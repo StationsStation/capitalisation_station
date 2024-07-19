@@ -7,22 +7,22 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifio56gpmbwnhqvk4f5cmavsrmqm7ljy6ll44mgzmswfrftat3h6a
-  behaviours.py: bafybeia3cml73gt4t7smwufue5fhww6ov2cirnvvnmeartwclgxykgvthm
-  composition.py: bafybeige36iz2y7drvzmdhj7bqgvqsgukych2fxaifjbihok2nlv6k326a
-  dialogues.py: bafybeigldzglsnduyafpvslc3nmjjtcgb3aqms54dlzjw5tqc2lpebxovq
-  handlers.py: bafybeib5s6ue3rc2ylt2xqyji5pz5jpmgrt27dpluyebipiw6gpkb7g44i
-  my_model.py: bafybeibhgrwh2tb4spzued5jr3rld4ppgsonhwsiscgw3zqstpiq3yysbi
+  behaviours.py: bafybeig2sekkunot66d7argty6yrgzssjfg7q7nna3ecnt73afodmsthfy
+  composition.py: bafybeigahp34oi6uyzcjmbcgtseubmu6rpxd4aeepcnjuwqsykbenict7a
+  dialogues.py: bafybeih3h3a4zxvpjw3mgaijjzlugmnd6peamybx4jzw26tyadbgpttqvi
+  handlers.py: bafybeiewyuowct6y4rf2oaky5hy4sp36eki6pq7merksp4rqylfbewukme
+  my_model.py: bafybeifyr2sbkbfhocm2i2mtizq5rqbjmmsjw7qm6meja4wi5brncvuhcm
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeig2x6bjhj5yjd2m6gu7zroqso6nfn6xswld5ktvzhcxinmqik6lby
-- eightballer/markets:0.1.0:bafybeideceldq2va2dy3lcobu6i6nnlm34gf6p4f2vrebvhx5m5d63zuqa
-- eightballer/orders:0.1.0:bafybeicp3y52vrvwfnkjpymlprmluoculyj5xv5a24cr3gb3sjbhfbgf7y
-- eightballer/positions:0.1.0:bafybeibhhxea6n6m7wgpc76ljtotkczmtzsyctno3bzf2rn3uzgko4auei
-- eightballer/tickers:0.1.0:bafybeigm3qt4gow3fazaw5npauexa2dmnyshtdib5ey4pdzfbniln46g2y
+- eightballer/balances:0.1.0:bafybeibkvanfeqzdxjqbsy7kg6n4upcs3guojrmc4yjb3g7anmtia4las4
+- eightballer/markets:0.1.0:bafybeiejvub3u44kfudgldid6aq57z75wuenfi2filkbqdssxwavllgigm
+- eightballer/orders:0.1.0:bafybeia5lppfqs3wtarisbn3njiankxjxgdp2kzoyrlnzjuwomrjwbfby4
+- eightballer/positions:0.1.0:bafybeiabojtxwexbzgqjut7g3paekh2q7ssrjrpwgtsxw3jjhxhqyya7h4
+- eightballer/tickers:0.1.0:bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeifmagqmfam24cstkaicbgnr7fhljhafiu6wg3k273usrrbxq45pba
+- eightballer/dex_data_retrieval:0.1.0:bafybeifakh23cikxjqjw5odjmcwk6q44bb3xw2kr5z4rndwej6f4bmilka
 - valory/abstract_round_abci:0.1.0:bafybeiggaiblypax6haer32d3u5d5rhfmcd57hqydql7lr2gmaehz4mcsm
 - valory/registration_abci:0.1.0:bafybeihpfgjccst5vishgsw32in4reew33wjf257kp4nagiusi7ry47yfq
 - valory/reset_pause_abci:0.1.0:bafybeihp7ybmohndbbre7hspab5mm7pjmtqgbt673rh76hd2xkz6n7xota
