@@ -46,6 +46,9 @@ jobs:
 
       - name: Format
         run: |
+            echo "Running make fmt"
+            ls -la
+            ls packages/
             make fmt
 
       - name: Lint
