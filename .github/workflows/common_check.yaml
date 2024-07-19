@@ -45,6 +45,7 @@ jobs:
       - name: Format
         run: |
             export PYTHONPATH=.
+            export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
             make fmt
 
       - name: Lint

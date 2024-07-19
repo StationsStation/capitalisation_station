@@ -23,8 +23,8 @@
 # pylint: disable=R1735
 from typing import List
 
-from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 import pytest
+from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
 from packages.eightballer.protocols.order_book.message import OrderBookMessage

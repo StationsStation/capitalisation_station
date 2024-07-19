@@ -22,8 +22,8 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import List
 
-from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 import pytest
+from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.markets.custom_types import ErrorCode, Market, Markets
 from packages.eightballer.protocols.markets.message import MarketsMessage

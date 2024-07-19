@@ -22,8 +22,8 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import List
 
-from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 import pytest
+from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.positions.custom_types import ErrorCode, Position, Positions, PositionSide
 from packages.eightballer.protocols.positions.message import PositionsMessage

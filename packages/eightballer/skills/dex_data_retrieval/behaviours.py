@@ -125,7 +125,7 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
         exchange_to_markets = {}
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             for exchange_id in exchange_ids:
-                extra_kwargs = extra_kwargs.get(exchange_id, {})
+                extra_kwargs = extra_kwargs.get(exchange_id, {}) if extra_kwargs else {}
                 successful = False
                 retries = 0
                 while not successful and retries < DEFAULT_RETRIES:
