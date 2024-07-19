@@ -70,8 +70,7 @@ class FetchDexBalancesRound(CollectSameUntilThresholdRound):
         if json.loads(self.most_voted_payload) is None:
             return self.synchronized_data, Event.FAILED
         state = self.synchronized_data.update(
-            synchronized_data_class=self.synchronized_data_class,
-            **{self.payload_attribute: self.most_voted_payload}
+            synchronized_data_class=self.synchronized_data_class, **{self.payload_attribute: self.most_voted_payload}
         )
         return state, Event.DONE
 
@@ -90,8 +89,7 @@ class FetchDexMarketsRound(CollectSameUntilThresholdRound):
         if json.loads(self.most_voted_payload) is None:
             return self.synchronized_data, Event.FAILED
         state = self.synchronized_data.update(
-            synchronized_data_class=self.synchronized_data_class,
-            **{self.payload_attribute: self.most_voted_payload}
+            synchronized_data_class=self.synchronized_data_class, **{self.payload_attribute: self.most_voted_payload}
         )
         return state, Event.DONE
 
@@ -109,8 +107,7 @@ class FetchDexOrdersRound(CollectSameUntilThresholdRound):
             return None
 
         state = self.synchronized_data.update(
-            synchronized_data_class=self.synchronized_data_class,
-            **{self.payload_attribute: self.most_voted_payload}
+            synchronized_data_class=self.synchronized_data_class, **{self.payload_attribute: self.most_voted_payload}
         )
         return state, Event.DONE
 
@@ -127,8 +124,7 @@ class FetchDexPositionsRound(CollectSameUntilThresholdRound):
         if not self.threshold_reached:
             return None
         state = self.synchronized_data.update(
-            synchronized_data_class=self.synchronized_data_class,
-            **{self.payload_attribute: self.most_voted_payload}
+            synchronized_data_class=self.synchronized_data_class, **{self.payload_attribute: self.most_voted_payload}
         )
         return state, Event.DONE
 
@@ -145,8 +141,7 @@ class FetchDexTickersRound(CollectSameUntilThresholdRound):
         if not self.threshold_reached:
             return None
         state = self.synchronized_data.update(
-            synchronized_data_class=self.synchronized_data_class,
-            **{self.payload_attribute: self.most_voted_payload}
+            synchronized_data_class=self.synchronized_data_class, **{self.payload_attribute: self.most_voted_payload}
         )
         return state, Event.DONE
 

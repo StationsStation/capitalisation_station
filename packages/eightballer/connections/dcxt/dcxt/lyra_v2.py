@@ -14,19 +14,37 @@ from lyra.enums import UnderlyingCurrency
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
-from packages.eightballer.protocols.orders.custom_types import (
-    Order,
-    Orders,
-    OrderStatus,
-    OrderType,
-)
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus, OrderType
 from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 
 
 def to_market(api_result):
     """Convert to a market object.
-    raw_resulot = {'instrument_type': 'perp', 'instrument_name': 'BTC-PERP', 'scheduled_activation': 1699035945, 'scheduled_deactivation': 9223372036854775807, 'is_active': True, 'tick_size': '0.1', 'minimum_amount': '0.01', 'maximum_amount': '10000', 'amount_step': '0.001', 'mark_price_fee_rate_cap': '0', 'maker_fee_rate': '0.0005', 'taker_fee_rate': '0.001', 'base_fee': '1.5', 'base_currency': 'BTC', 'quote_currency': 'USD', 'option_details': None, 'perp_details': {'index': 'BTC-USD', 'max_rate_per_hour': '0.1', 'min_rate_per_hour': '-0.1', 'static_interest_rate': '0', 'aggregate_funding': '244.249950785486024857', 'funding_rate': '-0.0000125'}, 'base_asset_address': '0xAFB6Bb95cd70D5367e2C39e9dbEb422B9815339D', 'base_asset_sub_id': '0'}
+        raw_resulot = {'instrument_type': 'perp',
+        'instrument_name': 'BTC-PERP',
+        'scheduled_activation': 1699035945,
+        'scheduled_deactivation': 9223372036854775807,
+    'is_active': True,
+    'tick_size': '0.1',
+    'minimum_amount': '0.01',
+    'maximum_amount': '10000',
+    'amount_step': '0.001',
+    'mark_price_fee_rate_cap': '0',
+    'maker_fee_rate': '0.0005',
+    'taker_fee_rate': '0.001',
+    'base_fee': '1.5',
+    'base_currency': 'BTC',
+    'quote_currency': 'USD',
+    'option_details': None,
+    'perp_details': {'index': 'BTC-USD',
+    'max_rate_per_hour': '0.1',
+    'min_rate_per_hour': '-0.1',
+    'static_interest_rate': '0',
+    'aggregate_funding': '244.249950785486024857',
+    'funding_rate': '-0.0000125'},
+    'base_asset_address': '0xAFB6Bb95cd70D5367e2C39e9dbEb422B9815339D',
+    'base_asset_sub_id': '0'}
 
     """
 
@@ -248,8 +266,8 @@ def to_order(api_result):
         'nonce': 1710616516996107,
         'signer': '0x86535B713830B2CFc976799C95Ef799428b8661B',
         'signature':
-    '0xf0cfcae8c6c32a0b1b692b83065df24873cd17cb4670495ba200aa777a5f0235680d91aeb9560520ceb4b91f2019cd4a14a16d82e9604b73d859b
-    04a0afc10fa1c',
+    '0xf0cfcae8c6c32a0b1b692b83065df24873cd17cb4670495ba200aa777a5f
+    0235680d91aeb9560520ceb4b91f2019cd4a14a16d82e9604b73d859b04a0afc10fa1c',
         'cancel_reason': '',
         'mmp': False,
         'is_transfer': False,
@@ -299,9 +317,7 @@ def to_order(api_result):
         exchange_id="lyra",
         client_order_id=api_result["order_id"],
         timestamp=api_result["creation_timestamp"],
-        datetime=datetime.datetime.fromtimestamp(
-            api_result["creation_timestamp"]
-        ).isoformat(),
+        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"]).isoformat(),
         last_trade_timestamp=api_result["creation_timestamp"],
         status=LYRA_ORDER_STATUS_MAP[api_result["order_status"]],
         symbol=api_result["instrument_name"],
@@ -373,9 +389,7 @@ class LyraClient:
         """Fetch all open orders."""
         del args
         params = kwargs.get("params", {})
-        result = await self.client.get_open_orders(
-            status=LyraOrderStatus.OPEN.value, **params
-        )
+        result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
         orders = [to_order(order) for order in result]
         orders = Orders(
             orders=orders,
@@ -386,12 +400,10 @@ class LyraClient:
         """Watch the order book."""
         params = kwargs.get("params", {})
         try:
-            result = await self.client.watch_order_book(
-                instrument_name=args[0], **params
-            )
-        except Exception as e:  # pylint: disable=broad-except
+            result = await self.client.watch_order_book(instrument_name=args[0], **params)
+        except Exception as error:  # pylint: disable=broad-except
             traceback.print_exc()
-            raise e
+            raise error
         order_book = OrderBook(
             **result,
             exchange_id=self.exchange_id,

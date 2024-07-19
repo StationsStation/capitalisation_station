@@ -14,9 +14,7 @@ from aea.protocols.dialogue.base import Dialogue
 from lyra.enums import Environment
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID, dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface import (
-    ConnectionProtocolInterface,
-)
+from packages.eightballer.connections.dcxt.interfaces.interface import ConnectionProtocolInterface
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
 from packages.eightballer.protocols.markets.custom_types import Market
@@ -26,7 +24,7 @@ RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
 
 
-class DcxtConnection(Connection):
+class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes
     """Ccxt connection class."""
 
     connection_id = PUBLIC_ID
@@ -104,8 +102,8 @@ class DcxtConnection(Connection):
             try:
                 exchange_class = getattr(dcxt, exchange_id)
                 exchange = exchange_class(params)
-            except AttributeError:
-                raise ValueError(f"Exchange {exchange_id} not found in dcxt")
+            except AttributeError as exc:
+                raise ValueError(f"Exchange {exchange_id} not found in dcxt") from exc
             self._exchanges.update({exchange_id: exchange})
             self.logger.info(f"Successfully connected to {exchange_id}")
         self.state = ConnectionStates.connected
@@ -160,11 +158,9 @@ class DcxtConnection(Connection):
         try:
             dialogue = self.protocol_interface.validate_envelope(envelope)
             return await self.protocol_interface.handle_envelope(envelope)
-        except Exception as e:  # pylint: disable=broad-except
-            self.logger.error(
-                f"Couldn't execute task, e={e} traceback={traceback.print_exc()}"
-            )
-            return self.get_error_message(e, envelope.message, dialogue)
+        except Exception as error:  # pylint: disable=broad-except
+            self.logger.error(f"Couldn't execute task, e={error} traceback={traceback.print_exc()}")
+            return self.get_error_message(error, envelope.message, dialogue)
 
     def _handle_req(self, envelope) -> Task:
         """Create a task."""
@@ -175,9 +171,7 @@ class DcxtConnection(Connection):
         request = self.task_to_request.pop(task, None)
         self.executing_tasks.remove(task)
         response_message: Optional[Message] = task.result()
-        response_envelope = self.protocol_interface.build_envelope(
-            request, response_message
-        )
+        response_envelope = self.protocol_interface.build_envelope(request, response_message)
         if response_envelope is None:
             return
         self.logger.debug(f"Placing {response_message} in queue")
@@ -190,9 +184,7 @@ class DcxtConnection(Connection):
         response_message: Optional[Message],
     ):
         """Get the error message."""
-        self.logger.error(
-            "Unable to handle protocol : %s message", request.performative
-        )
+        self.logger.error("Unable to handle protocol : %s message", request.performative)
         message = DefaultMessage(
             performative=DefaultMessage.Performative.ERROR,
             error_msg=bytes(str(error), "utf-8"),

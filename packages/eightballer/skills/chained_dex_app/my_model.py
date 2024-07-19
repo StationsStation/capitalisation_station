@@ -19,16 +19,10 @@
 
 """This package contains a scaffold of a model."""
 from packages.eightballer.skills.chained_dex_app.composition import ChaineddexAbciApp
-from packages.eightballer.skills.dex_data_retrieval.models import (
-    Params as dexBaseParams,
-)
-from packages.valory.skills.abstract_round_abci.models import (
-    BenchmarkTool as BaseBenchmarkTool,
-)
+from packages.eightballer.skills.dex_data_retrieval.models import Params as dexBaseParams
+from packages.valory.skills.abstract_round_abci.models import BenchmarkTool as BaseBenchmarkTool
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import (
-    SharedState as BaseSharedState,
-)
+from packages.valory.skills.abstract_round_abci.models import SharedState as BaseSharedState
 
 
 class SharedState(BaseSharedState):

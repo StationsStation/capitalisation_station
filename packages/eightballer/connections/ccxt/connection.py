@@ -17,9 +17,7 @@ from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.connections.ccxt.custom import CustomBroker
-from packages.eightballer.connections.ccxt.interfaces.interface import (
-    ConnectionProtocolInterface,
-)
+from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
 from packages.eightballer.connections.ccxt.interfaces.market import Market
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
@@ -32,7 +30,7 @@ RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
 
 
-class CcxtConnection(Connection):
+class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes
     """Ccxt connection class."""
 
     connection_id = PUBLIC_ID
@@ -164,11 +162,9 @@ class CcxtConnection(Connection):
         try:
             dialogue = self.protocol_interface.validate_envelope(envelope)
             return await self.protocol_interface.handle_envelope(envelope)
-        except Exception as e:  # pylint: disable=broad-except
-            self.logger.error(
-                f"Couldn't execute task, e={e} traceback={traceback.print_exc()}"
-            )
-            return self.get_error_message(e, envelope.message, dialogue)
+        except Exception as error:  # pylint: disable=broad-except
+            self.logger.error(f"Couldn't execute task, e={error} traceback={traceback.print_exc()}")
+            return self.get_error_message(error, envelope.message, dialogue)
 
     def _handle_req(self, envelope) -> Task:
         """Create a task."""
@@ -179,9 +175,7 @@ class CcxtConnection(Connection):
         request = self.task_to_request.pop(task, None)
         self.executing_tasks.remove(task)
         response_message: Optional[Message] = task.result()
-        response_envelope = self.protocol_interface.build_envelope(
-            request, response_message
-        )
+        response_envelope = self.protocol_interface.build_envelope(request, response_message)
         if response_envelope is None:
             return
         self.logger.debug(f"Placing {response_message} in queue")
@@ -194,9 +188,7 @@ class CcxtConnection(Connection):
         response_message: Optional[Message],
     ):
         """Get the error message."""
-        self.logger.error(
-            "Unable to handle protocol : %s message", request.performative
-        )
+        self.logger.error("Unable to handle protocol : %s message", request.performative)
         message = DefaultMessage(
             performative=DefaultMessage.Performative.ERROR,
             error_msg=bytes(str(error), "utf-8"),

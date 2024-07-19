@@ -33,9 +33,7 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.skills.dex_data_retrieval.models import Params
-from packages.eightballer.skills.dex_data_retrieval.payloads import (
-    FetchDexTickersPayload,
-)
+from packages.eightballer.skills.dex_data_retrieval.payloads import FetchDexTickersPayload
 from packages.eightballer.skills.dex_data_retrieval.rounds import (
     DexDataRetrievalAbciApp,
     FetchDexBalancesPayload,
@@ -51,10 +49,7 @@ from packages.eightballer.skills.dex_data_retrieval.rounds import (
 )
 from packages.eightballer.skills.reporting import PUBLIC_ID as REPORTING_PUBLIC_ID
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
-from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
-    BaseBehaviour,
-)
+from packages.valory.skills.abstract_round_abci.behaviours import AbstractRoundBehaviour, BaseBehaviour
 
 DEFAULT_RETRIES = 3
 DEFAULT_RETRY_DELAY = 5.0
@@ -82,9 +77,7 @@ class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
         Get a ccxt response.
         """
         if protocol_performative not in self._performative_to_dialogue_class:
-            raise ValueError(
-                f"Unsupported protocol performative '{protocol_performative}'"
-            )
+            raise ValueError(f"Unsupported protocol performative '{protocol_performative}'")
         dialogue_class = self._performative_to_dialogue_class[protocol_performative]
 
         msg, dialogue = dialogue_class.create(
@@ -155,9 +148,7 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
                     break
                 self._reporting(msg)
                 exchange_to_markets.update(self._from_markets_to_dict(msg, exchange_id))
-                self.context.logger.info(
-                    f"Received {len(exchange_to_markets[exchange_id])} markets from {exchange_id}"
-                )
+                self.context.logger.info(f"Received {len(exchange_to_markets[exchange_id])} markets from {exchange_id}")
 
             self.context.logger.info(f"Fetched Exchanges: {exchange_ids}")
             sender = self.context.agent_address
@@ -174,15 +165,11 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
 
     def _is_result_ok(self, msg: MarketsMessage, exchange_id) -> bool:
         if msg.Performative == MarketsMessage.Performative.ERROR:
-            self.context.logger.error(
-                f"Error fetching markets from {exchange_id}: {msg.error_msg} Retrying..."
-            )
+            self.context.logger.error(f"Error fetching markets from {exchange_id}: {msg.error_msg} Retrying...")
             return False
         return True
 
-    def _from_markets_to_dict(
-        self, markets_msg: MarketsMessage, exchange_id: str
-    ) -> dict:
+    def _from_markets_to_dict(self, markets_msg: MarketsMessage, exchange_id: str) -> dict:
         """Convert markets message to dict."""
         return {
             exchange_id: {m.id: m.symbol for m in markets_msg.markets.markets},
@@ -206,8 +193,8 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
             for exchange_id in exchange_ids:
                 params = extra_kwargs.get(exchange_id, {}).copy()
                 # extra kwargs must in the form str to bytes
-                for k, v in params.items():
-                    params[k] = v.encode("utf-8")
+                for key, value in params.items():
+                    params[key] = value.encode("utf-8")
 
                 msg: BalancesMessage = yield from self.get_ccxt_response(
                     protocol_performative=BalancesMessage.Performative.GET_ALL_BALANCES,
@@ -217,9 +204,7 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
 
                 balances = self._from_balances_to_dict(msg, exchange_id)
                 self._reporting(msg)
-                self.context.logger.info(
-                    f"Received {len(balances[exchange_id])} balances from {exchange_id}"
-                )
+                self.context.logger.info(f"Received {len(balances[exchange_id])} balances from {exchange_id}")
                 exchange_to_balances.update(balances)
             sender = self.context.agent_address
             payload = FetchDexBalancesPayload(
@@ -233,9 +218,7 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
 
         self.set_done()
 
-    def _from_balances_to_dict(
-        self, balances_msg: BalancesMessage, exchange_id: str
-    ) -> dict:
+    def _from_balances_to_dict(self, balances_msg: BalancesMessage, exchange_id: str) -> dict:
         """Convert balances message to dict."""
         return {
             exchange_id: [b.as_json() for b in balances_msg.balances.balances],
@@ -261,9 +244,7 @@ class FetchDexOrdersBehaviour(DexDataRetrievalBaseBehaviour):
                     exchange_id=exchange_id,
                     **extra_kwargs,
                 )
-                self.context.logger.info(
-                    f"Received {len(msg.orders.orders)} orders from {exchange_id}"
-                )
+                self.context.logger.info(f"Received {len(msg.orders.orders)} orders from {exchange_id}")
                 exchange_to_orders.update(self._from_orders_to_dict(msg, exchange_id))
                 self._reporting(msg)
 
@@ -299,21 +280,18 @@ class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
         exchange_to_positions = {}
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             for exchange_id in self.params.dex_data_retrieval_config.exchange_ids:
                 extra_kwargs = extra_kwargs.get(exchange_id, {})
                 params = {}
-                for k, v in extra_kwargs.items():
-                    params[k] = v.encode("utf-8")
+                for key, value in extra_kwargs.items():
+                    params[key] = value.encode("utf-8")
 
                 msg: PositionsMessage = yield from self.get_ccxt_response(
                     protocol_performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
                     exchange_id=exchange_id,
                     params=params,
                 )
-                exchange_to_positions.update(
-                    self._from_positions_to_dict(msg, exchange_id)
-                )
+                exchange_to_positions.update(self._from_positions_to_dict(msg, exchange_id))
                 self.context.logger.info(
                     f"Received {len(exchange_to_positions[exchange_id])} positions from {exchange_id}"
                 )
@@ -331,14 +309,12 @@ class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
 
         self.set_done()
 
-    def _from_positions_to_dict(
-        self, positions_msg: PositionsMessage, exchange_id: str
-    ) -> dict:
+    def _from_positions_to_dict(self, positions_msg: PositionsMessage, exchange_id: str) -> dict:
         """Convert positions message to dict."""
-        for p in positions_msg.positions.positions:
-            p.exchange_id = exchange_id
+        for pos in positions_msg.positions.positions:
+            pos.exchange_id = exchange_id
         return {
-            exchange_id: [p.as_json() for p in positions_msg.positions.positions],
+            exchange_id: [pos.as_json() for pos in positions_msg.positions.positions],
         }
 
 
@@ -357,17 +333,15 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             for exchange_id in self.params.dex_data_retrieval_config.exchange_ids:
                 params = extra_kwargs.get(exchange_id, {}).copy()
-                for k, v in params.items():
-                    params[k] = v.encode("utf-8")
+                for key, value in params.items():
+                    params[key] = value.encode("utf-8")
                 msg: TickersMessage = yield from self.get_ccxt_response(
                     protocol_performative=TickersMessage.Performative.GET_ALL_TICKERS,
                     exchange_id=exchange_id,
                     params=params,
                 )
                 exchange_to_tickers.update(self._from_tickers_to_dict(msg, exchange_id))
-                self.context.logger.info(
-                    f"Received {len(exchange_to_tickers[exchange_id])} tickers from {exchange_id}"
-                )
+                self.context.logger.info(f"Received {len(exchange_to_tickers[exchange_id])} tickers from {exchange_id}")
                 self._reporting(msg)
 
             sender = self.context.agent_address
@@ -382,13 +356,11 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
 
         self.set_done()
 
-    def _from_tickers_to_dict(
-        self, tickers_msg: TickersMessage, exchange_id: str
-    ) -> dict:
+    def _from_tickers_to_dict(self, tickers_msg: TickersMessage, exchange_id: str) -> dict:
         """Convert tickers message to dict."""
 
         def select_fields(ticker):
-            FIELDS = [
+            FIELDS = [  # pylint: disable=C0103
                 "symbol",
                 "bid",
                 "bidVolume",
@@ -405,9 +377,7 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
             return {k: v for k, v in ticker.items() if k in FIELDS}
 
         return {
-            exchange_id: [
-                select_fields(t.as_json()) for t in tickers_msg.tickers.tickers
-            ],
+            exchange_id: [select_fields(t.as_json()) for t in tickers_msg.tickers.tickers],
         }
 
 

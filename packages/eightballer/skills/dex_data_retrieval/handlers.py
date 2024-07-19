@@ -24,28 +24,14 @@ from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.valory.skills.abstract_round_abci.handlers import (
-    ABCIRoundHandler as BaseABCIRoundHandler,
-)
+from packages.valory.skills.abstract_round_abci.handlers import ABCIRoundHandler as BaseABCIRoundHandler
 from packages.valory.skills.abstract_round_abci.handlers import AbstractResponseHandler
-from packages.valory.skills.abstract_round_abci.handlers import (
-    ContractApiHandler as BaseContractApiHandler,
-)
-from packages.valory.skills.abstract_round_abci.handlers import (
-    HttpHandler as BaseHttpHandler,
-)
-from packages.valory.skills.abstract_round_abci.handlers import (
-    IpfsHandler as BaseIpfsHandler,
-)
-from packages.valory.skills.abstract_round_abci.handlers import (
-    LedgerApiHandler as BaseLedgerApiHandler,
-)
-from packages.valory.skills.abstract_round_abci.handlers import (
-    SigningHandler as BaseSigningHandler,
-)
-from packages.valory.skills.abstract_round_abci.handlers import (
-    TendermintHandler as BaseTendermintHandler,
-)
+from packages.valory.skills.abstract_round_abci.handlers import ContractApiHandler as BaseContractApiHandler
+from packages.valory.skills.abstract_round_abci.handlers import HttpHandler as BaseHttpHandler
+from packages.valory.skills.abstract_round_abci.handlers import IpfsHandler as BaseIpfsHandler
+from packages.valory.skills.abstract_round_abci.handlers import LedgerApiHandler as BaseLedgerApiHandler
+from packages.valory.skills.abstract_round_abci.handlers import SigningHandler as BaseSigningHandler
+from packages.valory.skills.abstract_round_abci.handlers import TendermintHandler as BaseTendermintHandler
 
 ABCIHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler

@@ -5,13 +5,8 @@ from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
 from ccxt import RequestTimeout
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import (
-    BaseInterface,
-)
-from packages.eightballer.protocols.markets.dialogues import (
-    BaseMarketsDialogues,
-    MarketsDialogue,
-)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
 
 
@@ -22,9 +17,7 @@ class MarketInterface(BaseInterface):
     dialogue_class = MarketsDialogue
     dialogues_class = BaseMarketsDialogues
 
-    async def get_all_markets(
-        self, message: MarketsMessage, dialogue: Dialogue, connection
-    ) -> Optional[Message]:
+    async def get_all_markets(self, message: MarketsMessage, dialogue: Dialogue, connection) -> Optional[Message]:
         """Get all markets from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
@@ -41,13 +34,9 @@ class MarketInterface(BaseInterface):
                     exchange_id=message.exchange_id,
                 ),
             )
-            connection.logger.debug(
-                f"Fetched {len(markets.markets)} markets for {message.exchange_id}"
-            )
+            connection.logger.debug(f"Fetched {len(markets.markets)} markets for {message.exchange_id}")
         except RequestTimeout:
-            connection.logger.warning(
-                f"Request timeout when fetching markets for {message.exchange_id}"
-            )
+            connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(
                 Optional[Message],
                 dialogue.reply(

@@ -7,10 +7,7 @@ from ccxt import RequestTimeout
 
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
-from packages.eightballer.protocols.tickers.dialogues import (
-    BaseTickersDialogues,
-    TickersDialogue,
-)
+from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
 
@@ -40,8 +37,8 @@ class TickerInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for k, v in message.params.items():
-                params[k] = v.decode()
+            for key, value in message.params.items():
+                params[key] = value.decode()
             tickers = await exchange.fetch_tickers(params=params)
             tickers = all_tickers_from_api_call(tickers)
             response_message = dialogue.reply(
@@ -68,8 +65,8 @@ class TickerInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for k, v in message.params.items():
-                params[k] = v.decode()
+            for key, value in message.params.items():
+                params[key] = value.decode()
             ticker = await exchange.fetch_ticker(message.symbol, params=params)
             ticker = Ticker(**ticker)
             response_message = dialogue.reply(
