@@ -5,14 +5,9 @@ from typing import Optional
 
 from ccxt import RequestTimeout
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import (
-    BaseInterface,
-)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.tickers.custom_types import Ticker
-from packages.eightballer.protocols.tickers.dialogues import (
-    BaseTickersDialogues,
-    TickersDialogue,
-)
+from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
 
@@ -34,8 +29,8 @@ class TickerInterface(BaseInterface):
             params = {}
 
             if message.params is not None:
-                for k, v in message.params.items():
-                    params[k] = v.decode()
+                for key, value in message.params.items():
+                    params[key] = value.decode()
             tickers = await exchange.fetch_tickers(params=params)
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.ALL_TICKERS,
@@ -62,8 +57,8 @@ class TickerInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for k, v in message.params.items():
-                params[k] = v.decode()
+            for key, value in message.params.items():
+                params[key] = value.decode()
             ticker = await exchange.fetch_ticker(message.symbol, params=params)
             ticker = Ticker(**ticker)
             response_message = dialogue.reply(

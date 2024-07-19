@@ -9,10 +9,7 @@ from ccxt import RequestTimeout
 
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
-from packages.eightballer.protocols.balances.dialogues import (
-    BalancesDialogue,
-    BaseBalancesDialogues,
-)
+from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 
@@ -53,8 +50,8 @@ class BalanceInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for k, v in message.params.items():
-                params[k] = v.decode()
+            for key, value in message.params.items():
+                params[key] = value.decode()
             balances = await exchange.fetch_balance(params=params)
             balances = all_balances_from_api_call(balances)
             response_message = dialogue.reply(
@@ -63,13 +60,9 @@ class BalanceInterface(BaseInterface):
                 balances=balances,
                 exchange_id=message.exchange_id,
             )
-            connection.logger.debug(
-                f"Fetched {len(balances.balances)} balances for {message.exchange_id}"
-            )
+            connection.logger.debug(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
         except RequestTimeout:
-            connection.logger.warning(
-                f"Request timeout when fetching balances for {message.exchange_id}"
-            )
+            connection.logger.warning(f"Request timeout when fetching balances for {message.exchange_id}")
             response_message = dialogue.reply(
                 performative=BalancesMessage.Performative.ERROR,
                 target_message=message,

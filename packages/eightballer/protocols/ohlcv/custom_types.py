@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+# pylint: disable=C0103,R0902,C0301,R1735
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 from enum import Enum

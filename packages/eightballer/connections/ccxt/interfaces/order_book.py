@@ -7,10 +7,7 @@ from aea.skills.base import Envelope
 
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
-from packages.eightballer.protocols.order_book.dialogues import (
-    BaseOrderBookDialogues,
-    OrderBookDialogue,
-)
+from packages.eightballer.protocols.order_book.dialogues import BaseOrderBookDialogues, OrderBookDialogue
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 
 DEFAULT_INTERVAL = 0.1
@@ -55,9 +52,7 @@ class OrderBookInterface(BaseInterface):
                     await connection.queue.put(envelope)
                 except ccxt.ExchangeError as error:
                     if "out-of-order nonce" in str(error):
-                        connection.logger.warning(
-                            f"Out of order nonce error for {message.exchange_id}. Retrying..."
-                        )
+                        connection.logger.warning(f"Out of order nonce error for {message.exchange_id}. Retrying...")
                         continue
 
                     raise error

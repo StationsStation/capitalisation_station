@@ -17,31 +17,29 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for tickers protocol."""
+"""Test dialogues module for markets protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, TickersDialogues
-from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.default.dialogues import DefaultDialogue, DefaultDialogues
+from packages.eightballer.protocols.default.message import DefaultMessage
 
 
-class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
-    """Test for the 'tickers' protocol dialogues."""
+class TestDialoguesDefault(BaseProtocolDialoguesTestCase):
+    """Test for the 'markets' protocol dialogues."""
 
-    MESSAGE_CLASS = TickersMessage
+    MESSAGE_CLASS = DefaultMessage
 
-    DIALOGUE_CLASS = TickersDialogue
+    DIALOGUE_CLASS = DefaultDialogue
 
-    DIALOGUES_CLASS = TickersDialogues
+    DIALOGUES_CLASS = DefaultDialogues
 
-    ROLE_FOR_THE_FIRST_MESSAGE = TickersDialogue.Role.AGENT  # CHECK
+    ROLE_FOR_THE_FIRST_MESSAGE = DefaultDialogue.Role.AGENT
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id="some str",
-            params={"some str": b"some_bytes"},
-        )
+        return {
+            "performative": DefaultMessage.Performative.BYTES,
+            "content": b"some bytes",
+        }

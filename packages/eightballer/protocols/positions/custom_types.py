@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
+# pylint: disable=C0103,R0902,C0301,R1735
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
@@ -63,9 +64,7 @@ class PositionSide(Enum):
     SHORT = 1
 
     @staticmethod
-    def encode(
-        position_side_protobuf_object, position_side_object: "PositionSide"
-    ) -> None:
+    def encode(position_side_protobuf_object, position_side_object: "PositionSide") -> None:
         """
         Encode an instance of this class into the protocol buffer object.
 
@@ -169,9 +168,7 @@ class Position:
     @staticmethod
     def encode(position_protobuf_object, position_object: "Position") -> None:
         """Encode an instance of this class into the protocol buffer object."""
-        for (
-            attribute
-        ) in Position.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Position.__dataclass_fields__.keys():  # pylint: disable=no-member
             attribute_value = getattr(position_object, attribute)
             if attribute_value is not None:
                 setattr(position_protobuf_object.Position, attribute, attribute_value)
@@ -180,12 +177,8 @@ class Position:
     def decode(cls, position_protobuf_object) -> "Position":
         """Decode a protocol buffer object that corresponds with this class into an instance of this class."""
         position_object = cls()
-        for (
-            attribute
-        ) in Position.__dataclass_fields__.keys():  # pylint: disable=no-member
-            attribute_value = getattr(
-                position_protobuf_object.Position, attribute, None
-            )
+        for attribute in Position.__dataclass_fields__.keys():  # pylint: disable=no-member
+            attribute_value = getattr(position_protobuf_object.Position, attribute, None)
             if attribute_value is not None:
                 setattr(position_object, attribute, attribute_value)
         return position_object
@@ -195,10 +188,7 @@ class Position:
             return all(
                 getattr(self, field) == getattr(other, field)
                 for field in Position.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self
-                and other
-                and getattr(self, field) is not None
-                and getattr(other, field) is not None
+                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
             )
         return False
 
@@ -209,9 +199,7 @@ class Position:
         """
 
         def _from_camel_case(name):
-            return "".join(
-                ["_" + c.lower() if c.isupper() else c for c in name]
-            ).lstrip("_")
+            return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
 
         args = {}
         for key, value in api_call.items():
@@ -254,9 +242,6 @@ class Positions:
             return all(
                 getattr(self, field) == getattr(other, field)
                 for field in Positions.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self
-                and other
-                and getattr(self, field) is not None
-                and getattr(other, field) is not None
+                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
             )
         return False

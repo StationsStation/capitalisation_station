@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
+# pylint: disable=C0301,R0902,C0103
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, List, Optional
@@ -101,9 +102,7 @@ class OrderStatus(Enum):
     FAILED = 7
 
     @staticmethod
-    def encode(
-        order_status_protobuf_object, order_status_object: "OrderStatus"
-    ) -> None:
+    def encode(order_status_protobuf_object, order_status_object: "OrderStatus") -> None:
         """
         Encode an instance of this class into the protocol buffer object.
 

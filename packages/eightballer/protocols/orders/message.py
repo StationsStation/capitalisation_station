@@ -20,6 +20,7 @@
 """This module contains orders's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object,too-complex
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
@@ -27,20 +28,12 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.orders.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
+from packages.eightballer.protocols.orders.custom_types import ErrorCode as CustomErrorCode
 from packages.eightballer.protocols.orders.custom_types import Order as CustomOrder
 from packages.eightballer.protocols.orders.custom_types import Orders as CustomOrders
-from packages.eightballer.protocols.orders.custom_types import (
-    OrderSide as CustomOrderSide,
-)
-from packages.eightballer.protocols.orders.custom_types import (
-    OrderStatus as CustomOrderStatus,
-)
-from packages.eightballer.protocols.orders.custom_types import (
-    OrderType as CustomOrderType,
-)
+from packages.eightballer.protocols.orders.custom_types import OrderSide as CustomOrderSide
+from packages.eightballer.protocols.orders.custom_types import OrderStatus as CustomOrderStatus
+from packages.eightballer.protocols.orders.custom_types import OrderType as CustomOrderType
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.orders.message")
 
@@ -266,15 +259,11 @@ class OrdersMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -293,33 +282,25 @@ class OrdersMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.ORDER_CREATED:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.CANCEL_ORDER:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.ORDER_CANCELLED:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.GET_ORDERS:
                 expected_nb_of_contents = 1
@@ -334,18 +315,14 @@ class OrdersMessage(Message):
                     symbol = cast(str, self.symbol)
                     enforce(
                         isinstance(symbol, str),
-                        "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(
-                            type(symbol)
-                        ),
+                        "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(type(symbol)),
                     )
                 if self.is_set("currency"):
                     expected_nb_of_contents += 1
                     currency = cast(str, self.currency)
                     enforce(
                         isinstance(currency, str),
-                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(
-                            type(currency)
-                        ),
+                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(type(currency)),
                     )
                 if self.is_set("order_type"):
                     expected_nb_of_contents += 1
@@ -361,18 +338,14 @@ class OrdersMessage(Message):
                     side = cast(CustomOrderSide, self.side)
                     enforce(
                         isinstance(side, CustomOrderSide),
-                        "Invalid type for content 'side'. Expected 'OrderSide'. Found '{}'.".format(
-                            type(side)
-                        ),
+                        "Invalid type for content 'side'. Expected 'OrderSide'. Found '{}'.".format(type(side)),
                     )
                 if self.is_set("status"):
                     expected_nb_of_contents += 1
                     status = cast(CustomOrderStatus, self.status)
                     enforce(
                         isinstance(status, CustomOrderStatus),
-                        "Invalid type for content 'status'. Expected 'OrderStatus'. Found '{}'.".format(
-                            type(status)
-                        ),
+                        "Invalid type for content 'status'. Expected 'OrderStatus'. Found '{}'.".format(type(status)),
                     )
             elif self.performative == OrdersMessage.Performative.GET_SETTLEMENTS:
                 expected_nb_of_contents = 1
@@ -387,9 +360,7 @@ class OrdersMessage(Message):
                     currency = cast(str, self.currency)
                     enforce(
                         isinstance(currency, str),
-                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(
-                            type(currency)
-                        ),
+                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(type(currency)),
                     )
                 if self.is_set("end_timestamp"):
                     expected_nb_of_contents += 1
@@ -413,25 +384,19 @@ class OrdersMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.ORDER:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
-                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(
-                        type(self.order)
-                    ),
+                    "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.ORDERS:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.orders, CustomOrders),
-                    "Invalid type for content 'orders'. Expected 'Orders'. Found '{}'.".format(
-                        type(self.orders)
-                    ),
+                    "Invalid type for content 'orders'. Expected 'Orders'. Found '{}'.".format(type(self.orders)),
                 )
             elif self.performative == OrdersMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
@@ -443,15 +408,11 @@ class OrdersMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
-                        type(self.error_data)
-                    ),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -479,9 +440,7 @@ class OrdersMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

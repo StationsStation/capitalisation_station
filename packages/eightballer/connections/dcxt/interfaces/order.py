@@ -5,20 +5,9 @@ from typing import Any, Dict, Optional, cast
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import (
-    BaseInterface,
-)
-from packages.eightballer.protocols.orders.custom_types import (
-    Order,
-    Orders,
-    OrderSide,
-    OrderStatus,
-    OrderType,
-)
-from packages.eightballer.protocols.orders.dialogues import (
-    BaseOrdersDialogues,
-    OrdersDialogue,
-)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
+from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
 
 INTERVAL = 10
@@ -140,9 +129,7 @@ def map_status_to_enum(status):
     return mapping[status]
 
 
-def get_error(
-    message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str
-) -> OrdersMessage:
+def get_error(message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str) -> OrdersMessage:
     """Get the error message."""
     response_message = cast(
         Optional[OrdersMessage],
@@ -168,9 +155,7 @@ class OrderInterface(BaseInterface):
 
     def process_api_orders(self, exchange_id: str, api_orders: Dict[str, dict]):
         """Process orders from the api to internal hashmap"""
-        orders = {
-            order["id"]: from_api_call(order, exchange_id) for order in api_orders
-        }
+        orders = {order["id"]: from_api_call(order, exchange_id) for order in api_orders}
         if exchange_id not in self.open_orders:
             self.open_orders[exchange_id] = orders
         return orders
@@ -196,9 +181,7 @@ class OrderInterface(BaseInterface):
         except ccxt.InsufficientFunds as base_error:
             order.status = OrderStatus.CANCELLED
             updated_order = order
-            connection.logger.error(
-                f"FAILED TO CREATE ORDER -> insufficient funds! {str(base_error)}"
-            )
+            connection.logger.error(f"FAILED TO CREATE ORDER -> insufficient funds! {str(base_error)}")
         except (ccxt.ExchangeNotAvailable, ccxt.InvalidOrder) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
@@ -211,9 +194,7 @@ class OrderInterface(BaseInterface):
         self.open_orders[order.exchange_id][order.id] = order
         return response_message
 
-    async def get_orders(
-        self, message: OrdersMessage, dialogue: OrdersDialogue, connection
-    ):
+    async def get_orders(self, message: OrdersMessage, dialogue: OrdersDialogue, connection):
         """Retrieve the open orders from the exchange."""
 
         def _get_kwargs():
@@ -236,20 +217,16 @@ class OrderInterface(BaseInterface):
                 performative=OrdersMessage.Performative.ORDERS,
                 orders=open_orders,
             )
-            response_envelope = connection.build_envelope(
-                request=message, response_message=response_message
-            )
+            response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
-        except Exception as e:  # pylint: disable=W0703
+        except Exception as error:  # pylint: disable=W0703
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
-                f"The following error was encountered, {type(e).__name__}: {traceback.format_exc()}."
+                f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            return get_error(message, dialogue, str(e))
+            return get_error(message, dialogue, str(error))
 
-    async def get_order(
-        self, message: OrdersMessage, dialogue: OrdersDialogue, connection
-    ):
+    async def get_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection):
         """Retrieve an order from the exchange."""
         order = message.order
         exchange = connection.exchanges[order.exchange_id]
@@ -272,20 +249,18 @@ class OrderInterface(BaseInterface):
                 f"Couldn't fetch order {order.id} from {exchange_id}. Removed from open orders."
                 + f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-        except Exception as e:  # pylint: disable=W0703
+        except Exception as error:  # pylint: disable=W0703
             connection.logger.warning(
                 f"Couldn't fetch order {order.id} from {exchange_id}."
-                f"The following error was encountered, {type(e).__name__}: {traceback.format_exc()}."
+                f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            return get_error(message, dialogue, str(e))
+            return get_error(message, dialogue, str(error))
         response_message = dialogue.reply(
             target_message=message,
             performative=OrdersMessage.Performative.ORDER,
             order=new_order,
         )
-        response_envelope = connection.build_envelope(
-            request=message, response_message=response_message
-        )
+        response_envelope = connection.build_envelope(request=message, response_message=response_message)
         connection.queue.put_nowait(response_envelope)
 
     async def cancel_order(
@@ -337,9 +312,7 @@ class OrderInterface(BaseInterface):
         if message.start_timestamp is not None:
             params["start_timestamp"] = message.start_timestamp
         try:
-            settlements = await exchange.private_get_get_settlement_history_by_currency(
-                params=params
-            )
+            settlements = await exchange.private_get_get_settlement_history_by_currency(params=params)
             response_message = cast(
                 Optional[OrdersMessage],
                 dialogue.reply(

@@ -19,11 +19,11 @@
 
 """Serialization module for default protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import Any, Dict, cast
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
+from typing import cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
+from aea.mail.base_pb2 import DialogueMessage  # pylint: disable=E0611
+from aea.mail.base_pb2 import Message as ProtobufMessage  # pylint: disable=E0611
 from aea.protocols.base import Message, Serializer
 
 from packages.eightballer.protocols.default import default_pb2
@@ -124,5 +124,5 @@ class DefaultSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )

@@ -20,15 +20,12 @@
 """Test messages module for tickers protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.tickers.custom_types import (
-    ErrorCode,
-    Ticker,
-    Tickers,
-)
+from packages.eightballer.protocols.tickers.custom_types import ErrorCode, Ticker, Tickers
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
 RAW_TICKER = {

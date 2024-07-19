@@ -20,15 +20,12 @@
 """Test messages module for balances protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.balances.custom_types import (
-    Balance,
-    Balances,
-    ErrorCode,
-)
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances, ErrorCode
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 TEST_BALANCE = Balance(
@@ -63,9 +60,7 @@ class TestMessageBalances(BaseProtocolMessagesTestCase):
                 performative=BalancesMessage.Performative.ALL_BALANCES,
                 balances=TEST_BALANCES,
             ),
-            BalancesMessage(
-                performative=BalancesMessage.Performative.BALANCE, balance=TEST_BALANCE
-            ),
+            BalancesMessage(performative=BalancesMessage.Performative.BALANCE, balance=TEST_BALANCE),
             BalancesMessage(
                 performative=BalancesMessage.Performative.ERROR,
                 error_code=ErrorCode(1),

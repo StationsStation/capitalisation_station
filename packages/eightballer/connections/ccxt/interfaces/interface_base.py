@@ -68,9 +68,7 @@ class BaseInterface:
         """
         handler = getattr(self, performative.value, None)
         if handler is None:
-            raise UnknownPerformatives(
-                f"Performative not recognized: {performative.value}"
-            )
+            raise UnknownPerformatives(f"Performative not recognized: {performative.value}")
         return handler
 
     def validate_msg(self, message: Any):

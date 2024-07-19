@@ -20,6 +20,7 @@
 """This module contains positions's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
@@ -27,22 +28,12 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.positions.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
-from packages.eightballer.protocols.positions.custom_types import (
-    Position as CustomPosition,
-)
-from packages.eightballer.protocols.positions.custom_types import (
-    Positions as CustomPositions,
-)
-from packages.eightballer.protocols.positions.custom_types import (
-    PositionSide as CustomPositionSide,
-)
+from packages.eightballer.protocols.positions.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.positions.custom_types import Position as CustomPosition
+from packages.eightballer.protocols.positions.custom_types import Positions as CustomPositions
+from packages.eightballer.protocols.positions.custom_types import PositionSide as CustomPositionSide
 
-_default_logger = logging.getLogger(
-    "aea.packages.eightballer.protocols.positions.message"
-)
+_default_logger = logging.getLogger("aea.packages.eightballer.protocols.positions.message")
 
 DEFAULT_BODY_SIZE = 4
 
@@ -229,15 +220,11 @@ class PositionsMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -265,9 +252,7 @@ class PositionsMessage(Message):
                     params = cast(Dict[str, bytes], self.params)
                     enforce(
                         isinstance(params, dict),
-                        "Invalid type for content 'params'. Expected 'dict'. Found '{}'.".format(
-                            type(params)
-                        ),
+                        "Invalid type for content 'params'. Expected 'dict'. Found '{}'.".format(type(params)),
                     )
                     for key_of_params, value_of_params in params.items():
                         enforce(
@@ -287,9 +272,7 @@ class PositionsMessage(Message):
                     side = cast(CustomPositionSide, self.side)
                     enforce(
                         isinstance(side, CustomPositionSide),
-                        "Invalid type for content 'side'. Expected 'PositionSide'. Found '{}'.".format(
-                            type(side)
-                        ),
+                        "Invalid type for content 'side'. Expected 'PositionSide'. Found '{}'.".format(type(side)),
                     )
             elif self.performative == PositionsMessage.Performative.GET_POSITION:
                 expected_nb_of_contents = 2
@@ -323,9 +306,7 @@ class PositionsMessage(Message):
                 expected_nb_of_contents = 2
                 enforce(
                     isinstance(self.position, CustomPosition),
-                    "Invalid type for content 'position'. Expected 'Position'. Found '{}'.".format(
-                        type(self.position)
-                    ),
+                    "Invalid type for content 'position'. Expected 'Position'. Found '{}'.".format(type(self.position)),
                 )
                 enforce(
                     isinstance(self.exchange_id, str),
@@ -343,15 +324,11 @@ class PositionsMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
-                        type(self.error_data)
-                    ),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -379,9 +356,7 @@ class PositionsMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

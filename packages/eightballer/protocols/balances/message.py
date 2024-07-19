@@ -20,6 +20,7 @@
 """This module contains balances's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
@@ -27,19 +28,11 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.balances.custom_types import (
-    Balance as CustomBalance,
-)
-from packages.eightballer.protocols.balances.custom_types import (
-    Balances as CustomBalances,
-)
-from packages.eightballer.protocols.balances.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
+from packages.eightballer.protocols.balances.custom_types import Balance as CustomBalance
+from packages.eightballer.protocols.balances.custom_types import Balances as CustomBalances
+from packages.eightballer.protocols.balances.custom_types import ErrorCode as CustomErrorCode
 
-_default_logger = logging.getLogger(
-    "aea.packages.eightballer.protocols.balances.message"
-)
+_default_logger = logging.getLogger("aea.packages.eightballer.protocols.balances.message")
 
 DEFAULT_BODY_SIZE = 4
 
@@ -218,15 +211,11 @@ class BalancesMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -254,9 +243,7 @@ class BalancesMessage(Message):
                     params = cast(Dict[str, bytes], self.params)
                     enforce(
                         isinstance(params, dict),
-                        "Invalid type for content 'params'. Expected 'dict'. Found '{}'.".format(
-                            type(params)
-                        ),
+                        "Invalid type for content 'params'. Expected 'dict'. Found '{}'.".format(type(params)),
                     )
                     for key_of_params, value_of_params in params.items():
                         enforce(
@@ -275,9 +262,7 @@ class BalancesMessage(Message):
                 expected_nb_of_contents = 2
                 enforce(
                     isinstance(self.asset_id, str),
-                    "Invalid type for content 'asset_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.asset_id)
-                    ),
+                    "Invalid type for content 'asset_id'. Expected 'str'. Found '{}'.".format(type(self.asset_id)),
                 )
                 enforce(
                     isinstance(self.exchange_id, str),
@@ -289,17 +274,13 @@ class BalancesMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.balances, CustomBalances),
-                    "Invalid type for content 'balances'. Expected 'Balances'. Found '{}'.".format(
-                        type(self.balances)
-                    ),
+                    "Invalid type for content 'balances'. Expected 'Balances'. Found '{}'.".format(type(self.balances)),
                 )
             elif self.performative == BalancesMessage.Performative.BALANCE:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.balance, CustomBalance),
-                    "Invalid type for content 'balance'. Expected 'Balance'. Found '{}'.".format(
-                        type(self.balance)
-                    ),
+                    "Invalid type for content 'balance'. Expected 'Balance'. Found '{}'.".format(type(self.balance)),
                 )
             elif self.performative == BalancesMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
@@ -311,15 +292,11 @@ class BalancesMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
-                        type(self.error_data)
-                    ),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -347,9 +324,7 @@ class BalancesMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

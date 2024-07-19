@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+# pylint: disable=C0103,R0902,C0301,R1735
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 from dataclasses import dataclass
@@ -126,9 +127,7 @@ class Ticker:
         :param ticker_protobuf_object: the protocol buffer object whose type corresponds with this class.
         :param ticker_object: an instance of this class to be encoded in the protocol buffer object.
         """
-        for (
-            attribute
-        ) in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
             attribute_value = getattr(ticker_object, attribute)
             if attribute_value is not None:
                 setattr(ticker_protobuf_object.Ticker, attribute, attribute_value)
@@ -144,9 +143,7 @@ class Ticker:
         :return: A new instance of this class that matches the protocol buffer object in the 'ticker_protobuf_object' argument.
         """
         params = {}
-        for (
-            attribute
-        ) in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
             attribute_value = getattr(ticker_protobuf_object.Ticker, attribute, None)
             if attribute_value is not None:
                 params[attribute] = attribute_value
@@ -157,10 +154,7 @@ class Ticker:
             return all(
                 getattr(self, field) == getattr(other, field)
                 for field in Ticker.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self
-                and other
-                and getattr(self, field) is not None
-                and getattr(other, field) is not None
+                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
             )
         return False
 
@@ -212,9 +206,6 @@ class Tickers:
             return all(
                 getattr(self, field) == getattr(other, field)
                 for field in Tickers.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self
-                and other
-                and getattr(self, field) is not None
-                and getattr(other, field) is not None
+                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
             )
         return False

@@ -6,13 +6,8 @@ from typing import Optional
 
 from aea.skills.base import Envelope
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import (
-    BaseInterface,
-)
-from packages.eightballer.protocols.order_book.dialogues import (
-    BaseOrderBookDialogues,
-    OrderBookDialogue,
-)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.protocols.order_book.dialogues import BaseOrderBookDialogues, OrderBookDialogue
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 
 DEFAULT_INTERVAL = 0.1
@@ -34,9 +29,7 @@ class OrderBookInterface(BaseInterface):
         Get a position from the exchange.
         """
         exchange = connection.exchanges[message.exchange_id]
-        connection.logger.info(
-            f"Subscribing to {message.exchange_id} order book. Symbol: {message.symbol}"
-        )
+        connection.logger.info(f"Subscribing to {message.exchange_id} order book. Symbol: {message.symbol}")
         try:
             while True:
                 book = await exchange.watch_order_book(

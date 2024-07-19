@@ -15,6 +15,7 @@ class HundredXClient:
         :param api_key: The API key.
         :param api_secret: The API secret.
         """
+        del args, kwargs
 
     async def fetch_markets(self, *args, **kwargs):
         """
@@ -22,6 +23,7 @@ class HundredXClient:
 
         :return: The markets.
         """
+        del args, kwargs
 
     async def fetch_tickers(self, *args, **kwargs):
         """
@@ -29,6 +31,7 @@ class HundredXClient:
 
         :return: The tickers.
         """
+        del args, kwargs
 
     async def fetch_ticker(self, *args, **kwargs):
         """
@@ -36,3 +39,4 @@ class HundredXClient:
 
         :return: The ticker.
         """
+        del args, kwargs

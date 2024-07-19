@@ -38,18 +38,10 @@ from packages.eightballer.skills.dex_data_retrieval.behaviours import (
     FetchDexPositionsBehaviour,
     FetchDexTickersBehaviour,
 )
-from packages.eightballer.skills.dex_data_retrieval.rounds import (
-    Event,
-    SynchronizedData,
-)
+from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
-from packages.valory.skills.abstract_round_abci.test_tools.base import (
-    FSMBehaviourBaseCase,
-)
-from tests.test_connections.test_ccxt_connection.protocols.test_market import (
-    TEST_EXCHANGE,
-)
+from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
 
 TEST_EXCHANGE = "deribit"
 
@@ -172,9 +164,7 @@ class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
         mocker.from_markets_to_dict = from_markets_to_dict
         mocker.is_result_ok = is_result_ok
         # we need to mock the get_ccxt_response method of the behaviour
-        self.skill.behaviours[
-            "main"
-        ].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
+        self.skill.behaviours["main"].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
         self.skill.behaviours[  # pylint: disable=protected-access
             "main"
         ].current_behaviour._from_markets_to_dict = mocker.from_markets_to_dict
@@ -224,9 +214,7 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         mocker.from_markets_to_dict = from_markets_to_dict
         mocker.is_result_ok = is_result_ok
         # we need to mock the get_ccxt_response method of the behaviour
-        self.skill.behaviours[
-            "main"
-        ].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
+        self.skill.behaviours["main"].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
         self.skill.behaviours[  # pylint: disable=protected-access
             "main"
         ].current_behaviour._from_markets_to_dict = mocker.from_markets_to_dict

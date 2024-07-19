@@ -16,7 +16,7 @@ from packages.eightballer.connections.ccxt.interfaces.spot_asset import SpotAsse
 from packages.eightballer.connections.ccxt.interfaces.ticker import TickerInterface
 
 
-class ConnectionProtocolInterface:
+class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attributes
     """Interface for the supported protocols."""
 
     def __init__(self, **kwargs):
@@ -51,14 +51,12 @@ class ConnectionProtocolInterface:
         handler: Callable[[Any], Any] = interface.get_handler(performative)
         return await handler(msg, dialogue, connection=self)
 
-    def build_envelope(
-        self, request: Optional[Envelope], response_message: Optional[Message]
-    ):
+    def build_envelope(self, request: Optional[Envelope], response_message: Optional[Message]):
         """Build the envelope."""
         response_envelope = None
 
         if response_message is not None:
-            to = request.sender if request is not None else response_message.to
+            to = request.sender if request is not None else response_message.to  # pylint: disable=C0103
             response_envelope = Envelope(
                 to=to,
                 sender=str(PUBLIC_ID),

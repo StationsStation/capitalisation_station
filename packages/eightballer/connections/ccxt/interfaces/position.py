@@ -7,10 +7,7 @@ from ccxt import AuthenticationError, BadSymbol, RequestTimeout
 
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.positions.custom_types import Position, Positions
-from packages.eightballer.protocols.positions.dialogues import (
-    BasePositionsDialogues,
-    PositionsDialogue,
-)
+from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
 
 
@@ -44,8 +41,8 @@ class PositionInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for k, v in message.params.items():
-                params[k] = v.decode()
+            for key, value in message.params.items():
+                params[key] = value.decode()
             positions = await exchange.fetch_positions(params=params)
             positions = all_positions_from_api_call(positions)
             response_message = dialogue.reply(

@@ -3,10 +3,7 @@ import asyncio
 
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.spot_asset.custom_types import Decimal
-from packages.eightballer.protocols.spot_asset.dialogues import (
-    SpotAssetDialogue,
-    SpotAssetDialogues,
-)
+from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 
 INTERVAL = 10
@@ -48,14 +45,10 @@ class SpotAssetInterface(BaseInterface):
         return response
 
     def _parse_result_ftx(self, res, message):
-        self._balances[message.exchange_id] = {
-            k["coin"]: k for k in res["info"]["result"]
-        }
+        self._balances[message.exchange_id] = {k["coin"]: k for k in res["info"]["result"]}
 
     def _parse_result_other(self, res, message):
-        self._balances[message.exchange_id] = {
-            k["asset"]: k for k in res["info"]["balances"]
-        }
+        self._balances[message.exchange_id] = {k["asset"]: k for k in res["info"]["balances"]}
         asset = self._balances[message.exchange_id][message.name]
         asset["total"] = float(asset["free"]) + float(asset["locked"])
         asset["availableWithoutBorrow"] = asset["free"]
@@ -80,8 +73,8 @@ class SpotAssetInterface(BaseInterface):
                 raise ValueError("Unsupported exchange {message.exchange_id}")
             self._parse_result_other(res, message)
             return self._balances[message.exchange_id][message.name]
-        except Exception as e:  # pylint: disable=W0703
-            connection.logger.error(f"FAILED TO POLL WITH -> {e}!")
+        except Exception as error:  # pylint: disable=W0703
+            connection.logger.error(f"FAILED TO POLL WITH -> {error}!")
 
     async def _poll_balances(self, message, connection):
         connection.logger.info("Starting to poll balances : %s", message.name)

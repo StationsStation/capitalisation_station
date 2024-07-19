@@ -20,6 +20,7 @@
 """Serialization module for tickers protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=E0611,R0912,C0209,R1735
 from typing import cast
 
 from aea.mail.base_pb2 import DialogueMessage
@@ -27,11 +28,7 @@ from aea.mail.base_pb2 import Message as ProtobufMessage
 from aea.protocols.base import Message, Serializer
 
 from packages.eightballer.protocols.tickers import tickers_pb2
-from packages.eightballer.protocols.tickers.custom_types import (
-    ErrorCode,
-    Ticker,
-    Tickers,
-)
+from packages.eightballer.protocols.tickers.custom_types import ErrorCode, Ticker, Tickers
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
 
@@ -161,5 +158,5 @@ class TickersSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )
