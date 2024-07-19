@@ -22,9 +22,10 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
 from typing import cast
 
-from aea.mail.base_pb2 import DialogueMessage # pylint: disable=E0611
-from aea.mail.base_pb2 import Message as ProtobufMessage # pylint: disable=E0611
+from aea.mail.base_pb2 import DialogueMessage  # pylint: disable=E0611
+from aea.mail.base_pb2 import Message as ProtobufMessage  # pylint: disable=E0611
 from aea.protocols.base import Message, Serializer
+
 from packages.eightballer.protocols.default import default_pb2
 from packages.eightballer.protocols.default.custom_types import ErrorCode
 from packages.eightballer.protocols.default.message import DefaultMessage

@@ -20,6 +20,7 @@
 """This module contains order_book's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Optional, Set, Tuple, cast
 
@@ -27,13 +28,9 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.order_book.custom_types import (
-    OrderBook as CustomOrderBook,
-)
+from packages.eightballer.protocols.order_book.custom_types import OrderBook as CustomOrderBook
 
-_default_logger = logging.getLogger(
-    "aea.packages.eightballer.protocols.order_book.message"
-)
+_default_logger = logging.getLogger("aea.packages.eightballer.protocols.order_book.message")
 
 DEFAULT_BODY_SIZE = 4
 
@@ -42,9 +39,7 @@ class OrderBookMessage(Message):
     """A protocol to enable agents to subscribe to order books and receive updates in real-time. This protocol facilitates monitoring changes in bid and ask prices along with their volumes for given trading pairs on specified exchanges."""
 
     protocol_id = PublicId.from_str("eightballer/order_book:0.1.0")
-    protocol_specification_id = PublicId.from_str(
-        "eightballer/order_book_subscription:0.1.0"
-    )
+    protocol_specification_id = PublicId.from_str("eightballer/order_book_subscription:0.1.0")
 
     OrderBook = CustomOrderBook
 
@@ -188,15 +183,11 @@ class OrderBookMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -221,27 +212,21 @@ class OrderBookMessage(Message):
                 )
                 enforce(
                     isinstance(self.symbol, str),
-                    "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(
-                        type(self.symbol)
-                    ),
+                    "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(type(self.symbol)),
                 )
                 if self.is_set("precision"):
                     expected_nb_of_contents += 1
                     precision = cast(str, self.precision)
                     enforce(
                         isinstance(precision, str),
-                        "Invalid type for content 'precision'. Expected 'str'. Found '{}'.".format(
-                            type(precision)
-                        ),
+                        "Invalid type for content 'precision'. Expected 'str'. Found '{}'.".format(type(precision)),
                     )
                 if self.is_set("interval"):
                     expected_nb_of_contents += 1
                     interval = cast(int, self.interval)
                     enforce(
                         type(interval) is int,
-                        "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(
-                            type(interval)
-                        ),
+                        "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(type(interval)),
                     )
             elif self.performative == OrderBookMessage.Performative.UNSUBSCRIBE:
                 expected_nb_of_contents = 2
@@ -253,9 +238,7 @@ class OrderBookMessage(Message):
                 )
                 enforce(
                     isinstance(self.symbol, str),
-                    "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(
-                        type(self.symbol)
-                    ),
+                    "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(type(self.symbol)),
                 )
             elif self.performative == OrderBookMessage.Performative.ORDER_BOOK_UPDATE:
                 expected_nb_of_contents = 1
@@ -269,9 +252,7 @@ class OrderBookMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
 
             # Check correct content count
@@ -286,9 +267,7 @@ class OrderBookMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

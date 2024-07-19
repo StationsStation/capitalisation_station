@@ -40,6 +40,6 @@ class TestDialoguesDefault(BaseProtocolDialoguesTestCase):
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
         return {
-            "performative":DefaultMessage.Performative.BYTES,
-            "content":b"some bytes",
+            "performative": DefaultMessage.Performative.BYTES,
+            "content": b"some bytes",
         }

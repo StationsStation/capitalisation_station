@@ -37,7 +37,7 @@ class ErrorCode(Enum):
         """
         Encode an instance of this class into the protocol buffer object.
 
-        The protocol buffer object in the error_code_protobuf_object argument is 
+        The protocol buffer object in the error_code_protobuf_object argument is
         matched with the instance of this class in the 'error_code_object' argument.
 
         :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
@@ -48,15 +48,15 @@ class ErrorCode(Enum):
     @classmethod
     def decode(cls, error_code_protobuf_object: Any) -> "ErrorCode":
         """
-        Decode a protocol buffer object that corresponds with this class into 
+        Decode a protocol buffer object that corresponds with this class into
         an instance of this class.
 
-        A new instance of this class is created that matches the protocol buffer object in the 
+        A new instance of this class is created that matches the protocol buffer object in the
         error_code_protobuf_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with 
+        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with
         this class.
-        :return: A new instance of this class that matches the 
+        :return: A new instance of this class that matches the
         protocol buffer object in the 'error_code_protobuf_object' argument.
         """
         enum_value_from_pb2 = error_code_protobuf_object.error_code

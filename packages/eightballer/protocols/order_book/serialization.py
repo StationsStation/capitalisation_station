@@ -19,7 +19,8 @@
 
 """Serialization module for order_book protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
+# pylint: disable=E0611,R0912,C0209,R1735
 from typing import cast
 
 from aea.mail.base_pb2 import DialogueMessage
@@ -148,5 +149,5 @@ class OrderBookSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )

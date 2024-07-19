@@ -19,7 +19,9 @@
 
 """Serialization module for spot_asset protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
+# pylint: disable=E0611,R0912,C0209,R1735
+
 from typing import cast
 
 from aea.mail.base_pb2 import DialogueMessage
@@ -70,9 +72,7 @@ class SpotAssetSerializer(Serializer):
             free = msg.free
             Decimal.encode(performative.free, free)
             available_without_borrow = msg.available_without_borrow
-            Decimal.encode(
-                performative.available_without_borrow, available_without_borrow
-            )
+            Decimal.encode(performative.available_without_borrow, available_without_borrow)
             if msg.is_set("usd_value"):
                 performative.usd_value_is_set = True
                 usd_value = msg.usd_value
@@ -142,9 +142,7 @@ class SpotAssetSerializer(Serializer):
             pb2_free = spot_asset_pb.spot_asset.free
             free = Decimal.decode(pb2_free)
             performative_content["free"] = free
-            pb2_available_without_borrow = (
-                spot_asset_pb.spot_asset.available_without_borrow
-            )
+            pb2_available_without_borrow = spot_asset_pb.spot_asset.available_without_borrow
             available_without_borrow = Decimal.decode(pb2_available_without_borrow)
             performative_content["available_without_borrow"] = available_without_borrow
             if spot_asset_pb.spot_asset.usd_value_is_set:
@@ -174,5 +172,5 @@ class SpotAssetSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )

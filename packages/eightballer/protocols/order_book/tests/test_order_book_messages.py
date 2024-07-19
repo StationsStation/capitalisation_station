@@ -20,6 +20,7 @@
 """Test messages module for order_book protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase

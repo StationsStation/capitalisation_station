@@ -37,16 +37,12 @@ from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 class OhlcvDialogue(Dialogue):
     """The ohlcv dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {OhlcvMessage.Performative.SUBSCRIBE}
-    )
+    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({OhlcvMessage.Performative.SUBSCRIBE})
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {OhlcvMessage.Performative.ERROR, OhlcvMessage.Performative.END}
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
-        OhlcvMessage.Performative.CANDLESTICK: frozenset(
-            {OhlcvMessage.Performative.END}
-        ),
+        OhlcvMessage.Performative.CANDLESTICK: frozenset({OhlcvMessage.Performative.END}),
         OhlcvMessage.Performative.END: frozenset(),
         OhlcvMessage.Performative.ERROR: frozenset(),
         OhlcvMessage.Performative.HISTORY: frozenset(

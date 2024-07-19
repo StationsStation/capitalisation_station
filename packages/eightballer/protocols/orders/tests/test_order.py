@@ -1,18 +1,13 @@
 """
 Test order protocol
 """
+# pylint: disable=R1735
 from abc import abstractmethod
 
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.orders import OrdersMessage
-from packages.eightballer.protocols.orders.custom_types import (
-    ErrorCode,
-    Order,
-    OrderSide,
-    OrderStatus,
-    OrderType,
-)
+from packages.eightballer.protocols.orders.custom_types import ErrorCode, Order, OrderSide, OrderStatus, OrderType
 
 RAW_ORDER = {
     "id": "test_order",
@@ -46,10 +41,7 @@ class BaseTestMessageConstruction:
 
         assert expected_envelope.to == actual_envelope.to
         assert expected_envelope.sender == actual_envelope.sender
-        assert (
-            expected_envelope.protocol_specification_id
-            == actual_envelope.protocol_specification_id
-        )
+        assert expected_envelope.protocol_specification_id == actual_envelope.protocol_specification_id
         assert expected_envelope.message != actual_envelope.message
 
         actual_msg = self.msg_class.serializer.decode(actual_envelope.message_bytes)
@@ -126,9 +118,7 @@ class TestGetOrders(BaseTestMessageConstruction):
             status=OrderStatus.OPEN,
             order_type=OrderType.LIMIT,
         )
-        return OrdersMessage(
-            performative=OrdersMessage.Performative.GET_ORDERS, **params  # type: ignore
-        )
+        return OrdersMessage(performative=OrdersMessage.Performative.GET_ORDERS, **params)  # type: ignore
 
 
 class BaseTestCustomType:

@@ -20,6 +20,7 @@
 """This module contains ohlcv's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Set, Tuple, cast
 
@@ -27,9 +28,7 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.ohlcv.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
+from packages.eightballer.protocols.ohlcv.custom_types import ErrorCode as CustomErrorCode
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.ohlcv.message")
 
@@ -243,15 +242,11 @@ class OhlcvMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -282,9 +277,7 @@ class OhlcvMessage(Message):
                 )
                 enforce(
                     type(self.interval) is int,
-                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(
-                        type(self.interval)
-                    ),
+                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(type(self.interval)),
                 )
             elif self.performative == OhlcvMessage.Performative.CANDLESTICK:
                 expected_nb_of_contents = 9
@@ -302,45 +295,31 @@ class OhlcvMessage(Message):
                 )
                 enforce(
                     type(self.interval) is int,
-                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(
-                        type(self.interval)
-                    ),
+                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(type(self.interval)),
                 )
                 enforce(
                     isinstance(self.open, float),
-                    "Invalid type for content 'open'. Expected 'float'. Found '{}'.".format(
-                        type(self.open)
-                    ),
+                    "Invalid type for content 'open'. Expected 'float'. Found '{}'.".format(type(self.open)),
                 )
                 enforce(
                     isinstance(self.high, float),
-                    "Invalid type for content 'high'. Expected 'float'. Found '{}'.".format(
-                        type(self.high)
-                    ),
+                    "Invalid type for content 'high'. Expected 'float'. Found '{}'.".format(type(self.high)),
                 )
                 enforce(
                     isinstance(self.low, float),
-                    "Invalid type for content 'low'. Expected 'float'. Found '{}'.".format(
-                        type(self.low)
-                    ),
+                    "Invalid type for content 'low'. Expected 'float'. Found '{}'.".format(type(self.low)),
                 )
                 enforce(
                     isinstance(self.close, float),
-                    "Invalid type for content 'close'. Expected 'float'. Found '{}'.".format(
-                        type(self.close)
-                    ),
+                    "Invalid type for content 'close'. Expected 'float'. Found '{}'.".format(type(self.close)),
                 )
                 enforce(
                     isinstance(self.volume, float),
-                    "Invalid type for content 'volume'. Expected 'float'. Found '{}'.".format(
-                        type(self.volume)
-                    ),
+                    "Invalid type for content 'volume'. Expected 'float'. Found '{}'.".format(type(self.volume)),
                 )
                 enforce(
                     type(self.timestamp) is int,
-                    "Invalid type for content 'timestamp'. Expected 'int'. Found '{}'.".format(
-                        type(self.timestamp)
-                    ),
+                    "Invalid type for content 'timestamp'. Expected 'int'. Found '{}'.".format(type(self.timestamp)),
                 )
             elif self.performative == OhlcvMessage.Performative.HISTORY:
                 expected_nb_of_contents = 5
@@ -370,9 +349,7 @@ class OhlcvMessage(Message):
                 )
                 enforce(
                     type(self.interval) is int,
-                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(
-                        type(self.interval)
-                    ),
+                    "Invalid type for content 'interval'. Expected 'int'. Found '{}'.".format(type(self.interval)),
                 )
             elif self.performative == OhlcvMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
@@ -384,15 +361,11 @@ class OhlcvMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
-                        type(self.error_data)
-                    ),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -422,9 +395,7 @@ class OhlcvMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

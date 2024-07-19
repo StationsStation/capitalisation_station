@@ -20,12 +20,10 @@
 """Test dialogues module for order_book protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.order_book.dialogues import (
-    OrderBookDialogue,
-    OrderBookDialogues,
-)
+from packages.eightballer.protocols.order_book.dialogues import OrderBookDialogue, OrderBookDialogues
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 
 

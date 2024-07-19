@@ -24,11 +24,7 @@ from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.markets.custom_types import (
-    ErrorCode,
-    Market,
-    Markets,
-)
+from packages.eightballer.protocols.markets.custom_types import ErrorCode, Market, Markets
 from packages.eightballer.protocols.markets.message import MarketsMessage
 
 TEST_MARKET_CASE = {

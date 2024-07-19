@@ -20,13 +20,11 @@
 """Test dialogues module for positions protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.positions.custom_types import PositionSide
-from packages.eightballer.protocols.positions.dialogues import (
-    PositionsDialogue,
-    PositionsDialogues,
-)
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, PositionsDialogues
 from packages.eightballer.protocols.positions.message import PositionsMessage
 
 

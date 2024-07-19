@@ -20,6 +20,7 @@
 """Serialization module for balances protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=E0611,R0912,C0209,R1735
 from typing import cast
 
 from aea.mail.base_pb2 import DialogueMessage
@@ -27,11 +28,7 @@ from aea.mail.base_pb2 import Message as ProtobufMessage
 from aea.protocols.base import Message, Serializer
 
 from packages.eightballer.protocols.balances import balances_pb2
-from packages.eightballer.protocols.balances.custom_types import (
-    Balance,
-    Balances,
-    ErrorCode,
-)
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances, ErrorCode
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 
@@ -161,5 +158,5 @@ class BalancesSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )

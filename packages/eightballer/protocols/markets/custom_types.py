@@ -16,6 +16,7 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+# pylint: disable=C0103,R0902,C0301,R1735
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 
@@ -104,9 +105,7 @@ class Market:
         :param market_protobuf_object: the protocol buffer object whose type corresponds with this class.
         :param market_object: an instance of this class to be encoded in the protocol buffer object.
         """
-        for (
-            attribute
-        ) in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
             if hasattr(market_object, attribute):
                 value = getattr(market_object, attribute)
                 setattr(market_protobuf_object.Market, attribute, value)
@@ -124,14 +123,10 @@ class Market:
         :return: A new instance of this class that matches the protocol buffer object in the 'market_protobuf_object' argument.
         """
         attribute_dict = dict()
-        for (
-            attribute
-        ) in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
             if hasattr(market_protobuf_object.Market, attribute):
                 if getattr(market_protobuf_object.Market, attribute) is not None:
-                    attribute_dict[attribute] = getattr(
-                        market_protobuf_object.Market, attribute
-                    )
+                    attribute_dict[attribute] = getattr(market_protobuf_object.Market, attribute)
         return cls(**attribute_dict)
 
     def __eq__(self, other):
@@ -152,9 +147,7 @@ class Market:
     def to_json(self):
         """TO a pretty dictionary string."""
         result = {}
-        for (
-            attribute
-        ) in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
+        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
             if hasattr(self, attribute):
                 value = getattr(self, attribute)
                 if value is not None:
@@ -179,9 +172,7 @@ class Markets:
         :param markets_object: an instance of this class to be encoded in the protocol buffer object.
         """
         if markets_protobuf_object is None:
-            raise ValueError(
-                "The protocol buffer object 'markets_protobuf_object' is not initialized."
-            )
+            raise ValueError("The protocol buffer object 'markets_protobuf_object' is not initialized.")
         markets_protobuf_object.Markets.markets = markets_object.markets
 
     @classmethod

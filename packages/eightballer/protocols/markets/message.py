@@ -20,6 +20,8 @@
 """This module contains markets's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
+
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
@@ -27,15 +29,11 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.markets.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
+from packages.eightballer.protocols.markets.custom_types import ErrorCode as CustomErrorCode
 from packages.eightballer.protocols.markets.custom_types import Market as CustomMarket
 from packages.eightballer.protocols.markets.custom_types import Markets as CustomMarkets
 
-_default_logger = logging.getLogger(
-    "aea.packages.eightballer.protocols.markets.message"
-)
+_default_logger = logging.getLogger("aea.packages.eightballer.protocols.markets.message")
 
 DEFAULT_BODY_SIZE = 4
 
@@ -208,15 +206,11 @@ class MarketsMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -244,17 +238,13 @@ class MarketsMessage(Message):
                     currency = cast(str, self.currency)
                     enforce(
                         isinstance(currency, str),
-                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(
-                            type(currency)
-                        ),
+                        "Invalid type for content 'currency'. Expected 'str'. Found '{}'.".format(type(currency)),
                     )
             elif self.performative == MarketsMessage.Performative.GET_MARKET:
                 expected_nb_of_contents = 2
                 enforce(
                     isinstance(self.id, str),
-                    "Invalid type for content 'id'. Expected 'str'. Found '{}'.".format(
-                        type(self.id)
-                    ),
+                    "Invalid type for content 'id'. Expected 'str'. Found '{}'.".format(type(self.id)),
                 )
                 enforce(
                     isinstance(self.exchange_id, str),
@@ -266,17 +256,13 @@ class MarketsMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.markets, CustomMarkets),
-                    "Invalid type for content 'markets'. Expected 'Markets'. Found '{}'.".format(
-                        type(self.markets)
-                    ),
+                    "Invalid type for content 'markets'. Expected 'Markets'. Found '{}'.".format(type(self.markets)),
                 )
             elif self.performative == MarketsMessage.Performative.MARKET:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.market, CustomMarket),
-                    "Invalid type for content 'market'. Expected 'Market'. Found '{}'.".format(
-                        type(self.market)
-                    ),
+                    "Invalid type for content 'market'. Expected 'Market'. Found '{}'.".format(type(self.market)),
                 )
             elif self.performative == MarketsMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
@@ -288,15 +274,11 @@ class MarketsMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
-                        type(self.error_data)
-                    ),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -324,9 +306,7 @@ class MarketsMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

@@ -20,6 +20,7 @@
 """This module contains spot_asset's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Optional, Set, Tuple, cast
 
@@ -27,16 +28,10 @@ from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message
 
-from packages.eightballer.protocols.spot_asset.custom_types import (
-    Decimal as CustomDecimal,
-)
-from packages.eightballer.protocols.spot_asset.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
+from packages.eightballer.protocols.spot_asset.custom_types import Decimal as CustomDecimal
+from packages.eightballer.protocols.spot_asset.custom_types import ErrorCode as CustomErrorCode
 
-_default_logger = logging.getLogger(
-    "aea.packages.eightballer.protocols.spot_asset.message"
-)
+_default_logger = logging.getLogger("aea.packages.eightballer.protocols.spot_asset.message")
 
 DEFAULT_BODY_SIZE = 4
 
@@ -216,15 +211,11 @@ class SpotAssetMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
-                    type(self.message_id)
-                ),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
-                    type(self.target)
-                ),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
             )
 
             # Light Protocol Rule 2
@@ -243,9 +234,7 @@ class SpotAssetMessage(Message):
                 expected_nb_of_contents = 2
                 enforce(
                     isinstance(self.name, str),
-                    "Invalid type for content 'name'. Expected 'str'. Found '{}'.".format(
-                        type(self.name)
-                    ),
+                    "Invalid type for content 'name'. Expected 'str'. Found '{}'.".format(type(self.name)),
                 )
                 enforce(
                     isinstance(self.exchange_id, str),
@@ -257,21 +246,15 @@ class SpotAssetMessage(Message):
                 expected_nb_of_contents = 4
                 enforce(
                     isinstance(self.name, str),
-                    "Invalid type for content 'name'. Expected 'str'. Found '{}'.".format(
-                        type(self.name)
-                    ),
+                    "Invalid type for content 'name'. Expected 'str'. Found '{}'.".format(type(self.name)),
                 )
                 enforce(
                     isinstance(self.total, CustomDecimal),
-                    "Invalid type for content 'total'. Expected 'Decimal'. Found '{}'.".format(
-                        type(self.total)
-                    ),
+                    "Invalid type for content 'total'. Expected 'Decimal'. Found '{}'.".format(type(self.total)),
                 )
                 enforce(
                     isinstance(self.free, CustomDecimal),
-                    "Invalid type for content 'free'. Expected 'Decimal'. Found '{}'.".format(
-                        type(self.free)
-                    ),
+                    "Invalid type for content 'free'. Expected 'Decimal'. Found '{}'.".format(type(self.free)),
                 )
                 enforce(
                     isinstance(self.available_without_borrow, CustomDecimal),
@@ -284,18 +267,14 @@ class SpotAssetMessage(Message):
                     usd_value = cast(CustomDecimal, self.usd_value)
                     enforce(
                         isinstance(usd_value, CustomDecimal),
-                        "Invalid type for content 'usd_value'. Expected 'Decimal'. Found '{}'.".format(
-                            type(usd_value)
-                        ),
+                        "Invalid type for content 'usd_value'. Expected 'Decimal'. Found '{}'.".format(type(usd_value)),
                     )
                 if self.is_set("decimal"):
                     expected_nb_of_contents += 1
                     decimal = cast(CustomDecimal, self.decimal)
                     enforce(
                         isinstance(decimal, CustomDecimal),
-                        "Invalid type for content 'decimal'. Expected 'Decimal'. Found '{}'.".format(
-                            type(decimal)
-                        ),
+                        "Invalid type for content 'decimal'. Expected 'Decimal'. Found '{}'.".format(type(decimal)),
                     )
             elif self.performative == SpotAssetMessage.Performative.GET_SPOT_ASSETS:
                 expected_nb_of_contents = 1
@@ -315,9 +294,7 @@ class SpotAssetMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
-                        type(self.error_msg)
-                    ),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
                 )
             elif self.performative == SpotAssetMessage.Performative.END:
                 expected_nb_of_contents = 0
@@ -334,9 +311,7 @@ class SpotAssetMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
-                        self.target
-                    ),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))

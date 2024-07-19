@@ -20,6 +20,7 @@
 """Serialization module for markets protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=E0611,R0912,C0209,R1735,C0103
 from typing import cast
 
 from aea.mail.base_pb2 import DialogueMessage
@@ -27,11 +28,7 @@ from aea.mail.base_pb2 import Message as ProtobufMessage
 from aea.protocols.base import Message, Serializer
 
 from packages.eightballer.protocols.markets import markets_pb2
-from packages.eightballer.protocols.markets.custom_types import (
-    ErrorCode,
-    Market,
-    Markets,
-)
+from packages.eightballer.protocols.markets.custom_types import ErrorCode, Market, Markets
 from packages.eightballer.protocols.markets.message import MarketsMessage
 
 
@@ -160,5 +157,5 @@ class MarketsSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content
+            **performative_content,
         )

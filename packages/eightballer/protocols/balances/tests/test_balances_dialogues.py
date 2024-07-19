@@ -20,12 +20,10 @@
 """Test dialogues module for balances protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.balances.dialogues import (
-    BalancesDialogue,
-    BaseBalancesDialogues,
-)
+from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 

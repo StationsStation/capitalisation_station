@@ -5,6 +5,7 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+
 # pylint: disable=C0209,C0301,C0103,W0212
 # @@protoc_insertion_point(imports)
 

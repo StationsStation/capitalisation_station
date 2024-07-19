@@ -126,9 +126,7 @@ class BaseOrdersDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[
-            Callable[[Message, Address], Dialogue.Role]
-        ] = None,
+        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
         dialogue_class: Type[OrdersDialogue] = OrdersDialogue,
     ) -> None:
         """
@@ -140,9 +138,7 @@ class BaseOrdersDialogues(Dialogues, ABC):
         """
         del role_from_first_message
 
-        def _role_from_first_message(
-            message: Message, sender: Address
-        ) -> Dialogue.Role:
+        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
             """Infer the role of the agent from an incoming/outgoing first message."""
             del message, sender
             return OrdersDialogue.Role.AGENT

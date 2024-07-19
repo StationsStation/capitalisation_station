@@ -38,9 +38,7 @@ from packages.eightballer.protocols.order_book.message import OrderBookMessage
 class OrderBookDialogue(Dialogue):
     """The order_book dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {OrderBookMessage.Performative.SUBSCRIBE}
-    )
+    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({OrderBookMessage.Performative.SUBSCRIBE})
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {OrderBookMessage.Performative.UNSUBSCRIBE, OrderBookMessage.Performative.ERROR}
     )
@@ -102,9 +100,7 @@ class OrderBookDialogue(Dialogue):
 class BaseOrderBookDialogues(Dialogues, ABC):
     """This class keeps track of all order_book dialogues."""
 
-    END_STATES = frozenset(
-        {OrderBookDialogue.EndState.UNSUBSCRIBE, OrderBookDialogue.EndState.ERROR}
-    )
+    END_STATES = frozenset({OrderBookDialogue.EndState.UNSUBSCRIBE, OrderBookDialogue.EndState.ERROR})
 
     _keep_terminal_state_dialogues = False
 
@@ -138,9 +134,7 @@ class OrderBookDialogues(Model, BaseOrderBookDialogues):
     def __init__(self, **kwargs):
         """Initialize order_book dialogues."""
 
-        def _role_from_first_message(
-            message: Message, sender: Address
-        ) -> Dialogue.Role:
+        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
             """Infer the role of the agent from an incoming/outgoing first message"""
             del message, sender
             return OrderBookDialogue.Role.AGENT
