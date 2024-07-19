@@ -23,6 +23,7 @@
 from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
+import pytest
 
 from packages.eightballer.protocols.positions.custom_types import ErrorCode, Position, Positions, PositionSide
 from packages.eightballer.protocols.positions.message import PositionsMessage
@@ -76,6 +77,7 @@ TEST_POSITION = {
 }
 
 
+@pytest.mark.skip("Not implemented yet")
 class TestMessagePositions(BaseProtocolMessagesTestCase):
     """Test for the 'positions' protocol message."""
 

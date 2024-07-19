@@ -43,9 +43,8 @@ jobs:
             make install
 
       - name: Format
-        env:
-          PYTHONPATH: '.'
         run: |
+            export PYTHONPATH=.
             make fmt
 
       - name: Lint
