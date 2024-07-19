@@ -48,12 +48,15 @@ hashes: clean
 	poetry run adev -v -n 0 lint
 
 lint:
-	poetry run adev -v -n 0 lint -co
+	poetry run adev -v -n 0 lint
 
 fmt: 
-	poetry run adev -n 0 fmt -co
+	poetry run adev -n 0 fmt
 
 test:
 	poetry run adev -v test
 
 all: fmt lint test hashes
+
+install:
+	poetry install
