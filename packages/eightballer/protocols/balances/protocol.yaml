@@ -1,0 +1,21 @@
+name: balances
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/balances:0.1.0
+type: protocol
+description: A protocol for passing balance data between agent components.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigalpw3zlh2sfmxw52dzxzsrnofbzb2fkucbravmi2dzsmpiwjtse
+  balances.proto: bafybeifl2dh3x5bqs5c5m22ljpzbfjzx6wvh2nioxvl7gc7aammcwqlzdi
+  balances_pb2.py: bafybeiedr5lrxfmmgbhlbrnuu4aewmeo5gdfpqxkl766ux5u6acvpxnusi
+  custom_types.py: bafybeiafmbp3tfec5o5fefeqm5s7xp6n3mbsdmwihhkumg7znldxatousi
+  dialogues.py: bafybeidm3cdyhnqmyflgruutwj2xtiuhtikym3hp3jrf3yrgnq3n47jjom
+  message.py: bafybeihs4togp3iobcl3lujuag6a4lwqw365b6m7skf545cc5qcqov2rny
+  serialization.py: bafybeib2me7zc2mdcsht4gn5kjiakfglpy2437c3np6ps5ey4tjkyp2ai4
+  tests/test_balances_dialogues.py: bafybeibdq6fnwqeqb2u7f6m2w3d4ejfahoesaxky5ks6fn2npm4i2vjjay
+  tests/test_balances_messages.py: bafybeic4zeajujjtdm2weo6pvkadghfhy3qqonqneqysxpty2pgtyezojy
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

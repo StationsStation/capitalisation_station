@@ -1,0 +1,21 @@
+name: spot_asset
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/spot_asset:0.1.0
+type: protocol
+description: A protocol for representing spot_assets.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibrexx3shtfib4smmw4s2tsi7a2bfaav6yrexlvwrzcyjhdnksck4
+  custom_types.py: bafybeihvlnae2wywe4cwgi3wjwns5jj2psaiwre7jayrzmif2lk7x5h2fe
+  dialogues.py: bafybeiajf4laedipyxsfalmnzelr22spav34lpfdq3kdm3qbpoubimpb5y
+  message.py: bafybeia7zuw52zivms6d4vpcwnollhrehuauhhsxc7bju22hw2eqebsw5m
+  serialization.py: bafybeif6ph2mx2s6ygv5lbmxcanzjomb2bg2gie3kf5psd6q6faim4kh34
+  spot_asset.proto: bafybeieuoeojj3rktsxl2bzyondfg372i6276zmauhsalkjldk4ttasgxi
+  spot_asset_pb2.py: bafybeie6kavpnmmgold57vtdf7vpbimf5jgswf7ykrjuawrnvn2fyapopm
+  tests/__init__.py: bafybeiceqkr32h2nowqnobnqc6y722cpfzosgmjc54fjkgmxi5dw5q7khq
+  tests/test_spot_asset.py: bafybeihyfs27kyvieuizk5pcd7e5lqrt3jjsyndz5kbc6lbdwb672m6bfe
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

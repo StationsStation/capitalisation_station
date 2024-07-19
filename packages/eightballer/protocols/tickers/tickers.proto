@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package aea.eightballer.tickers.v0_1_0;
+
+message TickersMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      UNKNOWN_EXCHANGE = 0;
+      UNKNOWN_TICKER = 1;
+      API_ERROR = 2;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Ticker{
+    message Ticker {
+      string symbol = 1;
+      int64 timestamp = 2;
+      string datetime = 3;
+      float high = 4;
+      float low = 5;
+      float bid = 6;
+      float bidVolume = 7;
+      float ask = 8;
+      float askVolume = 9;
+      float vwap = 10;
+      float open = 11;
+      float close = 12;
+      float last = 13;
+      float previousClose = 14;
+      float change = 15;
+      float percentage = 16;
+      float average = 17;
+      float baseVolume = 18;
+      float quoteVolume = 19;
+      string info = 20;
+    }
+  }
+
+  message Tickers{
+    message Tickers{
+      repeated Ticker tickers = 1;
+    }
+  }
+
+
+  // Performatives and contents
+  message Get_All_Tickers_Performative{
+    string exchange_id = 1;
+    map<string, bytes> params = 2;
+    bool params_is_set = 3;
+  }
+
+  message Get_Ticker_Performative{
+    string asset_id = 1;
+    string exchange_id = 2;
+  }
+
+  message All_Tickers_Performative{
+    Tickers tickers = 1;
+  }
+
+  message Ticker_Performative{
+    Ticker ticker = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Tickers_Performative all_tickers = 5;
+    Error_Performative error = 6;
+    Get_All_Tickers_Performative get_all_tickers = 7;
+    Get_Ticker_Performative get_ticker = 8;
+    Ticker_Performative ticker = 9;
+  }
+}

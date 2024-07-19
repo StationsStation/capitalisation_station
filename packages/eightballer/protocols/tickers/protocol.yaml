@@ -1,0 +1,21 @@
+name: tickers
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/tickers:0.1.0
+type: protocol
+description: A protocol for passing ticker data between agent components.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeife3lyh6j7vsdh7ze7fahohnnhbpkbyxxxn3y24dj6m7qcz45f7xa
+  custom_types.py: bafybeiezvqgg5kbaw55jwvnyrm4dyo255pfj6ers4nz35ctcjv7m6aleju
+  dialogues.py: bafybeibrbdvagk6du6uqzxisvicuexsjyyngs6bifd6oa4tth345epqptu
+  message.py: bafybeidom3k3bn7e7nibz7whwsaivagwcwxxzxbjykl2xdi4jrqyaes2ri
+  serialization.py: bafybeie2zh7kyx7gvxi3q5k3sqbfdmzthgwodfou5xprakg46m4wncbcgi
+  tests/test_tickers_dialogues.py: bafybeidym3nerg5ayw6qoadhiadwrvy63v37dn7rs72alxjeany46idmee
+  tests/test_tickers_messages.py: bafybeienisopxdplohm5jplxzu3xflamd35wgrdo72o7it7jgob4gaui4i
+  tickers.proto: bafybeihjhe2g5nqaqatbsl64i64blfeyqqlveaq7lfjj3typu5kcvx7mty
+  tickers_pb2.py: bafybeib4d3i2ss54jbelzpqwtklb5t2x7x72yrfgkdsskjk6vc2ta7ycpm
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

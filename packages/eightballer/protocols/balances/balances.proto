@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package aea.eightballer.balances.v0_1_0;
+
+message BalancesMessage{
+
+  // Custom Types
+  message Balance{
+    message Balance {
+      string asset_id = 1;
+      float free = 2;
+      float used = 3;
+      float total = 4;
+    }
+  }
+
+  message Balances{
+    message Balances {
+      repeated Balance balances = 1;
+    }
+  }
+
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      UNKNOWN_EXCHANGE = 0;
+      UNKNOWN_ASSET = 1;
+      API_ERROR = 2;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+
+  // Performatives and contents
+  message Get_All_Balances_Performative{
+    string exchange_id = 1;
+    map<string, bytes> params = 2;
+    bool params_is_set = 3;
+  }
+
+  message Get_Balance_Performative{
+    string asset_id = 1;
+    string exchange_id = 2;
+  }
+
+  message All_Balances_Performative{
+    Balances balances = 1;
+  }
+
+  message Balance_Performative{
+    Balance balance = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Balances_Performative all_balances = 5;
+    Balance_Performative balance = 6;
+    Error_Performative error = 7;
+    Get_All_Balances_Performative get_all_balances = 8;
+    Get_Balance_Performative get_balance = 9;
+  }
+}

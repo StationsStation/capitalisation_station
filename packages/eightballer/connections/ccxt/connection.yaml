@@ -1,0 +1,58 @@
+name: ccxt
+author: eightballer
+version: 0.1.0
+type: connection
+description: A wrapper of CCXT.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeieqyjeeb2jqocoaxazmyf3bvs74takayk3qqelqer7xtqk3nlodf4
+  connection.py: bafybeibs6czdyiptqlhvo7h4s7jnslnlzoud7zsenzzypoov2bu2s7kzia
+  custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
+  interfaces/balance.py: bafybeidwohydbngk53ryc2ycbxq43vltp7tu4zdtybzuthrwsdq5w5dwgi
+  interfaces/interface.py: bafybeihhztnpdwwzn4jcvk3rxv3b7gzxahsrbumv7vhsopnc2ntw33rsxq
+  interfaces/interface_base.py: bafybeifhvrnlpd5k6gfiot67tc7plsbtaf4ntsjgwmin3n7car6drww2ge
+  interfaces/market.py: bafybeigbpim7jajg43r3myr7kjzojjnufuiwdipo5fraygfz32wkizihka
+  interfaces/ohlcv.py: bafybeigzotimm4inqs5p2n6g6roeubfwctzowlyznxp3ql5xhvmtsbd2xm
+  interfaces/order.py: bafybeigi2i4qgpm54ujfouem4miu2fpfoydueufav37vrt5n2q4bw4c6nm
+  interfaces/order_book.py: bafybeie2x4juewbsy3lbrupik6cmoukllojfkorxpkvdzo5ftttlp6w53y
+  interfaces/position.py: bafybeielscynhtnb4glwxksu4fvzwes3ttqbgwx6k7altvub63l3kicg34
+  interfaces/spot_asset.py: bafybeiax3e2vdyalwsdsovy45mp3tno2c2oc2bmnkjshmrz6zaq6qlaxd4
+  interfaces/ticker.py: bafybeiaggaw45rcj4mklj7yn5gujht5xvvx5nvldcb2lao22kl4qymkz2e
+fingerprint_ignore_patterns: []
+connections: []
+restricted_to_protocols:
+- eightballer/balances:0.1.0
+- eightballer/markets:0.1.0
+- eightballer/ohlcv:0.1.0
+- eightballer/order_book:0.1.0
+- eightballer/orders:0.1.0
+- eightballer/positions:0.1.0
+- eightballer/spot_asset:0.1.0
+- eightballer/tickers:0.1.0
+protocols:
+- eightballer/balances:0.1.0:bafybeig2x6bjhj5yjd2m6gu7zroqso6nfn6xswld5ktvzhcxinmqik6lby
+- eightballer/default:0.1.0:bafybeia2oqgnqvvwciwwgiht74hn64yg4o2xxx7v52q74g4mm5a3pie5ii
+- eightballer/markets:0.1.0:bafybeideceldq2va2dy3lcobu6i6nnlm34gf6p4f2vrebvhx5m5d63zuqa
+- eightballer/ohlcv:0.1.0:bafybeib5sz7rz2ick6kxkbe4ifcwuztse4ebwrqlfxwav4mjq7mpbs222y
+- eightballer/order_book:0.1.0:bafybeic42bbd2ni2eu4dxerkzcokowrtvljbyeeql4pjda4x7nxfqbclnm
+- eightballer/orders:0.1.0:bafybeicp3y52vrvwfnkjpymlprmluoculyj5xv5a24cr3gb3sjbhfbgf7y
+- eightballer/positions:0.1.0:bafybeibhhxea6n6m7wgpc76ljtotkczmtzsyctno3bzf2rn3uzgko4auei
+- eightballer/spot_asset:0.1.0:bafybeicy3l7se2fatfw52yeng574uow4wuykrrg3imiik6msyvfa3t5kiy
+- eightballer/tickers:0.1.0:bafybeigm3qt4gow3fazaw5npauexa2dmnyshtdib5ey4pdzfbniln46g2y
+class_name: CcxtConnection
+config:
+  exchanges:
+  - name: binance
+    api_key: none
+    api_secret: none
+    sub_account: none
+    custom_urls: {}
+  target_skill_id: null
+excluded_protocols: []
+dependencies:
+  ccxt:
+    version: '>=3.1.43'
+  dateparser:
+    version: '>=1.1.1'
+is_abstract: false

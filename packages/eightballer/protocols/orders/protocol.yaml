@@ -1,0 +1,21 @@
+name: orders
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/orders:0.1.0
+type: protocol
+description: A protocol for representing orders.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeihhuxlbyl4qjl2lsggoh77qkgrzlrjifhdfymuxiblauwoodl6m5y
+  custom_types.py: bafybeigrz3ljtuev5g7sycuaf4jazjcj7t7yatadc5aohd2y5345oqcpna
+  dialogues.py: bafybeicsnfp4skwizznbytqlz7yevtwn2lsqib2lqipktdu4sf6dukocr4
+  message.py: bafybeibwjlnpuo2g75dv4ggfxifyr3rzdtbztuw7vd5frpzxsvvptlonk4
+  orders.proto: bafybeiaofejdygbj6l2s4fyeudiocx2pk6nkjkltrnaxxuahobqzzhtdbe
+  orders_pb2.py: bafybeiezzo7wfidbjulku5biqd3lnk6zsv2zkadm4mvycgiz2snkhm54qe
+  serialization.py: bafybeiglyjn4jwoyzddtd73oi2grjrklnxe4k3ytahenmpyhkwhx2kl4gq
+  tests/__init__.py: bafybeierwsy34eqeiawwmy6xasatflc7a7i6ae5nmdsx3ogspj3eqckzci
+  tests/test_order.py: bafybeid2cbc3qul6xtecnasjz6iq76p6q2pt5dpx5h6uwehq7utvizue7m
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

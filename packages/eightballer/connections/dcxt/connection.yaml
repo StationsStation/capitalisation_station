@@ -1,0 +1,60 @@
+name: dcxt
+author: eightballer
+version: 0.1.0
+type: connection
+description: A wrapper of CCXT.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
+  connection.py: bafybeiayf2g2zewboasyp227nqdhjaagtucc5gdsr7do3cmm3illtnhbni
+  custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
+  dcxt/__init__.py: bafybeiaadl3jrgbi263sq3qbtxwt4xocracubdpg73bspj2tvaviaetib4
+  dcxt/hundred_x.py: bafybeig3s6d6ehksx5uz2darcoe5c5l2ijs55ml2pzhz5c2xfzvosh2y5y
+  dcxt/lyra_v2.py: bafybeig5ticd7gpxwhl4vsvd6ql2jr7rbmzppi6cbkzqmbenq4d4yvlf3i
+  interfaces/balance.py: bafybeiejj7oaxnr6umet4fg72aqjniysb34irvlykjsfwoptsi3em7e7b4
+  interfaces/interface.py: bafybeidcwdww3veskriyovem7z32v4exdmqu7hxp4yc377l2x26d63tive
+  interfaces/interface_base.py: bafybeib52vwkczc7mterhvmt77tadgswsbp3c5d7cfavyoy5oyhke5w7iu
+  interfaces/market.py: bafybeicxpewb4y7jgsrcw4ly7h3c46id5m6ig5ra4ouejtflgzwagjtk4q
+  interfaces/ohlcv.py: bafybeicorkkjdtmvnymykcs52aa2epp4dqio3eudnx3qvimfsi55sgjl6y
+  interfaces/order.py: bafybeib24gnaqy3tjkv7tvqcsxkz4pj3mfzynmmu2frnwv6rspegvildry
+  interfaces/order_book.py: bafybeicmb2u7nukshm76tgjgxomtb4a3ucbhp7wbkopc3e6mczxt574oiu
+  interfaces/position.py: bafybeidwpy5pcw2ti3wgdx4ub5kpi6xbxw477xdeknceyewe6jlpnulxoi
+  interfaces/spot_asset.py: bafybeiat2rzrrnhvdihghs2kmqs4xjwn63oc5vwmkszqd77ctjl5v5sipy
+  interfaces/ticker.py: bafybeicsjxmxt6euxaet33nkbyg4fe7ii5jqlwlsfo5bbwz5dszyzn4o4q
+fingerprint_ignore_patterns: []
+connections: []
+restricted_to_protocols:
+- eightballer/balances:0.1.0
+- eightballer/markets:0.1.0
+- eightballer/ohlcv:0.1.0
+- eightballer/order_book:0.1.0
+- eightballer/orders:0.1.0
+- eightballer/positions:0.1.0
+- eightballer/spot_asset:0.1.0
+- eightballer/tickers:0.1.0
+protocols:
+- eightballer/balances:0.1.0:bafybeig2x6bjhj5yjd2m6gu7zroqso6nfn6xswld5ktvzhcxinmqik6lby
+- eightballer/default:0.1.0:bafybeia2oqgnqvvwciwwgiht74hn64yg4o2xxx7v52q74g4mm5a3pie5ii
+- eightballer/markets:0.1.0:bafybeideceldq2va2dy3lcobu6i6nnlm34gf6p4f2vrebvhx5m5d63zuqa
+- eightballer/ohlcv:0.1.0:bafybeib5sz7rz2ick6kxkbe4ifcwuztse4ebwrqlfxwav4mjq7mpbs222y
+- eightballer/order_book:0.1.0:bafybeic42bbd2ni2eu4dxerkzcokowrtvljbyeeql4pjda4x7nxfqbclnm
+- eightballer/orders:0.1.0:bafybeicp3y52vrvwfnkjpymlprmluoculyj5xv5a24cr3gb3sjbhfbgf7y
+- eightballer/positions:0.1.0:bafybeibhhxea6n6m7wgpc76ljtotkczmtzsyctno3bzf2rn3uzgko4auei
+- eightballer/spot_asset:0.1.0:bafybeicy3l7se2fatfw52yeng574uow4wuykrrg3imiik6msyvfa3t5kiy
+- eightballer/tickers:0.1.0:bafybeigm3qt4gow3fazaw5npauexa2dmnyshtdib5ey4pdzfbniln46g2y
+class_name: DcxtConnection
+config:
+  exchanges:
+  - name: lyra
+    environment: test
+  target_skill_id: null
+excluded_protocols: []
+dependencies:
+  dateparser:
+    version: '>=1.1.1'
+  hundred-x:
+    version: '>=0.1.13'
+  lyra-v2-client:
+    version: '>=0.2.9'
+is_abstract: false

@@ -1,0 +1,21 @@
+name: markets
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/markets:0.1.0
+type: protocol
+description: A protocol for passing market data between components.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeicfxz7qdkubd7bv5vnj7lg7eoepevbtpowzjfi4hqa5yzrbywbo7y
+  custom_types.py: bafybeihefst4r55a3cc552m2v6xahgonb2dychdb2pljclwyyv4s3my24a
+  dialogues.py: bafybeico3uirucj2u646d7p2nzu65vw6mivjwl6fl6nixh5scx5w4hscxa
+  markets.proto: bafybeibihxjeibzycgd5e4rqifzq7wkaeqlzf2cmg75ppwl47murmygp6e
+  markets_pb2.py: bafybeiaebcrubvd25akmoxndo4h7qy2an7dmyg6cd4pya73au2yia2vsme
+  message.py: bafybeib2u33yyizdlqbj4stkrf2xsc2qnpsk5qkpeyekub5xuif6iplady
+  serialization.py: bafybeicvxnw7hwuedxkou6ijnqtv6td4k2kdnrlg2vrfoxgfgogj7xniym
+  tests/test_markets_dialogues.py: bafybeihikml67lyih4g7nhemayldz6ahi3tll4usen754r7jcxvtzw2vj4
+  tests/test_markets_messages.py: bafybeigysvwtkc2k6teatleketos4agq6ze3tg7rzhlpygh64fumhxarni
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}

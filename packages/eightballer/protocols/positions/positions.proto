@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package aea.eightballer.positions.v0_1_0;
+
+message PositionsMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      UNKNOWN_EXCHANGE = 0;
+      UNKNOWN_POSITION = 1;
+      API_ERROR = 2;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Position{
+    message Position {
+      string id = 1;
+      string symbol = 2;
+      int64 timestamp = 3;
+      string datetime = 4;
+      int64 lastUpdateTimestamp = 5;
+      float initialMargin = 6;
+      float initialMarginPercentage = 7;
+      float maintenanceMargin = 8;
+      float maintenanceMarginPercentage = 9;
+      float entryPrice = 10;
+      float notional = 11;
+      float leverage = 12;
+      float unrealizedPnl = 13;
+      float contracts = 14;
+      float contractSize = 15;
+      float marginRatio = 16;
+      float liquidationPrice = 17;
+      float markPrice = 18;
+      float lastPrice = 19;
+      float collateral = 20;
+      string marginMode = 21;
+      PositionSide side = 22;
+      float percentage = 23;
+      string info = 24;
+      float size = 25;
+      string exchange_id = 26;
+      string hedged = 27;
+      float stop_loss_price = 28;
+    }
+  }
+
+  message PositionSide{
+    enum PositionSideEnum {
+      LONG = 0;
+      SHORT = 1;
+    }
+    PositionSideEnum position_side = 1;
+  }
+
+  message Positions{
+    message Positions {
+      repeated Position positions = 1;
+    }
+  }
+
+
+  // Performatives and contents
+  message Get_All_Positions_Performative{
+    string exchange_id = 1;
+    map<string, bytes> params = 2;
+    bool params_is_set = 3;
+    PositionSide side = 4;
+    bool side_is_set = 5;
+  }
+
+  message Get_Position_Performative{
+    string position_id = 1;
+    string exchange_id = 2;
+  }
+
+  message All_Positions_Performative{
+    Positions positions = 1;
+    string exchange_id = 2;
+  }
+
+  message Position_Performative{
+    Position position = 1;
+    string exchange_id = 2;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Positions_Performative all_positions = 5;
+    Error_Performative error = 6;
+    Get_All_Positions_Performative get_all_positions = 7;
+    Get_Position_Performative get_position = 8;
+    Position_Performative position = 9;
+  }
+}

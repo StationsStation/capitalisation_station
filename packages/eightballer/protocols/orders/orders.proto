@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package aea.eightballer.orders.v0_1_0;
+
+message OrdersMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      UNKNOWN_MARKET = 0;
+      INSUFFICIENT_FUNDS = 1;
+      UNKNOWN_ORDER = 2;
+      API_ERROR = 3;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Order{
+    message Order {
+      string id = 1;
+      string client_order_id = 2;
+      string info = 3;
+      float timestamp = 4;
+      string datetime = 5;
+      float last_trade_timestamp = 6;
+      OrderStatus status = 7;
+      string symbol = 8;
+      OrderType type = 9;
+      string time_in_force = 10;
+      bool post_only = 11;
+      OrderSide side = 12;
+      float price = 13;
+      float stop_price = 14;
+      float trigger_price = 15;
+      float cost = 16;
+      float amount = 17;
+      float filled = 18;
+      float remaining = 19;
+      float fee = 20;
+      float average = 21;
+      string trades = 22;
+      string fees = 23;
+      float last_update_timestamp = 24;
+      bool reduce_only = 25;
+      float take_profit_price = 26;
+      float stop_loss_price = 27;
+      string exchange_id = 28;
+    }
+          
+  }
+
+  message OrderSide{
+    enum OrderSideEnum{
+      BUY = 0;
+      SELL = 1;
+    }
+    OrderSideEnum order_side = 1;
+  }
+
+  message OrderStatus{
+    enum OrderStatusEnum{
+      SUBMITTED = 0;
+      OPEN = 1;
+      PARTIALLY_FILLED = 2;
+      CANCELLED = 3;
+      FILLED = 4;
+      CLOSED = 5;
+      EXPIRED = 6;
+      FAILED = 8;
+    }
+    OrderStatusEnum order_status = 1;
+  }
+
+  message OrderType{
+    enum OrderTypeEnum{
+      LIMIT = 0;
+      MARKET = 1;
+    }
+    OrderTypeEnum order_type = 1;
+  }
+
+  message Orders{
+    message Orders {
+      repeated Order orders = 1;
+    }
+  }
+
+
+  // Performatives and contents
+  message Create_Order_Performative{
+    Order order = 1;
+  }
+
+  message Order_Created_Performative{
+    Order order = 1;
+  }
+
+  message Cancel_Order_Performative{
+    Order order = 1;
+  }
+
+  message Order_Cancelled_Performative{
+    Order order = 1;
+  }
+
+  message Get_Orders_Performative{
+    string exchange_id = 1;
+    string symbol = 2;
+    bool symbol_is_set = 3;
+    string currency = 4;
+    bool currency_is_set = 5;
+    OrderType order_type = 6;
+    bool order_type_is_set = 7;
+    OrderSide side = 8;
+    bool side_is_set = 9;
+    OrderStatus status = 10;
+    bool status_is_set = 11;
+  }
+
+  message Get_Settlements_Performative{
+    string exchange_id = 1;
+    string currency = 2;
+    bool currency_is_set = 3;
+    double end_timestamp = 4;
+    bool end_timestamp_is_set = 5;
+    double start_timestamp = 6;
+    bool start_timestamp_is_set = 7;
+  }
+
+  message Get_Order_Performative{
+    Order order = 1;
+  }
+
+  message Order_Performative{
+    Order order = 1;
+  }
+
+  message Orders_Performative{
+    Orders orders = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    Cancel_Order_Performative cancel_order = 5;
+    Create_Order_Performative create_order = 6;
+    Error_Performative error = 7;
+    Get_Order_Performative get_order = 8;
+    Get_Orders_Performative get_orders = 9;
+    Get_Settlements_Performative get_settlements = 10;
+    Order_Performative order = 11;
+    Order_Cancelled_Performative order_cancelled = 12;
+    Order_Created_Performative order_created = 13;
+    Orders_Performative orders = 14;
+  }
+}
