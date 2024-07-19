@@ -24,8 +24,6 @@ jobs:
         poetry-version: ["1.3.2"]
         os: [ubuntu-20.04,]
     runs-on: ${{ matrix.os }}
-    env:
-      PYTHONPATH: '.'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -45,10 +43,9 @@ jobs:
             make install
 
       - name: Format
+        env:
+          PYTHONPATH: '.'
         run: |
-            echo "Running make fmt"
-            ls -la
-            ls packages/
             make fmt
 
       - name: Lint
