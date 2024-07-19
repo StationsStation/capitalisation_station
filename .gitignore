@@ -33,5 +33,3 @@ packages/valory/skills/registration_abci
 packages/valory/skills/reset_pause_abci
 packages/eightballer/skills/prometheus
 packages/eightballer/skills/metrics
-packages/eightballer/agents/capitalisation
-packages/eightballer/agents/chained_dex_app
