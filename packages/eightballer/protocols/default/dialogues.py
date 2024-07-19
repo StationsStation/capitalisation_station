@@ -93,9 +93,7 @@ class DefaultDialogue(Dialogue):
 class DefaultDialogues(Dialogues, ABC):
     """This class keeps track of all default dialogues."""
 
-    END_STATES = frozenset(
-        {DefaultDialogue.EndState.SUCCESSFUL, DefaultDialogue.EndState.FAILED}
-    )
+    END_STATES = frozenset({DefaultDialogue.EndState.SUCCESSFUL, DefaultDialogue.EndState.FAILED})
 
     _keep_terminal_state_dialogues = True
 
