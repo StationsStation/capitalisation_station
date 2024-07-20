@@ -97,9 +97,9 @@ class TestOrdersExecution(BaseDcxtConnectionTest):
         # we create a mock object to simulate the response. We will return the 2 test settlement items.
         mocker = MagicMock()
         mocker.side_effect = mock_fetch_settlements
-        self.connection._exchanges[
+        self.connection._exchanges[  # pylint: disable=protected-access
             DEFAULT_EXCHANGE_ID
-        ].private_get_get_settlement_history_by_currency = mocker  # pylint: disable=protected-access
+        ].private_get_get_settlement_history_by_currency = mocker
         await self.connection.send(envelope)
         await asyncio.sleep(1)
         response = await self.connection.receive()
