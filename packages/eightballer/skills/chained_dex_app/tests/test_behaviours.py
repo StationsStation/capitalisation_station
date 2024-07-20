@@ -3,15 +3,10 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Hashable, Optional, Type
-from unittest.mock import MagicMock
 
 import pytest
 
-from packages.eightballer.protocols.markets import MarketsMessage
-from packages.eightballer.protocols.markets.custom_types import Markets
-from packages.eightballer.skills.chained_dex_app.behaviours import (
-    DexDataAbciAppConsensusBehaviour
-)
+from packages.eightballer.skills.chained_dex_app.behaviours import DexDataAbciAppConsensusBehaviour
 from packages.eightballer.skills.dex_data_retrieval.behaviours import FetchDexPositionsBehaviour
 from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
@@ -75,6 +70,7 @@ class BaseChainedDexTest(FSMBehaviourBaseCase):
         self.end_round(done_event=event)
         assert self.current_behaviour_id == self.next_behaviour_class.behaviour_id
 
+
 class TestChained(BaseChainedDexTest):
     """Tests FetchDexPositionsBehaviour"""
 
@@ -86,4 +82,3 @@ class TestChained(BaseChainedDexTest):
         """Run tests."""
 
         self.fast_forward(test_case.initial_data)
-
