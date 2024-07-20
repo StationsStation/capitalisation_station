@@ -60,3 +60,4 @@ all: fmt lint test hashes
 
 install:
 	poetry install
+	poetry run autonomy packages sync

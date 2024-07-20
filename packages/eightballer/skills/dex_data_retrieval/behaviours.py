@@ -47,7 +47,6 @@ from packages.eightballer.skills.dex_data_retrieval.rounds import (
     FetchDexTickersRound,
     SynchronizedData,
 )
-from packages.eightballer.skills.reporting import PUBLIC_ID as REPORTING_PUBLIC_ID
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import AbstractRoundBehaviour, BaseBehaviour
 
@@ -100,12 +99,6 @@ class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
             TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
         }
 
-    def _reporting(self, msg: Message) -> Generator:
-        """Send a message to the reporting skill."""
-        if self.params.dex_data_retrieval_config.reporting_enabled:
-            msg._to = str(REPORTING_PUBLIC_ID)  # pylint: disable=protected-access
-            self.context.send_to_skill(msg)
-
 
 class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
     """FetchDexMarketsBehaviour"""
@@ -146,7 +139,6 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
                     )
                     exchange_to_markets = None
                     break
-                self._reporting(msg)
                 exchange_to_markets.update(self._from_markets_to_dict(msg, exchange_id))
                 self.context.logger.info(f"Received {len(exchange_to_markets[exchange_id])} markets from {exchange_id}")
 
@@ -203,7 +195,6 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
                 )
 
                 balances = self._from_balances_to_dict(msg, exchange_id)
-                self._reporting(msg)
                 self.context.logger.info(f"Received {len(balances[exchange_id])} balances from {exchange_id}")
                 exchange_to_balances.update(balances)
             sender = self.context.agent_address
@@ -246,7 +237,6 @@ class FetchDexOrdersBehaviour(DexDataRetrievalBaseBehaviour):
                 )
                 self.context.logger.info(f"Received {len(msg.orders.orders)} orders from {exchange_id}")
                 exchange_to_orders.update(self._from_orders_to_dict(msg, exchange_id))
-                self._reporting(msg)
 
             sender = self.context.agent_address
             payload = FetchDexOrdersPayload(
@@ -295,7 +285,6 @@ class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
                 self.context.logger.info(
                     f"Received {len(exchange_to_positions[exchange_id])} positions from {exchange_id}"
                 )
-                self._reporting(msg)
 
             sender = self.context.agent_address
             payload = FetchDexPositionsPayload(
@@ -342,7 +331,6 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
                 )
                 exchange_to_tickers.update(self._from_tickers_to_dict(msg, exchange_id))
                 self.context.logger.info(f"Received {len(exchange_to_tickers[exchange_id])} tickers from {exchange_id}")
-                self._reporting(msg)
 
             sender = self.context.agent_address
             payload = FetchDexTickersPayload(
