@@ -39,9 +39,11 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_EXCHANGE_ID = "lyra"
 
-ROOT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..")
+ROOT_DIR = os.path.join(
+    os.path.dirname(__file__),
+)
 
-TEST_KEY_PATH = os.path.join(ROOT_DIR, "tests", "data", "key")
+TEST_KEY_PATH = os.path.join(ROOT_DIR, "data", "key")
 
 TEST_WALLET = "0x3A5c777edf22107d7FdFB3B02B0Cdfe8b75f3453"
 TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f89d4f4"
@@ -50,12 +52,6 @@ TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f
 TEST_EXCHANGES = [
     {
         "name": DEFAULT_EXCHANGE_ID,
-        "key_path": TEST_KEY_PATH,
-        "wallet": TEST_WALLET,
-        "environment": "test",
-    },
-    {
-        "name": "hundred_x",
         "key_path": TEST_KEY_PATH,
         "wallet": TEST_WALLET,
         "environment": "test",

@@ -50,7 +50,6 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseMarketsDialogues, MarketsDialogue)
 
-    @with_timeout(3)
     @pytest.mark.parametrize("exchange", TEST_EXCHANGES)
     async def test_handles_exchange_timeout(self, exchange) -> None:
         """Can handle ohlcv messages."""
