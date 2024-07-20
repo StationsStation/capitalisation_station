@@ -6,16 +6,10 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.markets.dialogues import (
-    BaseMarketsDialogues,
-    MarketsDialogue,
-)
+from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
-from tests.test_connections.test_ccxt_connection.test_ccxt_connection import (
-    BaseCcxtConnectionTest,
-    get_dialogues,
-    with_timeout,
-)
+
+from ..test_ccxt_connection import BaseCcxtConnectionTest, get_dialogues, with_timeout
 
 TEST_EXCHANGE = "deribit"
 TEST_MARKET = "BTC-PERPETUAL"
@@ -48,9 +42,7 @@ class TestMarkets(BaseCcxtConnectionTest):
         response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, MarketsMessage)
-        assert (
-            response.message.performative == MarketsMessage.Performative.ALL_MARKETS
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == MarketsMessage.Performative.ALL_MARKETS, f"Error: {response}"
 
     @with_timeout(3)
     async def test_handles_get_market(self) -> None:
@@ -73,9 +65,7 @@ class TestMarkets(BaseCcxtConnectionTest):
         response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, MarketsMessage)
-        assert (
-            response.message.performative == MarketsMessage.Performative.MARKET
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == MarketsMessage.Performative.MARKET, f"Error: {response}"
 
 
 @pytest.mark.asyncio
@@ -102,12 +92,10 @@ class TestConnectionHandlesExchangeErrors(BaseCcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.RequestTimeout)
-        self.connection._exchanges[TEST_EXCHANGE].fetch_markets = mocker  # type: ignore
+        self.connection._exchanges[TEST_EXCHANGE].fetch_markets = mocker  # pylint: disable=W0212
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 
         assert response is not None
         assert isinstance(response, MarketsMessage)
-        assert (
-            response.performative == MarketsMessage.Performative.ERROR
-        ), "Error: {}".format(response)
+        assert response.performative == MarketsMessage.Performative.ERROR, f"Error: {response}"

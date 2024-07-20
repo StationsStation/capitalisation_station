@@ -27,7 +27,8 @@ open-aea-test-autonomy = "==0.14.12"
 open-autonomy = "==0.14.12"
 autonomy-dev = {extras = ["all"], version = "0.2.43"}
 lyra-v2-client = "^0.2.9"
-ccxt = "4.3.63"
+ccxt = "4.2.91"
+numpy = "1.26.0"
 
 
 [tool.poetry.dev-dependencies]

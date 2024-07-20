@@ -1,5 +1,5 @@
-"""Test the order connection."""
 """Test the spot_asset protocol."""
+
 import asyncio
 from unittest.mock import MagicMock
 
@@ -7,17 +7,10 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.orders.dialogues import (
-    BaseOrdersDialogues,
-    OrdersDialogue,
-)
+from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from tests.test_connections.test_ccxt_connection.test_ccxt_connection import (
-    DEFAULT_EXCHANGE_ID,
-    BaseCcxtConnectionTest,
-    get_dialogues,
-    with_timeout,
-)
+
+from ..test_ccxt_connection import DEFAULT_EXCHANGE_ID, BaseCcxtConnectionTest, get_dialogues, with_timeout
 
 TEST_SETTLEMENTS = [
     {
@@ -68,7 +61,7 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.ExchangeError)
 
-        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_open_orders = mocker  # type: ignore
+        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_open_orders = mocker  # pylint: disable=protected-access
 
         await self.connection.send(envelope)
         await asyncio.sleep(1)
@@ -76,9 +69,7 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
         assert response is not None
         assert isinstance(response.message, OrdersMessage)
         # we assume that the response is an error message as we have no authentification.
-        assert (
-            response.message.performative == OrdersMessage.Performative.ERROR
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == OrdersMessage.Performative.ERROR, f"Error: {response}"
 
     @with_timeout(3)
     async def test_handles_get_settlements(self) -> None:
@@ -101,17 +92,18 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
         )
 
         async def mock_fetch_settlements(*args, **kwargs):
+            del args, kwargs
             return {"result": {"settlements": TEST_SETTLEMENTS}}
 
         # we create a mock object to simulate the response. We will return the 2 test settlement items.
         mocker = MagicMock()
         mocker.side_effect = mock_fetch_settlements
-        self.connection._exchanges[DEFAULT_EXCHANGE_ID].private_get_get_settlement_history_by_currency = mocker  # type: ignore
+        self.connection._exchanges[  # pylint: disable=protected-access
+            DEFAULT_EXCHANGE_ID
+        ].private_get_get_settlement_history_by_currency = mocker  # pylint: disable=protected-access
         await self.connection.send(envelope)
         await asyncio.sleep(1)
         response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, OrdersMessage)
-        assert (
-            response.message.performative == OrdersMessage.Performative.ORDERS
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == OrdersMessage.Performative.ORDERS, f"Error: {response}"
