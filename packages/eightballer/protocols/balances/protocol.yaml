@@ -9,13 +9,13 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigalpw3zlh2sfmxw52dzxzsrnofbzb2fkucbravmi2dzsmpiwjtse
   balances.proto: bafybeifl2dh3x5bqs5c5m22ljpzbfjzx6wvh2nioxvl7gc7aammcwqlzdi
-  balances_pb2.py: bafybeiedr5lrxfmmgbhlbrnuu4aewmeo5gdfpqxkl766ux5u6acvpxnusi
-  custom_types.py: bafybeiafmbp3tfec5o5fefeqm5s7xp6n3mbsdmwihhkumg7znldxatousi
-  dialogues.py: bafybeidm3cdyhnqmyflgruutwj2xtiuhtikym3hp3jrf3yrgnq3n47jjom
-  message.py: bafybeihs4togp3iobcl3lujuag6a4lwqw365b6m7skf545cc5qcqov2rny
-  serialization.py: bafybeib2me7zc2mdcsht4gn5kjiakfglpy2437c3np6ps5ey4tjkyp2ai4
-  tests/test_balances_dialogues.py: bafybeibdq6fnwqeqb2u7f6m2w3d4ejfahoesaxky5ks6fn2npm4i2vjjay
-  tests/test_balances_messages.py: bafybeic4zeajujjtdm2weo6pvkadghfhy3qqonqneqysxpty2pgtyezojy
+  balances_pb2.py: bafybeie6jfoegxhklaldyyym6rptspv2qximtljybucpud3ndc7a527i2m
+  custom_types.py: bafybeiezgzcylgdbcx3z27sxqpfzxuw3dvh4eqytrmtz3wptqgoxw2uq5a
+  dialogues.py: bafybeigu6nhm36fi4fbxkcwjp55lbyhryladdyh6y3iad5sbofoeljse24
+  message.py: bafybeihco7lhsh2zrq4x6trnudd4nzr7pni2lzvzcruyhw4f2dtgmviepi
+  serialization.py: bafybeidjgh534jl7srdubhxm5a7g5owhwg65mnl3awigo4ldhoa75iclza
+  tests/test_balances_dialogues.py: bafybeia2jfxpgaoza6muswlkotlarqjaqed6gyalgy2iv7mn464tnjpw5a
+  tests/test_balances_messages.py: bafybeiewi53joxlus3v6obzvaswckmntuuate3e4cgharjfuvnjkoshh6a
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

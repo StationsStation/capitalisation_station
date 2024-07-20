@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie6iejvygcvaygm7fn6dhxkopqh2z3ayf6544d7tqkenehaukcszq
-  custom_types.py: bafybeicavynf6hg2vsvrgeqqbiqzgq625nm5qrnm27j4o5t5vafexemw5u
-  dialogues.py: bafybeihdyvqij2qucilztvdsertthcr6mhw2km3cqqgmvsizjufovpb7xe
-  message.py: bafybeigz7wce52pnmhi2lncp6dlhxk4mnntem73kopfchg43hyuvonrbii
+  custom_types.py: bafybeiefj7cnhnmi4qh6jn6reedx6yx7p7axt76rynp7pahd66kif27gja
+  dialogues.py: bafybeidgtphuyj4vcm6ener5og2mglxnldisvidznx67tri4ooy3hzo3yq
+  message.py: bafybeihuuwurihouixzo6ccjij4so6ea7laagflv6auyenxurc4uzabpgm
   positions.proto: bafybeiarecol3osiwh25kcjjy4e2iscltvkevo6balhkdlawxr7ihgm6xy
-  positions_pb2.py: bafybeid3wrf3w74utmdyavblvx2h2apy4fomla4utbdxgc7va74i6abmlm
-  serialization.py: bafybeiao7zqaogfqe65hhd6onxf6oovoosr6465e5e2mjq4khkaaitdb5u
-  tests/test_positions_dialogues.py: bafybeiaomwsxwbdzapem42axrtxfd4qvudr5k626sn7t2fmql7byvav4hu
-  tests/test_positions_messages.py: bafybeiga7ds5jbioo4bii5hsydomaqn2zjk3kl6ujj6f7ufhgceemfk63e
+  positions_pb2.py: bafybeid4nefrup264yk2pt2b7owza7xvcuwalecmmdmpmfvm4lasgaprhy
+  serialization.py: bafybeicnyrpctbeggwunqowgitv3sw2qy7l4ehpmv5i3a7uvwxaha7gjpu
+  tests/test_positions_dialogues.py: bafybeigxghgnjigwa6njgjzlwuarnql2efmeguc4dckn5ezdezrb476s2i
+  tests/test_positions_messages.py: bafybeiaqeju5m3p2niub5gm5qplr7xd43ooglssxxpvkhhbyswxeznlwle
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

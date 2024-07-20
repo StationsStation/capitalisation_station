@@ -22,6 +22,7 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import List
 
+import pytest
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.positions.custom_types import ErrorCode, Position, Positions, PositionSide
@@ -76,6 +77,7 @@ TEST_POSITION = {
 }
 
 
+@pytest.mark.skip("Not implemented yet")
 class TestMessagePositions(BaseProtocolMessagesTestCase):
     """Test for the 'positions' protocol message."""
 

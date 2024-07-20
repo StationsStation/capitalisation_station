@@ -20,7 +20,7 @@
 """This module contains the shared state for the abci skill of AbciApp."""
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 from packages.eightballer.skills.dex_data_retrieval.rounds import DexDataRetrievalAbciApp
 from packages.valory.skills.abstract_round_abci.models import BaseParams
@@ -35,10 +35,10 @@ class DexDataRetrievalConfig:
 
     enabled: bool
     exchange_ids: List[str]
-    extra_kwargs: Dict[str, Dict[str, Union[str, int, float, bool]]]
     retries: int
     backoff: float
     reporting_enabled: bool
+    extra_kwargs: Optional[Dict[str, Dict[str, Union[str, int, float, bool]]]] = None
 
 
 class SharedState(BaseSharedState):

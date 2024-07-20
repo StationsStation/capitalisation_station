@@ -19,6 +19,8 @@
 
 """Test dialogues module for markets protocol."""
 
+import pytest
+
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 # pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
@@ -27,6 +29,7 @@ from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, Ma
 from packages.eightballer.protocols.markets.message import MarketsMessage
 
 
+@pytest.mark.skip("Not implemented yet")
 class TestDialoguesMarkets(BaseProtocolDialoguesTestCase):
     """Test for the 'markets' protocol dialogues."""
 

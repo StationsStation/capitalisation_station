@@ -9,14 +9,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibnu6doqyiadtrfviwiivk5steyaqtgflnunbeam2advmqu3houly
-  custom_types.py: bafybeibchoii734rbrrezo4rya7bhqrdibfrtqsdgke62l5fn343nltp3e
-  dialogues.py: bafybeibnkxd3srkfqiqnpvbdmgnrsmat5ehht5mq44xyfnnu3lws4v5r2u
-  message.py: bafybeifmi7kmnzle6u7wna5x74xgnclkuudfoi3gdicc7gcucyn3qnrgdq
+  custom_types.py: bafybeianncccj7aygjreapa2hc7mvpdnbmvaztrzxw2jjtyxehtlefoqbq
+  dialogues.py: bafybeiamhbxeenpaclaqni7qwwep5zdf7gwirerusfrpzr52zt4cnhnlsa
+  message.py: bafybeiduej3hdp6wm4wusl6uozv27jhh4pmferkqh2os6ffog35cfl6jda
   ohlcv.proto: bafybeibihujekcbtreitcb4bhchfqnngv6iw4dkzf3ibu7pkylbznypfju
-  ohlcv_pb2.py: bafybeifsmmxyuq27lsztw4co75bnfy7kxss3pp5djf5c74qokehlyd4vyi
-  serialization.py: bafybeia7ru4dr2iaq2p6bhtcclaevoylucwuref2fypfeden2vxhabakz4
+  ohlcv_pb2.py: bafybeihoz42lutf4c64ygl6ejgmhi5dw42zqvzjhbpd5uqbwa523qb7rmi
+  serialization.py: bafybeibl3frfn7bf5icvrx7gynlb7qxw6pgcld6sjmupvysju7ywur2y7y
   tests/__init__.py: bafybeigdw2ixe76kbmiaurisdse6vv453viypzxcen3nwnoe6zbvlcwory
-  tests/test_ohlcv.py: bafybeibd4zu2ijifzd2hbzaoymzcehmm7inxzmisqcezofu7ccwacoxsuy
+  tests/test_ohlcv.py: bafybeibagvmsjzf72ydutb2pq6n5mzgtiolhlfxknuw2s5duqau5tadymy
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

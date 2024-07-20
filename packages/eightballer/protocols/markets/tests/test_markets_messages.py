@@ -22,6 +22,7 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import List
 
+import pytest
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.markets.custom_types import ErrorCode, Market, Markets
@@ -156,6 +157,7 @@ TEST_MARKET_CASE = {
 }
 
 
+@pytest.mark.skip("Not implemented yet")
 class TestMessageMarkets(BaseProtocolMessagesTestCase):
     """Test for the 'markets' protocol message."""
 

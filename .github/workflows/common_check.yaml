@@ -25,7 +25,8 @@ jobs:
         os: [ubuntu-20.04,]
     runs-on: ${{ matrix.os }}
     env:
-      PYTHONPATH: '.'
+      PYTHONPATH: .
+      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -54,5 +55,5 @@ jobs:
 
       - name: Tests
         run: |
-            make tests
+            make test
 
