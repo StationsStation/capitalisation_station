@@ -1,6 +1,3 @@
-# ./test_position.py
-
-# Path: tests/test_connections/test_ccxt_connection/protocols/test_position_interface.py
 """
 Tests for the position interface.
 """
@@ -10,21 +7,13 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 
-from packages.ardian.connections.ccxt.interfaces.interface_base import get_dialogues
+from packages.eightballer.connections.dcxt.interfaces.interface_base import get_dialogues
 from packages.eightballer.protocols.positions.custom_types import Positions
-from packages.eightballer.protocols.positions.dialogues import (
-    BasePositionsDialogues,
-    PositionsDialogue,
-)
+from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from tests.test_connections.test_dcxt_connection.protocols.test_tickers import (
-    TEST_EXCHANGE,
-)
-from tests.test_connections.test_dcxt_connection.test_dcxt_connection import (
-    BaseDcxtConnectionTest,
-    get_dialogues,
-    with_timeout,
-)
+
+from ..protocols.test_tickers import TEST_EXCHANGE
+from ..test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues, with_timeout
 
 
 @pytest.mark.asyncio
@@ -56,16 +45,14 @@ class TestPositionInterface(BaseDcxtConnectionTest):
         )
         # we make sure that we mock the api call
         with patch.object(
-            self.connection._exchanges[TEST_EXCHANGE],
+            self.connection._exchanges[TEST_EXCHANGE],  # pylint: disable=protected-access
             "fetch_positions",
             return_value=[],
-        ) as mock_get_all_positions:
+        ):
             await self.connection.send(envelope)
             await asyncio.sleep(1)
             response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, PositionsMessage)
-        assert (
-            response.message.performative == PositionsMessage.Performative.ALL_POSITIONS
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == PositionsMessage.Performative.ALL_POSITIONS, f"Error: {response}"
         assert isinstance(response.message.positions, Positions)

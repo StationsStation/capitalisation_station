@@ -6,17 +6,10 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.markets.dialogues import (
-    BaseMarketsDialogues,
-    MarketsDialogue,
-)
+from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
-from tests.test_connections.test_dcxt_connection.test_dcxt_connection import (
-    TEST_EXCHANGES,
-    BaseDcxtConnectionTest,
-    get_dialogues,
-    with_timeout,
-)
+
+from ..test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, get_dialogues, with_timeout
 
 
 @pytest.mark.asyncio
@@ -48,9 +41,7 @@ class TestMarkets(BaseDcxtConnectionTest):
             response = await self.connection.receive()
             assert response is not None
             assert isinstance(response.message, MarketsMessage)
-            assert (
-                response.message.performative == MarketsMessage.Performative.ALL_MARKETS
-            ), "Error: {}".format(response.message)
+            assert response.message.performative == MarketsMessage.Performative.ALL_MARKETS, f"Error: {response}"
 
 
 @pytest.mark.asyncio
@@ -78,12 +69,10 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.RequestTimeout)
-        self.connection._exchanges[exchange["name"]].fetch_markets = mocker  # type: ignore
+        self.connection._exchanges[exchange["name"]].fetch_markets = mocker  # pylint: disable=protected-access
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 
         assert response is not None
         assert isinstance(response, MarketsMessage)
-        assert (
-            response.performative == MarketsMessage.Performative.ERROR
-        ), "Error: {}".format(response)
+        assert response.performative == MarketsMessage.Performative.ERROR, f"Error: {response}"

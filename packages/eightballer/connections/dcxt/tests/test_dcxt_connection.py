@@ -76,9 +76,7 @@ def with_timeout(t):
     return wrapper
 
 
-def get_dialogues(
-    target_dialogues: Type[Dialogues], target_dialogue: Type[Dialogue]
-) -> object:
+def get_dialogues(target_dialogues: Type[Dialogues], target_dialogue: Type[Dialogue]) -> object:
     """Factory method to generate dialogue classes."""
 
     class MetaClass(target_dialogues):
@@ -120,9 +118,7 @@ class BaseDcxtConnectionTest:
     def setup(self) -> None:
         """Initialise the class."""
         self.client_skill_id = "some/skill:0.1.0"
-        self.agent_identity = Identity(
-            "name", address="some string", public_key="some public_key"
-        )
+        self.agent_identity = Identity("name", address="some string", public_key="some public_key")
         configuration = ConnectionConfig(
             target_skill_id=self.client_skill_id,
             exchanges=TEST_EXCHANGES,

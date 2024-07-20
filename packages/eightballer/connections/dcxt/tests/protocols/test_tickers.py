@@ -6,16 +6,10 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.tickers.dialogues import (
-    BaseTickersDialogues,
-    TickersDialogue,
-)
+from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
-from tests.test_connections.test_dcxt_connection.test_dcxt_connection import (
-    BaseDcxtConnectionTest,
-    get_dialogues,
-    with_timeout,
-)
+
+from ..test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues, with_timeout
 
 TEST_EXCHANGE = "lyra"
 TEST_MARKET = "BTC-PERP"
@@ -47,9 +41,7 @@ class TestFetchTickers(BaseDcxtConnectionTest):
         response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, TickersMessage)
-        assert (
-            response.message.performative == TickersMessage.Performative.ALL_TICKERS
-        ), "Error: {}".format(response.message)
+        assert response.message.performative == TickersMessage.Performative.ALL_TICKERS, f"Error: {response}"
 
 
 @pytest.mark.asyncio
@@ -76,12 +68,10 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.RequestTimeout)
-        self.connection._exchanges[TEST_EXCHANGE].fetch_tickers = mocker  # type: ignore
+        self.connection._exchanges[TEST_EXCHANGE].fetch_tickers = mocker  # pylint: disable=W0212
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 
         assert response is not None
         assert isinstance(response, TickersMessage)
-        assert (
-            response.performative == TickersMessage.Performative.ERROR
-        ), "Error: {}".format(response)
+        assert response.performative == TickersMessage.Performative.ERROR, f"Error: {response}"
