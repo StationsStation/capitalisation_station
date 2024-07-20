@@ -18,8 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 # pylint: disable=unused-import
-from pathlib import Path
-
+"""Test the agent."""
 import pytest
 
 TARGET_AGENT = "eightballer/chained_dex_app:0.1.0"
@@ -32,4 +31,3 @@ TIME_TO_FINISH = 60  # 1 minute
 def test_integration():
     """Test the integration."""
     pytest.skip("Integration tests are not yet implemented.")
-
