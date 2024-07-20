@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeid7rhru7zn3l4feztoujbuf43hlated3pmu7xptqa2vc54tk3xrbq
-  behaviours.py: bafybeidfhdv2tzj62xm4e4uwesxumjcmdcv2itksjbgeq6onrduysuyysa
+  behaviours.py: bafybeiaubmiil6jsdmcyj5khuigientvmy2xb577zmhgambuv73gntfkj4
   check_cex_balances.yaml: bafybeigz4ba5jfscg2y6yoxxsmwc63ictz5iqneaann3fptgc2t5qohcra
   dialogues.py: bafybeicdl2nbgn7vhhad5l5nechhlsuu647ucsrr34mcmksyboqqtairf4
   fsm_specification.yaml: bafybeidbypph3ghds673b3xl5paxsnax5enwjdrrx7lwqyavusd4dju7te
@@ -34,7 +34,6 @@ protocols:
 - eightballer/positions:0.1.0:bafybeiabojtxwexbzgqjut7g3paekh2q7ssrjrpwgtsxw3jjhxhqyya7h4
 - eightballer/tickers:0.1.0:bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm
 skills:
-- eightballer/reporting:0.1.0:bafybeifcsrcbwsyemln6qdqdpfa65sfdwh37bpwsxcq6pptoy5jcxmre4i
 - valory/abstract_round_abci:0.1.0:bafybeiggaiblypax6haer32d3u5d5rhfmcd57hqydql7lr2gmaehz4mcsm
 behaviours:
   main:
