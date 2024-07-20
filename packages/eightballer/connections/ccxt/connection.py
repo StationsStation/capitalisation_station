@@ -8,15 +8,13 @@ from asyncio import Task
 from collections import deque
 from typing import Any, Deque, Dict, List, Optional, cast
 
-# import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-import ccxt.pro as ccxt
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.connections.base import Connection, ConnectionStates
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID
-from packages.eightballer.connections.ccxt.custom import CustomBroker
 from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
 from packages.eightballer.connections.ccxt.interfaces.market import Market
 from packages.eightballer.protocols.default import DefaultMessage
@@ -92,22 +90,8 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             try:
                 exchange_class = getattr(ccxt, exchange_id)
                 exchange = exchange_class(params)
-            except AttributeError:
-                urls = exchange_config.get("custom_urls")
-                fapi = urls.get("fapi_url")
-                dapi = urls.get("dapi_url")
-                sapi = urls.get("sapi_url")
-                params["urls"] = {
-                    "api": {
-                        "fapiPrivateV2": f"{fapi}/fapi/v2",
-                        "dapiPrivate": f"{dapi}/dapi/v1",
-                        "dapiPrivateV2": f"{dapi}/dapi/v2",
-                        "sapi": f"{sapi}/sapi/v1",
-                        "sapiV3": f"{sapi}/sapi/v3",
-                        "private": f"{sapi}/api/v3",
-                    }
-                }
-                exchange = CustomBroker(params)
+            except AttributeError as exc:
+                raise ValueError(f"Exchange {exchange_id} not found in ccxt") from exc
             self._exchanges.update({exchange_id: exchange})
             self.logger.info(f"Successfully connected to {exchange_id}")
         self.state = ConnectionStates.connected
