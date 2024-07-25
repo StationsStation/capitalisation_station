@@ -43,9 +43,10 @@ clean-test:
 	find . -name 'log.*.txt' -exec rm -fr {} +
 
 .PHONY: hashes
-hashes: clean
+hashes: clean fmt lint
 	poetry run autonomy packages lock
-	poetry run adev -v -n 0 lint
+	git add packages
+	git commit -m 'chore: hashes'
 
 lint:
 	poetry run adev -v -n 0 lint
