@@ -7,8 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeieqyjeeb2jqocoaxazmyf3bvs74takayk3qqelqer7xtqk3nlodf4
-  connection.py: bafybeidy2k6swvxtx7hs2ustttjdhwiduek3p6667kxulc4ynrd7tcbeby
-  custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
+  connection.py: bafybeigmpjuklmyvwfbcdjeivar7v334b6rdmlf2jlcuytxyiv7svvmvpe
   interfaces/balance.py: bafybeickjtf2xlwqonufdookbkehpd4mme62qsnkhkry7mk3gzvqjtvbt4
   interfaces/interface.py: bafybeigepuveccugrcea5utsl4jge6fnymt3aednwbsraosbcqadzx6yl4
   interfaces/interface_base.py: bafybeidhqnfe7vepoxvgj4pfopppwapb33kfwkt3d37pptdu5huctzxw7m
@@ -19,6 +18,14 @@ fingerprint:
   interfaces/position.py: bafybeifa4c23gep24qku5lykmsq5fhus4ssfezbhj4ue4yna63pmujncgq
   interfaces/spot_asset.py: bafybeidj355xjrtmdhhwkg4glyoitp533ncavnr5tvyr7r7el7dowzlplm
   interfaces/ticker.py: bafybeifca4utgroey6cziyj3pw7rdwckbo7lmkvor4h2tynrae4qknxpzi
+  tests/__init__.py: bafybeic7taeyhjort3vfpvtgrm2i6zawa4t2eurfpyui52fczqqg2wbimi
+  tests/protocols/__init__.py: bafybeih5qkwgk6alfxrnxuhs6nmcpmtkjsnkcf5cbjyju44smnci63ri5m
+  tests/protocols/test_market.py: bafybeianz6gqkqnetvzchrgvieiibew55yaz7dbvchy6tok6xefbwgg3iu
+  tests/protocols/test_ohlcv_interface.py: bafybeifdvnjoo5vuwq5yl5akgiooe5i7k5y5en7g2jz7xahzgoqaxfyzke
+  tests/protocols/test_order_interface.py: bafybeidn2em43agjfrokd5d6hkrewxz3dsqviwf4d5tj6pogw664gwkkhi
+  tests/protocols/test_positions_interface.py: bafybeihvz2wevfqhzs52vug4sc4gfzclleglkjqisumkvfnfryxanqfhrq
+  tests/protocols/test_spot_asset_interface.py: bafybeic7xm3kbgs3jljrhpr3y7bohqbdiuclt5cx3zrhzufg5wgtwmqrei
+  tests/test_ccxt_connection.py: bafybeig4vsxwy2hmtmitb2q7rsyk4fchkmo2ue3wcg3hrdzjwgymxgrate
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:

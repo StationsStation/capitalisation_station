@@ -4,11 +4,13 @@ version: 0.1.0
 license: Apache-2.0
 description: ''
 aea_version: '>=1.35.0, <2.0.0'
-fingerprint: {}
+fingerprint:
+  tests/__init__.py: bafybeiepblz7lugbzxz56ocqdxykmndj26fnsfcuccqh5l4gevgyl7w2yi
+  tests/test_agent.py: bafybeibuzpuqf55ij6fyku7pcg4whwuarchpo33zxo32nmqao4c4sdo3xu
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeig3lo2t4bsryf7hdi5tnrpaukdjrlb2mtqnthlqqhqiynsqgaqmw4
-- eightballer/dcxt:0.1.0:bafybeieroisb3ln6smu3skbf6efa34v5me56eytbwzoc4xbojhjtajyoiu
+- eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
+- eightballer/dcxt:0.1.0:bafybeidwcq7nzz5i7qwibwuczlu2wgcu4yzuwckwypwkntzmbnxqf7r6zi
 - eightballer/http_client:0.1.0:bafybeid4cwamevng2ufyflcrerm6xyp5rjby2lbo2ulybqlik44g3aslni
 - eightballer/http_server:0.1.0:bafybeib27byea6hwpt2fh2tt4t7jbn34r56hc654r365vipbktecfh4qsy
 - eightballer/prometheus:0.1.1:bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca
@@ -40,8 +42,8 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeidltb2fvcfokf7a2i3jnrf4kmmsn5bxmcrwdtbz2nrrzhpj4dlzwe
 - valory/tendermint:0.1.0:bafybeib25ulpp3tri3ppexk4t6yttuajhr7wpgs7wajpsnbbnzo256ubem
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeicjiqxvkm6r32cgdubcaoqu5bi7fphq2qpnzg754j7col3fqfe3wy
-- eightballer/dex_data_retrieval:0.1.0:bafybeifakh23cikxjqjw5odjmcwk6q44bb3xw2kr5z4rndwej6f4bmilka
+- eightballer/chained_dex_app:0.1.0:bafybeia5pprj7lta3nxg5u6kurma6niyal4ae2u5pdmblcfndjxkhttxjm
+- eightballer/dex_data_retrieval:0.1.0:bafybeigmc42jcq3ql3spq4ffc542jjnqj7vq67luee3myg5xymjcpgeg4u
 - eightballer/metrics:0.1.0:bafybeihjbgp2yyz7h4ghgwvidurnmbd7va4fi6y5hgollv7lz75dnrrcmm
 - eightballer/prometheus:0.1.0:bafybeibuaypehp74awahj7p665ccivdhrp7446kvw2axt6cs43owq5nuq4
 - valory/abstract_abci:0.1.0:bafybeiaxsvkslgmh3zg7r3bymjhxlelosiun42ibea323ni5duux2omxje
@@ -150,10 +152,3 @@ config:
     wallet: null
     subaccount_id: null
     environment: prod
----
-public_id: eightballer/reporting:0.1.0
-type: skill
-models:
-  reporting_strategy:
-    args:
-      connection_string: ${str:sqlite:///reporting.db}

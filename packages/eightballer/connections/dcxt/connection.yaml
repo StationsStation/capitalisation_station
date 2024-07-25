@@ -22,6 +22,16 @@ fingerprint:
   interfaces/position.py: bafybeicwbwam4qbosn4ykfran4v2j5epfenmmtjvaz5wlqcyroebssnvqq
   interfaces/spot_asset.py: bafybeihmnmrktjstmy6x2rjd37d3tjpet25xk4w6aqs6oltttler546d3i
   interfaces/ticker.py: bafybeidoz4u6dan7zno4vxzlsexbgzp32bdqrlel7lwxsyszk3jzpqccyi
+  tests/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
+  tests/data/key: bafybeibpiq3ximhcv3eoz2tlgehwgac4be7ex4yjeljo4gigjiekbyprw4
+  tests/protocols/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
+  tests/protocols/test_market.py: bafybeiebdnl7a44xe6aluyzky5uqpjrncfz3us6zajjsgsczu6f3w67mwy
+  tests/protocols/test_ohlcv_interface.py: bafybeifeb4fsjoaqyp5dcrfaqrl2yiysx3dts4xkwai5vy3it52etod77m
+  tests/protocols/test_order_interface.py: bafybeia6vn5rikitboxsce5tiltzveix4vkbctqfsz3jt554u2fbcc63pi
+  tests/protocols/test_positions_interface.py: bafybeihka3fcrgnu4tgstt6f4uk7ltuaxmidxltcg6zp4hfkronqi6a7ve
+  tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
+  tests/protocols/test_tickers.py: bafybeihtqqyonbhncohw6fbsb2uexmmbkw4v32duqlif2h3m3vfrif2754
+  tests/test_dcxt_connection.py: bafybeihfriqexn7u56wwh2zwai7jzdg3x7xz3alnsn4jbih7y7qttacuiq
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
