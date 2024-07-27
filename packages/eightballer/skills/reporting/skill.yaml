@@ -15,8 +15,8 @@ fingerprint:
   tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
   tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
   tests/test_behaviour.py: bafybeiahhyq3z7wpifabvlkmymshnev4pcnxphnrxzpgh6tmcxetrq5lsi
-  tests/test_handlers.py: bafybeif2sxwdf7wixiuin2koyph5dmnxf5e42ru4mwt6ng6o3loyywntym
-  tests/test_strategy.py: bafybeigrdrj43aowmhrzbzwc73fwrwhckdvirebe6hew3bpaut2a6clg3i
+  tests/test_handlers.py: bafybeihdu3iixf44wbisonp57ezoygh75dbhiqay3hqyvnm4htcjiyksdy
+  tests/test_strategy.py: bafybeicvwcfpgnezre5jvbbxwxfsvogxjnpbhe2c2tptci6q47v7dn5hxe
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
