@@ -369,7 +369,7 @@ web3 = "~6"
 
 [package.source]
 type = "directory"
-url = "../../Fun/olas_arbitrage/third_party/balpy"
+url = "third_party/forks/balpy"
 
 [[package]]
 name = "base58"
@@ -2207,13 +2207,13 @@ pandas = "~1"
 python-dotenv = ">=0.14.0,<0.18.0"
 requests = "^2"
 rich-click = "^1.7.1"
-setuptools = ">=68.2.2"
+setuptools = ">=68.2.2,<70"
 web3 = "^6"
 websocket-client = ">=0.32.0,<1"
 
 [package.source]
 type = "directory"
-url = "../../Fun/lyra/lyra_client"
+url = "third_party/upstream/lyra_client"
 
 [[package]]
 name = "mando"
@@ -2461,7 +2461,7 @@ web3 = "~6"
 
 [package.source]
 type = "directory"
-url = "../../Fun/olas_arbitrage/third_party/multicaller"
+url = "third_party/forks/multicaller"
 
 [[package]]
 name = "multidict"
@@ -4188,19 +4188,20 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "70.0.0"
+version = "69.5.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-70.0.0-py3-none-any.whl", hash = "sha256:54faa7f2e8d2d11bcd2c07bed282eef1046b5c080d1c32add737d7b5817b1ad4"},
-    {file = "setuptools-70.0.0.tar.gz", hash = "sha256:f211a66637b8fa059bb28183da127d4e86396c991a942b028c6650d4319c3fd0"},
+    {file = "setuptools-69.5.1-py3-none-any.whl", hash = "sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32"},
+    {file = "setuptools-69.5.1.tar.gz", hash = "sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987"},
 ]
 
 [package.extras]
-docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
-testing = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "importlib-metadata", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "mypy (==1.9)", "packaging (>=23.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.1)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-home (>=0.5)", "pytest-mypy", "pytest-perf", "pytest-ruff (>=0.2.1)", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
+docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
+testing = ["build[virtualenv]", "filelock (>=3.4.0)", "importlib-metadata", "ini2toml[lite] (>=0.9)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "mypy (==1.9)", "packaging (>=23.2)", "pip (>=19.1)", "pytest (>=6,!=8.1.1)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-home (>=0.5)", "pytest-mypy", "pytest-perf", "pytest-ruff (>=0.2.1)", "pytest-timeout", "pytest-xdist (>=3)", "tomli", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
+testing-integration = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "packaging (>=23.2)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
 name = "sigfig"
@@ -4827,7 +4828,7 @@ test = ["pytest-xdist (>=3.3.1,<4.0.0)"]
 
 [package.source]
 type = "directory"
-url = "../../Fun/web3-ethereum-defi"
+url = "third_party/forks/web3-ethereum-defi"
 
 [[package]]
 name = "websocket-client"
@@ -5109,4 +5110,4 @@ doc = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "045bd012140f978f2019498bfb05146c2bf3dce3d396957ef2617925cf0e3f84"
+content-hash = "a58879b2359a1bd535ec780bfada1a8b3122731acd8cf244e5075a0c60df950a"
