@@ -66,6 +66,21 @@ install:
 
 
 update_deps:
-	git submodule update --init --recursive
+	# This necessary for the first commit.
+	# We check if the third-party dependencies are visible.
+	if [ ! -d "third_party/upstream" ]; then \
+		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
+		git submodule update --init --recursive 
+	fi
+	# This is necessary for the 2nd commit.
 	git pull --recurse-submodules
 	poetry update
+
+is_dirty:
+	# Check if the repository is dirty.
+	if [ -n "$(shell git status --porcelain)" ]; then \
+		echo "The repository is dirty. Please commit your changes first."; \
+		exit 1; \
+	fi
+
+update_third_party: is_dirty
