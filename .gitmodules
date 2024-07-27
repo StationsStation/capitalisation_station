@@ -1,10 +1,13 @@
-[submodule "third_party/balpy"]
+[submodule "third_party/forks/balpy"]
 	path = third_party/forks/balpy
 	url = https://github.com/8ball030/balpy.git
-[submodule "third_party/multicaller"]
+[submodule "third_party/forks/multicaller"]
 	path = third_party/forks/multicaller
 	url = https://github.com/8ball030/multicaller.git
-[submodule "olas_arbitrage/aea_contracts_solana"]
+[submodule "third_party/forks/web3-ethereum-defi"]
+	path = third_party/forks/web3-ethereum-defi
+	url = https://github.com/8ball030/open-web3-ethereum-defi.git
+[submodule "olas_arbitrage/upstream/aea_contracts_solana"]
 	path = third_party/upstream/aea_contracts_solana
 	url = https://github.com/Dassy23/aea_contracts_solana.git
 
