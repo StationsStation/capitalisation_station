@@ -46,6 +46,10 @@ DB_FILE = "test.db"
 
 
 class TestOrder:
+    """
+    Test order class.
+    """
+
     id: str = "test_id"
     exchange_id: str = "test_exchange_id"
 
@@ -134,7 +138,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "long", 1, 1]
+        assert list(df.values[0]) == [2000.0, "long", 1, 1]
 
     def test_nets_out_positions_in_pivot(self):
         """
@@ -169,7 +173,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "flat", 0]
+        assert list(df.values[0]) == [2000.0, "flat", 0]
 
     def test_nets_out_positions_in_pivot_multiple(self):
         """

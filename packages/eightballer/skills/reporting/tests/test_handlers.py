@@ -83,7 +83,7 @@ class TestOrderHandler(BaseSkillTestCase):
         )
 
         # operation
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
 
         # after

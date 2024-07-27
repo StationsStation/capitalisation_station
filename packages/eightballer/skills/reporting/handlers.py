@@ -189,7 +189,7 @@ class TickersReportingHandler(BaseHandler):
         """
         handle reports on tickers.
         """
-        self.context.logger.debug("Reporting on tickers: {}".format(message))
+        self.context.logger.debug(f"Reporting on tickers: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == TickersMessage.Performative.ALL_TICKERS:
@@ -268,11 +268,7 @@ class PositionsReportingHandler(BaseHandler):
             dialogue = self.context.positions_dialogues.update(message=message)
             if dialogue:
                 last_outgoing_message = dialogue.last_outgoing_message
-                position_id = "{}_{}_{}".format(
-                    last_outgoing_message.exchange_id,
-                    from_id_to_instrument_name(last_outgoing_message.position_id),
-                    self.context.agent_address,
-                )
+                position_id = f"{last_outgoing_message.exchange_id}_{from_id_to_instrument_name(last_outgoing_message.position_id)}_{self.context.agent_address}"  # noqa: E501
                 position = Position(
                     id=position_id,
                     symbol=from_id_to_instrument_name(last_outgoing_message.position_id),
@@ -304,8 +300,8 @@ class HttpHandler(BaseHandler):
                 if json.loads(msg.body)["ok"]:
                     self.context.logger.debug("success")
                 else:
-                    raise ValueError("FAILED http error: status_code={}".format(msg.status_code))
+                    raise ValueError(f"FAILED http error: status_code={msg.status_code}")
             else:
-                raise ValueError("received http error: status_code={}".format(msg.status_code))
+                raise ValueError(f"FAILED http error: status_code={msg.status_code}")
         else:
-            raise ValueError("cannot handle http message of performative={}".format(msg.performative))
+            raise ValueError(f"Cannot handle message of performative {msg.performative}")
