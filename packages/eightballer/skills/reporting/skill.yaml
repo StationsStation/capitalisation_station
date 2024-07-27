@@ -13,8 +13,8 @@ fingerprint:
   slack.py: bafybeibsz5onpqcwl6wjyzz5znia7mq6dhvuieb2jy26beqcaikx4xzeqq
   strategy.py: bafybeifhypmslngpxwcsdsvqfoi6tbp5pj2gmoxrww4d2c7kpmmmzcqh4e
   test_reporting/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
-  test_reporting/test_behaviour.py: bafybeihkusnperslyn5jk3pzlh34xjc77kylvpq4gku7y2quxxg6li24t4
-  test_reporting/test_handlers.py: bafybeic7fvjncoh6adloaaiirxojma4ml225x3eq4zgeprqmavdfkecf4i
+  test_reporting/test_behaviour.py: bafybeihflrejuzurtbbwhir2u4tmvede2kccqav4u44yjbi6qchzzg6kqq
+  test_reporting/test_handlers.py: bafybeifg6qziglcrbeug2udovmddayl4qhyxdontrw2ytuj6vcg5vfmxxi
   test_reporting/test_strategy.py: bafybeicpvobozujxvvoc3o56nmrn6jkn24w7rvyq5ayzc7s263hgpdwpm4
 fingerprint_ignore_patterns: []
 connections:

@@ -21,7 +21,7 @@ from packages.eightballer.skills.reporting.handlers import (
 )
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
 from tests.conftest import ROOT_DIR
-from tests.test_connections.test_ccxt_connection.test_ccxt_connection import (
+from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
     DEFAULT_EXCHANGE_ID,
 )
 

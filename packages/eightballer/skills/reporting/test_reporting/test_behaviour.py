@@ -29,12 +29,8 @@ from aea.test_tools.test_skill import BaseSkillTestCase
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.skills.reporting.behaviours import (
-    from_id_to_instrument_name,
-    from_instrument_name_to_id,
-)
+from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name, from_instrument_name_to_id
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
-from tests.conftest import ROOT_DIR
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
 
