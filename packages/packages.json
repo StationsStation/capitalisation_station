@@ -10,11 +10,11 @@
         "protocol/eightballer/ohlcv/0.1.0": "bafybeihcyzz5fmf3b3pkng5wogwhel3v7o7bphv7bgt4pbra4zoeoij4va",
         "protocol/eightballer/tickers/0.1.0": "bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm",
         "contract/eightballer/erc_20/0.1.0": "bafybeidekerbx3dgazawt7mhpzkptnrxhjb5skjgs5g2acktwpaajjc6da",
-        "connection/eightballer/dcxt/0.1.0": "bafybeidnj5ichk2e5o43mxwzeade2qmsh65eujbpi3orugqt2apya74n2y",
+        "connection/eightballer/dcxt/0.1.0": "bafybeihe46y6xbmcl4kl4sqaxm7t6e6sqfobwm5jphg3xolnodbj5j53p4",
         "connection/eightballer/ccxt/0.1.0": "bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeie623goi2fitf37jbxnxp4ppmucht44c4yatwrb3oxfsupnlnt4ze",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeieyh62nsmojki227bo45wgi775lrvqewl43if5dyvadxzj3z25hgu",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeigvghhutl2obylstrhmumuwrjyw37tdqtcszalq2rzt2cdu4fnm7u"
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeietou4m4o7ugluwnd3kakjrce77b2bew4vkemruq4pczh37vp3mge",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeibrtlzsuniwnkmixt5rehhjj74wbx4q7butxoqutdl6j2p5hcpcgy",
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeidtkys2ssnnkyc6qq4dumde6ydoiijildytsxperug7n2ljvepwk4"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeifsttranjnxstpoyswpm2dzfyzimpatdfbu5pdpu7ibmda5x24ipe",
@@ -44,6 +44,6 @@
         "skill/valory/reset_pause_abci/0.1.0": "bafybeihp7ybmohndbbre7hspab5mm7pjmtqgbt673rh76hd2xkz6n7xota",
         "skill/eightballer/metrics/0.1.0": "bafybeihjbgp2yyz7h4ghgwvidurnmbd7va4fi6y5hgollv7lz75dnrrcmm",
         "skill/eightballer/prometheus/0.1.0": "bafybeibuaypehp74awahj7p665ccivdhrp7446kvw2axt6cs43owq5nuq4",
-        "skill/eightballer/reporting/0.1.0": "bafybeictg2vdmysmpjv44ujckw25u5cg4ksadirs6oonr7ksyeodufq5ge"
+        "skill/eightballer/reporting/0.1.0": "bafybeihj43p7cxjayhcurs5uwazii5k3bs6va73abi7j2xgeldu7crav7m"
     }
 }
