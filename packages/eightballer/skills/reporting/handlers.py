@@ -48,7 +48,7 @@ class BaseHandler(Handler):
 
     def handle(self, message: Message) -> None:
         """Implement the reaction to an event."""
-        self.context.logger.info("Handling message: {}".format(message))
+        self.context.logger.info(f"Handling message: {message}")
 
     def _handle_error(self, message: Message):
         self.context.logger.error("Error in {} handler: {}".format(self.__class__.__name__, message))
