@@ -107,7 +107,7 @@ class TestOrderHandler(BaseSkillTestCase):
         )
 
         # operation
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
 
         # after
@@ -163,7 +163,7 @@ class TestPositionHandler(BaseSkillTestCase):
         mock_func = MagicMock()
         mock_func.save_pivot_to_db.return_value = None
         strategy.save_pivot_to_db = mock_func.save_position_to_db
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
         self.assert_quantity_in_outbox(0)
 

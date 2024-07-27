@@ -212,15 +212,15 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_2)
-        assert [f for f in df.values[0]] == [1800.0, "short", -1, 0]
-        assert [f for f in df.values[1]] == [1900.0, "long", 0, 1]
+        assert list(df.values[0]) == [1800.0, "short", -1, 0]
+        assert list(df.values[1]) == [1900.0, "long", 0, 1]
 
         # we now check that the pivot is correct
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [1800.0, "long", 1, 0]
-        assert [f for f in df.values[1]] == [1900.0, "short", 0, -1]
+        assert list(df.values[0]) == [1800.0, "long", 1, 0]
+        assert list(df.values[1]) == [1900.0, "short", 0, -1]
 
         # we confirm that the netted out pivot is correct
         df = strategy.from_positions_to_pivot(positions)
-        assert [f for f in df.values[0]] == [1800.0, "flat", 0, 0]
-        assert [f for f in df.values[1]] == [1900.0, "flat", 0, 0]
+        assert list(df.values[0]) == [1800.0, "flat", 0, 0]
+        assert list(df.values[1]) == [1900.0, "flat", 0, 0]
