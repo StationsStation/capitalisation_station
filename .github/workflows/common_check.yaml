@@ -29,6 +29,9 @@ jobs:
       PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
