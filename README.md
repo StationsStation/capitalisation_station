@@ -75,3 +75,12 @@ make all
 
 This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
+## Upstream Dependenencies
+
+
+All solana credit for the jupyter integration goes to
+
+With specific reference to components;
+contract/vybe/jupitar_swap/0.1.0
+https://github.com/Dassy23/aea_contracts_solana/
+
