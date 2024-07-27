@@ -30,8 +30,7 @@ import pandas as pd
 from aea.test_tools.test_skill import BaseSkillTestCase
 
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
-from tests.conftest import ROOT_DIR
-from tests.test_skills.test_reporting.cases import (
+from packages.eightballer.skills.reporting.tests.cases import (
     EXCHANGE_1,
     EXCHANGE_2,
     POSITION_CASE_1,
@@ -39,8 +38,11 @@ from tests.test_skills.test_reporting.cases import (
     TEST_MARKET_NAME_1,
     TEST_MARKET_NAME_2,
 )
+from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
+
+DB_FILE = "test.db"
 
 
 class TestOrder:
@@ -53,6 +55,12 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
 
     path_to_skill = Path(ROOT_DIR, "packages", "eightballer", "skills", "reporting")
     behaviour_name: str = None
+
+    @classmethod
+    def teardown_class(cls):
+        """Teardown the test."""
+        if Path(DB_FILE).exists():
+            Path(DB_FILE).unlink()
 
     def test_setup(self):
         """Test the setup method of the price_polling behaviour."""

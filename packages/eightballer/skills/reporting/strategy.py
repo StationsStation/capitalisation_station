@@ -25,16 +25,7 @@ from typing import Any, Dict, Optional
 
 import pandas as pd
 from aea.skills.base import Model
-from sqlalchemy import (
-    BigInteger,
-    Boolean,
-    Column,
-    DateTime,
-    Float,
-    String,
-    create_engine,
-    func,
-)
+from sqlalchemy import BigInteger, Boolean, Column, DateTime, Float, String, create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -42,12 +33,7 @@ from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.balances.custom_types import Balance
 from packages.eightballer.protocols.markets.custom_types import Market
-from packages.eightballer.protocols.orders.custom_types import (
-    Order,
-    OrderSide,
-    OrderStatus,
-    OrderType,
-)
+from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderStatus, OrderType
 from packages.eightballer.protocols.positions.custom_types import Position, PositionSide
 from packages.eightballer.protocols.tickers.custom_types import Ticker
 
@@ -126,23 +112,17 @@ class ReportingStrategy(Model):
         self._add_exchanges()
         # we now confirm we can connect to the database
         self.context.logger.info("Reporting strategy successfully set up.")
-        self._schema = (
-            "public" if self._connection_string.find("sqlite") == -1 else None
-        )
+        self._schema = "public" if self._connection_string.find("sqlite") == -1 else None
 
     def _get_agent_model(self):
         """Check if the agent is already in the database, if not add it. Use the agent address as the unique identifier."""
         with self.session.begin() as session:  # pylint: disable=E1101
             agent = (
-                session.query(self.object_to_model[Agent])
-                .filter_by(agent_address=self.context.agent_address)
-                .first()
+                session.query(self.object_to_model[Agent]).filter_by(agent_address=self.context.agent_address).first()
             )
             if agent:
                 return agent
-        return self.get_model(Agent)(
-            id=self.context.agent_name, agent_address=self.context.agent_address
-        )
+        return self.get_model(Agent)(id=self.context.agent_name, agent_address=self.context.agent_address)
 
     def update(self, model, **kwargs) -> None:
         """Implement the registration."""
@@ -155,9 +135,7 @@ class ReportingStrategy(Model):
     def _add_exchanges(self) -> None:
         """Add exchanges to the database."""
         for name, _type in DEFAULT_EXCHANGES.items():
-            new_exchange = self.get_model(Exchange)(
-                type=_type, id=name, agent_address=self.context.agent_address
-            )
+            new_exchange = self.get_model(Exchange)(type=_type, id=name, agent_address=self.context.agent_address)
             self.update(new_exchange)
 
     def get_model(self, data_class):
@@ -168,11 +146,7 @@ class ReportingStrategy(Model):
         """Get an instance of a model from a dataclass instance from the database."""
         model = self.get_model(data_class_instance.__class__)
         with self.session.begin() as session:  # pylint: disable=E1101
-            instance = (
-                session.query(model)
-                .filter_by(**{key: getattr(data_class_instance, key)})
-                .first()
-            )
+            instance = session.query(model).filter_by(**{key: getattr(data_class_instance, key)}).first()
         if instance:
             return instance
         return False
@@ -188,10 +162,7 @@ class ReportingStrategy(Model):
     def bulk_add_instances(self, data_class_instances):
         """Add instances of a model from a list of dataclass instances to the database."""
         model = self.get_model(data_class_instances[0].__class__)
-        instances = [
-            model(**data_class_instance.__dict__)
-            for data_class_instance in data_class_instances
-        ]
+        instances = [model(**data_class_instance.__dict__) for data_class_instance in data_class_instances]
         with self.session.begin() as session:  # pylint: disable=E1101
             session.bulk_save_objects(instances)
             session.commit()
@@ -201,9 +172,7 @@ class ReportingStrategy(Model):
         model = self.get_model(data_class_instances[0].__class__)
         with self.session.begin() as session:  # pylint: disable=E1101
             for data_class_instance in data_class_instances:
-                instance = (
-                    session.query(model).filter_by(id=data_class_instance.id).first()
-                )
+                instance = session.query(model).filter_by(id=data_class_instance.id).first()
                 for field, value in data_class_instance.__dict__.items():
                     setattr(instance, field, value)
                 session.merge(instance)
@@ -330,13 +299,9 @@ class ReportingStrategy(Model):
         positions_df = pd.DataFrame(positions_table, columns=positions_columns)
 
         if view != "all":
-            positions_df = (
-                positions_df.groupby(["symbol", "exchange_id"]).sum().reset_index()
-            )
+            positions_df = positions_df.groupby(["symbol", "exchange_id"]).sum().reset_index()
             positions_df["side"] = positions_df["size"].apply(map_size_to_side)
-            merged_df = pd.merge(
-                markets_df, positions_df, on=["symbol", "exchange_id"], how="inner"
-            )
+            merged_df = pd.merge(markets_df, positions_df, on=["symbol", "exchange_id"], how="inner")
         else:
             positions_df = (
                 positions_df.groupby(
@@ -392,31 +357,21 @@ class ReportingStrategy(Model):
         if exchange_type:
             query.update({"type": exchange_type.value})
         with self.session.begin() as session:  # pylint: disable=E1101
-            exchanges = (
-                session.query(self.object_to_model[Exchange]).filter_by(**query).all()
-            )
+            exchanges = session.query(self.object_to_model[Exchange]).filter_by(**query).all()
         return [exchange.id for exchange in exchanges]
 
     def pivot_all_exchanges(self):
         """Pivot the positions for each exchange."""
         for exchange in self.get_exchanges():
             with self.session.begin() as session:  # pylint: disable=E1101
-
-                positions = (
-                    session.query(self.object_to_model[Position])
-                    .filter_by(exchange_id=exchange)
-                    .all()
-                )
+                positions = session.query(self.object_to_model[Position]).filter_by(exchange_id=exchange).all()
             self.from_positions_to_pivot(positions, exchange)
 
     def pivot_all_positions(self):
         """Pivot the positions for each exchange."""
         with self.session.begin() as session:  # pylint: disable=E1101
-
             positions = (
-                session.query(self.object_to_model[Position])
-                .filter_by(agent_address=self.context.agent_address)
-                .all()
+                session.query(self.object_to_model[Position]).filter_by(agent_address=self.context.agent_address).all()
             )
         self.from_positions_to_pivot(positions, "all")
 
@@ -432,11 +387,7 @@ class ReportingStrategy(Model):
 
         with self.session.begin() as session:  # pylint: disable=E1101
             orm_model = self.object_to_model[Order]
-            orders = (
-                session.query(orm_model)
-                .filter_by(agent_address=self.context.agent_address)
-                .filter_by(**query)
-            )
+            orders = session.query(orm_model).filter_by(agent_address=self.context.agent_address).filter_by(**query)
             if since:
                 orders = orders.filter(orm_model.latest_update >= since)
             if until:
@@ -461,11 +412,7 @@ class ReportingStrategy(Model):
         # we now query the database
         with self.session.begin() as session:  # pylint: disable=E1101
             model = self.object_to_model[Position]
-            position_query = (
-                session.query(model)
-                .filter_by(agent_address=self.context.agent_address)
-                .filter_by(**query)
-            )
+            position_query = session.query(model).filter_by(agent_address=self.context.agent_address).filter_by(**query)
             if open_only:
                 position_query = position_query.filter(model.size != 0)
             positions = position_query.all()

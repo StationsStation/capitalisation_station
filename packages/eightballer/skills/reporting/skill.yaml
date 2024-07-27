@@ -12,10 +12,11 @@ fingerprint:
   handlers.py: bafybeibid63qrbtcy6lz7qo65ks2x7m22rcjpkiqpbcbgqsuurbuuawfnu
   slack.py: bafybeibsz5onpqcwl6wjyzz5znia7mq6dhvuieb2jy26beqcaikx4xzeqq
   strategy.py: bafybeifhypmslngpxwcsdsvqfoi6tbp5pj2gmoxrww4d2c7kpmmmzcqh4e
-  test_reporting/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
-  test_reporting/test_behaviour.py: bafybeihflrejuzurtbbwhir2u4tmvede2kccqav4u44yjbi6qchzzg6kqq
-  test_reporting/test_handlers.py: bafybeifg6qziglcrbeug2udovmddayl4qhyxdontrw2ytuj6vcg5vfmxxi
-  test_reporting/test_strategy.py: bafybeicpvobozujxvvoc3o56nmrn6jkn24w7rvyq5ayzc7s263hgpdwpm4
+  tests/__init__.py: bafybeifo6vr5aykngaktppn757wmpzocykh4a5tubyxtpdppvxb23sk55y
+  tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
+  tests/test_behaviour.py: bafybeig255c65vhujpti5gujquljuturbwe5tljjkekqpfuujfr7pgfq7a
+  tests/test_handlers.py: bafybeicchhhyaz3hixgwo2fm6lwbhfkjqb6ejox6khimh422r2rlvuedkm
+  tests/test_strategy.py: bafybeihp5c2iypiln5jhn2ja7dtau53xhbjzelctm5sxblf3n5mbe2wxpe
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
@@ -83,7 +84,7 @@ models:
     class_name: PositionsDialogues
   reporting_strategy:
     args:
-      connection_string: sqlite:///reporting.db
+      connection_string: sqlite:///test.db
     class_name: ReportingStrategy
 dependencies:
   pandas:

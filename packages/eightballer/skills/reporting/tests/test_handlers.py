@@ -6,24 +6,16 @@ from unittest.mock import MagicMock, patch
 
 from aea.test_tools.test_skill import BaseSkillTestCase
 
-from packages.eightballer.protocols.orders.custom_types import (
-    Order,
-    Orders,
-    OrderStatus,
-)
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import DEFAULT_EXCHANGE_ID
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogues
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.skills.reporting.handlers import (
-    OrdersReportingHandler,
-    PositionsReportingHandler,
-)
+from packages.eightballer.skills.reporting.handlers import OrdersReportingHandler, PositionsReportingHandler
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
-from tests.conftest import ROOT_DIR
-from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
-    DEFAULT_EXCHANGE_ID,
-)
+from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
+from packages.eightballer.skills.reporting.tests.test_strategy import DB_FILE
 
 PATH_TO_SKILL = Path(ROOT_DIR, "packages", "eightballer", "skills", "reporting")
 
@@ -32,6 +24,12 @@ class TestOrderHandler(BaseSkillTestCase):
     """Test HttpHandler of http_echo."""
 
     path_to_skill = PATH_TO_SKILL
+
+    @classmethod
+    def teardown_class(cls):
+        """Teardown the test."""
+        if Path(DB_FILE).exists():
+            Path(DB_FILE).unlink()
 
     @classmethod
     def setup(cls):  #  pylint: disable=W0221
@@ -54,6 +52,7 @@ class TestOrderHandler(BaseSkillTestCase):
             "side": "buy",
             "type": "limit",
             "status": OrderStatus.OPEN,
+            "exchange_id": DEFAULT_EXCHANGE_ID,
         }
         cls.position_params = {
             "id": "123",

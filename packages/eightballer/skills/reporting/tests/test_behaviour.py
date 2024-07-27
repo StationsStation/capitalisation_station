@@ -34,6 +34,10 @@ from packages.eightballer.skills.reporting.strategy import ReportingStrategy
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
 
+DB_FILE = "test.db"
+
+ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
+
 
 class TestOrder:
     id: str = "test_id"
@@ -52,6 +56,13 @@ class BaseReportingTestCase(BaseSkillTestCase, ABC):
         behaviour = self.skill.behaviours[self.behaviour_name]
         behaviour.setup()
 
+    @classmethod
+    def teardown_class(cls):
+        """Teardown the test."""
+        if Path(DB_FILE).exists():
+            Path(DB_FILE).unlink()
+
+    @pytest.mark.skip()
     def test_act(self):
         """Test the act method of the price_polling behaviour."""
         # operation

@@ -30,19 +30,12 @@ from packages.eightballer.connections.ccxt.interfaces.order import (
 )
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
-from packages.eightballer.protocols.orders.dialogues import (
-    OrdersDialogue,
-    OrdersDialogues,
-)
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, OrdersDialogues
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.skills.reporting.slack import SlackUploader
-from packages.eightballer.skills.reporting.strategy import (
-    DEFAULT_EXCHANGES,
-    ExchangeType,
-    ReportingStrategy,
-)
+from packages.eightballer.skills.reporting.strategy import DEFAULT_EXCHANGES, ExchangeType, ReportingStrategy
 
 from_id_to_instrument_name = base_from_id_to_instrument_name
 
@@ -200,9 +193,7 @@ class EodReportingBehaviour(TickerBehaviour):
             if next_report_time is not None:
                 self._run_reports(report_time)
                 # set the next report time
-                self.context.logger.info(
-                    f"Setting next report time: {next_report_time}"
-                )
+                self.context.logger.info(f"Setting next report time: {next_report_time}")
                 new_report_times.append(next_report_time)
                 # mark this report as done
                 self.context.logger.info(f"Marking report as done: {report_time}")
@@ -240,9 +231,7 @@ class EodReportingBehaviour(TickerBehaviour):
             raise ValueError(f"Unknown uploader class: {uploader['class_name']}")
 
         self.context.logger.info(f"Reporting Uploader: {self.uploader}")
-        self.context.logger.info(
-            f"Reporting Uploader Daily Report Times: {self.report_times}"
-        )
+        self.context.logger.info(f"Reporting Uploader Daily Report Times: {self.report_times}")
 
 
 class ReconciliationBehaviour(TickerBehaviour):

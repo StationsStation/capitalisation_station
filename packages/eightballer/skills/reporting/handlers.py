@@ -51,9 +51,7 @@ class BaseHandler(Handler):
         self.context.logger.info("Handling message: {}".format(message))
 
     def _handle_error(self, message: Message):
-        self.context.logger.error(
-            "Error in {} handler: {}".format(self.__class__.__name__, message)
-        )
+        self.context.logger.error("Error in {} handler: {}".format(self.__class__.__name__, message))
 
     def teardown(self) -> None:
         """Implement the handler teardown."""
@@ -95,9 +93,7 @@ class MarketsReportingHandler(BaseHandler):
         elif message.performative == MarketsMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
 
 
 class BalancesReportingHandler(BaseHandler):
@@ -129,9 +125,7 @@ class BalancesReportingHandler(BaseHandler):
         elif message.performative == BalancesMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
 
 
 class OrdersReportingHandler(BaseHandler):
@@ -173,9 +167,7 @@ class OrdersReportingHandler(BaseHandler):
         elif message.performative == OrdersMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
 
     def _parse_order(self, order: Order):
         """Parse the order."""
@@ -217,9 +209,7 @@ class TickersReportingHandler(BaseHandler):
         elif message.performative == TickersMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
 
 
 class PositionsReportingHandler(BaseHandler):
@@ -251,9 +241,7 @@ class PositionsReportingHandler(BaseHandler):
         elif message.performative == PositionsMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
         if new_instances:
             self.strategy.bulk_add_instances(new_instances)
         if existing_instances:
@@ -268,16 +256,12 @@ class PositionsReportingHandler(BaseHandler):
         """
         position.agent_address = self.context.agent_address
         position.info = json.dumps(position.info)
-        position.id = (
-            f"{message.exchange_id}_{position.symbol}_{self.context.agent_address}"
-        )
+        position.id = f"{message.exchange_id}_{position.symbol}_{self.context.agent_address}"
         instance = self.strategy.get_instance(position, "id")
         return instance
 
     def _handle_error(self, message: Message):
-        self.context.logger.error(
-            "Error in {} handler: {}".format(self.__class__.__name__, message)
-        )
+        self.context.logger.error("Error in {} handler: {}".format(self.__class__.__name__, message))
         if message.error_code == PositionsMessage.ErrorCode.UNKNOWN_POSITION:
             # we need to set the position to closed by nulling the size.
             # we get the last out going message.
@@ -291,26 +275,18 @@ class PositionsReportingHandler(BaseHandler):
                 )
                 position = Position(
                     id=position_id,
-                    symbol=from_id_to_instrument_name(
-                        last_outgoing_message.position_id
-                    ),
+                    symbol=from_id_to_instrument_name(last_outgoing_message.position_id),
                 )
                 position_model = self.strategy.get_instance(position, "id")
                 if position_model:
                     position.size = 0
                     self.strategy.bulk_update_instances([position])
                 else:
-                    self.context.logger.error(
-                        f"Could not find position for {position.id}"
-                    )
+                    self.context.logger.error(f"Could not find position for {position.id}")
             else:
-                self.context.logger.error(
-                    f"Could not find dialogue for {message.performative}"
-                )
+                self.context.logger.error(f"Could not find dialogue for {message.performative}")
         else:
-            raise ValueError(
-                f"Cannot handle message of performative {message.performative}"
-            )
+            raise ValueError(f"Cannot handle message of performative {message.performative}")
 
 
 class HttpHandler(BaseHandler):
@@ -328,14 +304,8 @@ class HttpHandler(BaseHandler):
                 if json.loads(msg.body)["ok"]:
                     self.context.logger.debug("success")
                 else:
-                    raise ValueError(
-                        "FAILED http error: status_code={}".format(msg.status_code)
-                    )
+                    raise ValueError("FAILED http error: status_code={}".format(msg.status_code))
             else:
-                raise ValueError(
-                    "received http error: status_code={}".format(msg.status_code)
-                )
+                raise ValueError("received http error: status_code={}".format(msg.status_code))
         else:
-            raise ValueError(
-                "cannot handle http message of performative={}".format(msg.performative)
-            )
+            raise ValueError("cannot handle http message of performative={}".format(msg.performative))

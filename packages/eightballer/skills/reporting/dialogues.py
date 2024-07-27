@@ -7,18 +7,10 @@ from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
 from pyparsing import Any
 
-from packages.eightballer.protocols.orders.dialogues import (
-    OrdersDialogue as BaseOrdersDialogue,
-)
-from packages.eightballer.protocols.orders.dialogues import (
-    OrdersDialogues as BaseOrdersDialogues,
-)
-from packages.eightballer.protocols.positions.dialogues import (
-    PositionsDialogue as BasePositionsDialogue,
-)
-from packages.eightballer.protocols.positions.dialogues import (
-    PositionsDialogues as BasePositionsDialogues,
-)
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue as BaseOrdersDialogue
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogues as BaseOrdersDialogues
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue as BasePositionsDialogue
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogues as BasePositionsDialogues
 from packages.valory.protocols.http.dialogues import HttpDialogue as BaseHttpDialogue
 from packages.valory.protocols.http.dialogues import HttpDialogues as BaseHttpDialogues
 
