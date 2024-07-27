@@ -66,7 +66,7 @@ install: update_git_deps
 
 
 update_git_deps:
-	if [ ! -d "third_party/upstream" ]; then \
+	if [ ! -d "third_party/upstream/lyra_client/README.md" ]; then \
 		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
 		git submodule update --init --recursive;fi
 
