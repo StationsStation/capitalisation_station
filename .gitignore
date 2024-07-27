@@ -29,7 +29,6 @@ packages/eightballer/connections/http_client
 packages/eightballer/connections/http_server
 packages/valory/skills/abstract_abci
 packages/valory/skills/abstract_round_abci
-packages/eightballer/skills/reporting
 packages/valory/skills/registration_abci
 packages/valory/skills/reset_pause_abci
 packages/eightballer/skills/prometheus

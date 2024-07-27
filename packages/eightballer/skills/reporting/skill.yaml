@@ -1,0 +1,92 @@
+name: reporting
+author: eightballer
+version: 0.1.0
+type: skill
+description: The scaffold skill is a scaffold for your own skill implementation.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeidvgqv37f6tmotxycc2vgl2lqbiz426lplsaxnlr7veg4y7qgvxd4
+  behaviours.py: bafybeia4jkxwyzo2igdifcb2slfuh2dgyit4eps73p6uhdukipdvxlii6a
+  dialogues.py: bafybeibql2j64oczpnaq5b2wsv3bzvxlfeerulbdrqbdfqnca6igbqsrra
+  handlers.py: bafybeibid63qrbtcy6lz7qo65ks2x7m22rcjpkiqpbcbgqsuurbuuawfnu
+  slack.py: bafybeibsz5onpqcwl6wjyzz5znia7mq6dhvuieb2jy26beqcaikx4xzeqq
+  strategy.py: bafybeifhypmslngpxwcsdsvqfoi6tbp5pj2gmoxrww4d2c7kpmmmzcqh4e
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
+- eightballer/dcxt:0.1.0:bafybeigqhtogfybo635z32sntbpna32mx4rpfnvnves7uo2eo7j4zmvfgy
+- valory/http_client:0.23.0:bafybeidf2hioh7g5g7swvis3sfpo2sgq4j4nvzusewje6d6vqjexwe5yze
+contracts: []
+protocols:
+- eightballer/balances:0.1.0:bafybeibkvanfeqzdxjqbsy7kg6n4upcs3guojrmc4yjb3g7anmtia4las4
+- eightballer/markets:0.1.0:bafybeiejvub3u44kfudgldid6aq57z75wuenfi2filkbqdssxwavllgigm
+- eightballer/orders:0.1.0:bafybeia5lppfqs3wtarisbn3njiankxjxgdp2kzoyrlnzjuwomrjwbfby4
+- eightballer/positions:0.1.0:bafybeiabojtxwexbzgqjut7g3paekh2q7ssrjrpwgtsxw3jjhxhqyya7h4
+- eightballer/tickers:0.1.0:bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm
+- valory/http:1.0.0:bafybeieshrrplt5oadws5tz3rhjo6m2spchdyhkwa2z6ze2bs4ivauusfq
+skills: []
+behaviours:
+  eod_reporting:
+    args:
+      daily_report_enabled: false
+      daily_report_times:
+      - 15:00:00-05:00
+      enabled: true
+      interval: 1
+      uploader:
+        class_name: SlackUploader
+        config:
+          enabled: false
+          channel: ABC123
+          token: xoxb-123345324423-112312323-ABC123123123123
+    class_name: EodReportingBehaviour
+  reconciliation_reporting:
+    args:
+      currency: ETH
+      enabled: true
+      interval: 300
+      start_timestamp: 1693519879
+    class_name: ReconciliationBehaviour
+handlers:
+  balances_reporting_handler:
+    args: {}
+    class_name: BalancesReportingHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  markets_reporting_handler:
+    args: {}
+    class_name: MarketsReportingHandler
+  orders_reporting_handler:
+    args: {}
+    class_name: OrdersReportingHandler
+  positions_reporting_handler:
+    args: {}
+    class_name: PositionsReportingHandler
+  tickers_reporting_handler:
+    args: {}
+    class_name: TickersReportingHandler
+models:
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  orders_dialogues:
+    args: {}
+    class_name: OrdersDialogues
+  positions_dialogues:
+    args: {}
+    class_name: PositionsDialogues
+  reporting_strategy:
+    args:
+      connection_string: sqlite:///reporting.db
+    class_name: ReportingStrategy
+dependencies:
+  pandas:
+    version: ==1.3.5
+  psycopg2-binary:
+    version: ==2.9.6
+  sqlalchemy:
+    version: ==1.4.45
+is_abstract: false
+customs: []
