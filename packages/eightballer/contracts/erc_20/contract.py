@@ -45,9 +45,7 @@ class Erc20(Contract):
         return {"int": result}
 
     @classmethod
-    def balance_of(
-        cls, ledger_api: LedgerApi, contract_address: str, account: Address
-    ) -> JSONLike:
+    def balance_of(cls, ledger_api: LedgerApi, contract_address: str, account: Address) -> JSONLike:
         """Handler method for the 'balance_of' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.balanceOf(account=account).call()
