@@ -59,7 +59,7 @@ test:
 
 all: fmt lint test hashes
 
-install:
+install: update_deps
 	poetry install
 	poetry run autonomy packages sync
 
@@ -82,5 +82,3 @@ is_dirty:
 		echo "The repository is dirty. Please commit your changes first."; \
 		exit 1; \
 	fi
-
-update_third_party: is_dirty
