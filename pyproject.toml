@@ -31,7 +31,7 @@ numpy = "1.26.0"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
 lyra-v2-client = {path = "third_party/upstream/lyra_client'}
 balpy = {path = "third_party/forks/balpy"}
-multicaller = {path = "/third_party/multicaller"}
+multicaller = {path = "third_party/forks/multicaller"}
 
 
 [tool.poetry.dev-dependencies]
