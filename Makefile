@@ -60,8 +60,8 @@ test:
 all: fmt lint test hashes
 
 install: update_git_deps
-	poetry install
-	poetry run autonomy packages sync
+	poetry install || echo "Poetry install failed. Please make sure you have poetry installed." && exit 1
+	poetry run autonomy packages sync || echo "Autonomy packages sync failed. Please verify your hashes lock file." && exit 1
 
 
 
