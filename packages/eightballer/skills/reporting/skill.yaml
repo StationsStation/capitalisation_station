@@ -7,16 +7,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidvgqv37f6tmotxycc2vgl2lqbiz426lplsaxnlr7veg4y7qgvxd4
-  behaviours.py: bafybeia4jkxwyzo2igdifcb2slfuh2dgyit4eps73p6uhdukipdvxlii6a
-  dialogues.py: bafybeibql2j64oczpnaq5b2wsv3bzvxlfeerulbdrqbdfqnca6igbqsrra
-  handlers.py: bafybeibid63qrbtcy6lz7qo65ks2x7m22rcjpkiqpbcbgqsuurbuuawfnu
-  slack.py: bafybeibsz5onpqcwl6wjyzz5znia7mq6dhvuieb2jy26beqcaikx4xzeqq
-  strategy.py: bafybeifhypmslngpxwcsdsvqfoi6tbp5pj2gmoxrww4d2c7kpmmmzcqh4e
-  tests/__init__.py: bafybeifo6vr5aykngaktppn757wmpzocykh4a5tubyxtpdppvxb23sk55y
+  behaviours.py: bafybeif5v5ajdxm3jrqwoykk45ig3ivbwwggccsraxnckoe2mb63zz2cpa
+  dialogues.py: bafybeiczv7mjgcatdws632yks36mnptyqn5pfjy7pq5744vhcsy6pspgky
+  handlers.py: bafybeihykt43c6k73nfanmqb4kmakm2xlhclsushsnpheywd63o4vqrbzu
+  slack.py: bafybeidmfjw2vmmok4hxbimldo7m56urlbeczdtwnawywcmomda2e6uste
+  strategy.py: bafybeihm52cb2x55nogwdjutjpbkew4mfqvcurgfagzalbpzaryped24cu
+  tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
   tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
-  tests/test_behaviour.py: bafybeig255c65vhujpti5gujquljuturbwe5tljjkekqpfuujfr7pgfq7a
-  tests/test_handlers.py: bafybeicchhhyaz3hixgwo2fm6lwbhfkjqb6ejox6khimh422r2rlvuedkm
-  tests/test_strategy.py: bafybeihp5c2iypiln5jhn2ja7dtau53xhbjzelctm5sxblf3n5mbe2wxpe
+  tests/test_behaviour.py: bafybeiahhyq3z7wpifabvlkmymshnev4pcnxphnrxzpgh6tmcxetrq5lsi
+  tests/test_handlers.py: bafybeidtsvogt5fkfncp7lto4g6v6fxfyewkfv3fqsmmlo3niuznus2pxe
+  tests/test_strategy.py: bafybeicptekeoj5oyp63oryvuz3zsgld3zq3iniwvstwd5u2jdxwas6sn4
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
