@@ -40,6 +40,9 @@ ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 class TestOrder:
+    """
+    Test order class.
+    """
     id: str = "test_id"
     exchange_id: str = "lyra"
 
