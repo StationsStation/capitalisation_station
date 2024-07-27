@@ -1,4 +1,5 @@
 .env
+.hypothesis
 __pycache__
 
 *private_key*

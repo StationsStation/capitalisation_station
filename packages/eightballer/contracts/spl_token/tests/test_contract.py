@@ -96,6 +96,7 @@ class TestContractCommon:
             OLAS_ADDRESS,
         ],
     )
+    @pytest.mark.skip("This test is not is only for local testing.")
     def test_get_balance(self, contract_address):
         """Test the get_balance method."""
 
