@@ -97,7 +97,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "long", 1]
+        assert list(df.values[0]) == [2000.0, "long", 1]
 
     def test_from_positions_to_pivot(self):
         """Test the act method of the price_polling behaviour."""
