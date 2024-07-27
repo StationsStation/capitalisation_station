@@ -27,7 +27,7 @@ clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
-	find . -name '.DS_Store' -exec rm -fr {} +
+	rm -rf '.DS_Store'
 
 .PHONY: clean-test
 clean-test:
