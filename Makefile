@@ -59,22 +59,17 @@ test:
 
 all: fmt lint test hashes
 
-install: update_deps
+install: update_git_deps
 	poetry install
 	poetry run autonomy packages sync
 
 
 
-update_deps:
-	# This necessary for the first commit.
-	# We check if the third-party dependencies are visible.
+update_git_deps:
 	if [ ! -d "third_party/upstream" ]; then \
 		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
-		git submodule update --init --recursive 
-	fi
-	# This is necessary for the 2nd commit.
-	git pull --recurse-submodules
-	poetry update
+		git submodule update --init --recursive;fi
+
 
 is_dirty:
 	# Check if the repository is dirty.
