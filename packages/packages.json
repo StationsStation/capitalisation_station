@@ -26,6 +26,8 @@
         "protocol/eightballer/prometheus/1.0.0": "bafybeie3sy2m3ltmnkrldx4vux26xbyokay6eh7datiacr2ropqwj3r3ga",
         "protocol/eightballer/http/0.1.0": "bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a",
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
+        "contract/vybe/jupitar_swap/0.1.0": "bafybeihxq6qs6twbhtpmgiqs55c2sqq6vrgjpzazncmprriy3mzk5akgna",
+        "contract/eightballer/spl_token/0.1.0": "bafybeiaqsqd7ve5leno762pnmmcfuc2ja2uewht26cr325256prpy7ebdm"
         "contract/valory/service_registry/0.1.0": "bafybeie7cd7jtclhycsqovtaoiu6lqyusr4d7eplin6o6onjsqwd63mrvu",
         "connection/valory/abci/0.1.0": "bafybeicmzmudap2ugzib633h4p4hfji7meh5mjujjfckd52savglvpixvy",
         "connection/valory/http_client/0.23.0": "bafybeidf2hioh7g5g7swvis3sfpo2sgq4j4nvzusewje6d6vqjexwe5yze",
