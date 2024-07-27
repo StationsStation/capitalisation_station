@@ -64,8 +64,6 @@ install: update_git_deps
 	poetry run autonomy packages sync 
 
 
-
-
 update_git_deps:
 	if [ ! -d "third_party/upstream/lyra_client/README.md" ]; then \
 		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
