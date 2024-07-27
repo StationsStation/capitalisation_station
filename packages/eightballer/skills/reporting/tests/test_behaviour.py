@@ -43,6 +43,7 @@ class TestOrder:
     """
     Test order class.
     """
+
     id: str = "test_id"
     exchange_id: str = "lyra"
 
