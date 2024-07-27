@@ -9,11 +9,12 @@
         "protocol/eightballer/balances/0.1.0": "bafybeibkvanfeqzdxjqbsy7kg6n4upcs3guojrmc4yjb3g7anmtia4las4",
         "protocol/eightballer/ohlcv/0.1.0": "bafybeihcyzz5fmf3b3pkng5wogwhel3v7o7bphv7bgt4pbra4zoeoij4va",
         "protocol/eightballer/tickers/0.1.0": "bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm",
-        "connection/eightballer/dcxt/0.1.0": "bafybeidwcq7nzz5i7qwibwuczlu2wgcu4yzuwckwypwkntzmbnxqf7r6zi",
+        "contract/eightballer/erc_20/0.1.0": "bafybeihx73l77za2i5otzhcsbpwi6ydhgqzpczbsypf5ttypr7mm7hjab4",
+        "connection/eightballer/dcxt/0.1.0": "bafybeidnj5ichk2e5o43mxwzeade2qmsh65eujbpi3orugqt2apya74n2y",
         "connection/eightballer/ccxt/0.1.0": "bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeigmc42jcq3ql3spq4ffc542jjnqj7vq67luee3myg5xymjcpgeg4u",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeia5pprj7lta3nxg5u6kurma6niyal4ae2u5pdmblcfndjxkhttxjm",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeiboqfmxbrotz7d3ee6tu6hy226c6emuwqacn4vc2f7xgajixsjwrq"
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeie623goi2fitf37jbxnxp4ppmucht44c4yatwrb3oxfsupnlnt4ze",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeieyh62nsmojki227bo45wgi775lrvqewl43if5dyvadxzj3z25hgu",
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeigvghhutl2obylstrhmumuwrjyw37tdqtcszalq2rzt2cdu4fnm7u"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeifsttranjnxstpoyswpm2dzfyzimpatdfbu5pdpu7ibmda5x24ipe",
@@ -41,6 +42,6 @@
         "skill/valory/reset_pause_abci/0.1.0": "bafybeihp7ybmohndbbre7hspab5mm7pjmtqgbt673rh76hd2xkz6n7xota",
         "skill/eightballer/metrics/0.1.0": "bafybeihjbgp2yyz7h4ghgwvidurnmbd7va4fi6y5hgollv7lz75dnrrcmm",
         "skill/eightballer/prometheus/0.1.0": "bafybeibuaypehp74awahj7p665ccivdhrp7446kvw2axt6cs43owq5nuq4",
-        "skill/eightballer/reporting/0.1.0": "bafybeiawodate54q74q6rbwpllh5cvl7ps6ohpqsfcsveyxecp7nottbvi"
+        "skill/eightballer/reporting/0.1.0": "bafybeictg2vdmysmpjv44ujckw25u5cg4ksadirs6oonr7ksyeodufq5ge"
     }
 }

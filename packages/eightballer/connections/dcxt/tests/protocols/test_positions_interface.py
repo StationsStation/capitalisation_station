@@ -12,8 +12,7 @@ from packages.eightballer.protocols.positions.custom_types import Positions
 from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
 
-from ..protocols.test_tickers import TEST_EXCHANGE
-from ..test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues, with_timeout
+from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, get_dialogues, with_timeout
 
 
 @pytest.mark.asyncio
@@ -35,7 +34,7 @@ class TestPositionInterface(BaseDcxtConnectionTest):
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
-            exchange_id=TEST_EXCHANGE,
+            exchange_id=DEFAULT_EXCHANGE_ID,
             params={},
         )
         envelope = Envelope(
@@ -45,7 +44,7 @@ class TestPositionInterface(BaseDcxtConnectionTest):
         )
         # we make sure that we mock the api call
         with patch.object(
-            self.connection._exchanges[TEST_EXCHANGE],  # pylint: disable=protected-access
+            self.connection._exchanges[DEFAULT_EXCHANGE_ID],  # pylint: disable=protected-access
             "fetch_positions",
             return_value=[],
         ):

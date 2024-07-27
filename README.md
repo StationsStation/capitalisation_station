@@ -17,8 +17,10 @@ The main components of interest are
 - [eightballer/dcxt](packages/eightballer/connections/dcxt)
     This connection enables the agents to send messages to the dcxt connection allowing generic trading on a number of decentralised exchanges.
     The included exchanges are:
+
     - [Balancer](https://balancer.finance/)
     - [Uniswap](https://uniswap.org/)
+    - [JupyterSwap](https://jup.ag/)
     - [100x](https://100x.finance/)
     - [lyra](https://lyra.finance/)
 

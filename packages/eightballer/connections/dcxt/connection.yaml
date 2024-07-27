@@ -7,15 +7,19 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
-  connection.py: bafybeidx5qtqyemzatbln7cexqqspzd26wluq2bd6l6qdql7fj3stmoq2q
+  connection.py: bafybeibqzu2u66c3pw7tmgh7gmal6ivgexvm6xrox4f6ynze23oyk6dbqa
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
-  dcxt/__init__.py: bafybeieauvskldzo3dxg3ogd4awblcvb3y3fn4hgjud22bia3tongfa3iu
+  dcxt/__init__.py: bafybeidmnoynisb7k5s7kfkhwu2rj2ibljdzk54j4tq7ne6htz4xhudxu4
+  dcxt/balancer.py: bafybeihp62zmbct7zk6n6274hdthrphzmbenejg5g5uy4cgkv6eoqcsxs4
+  dcxt/data/balancer/mainnet.json: bafybeiganyojsct3q2p2nat4ci5smu4fmjkrzvtochkicdw7swvk4ukklu
+  dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
+  dcxt/exceptions.py: bafybeiepgf7ekdajqflr3shwncrak4jeic7lzmn5googjnsealnlguftpq
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
   dcxt/lyra_v2.py: bafybeiaijqifz3gwluns4vrlxzuu7aszasr4di6dpjxvsqgvpomm4hotxe
   interfaces/balance.py: bafybeieohl3v66ygofdi5mmtcfdwlz3rwwo7r77n2kml3lcnczs6vrebc4
   interfaces/interface.py: bafybeihflhmbxhxrei4eyfce5euokl4gl73lcdmlqx6vaf6m4cczhu5krm
   interfaces/interface_base.py: bafybeiclbmxcckwyax4w2iyvywjs5n4fhvalcq3adpqka3zggnxuhlxlr4
-  interfaces/market.py: bafybeigv7xv7cv544vqwan753xayvdazk4oqvrnmnl3ehf5jftreqavu6m
+  interfaces/market.py: bafybeighjombqyisj5hqxsoa6nh5sgzumwrlpfj2pwpxecctiszjeevy3q
   interfaces/ohlcv.py: bafybeibfke2h6k67gwadtke5yrco2mm5ndmfdplhdoalqzxjkkqrh6yc5q
   interfaces/order.py: bafybeidslp3ay7h3gm3frsneksyoveac437bhuuf6cb7e5xom2fco7q2nm
   interfaces/order_book.py: bafybeicy33lj5iszqlmhcwcsjoqcy37gcp2yc4txrpl5zzmnwln5mhhujy
@@ -28,10 +32,10 @@ fingerprint:
   tests/protocols/test_market.py: bafybeiebdnl7a44xe6aluyzky5uqpjrncfz3us6zajjsgsczu6f3w67mwy
   tests/protocols/test_ohlcv_interface.py: bafybeifeb4fsjoaqyp5dcrfaqrl2yiysx3dts4xkwai5vy3it52etod77m
   tests/protocols/test_order_interface.py: bafybeia6vn5rikitboxsce5tiltzveix4vkbctqfsz3jt554u2fbcc63pi
-  tests/protocols/test_positions_interface.py: bafybeihka3fcrgnu4tgstt6f4uk7ltuaxmidxltcg6zp4hfkronqi6a7ve
+  tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
   tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
-  tests/protocols/test_tickers.py: bafybeihtqqyonbhncohw6fbsb2uexmmbkw4v32duqlif2h3m3vfrif2754
-  tests/test_dcxt_connection.py: bafybeihfriqexn7u56wwh2zwai7jzdg3x7xz3alnsn4jbih7y7qttacuiq
+  tests/protocols/test_tickers.py: bafybeidlwujshrnfq3psdnkluxbwuc52hjgdvqt47wprs6xzt22fkkncfa
+  tests/test_dcxt_connection.py: bafybeidf545hxzqhjgmvdnnkyjusqupcdubug6g7uzhxjr2xycrqbrrcda
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
@@ -56,7 +60,15 @@ protocols:
 class_name: DcxtConnection
 config:
   exchanges:
+  - name: balancer
+    environment: test
+    kwargs:
+      chain_id: mainnet
+      rpc_url: https://rpc.ankr.com/eth
+      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: lyra
+    environment: test
+  - name: uniswap
     environment: test
   target_skill_id: null
 excluded_protocols: []

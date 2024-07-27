@@ -37,7 +37,7 @@ from packages.eightballer.connections.dcxt.connection import DcxtConnection
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_EXCHANGE_ID = "lyra"
+DEFAULT_EXCHANGE_ID = "balancer"
 
 ROOT_DIR = os.path.join(
     os.path.dirname(__file__),
@@ -52,9 +52,14 @@ TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f
 TEST_EXCHANGES = [
     {
         "name": DEFAULT_EXCHANGE_ID,
+        "environment": "test",
+        "kwargs": {
+            "chain_id": 'mainnet',
+            "rpc_url": "http://eth.chains.wtf:8545",
+            "etherscan_api_key": "YOUR_ETHERSCAN_API_KEY",
+        },
         "key_path": TEST_KEY_PATH,
         "wallet": TEST_WALLET,
-        "environment": "test",
     },
 ]
 

@@ -9,9 +9,8 @@ from aea.mail.base import Envelope
 from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
-from ..test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues, with_timeout
+from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, get_dialogues, with_timeout
 
-TEST_EXCHANGE = "lyra"
 TEST_MARKET = "BTC-PERP"
 
 
@@ -29,7 +28,7 @@ class TestFetchTickers(BaseDcxtConnectionTest):
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id=TEST_EXCHANGE,
+            exchange_id=DEFAULT_EXCHANGE_ID,
         )
         envelope = Envelope(
             to=request.to,
@@ -58,7 +57,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id=TEST_EXCHANGE,
+            exchange_id=DEFAULT_EXCHANGE_ID,
         )
         envelope = Envelope(
             to=request.to,
@@ -68,7 +67,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.RequestTimeout)
-        self.connection._exchanges[TEST_EXCHANGE].fetch_tickers = mocker  # pylint: disable=W0212
+        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_tickers = mocker  # pylint: disable=W0212
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 
