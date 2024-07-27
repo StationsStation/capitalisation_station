@@ -1,0 +1,17 @@
+name: spl_token
+author: eightballer
+version: 0.1.0
+type: contract
+description: Implements a number of simple methods to enable interaction with a spl
+  token, along with a representation of the spl token itself.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
+  contract.py: bafybeiafafy4ebfxqxvlywbqthu65izuppzei7crwr2tnr47voaosgj3ma
+  tests/test_contract.py: bafybeiddt2qlviphrr3qqryv7dlv3up4g2ghhvlsp55wofncneoc7hhf2u
+fingerprint_ignore_patterns: []
+class_name: SolanaProgramLibraryToken
+contract_interface_paths: {}
+dependencies: {}
+contracts: []

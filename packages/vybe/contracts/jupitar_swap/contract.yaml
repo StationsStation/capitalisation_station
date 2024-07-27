@@ -1,0 +1,18 @@
+name: jupitar_swap
+author: vybe
+version: 0.1.0
+type: contract
+description: Jupitar Swap.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeia4kcp4oc2bursyknhw5skjre3jvqv65abayqifdqongfdjgcts4u
+  __init__.py: bafybeiajqexavi3ffoqbuxr6kaopalglvljy4f4mknwb4ta5y642vdwmjm
+  contract.py: bafybeigk5a2x6shskdrkv2esjn7wal37b224vuznnnv4vgqovoufniixh4
+  tests/test_contract_jup.py: bafybeigsg3avysuccwgotlqx3tmyaja4qt3l6egahnem375oys7meabkwm
+fingerprint_ignore_patterns: []
+class_name: JupitarSwapContract
+contract_interface_paths: {}
+dependencies: {}
+contracts:
+- eightballer/spl_token:0.1.0:bafybeiaqsqd7ve5leno762pnmmcfuc2ja2uewht26cr325256prpy7ebdm
