@@ -7,7 +7,10 @@
 [submodule "third_party/forks/web3-ethereum-defi"]
 	path = third_party/forks/web3-ethereum-defi
 	url = https://github.com/8ball030/open-web3-ethereum-defi.git
+
 [submodule "olas_arbitrage/upstream/aea_contracts_solana"]
 	path = third_party/upstream/aea_contracts_solana
 	url = https://github.com/Dassy23/aea_contracts_solana.git
-
+[submodule "third_party/upstream/lyra_client"]
+	path = third_party/forks/lyra_client
+	url = https://github.com/8ball030/lyra_client.git

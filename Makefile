@@ -62,3 +62,10 @@ all: fmt lint test hashes
 install:
 	poetry install
 	poetry run autonomy packages sync
+
+
+
+update_deps:
+	git submodule update --init --recursive
+	git pull --recurse-submodules
+	poetry update
