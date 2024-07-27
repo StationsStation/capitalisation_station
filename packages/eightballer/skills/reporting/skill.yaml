@@ -9,14 +9,14 @@ fingerprint:
   __init__.py: bafybeidvgqv37f6tmotxycc2vgl2lqbiz426lplsaxnlr7veg4y7qgvxd4
   behaviours.py: bafybeif5v5ajdxm3jrqwoykk45ig3ivbwwggccsraxnckoe2mb63zz2cpa
   dialogues.py: bafybeiczv7mjgcatdws632yks36mnptyqn5pfjy7pq5744vhcsy6pspgky
-  handlers.py: bafybeif4r6m2ietxglsa7kq5z3nn3sh2qllgc6wztcfhqgteq4rsvkspe4
+  handlers.py: bafybeiepi6zjtex5273zpuntbgtomc5yodvbdfmadfgpc2oeqqwrselzai
   slack.py: bafybeidmfjw2vmmok4hxbimldo7m56urlbeczdtwnawywcmomda2e6uste
-  strategy.py: bafybeihm52cb2x55nogwdjutjpbkew4mfqvcurgfagzalbpzaryped24cu
+  strategy.py: bafybeidw26hw3vsr3uc4fihwrcjxdvmhdq2sn56q66tunhu2di7g7isqaa
   tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
   tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
   tests/test_behaviour.py: bafybeiahhyq3z7wpifabvlkmymshnev4pcnxphnrxzpgh6tmcxetrq5lsi
-  tests/test_handlers.py: bafybeidtsvogt5fkfncp7lto4g6v6fxfyewkfv3fqsmmlo3niuznus2pxe
-  tests/test_strategy.py: bafybeicptekeoj5oyp63oryvuz3zsgld3zq3iniwvstwd5u2jdxwas6sn4
+  tests/test_handlers.py: bafybeif2sxwdf7wixiuin2koyph5dmnxf5e42ru4mwt6ng6o3loyywntym
+  tests/test_strategy.py: bafybeigrdrj43aowmhrzbzwc73fwrwhckdvirebe6hew3bpaut2a6clg3i
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
