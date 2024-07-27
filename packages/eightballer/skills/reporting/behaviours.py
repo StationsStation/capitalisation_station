@@ -286,7 +286,7 @@ class ReconciliationBehaviour(TickerBehaviour):
             for position in positions:
                 self.check_position_status(position, exchange_id)
         #  we also need to check the settled trades
-        for exchange_id in exchange_positions.keys():
+        for exchange_id in exchange_positions:
             self.check_settlements(exchange_id)
 
     def check_order_status(self, order: Order) -> None:
