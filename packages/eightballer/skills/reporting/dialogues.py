@@ -2,10 +2,11 @@
 Dialogs for the application.
 """
 
+from typing import Any
+
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
-from pyparsing import Any
 
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue as BaseOrdersDialogue
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogues as BaseOrdersDialogues
