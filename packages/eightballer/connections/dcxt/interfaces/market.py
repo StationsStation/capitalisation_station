@@ -25,16 +25,12 @@ class MarketInterface(BaseInterface):
             if message.currency is not None:
                 params["currency"] = message.currency
             markets = await exchange.fetch_markets(params=params)
-            response_message = cast(
-                Optional[Message],
-                dialogue.reply(
-                    performative=MarketsMessage.Performative.ALL_MARKETS,
-                    target_message=message,
-                    markets=markets,
-                    exchange_id=message.exchange_id,
-                ),
+            response_message = dialogue.reply(
+                performative=MarketsMessage.Performative.ALL_MARKETS,
+                target_message=message,
+                markets=markets,
+                exchange_id=message.exchange_id,
             )
-            connection.logger.debug(f"Fetched {len(markets.markets)} markets for {message.exchange_id}")
         except RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(

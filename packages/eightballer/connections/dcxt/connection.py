@@ -5,13 +5,13 @@ import asyncio
 import traceback
 from asyncio import Task
 from collections import deque
+from enum import Enum
 from typing import Any, Deque, Dict, List, Optional, cast
 
 from aea.connections.base import Connection, ConnectionStates
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
-from lyra.enums import Environment
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID, dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface import ConnectionProtocolInterface
@@ -22,6 +22,13 @@ from packages.eightballer.protocols.markets.custom_types import Market
 POLL_INTERVAL_MS = 50
 RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
+
+
+class Environment(Enum):
+    """Environment."""
+
+    PROD = "prod"
+    TEST = "test"
 
 
 class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes
@@ -99,9 +106,10 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 "subaccount_id": subaccount_id,
                 "wallet": wallet,
             }
+            params['kwargs'] = exchange_config.get("kwargs", {})
             try:
                 exchange_class = getattr(dcxt, exchange_id)
-                exchange = exchange_class(params)
+                exchange = exchange_class(**params)
             except AttributeError as exc:
                 raise ValueError(f"Exchange {exchange_id} not found in dcxt") from exc
             self._exchanges.update({exchange_id: exchange})

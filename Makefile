@@ -27,7 +27,7 @@ clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
-	find . -name '.DS_Store' -exec rm -fr {} +
+	rm -rf '.DS_Store'
 
 .PHONY: clean-test
 clean-test:
@@ -59,6 +59,21 @@ test:
 
 all: fmt lint test hashes
 
-install:
+install: update_git_deps
 	poetry install
 	poetry run autonomy packages sync
+
+
+
+update_git_deps:
+	if [ ! -d "third_party/upstream" ]; then \
+		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
+		git submodule update --init --recursive;fi
+
+
+is_dirty:
+	# Check if the repository is dirty.
+	if [ -n "$(shell git status --porcelain)" ]; then \
+		echo "The repository is dirty. Please commit your changes first."; \
+		exit 1; \
+	fi
