@@ -73,9 +73,7 @@ class SolanaProgramLibraryToken(Contract):
         :return: token_data # noqa: DAR202
         """
 
-        decimals = ledger_api.get_state(contract_address).data.parsed["info"][
-            "decimals"
-        ]
+        decimals = ledger_api.get_state(contract_address).data.parsed["info"]["decimals"]
         token = SplToken(address=contract_address, symbol=symbol, decimals=decimals)
         return token.__dict__
 
@@ -103,9 +101,5 @@ class SolanaProgramLibraryToken(Contract):
         opts = TokenAccountOpts(
             mint=Pubkey.from_string(contract_address),
         )
-        raw_res = ledger_api.api.get_token_accounts_by_owner_json_parsed(
-            owner=address_pubkey, opts=opts
-        )
-        return int(
-            raw_res.value[0].account.data.parsed["info"]["tokenAmount"]["amount"]
-        )
+        raw_res = ledger_api.api.get_token_accounts_by_owner_json_parsed(owner=address_pubkey, opts=opts)
+        return int(raw_res.value[0].account.data.parsed["info"]["tokenAmount"]["amount"])

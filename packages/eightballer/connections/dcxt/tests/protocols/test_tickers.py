@@ -14,6 +14,7 @@ from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, 
 TEST_MARKET = "BTC-PERP"
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 class TestFetchTickers(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""

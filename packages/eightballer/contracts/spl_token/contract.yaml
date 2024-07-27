@@ -8,8 +8,8 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
-  contract.py: bafybeiafafy4ebfxqxvlywbqthu65izuppzei7crwr2tnr47voaosgj3ma
-  tests/test_contract.py: bafybeiblexcsncmf4cghtmivrvkhdlfx2etuhr7klmyqmf5ul4jykw64ye
+  contract.py: bafybeiagihrbqycahidul3nio4oz24vcp4wxcoikvxzuacovaqx3w2apve
+  tests/test_contract.py: bafybeider4vmx2k443s2bjicihvieexptgc3pqacn62eh4ce3rxyarterq
 fingerprint_ignore_patterns: []
 class_name: SolanaProgramLibraryToken
 contract_interface_paths: {}

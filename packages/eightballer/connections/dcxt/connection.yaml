@@ -34,7 +34,7 @@ fingerprint:
   tests/protocols/test_order_interface.py: bafybeia6vn5rikitboxsce5tiltzveix4vkbctqfsz3jt554u2fbcc63pi
   tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
   tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
-  tests/protocols/test_tickers.py: bafybeidlwujshrnfq3psdnkluxbwuc52hjgdvqt47wprs6xzt22fkkncfa
+  tests/protocols/test_tickers.py: bafybeifujyhhjcxvp6ig4lqnuirglpzqmwc34ewrr2klpnq5a24ke62vrm
   tests/test_dcxt_connection.py: bafybeidf545hxzqhjgmvdnnkyjusqupcdubug6g7uzhxjr2xycrqbrrcda
 fingerprint_ignore_patterns: []
 connections: []

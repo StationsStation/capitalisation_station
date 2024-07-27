@@ -29,16 +29,16 @@ from typing import cast
 import pytest
 from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 from aea.contracts.base import Contract, contract_registry
-from aea_ledger_solana import SolanaApi, SolanaCrypto
+from aea_ledger_ethereum import EthereumApi, EthereumCrypto
 
-from packages.eightballer.contracts.spl_token.contract import SplToken
+from packages.eightballer.contracts.erc_20.contract import Erc20Token
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
-DEFAULT_ADDRESS = "https://belita-kndiva-fast-mainnet.helius-rpc.com/"
+DEFAULT_ADDRESS = "http://eth.chains.wtf:8545"
 
-SOL_ADDDRESS = "So11111111111111111111111111111111111111112"
-OLAS_ADDRESS = "Ez3nzG9ofodYCvEmw73XhQ87LWNYVRM2s7diB5tBZPyM"
+DAI_ADDRESS = "0x6b175474e89094c44da98b954eedeac495271d0f"
+OLAS_ADDRESS = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
 
 
 class TestContractCommon:
@@ -65,28 +65,28 @@ class TestContractCommon:
         CONFIG = {
             "address": DEFAULT_ADDRESS,
         }
-        cls.ledger_api = SolanaApi(**CONFIG)
+        cls.ledger_api = EthereumApi(**CONFIG)
 
     @pytest.mark.parametrize(
-        "address, symbol, expected_decimals",
+        "address, expected_decimals",
         [
-            (SOL_ADDDRESS, "SOL", 9),
-            (OLAS_ADDRESS, "OLAS", 8),
+            (DAI_ADDRESS, 18),
+            (OLAS_ADDRESS, 18),
         ],
     )
-    def test_get_token(self, address, symbol, expected_decimals):
+    def test_get_token(self, address, expected_decimals):
         """Test the get_token method."""
 
-        token_data = self.contract.get_token(self.ledger_api, address, symbol)
-        spl_token = SplToken(**token_data)
+        token_data = self.contract.get_token(self.ledger_api, address)
+        token = Erc20Token(**token_data)
         assert (
-            spl_token.decimals == expected_decimals
-        ), f"Token {spl_token.symbol} has {spl_token.decimals} decimals, expected {expected_decimals}"
+            token.decimals == expected_decimals
+        ), f"Token {token.symbol} has {token.decimals} decimals, expected {expected_decimals}"
 
     @pytest.mark.parametrize(
         "contract_address",
         [
-            SOL_ADDDRESS,
+            DAI_ADDRESS,
             OLAS_ADDRESS,
         ],
     )
@@ -94,6 +94,6 @@ class TestContractCommon:
     def test_get_balance(self, contract_address):
         """Test the get_balance method."""
 
-        crypto = SolanaCrypto("solana_private_key.txt")
+        crypto = EthereumCrypto("ethereum_private_key.txt")
         balance = self.contract.get_balance(self.ledger_api, contract_address, crypto.address)
         assert balance >= 0, f"Balance of {contract_address} is {balance}, expected >= 0"

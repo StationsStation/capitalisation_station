@@ -19,11 +19,30 @@
 
 """This module contains the scaffold contract definition."""
 
+from dataclasses import dataclass
+
 from aea.common import JSONLike
 from aea.contracts.base import Contract
 from aea.crypto.base import Address, LedgerApi
 
 from packages.eightballer.contracts.erc_20 import PUBLIC_ID
+
+
+@dataclass
+class Erc20Token:
+    """Class to represent a token."""
+
+    address: str
+    symbol: str
+    decimals: int
+
+    def to_human(self, amount):
+        """Return an amount in human readable format."""
+        return amount / 10**self.decimals
+
+    def to_machine(self, amount):
+        """Return an amount in machine readable format."""
+        return int(amount * 10**self.decimals)
 
 
 class Erc20(Contract):
@@ -94,3 +113,26 @@ class Erc20(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.totalSupply().call()
         return {"int": result}
+
+    @classmethod
+    def get_token(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """
+        Handler method for the 'get_token' requests.
+
+        Implement this method in the sub class if you want
+        to handle the contract requests manually.
+
+        :param ledger_api: the ledger apis.
+        :param contract_address: the contract address.
+        :param symbol: the symbol of the token.
+        :return: token_data # noqa: DAR202
+        """
+
+        decimals = cls.decimals(ledger_api, contract_address)["int"]
+        symbol = cls.symbol(ledger_api, contract_address)["str"]
+        token = Erc20Token(address=contract_address, symbol=symbol, decimals=decimals)
+        return token.__dict__
