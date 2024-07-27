@@ -186,6 +186,6 @@ class TestPositionHandler(BaseSkillTestCase):
             ),
         )
         # we patch the strategy save_pivot_to_db method
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
         self.assert_quantity_in_outbox(0)

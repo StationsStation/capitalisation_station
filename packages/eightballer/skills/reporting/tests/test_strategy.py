@@ -59,6 +59,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
     @classmethod
     def teardown_class(cls):
         """Teardown the test."""
+        del cls
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()
 
