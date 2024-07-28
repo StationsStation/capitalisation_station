@@ -61,7 +61,7 @@ class BaseReportingTestCase(BaseSkillTestCase, ABC):
         behaviour.setup()
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
         del cls
         if Path(DB_FILE).exists():

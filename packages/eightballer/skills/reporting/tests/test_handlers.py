@@ -26,7 +26,7 @@ class TestOrderHandler(BaseSkillTestCase):
     path_to_skill = PATH_TO_SKILL
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()

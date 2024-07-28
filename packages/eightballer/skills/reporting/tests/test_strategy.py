@@ -61,7 +61,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
     behaviour_name: str = None
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
         del cls
         if Path(DB_FILE).exists():
