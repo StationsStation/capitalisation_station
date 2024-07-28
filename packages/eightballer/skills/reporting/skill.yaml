@@ -7,16 +7,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidvgqv37f6tmotxycc2vgl2lqbiz426lplsaxnlr7veg4y7qgvxd4
-  behaviours.py: bafybeif5v5ajdxm3jrqwoykk45ig3ivbwwggccsraxnckoe2mb63zz2cpa
-  dialogues.py: bafybeiczv7mjgcatdws632yks36mnptyqn5pfjy7pq5744vhcsy6pspgky
-  handlers.py: bafybeihykt43c6k73nfanmqb4kmakm2xlhclsushsnpheywd63o4vqrbzu
+  behaviours.py: bafybeicysltyvh4m5wrve63g3ocylblvx5pk6yll6joyzc2pwvt6e6j6e4
+  dialogues.py: bafybeifc46bn5j2ttfnzx2xmkuouafd5t7so5ebhdeznikvevr77scqdmm
+  handlers.py: bafybeihovolulejj5wfg3luprusmuxmxjlkh3wgb5nmdr6sz3w2x5sn5ly
   slack.py: bafybeidmfjw2vmmok4hxbimldo7m56urlbeczdtwnawywcmomda2e6uste
-  strategy.py: bafybeihm52cb2x55nogwdjutjpbkew4mfqvcurgfagzalbpzaryped24cu
+  strategy.py: bafybeidw26hw3vsr3uc4fihwrcjxdvmhdq2sn56q66tunhu2di7g7isqaa
   tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
   tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
-  tests/test_behaviour.py: bafybeiahhyq3z7wpifabvlkmymshnev4pcnxphnrxzpgh6tmcxetrq5lsi
-  tests/test_handlers.py: bafybeidtsvogt5fkfncp7lto4g6v6fxfyewkfv3fqsmmlo3niuznus2pxe
-  tests/test_strategy.py: bafybeicptekeoj5oyp63oryvuz3zsgld3zq3iniwvstwd5u2jdxwas6sn4
+  tests/test_behaviour.py: bafybeie6moz53u3ig2apwwsuv53xwt5o3f3supq3m3cngmvml6u6zrznq4
+  tests/test_handlers.py: bafybeidu6c4w7cwvwurlpenbgxugcmzvzjqzycfstaa7jagoem3ougdgtu
+  tests/test_strategy.py: bafybeiaxuhy3bpqzzfltps73qd4llnzfdxlsjsltwvg37fkdhh6itmniza
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda

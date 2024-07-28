@@ -46,6 +46,10 @@ DB_FILE = "test.db"
 
 
 class TestOrder:
+    """
+    Test order class.
+    """
+
     id: str = "test_id"
     exchange_id: str = "test_exchange_id"
 
@@ -57,8 +61,9 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
     behaviour_name: str = None
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
+        del cls
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()
 
@@ -96,7 +101,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "long", 1]
+        assert list(df.values[0]) == [2000.0, "long", 1]
 
     def test_from_positions_to_pivot(self):
         """Test the act method of the price_polling behaviour."""
@@ -133,7 +138,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "long", 1, 1]
+        assert list(df.values[0]) == [2000.0, "long", 1, 1]
 
     def test_nets_out_positions_in_pivot(self):
         """
@@ -168,7 +173,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [2000.0, "flat", 0]
+        assert list(df.values[0]) == [2000.0, "flat", 0]
 
     def test_nets_out_positions_in_pivot_multiple(self):
         """
@@ -212,15 +217,15 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
             )
         )
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_2)
-        assert [f for f in df.values[0]] == [1800.0, "short", -1, 0]
-        assert [f for f in df.values[1]] == [1900.0, "long", 0, 1]
+        assert list(df.values[0]) == [1800.0, "short", -1, 0]
+        assert list(df.values[1]) == [1900.0, "long", 0, 1]
 
         # we now check that the pivot is correct
         df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert [f for f in df.values[0]] == [1800.0, "long", 1, 0]
-        assert [f for f in df.values[1]] == [1900.0, "short", 0, -1]
+        assert list(df.values[0]) == [1800.0, "long", 1, 0]
+        assert list(df.values[1]) == [1900.0, "short", 0, -1]
 
         # we confirm that the netted out pivot is correct
         df = strategy.from_positions_to_pivot(positions)
-        assert [f for f in df.values[0]] == [1800.0, "flat", 0, 0]
-        assert [f for f in df.values[1]] == [1900.0, "flat", 0, 0]
+        assert list(df.values[0]) == [1800.0, "flat", 0, 0]
+        assert list(df.values[1]) == [1900.0, "flat", 0, 0]

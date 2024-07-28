@@ -40,6 +40,10 @@ ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 class TestOrder:
+    """
+    Test order class.
+    """
+
     id: str = "test_id"
     exchange_id: str = "lyra"
 
@@ -57,8 +61,9 @@ class BaseReportingTestCase(BaseSkillTestCase, ABC):
         behaviour.setup()
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
+        del cls
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()
 

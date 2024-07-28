@@ -26,7 +26,7 @@ class TestOrderHandler(BaseSkillTestCase):
     path_to_skill = PATH_TO_SKILL
 
     @classmethod
-    def teardown_class(cls):
+    def teardown_method(cls):
         """Teardown the test."""
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()
@@ -83,7 +83,7 @@ class TestOrderHandler(BaseSkillTestCase):
         )
 
         # operation
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
 
         # after
@@ -107,7 +107,7 @@ class TestOrderHandler(BaseSkillTestCase):
         )
 
         # operation
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
 
         # after
@@ -163,7 +163,7 @@ class TestPositionHandler(BaseSkillTestCase):
         mock_func = MagicMock()
         mock_func.save_pivot_to_db.return_value = None
         strategy.save_pivot_to_db = mock_func.save_position_to_db
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
         self.assert_quantity_in_outbox(0)
 
@@ -186,6 +186,6 @@ class TestPositionHandler(BaseSkillTestCase):
             ),
         )
         # we patch the strategy save_pivot_to_db method
-        with patch.object(self.logger, "log") as mock_logger:
+        with patch.object(self.logger, "log"):
             self.handler.handle(incoming_message)
         self.assert_quantity_in_outbox(0)

@@ -48,10 +48,10 @@ class BaseHandler(Handler):
 
     def handle(self, message: Message) -> None:
         """Implement the reaction to an event."""
-        self.context.logger.info("Handling message: {}".format(message))
+        self.context.logger.info(f"Handling message: {message}")
 
     def _handle_error(self, message: Message):
-        self.context.logger.error("Error in {} handler: {}".format(self.__class__.__name__, message))
+        self.context.logger.error(f"Error in {self.__class__.__name__} handler: {message}")
 
     def teardown(self) -> None:
         """Implement the handler teardown."""
@@ -69,7 +69,7 @@ class MarketsReportingHandler(BaseHandler):
 
     def handle(self, message: Message) -> None:
         """Implement the reaction to an event."""
-        self.context.logger.debug("Reporting on markets: {}".format(message))
+        self.context.logger.debug(f"Reporting on markets: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == MarketsMessage.Performative.ALL_MARKETS:
@@ -105,7 +105,7 @@ class BalancesReportingHandler(BaseHandler):
         """
         handle reports on balances.
         """
-        self.context.logger.debug("Reporting on balances: {}".format(message))
+        self.context.logger.debug(f"Reporting on balances: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == BalancesMessage.Performative.ALL_BALANCES:
@@ -137,7 +137,7 @@ class OrdersReportingHandler(BaseHandler):
         """
         handle reports on orders.
         """
-        self.context.logger.debug("Reporting on orders: {}".format(message))
+        self.context.logger.debug(f"Reporting on orders: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == OrdersMessage.Performative.ORDERS:
@@ -189,7 +189,7 @@ class TickersReportingHandler(BaseHandler):
         """
         handle reports on tickers.
         """
-        self.context.logger.debug("Reporting on tickers: {}".format(message))
+        self.context.logger.debug(f"Reporting on tickers: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == TickersMessage.Performative.ALL_TICKERS:
@@ -221,7 +221,7 @@ class PositionsReportingHandler(BaseHandler):
         """
         handle reports on positions.
         """
-        self.context.logger.debug("Reporting on positions: {}".format(message))
+        self.context.logger.debug(f"Reporting on positions: {message}")
         new_instances = []
         existing_instances = []
         if message.performative == PositionsMessage.Performative.ALL_POSITIONS:
@@ -261,18 +261,14 @@ class PositionsReportingHandler(BaseHandler):
         return instance
 
     def _handle_error(self, message: Message):
-        self.context.logger.error("Error in {} handler: {}".format(self.__class__.__name__, message))
+        self.context.logger.error(f"Error in {self.__class__.__name__} handler: {message}")
         if message.error_code == PositionsMessage.ErrorCode.UNKNOWN_POSITION:
             # we need to set the position to closed by nulling the size.
             # we get the last out going message.
             dialogue = self.context.positions_dialogues.update(message=message)
             if dialogue:
                 last_outgoing_message = dialogue.last_outgoing_message
-                position_id = "{}_{}_{}".format(
-                    last_outgoing_message.exchange_id,
-                    from_id_to_instrument_name(last_outgoing_message.position_id),
-                    self.context.agent_address,
-                )
+                position_id = f"{last_outgoing_message.exchange_id}_{from_id_to_instrument_name(last_outgoing_message.position_id)}_{self.context.agent_address}"  # noqa: E501
                 position = Position(
                     id=position_id,
                     symbol=from_id_to_instrument_name(last_outgoing_message.position_id),
@@ -304,8 +300,8 @@ class HttpHandler(BaseHandler):
                 if json.loads(msg.body)["ok"]:
                     self.context.logger.debug("success")
                 else:
-                    raise ValueError("FAILED http error: status_code={}".format(msg.status_code))
+                    raise ValueError(f"FAILED http error: status_code={msg.status_code}")
             else:
-                raise ValueError("received http error: status_code={}".format(msg.status_code))
+                raise ValueError(f"FAILED http error: status_code={msg.status_code}")
         else:
-            raise ValueError("cannot handle http message of performative={}".format(msg.performative))
+            raise ValueError(f"Cannot handle message of performative {msg.performative}")

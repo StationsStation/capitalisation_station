@@ -115,7 +115,8 @@ class ReportingStrategy(Model):
         self._schema = "public" if self._connection_string.find("sqlite") == -1 else None
 
     def _get_agent_model(self):
-        """Check if the agent is already in the database, if not add it. Use the agent address as the unique identifier."""
+        """Check if the agent is already in the database, if not add it.
+        Use the agent address as the unique identifier."""
         with self.session.begin() as session:  # pylint: disable=E1101
             agent = (
                 session.query(self.object_to_model[Agent]).filter_by(agent_address=self.context.agent_address).first()

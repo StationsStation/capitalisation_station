@@ -74,6 +74,7 @@ class TestContractCommon:
             (OLAS_ADDRESS, 18),
         ],
     )
+    @pytest.mark.skip("This test is not is only for local testing.")
     def test_get_token(self, address, expected_decimals):
         """Test the get_token method."""
 
