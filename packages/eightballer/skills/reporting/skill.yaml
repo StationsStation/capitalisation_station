@@ -14,9 +14,9 @@ fingerprint:
   strategy.py: bafybeidw26hw3vsr3uc4fihwrcjxdvmhdq2sn56q66tunhu2di7g7isqaa
   tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
   tests/cases.py: bafybeiglu2smqkvtbrlqgzm4yddpprwd3vloytgyffy32ahq6kj62z44km
-  tests/test_behaviour.py: bafybeie6moz53u3ig2apwwsuv53xwt5o3f3supq3m3cngmvml6u6zrznq4
-  tests/test_handlers.py: bafybeidu6c4w7cwvwurlpenbgxugcmzvzjqzycfstaa7jagoem3ougdgtu
-  tests/test_strategy.py: bafybeiaxuhy3bpqzzfltps73qd4llnzfdxlsjsltwvg37fkdhh6itmniza
+  tests/test_behaviour.py: bafybeidciabvcvtwgbtzplpqldh2fjlv4j2ymicsgbojwjxfbejx2ual2e
+  tests/test_handlers.py: bafybeicrl3w2zozj6main34w7bx7cpwij2gz3fezcy3vk5xu4ajxkruu3q
+  tests/test_strategy.py: bafybeibvtw2abvdjduk36e6nke6gkq422edwyupj63oxrneqqqx3yhnk7m
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda
