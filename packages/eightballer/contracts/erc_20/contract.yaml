@@ -9,7 +9,7 @@ fingerprint:
   __init__.py: bafybeibaib6srjfuq6kqwenmnoswieukz47c5iomzkhddi22lkgtvfth6q
   build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   contract.py: bafybeie2tqoxndsbqdux6f6vgukq5axol4juwlacmyx2ino4ady67d32oi
-  tests/test_contract.py: bafybeifjvovvigjcccdssyvjlbaveoxbulvop6ppy5qzvwopecdumzxvqi
+  tests/test_contract.py: bafybeidtlzdhq4q6tacvkyevut7fvciyuyev5jv726thol35yfp2zj6js4
 fingerprint_ignore_patterns: []
 class_name: Erc20
 contract_interface_paths:
