@@ -1,14 +1,20 @@
 """
 Balancer exchange.
 """
+# pylint: disable=R0914,R0902
 import json
+from decimal import Decimal
 from glob import glob
 from pathlib import Path
+from typing import cast
 
+from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
+from aea.contracts.base import Contract
 from aea_ledger_ethereum import Account
 from balpy import balpy
 
 from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
+from packages.eightballer.contracts.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
@@ -35,12 +41,20 @@ ABI_MAPPING = {
 ETH_KEYPATH = 'ethereum_private_key.txt'
 
 BASE_ASSET_ID = '0x6b175474e89094c44da98b954eedeac495271d0f'
+OLAS_ADDRESS = '0x0001a500a6b18995b03f44bb040a5ffc28e45cb0'
+USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+
+WHITELISTED_POOLS = ['0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694']
+
+WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS]
 
 
 class BalancerClient:
     """
     Balancer exchange.
     """
+
+    tokens: dict[str:Erc20Token]
 
     def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         del args
@@ -71,6 +85,15 @@ class BalancerClient:
 
         self.gas_price = kwargs.get("gas_price", None)
         self.gas_price_premium = kwargs.get("gas_price_premium", GAS_PRICE_PREMIUM)
+
+        configuration = cast(
+            ContractConfig,
+            load_component_configuration(
+                ComponentType.CONTRACT, Path(__file__).parent.parent.parent.parent / 'contracts' / 'erc_20'
+            ),
+        )
+
+        self.erc20_contract = Contract.from_config(configuration)
 
     async def fetch_markets(
         self,
@@ -151,13 +174,6 @@ class BalancerClient:
 
         # We use olas USDC as the base pair for now.
 
-        OLAS_ADDRESS = '0x0001a500a6b18995b03f44bb040a5ffc28e45cb0'
-        USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
-
-        WHITELISTED_POOLS = ['0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694']
-
-        WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS]
-
         pools_of_interest = {}
         for pool_type in params:
             for pool_id in params[pool_type]:
@@ -200,14 +216,23 @@ class BalancerClient:
             )
         symbol_data = self.bal.mc.execute()
 
-        breakpoint()
-
         default_amount_usd = (
             100  # we use 100 as the default amount for now, assuming that the user has 100 of the token.
         )
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
             print(address, name[0], symbol[0])
+
+            Erc20Token(
+                address=address,
+                symbol=symbol[0],
+                name=name[0],
+                decimals=18,
+            )
             # We now get get the price for the swap
+            # We now make an erc20 representation of the token.
+            Erc20(self.erc20_contract)
+
+            self.get_price(amount=default_amount_usd, output_token_address=address, input_token_address=BASE_ASSET_ID)
 
         del args, kwargs
 
@@ -215,6 +240,8 @@ class BalancerClient:
         """
         Given the data, we get the params for the swap from the balancer exchange.
         """
+        del input_token_address, output_token_address, input_amount
+        return NotImplementedError
 
     def get_price(self, input_token_address: str, output_token_address: str, amount: float) -> float:
         """
@@ -227,14 +254,14 @@ class BalancerClient:
         params = self.get_params_for_swap(
             input_token_address=input_token_address,
             output_token_address=output_token_address,
-            amount_in=input_token.convert_to_decimals(input_token.convert_to_raw(amount)),
+            input_amount=input_token.convert_to_decimals(input_token.convert_to_raw(amount)),
         )
         # we query the smart router
         sor_result = self.bal.balSorQuery(params)
         amount_out = float(sor_result['batchSwap']['limits'][-1])
         output_amount = -amount_out
         rate = Decimal(output_amount) / Decimal(amount)
-        self.logger.info(
+        print(
             f"""
                     Balancer Exchange on {self.chain_name}:;
                         input:
