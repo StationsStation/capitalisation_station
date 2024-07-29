@@ -11,12 +11,12 @@
         "protocol/eightballer/tickers/0.1.0": "bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm",
         "contract/eightballer/erc_20/0.1.0": "bafybeigssaqclzpupgqnji2p6kl7ytwinpaayictud4klwcqqvnvoirrtm",
         "contract/eightballer/spl_token/0.1.0": "bafybeie5nsm7mmjv6cjxew7ex7ar72tyeqrjwkalw4pic62ykwbsdupjfq",
-        "connection/eightballer/dcxt/0.1.0": "bafybeihrgr3ntsahaddhhkwxi57wytg74utptjwgpk5yvurvep3y4xpfku",
+        "connection/eightballer/dcxt/0.1.0": "bafybeiddmb7bvsnrkmd7l2qy2iewjhagzo7kxggnxv35mgph4ntsaatq3i",
         "connection/eightballer/ccxt/0.1.0": "bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeihxavxdxfhg6eftxprajxa6mepoljlilnezgohhvlw64oqd447oaa",
-        "skill/eightballer/reporting/0.1.0": "bafybeidmgqdx3dsvogcuxhywyyif6jtufeffvqpamqveuvr4pbg2ot3smm",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeiewf4ljfciyyhrxszjz6cqizueuvf3j7d7oift6hcnq24vdwhtcgy",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeibbzwt3ah4wewzofutrjrpcamdb3cior77aujzyvo7pieedrbc5wq"
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeibsh5iizxpqy5bl4k2islswaia4idlwuq3qfsf5kc5krmonuweyl4",
+        "skill/eightballer/reporting/0.1.0": "bafybeiasml3rf4hjle4sl3y7ps2dz3h7xrooy3iwh77jjnfutsi2ochjpa",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeib5afgz6hi52zel6fl4vg7qaresjhkmibybqi6xk5l7fuyp5rd5ri",
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeib5ic2huhpgdwho7p6uz6qtdlzqpbbjripxuihy2nh3mvuptswe4i"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u",
@@ -44,6 +44,6 @@
         "skill/valory/registration_abci/0.1.0": "bafybeib4a3zmsmbebd74whk7sfnbcv7dwglrirmu53afrlo6ar2xi4t54q",
         "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i",
         "skill/eightballer/metrics/0.1.0": "bafybeihjbgp2yyz7h4ghgwvidurnmbd7va4fi6y5hgollv7lz75dnrrcmm",
-        "skill/eightballer/prometheus/0.1.0": "bafybeibuaypehp74awahj7p665ccivdhrp7446kvw2axt6cs43owq5nuq4"
+        "skill/eightballer/prometheus/0.1.0": "bafybeiafbgefdcah6mh2e37hvbcjzbocx4heugjifd2252wjg7bs7kb4wu"
     }
 }
