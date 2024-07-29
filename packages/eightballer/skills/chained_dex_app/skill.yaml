@@ -160,6 +160,11 @@ models:
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205
+      use_slashing: false
+      slash_cooldown_hours: 24
+      slash_threshold_amount: 100
+      light_slash_unit_amount: 100
+      serious_slash_unit_amount: 1000
     class_name: Params
   positions_dialogues:
     args: {}

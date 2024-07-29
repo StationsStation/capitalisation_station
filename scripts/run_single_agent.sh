@@ -1,19 +1,19 @@
 set -e 
 
 # fetch the agent from the local package registry
-aea fetch $1 --local --alias agent
+aea -s fetch $1 --local --alias agent
 
 # go to the new agent
 cd agent
 
 # create and add a new ethereum key
-aea generate-key ethereum && aea add-key ethereum
+aea -s generate-key ethereum && aea -s add-key ethereum
 
 # install any agent deps
-aea install
+aea -s install
 
 # issue certificates for agent peer-to-peer communications
-aea issue-certificates
+aea -s issue-certificates
 
 # finally, run the agent
-aea run
+aea -s run

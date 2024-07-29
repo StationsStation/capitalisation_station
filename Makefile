@@ -49,10 +49,10 @@ hashes: clean fmt lint
 	git commit -m 'chore: hashes'
 
 lint:
-	poetry run adev -v -n 0 lint
+	poetry run adev -v -n 0 lint -co
 
 fmt: 
-	poetry run adev -n 0 fmt
+	poetry run adev -n 0 fmt -co
 
 test:
 	poetry run adev -v test

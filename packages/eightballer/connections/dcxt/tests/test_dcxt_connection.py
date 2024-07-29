@@ -55,7 +55,7 @@ TEST_EXCHANGES = [
         "environment": "test",
         "kwargs": {
             "chain_id": 'mainnet',
-            "rpc_url": "http://eth.chains.wtf:8545",
+            "rpc_url": "https://rpc.ankr.com/eth",
             "etherscan_api_key": "YOUR_ETHERSCAN_API_KEY",
         },
         "key_path": TEST_KEY_PATH,

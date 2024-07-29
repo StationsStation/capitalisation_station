@@ -108,6 +108,7 @@ models:
         reporting_enabled: true
         exchange_ids:
         - lyra
+        - balancer
         extra_kwargs:
           lyra:
             currency: ETH
@@ -147,8 +148,17 @@ type: connection
 config:
   target_skill_id: eightballer/chained_dex_app:0.1.0
   exchanges:
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    environment: prod
+    kwargs:
+      chain_id: mainnet
+      rpc_url: https://rpc.ankr.com/eth
+      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: lyra
     key_path: ethereum_private_key.txt
     wallet: null
     subaccount_id: null
     environment: prod
+
