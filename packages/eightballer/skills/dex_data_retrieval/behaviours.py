@@ -183,7 +183,9 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
         exchange_to_balances = {}
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             for exchange_id in exchange_ids:
-                params = extra_kwargs.get(exchange_id, {}).copy()
+                params = {}
+                if extra_kwargs is not None:
+                    params = extra_kwargs.get(exchange_id, {}).copy()
                 # extra kwargs must in the form str to bytes
                 for key, value in params.items():
                     params[key] = value.encode("utf-8")
@@ -202,7 +204,6 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
                 sender=sender,
                 balances=json.dumps(exchange_to_balances),
             )
-
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()

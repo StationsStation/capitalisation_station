@@ -10,7 +10,7 @@ fingerprint:
   connection.py: bafybeibqzu2u66c3pw7tmgh7gmal6ivgexvm6xrox4f6ynze23oyk6dbqa
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
   dcxt/__init__.py: bafybeidmnoynisb7k5s7kfkhwu2rj2ibljdzk54j4tq7ne6htz4xhudxu4
-  dcxt/balancer.py: bafybeihp62zmbct7zk6n6274hdthrphzmbenejg5g5uy4cgkv6eoqcsxs4
+  dcxt/balancer.py: bafybeicaishyk6exrziyhxwohs52acyplzyb42o6d4th4tz6vgmpvwan2i
   dcxt/data/balancer/mainnet.json: bafybeiganyojsct3q2p2nat4ci5smu4fmjkrzvtochkicdw7swvk4ukklu
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeiepgf7ekdajqflr3shwncrak4jeic7lzmn5googjnsealnlguftpq
@@ -66,10 +66,6 @@ config:
       chain_id: mainnet
       rpc_url: https://rpc.ankr.com/eth
       etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-  - name: lyra
-    environment: test
-  - name: uniswap
-    environment: test
   target_skill_id: null
 excluded_protocols: []
 dependencies:

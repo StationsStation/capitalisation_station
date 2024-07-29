@@ -9,6 +9,7 @@ from aea_ledger_ethereum import Account
 from balpy import balpy
 
 from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
@@ -99,6 +100,25 @@ class BalancerClient:
             raise SorRetrievalException(
                 f'Error fetching markets from chainId {self.chain_name} Balancer: {exc}'
             ) from exc
+
+    async def fetch_balances(self, *args, **kwargs):
+        """
+        Fetches the balances.
+
+        :return: The balances.
+        """
+        del args, kwargs
+        balances = Balances(
+            balances=[
+                Balance(
+                    asset_id=BASE_ASSET_ID,
+                    free=0,
+                    used=0,
+                    total=0,
+                )
+            ]
+        )
+        return balances
 
     @property
     def pool_ids(self):
