@@ -10,8 +10,8 @@ fingerprint:
   connection.py: bafybeibqzu2u66c3pw7tmgh7gmal6ivgexvm6xrox4f6ynze23oyk6dbqa
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
   dcxt/__init__.py: bafybeidmnoynisb7k5s7kfkhwu2rj2ibljdzk54j4tq7ne6htz4xhudxu4
-  dcxt/balancer.py: bafybeicaishyk6exrziyhxwohs52acyplzyb42o6d4th4tz6vgmpvwan2i
-  dcxt/data/balancer/mainnet.json: bafybeiganyojsct3q2p2nat4ci5smu4fmjkrzvtochkicdw7swvk4ukklu
+  dcxt/balancer.py: bafybeibsxume62ahooggwlgsfy3ei2fcrwyk2jak4xajdsgqywifsmaqmy
+  dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeiepgf7ekdajqflr3shwncrak4jeic7lzmn5googjnsealnlguftpq
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
@@ -34,8 +34,8 @@ fingerprint:
   tests/protocols/test_order_interface.py: bafybeia6vn5rikitboxsce5tiltzveix4vkbctqfsz3jt554u2fbcc63pi
   tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
   tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
-  tests/protocols/test_tickers.py: bafybeifujyhhjcxvp6ig4lqnuirglpzqmwc34ewrr2klpnq5a24ke62vrm
-  tests/test_dcxt_connection.py: bafybeidf545hxzqhjgmvdnnkyjusqupcdubug6g7uzhxjr2xycrqbrrcda
+  tests/protocols/test_tickers.py: bafybeidlwujshrnfq3psdnkluxbwuc52hjgdvqt47wprs6xzt22fkkncfa
+  tests/test_dcxt_connection.py: bafybeifdrp7pwd7oqp5zw6engsdixadagvrt5jspn6q242isfkyzhge4ee
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:

@@ -35,6 +35,7 @@ class Erc20Token:
     address: str
     symbol: str
     decimals: int
+    name: str = ""
 
     def to_human(self, amount):
         """Return an amount in human readable format."""

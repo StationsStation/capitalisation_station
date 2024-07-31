@@ -61,8 +61,7 @@ test:
 all: fmt lint test hashes
 
 install: update_git_deps
-	poetry install 
-	poetry run autonomy packages sync 
+	poetry run bash scripts/install.sh
 
 
 update_git_deps:
