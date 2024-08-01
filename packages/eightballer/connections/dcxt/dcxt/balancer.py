@@ -103,6 +103,8 @@ class BalancerClient:
         self.erc20_contract = Contract.from_config(configuration)
         self.logger = kwargs.get("logger")
 
+        self.tickers = {}
+
     async def fetch_markets(
         self,
         params: dict,
@@ -225,7 +227,6 @@ class BalancerClient:
         symbol_data = self.bal.mc.execute()
 
         # We create an array of ticker data.
-        tickers = []
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
             print(address, name[0], symbol[0])
 
@@ -239,6 +240,7 @@ class BalancerClient:
             # We now get get the price for the swap
             # We now make an erc20 representation of the token.
 
+        self.tickers = {}
         for token_address in WHITE_LISTED_TOKENS:
             if token_address == USDC_ADDRESS:
                 continue
@@ -253,15 +255,16 @@ class BalancerClient:
             ask_price = 1 / self.get_price(
                 amount=sell_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
             )
+            symbol = f'{token.symbol}/USDC'
             ticker = Ticker(
-                symbol=f'{token.symbol}/USDC',
+                symbol=symbol,
                 high=ask_price,
                 low=bid_price,
                 ask=ask_price,
                 bid=bid_price,
             )
-            tickers.append(ticker)
-        return tickers
+            self.tickers[symbol] = ticker
+        return self.tickers
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
         """

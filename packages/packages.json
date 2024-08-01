@@ -11,12 +11,12 @@
         "protocol/eightballer/tickers/0.1.0": "bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm",
         "contract/eightballer/erc_20/0.1.0": "bafybeifjtxoyahzgrn622tipbrv2mx6r22fazawbffzszymjdlzs3uikbq",
         "contract/eightballer/spl_token/0.1.0": "bafybeie5nsm7mmjv6cjxew7ex7ar72tyeqrjwkalw4pic62ykwbsdupjfq",
-        "connection/eightballer/dcxt/0.1.0": "bafybeib2gkepm2i6yqbhfzszc4v35q32gwdpmqnp5pfxtaggy4kfbejch4",
+        "connection/eightballer/dcxt/0.1.0": "bafybeifvufnltwgnjvbx3j6elrkfsc2e2lxy54tt36d3fkbtm5r2zdmuaa",
         "connection/eightballer/ccxt/0.1.0": "bafybeihan7qcwpi2ye2k4d7rd5omxgrbkumcktnw34r76vlhr5nse6yqda",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeigdziumrscpu6nlqauruxdd56car7y74oa6ey57okxb6ahjtnnuse",
-        "skill/eightballer/reporting/0.1.0": "bafybeihh55j7ot5of4xa6nxpze2c7kma5oswhoa3vpmitmwatn6ftqzmoe",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeig543dv6dhj22eusnfrzmzrj5lvrrlsxj6iubi4zgbesmxelspezm",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeigr3azd4epvbx6kdtwgkmc3er6eyff56ygphdl73du423rf352cuu"
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeihveeklx6citagwuojt2amxevdtkas5cmio6cflfkbeowbcr2unzm",
+        "skill/eightballer/reporting/0.1.0": "bafybeigdy7kxn6npm6sq332xe32rkonj7bdrbajqir3lb6q64w55vrwu2i",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeibhi2i7s3xtnl3rqpncaj7hzwg77jg3aodvrfnoteu5vyktvpukpm",
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeieav7vufqllxn4qoyvnbjusvrivx46kfaas6szzk24ck76aawdzau"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u",
