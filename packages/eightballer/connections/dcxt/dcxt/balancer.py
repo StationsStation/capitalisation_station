@@ -2,8 +2,9 @@
 Balancer exchange.
 """
 import json
+import traceback
 
-# pylint: disable=R0914,R0902
+# pylint: disable=R0914,R0902,R0912
 from datetime import datetime
 from decimal import Decimal
 from glob import glob
@@ -100,6 +101,7 @@ class BalancerClient:
         )
         configuration.directory = contract_dir
         self.erc20_contract = Contract.from_config(configuration)
+        self.logger = kwargs.get("logger")
 
     async def fetch_markets(
         self,
@@ -240,17 +242,19 @@ class BalancerClient:
         for token_address in WHITE_LISTED_TOKENS:
             if token_address == USDC_ADDRESS:
                 continue
+
+            token = self.tokens[token_address]
             Erc20(self.erc20_contract)
 
             bid_price = self.get_price(
-                amount=DEFAULT_AMOUNT_USD, output_token_address=address, input_token_address=USDC_ADDRESS
+                amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=USDC_ADDRESS
             )
             sell_amount = bid_price * DEFAULT_AMOUNT_USD
             ask_price = 1 / self.get_price(
-                amount=sell_amount, output_token_address=USDC_ADDRESS, input_token_address=address
+                amount=sell_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
             )
             ticker = Ticker(
-                symbol=f'{symbol[0]}/USDC',
+                symbol=f'{token.symbol}/USDC',
                 high=ask_price,
                 low=bid_price,
                 ask=ask_price,
@@ -299,8 +303,11 @@ class BalancerClient:
             input_amount=amount,
         )
         # we query the smart router
-        sor_result = self.bal.balSorQuery(params)
-        breakpoint()
+        try:
+            sor_result = self.bal.balSorQuery(params)
+        except Exception as exc:  # pylint: disable=W0718
+            self.logger.error(exc)
+            self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
         if not sor_result['batchSwap']['limits']:
             raise SorRetrievalException(
                 f"No limits found for swap. Implies incorrect configuration of swap params: {params}"

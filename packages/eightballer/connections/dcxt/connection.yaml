@@ -7,10 +7,10 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
-  connection.py: bafybeibqzu2u66c3pw7tmgh7gmal6ivgexvm6xrox4f6ynze23oyk6dbqa
+  connection.py: bafybeidizeznckrnsxu5vlvhtydoaz2twr4lrqsuowmgmuwrxunbbgzucu
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
   dcxt/__init__.py: bafybeidmnoynisb7k5s7kfkhwu2rj2ibljdzk54j4tq7ne6htz4xhudxu4
-  dcxt/balancer.py: bafybeibsxume62ahooggwlgsfy3ei2fcrwyk2jak4xajdsgqywifsmaqmy
+  dcxt/balancer.py: bafybeic4poa5wthtdq3ftfr2fhmmopa6lg4x2smrhm3qbjrcz4omhw2bgm
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeiepgf7ekdajqflr3shwncrak4jeic7lzmn5googjnsealnlguftpq
@@ -35,7 +35,7 @@ fingerprint:
   tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
   tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
   tests/protocols/test_tickers.py: bafybeidlwujshrnfq3psdnkluxbwuc52hjgdvqt47wprs6xzt22fkkncfa
-  tests/test_dcxt_connection.py: bafybeifdrp7pwd7oqp5zw6engsdixadagvrt5jspn6q242isfkyzhge4ee
+  tests/test_dcxt_connection.py: bafybeidj7hhxjeztlfjqjeayhnzo4xliratwzbeibwrg7m55abui2b7q7a
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
