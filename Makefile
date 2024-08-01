@@ -69,7 +69,6 @@ update_git_deps:
 		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
 		git submodule update --init --recursive;fi
 
-
 is_dirty:
 	# Check if the repository is dirty.
 	if [ -n "$(shell git status --porcelain)" ]; then \
