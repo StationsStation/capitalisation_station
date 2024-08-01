@@ -1,8 +1,10 @@
 """
 Balancer exchange.
 """
-# pylint: disable=R0914,R0902
 import json
+
+# pylint: disable=R0914,R0902
+from datetime import datetime
 from decimal import Decimal
 from glob import glob
 from pathlib import Path
@@ -10,7 +12,7 @@ from typing import cast
 
 from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 from aea.contracts.base import Contract
-from aea_ledger_ethereum import Account, EthereumCrypto
+from aea_ledger_ethereum import Account
 from balpy import balpy
 
 from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
@@ -41,7 +43,6 @@ ABI_MAPPING = {
 
 ETH_KEYPATH = 'ethereum_private_key.txt'
 
-BASE_ASSET_ID = '0x6b175474e89094c44da98b954eedeac495271d0f'
 OLAS_ADDRESS = '0x0001a500a6b18995b03f44bb040a5ffc28e45cb0'
 USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
 
@@ -49,7 +50,7 @@ WHITELISTED_POOLS = ['0xebdd200fe52997142215f7603bc28a80becdadeb0002000000000000
 
 WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS]
 
-DEFAULT_AMOUNT_USD = 100
+DEFAULT_AMOUNT_USD = 1
 
 
 class BalancerClient:
@@ -57,7 +58,7 @@ class BalancerClient:
     Balancer exchange.
     """
 
-    tokens: dict[str:Erc20Token]
+    tokens: dict[str:Erc20Token] = {}
 
     def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
         del args
@@ -88,7 +89,6 @@ class BalancerClient:
 
         self.gas_price = kwargs.get("gas_price", None)
         self.gas_price_premium = kwargs.get("gas_price_premium", GAS_PRICE_PREMIUM)
-
 
         contract_dir = Path(__file__).parent.parent.parent.parent / 'contracts' / 'erc_20'
 
@@ -140,7 +140,7 @@ class BalancerClient:
         balances = Balances(
             balances=[
                 Balance(
-                    asset_id=BASE_ASSET_ID,
+                    asset_id=USDC_ADDRESS,
                     free=0,
                     used=0,
                     total=0,
@@ -222,77 +222,92 @@ class BalancerClient:
             )
         symbol_data = self.bal.mc.execute()
 
-
         # We create an array of ticker data.
+        tickers = []
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
             print(address, name[0], symbol[0])
 
             if address not in self.tokens:
                 self.tokens[address] = Erc20Token(
-                address=address,
-                symbol=symbol[0],
-                name=name[0],
-                decimals=18,
-            )
+                    address=address,
+                    symbol=symbol[0],
+                    name=name[0],
+                    decimals=18,
+                )
             # We now get get the price for the swap
             # We now make an erc20 representation of the token.
+
+        for token_address in WHITE_LISTED_TOKENS:
+            if token_address == USDC_ADDRESS:
+                continue
             Erc20(self.erc20_contract)
 
-            bid_price = self.get_price(amount=DEFAULT_AMOUNT_USD, output_token_address=address, input_token_address=BASE_ASSET_ID)
+            bid_price = self.get_price(
+                amount=DEFAULT_AMOUNT_USD, output_token_address=address, input_token_address=USDC_ADDRESS
+            )
             sell_amount = bid_price * DEFAULT_AMOUNT_USD
-            Ask_price = self.get_price(amount=sell_amount, output_token_address=BASE_ASSET_ID, input_token_address=address)
+            ask_price = 1 / self.get_price(
+                amount=sell_amount, output_token_address=USDC_ADDRESS, input_token_address=address
+            )
             ticker = Ticker(
                 symbol=f'{symbol[0]}/USDC',
-                base=BASE_ASSET_ID,
-                quote=address,
-                last_price=bid_price,
-                volume=0,
-                price_change_percent=0,
-                high=0,
-                low=0,
+                high=ask_price,
+                low=bid_price,
                 ask=ask_price,
                 bid=bid_price,
             )
+            tickers.append(ticker)
+        return tickers
 
-
-        del args, kwargs
-
-    def get_params_for_swap(self, input_token_address, output_token_address, input_amount):
+    def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
         """
         Given the data, we get the params for the swap from the balancer exchange.
         """
-        del input_token_address, output_token_address, input_amount
-        return NotImplementedError
+        gas_price = self.bal.web3.eth.gas_price * GAS_PRICE_PREMIUM
+        params = {
+            "network": self.chain_name,
+            "slippageTolerancePercent": "1.0",  # 1%
+            "sor": {
+                "sellToken": input_token_address,
+                "buyToken": output_token_address,  # // token out
+                "orderKind": "buy" if is_buy else "sell",
+                "amount": input_amount,
+                "gasPrice": gas_price,
+            },
+            "batchSwap": {
+                "funds": {
+                    "sender": self.account.address,  #      // your address
+                    "recipient": self.account.address,  #   // your address
+                    "fromInternalBalance": False,  # // to/from internal balance
+                    "toInternalBalance": False,  # // set to "false" unless you know what you're doing
+                },
+                # // unix timestamp after which the trade will revert if it hasn't executed yet
+                "deadline": datetime.now().timestamp() + 60,
+            },
+        }
+
+        return params
 
     def get_price(self, input_token_address: str, output_token_address: str, amount: float) -> float:
         """
         Get the price of the token.
         """
 
-        input_token = self.tokens[input_token_address]
-        output_token = self.tokens[output_token_address]
-
         params = self.get_params_for_swap(
             input_token_address=input_token_address,
             output_token_address=output_token_address,
-            input_amount=input_token.convert_to_decimals(input_token.convert_to_raw(amount)),
+            input_amount=amount,
         )
         # we query the smart router
         sor_result = self.bal.balSorQuery(params)
+        breakpoint()
+        if not sor_result['batchSwap']['limits']:
+            raise SorRetrievalException(
+                f"No limits found for swap. Implies incorrect configuration of swap params: {params}"
+            )
         amount_out = float(sor_result['batchSwap']['limits'][-1])
         output_amount = -amount_out
         rate = Decimal(output_amount) / Decimal(amount)
-        print(
-            f"""
-                    Balancer Exchange on {self.chain_name}:;
-                        input:
-                            Amount: {amount}
-                            Address: {input_token}
-                        output:
-                            Amount: {output_amount}
-                            Address: {output_token}
-                        Rate: {rate:.4f}"""
-        )
         return rate
 
     async def fetch_ticker(self, *args, **kwargs):
@@ -317,3 +332,66 @@ class BalancerClient:
             error_code=PositionsMessage.ErrorCode.API_ERROR,
             error_msg="Spot exchange does not support positions!",
         )
+
+    async def create_order(self, *args, **kwargs):
+        """
+        Create an order.
+
+        :return: The order.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def cancel_order(self, *args, **kwargs):
+        """
+        Cancel an order.
+
+        :return: The order.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def get_order(self, *args, **kwargs):
+        """
+        Get an order.
+
+        :return: The order.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def get_orders(self, *args, **kwargs):
+        """
+        Get an order.
+
+        :return: The order.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def get_all_markets(self, *args, **kwargs):
+        """
+        Get all markets.
+
+        :return: The markets.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def get_all_balances(self, *args, **kwargs):
+        """
+        Get all balances.
+
+        :return: The balances.
+        """
+        del args, kwargs
+        raise NotImplementedError
+
+    async def subscribe(self, *args, **kwargs):
+        """
+        Subscribe to the order book.
+
+        :return: The order book.
+        """
+        del args, kwargs
+        raise NotImplementedError

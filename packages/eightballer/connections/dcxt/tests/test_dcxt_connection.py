@@ -33,6 +33,7 @@ from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues
 from async_timeout import timeout
 
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.connection import DcxtConnection
 
 logger = logging.getLogger(__name__)
@@ -148,3 +149,28 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 
     async def test_custom_exchanges(self):
         """Test can start custom class."""
+
+
+EXPECTED_FUNCTIONS = [
+    'get_all_balances',  #          get all balances
+    'get_all_markets',  #           get all markets
+    'subscribe',  # order book      subscribe
+    'create_order',  # create order create_order
+    'get_orders',  # get orders:    historicasl tx hashes
+    'get_order',  # get order:      tx hash
+]
+
+
+@pytest.mark.parametrize(
+    "exchange_id, function",
+    [(exchange['name'], function) for exchange in TEST_EXCHANGES for function in EXPECTED_FUNCTIONS],
+)
+class TestPluginConsitency:
+    """Test the plugin consistency."""
+
+    def test_plugins_have_necessary_functions(self, exchange_id, function):
+        """Test exchange plugins are consistent."""
+
+        # we import here to avoid loading all the exchanges
+        module = getattr(dcxt, exchange_id)
+        assert hasattr(module, function), f"Missing function {function} in {exchange_id}"
