@@ -360,8 +360,16 @@ class LyraClient:
             params["currency"] = UnderlyingCurrency(params["currency"].lower())
         if "type" in params:
             params["type"] = InstrumentType(params["type"].lower())
-        result = await self.client.fetch_tickers(**params)
-        tickers = [to_ticker(ticker) for ticker in result.values()]
+
+        try:
+            result = await self.client.fetch_tickers(**params)
+            data = result.values()
+        except Exception as error:  # pylint: disable=broad-except
+            print(f"Error: {error}")
+            traceback.print_exc()
+            data = []
+
+        tickers = [to_ticker(ticker) for ticker in data]
         tickers = Tickers(
             tickers=tickers,
         )
@@ -389,14 +397,26 @@ class LyraClient:
         params = kwargs.get("params", {})
         if "currency" in params:
             params["currency"] = UnderlyingCurrency(params["currency"].lower())
-        result = await self.client.get_positions(**params)
-        return result
+        try:
+            result = await self.client.get_positions(**params)
+            data = result
+        except Exception as error:  # pylint: disable=broad-except
+            print(f"Error: {error}")
+            traceback.print_exc()
+            data = []
+        return data
 
     async def fetch_open_orders(self, *args, **kwargs):
         """Fetch all open orders."""
         del args
         params = kwargs.get("params", {})
-        result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
+        try:
+            result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
+        except Exception as error:  # pylint: disable=broad-except
+            print(f"Error: {error}")
+            traceback.print_exc()
+            result = []
+
         orders = [to_order(order) for order in result]
         orders = Orders(
             orders=orders,

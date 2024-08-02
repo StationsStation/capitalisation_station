@@ -20,8 +20,7 @@ from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationE
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
-from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.orders.custom_types import Orders
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 
 GAS_PRICE_PREMIUM = 20
@@ -341,19 +340,15 @@ class BalancerClient:
         del args, kwargs
         raise NotImplementedError
 
-    async def fetch_positions(self, positions_message: PositionsMessage, dialogue: PositionsDialogue, **kwargs):
+    async def fetch_positions(self, **kwargs):
         """
-        Fetches a ticker.
+        Fetches the positions, notice as this is a balancer exchange, we do not have positions.
+        We therefore return an empty list.
 
-        :return: The ticker.
+        :return: The
         """
         del kwargs
-        return dialogue.reply(
-            performative=PositionsMessage.Performative.ERROR,
-            target_message=positions_message,
-            error_code=PositionsMessage.ErrorCode.API_ERROR,
-            error_msg="Spot exchange does not support positions!",
-        )
+        return []
 
     async def create_order(self, *args, **kwargs):
         """
@@ -368,7 +363,13 @@ class BalancerClient:
         """
         Cancel an order.
 
-        :return: The order.
+        :return: The order tx hash
+
+        NOTE: This method is not implemented as we dont have orders in balancer.
+
+        in the future, we would look to get pending orders in
+        the mempool and replace with a 0 transfer of the same hash.
+
         """
         del args, kwargs
         raise NotImplementedError
@@ -382,14 +383,21 @@ class BalancerClient:
         del args, kwargs
         raise NotImplementedError
 
-    async def get_orders(self, *args, **kwargs):
+    async def fetch_open_orders(self, *args, **kwargs):
         """
         Get an order.
 
-        :return: The order.
+        :return: The orders as an array.
+
+        NOTE: This method is not implemented as we dont have orders in balancer.
+
+        However, further work would be to implement this method to get the orders from the balancer exchange.
+
+        This would get the pending order from the mempool, and the filled orders from the chain.
+
         """
         del args, kwargs
-        raise NotImplementedError
+        return Orders(orders=[])
 
     async def get_all_markets(self, *args, **kwargs):
         """
@@ -398,16 +406,6 @@ class BalancerClient:
         :return: The markets.
         """
         del args, kwargs
-        raise NotImplementedError
-
-    async def get_all_balances(self, *args, **kwargs):
-        """
-        Get all balances.
-
-        :return: The balances.
-        """
-        del args, kwargs
-        breakpoint()
         raise NotImplementedError
 
     async def subscribe(self, *args, **kwargs):

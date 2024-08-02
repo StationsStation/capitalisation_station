@@ -76,3 +76,6 @@ is_dirty:
 		echo "The repository is dirty. Please commit your changes first."; \
 		exit 1; \
 	fi
+
+run_demo:
+	rm -rf agent && bash scripts/run_single_agent.sh eightballer/chained_dex_app:0.1.0

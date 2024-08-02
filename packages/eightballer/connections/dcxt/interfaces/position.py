@@ -65,6 +65,7 @@ class PositionInterface(BaseInterface):
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Authentication error",
             )
+
         except Exception as error:
             connection.logger.error(f"Error: {error}")
             raise error
