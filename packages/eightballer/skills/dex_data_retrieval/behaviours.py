@@ -50,7 +50,7 @@ from packages.eightballer.skills.dex_data_retrieval.rounds import (
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import AbstractRoundBehaviour, BaseBehaviour
 
-DEFAULT_RETRIES = 3
+DEFAULT_RETRIES = 6
 DEFAULT_RETRY_DELAY = 5.0
 
 
@@ -334,6 +334,7 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
                 self.context.logger.info(f"Received {len(exchange_to_tickers[exchange_id])} tickers from {exchange_id}")
 
             sender = self.context.agent_address
+            self.context.logger.info(f"Received Exchanges: {exchange_to_tickers}")
             payload = FetchDexTickersPayload(
                 sender=sender,
                 tickers=json.dumps(exchange_to_tickers),

@@ -1,0 +1,18 @@
+name: erc_20
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibaib6srjfuq6kqwenmnoswieukz47c5iomzkhddi22lkgtvfth6q
+  build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
+  contract.py: bafybeihzwsowe6n7gxctq4qrsl2xqbvo2icydd4gnyedtqio6akvrhbx2e
+  tests/test_contract.py: bafybeidtlzdhq4q6tacvkyevut7fvciyuyev5jv726thol35yfp2zj6js4
+fingerprint_ignore_patterns: []
+class_name: Erc20
+contract_interface_paths:
+  ethereum: build/erc_20.json
+dependencies: {}
+contracts: []

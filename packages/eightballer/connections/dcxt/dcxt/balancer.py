@@ -17,12 +17,12 @@ from aea_ledger_ethereum import Account
 from balpy import balpy
 
 from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
-from packages.eightballer.contracts.erc_20.contract import Erc20, Erc20Token
+from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.protocols.tickers.custom_types import Ticker
+from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 
 GAS_PRICE_PREMIUM = 20
 GAS_SPEED = "fast"
@@ -46,10 +46,15 @@ ETH_KEYPATH = 'ethereum_private_key.txt'
 
 OLAS_ADDRESS = '0x0001a500a6b18995b03f44bb040a5ffc28e45cb0'
 USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+WETH_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 
-WHITELISTED_POOLS = ['0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694']
+# Manuall retrieved from https://balancer.fi/pools/ethereum/v2/
+WHITELISTED_POOLS = [
+    '0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694',
+    '0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019',
+]
 
-WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS]
+WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS, WETH_ADDRESS]
 
 DEFAULT_AMOUNT_USD = 1
 
@@ -248,12 +253,19 @@ class BalancerClient:
             token = self.tokens[token_address]
             Erc20(self.erc20_contract)
 
-            bid_price = self.get_price(
-                amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=USDC_ADDRESS
+            # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
+            ask_price = 1 / float(
+                self.get_price(
+                    amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=USDC_ADDRESS
+                )
             )
-            sell_amount = bid_price * DEFAULT_AMOUNT_USD
-            ask_price = 1 / self.get_price(
-                amount=sell_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
+            buy_amount = DEFAULT_AMOUNT_USD / ask_price
+
+            bid_price = 1 / float(
+                1
+                / self.get_price(
+                    amount=buy_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
+                )
             )
             symbol = f'{token.symbol}/USDC'
             ticker = Ticker(
@@ -264,7 +276,7 @@ class BalancerClient:
                 bid=bid_price,
             )
             self.tickers[symbol] = ticker
-        return self.tickers
+        return Tickers(tickers=list(ticker for ticker in self.tickers.values()))
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
         """
@@ -395,6 +407,7 @@ class BalancerClient:
         :return: The balances.
         """
         del args, kwargs
+        breakpoint()
         raise NotImplementedError
 
     async def subscribe(self, *args, **kwargs):
@@ -405,3 +418,46 @@ class BalancerClient:
         """
         del args, kwargs
         raise NotImplementedError
+
+    async def close(self):
+        """
+        Close the connection.
+
+        :return: None
+        """
+        return None
+
+    async def fetch_balance(self, *args, **kwargs):
+        """
+        Fetch the balance.
+
+        :return: The balance.
+        """
+        del args, kwargs
+
+        mc = self.bal.mc
+        # We iterate over all the whitelisted tokens and get the balances.
+        mc.reset()
+        for token_address in WHITE_LISTED_TOKENS:
+            if token_address not in self.tokens:
+                continue
+            contract = self.bal.erc20GetContract(token_address)
+            mc.addCall(
+                token_address,
+                contract.abi,
+                'balanceOf',
+                args=[self.account.address],
+            )
+        balance_data = mc.execute()
+        balances = Balances(
+            balances=[
+                Balance(
+                    asset_id=token_address,
+                    free=balance[0],
+                    used=0,
+                    total=balance[0],
+                )
+                for token_address, balance in zip(WHITE_LISTED_TOKENS, balance_data[0])
+            ]
+        )
+        return balances

@@ -333,8 +333,9 @@ class LyraClient:
 
     def __init__(self, *args, **kwargs):
         """Initialize the LyraClient."""
-        del args, kwargs
+        del args
         self.client = AsyncClient()
+        self.logger = kwargs.get("logger")
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
@@ -369,8 +370,14 @@ class LyraClient:
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
         del args, kwargs
-        result = await self.client.get_collaterals()
-        balances = [to_balance(balance) for balance in [result]]
+        try:
+            result = await self.client.get_collaterals()
+            balances = [to_balance(balance) for balance in [result]]
+        except Exception as error:  # pylint: disable=broad-except
+            traceback.print_exc()
+            self.logger.error(f"Failed to fetch balances: {error}")
+            balances = []
+
         balances = Balances(
             balances=balances,
         )
