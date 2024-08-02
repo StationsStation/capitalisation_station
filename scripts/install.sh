@@ -127,6 +127,9 @@ function install_poetry_deps() {
 
     echo "Using virtual environment: $executable"
 
+    # We also 
+
+    pip install poetry-dotenv-plugin > /dev/null || exit 1
     if [ ! -f "$executable" ]; then
         echo "No virtual environment! Creating one..."
     fi
