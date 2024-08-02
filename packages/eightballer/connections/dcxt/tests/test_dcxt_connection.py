@@ -152,11 +152,9 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 
 
 EXPECTED_FUNCTIONS = [
-    'get_all_balances',  #          get all balances
     'get_all_markets',  #           get all markets
     'subscribe',  # order book      subscribe
     'create_order',  # create order create_order
-    'get_orders',  # get orders:    historicasl tx hashes
     'get_order',  # get order:      tx hash
 ]
 

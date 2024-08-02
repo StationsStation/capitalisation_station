@@ -105,6 +105,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 "env": env,
                 "subaccount_id": subaccount_id,
                 "wallet": wallet,
+                "logger": self.logger,
             }
             params['kwargs'] = exchange_config.get("kwargs", {})
             try:
