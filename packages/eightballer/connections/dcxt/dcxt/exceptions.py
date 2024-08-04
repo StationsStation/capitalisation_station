@@ -38,17 +38,22 @@ class ExchangeError(Exception):
 class AuthenticationError(Exception):
     """Raised when there is an authentication error."""
 
+
 class InsufficientFunds(Exception):
     """Raised when there are insufficient funds to perform the operation."""
+
 
 class BadSymbol(Exception):
     """Raised when the symbol is not recognised by the exchange."""
 
+
 class ExchangeNotAvailable(Exception):
     """Raised when the exchange is not available."""
 
+
 class InvalidOrder(Exception):
     """Raised when the order is invalid."""
+
 
 class OrderNotFound(Exception):
     """Raised when the order is not found."""
