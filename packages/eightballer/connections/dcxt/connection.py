@@ -2,6 +2,7 @@
 Connection for dcxt.
 """
 import asyncio
+import os
 import traceback
 from asyncio import Task
 from collections import deque
@@ -77,6 +78,8 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             if key_path is not None:
                 with open(key_path, "r", encoding="utf8") as key_file:
                     private_key = key_file.read()
+            else:
+                private_key = os.urandom(32).hex()
 
             params = {
                 "auth": {"private_key": private_key},

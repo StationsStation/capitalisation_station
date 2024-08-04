@@ -57,7 +57,7 @@ class PositionInterface(BaseInterface):
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Request timeout",
             )
-        except dcxt.exception.AuthenticationError:
+        except dcxt.exceptions.AuthenticationError:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
