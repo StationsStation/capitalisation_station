@@ -3,7 +3,6 @@ Interface for the positios protocol.
 """
 from typing import Optional
 
-
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.positions.custom_types import Position, Positions

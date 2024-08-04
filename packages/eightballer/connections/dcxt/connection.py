@@ -5,7 +5,6 @@ import asyncio
 import traceback
 from asyncio import Task
 from collections import deque
-from enum import Enum
 from typing import Any, Deque, Dict, List, Optional, cast
 
 from aea.connections.base import Connection, ConnectionStates
@@ -22,7 +21,6 @@ from packages.eightballer.protocols.markets.custom_types import Market
 POLL_INTERVAL_MS = 50
 RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
-
 
 
 class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes

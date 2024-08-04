@@ -30,5 +30,6 @@ class ConfigurationError(Exception):
 class RequestTimeout(Exception):
     """Raised when there is a request timeout."""
 
+
 class ExchangeError(Exception):
     """Raised when there is an error with the exchange."""
