@@ -16,6 +16,7 @@
         "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeihtjff73aujwqukrssew6xqv2vsg2pqzpgl563xjcxqidjn6c2lxm",
         "skill/eightballer/reporting/0.1.0": "bafybeifbxepsryva74xsnedidckm2ifemygprrqw57ty2f6dplo7rfu57q",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeien7pkp7hlziy7hy6di2jxbkkcd4hknfusra537vnf646bkatsu6m",
+        "skill/eightballer/metrics/0.1.0": "bafybeidbhbiexqca4vkuectkgohowfc33rsleyjo4pmgo3pdz5htbdemwy",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeigwuyw74ogcm2atnwpwlm4cynllbmnjgzmtdudnrqhxdmzf3uiqsi"
     },
     "third_party": {
@@ -43,7 +44,6 @@
         "skill/valory/abstract_abci/0.1.0": "bafybeigihbaefe22hhsno6gfpvv5hn46pikg4vdakhrycbvntdpufrd7xq",
         "skill/valory/abstract_round_abci/0.1.0": "bafybeihkq6n7ug5eyqbf3t6q2mqwryecjkqgjg6375cyvvfdylivo25z5u",
         "skill/valory/registration_abci/0.1.0": "bafybeib4a3zmsmbebd74whk7sfnbcv7dwglrirmu53afrlo6ar2xi4t54q",
-        "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i",
-        "skill/eightballer/metrics/0.1.0": "bafybeidbhbiexqca4vkuectkgohowfc33rsleyjo4pmgo3pdz5htbdemwy"
+        "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i"
     }
 }
