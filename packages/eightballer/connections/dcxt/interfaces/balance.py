@@ -5,8 +5,7 @@ Base interface for balances protocol.
 
 from typing import Optional
 
-from ccxt import RequestTimeout
-
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.message import BalancesMessage
@@ -40,7 +39,7 @@ class BalanceInterface(BaseInterface):
                 exchange_id=message.exchange_id,
             )
             connection.logger.debug(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching balances for {message.exchange_id}")
             response_message = dialogue.reply(
                 performative=BalancesMessage.Performative.ERROR,

@@ -25,3 +25,10 @@ class SorRetrievalException(Exception):
 
 class ConfigurationError(Exception):
     """Raised when there is an error with the configuration."""
+
+
+class RequestTimeout(Exception):
+    """Raised when there is a request timeout."""
+
+class ExchangeError(Exception):
+    """Raised when there is an error with the exchange."""

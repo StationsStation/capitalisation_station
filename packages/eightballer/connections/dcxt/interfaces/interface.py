@@ -1,11 +1,10 @@
 """Interface."""
 from typing import Any, Callable, Dict, Optional
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
-from packages.eightballer.connections.dcxt import PUBLIC_ID
+from packages.eightballer.connections.dcxt import PUBLIC_ID, dcxt
 from packages.eightballer.connections.dcxt.interfaces.balance import BalanceInterface
 from packages.eightballer.connections.dcxt.interfaces.market import MarketInterface
 from packages.eightballer.connections.dcxt.interfaces.ohlcv import OhlcvInterface
@@ -26,7 +25,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         self.polling_tasks = kwargs.get("polling_tasks")
         self.executing_tasks = kwargs.get("executing_tasks")
         self.queue = kwargs.get("queue")
-        self.exchanges: Dict[str, ccxt.Exchange] = kwargs.get("exchanges")
+        self.exchanges: Dict[str, dcxt.Exchange] = kwargs.get("exchanges")
         self.supported_protocols = {
             SpotAssetInterface.protocol_id: SpotAssetInterface(),
             OhlcvInterface.protocol_id: OhlcvInterface(),

@@ -9,7 +9,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigalpw3zlh2sfmxw52dzxzsrnofbzb2fkucbravmi2dzsmpiwjtse
   balances.proto: bafybeifl2dh3x5bqs5c5m22ljpzbfjzx6wvh2nioxvl7gc7aammcwqlzdi
-  balances_pb2.py: bafybeie6jfoegxhklaldyyym6rptspv2qximtljybucpud3ndc7a527i2m
+  balances_pb2.py: bafybeibye7g5qkh5lcsx6oohmkn6wpppuqbpuwcm4xfpbg542mlnd3cd4q
   custom_types.py: bafybeiezgzcylgdbcx3z27sxqpfzxuw3dvh4eqytrmtz3wptqgoxw2uq5a
   dialogues.py: bafybeigu6nhm36fi4fbxkcwjp55lbyhryladdyh6y3iad5sbofoeljse24
   message.py: bafybeihco7lhsh2zrq4x6trnudd4nzr7pni2lzvzcruyhw4f2dtgmviepi

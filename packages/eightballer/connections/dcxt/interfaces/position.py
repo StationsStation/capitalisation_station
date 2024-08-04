@@ -3,8 +3,8 @@ Interface for the positios protocol.
 """
 from typing import Optional
 
-from ccxt import AuthenticationError, BadSymbol, RequestTimeout
 
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.positions.custom_types import Position, Positions
 from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
@@ -51,14 +51,14 @@ class PositionInterface(BaseInterface):
                 positions=positions,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Request timeout",
             )
-        except AuthenticationError:
+        except dcxt.exception.AuthenticationError:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
@@ -91,21 +91,21 @@ class PositionInterface(BaseInterface):
                 position=position,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Request timeout",
             )
-        except BadSymbol:
+        except dcxt.exceptions.BadSymbol:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.UNKNOWN_POSITION,
                 error_msg=message.position_id,
             )
-        except AuthenticationError:
+        except dcxt.exceptions.AuthenticationError:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,

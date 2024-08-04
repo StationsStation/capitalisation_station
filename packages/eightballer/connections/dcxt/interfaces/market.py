@@ -3,8 +3,8 @@ from typing import Optional, cast
 
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
-from ccxt import RequestTimeout
 
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
@@ -31,7 +31,7 @@ class MarketInterface(BaseInterface):
                 markets=markets,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(
                 Optional[Message],

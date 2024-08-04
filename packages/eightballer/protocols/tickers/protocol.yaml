@@ -15,7 +15,7 @@ fingerprint:
   tests/test_tickers_dialogues.py: bafybeigfrdj3pvobqjbcqq3ypyyxrx6geuszyp3trgyli7qkt6jinpfzqy
   tests/test_tickers_messages.py: bafybeiaa3bl2chh4uytqlpafjym7q5mjuocpootvvuv547rj6aw66jrakq
   tickers.proto: bafybeihjhe2g5nqaqatbsl64i64blfeyqqlveaq7lfjj3typu5kcvx7mty
-  tickers_pb2.py: bafybeidcqaywleutfhkbukt6pcghpkrkebv7ersj55lnrhtodncdtc4zmq
+  tickers_pb2.py: bafybeib3jjyl7zwez23hohxce4zmzmw7vjvy4zmzlwzlenashh7hzdykka
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
