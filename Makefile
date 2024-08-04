@@ -44,7 +44,7 @@ clean-test:
 
 .PHONY: hashes
 hashes: clean fmt lint
-	poetry run autonomy packages lock
+	poetry run autonomy packages lock && poetry run autonomy push-all
 	git add packages
 	git commit -m 'chore: hashes'
 
