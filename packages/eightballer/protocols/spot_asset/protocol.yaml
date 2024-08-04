@@ -13,7 +13,7 @@ fingerprint:
   message.py: bafybeifgxiemt5bbjo3q62s5ng4vlgk6ngdvrcgc537eont4jv2ehgay7i
   serialization.py: bafybeiggoc34mbc2aq5vo6njty254vocs2ifj5bxdwbqw4auvn4ezgrnaq
   spot_asset.proto: bafybeieuoeojj3rktsxl2bzyondfg372i6276zmauhsalkjldk4ttasgxi
-  spot_asset_pb2.py: bafybeifqesjuf7lmpubp3t6csvckicng4yprcx3jguuhq6loa3ucpmmc3a
+  spot_asset_pb2.py: bafybeifwmbstbg2nnerdwdcksv2kidkbcp3tmiarrc4vmufg2sf5wjiuiu
   tests/__init__.py: bafybeiceqkr32h2nowqnobnqc6y722cpfzosgmjc54fjkgmxi5dw5q7khq
   tests/test_spot_asset.py: bafybeidrqopy7oje4ggaaq4z5k4utuxvmozdvhw5glwyt3nxrkb6lodfq4
 fingerprint_ignore_patterns: []

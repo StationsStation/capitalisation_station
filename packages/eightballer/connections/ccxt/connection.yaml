@@ -38,15 +38,15 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeibkvanfeqzdxjqbsy7kg6n4upcs3guojrmc4yjb3g7anmtia4las4
-- eightballer/default:0.1.0:bafybeigmvppaw5qt4j32g5pbzj2mr6yuviucbq6zkhadvkyfks6xguab3y
-- eightballer/markets:0.1.0:bafybeiejvub3u44kfudgldid6aq57z75wuenfi2filkbqdssxwavllgigm
-- eightballer/ohlcv:0.1.0:bafybeihcyzz5fmf3b3pkng5wogwhel3v7o7bphv7bgt4pbra4zoeoij4va
-- eightballer/order_book:0.1.0:bafybeiaysxz472vn32xrqbeljar2r4bkfxpjdqiucw66kfd5cbhfmuswxq
-- eightballer/orders:0.1.0:bafybeia5lppfqs3wtarisbn3njiankxjxgdp2kzoyrlnzjuwomrjwbfby4
-- eightballer/positions:0.1.0:bafybeiabojtxwexbzgqjut7g3paekh2q7ssrjrpwgtsxw3jjhxhqyya7h4
-- eightballer/spot_asset:0.1.0:bafybeibi7tzl4axbzfliy6z6zbrwgviatjeyfda2lqwf3742jkwpbeplw4
-- eightballer/tickers:0.1.0:bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm
+- eightballer/balances:0.1.0:bafybeihrnjigqe3cwzsybhfgb2745e3pxccojpqhy4bu7jtg62ugwnuole
+- eightballer/default:0.1.0:bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma
+- eightballer/markets:0.1.0:bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4
+- eightballer/ohlcv:0.1.0:bafybeiekgrxin3jge5j5gfygbgyemlqnciuyiauvrja3a4wmywlncddwee
+- eightballer/order_book:0.1.0:bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki
+- eightballer/orders:0.1.0:bafybeifvom6eqscy4uniihnodvgdhvbj6cjjybkwyitkp3dmnsrv3a6tum
+- eightballer/positions:0.1.0:bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm
+- eightballer/spot_asset:0.1.0:bafybeibfw3gtaihkpevki6bc2e5gd5bc7rv7nkv4dnhrezdefo2busuvxi
+- eightballer/tickers:0.1.0:bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4
 class_name: CcxtConnection
 config:
   exchanges:
