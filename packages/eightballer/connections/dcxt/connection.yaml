@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
-  connection.py: bafybeia6kjnxlud2bybw7rwimpev4kaeotcap36l3cjkwpi33ox2uyoexa
+  connection.py: bafybeibqzn6dgriwnqa6ri4hav3sapsmaxqagaexig5p2ui5t4fvomdmu4
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
   dcxt/__init__.py: bafybeihn7e3tvsfwm7un2nzaztvxlhels47aab4h2fzwulyflrigznflpi
   dcxt/balancer.py: bafybeibzgo3smbia6asjctfpyjxdo7cbcsmqflq4uwnyfwsxbplbyxadk4
@@ -77,4 +77,7 @@ dependencies:
     version: '>=1.1.1'
   lyra-v2-client:
     version: '>=0.2.9'
+  balpy:
+    version: '>=0.0.0a84'
+  open-aea-ledger-ethereum: {}
 is_abstract: false

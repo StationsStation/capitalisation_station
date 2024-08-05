@@ -15,4 +15,4 @@ class_name: JupitarSwapContract
 contract_interface_paths: {}
 dependencies: {}
 contracts:
-- eightballer/spl_token:0.1.0:bafybeie5nsm7mmjv6cjxew7ex7ar72tyeqrjwkalw4pic62ykwbsdupjfq
+- eightballer/spl_token:0.1.0:bafybeieihaknw6ergbe2llk3e7ix5f6drzdt65zb2e3v2uv7nju54ptlze
