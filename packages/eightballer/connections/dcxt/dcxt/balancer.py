@@ -11,6 +11,7 @@ from glob import glob
 from pathlib import Path
 from typing import cast
 
+import web3
 from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import Account
@@ -20,7 +21,7 @@ from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationE
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.protocols.orders.custom_types import Orders
+from packages.eightballer.protocols.orders.custom_types import Order, Orders
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 
 GAS_PRICE_PREMIUM = 20
@@ -83,7 +84,7 @@ class BalancerClient:
         self.account = Account.from_key(  # pylint: disable=E1120
             private_key=kwargs.get('auth').get("private_key").strip()
         )  # pylint: disable=E1120
-        self.bal = balpy.balpy(
+        self.bal: balpy.balpy = balpy.balpy(
             self.chain_name,
             manualEnv={
                 "privateKey": self.account._private_key,
@@ -351,14 +352,111 @@ class BalancerClient:
         del kwargs
         return []
 
-    async def create_order(self, *args, **kwargs):
+    async def create_order(self, retries=1, *args, **kwargs) -> Order:
         """
         Create an order.
 
         :return: The order.
         """
+        print(f"Creating order with args: {args} and kwargs: {kwargs}")
+
+        symbol = kwargs.get("symbol", None)
+        if not symbol:
+            raise ValueError("Symbol not provided to create order")
+
+        input_token_address, output_token_address = symbol.split('/')
+        human_amount = kwargs.get("amount", None)
+        if not human_amount:
+            raise ValueError("Size not provided to create order")
+        machine_amount = self.tokens[input_token_address].to_machine(human_amount)
+        amount = human_amount
+
+        params = self.get_params_for_swap(
+            input_token_address=input_token_address,
+            output_token_address=output_token_address,
+            input_amount=amount,
+            is_buy=True,
+        )
+        try:
+            sor_result = self.bal.balSorQuery(params)
+        except Exception as exc:  # pylint: disable=W0703
+            self.logger.error(exc)
+            self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
+            raise SorRetrievalException(f"Error querying SOR: {exc}")
+
+        swap = sor_result["batchSwap"]
+        self.logger.info(
+            f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n {json.dumps(swap, indent=4)}"
+        )
+        tokens = swap["assets"]
+        limits = swap["limits"]
+        if not tokens or not limits:
+            self.log("Problem with SOR retrieval!!")
+            if retries > 0:
+                self.log(f"Retrying transaction. {retries} retries left")
+                return self.create_order(*args, **kwargs, retries=retries - 1)
+            raise SorRetrievalException(f"No tokens {tokens} or limits: {limits} provided in swap")
+
+        # we now do the txn if its not a multi sig.
+        if not kwargs.get("safe_address"):
+            fnc = self._handle_eoa_txn
+        else:
+            fnc = self._handle_safe_txn
+        return fnc(swap, symbol, input_token_address, machine_amount)
+
+    def _handle_eoa_txn(self, swap, symbol, input_token_address, machine_amount) -> Order:
+        """
+        Handle the EOA transaction.
+        """
+
+        vault = self.bal.balLoadContract("Vault")
+
+        approved = self.bal.erc20GetAllowanceStandard(
+            tokenAddress=input_token_address,
+            allowedAddress=vault.address,
+        )
+
+        # We approve the token if we have not already done so.
+
+        if approved < machine_amount:
+            self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
+            contract = self.bal.erc20GetContract(input_token_address)
+            data = contract.encodeABI('approve', [vault.address, machine_amount])
+
+        else:
+            try:
+                mc_args = self.bal.balFormatBatchSwapData(swap)
+                vault = self.bal.balLoadContract("Vault")
+                function_name = 'batchSwap'
+                data = vault.encodeABI(function_name, mc_args)
+                batchSwapFn = vault.get_function_by_name(fn_name=function_name)
+                # Assuming this does not revert, we have our call data for the order.
+                batchSwapFn(*mc_args).call()
+            except web3.exceptions.ContractLogicError as exc:
+                self.logger.error(exc)
+                self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
+                if 'BAL#508' in str(exc):
+                    raise ValueError("SWAP_DEADLINE: Swap transaction not mined within the specified deadline")
+                if 'execution reverted: ERC20: transfer amount exceeds allowance' in str(exc):
+                    raise ValueError("ERC20: transfer amount exceeds allowance")
+                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}")
+
+        return Order(
+            exchange_id="balancer",
+            symbol=symbol,
+            data={
+                "data": data,
+            },
+        )
+
+    def parse_order(self, order, *args, **kwargs):
+        """
+        Parse the order.
+
+        :return: The order.
+        """
         del args, kwargs
-        raise NotImplementedError
+        return order
 
     async def cancel_order(self, *args, **kwargs):
         """

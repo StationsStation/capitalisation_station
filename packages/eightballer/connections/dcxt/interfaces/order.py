@@ -52,31 +52,6 @@ def from_id_to_instrument_name(instrument_id):
     return f"{symbol}/USD:ETH-{date}-{parts[2]}-{parts[3]}"
 
 
-def from_camelize(name: str) -> str:
-    """Convert a camel case name to a snake case name."""
-    return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
-
-
-def from_api_call(api_call: Dict[str, Any], exchange_id) -> Order:
-    """Create an order from an api call."""
-    kwargs = {from_camelize(key): value for key, value in api_call.items()}
-    del kwargs["info"]
-
-    if all(
-        [
-            kwargs["status"] == "closed",
-            kwargs["remaining"] == 0,
-            kwargs["filled"] == kwargs["amount"],
-        ]
-    ):
-        kwargs["status"] = "filled"
-    kwargs["status"] = map_status_to_enum(kwargs["status"])
-    kwargs["type"] = map_order_type_to_enum(kwargs["type"])
-    kwargs["side"] = OrderSide.BUY if kwargs["side"] == "buy" else OrderSide.SELL
-    kwargs["exchange_id"] = exchange_id
-    return Order(**kwargs)
-
-
 def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
     """Create an order from a settlement txn."""
     size = float(settlement["position"])
@@ -98,34 +73,8 @@ def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
     return Order(**order_params)
 
 
-def map_order_type_to_enum(order_type: str) -> OrderType:
-    """Map the order type to order protocol type."""
-    mapping = {
-        "limit": OrderType.LIMIT,
-        "market": OrderType.MARKET,
-    }
-    if order_type not in mapping:
-        raise ValueError(f"Unknown order type: {order_type}")
-    return mapping[order_type]
-
-
 class PollingError(Exception):
     """Polling error."""
-
-
-def map_status_to_enum(status):
-    """Map the status to order protocol status"""
-    mapping = {
-        "open": OrderStatus.OPEN,
-        "new": OrderStatus.OPEN,
-        "Order queued for cancellation": OrderStatus.CANCELLED,
-        "closed": OrderStatus.CLOSED,
-        "canceled": OrderStatus.CANCELLED,
-        "filled": OrderStatus.FILLED,
-    }
-    if status not in mapping:
-        raise ValueError(f"Unknown status: {status}")
-    return mapping[status]
 
 
 def get_error(message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str) -> OrdersMessage:
@@ -152,8 +101,10 @@ class OrderInterface(BaseInterface):
     exchange_to_orders: Dict[str, list] = {}
     open_orders: Dict[str, list] = {}
 
-    def process_api_orders(self, exchange_id: str, api_orders: Dict[str, dict]):
+    def process_api_orders(self, exchange_id: str, api_orders: Dict[str, dict], connection) -> Dict[str, Order]:
         """Process orders from the api to internal hashmap"""
+        exchange = connection.exchanges[order.exchange_id]
+        exchange.parse_order
         orders = {order["id"]: from_api_call(order, exchange_id) for order in api_orders}
         if exchange_id not in self.open_orders:
             self.open_orders[exchange_id] = orders
@@ -165,6 +116,7 @@ class OrderInterface(BaseInterface):
         """Submit an order to the appropriate exchange."""
         order = message.order
         exchange = connection.exchanges[order.exchange_id]
+        order_parsing_func = exchange.parse_order
 
         try:
             res = await exchange.create_order(
@@ -174,8 +126,7 @@ class OrderInterface(BaseInterface):
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
             )
-            updated_order = from_api_call(res, order.exchange_id)
-            updated_order.client_order_id = order.client_order_id
+            updated_order = order_parsing_func(res, order.exchange_id)
 
         except dcxt.exceptions.InsufficientFunds as base_error:
             order.status = OrderStatus.CANCELLED

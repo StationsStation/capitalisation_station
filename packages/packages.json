@@ -1,7 +1,7 @@
 {
     "dev": {
         "protocol/eightballer/default/0.1.0": "bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma",
-        "protocol/eightballer/orders/0.1.0": "bafybeifvom6eqscy4uniihnodvgdhvbj6cjjybkwyitkp3dmnsrv3a6tum",
+        "protocol/eightballer/orders/0.1.0": "bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774",
         "protocol/eightballer/order_book/0.1.0": "bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki",
         "protocol/eightballer/positions/0.1.0": "bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm",
         "protocol/eightballer/markets/0.1.0": "bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4",
@@ -11,13 +11,13 @@
         "protocol/eightballer/tickers/0.1.0": "bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4",
         "contract/eightballer/erc_20/0.1.0": "bafybeifjtxoyahzgrn622tipbrv2mx6r22fazawbffzszymjdlzs3uikbq",
         "contract/eightballer/spl_token/0.1.0": "bafybeieihaknw6ergbe2llk3e7ix5f6drzdt65zb2e3v2uv7nju54ptlze",
-        "connection/eightballer/dcxt/0.1.0": "bafybeigin5mavvudnr2hnjf2tnyviuuy3rbqlkzf65xpnhtk77k4urgxle",
-        "connection/eightballer/ccxt/0.1.0": "bafybeiadhi2w4ms5jqqmymyr2kjxf5teyazu4bybtwe477h7zshvpnii5a",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeievrqiumpfauuya6ynvay25542rp4jyfzltrgfeqeo5tk65puieh4",
-        "skill/eightballer/reporting/0.1.0": "bafybeiakrehfnhpkegyouu37suaoc4jfnifwx56acaahftphvqdarhr4ha",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeih6xh6tvrrx3a7marteyswa2subxihoivoh64q77zgu7wjslaeceu",
+        "connection/eightballer/dcxt/0.1.0": "bafybeiculmglnfnd7wvjeprtkf5e2rppqf7mdgsj3xvf5jdz24o2hyvpey",
+        "connection/eightballer/ccxt/0.1.0": "bafybeia2544o5zgrtno7y3tsy6mgbvg53cpvdyptbyuvmot25b4tgfnb7e",
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeiggirbiucdqczcmftvv4qm3bxwhgxf4lwninuibvq42qibbffcvau",
+        "skill/eightballer/reporting/0.1.0": "bafybeihphiiw63sv6x3kpd6gxrihbqpmyth2olvq7se456dhf3xhu2aa64",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeic37gt64xorc43wgbsu7xdyhmarwigdixowmx5vgczabsce2557vq",
         "skill/eightballer/metrics/0.1.0": "bafybeiabyfp6wsznmwxgkl353mcytuqk3ta2enew7ktejq2qduhje3nd6i",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeihm26ju2jbgo7fqolnw5lu3rbfqbyanhh25i44yju3kpnh6owqpmm"
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeigicn5xtc7gdp2ft2kgapngkrjyresyn75ishirgt44abibx5fkba"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u",

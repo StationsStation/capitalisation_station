@@ -10,12 +10,12 @@ fingerprint:
   connection.py: bafybeibqzn6dgriwnqa6ri4hav3sapsmaxqagaexig5p2ui5t4fvomdmu4
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
   dcxt/__init__.py: bafybeihn7e3tvsfwm7un2nzaztvxlhels47aab4h2fzwulyflrigznflpi
-  dcxt/balancer.py: bafybeiehpc27pkoui7awd5psky3eqlbdtpn5dxbfanxq6obnhowqugjkxy
+  dcxt/balancer.py: bafybeic4p5ukuionzvitm664hvpl23n2inje3jxwcutuj7fvmbqr6kkuh4
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeidb33fbztwjbjsxze5hukhl237xgjaw67bfsbfj2hwtzcff3g2h6m
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
-  dcxt/lyra_v2.py: bafybeih7x64b4jhqipavt57yhbn3cqa7klte2llpq57elvfpg4ucmyvije
+  dcxt/lyra_v2.py: bafybeiha2vk4ibopkxaxyojushl6rg7egnzynrzsxdkba36ee4s3z5aoxy
   erc_20/__init__.py: bafybeibaib6srjfuq6kqwenmnoswieukz47c5iomzkhddi22lkgtvfth6q
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeigjff7bkyu4spjkbuje4tzviz7wcazr7xf7byf7mz575koif4vpe4
@@ -25,7 +25,7 @@ fingerprint:
   interfaces/interface_base.py: bafybeic2qwt7aprhowoevntectf44jgrnnx5et2s3bzeisjxul7m2ecqye
   interfaces/market.py: bafybeidypwhtnrkwdncxbrjsjdbtxzzom6djve7hb57asqfr6ttureyecq
   interfaces/ohlcv.py: bafybeielfqqfe4x5724fcsudxaqucgbwyrm7d5locwe563vcptxdcpsdfa
-  interfaces/order.py: bafybeibnmn2bwysnhthn3bnpo3xhgqm4rwps3bmcpe55t3ikotmrej2fpy
+  interfaces/order.py: bafybeidvrwcqvvvn6nkfqlrdeznjdr4tje7nx4i4fm3446h6pbinz64b6m
   interfaces/order_book.py: bafybeicy33lj5iszqlmhcwcsjoqcy37gcp2yc4txrpl5zzmnwln5mhhujy
   interfaces/position.py: bafybeidrf2qhaekzlycfx3ryrrvyacevaykfs3tehghobv4pnronrjmb6e
   interfaces/spot_asset.py: bafybeihmnmrktjstmy6x2rjd37d3tjpet25xk4w6aqs6oltttler546d3i
@@ -57,7 +57,7 @@ protocols:
 - eightballer/markets:0.1.0:bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4
 - eightballer/ohlcv:0.1.0:bafybeiekgrxin3jge5j5gfygbgyemlqnciuyiauvrja3a4wmywlncddwee
 - eightballer/order_book:0.1.0:bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki
-- eightballer/orders:0.1.0:bafybeifvom6eqscy4uniihnodvgdhvbj6cjjybkwyitkp3dmnsrv3a6tum
+- eightballer/orders:0.1.0:bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774
 - eightballer/positions:0.1.0:bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm
 - eightballer/spot_asset:0.1.0:bafybeibfw3gtaihkpevki6bc2e5gd5bc7rv7nkv4dnhrezdefo2busuvxi
 - eightballer/tickers:0.1.0:bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4
@@ -79,5 +79,7 @@ dependencies:
     version: '>=0.2.9'
   balpy:
     version: '>=0.0.0a84'
+  web3:
+    version: '>=5.0.0'
   open-aea-ledger-ethereum: {}
 is_abstract: false
