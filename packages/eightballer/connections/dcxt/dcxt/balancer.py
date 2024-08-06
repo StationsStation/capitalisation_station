@@ -17,7 +17,7 @@ from aea_ledger_ethereum import Account
 from balpy import balpy
 
 from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
-from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
+from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.orders.custom_types import Orders
@@ -251,7 +251,6 @@ class BalancerClient:
                 continue
 
             token = self.tokens[token_address]
-            Erc20(self.erc20_contract)
 
             # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
             ask_price = 1 / float(
@@ -268,6 +267,7 @@ class BalancerClient:
                 )
             )
             symbol = f'{token.symbol}/USDC'
+            symbol = f'{token.address}/{USDC_ADDRESS}'
             ticker = Ticker(
                 symbol=symbol,
                 high=ask_price,
