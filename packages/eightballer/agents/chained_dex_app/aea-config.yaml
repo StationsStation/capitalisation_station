@@ -10,7 +10,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeia2544o5zgrtno7y3tsy6mgbvg53cpvdyptbyuvmot25b4tgfnb7e
-- eightballer/dcxt:0.1.0:bafybeiculmglnfnd7wvjeprtkf5e2rppqf7mdgsj3xvf5jdz24o2hyvpey
+- eightballer/dcxt:0.1.0:bafybeicyeg2jnnvbhmles6gssw5zj2mjvcr2j2lyp5jrzdft3qsrnwgv5a
 - eightballer/http_client:0.1.0:bafybeihhsap2dtyoyr6yy462nnpnyuy5gkrelpv252isshajhfhvnsxnga
 - eightballer/http_server:0.1.0:bafybeiequxaqyqungpivblrwiopya3yqhwrjaqlrf2ez54a2oagzfrqxeq
 - eightballer/prometheus:0.1.1:bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca
@@ -43,8 +43,8 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/tendermint:0.1.0:bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeic37gt64xorc43wgbsu7xdyhmarwigdixowmx5vgczabsce2557vq
-- eightballer/dex_data_retrieval:0.1.0:bafybeiggirbiucdqczcmftvv4qm3bxwhgxf4lwninuibvq42qibbffcvau
+- eightballer/chained_dex_app:0.1.0:bafybeibwrlydty2kt5hons55uau6z6uodck24ac55maiea3i6dl6xqwxqy
+- eightballer/dex_data_retrieval:0.1.0:bafybeifkmiyz6bwwzbekf4rvgra7nz2u7ast5dwyfq34emhjk3myhqp2ma
 - eightballer/metrics:0.1.0:bafybeiabyfp6wsznmwxgkl353mcytuqk3ta2enew7ktejq2qduhje3nd6i
 - eightballer/prometheus:0.1.0:bafybeiafbgefdcah6mh2e37hvbcjzbocx4heugjifd2252wjg7bs7kb4wu
 - valory/abstract_abci:0.1.0:bafybeiedikuvfpdx7xhyrxcpp6ywi2d6qf6uqvlwmhgcal7qhw5duicvym

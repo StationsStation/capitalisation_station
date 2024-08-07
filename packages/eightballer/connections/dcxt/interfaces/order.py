@@ -1,4 +1,5 @@
 """Order protocol handler."""
+import json
 import traceback
 from datetime import datetime
 from typing import Any, Dict, Optional, cast
@@ -125,6 +126,9 @@ class OrderInterface(BaseInterface):
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
+                data=json.loads(
+                    order.data,
+                ),
             )
             updated_order = order_parsing_func(res, order.exchange_id)
 
