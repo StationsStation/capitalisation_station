@@ -28,7 +28,7 @@ from packages.eightballer.protocols.default.message import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.dialogues import DefaultDialogue, DefaultDialogues, HttpDialogue, HttpDialogues
 
-ROOT_DIR = Path(__file__).parent.parent.parent.parent
+ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 class TestDialogues(BaseSkillTestCase):

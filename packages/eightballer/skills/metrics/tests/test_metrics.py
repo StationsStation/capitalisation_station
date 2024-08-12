@@ -1,6 +1,7 @@
 """Test the metrics skill."""
 import json
 import logging
+import os
 from pathlib import Path
 from typing import cast
 from unittest.mock import patch
@@ -12,7 +13,7 @@ from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.dialogues import HttpDialogues
 from packages.eightballer.skills.metrics.handlers import HttpHandler
 
-ROOT_DIR = Path(__file__).parent.parent.parent.parent
+ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 class TestHttpHandler(BaseSkillTestCase):
@@ -92,7 +93,7 @@ class TestHttpHandler(BaseSkillTestCase):
         mock_logger.assert_any_call(
             logging.INFO,
             f"received http request with method={incoming_message.method}, "
-            + f"url={incoming_message.url} and body={incoming_message.body:!r}",
+            + f"url={incoming_message.url} and body={incoming_message.body}",
         )
 
         message = self.get_message_from_outbox()
@@ -114,3 +115,10 @@ class TestHttpHandler(BaseSkillTestCase):
             logging.INFO,
             f"responding with: {message}",
         )
+
+    @classmethod
+    def teardown(cls, *args, **kwargs):  # noqa
+        """Teardown the test class."""
+        db_fn = "test.db"
+        if os.path.exists(db_fn):
+            os.remove("test.db")
