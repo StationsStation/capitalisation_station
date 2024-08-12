@@ -57,3 +57,7 @@ class InvalidOrder(Exception):
 
 class OrderNotFound(Exception):
     """Raised when the order is not found."""
+
+
+class ApprovalError(Exception):
+    """Raised when there is an error with the approvals."""

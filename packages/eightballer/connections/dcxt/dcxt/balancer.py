@@ -17,7 +17,12 @@ from aea.contracts.base import Contract
 from aea_ledger_ethereum import Account
 from balpy import balpy
 
-from packages.eightballer.connections.dcxt.dcxt.exceptions import ConfigurationError, SorRetrievalException
+from packages.eightballer.connections.dcxt.dcxt.exceptions import (
+    ApprovalError,
+    ConfigurationError,
+    ExchangeError,
+    SorRetrievalException,
+)
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
@@ -352,7 +357,12 @@ class BalancerClient:
         del kwargs
         return []
 
-    async def create_order(self, retries=1, *args, **kwargs) -> Order:
+    async def create_order(
+        self,
+        *args,
+        retries=1,
+        **kwargs,
+    ) -> Order:
         """
         Create an order.
 
@@ -382,18 +392,19 @@ class BalancerClient:
         except Exception as exc:  # pylint: disable=W0703
             self.logger.error(exc)
             self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
-            raise SorRetrievalException(f"Error querying SOR: {exc}")
+            raise SorRetrievalException(f"Error querying SOR: {exc}") from exc
 
         swap = sor_result["batchSwap"]
         self.logger.info(
-            f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n {json.dumps(swap, indent=4)}"
+            f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n"
+            + f"{json.dumps(swap, indent=4)}"
         )
         tokens = swap["assets"]
         limits = swap["limits"]
         if not tokens or not limits:
-            self.log("Problem with SOR retrieval!!")
+            self.logger("Problem with SOR retrieval!!")
             if retries > 0:
-                self.log(f"Retrying transaction. {retries} retries left")
+                self.logger(f"Retrying transaction. {retries} retries left")
                 return self.create_order(*args, **kwargs, retries=retries - 1)
             raise SorRetrievalException(f"No tokens {tokens} or limits: {limits} provided in swap")
 
@@ -420,11 +431,7 @@ class BalancerClient:
         swap['funds']['sender'] = safe_address
         swap['funds']['recipient'] = safe_address
 
-        # approved = self.bal.erc20GetAllowanceStandard(
-        #     tokenAddress=input_token_address,
-        #     allowedAddress=vault.address,
-        # )
-
+        # Note this is a place holder for the approval amount assuming we have approved the token.
         approved = 99999999999999999999999
 
         # We approve the token if we have not already done so.
@@ -444,10 +451,12 @@ class BalancerClient:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
                 if 'BAL#508' in str(exc):
-                    raise ValueError("SWAP_DEADLINE: Swap transaction not mined within the specified deadline")
+                    raise ExchangeError(
+                        "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
+                    ) from exc
                 if 'execution reverted: ERC20: transfer amount exceeds allowance' in str(exc):
-                    raise ValueError("ERC20: transfer amount exceeds allowance")
-                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}")
+                    raise ApprovalError("ERC20: transfer amount exceeds allowance") from exc
+                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
 
         return Order(
             exchange_id="balancer",
@@ -459,7 +468,9 @@ class BalancerClient:
             },
         )
 
-    def _handle_eoa_txn(self, swap, symbol, input_token_address, machine_amount, **kwargs) -> Order:
+    def _handle_eoa_txn(  # pylint: disable=unused-argument
+        self, swap, symbol, input_token_address, machine_amount, **kwargs
+    ) -> Order:  # pylint: disable=unused-argument
         """
         Handle the EOA transaction.
         """
@@ -484,17 +495,19 @@ class BalancerClient:
                 vault = self.bal.balLoadContract("Vault")
                 function_name = 'batchSwap'
                 data = vault.encodeABI(function_name, mc_args)
-                batchSwapFn = vault.get_function_by_name(fn_name=function_name)
+                fn = vault.get_function_by_name(fn_name=function_name)
                 # Assuming this does not revert, we have our call data for the order.
-                batchSwapFn(*mc_args).call()
+                fn(*mc_args).call()
             except web3.exceptions.ContractLogicError as exc:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
                 if 'BAL#508' in str(exc):
-                    raise ValueError("SWAP_DEADLINE: Swap transaction not mined within the specified deadline")
+                    raise ExchangeError(
+                        "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
+                    ) from exc
                 if 'execution reverted: ERC20: transfer amount exceeds allowance' in str(exc):
-                    raise ValueError("ERC20: transfer amount exceeds allowance")
-                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}")
+                    raise ApprovalError(f"ERC20: transfer amount exceeds allowance: {exc}") from exc
+                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
 
         return Order(
             exchange_id="balancer",

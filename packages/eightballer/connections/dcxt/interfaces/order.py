@@ -104,9 +104,7 @@ class OrderInterface(BaseInterface):
 
     def process_api_orders(self, exchange_id: str, api_orders: Dict[str, dict], connection) -> Dict[str, Order]:
         """Process orders from the api to internal hashmap"""
-        exchange = connection.exchanges[order.exchange_id]
-        exchange.parse_order
-        orders = {order["id"]: from_api_call(order, exchange_id) for order in api_orders}
+        orders = {order["id"]: connection.exchange[exchange_id].parse_order(order, exchange_id) for order in api_orders}
         if exchange_id not in self.open_orders:
             self.open_orders[exchange_id] = orders
         return orders
@@ -187,7 +185,7 @@ class OrderInterface(BaseInterface):
         exchange_id = order.exchange_id
         try:
             api_order = await exchange.fetch_order(order.id)
-            new_order = from_api_call(api_order, exchange_id)
+            new_order = exchange.parse_order(api_order, exchange_id)
             new_order.client_order_id = order.client_order_id
             if exchange_id not in self.open_orders:
                 self.open_orders[exchange_id] = {}
