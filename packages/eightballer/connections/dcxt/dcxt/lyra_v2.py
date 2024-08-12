@@ -4,6 +4,7 @@ An interface for the Lyra API.
 
 import datetime
 import traceback
+from typing import Any, Dict
 
 from lyra.async_client import AsyncClient
 from lyra.enums import InstrumentType
@@ -14,7 +15,7 @@ from lyra.enums import UnderlyingCurrency
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus, OrderType
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
 from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 
@@ -326,6 +327,37 @@ def to_order(api_result):
     )
 
 
+def from_camelize(name: str) -> str:
+    """Convert a camel case name to a snake case name."""
+    return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
+
+
+def map_status_to_enum(status):
+    """Map the status to order protocol status"""
+    mapping = {
+        "open": OrderStatus.OPEN,
+        "new": OrderStatus.OPEN,
+        "Order queued for cancellation": OrderStatus.CANCELLED,
+        "closed": OrderStatus.CLOSED,
+        "canceled": OrderStatus.CANCELLED,
+        "filled": OrderStatus.FILLED,
+    }
+    if status not in mapping:
+        raise ValueError(f"Unknown status: {status}")
+    return mapping[status]
+
+
+def map_order_type_to_enum(order_type: str) -> OrderType:
+    """Map the order type to order protocol type."""
+    mapping = {
+        "limit": OrderType.LIMIT,
+        "market": OrderType.MARKET,
+    }
+    if order_type not in mapping:
+        raise ValueError(f"Unknown order type: {order_type}")
+    return mapping[order_type]
+
+
 class LyraClient:
     """A class for interacting with the Lyra API."""
 
@@ -336,6 +368,23 @@ class LyraClient:
         del args
         self.client = AsyncClient()
         self.logger = kwargs.get("logger")
+
+    def parse_order(self, api_call: Dict[str, Any], exchange_id) -> Order:
+        """Create an order from an api call."""
+        kwargs = {from_camelize(key): value for key, value in api_call.items()}
+        if all(
+            [
+                kwargs["status"] == "closed",
+                kwargs["remaining"] == 0,
+                kwargs["filled"] == kwargs["amount"],
+            ]
+        ):
+            kwargs["status"] = "filled"
+        kwargs["status"] = map_status_to_enum(kwargs["status"])
+        kwargs["type"] = map_order_type_to_enum(kwargs["type"])
+        kwargs["side"] = OrderSide.BUY if kwargs["side"] == "buy" else OrderSide.SELL
+        kwargs["exchange_id"] = exchange_id
+        return Order(**kwargs)
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""

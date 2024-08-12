@@ -2,10 +2,10 @@
 import asyncio
 from unittest.mock import MagicMock
 
-import ccxt
 import pytest
 from aea.mail.base import Envelope
 
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
 
@@ -58,7 +58,7 @@ class TestOrdersExecution(BaseDcxtConnectionTest):
         )
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
-        mocker = MagicMock(side_effect=ccxt.errors.ExchangeError)
+        mocker = MagicMock(side_effect=dcxt.exceptions.ExchangeError)
 
         self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_open_orders = mocker  # pylint: disable=protected-access
 

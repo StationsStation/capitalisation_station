@@ -82,7 +82,7 @@ def get_dialogues(target_dialogues: Type[Dialogues], target_dialogue: Type[Dialo
     """Factory method to generate dialogue classes."""
 
     class MetaClass(target_dialogues):
-        """The dialogues class keeps track of all ccxt dialogues."""
+        """The dialogues class keeps track of all dcxt dialogues."""
 
         def __init__(self, address: Type[Address]) -> None:
             """Initialize dialogues."""
@@ -135,7 +135,7 @@ class BaseDcxtConnectionTest:
 
 @pytest.mark.asyncio
 class TestDcxtConnection(BaseDcxtConnectionTest):
-    """Tests the ccxt connection."""
+    """Tests the dcxt connection."""
 
     async def test_all_protocols_supported(self):
         """Test if all protocols are supported."""

@@ -196,6 +196,7 @@ class Order:
     reduce_only: Optional[bool] = None
     take_profit_price: Optional[float] = None
     stop_loss_price: Optional[float] = None
+    data: Optional[str] = None
 
     @staticmethod
     def encode(orders_protobuf_object, orders_object: "Order") -> None:

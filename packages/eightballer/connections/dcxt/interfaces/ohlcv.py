@@ -24,10 +24,10 @@ class OhlcvInterface(BaseInterface):
     dialogues_class = OhlcvDialogues
 
     @staticmethod
-    def _parse_data_to_msg(ccxt_data: List[List[int]], market: Any):
-        """parse ccxt data to msg."""
+    def _parse_data_to_msg(dcxt_data: List[List[int]], market: Any):
+        """parse dcxt data to msg."""
         keys = ["timestamp", "open", "high", "low", "close", "volume"]
-        candle = dict(zip(keys, ccxt_data[-1]))
+        candle = dict(zip(keys, dcxt_data[-1]))
 
         return OhlcvMessage(
             performative=OhlcvMessage.Performative.CANDLESTICK,

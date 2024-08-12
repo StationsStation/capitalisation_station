@@ -7,38 +7,39 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
-  connection.py: bafybeidizeznckrnsxu5vlvhtydoaz2twr4lrqsuowmgmuwrxunbbgzucu
+  connection.py: bafybeibqzn6dgriwnqa6ri4hav3sapsmaxqagaexig5p2ui5t4fvomdmu4
   custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
-  dcxt/__init__.py: bafybeidmnoynisb7k5s7kfkhwu2rj2ibljdzk54j4tq7ne6htz4xhudxu4
-  dcxt/balancer.py: bafybeielpbpksfsdb3dl7xlqvgydmwrz3peisnj36a5q4q4eh7xfr5xnie
+  dcxt/__init__.py: bafybeihn7e3tvsfwm7un2nzaztvxlhels47aab4h2fzwulyflrigznflpi
+  dcxt/balancer.py: bafybeicqxuijsfbnuibfxmrbbv46kchpcb3ezundoagwfj5stxhijawdla
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
-  dcxt/exceptions.py: bafybeiepgf7ekdajqflr3shwncrak4jeic7lzmn5googjnsealnlguftpq
+  dcxt/exceptions.py: bafybeidb33fbztwjbjsxze5hukhl237xgjaw67bfsbfj2hwtzcff3g2h6m
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
-  dcxt/lyra_v2.py: bafybeih7x64b4jhqipavt57yhbn3cqa7klte2llpq57elvfpg4ucmyvije
+  dcxt/lyra_v2.py: bafybeiha2vk4ibopkxaxyojushl6rg7egnzynrzsxdkba36ee4s3z5aoxy
   erc_20/__init__.py: bafybeibaib6srjfuq6kqwenmnoswieukz47c5iomzkhddi22lkgtvfth6q
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeigjff7bkyu4spjkbuje4tzviz7wcazr7xf7byf7mz575koif4vpe4
-  interfaces/balance.py: bafybeieohl3v66ygofdi5mmtcfdwlz3rwwo7r77n2kml3lcnczs6vrebc4
-  interfaces/interface.py: bafybeihflhmbxhxrei4eyfce5euokl4gl73lcdmlqx6vaf6m4cczhu5krm
-  interfaces/interface_base.py: bafybeiclbmxcckwyax4w2iyvywjs5n4fhvalcq3adpqka3zggnxuhlxlr4
-  interfaces/market.py: bafybeighjombqyisj5hqxsoa6nh5sgzumwrlpfj2pwpxecctiszjeevy3q
-  interfaces/ohlcv.py: bafybeibfke2h6k67gwadtke5yrco2mm5ndmfdplhdoalqzxjkkqrh6yc5q
-  interfaces/order.py: bafybeidslp3ay7h3gm3frsneksyoveac437bhuuf6cb7e5xom2fco7q2nm
+  exchange.py: bafybeigvnewleyvxietfdcdxy3gtpysemcy56wkdthjmvyt65cmby627rq
+  interfaces/balance.py: bafybeiaaoegpn3mlisr37sdeopru34zxqiicn3627qugggdbwm73zdo4ny
+  interfaces/interface.py: bafybeibkalr75egxqojzjs5wog3dndkaqds2xusftxlvfnycl7xmpv3shi
+  interfaces/interface_base.py: bafybeic2qwt7aprhowoevntectf44jgrnnx5et2s3bzeisjxul7m2ecqye
+  interfaces/market.py: bafybeidypwhtnrkwdncxbrjsjdbtxzzom6djve7hb57asqfr6ttureyecq
+  interfaces/ohlcv.py: bafybeielfqqfe4x5724fcsudxaqucgbwyrm7d5locwe563vcptxdcpsdfa
+  interfaces/order.py: bafybeiaicnf2hhh6tfhaezeorxtib4tjw2ffk6t3kpsfndvdyfudqychei
   interfaces/order_book.py: bafybeicy33lj5iszqlmhcwcsjoqcy37gcp2yc4txrpl5zzmnwln5mhhujy
-  interfaces/position.py: bafybeiagufhrsmpa7belkdqztbdwm6ogvud5v3agpjugjdkx5i54v6vvfq
+  interfaces/position.py: bafybeidrf2qhaekzlycfx3ryrrvyacevaykfs3tehghobv4pnronrjmb6e
   interfaces/spot_asset.py: bafybeihmnmrktjstmy6x2rjd37d3tjpet25xk4w6aqs6oltttler546d3i
-  interfaces/ticker.py: bafybeidoz4u6dan7zno4vxzlsexbgzp32bdqrlel7lwxsyszk3jzpqccyi
+  interfaces/ticker.py: bafybeih67ibthv3bba3uydwxiud5srcrs6bfuqlz6q4p6pwqbxwngthpbu
   tests/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
   tests/data/key: bafybeibpiq3ximhcv3eoz2tlgehwgac4be7ex4yjeljo4gigjiekbyprw4
   tests/protocols/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
-  tests/protocols/test_market.py: bafybeiebdnl7a44xe6aluyzky5uqpjrncfz3us6zajjsgsczu6f3w67mwy
+  tests/protocols/test_market.py: bafybeid43ea24wmb43lvb2ztp6lofuba4cgfjklqcjesbkkrrrj7zffd54
   tests/protocols/test_ohlcv_interface.py: bafybeifeb4fsjoaqyp5dcrfaqrl2yiysx3dts4xkwai5vy3it52etod77m
-  tests/protocols/test_order_interface.py: bafybeia6vn5rikitboxsce5tiltzveix4vkbctqfsz3jt554u2fbcc63pi
+  tests/protocols/test_order_interface.py: bafybeicsps5zvtrvie7knmyxkthkolaiapb6x5kf7zwn4siou72borkwyi
   tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
   tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
-  tests/protocols/test_tickers.py: bafybeidlwujshrnfq3psdnkluxbwuc52hjgdvqt47wprs6xzt22fkkncfa
-  tests/test_dcxt_connection.py: bafybeiaga3pgopuxrxad3zxecazqmrt3lfla7pt5wz776wleog46sn6jz4
+  tests/protocols/test_tickers.py: bafybeihpom5zbcc6jotsytgnk7t2hnyrur5l5h6eee2k2vwisi2nb43vcm
+  tests/test_dcxt_connection.py: bafybeieck5cmbotawf76c5ghaflsdcazwvmyqs2vqlunixzgnvpkb3kkha
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
@@ -51,15 +52,15 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeibkvanfeqzdxjqbsy7kg6n4upcs3guojrmc4yjb3g7anmtia4las4
-- eightballer/default:0.1.0:bafybeigmvppaw5qt4j32g5pbzj2mr6yuviucbq6zkhadvkyfks6xguab3y
-- eightballer/markets:0.1.0:bafybeiejvub3u44kfudgldid6aq57z75wuenfi2filkbqdssxwavllgigm
-- eightballer/ohlcv:0.1.0:bafybeihcyzz5fmf3b3pkng5wogwhel3v7o7bphv7bgt4pbra4zoeoij4va
-- eightballer/order_book:0.1.0:bafybeiaysxz472vn32xrqbeljar2r4bkfxpjdqiucw66kfd5cbhfmuswxq
-- eightballer/orders:0.1.0:bafybeia5lppfqs3wtarisbn3njiankxjxgdp2kzoyrlnzjuwomrjwbfby4
-- eightballer/positions:0.1.0:bafybeiabojtxwexbzgqjut7g3paekh2q7ssrjrpwgtsxw3jjhxhqyya7h4
-- eightballer/spot_asset:0.1.0:bafybeibi7tzl4axbzfliy6z6zbrwgviatjeyfda2lqwf3742jkwpbeplw4
-- eightballer/tickers:0.1.0:bafybeicydet6vbzmszouu2diqcz422q2zk6w3x5e6osypktdsdkae5pplm
+- eightballer/balances:0.1.0:bafybeihrnjigqe3cwzsybhfgb2745e3pxccojpqhy4bu7jtg62ugwnuole
+- eightballer/default:0.1.0:bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma
+- eightballer/markets:0.1.0:bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4
+- eightballer/ohlcv:0.1.0:bafybeiekgrxin3jge5j5gfygbgyemlqnciuyiauvrja3a4wmywlncddwee
+- eightballer/order_book:0.1.0:bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki
+- eightballer/orders:0.1.0:bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774
+- eightballer/positions:0.1.0:bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm
+- eightballer/spot_asset:0.1.0:bafybeibfw3gtaihkpevki6bc2e5gd5bc7rv7nkv4dnhrezdefo2busuvxi
+- eightballer/tickers:0.1.0:bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4
 class_name: DcxtConnection
 config:
   exchanges:
@@ -74,8 +75,11 @@ excluded_protocols: []
 dependencies:
   dateparser:
     version: '>=1.1.1'
-  hundred-x:
-    version: '>=0.1.13'
   lyra-v2-client:
     version: '>=0.2.9'
+  balpy:
+    version: '>=0.0.0a84'
+  web3:
+    version: '>=5.0.0'
+  open-aea-ledger-ethereum: {}
 is_abstract: false

@@ -8,11 +8,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihhuxlbyl4qjl2lsggoh77qkgrzlrjifhdfymuxiblauwoodl6m5y
-  custom_types.py: bafybeif2od3yksltuz7giwrwbvmoherfa3cloemnog5y4iw2mc7ibup7yi
+  custom_types.py: bafybeigqnepqdkumgxx22bbqx55e5j66hxwetdxd2c2utcxe2ntt2yxrw4
   dialogues.py: bafybeigg63f2757cvf4l7nf5e763yrwjueqpid6p5v4adjtr42aj7qrwva
   message.py: bafybeieyjjr7qww5m3pzp4kjsbriacbq3pyxhech4h26jgh6geuuqmvz44
   orders.proto: bafybeiaofejdygbj6l2s4fyeudiocx2pk6nkjkltrnaxxuahobqzzhtdbe
-  orders_pb2.py: bafybeigggpa4l3btyolx4cfx5subywk4lasp7zmy6ld65ct6rv7a37j3ki
+  orders_pb2.py: bafybeicaruce2yrfjixacgr3pjciycfq644yye6zb7potc5vnoyok257de
   serialization.py: bafybeihndgbuheuzjktfhm7siu3g7stzhqppfv6rgxggxmivn76zk3nfwu
   tests/__init__.py: bafybeierwsy34eqeiawwmy6xasatflc7a7i6ae5nmdsx3ogspj3eqckzci
   tests/test_order.py: bafybeidjwch55ty2r73bsdviiruwfcpjmvgrbq4vtclrirzsfyk2xyduue

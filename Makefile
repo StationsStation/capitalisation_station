@@ -27,7 +27,6 @@ clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
-	rm -rf '.DS_Store'
 
 .PHONY: clean-test
 clean-test:
@@ -43,39 +42,25 @@ clean-test:
 	find . -name 'log.*.txt' -exec rm -fr {} +
 
 .PHONY: hashes
-hashes: clean fmt lint
-	poetry run autonomy packages lock && poetry run autonomy push-all
-	git add packages
-	git commit -m 'chore: hashes'
+hashes: clean
+	poetry run autonomy packages lock
+	poetry run adev -v -n 0 lint
 
 lint:
-	poetry run adev -v -n 0 lint -co
+	poetry run adev -v -n 0 lint
 
 fmt: 
-	poetry run adev -n 0 fmt -co
+	poetry run adev -n 0 fmt
 
 test:
 	poetry run adev -v test
 
-
-all: fmt lint test hashes
-
-install: update_git_deps
-	poetry run bash scripts/install.sh
+install:
+	bash install.sh
 	poetry run autonomy packages sync
 
+ sync:
+	git pull
+	poetry run autonomy packages sync
 
-update_git_deps:
-	if [ ! -d "third_party/upstream/lyra_client/README.md" ]; then \
-		echo "The third-party dependencies are not visible. Please run 'git submodule update --init --recursive'"; \
-		git submodule update --init --recursive;fi
-
-is_dirty:
-	# Check if the repository is dirty.
-	if [ -n "$(shell git status --porcelain)" ]; then \
-		echo "The repository is dirty. Please commit your changes first."; \
-		exit 1; \
-	fi
-
-run_demo:
-	rm -rf agent && bash scripts/run_single_agent.sh eightballer/chained_dex_app:0.1.0
+all: fmt lint test hashes

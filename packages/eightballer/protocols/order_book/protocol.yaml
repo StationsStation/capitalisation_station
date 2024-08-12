@@ -15,7 +15,7 @@ fingerprint:
   dialogues.py: bafybeihecsk2ocr5sfku6rnugoi2q3mp3hsfkdruvbqdkihjxwbhxhzwo4
   message.py: bafybeifj4mwaoayo4xec7y57jchfcngmz6aa5luuwfsatkhdvrdedxazdy
   order_book.proto: bafybeih6v6przoxyjtgqgbhc6ffxmflny524tl7slryprpfcygljnssqma
-  order_book_pb2.py: bafybeicx6xvg363arkz23yissukpyy5zaiq24an2o5lr3n7sjhfwglewga
+  order_book_pb2.py: bafybeiaa2l4fot4ycidijw4mhjnpibbboqpsix6ekp22nmkpkw67tbj76q
   serialization.py: bafybeic7rdbqhhsljvpef4azba2me6ijlkssg5yjjjcpa4sr4ys2frclze
   tests/test_order_book_dialogues.py: bafybeiedc7un6ehx4aelsxvslsxbhq5pvzvgwulnjnslf3ijscs2vvlklq
   tests/test_order_book_messages.py: bafybeifh2kmykj6coitmlwstiqtclahno5xzf2rzdooqmcs57rigwlrjdu
