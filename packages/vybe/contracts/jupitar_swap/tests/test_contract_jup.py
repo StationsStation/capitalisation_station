@@ -134,6 +134,7 @@ class TestContractCommon:
         assert is_settled is True
         return [str(transaction_digest.value), transaction_receipt]
 
+    @pytest.mark.skip("This test is is only for local testing.")
     @pytest.mark.ledger
     @pytest.mark.parametrize(
         "input_mint, output_mint, amount",
