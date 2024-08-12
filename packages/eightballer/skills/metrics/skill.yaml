@@ -1,0 +1,39 @@
+name: metrics
+author: eightballer
+version: 0.1.0
+type: skill
+description: The http echo skill prints out the content of received http messages
+  and responds with success.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
+  __init__.py: bafybeihq4mctkvxauduybfue3qjmirb37j3ip2ywyfrqh53rp4wl4hp37q
+  dialogues.py: bafybeibndsed6mrdmkbkfaiqkxfwbxol4yudclzpudhwhbsynu3mylgtam
+  handlers.py: bafybeif45ramzuwxnoletaev5sftv4hb25atykdkqbhy44mss46bcfill4
+  tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
+  tests/test_metrics.py: bafybeidphxwmwnm6j4gzpzrciup54dscamfrf2k4yc4ehpthkgjdwmftj4
+  tests/test_metrics_dialogues.py: bafybeig454faoozex62tpt3dmwhkinuf55x5ecq3woih42b6ctxdnomfom
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols:
+- eightballer/default:0.1.0:bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma
+- eightballer/http:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
+skills: []
+behaviours: {}
+handlers:
+  metrics_handler:
+    args:
+      enable_cors: false
+    class_name: HttpHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+dependencies: {}
+is_abstract: false
+customs: []
