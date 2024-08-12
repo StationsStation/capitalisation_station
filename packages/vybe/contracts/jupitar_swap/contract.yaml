@@ -9,7 +9,7 @@ fingerprint:
   README.md: bafybeia4kcp4oc2bursyknhw5skjre3jvqv65abayqifdqongfdjgcts4u
   __init__.py: bafybeiajqexavi3ffoqbuxr6kaopalglvljy4f4mknwb4ta5y642vdwmjm
   contract.py: bafybeigk5a2x6shskdrkv2esjn7wal37b224vuznnnv4vgqovoufniixh4
-  tests/test_contract_jup.py: bafybeigsg3avysuccwgotlqx3tmyaja4qt3l6egahnem375oys7meabkwm
+  tests/test_contract_jup.py: bafybeieasgsuwu7a3cn45wwkb4t5hhoxa7md4utdgk6d2lhcpquv6pw2nu
 fingerprint_ignore_patterns: []
 class_name: JupitarSwapContract
 contract_interface_paths: {}

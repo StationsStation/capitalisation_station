@@ -29,20 +29,13 @@ from typing import Optional, Tuple, Union, cast
 
 import pytest
 from aea.common import JSONLike
-from aea.configurations.loader import (
-    ComponentType,
-    ContractConfig,
-    load_component_configuration,
-)
+from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 from aea.contracts.base import Contract, contract_registry
 from aea_ledger_solana import SolanaApi, SolanaCrypto, SolanaFaucetApi
 from solders.message import MessageV0
 from solders.transaction import VersionedTransaction
 
-from packages.eightballer.contracts.spl_token.contract import (
-    SolanaProgramLibraryToken,
-    SplToken,
-)
+from packages.eightballer.contracts.spl_token.contract import SolanaProgramLibraryToken, SplToken
 
 PACKAGE_DIR = Path(__file__).parent.parent
 MAX_FLAKY_RERUNS = 3
@@ -68,9 +61,7 @@ class TestContractCommon:
             ContractConfig,
             load_component_configuration(ComponentType.CONTRACT, cls.path_to_contract),
         )
-        configuration._directory = (  # pylint: disable=protected-access
-            cls.path_to_contract
-        )
+        configuration._directory = cls.path_to_contract  # pylint: disable=protected-access
         if str(configuration.public_id) not in contract_registry.specs:
             # load contract into sys modules
             Contract.from_config(configuration)
@@ -109,18 +100,14 @@ class TestContractCommon:
             if transaction_digest == None:
                 return "failed"
             else:
-                transaction_receipt, is_settled = self._wait_get_receipt(
-                    api, transaction_digest
-                )
+                transaction_receipt, is_settled = self._wait_get_receipt(api, transaction_digest)
                 if is_settled is True:
                     return "success"
                 else:
                     return "failed"
 
     @staticmethod
-    def _wait_get_receipt(
-        solana_api: SolanaApi, transaction_digest: str
-    ) -> Tuple[Optional[JSONLike], bool]:
+    def _wait_get_receipt(solana_api: SolanaApi, transaction_digest: str) -> Tuple[Optional[JSONLike], bool]:
         transaction_receipt = None
         is_settled = False
         elapsed_time = 0
@@ -137,17 +124,13 @@ class TestContractCommon:
     def json_to_versioned_tx(tx):
         pass
 
-    def _sign_and_settle(
-        self, solana_api: SolanaApi, txn: dict, payer
-    ) -> Tuple[str, JSONLike]:
+    def _sign_and_settle(self, solana_api: SolanaApi, txn: dict, payer) -> Tuple[str, JSONLike]:
         recent_blockhash = self.ledger_api.api.get_latest_blockhash().value.blockhash
         txn["message"][1]["recentBlockhash"] = json.loads(recent_blockhash.to_json())
         msg = MessageV0.from_json(json.dumps(txn["message"][1]))
         signed_transaction = VersionedTransaction(msg, [payer.entity])
         transaction_digest = self.ledger_api.api.send_transaction(signed_transaction)
-        transaction_receipt, is_settled = self._wait_get_receipt(
-            self.ledger_api, str(transaction_digest.value)
-        )
+        transaction_receipt, is_settled = self._wait_get_receipt(self.ledger_api, str(transaction_digest.value))
         assert is_settled is True
         return [str(transaction_digest.value), transaction_receipt]
 
@@ -173,9 +156,7 @@ class TestContractCommon:
             slippage_bps=10,
         )
 
-        transaction_digest, is_settled = self._sign_and_settle(
-            self.ledger_api, txn, payer
-        )
+        transaction_digest, is_settled = self._sign_and_settle(self.ledger_api, txn, payer)
 
         assert transaction_digest is not None
         assert is_settled
@@ -192,12 +173,8 @@ class TestContractCommon:
         """Test get swap transaction."""
 
         # we first need to retrieve the token info
-        input_token = SplToken(
-            **SolanaProgramLibraryToken.get_token(self.ledger_api, *input_mint)
-        )
-        output_token = SplToken(
-            **SolanaProgramLibraryToken.get_token(self.ledger_api, *output_mint)
-        )
+        input_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *input_mint))
+        output_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *output_mint))
         quote = self.contract.get_swap_quote(
             ledger_api=self.ledger_api,
             input_mint=input_token.address,

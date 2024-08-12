@@ -146,7 +146,8 @@ class HttpHandler(Handler):
         :param http_dialogue: the http dialogue
         """
         self.context.logger.warning(
-            f"cannot handle http message of performative={http_msg.performative} in dialogue={http_dialogue.dialogue_label}."
+            f"cannot handle http message of performative={http_msg.performative} in "
+            + f"dialogue={http_dialogue.dialogue_label}."
         )
 
     def teardown(self) -> None:

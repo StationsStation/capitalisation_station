@@ -91,8 +91,8 @@ class TestHttpHandler(BaseSkillTestCase):
 
         mock_logger.assert_any_call(
             logging.INFO,
-            f"received http request with method={incoming_message.method}, " + 
-            f"url={incoming_message.url} and body={incoming_message.body:!r}"
+            f"received http request with method={incoming_message.method}, "
+            + f"url={incoming_message.url} and body={incoming_message.body:!r}",
         )
 
         message = self.get_message_from_outbox()
