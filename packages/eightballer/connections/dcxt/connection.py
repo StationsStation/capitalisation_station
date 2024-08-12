@@ -1,11 +1,11 @@
 """
-Connection for ccxt.
+Connection for dcxt.
 """
 import asyncio
+import os
 import traceback
 from asyncio import Task
 from collections import deque
-from enum import Enum
 from typing import Any, Deque, Dict, List, Optional, cast
 
 from aea.connections.base import Connection, ConnectionStates
@@ -24,15 +24,8 @@ RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
 
 
-class Environment(Enum):
-    """Environment."""
-
-    PROD = "prod"
-    TEST = "test"
-
-
 class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes
-    """Ccxt connection class."""
+    """Dcxt connection class."""
 
     connection_id = PUBLIC_ID
     protocol_interface = ConnectionProtocolInterface
@@ -81,30 +74,15 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             exchange_id = exchange_config["name"]
             self.logger.info(f"Connecting to {exchange_id}")
             key_path = exchange_config.get("key_path")
-            wallet = exchange_config.get("wallet")
-            subaccount_id = exchange_config.get("subaccount_id")
-            environment = exchange_config.get("environment")
-            auth = {
-                "logger": self.logger,
-            }
 
             if key_path is not None:
                 with open(key_path, "r", encoding="utf8") as key_file:
                     private_key = key_file.read()
-                    auth.update({"private_key": private_key})
-
-            if environment == Environment.PROD.value:
-                env = Environment.PROD
-            elif environment == Environment.TEST.value:
-                env = Environment.TEST
             else:
-                raise ValueError(f"Environment {environment} not found")
+                private_key = os.urandom(32).hex()
 
             params = {
-                "auth": auth,
-                "env": env,
-                "subaccount_id": subaccount_id,
-                "wallet": wallet,
+                "auth": {"private_key": private_key},
                 "logger": self.logger,
             }
             params['kwargs'] = exchange_config.get("kwargs", {})

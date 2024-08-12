@@ -195,7 +195,7 @@ class Position:
     @classmethod
     def from_api_call(cls, api_call):
         """
-        Parse a position from a ccxt api call.
+        Parse a position from a dcxt api call.
         """
 
         def _from_camel_case(name):

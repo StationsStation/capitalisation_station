@@ -104,6 +104,7 @@ class BalancerClient:
             ),
         )
         configuration.directory = contract_dir
+        # Not a nice way to do this, but connections cannot have contracts as a dependency.
         self.erc20_contract = Contract.from_config(configuration)
         self.logger = kwargs.get("logger")
 

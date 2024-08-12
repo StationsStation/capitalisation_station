@@ -3,8 +3,7 @@ import traceback
 from datetime import datetime
 from typing import Any, Dict, Optional, cast
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
 from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
@@ -178,11 +177,11 @@ class OrderInterface(BaseInterface):
             updated_order = from_api_call(res, order.exchange_id)
             updated_order.client_order_id = order.client_order_id
 
-        except ccxt.InsufficientFunds as base_error:
+        except dcxt.exceptions.InsufficientFunds as base_error:
             order.status = OrderStatus.CANCELLED
             updated_order = order
             connection.logger.error(f"FAILED TO CREATE ORDER -> insufficient funds! {str(base_error)}")
-        except (ccxt.ExchangeNotAvailable, ccxt.InvalidOrder) as base_error:
+        except (dcxt.exceptions.ExchangeNotAvailable, dcxt.exceptions.InvalidOrder) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
             target_message=message,
@@ -238,7 +237,7 @@ class OrderInterface(BaseInterface):
             if exchange_id not in self.open_orders:
                 self.open_orders[exchange_id] = {}
             self.open_orders[exchange_id][order.id] = new_order
-        except ccxt.OrderNotFound as error:
+        except dcxt.exceptions.OrderNotFound as error:
             order.status = OrderStatus.CANCELLED
             new_order = order
             if exchange_id not in self.open_orders:
