@@ -39,11 +39,15 @@
         "connection/valory/http_client/0.23.0": "bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u",
         "connection/valory/p2p_libp2p_client/0.1.0": "bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e",
         "connection/eightballer/prometheus/0.1.1": "bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca",
+        "connection/eightballer/http_client/0.1.0": "bafybeicv74672gixihzkeitlo55ciritxd74xedcdcptblszynpq2q5j4m",
+        "connection/eightballer/http_server/0.1.0": "bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u",
         "skill/eightballer/metrics/0.1.0": "bafybeiceenjunmzmm3krh3sbctqezaa3w2ppcuwhbff53drbanep2p3sh4",
         "skill/eightballer/prometheus/0.1.0": "bafybeiafbgefdcah6mh2e37hvbcjzbocx4heugjifd2252wjg7bs7kb4wu",
         "skill/valory/abstract_abci/0.1.0": "bafybeigihbaefe22hhsno6gfpvv5hn46pikg4vdakhrycbvntdpufrd7xq",
         "skill/valory/abstract_round_abci/0.1.0": "bafybeihkq6n7ug5eyqbf3t6q2mqwryecjkqgjg6375cyvvfdylivo25z5u",
         "skill/valory/registration_abci/0.1.0": "bafybeib4a3zmsmbebd74whk7sfnbcv7dwglrirmu53afrlo6ar2xi4t54q",
+        "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i",
+        "skill/eightballer/metrics/0.1.0": "bafybeiceenjunmzmm3krh3sbctqezaa3w2ppcuwhbff53drbanep2p3sh4"
         "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i"
     }
 }
