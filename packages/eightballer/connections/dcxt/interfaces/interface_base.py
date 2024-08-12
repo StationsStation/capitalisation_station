@@ -18,7 +18,7 @@ def get_dialogues(target_dialogues: Dialogues, target_dialogue: Dialogue) -> obj
     """Factory method to generate dialogue classes."""
 
     class MetaClass(target_dialogues):
-        """The dialogues class keeps track of all ccxt dialogues."""
+        """The dialogues class keeps track of all dcxt dialogues."""
 
         def __init__(self) -> None:
             """Initialize dialogues."""

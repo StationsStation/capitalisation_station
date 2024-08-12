@@ -3,8 +3,7 @@ Implements the interface for the Ticker protocol.
 """
 from typing import Optional
 
-from ccxt import RequestTimeout
-
+from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 from packages.eightballer.protocols.tickers.custom_types import Ticker
 from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
@@ -38,7 +37,7 @@ class TickerInterface(BaseInterface):
                 tickers=tickers,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.ERROR,
                 target_message=message,
@@ -66,7 +65,7 @@ class TickerInterface(BaseInterface):
                 target_message=message,
                 ticker=ticker,
             )
-        except RequestTimeout:
+        except dcxt.exceptions.RequestTimeout:
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.ERROR,
                 target_message=message,
