@@ -13,5 +13,9 @@ fingerprint:
 fingerprint_ignore_patterns: []
 class_name: SolanaProgramLibraryToken
 contract_interface_paths: {}
-dependencies: {}
+dependencies:
+  solana:
+    version: ==0.30.2
+  open-aea-ledger-solana:
+    version: ==1.51.0
 contracts: []

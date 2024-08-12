@@ -1,7 +1,7 @@
 {
     "dev": {
         "protocol/eightballer/default/0.1.0": "bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma",
-        "protocol/eightballer/orders/0.1.0": "bafybeifvom6eqscy4uniihnodvgdhvbj6cjjybkwyitkp3dmnsrv3a6tum",
+        "protocol/eightballer/orders/0.1.0": "bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774",
         "protocol/eightballer/order_book/0.1.0": "bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki",
         "protocol/eightballer/positions/0.1.0": "bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm",
         "protocol/eightballer/markets/0.1.0": "bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4",
@@ -10,14 +10,14 @@
         "protocol/eightballer/ohlcv/0.1.0": "bafybeiekgrxin3jge5j5gfygbgyemlqnciuyiauvrja3a4wmywlncddwee",
         "protocol/eightballer/tickers/0.1.0": "bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4",
         "contract/eightballer/erc_20/0.1.0": "bafybeifjtxoyahzgrn622tipbrv2mx6r22fazawbffzszymjdlzs3uikbq",
-        "contract/eightballer/spl_token/0.1.0": "bafybeie5nsm7mmjv6cjxew7ex7ar72tyeqrjwkalw4pic62ykwbsdupjfq",
-        "connection/eightballer/dcxt/0.1.0": "bafybeibn6wiqtrgo3fhqvcsycsgybqxvcouodu4hmtys5mpuorazqxfmpu",
-        "connection/eightballer/ccxt/0.1.0": "bafybeiadhi2w4ms5jqqmymyr2kjxf5teyazu4bybtwe477h7zshvpnii5a",
-        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeia77mwvdspxu3l2pr5oe2bp24esp3vifdeyj4pxvlmgpnjlw2cvly",
-        "skill/eightballer/reporting/0.1.0": "bafybeig2556rgg2x2ml4flnf4jrparugrvxkial546dmtxtlmfpahxszjm",
-        "skill/eightballer/chained_dex_app/0.1.0": "bafybeih2iyco3eai5cibihzlrea6xto32yyzr3j5volhxrd7qvgoo2b5oe",
+        "contract/eightballer/spl_token/0.1.0": "bafybeieihaknw6ergbe2llk3e7ix5f6drzdt65zb2e3v2uv7nju54ptlze",
+        "connection/eightballer/dcxt/0.1.0": "bafybeicyeg2jnnvbhmles6gssw5zj2mjvcr2j2lyp5jrzdft3qsrnwgv5a",
+        "connection/eightballer/ccxt/0.1.0": "bafybeia2544o5zgrtno7y3tsy6mgbvg53cpvdyptbyuvmot25b4tgfnb7e",
+        "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeifkmiyz6bwwzbekf4rvgra7nz2u7ast5dwyfq34emhjk3myhqp2ma",
+        "skill/eightballer/reporting/0.1.0": "bafybeiefwcldos6aylrlrwlb7qs52kfpq7p3mvgxkfwbhprhkmhfctm3zm",
+        "skill/eightballer/chained_dex_app/0.1.0": "bafybeibwrlydty2kt5hons55uau6z6uodck24ac55maiea3i6dl6xqwxqy",
         "skill/eightballer/metrics/0.1.0": "bafybeiabyfp6wsznmwxgkl353mcytuqk3ta2enew7ktejq2qduhje3nd6i",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeihwslhf27px6dwdzimpp57uykte5pjdxdjllcp52dhvpgwotebzke"
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeidxi57pwgd5qwikbqzs5ar7ciangj6xnqe5hbqjcobonupbb3vvji"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u",
@@ -30,20 +30,20 @@
         "protocol/eightballer/prometheus/1.0.0": "bafybeie3sy2m3ltmnkrldx4vux26xbyokay6eh7datiacr2ropqwj3r3ga",
         "protocol/eightballer/http/0.1.0": "bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a",
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
-        "contract/vybe/jupitar_swap/0.1.0": "bafybeigwmrgyodapndf2g33jz6pexw7dznc2t7eawgra5mtps3bfpc2qwu",
-        "contract/valory/service_registry/0.1.0": "bafybeifl2e2ga3nk55fovdt6xk3r4zyzwvn5cttga3d7x6wn56vwsw23qi",
-        "connection/valory/abci/0.1.0": "bafybeidi3jtubhxbstw26wigbrn42art3kinrckx6qdbsinz3noqdinffa",
+        "contract/vybe/jupitar_swap/0.1.0": "bafybeigzgbuvwdkun56hhjulcv5hhfd33yirrugv2hgya5qntvq7msrrve",
+        "contract/valory/service_registry/0.1.0": "bafybeigrfupd7lo6aet376rwluqgm33jfghibkbvumfsdgrymqxoopqydq",
+        "connection/valory/abci/0.1.0": "bafybeihhtx7t5fsxaoajzq5nm4hrq57smigx7gqv35bss766txaaffjmsa",
         "connection/valory/http_client/0.23.0": "bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u",
-        "connection/valory/ipfs/0.1.0": "bafybeidliv233a35s3djsmwppm7ci2mfnhdqmfeuabowdfbk3coyzqxynu",
-        "connection/valory/ledger/0.19.0": "bafybeidphjapndobkcgoq7swwroeumkfzpz5ap4xqbdvyg6kgfb655bwtm",
+        "connection/valory/ipfs/0.1.0": "bafybeifqca6e232lbvwrjhd7ioh43bo3evxfkpumdvcr6re2sdwjuntgna",
+        "connection/valory/ledger/0.19.0": "bafybeig7woeog4srdby75hpjkmx4rhpkzncbf4h2pm5r6varsp26pf2uhu",
         "connection/valory/p2p_libp2p_client/0.1.0": "bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e",
         "connection/eightballer/prometheus/0.1.1": "bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca",
-        "connection/eightballer/http_client/0.1.0": "bafybeid4cwamevng2ufyflcrerm6xyp5rjby2lbo2ulybqlik44g3aslni",
-        "connection/eightballer/http_server/0.1.0": "bafybeib27byea6hwpt2fh2tt4t7jbn34r56hc654r365vipbktecfh4qsy",
+        "connection/eightballer/http_client/0.1.0": "bafybeihhsap2dtyoyr6yy462nnpnyuy5gkrelpv252isshajhfhvnsxnga",
+        "connection/eightballer/http_server/0.1.0": "bafybeiequxaqyqungpivblrwiopya3yqhwrjaqlrf2ez54a2oagzfrqxeq",
         "skill/eightballer/prometheus/0.1.0": "bafybeiafbgefdcah6mh2e37hvbcjzbocx4heugjifd2252wjg7bs7kb4wu",
-        "skill/valory/abstract_abci/0.1.0": "bafybeigihbaefe22hhsno6gfpvv5hn46pikg4vdakhrycbvntdpufrd7xq",
-        "skill/valory/abstract_round_abci/0.1.0": "bafybeihkq6n7ug5eyqbf3t6q2mqwryecjkqgjg6375cyvvfdylivo25z5u",
-        "skill/valory/registration_abci/0.1.0": "bafybeib4a3zmsmbebd74whk7sfnbcv7dwglrirmu53afrlo6ar2xi4t54q",
-        "skill/valory/reset_pause_abci/0.1.0": "bafybeief6h4sqqh2ydiri54sc6dqcjmiwdiss5zbphcmpkbv5sblpzwt4i"
+        "skill/valory/abstract_abci/0.1.0": "bafybeiedikuvfpdx7xhyrxcpp6ywi2d6qf6uqvlwmhgcal7qhw5duicvym",
+        "skill/valory/abstract_round_abci/0.1.0": "bafybeia7msuvsouwcky263k6lup5hwcj73pka4pepkgyii6sya2wfawqvy",
+        "skill/valory/registration_abci/0.1.0": "bafybeihwkqc6klqrk247esh4cumfphosx3yadullxhmrrkovzg2rward5y",
+        "skill/valory/reset_pause_abci/0.1.0": "bafybeibd5divbbng3klkxlkzfwmwdc7imobcymfx57lf3owbyf7we7xdem"
     }
 }
