@@ -60,4 +60,8 @@ install:
 	bash install.sh
 	poetry run autonomy packages sync
 
+ sync:
+	git pull
+	poetry run autonomy packages sync
+
 all: fmt lint test hashes

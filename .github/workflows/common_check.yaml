@@ -25,8 +25,8 @@ jobs:
         os: [ubuntu-20.04,]
     runs-on: ${{ matrix.os }}
     env:
-        PYTHONPATH: .
-        PYTHONWARNINGS: "ignore"
+      PYTHONPATH: .
+      PYTHONWARNINGS: ignore
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,7 +43,7 @@ jobs:
           virtualenvs-path: ~/my-custom-path
           installer-parallel: true
 
-      - name: Install Packages
+      - name: Install Project
         run: |
             make install
 
