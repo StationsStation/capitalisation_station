@@ -94,6 +94,6 @@ class TestContractCommon:
     def test_get_balance(self, contract_address):
         """Test the get_balance method."""
 
-        crypto = SolanaCrypto("solana_private_key.txt")
+        crypto = SolanaCrypto()
         balance = self.contract.get_balance(self.ledger_api, contract_address, crypto.address)
         assert balance >= 0, f"Balance of {contract_address} is {balance}, expected >= 0"
