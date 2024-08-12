@@ -2,7 +2,7 @@
 name = "capitalisation_station"
 version = "0.1.0"
 description = ""
-authors = ["eightballer"]
+authors = ["StationsStation"]
 readme = "README.md"
 license = "Apache-2.0"
 classifiers = [
@@ -17,15 +17,15 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.9,<3.12"
 cython = "<3.0.0"
-open-aea-ledger-solana = "==1.52.0"
-open-aea-ledger-cosmos = "==1.52.0"
-open-aea-ledger-ethereum = "==1.52.0"
-open-aea-cli-ipfs = "==1.52.0"
-open-aea-test-autonomy = "==0.14.12"
-open-autonomy = "==0.14.12"
-autonomy-dev = {extras = ["all"], version = "0.2.56"}
+open-aea-ledger-solana = "==1.55.0"
+open-aea-ledger-cosmos = "==1.55.0"
+open-aea-ledger-ethereum = "==1.55.0"
+open-aea-cli-ipfs = "==1.55.0"
+open-aea-test-autonomy = "==0.15.2"
+open-autonomy = "==0.15.2"
+autonomy-dev = {extras = ["all"], version = ">=0.2.64,<=0.2.68"}
 ccxt = "4.2.91"
 numpy = "1.26.0"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
@@ -35,7 +35,6 @@ multicaller = {path = "third_party/forks/multicaller"}
 pandas = "1.3.5"
 psycopg2-binary = "2.9.6"
 sqlalchemy = "1.4.45"
-
 
 [tool.poetry.dev-dependencies]
 

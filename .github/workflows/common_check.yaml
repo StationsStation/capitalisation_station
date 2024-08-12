@@ -26,12 +26,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       PYTHONPATH: .
-      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
+      PYTHONWARNINGS: ignore
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
@@ -44,7 +43,7 @@ jobs:
           virtualenvs-path: ~/my-custom-path
           installer-parallel: true
 
-      - name: Install Packages
+      - name: Install Project
         run: |
             make install
 
