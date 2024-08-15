@@ -25,7 +25,7 @@ open-aea-ledger-ethereum = "==1.55.0"
 open-aea-cli-ipfs = "==1.55.0"
 open-aea-test-autonomy = "==0.15.2"
 open-autonomy = "==0.15.2"
-autonomy-dev = {version = "<=0.2.68,>=0.2.64", extras = ["all"]}
+autonomy-dev = {version = "0.2.73", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
