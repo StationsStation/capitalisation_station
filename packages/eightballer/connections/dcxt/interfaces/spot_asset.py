@@ -1,10 +1,12 @@
 """Interface for the Spot asset."""
+
 import asyncio
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.spot_asset.custom_types import Decimal
-from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
+from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues
+from packages.eightballer.protocols.spot_asset.custom_types import Decimal
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+
 
 INTERVAL = 10
 DEFAULT_SPOT_ASSET = {

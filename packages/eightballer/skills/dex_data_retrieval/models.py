@@ -19,14 +19,16 @@
 
 """This module contains the shared state for the abci skill of AbciApp."""
 
+from typing import Any, Dict, List, Union, Optional
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
 
+from packages.valory.skills.abstract_round_abci.models import (
+    Requests as BaseRequests,
+    BaseParams,
+    SharedState as BaseSharedState,
+    BenchmarkTool as BaseBenchmarkTool,
+)
 from packages.eightballer.skills.dex_data_retrieval.rounds import DexDataRetrievalAbciApp
-from packages.valory.skills.abstract_round_abci.models import BaseParams
-from packages.valory.skills.abstract_round_abci.models import BenchmarkTool as BaseBenchmarkTool
-from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import SharedState as BaseSharedState
 
 
 @dataclass

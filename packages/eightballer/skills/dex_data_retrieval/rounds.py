@@ -21,23 +21,23 @@
 
 import json
 from enum import Enum
-from typing import Dict, Optional, Set, Tuple
+from typing import Set, Dict, Tuple, Optional
 
-from packages.eightballer.skills.dex_data_retrieval.payloads import (
-    FetchDexBalancesPayload,
-    FetchDexMarketsPayload,
-    FetchDexOrdersPayload,
-    FetchDexPositionsPayload,
-    FetchDexTickersPayload,
-)
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
-    AbciAppTransitionFunction,
     AppState,
-    BaseSynchronizedData,
-    CollectSameUntilThresholdRound,
-    DegenerateRound,
     EventToTimeout,
+    DegenerateRound,
+    BaseSynchronizedData,
+    AbciAppTransitionFunction,
+    CollectSameUntilThresholdRound,
+)
+from packages.eightballer.skills.dex_data_retrieval.payloads import (
+    FetchDexOrdersPayload,
+    FetchDexMarketsPayload,
+    FetchDexTickersPayload,
+    FetchDexBalancesPayload,
+    FetchDexPositionsPayload,
 )
 
 

@@ -19,32 +19,32 @@
 
 """This package contains round behaviours of AbciApp."""
 
-from dataclasses import dataclass, field
+from typing import Any, Dict, Type, Hashable, Optional
 from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
+from dataclasses import field, dataclass
 from unittest.mock import MagicMock
 
 import pytest
 
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES
-from packages.eightballer.protocols.balances import BalancesMessage
-from packages.eightballer.protocols.balances.custom_types import Balances
 from packages.eightballer.protocols.markets import MarketsMessage
+from packages.eightballer.protocols.balances import BalancesMessage
+from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.eightballer.protocols.markets.custom_types import Markets
+from packages.eightballer.protocols.balances.custom_types import Balances
+from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.eightballer.skills.dex_data_retrieval.behaviours import (
     DEFAULT_RETRIES,
+    FetchDexOrdersBehaviour,
+    FetchDexMarketsBehaviour,
+    FetchDexTickersBehaviour,
+    FetchDexBalancesBehaviour,
+    FetchDexPositionsBehaviour,
     DexDataRetrievalBaseBehaviour,
     DexDataRetrievalRoundBehaviour,
-    FetchDexBalancesBehaviour,
-    FetchDexMarketsBehaviour,
-    FetchDexOrdersBehaviour,
-    FetchDexPositionsBehaviour,
-    FetchDexTickersBehaviour,
 )
-from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
-from packages.valory.skills.abstract_round_abci.base import AbciAppDB
-from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES
 
 
 @dataclass

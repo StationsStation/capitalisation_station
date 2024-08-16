@@ -1,4 +1,5 @@
 """Test the spot_asset protocol."""
+
 import asyncio
 from unittest.mock import MagicMock
 
@@ -6,10 +7,11 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
+from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 
-from ..test_ccxt_connection import BaseCcxtConnectionTest, get_dialogues, with_timeout
+from ..test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
+
 
 TEST_EXCHANGE = "deribit"
 TEST_MARKET = "BTC-PERPETUAL"

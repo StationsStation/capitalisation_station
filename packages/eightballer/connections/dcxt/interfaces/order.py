@@ -1,14 +1,16 @@
 """Order protocol handler."""
+
 import json
 import traceback
-from datetime import datetime
 from typing import Any, Dict, Optional, cast
+from datetime import datetime
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
-from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+
 
 INTERVAL = 10
 

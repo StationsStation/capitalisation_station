@@ -20,21 +20,22 @@
 """This module contains the tests of the HTTP Server connection module."""
 
 # pylint: disable=W0201
-import logging
 import os
+import logging
 from typing import Type
 from unittest.mock import MagicMock
 
 import pytest
 from aea.common import Address
-from aea.configurations.base import ConnectionConfig
+from async_timeout import timeout
 from aea.identity.base import Identity
 from aea.protocols.base import Message
+from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue, Dialogues
-from async_timeout import timeout
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.connection import DcxtConnection
+
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ TEST_EXCHANGES = [
         "name": DEFAULT_EXCHANGE_ID,
         "environment": "test",
         "kwargs": {
-            "chain_id": 'mainnet',
+            "chain_id": "mainnet",
             "rpc_url": "https://rpc.ankr.com/eth",
             "etherscan_api_key": "YOUR_ETHERSCAN_API_KEY",
         },
@@ -152,16 +153,16 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 
 
 EXPECTED_FUNCTIONS = [
-    'get_all_markets',  #           get all markets
-    'subscribe',  # order book      subscribe
-    'create_order',  # create order create_order
-    'get_order',  # get order:      tx hash
+    "get_all_markets",  #           get all markets
+    "subscribe",  # order book      subscribe
+    "create_order",  # create order create_order
+    "get_order",  # get order:      tx hash
 ]
 
 
 @pytest.mark.parametrize(
     "exchange_id, function",
-    [(exchange['name'], function) for exchange in TEST_EXCHANGES for function in EXPECTED_FUNCTIONS],
+    [(exchange["name"], function) for exchange in TEST_EXCHANGES for function in EXPECTED_FUNCTIONS],
 )
 class TestPluginConsitency:
     """Test the plugin consistency."""

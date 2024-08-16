@@ -19,19 +19,23 @@
 
 """This module contains the handler for the 'price_estimation_abci' skill."""
 
+from packages.valory.skills.abstract_round_abci.handlers import (
+    HttpHandler as BaseHttpHandler,
+    IpfsHandler as BaseIpfsHandler,
+    SigningHandler as BaseSigningHandler,
+    ABCIRoundHandler,
+    LedgerApiHandler as BaseLedgerApiHandler,
+    TendermintHandler as BaseTendermintHandler,
+    ContractApiHandler as BaseContractApiHandler,
+)
+from packages.eightballer.skills.dex_data_retrieval.handlers import (
+    DexOrdersHandler as BaseDexOrdersHandler,
+    DexMarketsHandler as BaseDexMarketsHandler,
+    DexTickersHandler as BaseDexTickersHandler,
+    DexBalancesHandler as BaseDexBalancesHandler,
+    DexPositionsHandler as BaseDexPositionsHandler,
+)
 
-from packages.eightballer.skills.dex_data_retrieval.handlers import DexBalancesHandler as BaseDexBalancesHandler
-from packages.eightballer.skills.dex_data_retrieval.handlers import DexMarketsHandler as BaseDexMarketsHandler
-from packages.eightballer.skills.dex_data_retrieval.handlers import DexOrdersHandler as BaseDexOrdersHandler
-from packages.eightballer.skills.dex_data_retrieval.handlers import DexPositionsHandler as BaseDexPositionsHandler
-from packages.eightballer.skills.dex_data_retrieval.handlers import DexTickersHandler as BaseDexTickersHandler
-from packages.valory.skills.abstract_round_abci.handlers import ABCIRoundHandler
-from packages.valory.skills.abstract_round_abci.handlers import ContractApiHandler as BaseContractApiHandler
-from packages.valory.skills.abstract_round_abci.handlers import HttpHandler as BaseHttpHandler
-from packages.valory.skills.abstract_round_abci.handlers import IpfsHandler as BaseIpfsHandler
-from packages.valory.skills.abstract_round_abci.handlers import LedgerApiHandler as BaseLedgerApiHandler
-from packages.valory.skills.abstract_round_abci.handlers import SigningHandler as BaseSigningHandler
-from packages.valory.skills.abstract_round_abci.handlers import TendermintHandler as BaseTendermintHandler
 
 ABCIPriceEstimationHandler = ABCIRoundHandler
 HttpHandler = BaseHttpHandler

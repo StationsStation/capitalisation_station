@@ -25,17 +25,18 @@ from typing import Any, Dict, List, cast
 from aea.skills.behaviours import TickerBehaviour
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
+from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
+from packages.eightballer.skills.reporting.slack import SlackUploader
+from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.skills.reporting.strategy import DEFAULT_EXCHANGES, ExchangeType, ReportingStrategy
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, OrdersDialogues
+from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
 from packages.eightballer.connections.ccxt.interfaces.order import (
     from_id_to_instrument_name as base_from_id_to_instrument_name,
 )
-from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
-from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
-from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, OrdersDialogues
-from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
-from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.skills.reporting.slack import SlackUploader
-from packages.eightballer.skills.reporting.strategy import DEFAULT_EXCHANGES, ExchangeType, ReportingStrategy
+
 
 from_id_to_instrument_name = base_from_id_to_instrument_name
 

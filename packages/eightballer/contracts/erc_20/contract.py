@@ -22,8 +22,8 @@
 from dataclasses import dataclass
 
 from aea.common import JSONLike
-from aea.contracts.base import Contract
 from aea.crypto.base import Address, LedgerApi
+from aea.contracts.base import Contract
 
 from packages.eightballer.contracts.erc_20 import PUBLIC_ID
 

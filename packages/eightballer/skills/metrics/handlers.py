@@ -23,12 +23,12 @@
 import json
 from typing import cast
 
-from aea.protocols.base import Message
 from aea.skills.base import Handler
+from aea.protocols.base import Message
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.skills.metrics.dialogues import DefaultDialogues, HttpDialogue, HttpDialogues
+from packages.eightballer.skills.metrics.dialogues import HttpDialogue, HttpDialogues, DefaultDialogues
 
 
 class HttpHandler(Handler):

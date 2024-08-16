@@ -19,23 +19,23 @@
 
 """This package contains a scaffold of a model."""
 
-from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Optional
+from dataclasses import dataclass
 
 import pandas as pd
-from aea.skills.base import Model
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, Float, String, create_engine, func
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Float, Column, String, Boolean, DateTime, BigInteger, func, create_engine
 from sqlalchemy.orm import Session, sessionmaker
+from aea.skills.base import Model
+from sqlalchemy.ext.declarative import declarative_base
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
-from packages.eightballer.protocols.balances.custom_types import Balance
+from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderStatus, OrderType
-from packages.eightballer.protocols.positions.custom_types import Position, PositionSide
 from packages.eightballer.protocols.tickers.custom_types import Ticker
+from packages.eightballer.protocols.balances.custom_types import Balance
+from packages.eightballer.protocols.positions.custom_types import Position, PositionSide
 
 
 def map_size_to_side(size):

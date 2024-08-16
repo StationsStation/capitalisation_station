@@ -1,13 +1,14 @@
 """Implements the interface for market protocol."""
+
 from typing import Optional, cast
 
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
+from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
 class MarketInterface(BaseInterface):

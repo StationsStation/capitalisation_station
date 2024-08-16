@@ -26,16 +26,22 @@ This module contains the classes required for dialogue management.
 - HttpDialogue: The dialogue class maintains state of a dialogue of type http and manages it.
 - HttpDialogues: The dialogues class keeps track of all dialogues of type http.
 """
+
 from typing import Any
 
+from aea.skills.base import Model
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
-from aea.skills.base import Model
 
-from packages.eightballer.protocols.default.dialogues import DefaultDialogue as BaseDefaultDialogue
-from packages.eightballer.protocols.default.dialogues import DefaultDialogues as BaseDefaultDialogues
-from packages.eightballer.protocols.http.dialogues import HttpDialogue as BaseHttpDialogue
-from packages.eightballer.protocols.http.dialogues import HttpDialogues as BaseHttpDialogues
+from packages.eightballer.protocols.http.dialogues import (
+    HttpDialogue as BaseHttpDialogue,
+    HttpDialogues as BaseHttpDialogues,
+)
+from packages.eightballer.protocols.default.dialogues import (
+    DefaultDialogue as BaseDefaultDialogue,
+    DefaultDialogues as BaseDefaultDialogues,
+)
+
 
 DefaultDialogue = BaseDefaultDialogue
 

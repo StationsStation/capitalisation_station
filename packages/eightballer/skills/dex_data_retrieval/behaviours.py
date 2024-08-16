@@ -22,33 +22,34 @@
 import json
 import time
 from abc import ABC
-from typing import Any, Generator, Set, Type, cast
+from typing import Any, Set, Type, Generator, cast
 
 from aea.mail.base import Message
 
-from packages.eightballer.connections.dcxt.connection import PUBLIC_ID as DCXT_PUBLIC_ID
-from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.valory.skills.abstract_round_abci.base import AbstractRound
+from packages.eightballer.connections.dcxt.connection import PUBLIC_ID as DCXT_PUBLIC_ID
+from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.skills.dex_data_retrieval.models import Params
-from packages.eightballer.skills.dex_data_retrieval.payloads import FetchDexTickersPayload
 from packages.eightballer.skills.dex_data_retrieval.rounds import (
+    SynchronizedData,
+    FetchDexOrdersRound,
+    FetchDexMarketsRound,
+    FetchDexTickersRound,
+    FetchDexBalancesRound,
+    FetchDexOrdersPayload,
+    FetchDexMarketsPayload,
+    FetchDexPositionsRound,
     DexDataRetrievalAbciApp,
     FetchDexBalancesPayload,
-    FetchDexBalancesRound,
-    FetchDexMarketsPayload,
-    FetchDexMarketsRound,
-    FetchDexOrdersPayload,
-    FetchDexOrdersRound,
     FetchDexPositionsPayload,
-    FetchDexPositionsRound,
-    FetchDexTickersRound,
-    SynchronizedData,
 )
-from packages.valory.skills.abstract_round_abci.base import AbstractRound
-from packages.valory.skills.abstract_round_abci.behaviours import AbstractRoundBehaviour, BaseBehaviour
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour, AbstractRoundBehaviour
+from packages.eightballer.skills.dex_data_retrieval.payloads import FetchDexTickersPayload
+
 
 DEFAULT_RETRIES = 6
 DEFAULT_RETRY_DELAY = 5.0

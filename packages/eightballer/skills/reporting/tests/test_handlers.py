@@ -1,21 +1,22 @@
 """This module contains the tests of the handler class of the price_poller skill."""
 
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from aea.test_tools.test_skill import BaseSkillTestCase
 
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import DEFAULT_EXCHANGE_ID
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus
-from packages.eightballer.protocols.orders.dialogues import OrdersDialogues
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.protocols.positions.custom_types import Position
-from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.skills.reporting.handlers import OrdersReportingHandler, PositionsReportingHandler
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
-from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogues
+from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus
+from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.skills.reporting.tests.test_strategy import DB_FILE
+from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import DEFAULT_EXCHANGE_ID
+
 
 PATH_TO_SKILL = Path(ROOT_DIR, "packages", "eightballer", "skills", "reporting")
 

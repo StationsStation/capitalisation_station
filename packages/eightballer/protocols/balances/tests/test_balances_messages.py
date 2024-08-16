@@ -25,8 +25,9 @@ from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.balances.custom_types import Balance, Balances, ErrorCode
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances, ErrorCode
+
 
 TEST_BALANCE = Balance(
     asset_id="some str",

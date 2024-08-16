@@ -19,15 +19,16 @@
 
 """This module contains the scaffold contract definition."""
 
-import base64
 import json
+import base64
 
 import requests
 from aea.common import JSONLike
-from aea.configurations.base import PublicId
-from aea.contracts.base import Contract
 from aea_ledger_solana import SolanaApi
+from aea.contracts.base import Contract
 from solders.transaction import VersionedTransaction  # noqa
+from aea.configurations.base import PublicId
+
 
 JUPITAR_URL = "https://quote-api.jup.ag/v6"
 TIMEOUT = 10

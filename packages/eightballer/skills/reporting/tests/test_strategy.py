@@ -19,11 +19,12 @@
 # ------------------------------------------------------------------------------
 
 """Tests for valory/abstract_round_abci skill's behaviours."""
+
 from abc import ABC
 from copy import deepcopy
-from datetime import datetime
-from pathlib import Path
 from typing import cast
+from pathlib import Path
+from datetime import datetime
 from unittest.mock import MagicMock
 
 import pandas as pd
@@ -39,6 +40,7 @@ from packages.eightballer.skills.reporting.tests.cases import (
     TEST_MARKET_NAME_2,
 )
 from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
+
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
 

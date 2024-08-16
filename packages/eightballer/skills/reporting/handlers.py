@@ -22,20 +22,20 @@
 import json
 from typing import Optional, cast
 
-from aea.configurations.base import PublicId
-from aea.protocols.base import Message
 from aea.skills.base import Handler
+from aea.protocols.base import Message
+from aea.configurations.base import PublicId
 
-from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.markets.message import MarketsMessage
-from packages.eightballer.protocols.orders.custom_types import Order
-from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.protocols.positions.custom_types import Position
-from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name
-from packages.eightballer.skills.reporting.strategy import ReportingStrategy
 from packages.valory.protocols.http.message import HttpMessage
+from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.markets.message import MarketsMessage
+from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.skills.reporting.strategy import ReportingStrategy
+from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name
+from packages.eightballer.protocols.orders.custom_types import Order
+from packages.eightballer.protocols.positions.custom_types import Position
 
 
 class BaseHandler(Handler):

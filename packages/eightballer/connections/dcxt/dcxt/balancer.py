@@ -1,33 +1,35 @@
 """
 Balancer exchange.
 """
+
 import json
 import traceback
+from glob import glob
+from typing import cast
+from decimal import Decimal
+from pathlib import Path
 
 # pylint: disable=R0914,R0902,R0912
 from datetime import datetime
-from decimal import Decimal
-from glob import glob
-from pathlib import Path
-from typing import cast
 
 import web3
-from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
+from balpy import balpy
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import Account
-from balpy import balpy
+from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 
+from packages.eightballer.protocols.orders.custom_types import Order, Orders
+from packages.eightballer.protocols.markets.custom_types import Market, Markets
+from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.connections.dcxt.dcxt.exceptions import (
     ApprovalError,
-    ConfigurationError,
     ExchangeError,
+    ConfigurationError,
     SorRetrievalException,
 )
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
-from packages.eightballer.protocols.balances.custom_types import Balance, Balances
-from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.protocols.orders.custom_types import Order, Orders
-from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
+
 
 GAS_PRICE_PREMIUM = 20
 GAS_SPEED = "fast"
@@ -41,22 +43,20 @@ PACKAGE_DIR = Path(__file__).parent
 ABI_DIR = PACKAGE_DIR / "abis"
 
 ABI_MAPPING = {
-    Path(path)
-    .stem.upper(): open(path, encoding=DEFAULT_ENCODING)  # pylint: disable=R1732
-    .read()  # pylint: disable=R1732
+    Path(path).stem.upper(): open(path, encoding=DEFAULT_ENCODING).read()  # pylint: disable=R1732  # pylint: disable=R1732
     for path in glob(str(ABI_DIR / "*.json"))
 }
 
-ETH_KEYPATH = 'ethereum_private_key.txt'
+ETH_KEYPATH = "ethereum_private_key.txt"
 
-OLAS_ADDRESS = '0x0001a500a6b18995b03f44bb040a5ffc28e45cb0'
-USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
-WETH_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+OLAS_ADDRESS = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
+USDC_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
 
 # Manuall retrieved from https://balancer.fi/pools/ethereum/v2/
 WHITELISTED_POOLS = [
-    '0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694',
-    '0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019',
+    "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
+    "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
 ]
 
 WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS, WETH_ADDRESS]
@@ -87,7 +87,7 @@ class BalancerClient:
             raise ConfigurationError("Etherscan API key not provided to BalancerClient")
 
         self.account = Account.from_key(  # pylint: disable=E1120
-            private_key=kwargs.get('auth').get("private_key").strip()
+            private_key=kwargs.get("auth").get("private_key").strip()
         )  # pylint: disable=E1120
         self.bal: balpy.balpy = balpy.balpy(
             self.chain_name,
@@ -101,12 +101,12 @@ class BalancerClient:
         self.gas_price = kwargs.get("gas_price", None)
         self.gas_price_premium = kwargs.get("gas_price_premium", GAS_PRICE_PREMIUM)
 
-        contract_dir = Path(__file__).parent.parent.parent.parent / 'contracts' / 'erc_20'
+        contract_dir = Path(__file__).parent.parent.parent.parent / "contracts" / "erc_20"
 
         configuration = cast(
             ContractConfig,
             load_component_configuration(
-                ComponentType.CONTRACT, Path(__file__).parent.parent.parent.parent / 'contracts' / 'erc_20'
+                ComponentType.CONTRACT, Path(__file__).parent.parent.parent.parent / "contracts" / "erc_20"
             ),
         )
         configuration.directory = contract_dir
@@ -129,11 +129,11 @@ class BalancerClient:
         try:
             markets = [
                 {
-                    'id': pool_id,
-                    'symbol': 'OLAS/USDC',
-                    'base': 'OLAS',
-                    'quote': 'USDC',
-                    'spot': True,
+                    "id": pool_id,
+                    "symbol": "OLAS/USDC",
+                    "base": "OLAS",
+                    "quote": "USDC",
+                    "spot": True,
                 }
                 for pool_id in self.pool_ids
             ]
@@ -142,7 +142,7 @@ class BalancerClient:
             )
         except SorRetrievalException as exc:
             raise SorRetrievalException(
-                f'Error fetching markets from chainId {self.chain_name} Balancer: {exc}'
+                f"Error fetching markets from chainId {self.chain_name} Balancer: {exc}"
             ) from exc
 
     async def fetch_balances(self, *args, **kwargs):
@@ -172,10 +172,10 @@ class BalancerClient:
         :return: The pool IDs.
         """
         # We read in the pool IDs from a file for now.
-        with open(Path(__file__).parent / 'data' / 'balancer' / "mainnet.json", "r", encoding=DEFAULT_ENCODING) as file:
-            json_data = json.loads(file.read())['pools']
-        if 'Element' in json_data:
-            del json_data['Element']
+        with open(Path(__file__).parent / "data" / "balancer" / "mainnet.json", "r", encoding=DEFAULT_ENCODING) as file:
+            json_data = json.loads(file.read())["pools"]
+        if "Element" in json_data:
+            del json_data["Element"]
         return json_data
 
     async def fetch_tickers(self, *args, **kwargs):
@@ -218,7 +218,7 @@ class BalancerClient:
             self.bal.mc.addCall(
                 token_address,
                 contract.abi,
-                'name',
+                "name",
                 args=[],
             )
         name_data = self.bal.mc.execute()
@@ -232,7 +232,7 @@ class BalancerClient:
             self.bal.mc.addCall(
                 token_address,
                 contract.abi,
-                'symbol',
+                "symbol",
                 args=[],
             )
         symbol_data = self.bal.mc.execute()
@@ -272,8 +272,8 @@ class BalancerClient:
                     amount=buy_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
                 )
             )
-            symbol = f'{token.symbol}/USDC'
-            symbol = f'{token.address}/{USDC_ADDRESS}'
+            symbol = f"{token.symbol}/USDC"
+            symbol = f"{token.address}/{USDC_ADDRESS}"
             ticker = Ticker(
                 symbol=symbol,
                 high=ask_price,
@@ -329,11 +329,11 @@ class BalancerClient:
         except Exception as exc:  # pylint: disable=W0718
             self.logger.error(exc)
             self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
-        if not sor_result['batchSwap']['limits']:
+        if not sor_result["batchSwap"]["limits"]:
             raise SorRetrievalException(
                 f"No limits found for swap. Implies incorrect configuration of swap params: {params}"
             )
-        amount_out = float(sor_result['batchSwap']['limits'][-1])
+        amount_out = float(sor_result["batchSwap"]["limits"][-1])
         output_amount = -amount_out
         rate = Decimal(output_amount) / Decimal(amount)
         return rate
@@ -374,7 +374,7 @@ class BalancerClient:
         if not symbol:
             raise ValueError("Symbol not provided to create order")
 
-        input_token_address, output_token_address = symbol.split('/')
+        input_token_address, output_token_address = symbol.split("/")
         human_amount = kwargs.get("amount", None)
         if not human_amount:
             raise ValueError("Size not provided to create order")
@@ -428,8 +428,8 @@ class BalancerClient:
 
         vault = self.bal.balLoadContract("Vault")
 
-        swap['funds']['sender'] = safe_address
-        swap['funds']['recipient'] = safe_address
+        swap["funds"]["sender"] = safe_address
+        swap["funds"]["recipient"] = safe_address
 
         # Note this is a place holder for the approval amount assuming we have approved the token.
         approved = 99999999999999999999999
@@ -439,22 +439,22 @@ class BalancerClient:
         if approved < machine_amount:
             self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
             contract = self.bal.erc20GetContract(input_token_address)
-            data = contract.encodeABI('approve', [vault.address, machine_amount])
+            data = contract.encodeABI("approve", [vault.address, machine_amount])
 
         else:
             try:
                 mc_args = self.bal.balFormatBatchSwapData(swap)
                 vault = self.bal.balLoadContract("Vault")
-                function_name = 'batchSwap'
+                function_name = "batchSwap"
                 data = vault.encodeABI(function_name, mc_args)
             except web3.exceptions.ContractLogicError as exc:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
-                if 'BAL#508' in str(exc):
+                if "BAL#508" in str(exc):
                     raise ExchangeError(
                         "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
                     ) from exc
-                if 'execution reverted: ERC20: transfer amount exceeds allowance' in str(exc):
+                if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
                     raise ApprovalError("ERC20: transfer amount exceeds allowance") from exc
                 raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
 
@@ -463,8 +463,8 @@ class BalancerClient:
             symbol=symbol,
             data={
                 "data": data,
-                'vault_address': vault.address,
-                'chain_id': self.bal.web3.eth.chain_id,
+                "vault_address": vault.address,
+                "chain_id": self.bal.web3.eth.chain_id,
             },
         )
 
@@ -487,13 +487,13 @@ class BalancerClient:
         if approved < machine_amount:
             self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
             contract = self.bal.erc20GetContract(input_token_address)
-            data = contract.encodeABI('approve', [vault.address, machine_amount])
+            data = contract.encodeABI("approve", [vault.address, machine_amount])
 
         else:
             try:
                 mc_args = self.bal.balFormatBatchSwapData(swap)
                 vault = self.bal.balLoadContract("Vault")
-                function_name = 'batchSwap'
+                function_name = "batchSwap"
                 data = vault.encodeABI(function_name, mc_args)
                 fn = vault.get_function_by_name(fn_name=function_name)
                 # Assuming this does not revert, we have our call data for the order.
@@ -501,11 +501,11 @@ class BalancerClient:
             except web3.exceptions.ContractLogicError as exc:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
-                if 'BAL#508' in str(exc):
+                if "BAL#508" in str(exc):
                     raise ExchangeError(
                         "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
                     ) from exc
-                if 'execution reverted: ERC20: transfer amount exceeds allowance' in str(exc):
+                if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
                     raise ApprovalError(f"ERC20: transfer amount exceeds allowance: {exc}") from exc
                 raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
 
@@ -514,8 +514,8 @@ class BalancerClient:
             symbol=symbol,
             data={
                 "data": data,
-                'vault_address': vault.address,
-                'chain_id': self.bal.web3.eth.chain_id,
+                "vault_address": vault.address,
+                "chain_id": self.bal.web3.eth.chain_id,
             },
         )
 
@@ -612,7 +612,7 @@ class BalancerClient:
             mc.addCall(
                 token_address,
                 contract.abi,
-                'balanceOf',
+                "balanceOf",
                 args=[self.account.address],
             )
         balance_data = mc.execute()

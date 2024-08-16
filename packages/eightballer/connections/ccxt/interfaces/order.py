@@ -1,14 +1,16 @@
 """Order protocol handler."""
+
 import traceback
-from datetime import datetime
 from typing import Any, Dict, Optional, cast
+from datetime import datetime
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
-from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
+from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+
 
 INTERVAL = 10
 

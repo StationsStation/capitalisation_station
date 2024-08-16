@@ -4,9 +4,8 @@ Module to upload the report to Slack.
 
 from typing import cast
 
-from packages.valory.connections.http_client.connection import PUBLIC_ID as HTTP_CLIENT_PUBLIC_ID
-from packages.valory.connections.http_client.connection import HttpDialogue
 from packages.valory.protocols.http.message import HttpMessage
+from packages.valory.connections.http_client.connection import PUBLIC_ID as HTTP_CLIENT_PUBLIC_ID, HttpDialogue
 
 
 class Uploader:

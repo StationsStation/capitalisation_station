@@ -28,6 +28,7 @@ from aea.configurations.data_types import PublicId
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.serialization import OhlcvSerializer
 
+
 OhlcvMessage.serializer = OhlcvSerializer
 
 PUBLIC_ID = PublicId.from_str("eightballer/ohlcv:0.1.0")

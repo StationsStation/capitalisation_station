@@ -1,11 +1,12 @@
 """Base interface class."""
+
 from typing import Any, Callable
 
 from aea.common import Address
-from aea.configurations.data_types import PublicId
 from aea.exceptions import enforce
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues
+from aea.configurations.data_types import PublicId
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 

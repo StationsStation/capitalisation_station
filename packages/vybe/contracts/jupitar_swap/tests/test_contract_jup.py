@@ -24,18 +24,19 @@
 
 import json
 import time
+from typing import Tuple, Union, Optional, cast
 from pathlib import Path
-from typing import Optional, Tuple, Union, cast
 
 import pytest
 from aea.common import JSONLike
-from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
-from aea.contracts.base import Contract, contract_registry
-from aea_ledger_solana import SolanaApi, SolanaCrypto, SolanaFaucetApi
 from solders.message import MessageV0
+from aea_ledger_solana import SolanaApi, SolanaCrypto, SolanaFaucetApi
+from aea.contracts.base import Contract, contract_registry
 from solders.transaction import VersionedTransaction
+from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 
-from packages.eightballer.contracts.spl_token.contract import SolanaProgramLibraryToken, SplToken
+from packages.eightballer.contracts.spl_token.contract import SplToken, SolanaProgramLibraryToken
+
 
 PACKAGE_DIR = Path(__file__).parent.parent
 MAX_FLAKY_RERUNS = 3
