@@ -7,15 +7,15 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeihhuxlbyl4qjl2lsggoh77qkgrzlrjifhdfymuxiblauwoodl6m5y
-  custom_types.py: bafybeigqnepqdkumgxx22bbqx55e5j66hxwetdxd2c2utcxe2ntt2yxrw4
-  dialogues.py: bafybeigg63f2757cvf4l7nf5e763yrwjueqpid6p5v4adjtr42aj7qrwva
+  __init__.py: bafybeic7pu6woonij27v4ihn73ga2cdm6odw4lpk4whldktrfpcxowfuim
+  custom_types.py: bafybeihm3cn22cwo3udpqagsxivzp6qcmmjcj677adzyhgxnil2xljgxle
+  dialogues.py: bafybeig7qxszlrxdiu7qgpvnheok5eyjdm2ayzxjs2motwu3bd2udfvsoe
   message.py: bafybeieyjjr7qww5m3pzp4kjsbriacbq3pyxhech4h26jgh6geuuqmvz44
   orders.proto: bafybeiaofejdygbj6l2s4fyeudiocx2pk6nkjkltrnaxxuahobqzzhtdbe
   orders_pb2.py: bafybeicaruce2yrfjixacgr3pjciycfq644yye6zb7potc5vnoyok257de
   serialization.py: bafybeihndgbuheuzjktfhm7siu3g7stzhqppfv6rgxggxmivn76zk3nfwu
   tests/__init__.py: bafybeierwsy34eqeiawwmy6xasatflc7a7i6ae5nmdsx3ogspj3eqckzci
-  tests/test_order.py: bafybeidjwch55ty2r73bsdviiruwfcpjmvgrbq4vtclrirzsfyk2xyduue
+  tests/test_order.py: bafybeicnof4fjrs3gj5qvkhjoaql7igu2hkta76c3rkc5rczywisnpcf64
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

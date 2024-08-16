@@ -11,7 +11,6 @@ from aea.mail.base import Envelope
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Positions
-from packages.eightballer.connections.dcxt.interfaces.interface_base import get_dialogues
 
 from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, with_timeout, get_dialogues
 

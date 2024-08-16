@@ -7,15 +7,15 @@ description: A protocol for passing position data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeie6iejvygcvaygm7fn6dhxkopqh2z3ayf6544d7tqkenehaukcszq
-  custom_types.py: bafybeidtbiia3horck6fxpuajvpsz6r4c6jchrgaiem46igngalyrpwy3e
-  dialogues.py: bafybeidgtphuyj4vcm6ener5og2mglxnldisvidznx67tri4ooy3hzo3yq
+  __init__.py: bafybeien5mlkcicexs3gdp3kw5ukeado326ec4xsfthnsov7edwbbmu3gi
+  custom_types.py: bafybeihzcsppmg7zxykueueqyziqh6ow3igo3qbaku6lszudzdsax7j7rq
+  dialogues.py: bafybeih5m22kal6zr26lwickhnhdpsb4lwkartf4apts6c2lq5cwcer2vq
   message.py: bafybeihuuwurihouixzo6ccjij4so6ea7laagflv6auyenxurc4uzabpgm
   positions.proto: bafybeiarecol3osiwh25kcjjy4e2iscltvkevo6balhkdlawxr7ihgm6xy
   positions_pb2.py: bafybeiexc3bifvoeg7yxk5c6of262kind62aqvvwzyuipzyj6wqtwsxhae
   serialization.py: bafybeicnyrpctbeggwunqowgitv3sw2qy7l4ehpmv5i3a7uvwxaha7gjpu
-  tests/test_positions_dialogues.py: bafybeigxghgnjigwa6njgjzlwuarnql2efmeguc4dckn5ezdezrb476s2i
-  tests/test_positions_messages.py: bafybeiaqeju5m3p2niub5gm5qplr7xd43ooglssxxpvkhhbyswxeznlwle
+  tests/test_positions_dialogues.py: bafybeihtiond3j5eyxgq5ezmafjyqbirgwm3zyvtvh6x5yjt23j2sft2my
+  tests/test_positions_messages.py: bafybeialv4fbjxppr25rbuqoaleje7das7s3t6dicrb2wfrwhk6b7ps64q
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

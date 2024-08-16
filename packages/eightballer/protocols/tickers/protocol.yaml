@@ -7,13 +7,13 @@ description: A protocol for passing ticker data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeife3lyh6j7vsdh7ze7fahohnnhbpkbyxxxn3y24dj6m7qcz45f7xa
-  custom_types.py: bafybeifan7atnrw4z27mbp5qtfcxhem6po2u5jwtznwllgd6jd75ty2uki
-  dialogues.py: bafybeid2v4tbv5v3kabefvkxtktcwsk2kk2rwukxtw34pn7hgyhmpztuhm
+  __init__.py: bafybeiaca4glyi2rn66njrbtoqunvldk4ea2m7kdd6lz42mrvehav272bm
+  custom_types.py: bafybeidj4h52h6x5jtes5pncmoygslgj2hdezpxa46m43xbi5hh2dlffdi
+  dialogues.py: bafybeibgm772pctryo7trvsdipvngkbfavaojvpxtfqx75tssqtl7jlek4
   message.py: bafybeidextk3hrbnwatkubhovhzfmdxrdqmwzt3zqrkwm7oep3iskg3nxy
   serialization.py: bafybeih2hewf5xaj3gwy4szvab7svjk3cm7sogsxc6onjbo36nm7udlq34
-  tests/test_tickers_dialogues.py: bafybeigfrdj3pvobqjbcqq3ypyyxrx6geuszyp3trgyli7qkt6jinpfzqy
-  tests/test_tickers_messages.py: bafybeiaa3bl2chh4uytqlpafjym7q5mjuocpootvvuv547rj6aw66jrakq
+  tests/test_tickers_dialogues.py: bafybeidq5ccrypucpwt7ocxyk2b7eder5rccndphsfoj2ih6ptc4ldt3om
+  tests/test_tickers_messages.py: bafybeidbqixr4e5uwvnwvzknbagexddspxxx3p55jnxv2nssnou337efju
   tickers.proto: bafybeihjhe2g5nqaqatbsl64i64blfeyqqlveaq7lfjj3typu5kcvx7mty
   tickers_pb2.py: bafybeidoqaiyoly4lxr3izfhehoqfmj4gsz7pz6kximtck5qr36ouj6lry
 fingerprint_ignore_patterns: []

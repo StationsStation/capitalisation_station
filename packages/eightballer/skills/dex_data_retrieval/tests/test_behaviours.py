@@ -134,6 +134,7 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
     def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
         """Run tests."""
 
+        del exchange_data
         self.fast_forward(test_case.initial_data)
 
         def get_ccxt_response(*args, **kwargs):
@@ -147,7 +148,6 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
         def from_balances_to_dict(*args, **kwargs):
             """Mock _from_balances_to_dict"""
             del args, kwargs
-            del exchange_data
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):
@@ -234,6 +234,7 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
     async def test_run_failed_api_call(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
         """Run tests."""
 
+        del exchange_data
         self.fast_forward(test_case.initial_data)
 
         mocker = MagicMock()
@@ -251,7 +252,6 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         def from_markets_to_dict(*args, **kwargs):
             """Mock _from_markets_to_dict"""
             del args, kwargs
-            del exchange_data
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):

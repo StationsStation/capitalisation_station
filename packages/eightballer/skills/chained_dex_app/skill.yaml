@@ -6,24 +6,24 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifio56gpmbwnhqvk4f5cmavsrmqm7ljy6ll44mgzmswfrftat3h6a
-  behaviours.py: bafybeig2sekkunot66d7argty6yrgzssjfg7q7nna3ecnt73afodmsthfy
-  composition.py: bafybeigahp34oi6uyzcjmbcgtseubmu6rpxd4aeepcnjuwqsykbenict7a
-  dialogues.py: bafybeih3h3a4zxvpjw3mgaijjzlugmnd6peamybx4jzw26tyadbgpttqvi
-  handlers.py: bafybeiewyuowct6y4rf2oaky5hy4sp36eki6pq7merksp4rqylfbewukme
-  my_model.py: bafybeifyr2sbkbfhocm2i2mtizq5rqbjmmsjw7qm6meja4wi5brncvuhcm
-  tests/test_behaviours.py: bafybeie2qiivpo4gg6ah52sa5ha5qdgwiddscizlshpgspfudgwyjg7c4e
+  __init__.py: bafybeieq7ntezkqnkmquqafmfwwn2sghcm3y4b6pw4nbyxaagzejainl6u
+  behaviours.py: bafybeiei4wmqpkhhj75donuviharffmzotcif6pdgluufaj4gxszyo4sei
+  composition.py: bafybeifm6lmlpkjmgf5n7p2oxbfylojgjvq57g5ljwx6d76tvwf437y4we
+  dialogues.py: bafybeigbufmeiryggdxqldrcd565gactjwlc47vtacducyohhds7gg5oxm
+  handlers.py: bafybeiexpp4paaklmrspyhlm66qo24ksazqvxtyenizn4loz3iyhppy7fu
+  my_model.py: bafybeig4qnykqae6fip5ispjsvttzto2lfst2bgj72qyyl6argvbtmtqqm
+  tests/test_behaviours.py: bafybeibpulodvi5uraceue7zl3s66v55y6pmvrbtmp4752l6bf3tluy4jq
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeihrnjigqe3cwzsybhfgb2745e3pxccojpqhy4bu7jtg62ugwnuole
-- eightballer/markets:0.1.0:bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4
-- eightballer/orders:0.1.0:bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774
-- eightballer/positions:0.1.0:bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm
-- eightballer/tickers:0.1.0:bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4
+- eightballer/balances:0.1.0:bafybeiajh5vzhcofdpemm3545t3yh6g4okpwnejvbqchxapo765batiitu
+- eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
+- eightballer/orders:0.1.0:bafybeibprhniaoq3y2uzc4arwwl7yws3i54ahaicrphh5gtl4xxhxqexdy
+- eightballer/positions:0.1.0:bafybeib6v2rtylru3lmri6tpgug7sgsd3imzqrpma3nuiqgjzmtdrsblaa
+- eightballer/tickers:0.1.0:bafybeicjbpa24tla2enenmlzipqhu6grutqso74q6y7is2cpk7acub3bca
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeia3xhrnjk6telpmy6qlqibq6u22qp53nztzxx2pl2763khe36kzoi
+- eightballer/dex_data_retrieval:0.1.0:bafybeihjyb3bqxezyc2obz6cgtzisyhmgio4rlexkjl7jqd56eizmoaalu
 - valory/abstract_round_abci:0.1.0:bafybeibovsktd3uxur45nrcomq5shcn46cgxd5idmhxbmjhg32c5abyqim
 - valory/registration_abci:0.1.0:bafybeicnth5q4httefsusywx3zrrq4al47owvge72dqf2fziruicq6hqta
 - valory/reset_pause_abci:0.1.0:bafybeievjciqdvxhqxfjd4whqs27h6qbxqzrae7wwj7fpvxlvmtw3x35im
