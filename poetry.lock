@@ -17,14 +17,14 @@ pycares = ">=4.0.0"
 
 [[package]]
 name = "aiohappyeyeballs"
-version = "2.3.5"
+version = "2.3.6"
 description = "Happy Eyeballs for asyncio"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "aiohappyeyeballs-2.3.5-py3-none-any.whl", hash = "sha256:4d6dea59215537dbc746e93e779caea8178c866856a721c9c660d7a5a7b8be03"},
-    {file = "aiohappyeyeballs-2.3.5.tar.gz", hash = "sha256:6fa48b9f1317254f122a07a131a86b71ca6946ca989ce6326fff54a99a920105"},
+    {file = "aiohappyeyeballs-2.3.6-py3-none-any.whl", hash = "sha256:15dca2611fa78442f1cb54cf07ffb998573f2b4fbeab45ca8554c045665c896b"},
+    {file = "aiohappyeyeballs-2.3.6.tar.gz", hash = "sha256:88211068d2a40e0436033956d7de3926ff36d54776f8b1022d6b21320cadae79"},
 ]
 
 [[package]]
@@ -706,14 +706,14 @@ files = [
 
 [[package]]
 name = "ccxt"
-version = "4.3.80"
+version = "4.3.83"
 description = "A JavaScript / TypeScript / Python / C# / PHP cryptocurrency trading library with support for 100+ exchanges"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ccxt-4.3.80-py2.py3-none-any.whl", hash = "sha256:d7a5996c79d8d17d669917ef16031d096cb546d47cf59ab3aeda6e7f8adaa602"},
-    {file = "ccxt-4.3.80.tar.gz", hash = "sha256:3c85fadff13bf957dd9931f9b2e82722d0d58f20b0f830533ca50362a974dc2f"},
+    {file = "ccxt-4.3.83-py2.py3-none-any.whl", hash = "sha256:a62de845c1b711975017ad2c1d6f72b38fc82fc947e576a14d583162bfcfc464"},
+    {file = "ccxt-4.3.83.tar.gz", hash = "sha256:70370c9fc482e2eb7804dd8de817b393fff6c7bfdac6cc5fdf94cc675ce58faf"},
 ]
 
 [package.dependencies]
@@ -1527,6 +1527,21 @@ dev = ["black (>=23)", "build (>=0.9.0)", "bumpversion (>=0.5.3)", "eth-hash[pyc
 docs = ["sphinx (>=5.0.0)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)"]
 lint = ["black (>=23)", "flake8 (==3.8.3)", "isort (>=5.11.0)", "mypy (==0.971)", "pydocstyle (>=5.0.0)", "types-setuptools"]
 test = ["hypothesis (>=4.43.0)", "mypy (==0.971)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "types-setuptools"]
+
+[[package]]
+name = "eval-type-backport"
+version = "0.2.0"
+description = "Like `typing._eval_type`, but lets older Python versions use newer typing features."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "eval_type_backport-0.2.0-py3-none-any.whl", hash = "sha256:ac2f73d30d40c5a30a80b8739a789d6bb5e49fdffa66d7912667e2015d9c9933"},
+    {file = "eval_type_backport-0.2.0.tar.gz", hash = "sha256:68796cfbc7371ebf923f03bdf7bef415f3ec098aeced24e054b253a0e78f7b37"},
+]
+
+[package.extras]
+tests = ["pytest"]
 
 [[package]]
 name = "evm-trace"
@@ -3316,21 +3331,26 @@ test = ["factory-boy (==2.11.1)", "hypothesis (>=5,<6)", "importlib-metadata (<5
 
 [[package]]
 name = "py-geth"
-version = "4.4.0"
+version = "5.0.0"
 description = "py-geth: Run Go-Ethereum as a subprocess"
 category = "main"
 optional = false
 python-versions = "<4,>=3.8"
 files = [
-    {file = "py-geth-4.4.0.tar.gz", hash = "sha256:c08d84f6dad4f86a9b8ffd74c0a0f160d600db0ee45dfc2a66d5e13522aeb039"},
-    {file = "py_geth-4.4.0-py3-none-any.whl", hash = "sha256:ae8771b028c68f6710e6434d2aa1310ce2ba3cc9099d244d9bb5a9e340786a92"},
+    {file = "py_geth-5.0.0-py3-none-any.whl", hash = "sha256:bd2edaf8dcba4b3fdf4b33792da0340e114e411feff35b6ac7d58d19252c06b7"},
+    {file = "py_geth-5.0.0.tar.gz", hash = "sha256:57368b52c6e1c74f2277a2a370c01ad4c73a021835b150619c02dd7bdab3d369"},
 ]
 
 [package.dependencies]
+eval-type-backport = {version = ">=0.1.0", markers = "python_version < \"3.10\""}
+pydantic = ">=2.6.0"
+requests = ">=2.23"
 semantic-version = ">=2.6.0"
+types-requests = ">=2.0.0"
+typing-extensions = ">=4.0.1"
 
 [package.extras]
-dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "flaky (>=3.2.0)", "ipython", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "requests (>=2.20)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
+dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "flaky (>=3.2.0)", "ipython", "mypy (==1.10.0)", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
 docs = ["towncrier (>=21,<22)"]
 test = ["flaky (>=3.2.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
 
@@ -4879,6 +4899,33 @@ python-versions = "*"
 files = [
     {file = "types-cachetools-4.2.10.tar.gz", hash = "sha256:b1cb18aaff25d2ad47a060413c660c39fadddb01f72012dd1134584b1fdaada5"},
     {file = "types_cachetools-4.2.10-py3-none-any.whl", hash = "sha256:48301115189d4879d0960baac5a8a2b2d31ce6129b2ce3b915000ed337284898"},
+]
+
+[[package]]
+name = "types-requests"
+version = "2.31.0.6"
+description = "Typing stubs for requests"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-requests-2.31.0.6.tar.gz", hash = "sha256:cd74ce3b53c461f1228a9b783929ac73a666658f223e28ed29753771477b3bd0"},
+    {file = "types_requests-2.31.0.6-py3-none-any.whl", hash = "sha256:a2db9cb228a81da8348b49ad6db3f5519452dd20a9c1e1a868c83c5fe88fd1a9"},
+]
+
+[package.dependencies]
+types-urllib3 = "*"
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.14"
+description = "Typing stubs for urllib3"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-urllib3-1.26.25.14.tar.gz", hash = "sha256:229b7f577c951b8c1b92c1bc2b2fdb0b49847bd2af6d1cc2a2e3dd340f3bda8f"},
+    {file = "types_urllib3-1.26.25.14-py3-none-any.whl", hash = "sha256:9683bbb7fb72e32bfe9d2be6e04875fbe1b3eeec3cbb4ea231435aa7fd6b4f0e"},
 ]
 
 [[package]]
