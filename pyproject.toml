@@ -27,7 +27,7 @@ open-aea-test-autonomy = "==0.15.2"
 open-autonomy = "==0.15.2"
 autonomy-dev = {version = "0.2.73", extras = ["all"]}
 ccxt = ">=3.1.43"
-numpy = ">=1.26.0"
+numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
 lyra-v2-client = {path = "third_party/upstream/lyra_client"}
 balpy = {path = "third_party/forks/balpy"}
