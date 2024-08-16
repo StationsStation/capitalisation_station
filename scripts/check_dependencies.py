@@ -319,6 +319,7 @@ def load_packages_dependencies(packages_dir: Path) -> List[Dependency]:
             if key not in dependencies:
                 dependencies[key] = value
             else:
+                print(f"Processing {key} {value} vs {dependencies[key]}")
                 if value.version == "":
                     continue
                 if dependencies[key].version == "":

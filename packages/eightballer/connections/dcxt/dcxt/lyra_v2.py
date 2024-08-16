@@ -6,18 +6,15 @@ import datetime
 import traceback
 from typing import Any, Dict
 
+from lyra.enums import OrderType as LyraOrderType, OrderStatus as LyraOrderStatus, InstrumentType, UnderlyingCurrency
 from lyra.async_client import AsyncClient
-from lyra.enums import InstrumentType
-from lyra.enums import OrderStatus as LyraOrderStatus
-from lyra.enums import OrderType as LyraOrderType
-from lyra.enums import UnderlyingCurrency
 
-from packages.eightballer.protocols.balances.custom_types import Balance, Balances
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.protocols.order_book.custom_types import OrderBook
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderStatus, OrderType
-from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances
+from packages.eightballer.protocols.positions.custom_types import Position
+from packages.eightballer.protocols.order_book.custom_types import OrderBook
 
 
 def to_market(api_result):

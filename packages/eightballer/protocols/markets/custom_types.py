@@ -20,10 +20,9 @@
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 
-
-from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
 
 
 class ErrorCode(Enum):

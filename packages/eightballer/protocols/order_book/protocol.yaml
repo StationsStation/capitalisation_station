@@ -10,15 +10,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiacg77zewdgscsnfivnlkacojc3mldao4guqgr27mb7egrd7uqkri
-  __init__.py: bafybeibbjwrpigcl6bfzkl4n4h54aqgdlqjgvoujrf2rrujaelehtzr2ei
-  custom_types.py: bafybeihd4jz4e74wly6dptxcei42o3pioye6i5p6ifg3hiiai5fzi2hxka
-  dialogues.py: bafybeihecsk2ocr5sfku6rnugoi2q3mp3hsfkdruvbqdkihjxwbhxhzwo4
+  __init__.py: bafybeicucte3uu7dvf5b5lwsla3ljwoiaimlwovzcfsleemqeoqdgztgee
+  custom_types.py: bafybeibm3cg23rxtvzmassjuvmgghymtumdtkmpjgscpbfmdd33qxlb3w4
+  dialogues.py: bafybeigfcqttto3fahg7ephkmbivrwsgulnzzeaxrkl4to6vbm4qvbxzgm
   message.py: bafybeifj4mwaoayo4xec7y57jchfcngmz6aa5luuwfsatkhdvrdedxazdy
   order_book.proto: bafybeih6v6przoxyjtgqgbhc6ffxmflny524tl7slryprpfcygljnssqma
   order_book_pb2.py: bafybeiaa2l4fot4ycidijw4mhjnpibbboqpsix6ekp22nmkpkw67tbj76q
   serialization.py: bafybeic7rdbqhhsljvpef4azba2me6ijlkssg5yjjjcpa4sr4ys2frclze
-  tests/test_order_book_dialogues.py: bafybeiedc7un6ehx4aelsxvslsxbhq5pvzvgwulnjnslf3ijscs2vvlklq
-  tests/test_order_book_messages.py: bafybeifh2kmykj6coitmlwstiqtclahno5xzf2rzdooqmcs57rigwlrjdu
+  tests/test_order_book_dialogues.py: bafybeic7tapjgz2u52wvltjnj4ul6lcwkgkuppb4lk7lui7rvt2nyjkgom
+  tests/test_order_book_messages.py: bafybeibxbmlll3q5j6q73esp3t2vs2bopxdsbge3wuqs6aathxcb3fieqi
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

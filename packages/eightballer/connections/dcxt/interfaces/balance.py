@@ -2,13 +2,12 @@
 Base interface for balances protocol.
 """
 
-
 from typing import Optional
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
 class BalanceInterface(BaseInterface):

@@ -25,9 +25,9 @@ import pytest
 # pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.positions.custom_types import PositionSide
-from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, PositionsDialogues
 from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, PositionsDialogues
+from packages.eightballer.protocols.positions.custom_types import PositionSide
 
 
 @pytest.mark.skip("Not implemented yet")

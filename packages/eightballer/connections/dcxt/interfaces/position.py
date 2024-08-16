@@ -1,13 +1,14 @@
 """
 Interface for the positios protocol.
 """
+
 from typing import Optional
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.positions.custom_types import Position, Positions
-from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
+from packages.eightballer.protocols.positions.custom_types import Position, Positions
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
 def all_positions_from_api_call(api_call):

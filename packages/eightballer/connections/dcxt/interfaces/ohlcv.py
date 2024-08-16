@@ -1,11 +1,12 @@
 """Interface for the ohlcv."""
+
 import asyncio
 from typing import Any, List, Optional, cast
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.markets.custom_types import Market
-from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
+from packages.eightballer.protocols.markets.custom_types import Market
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
 def _seconds_to_timeframe(seconds=60):

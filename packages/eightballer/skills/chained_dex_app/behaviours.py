@@ -21,14 +21,14 @@
 
 from typing import Set, Type
 
+from packages.valory.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
+from packages.valory.skills.registration_abci.behaviours import (
+    RegistrationStartupBehaviour,
+    AgentRegistrationRoundBehaviour,
+)
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour, AbstractRoundBehaviour
 from packages.eightballer.skills.chained_dex_app.composition import ChaineddexAbciApp
 from packages.eightballer.skills.dex_data_retrieval.behaviours import DexDataRetrievalRoundBehaviour
-from packages.valory.skills.abstract_round_abci.behaviours import AbstractRoundBehaviour, BaseBehaviour
-from packages.valory.skills.registration_abci.behaviours import (
-    AgentRegistrationRoundBehaviour,
-    RegistrationStartupBehaviour,
-)
-from packages.valory.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
 
 
 class DexDataAbciAppConsensusBehaviour(AbstractRoundBehaviour):

@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.17.3` and aea 
 from packages.eightballer.protocols.default.message import DefaultMessage
 from packages.eightballer.protocols.default.serialization import DefaultSerializer
 
+
 DefaultMessage.serializer = DefaultSerializer

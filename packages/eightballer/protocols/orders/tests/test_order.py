@@ -1,13 +1,15 @@
 """
 Test order protocol
 """
+
 # pylint: disable=R1735
 from abc import abstractmethod
 
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.orders import OrdersMessage
-from packages.eightballer.protocols.orders.custom_types import ErrorCode, Order, OrderSide, OrderStatus, OrderType
+from packages.eightballer.protocols.orders.custom_types import Order, ErrorCode, OrderSide, OrderType, OrderStatus
+
 
 RAW_ORDER = {
     "id": "test_order",

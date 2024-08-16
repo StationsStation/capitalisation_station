@@ -1,14 +1,15 @@
 """
 Implements the interface for the Ticker protocol.
 """
+
 from typing import Optional
 
 from ccxt import RequestTimeout
 
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
-from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
+from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
+from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 
 
 def all_tickers_from_api_call(api_call):

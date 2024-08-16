@@ -25,11 +25,11 @@ This module contains the classes required for ohlcv dialogue management.
 """
 
 from abc import ABC
-from typing import Callable, Dict, FrozenSet, Type, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
+from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 

@@ -20,8 +20,8 @@
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 # pylint: disable=C0103,R0902,C0301,R1735
 
-from dataclasses import dataclass
 from typing import List
+from dataclasses import dataclass
 
 
 @dataclass

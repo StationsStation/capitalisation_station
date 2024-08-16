@@ -1,13 +1,14 @@
 """
 Implements the interface for the Ticker protocol.
 """
+
 from typing import Optional
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.tickers.custom_types import Ticker
-from packages.eightballer.protocols.tickers.dialogues import BaseTickersDialogues, TickersDialogue
 from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
+from packages.eightballer.protocols.tickers.custom_types import Ticker
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
 class TickerInterface(BaseInterface):

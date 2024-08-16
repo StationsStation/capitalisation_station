@@ -5,6 +5,7 @@ Contains cases for the reporting tests.
 from packages.eightballer.protocols.markets.custom_types import Market
 from packages.eightballer.protocols.positions.custom_types import Position, PositionSide
 
+
 EXCHANGE_1 = "deribit"
 EXCHANGE_2 = "binance"
 

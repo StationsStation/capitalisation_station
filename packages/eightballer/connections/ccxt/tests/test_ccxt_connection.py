@@ -20,20 +20,21 @@
 """This module contains the tests of the HTTP Server connection module."""
 
 # pylint: disable=W0201
-import logging
 import os
+import logging
 from typing import Type
 from unittest.mock import MagicMock
 
 import pytest
 from aea.common import Address
-from aea.configurations.base import ConnectionConfig
+from async_timeout import timeout
 from aea.identity.base import Identity
 from aea.protocols.base import Message
+from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue, Dialogues
-from async_timeout import timeout
 
 from packages.eightballer.connections.ccxt.connection import CcxtConnection
+
 
 logger = logging.getLogger(__name__)
 

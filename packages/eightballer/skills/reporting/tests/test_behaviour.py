@@ -19,9 +19,10 @@
 # ------------------------------------------------------------------------------
 
 """Tests for valory/abstract_round_abci skill's behaviours."""
+
 from abc import ABC
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -29,8 +30,9 @@ from aea.test_tools.test_skill import BaseSkillTestCase
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name, from_instrument_name_to_id
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
+from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name, from_instrument_name_to_id
+
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
 

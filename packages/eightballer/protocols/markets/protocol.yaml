@@ -7,15 +7,15 @@ description: A protocol for passing market data between components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeicfxz7qdkubd7bv5vnj7lg7eoepevbtpowzjfi4hqa5yzrbywbo7y
-  custom_types.py: bafybeiekq577asf5gc3ivygjqtz5qq6zs52wgyokx4ug4haofhtaxjhbui
-  dialogues.py: bafybeia774v7mi66h63rm5vjv2vstgobjqqpm2eh6rezk3xlc6ehlz2qfq
+  __init__.py: bafybeiedgfzg6naaj6sedy2tcxayxdfpsoc2fmwxgghik6nszztprsgubm
+  custom_types.py: bafybeifiazpm2hmjnjax6g3yiypt7hyj2ycmsb7y2nucohz22ctubfrv7m
+  dialogues.py: bafybeihenitvipnycug3vtt7ch5o4ruvs3gafm6gqhvh5dqi3o2whtxxpe
   markets.proto: bafybeibihxjeibzycgd5e4rqifzq7wkaeqlzf2cmg75ppwl47murmygp6e
   markets_pb2.py: bafybeigccteqjvs3426fp43ndouxalnvw2zej4by2gcxkais3d27jbua6i
   message.py: bafybeib5uvpngqcsncjvcfwerd5fplmwup4qtprawxezv6lom5otntv4zy
   serialization.py: bafybeigmszgfw4kg5y2bhrgbkcfjscbysy4s44m4dg3vzsuwujzrlstg6a
-  tests/test_markets_dialogues.py: bafybeidtc6ujxm3ffdweh4sopbjfffe2aobc2ocawhpcoz5publawpt7cq
-  tests/test_markets_messages.py: bafybeidtabzrsdk5p3hdi3whrlouhujdyx7eeeggn6aruxljwpf6jajlzu
+  tests/test_markets_dialogues.py: bafybeiczwgchaumqhpn3pszp2sxpwa7eeytxcuelwkgxx5xtvwzyb7elj4
+  tests/test_markets_messages.py: bafybeicwiohne6dgaibttlrgo2dnnwhdlso7cn4adzo224pxry2a73z7ci
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

@@ -1,24 +1,26 @@
 """
 Connection for ccxt.
 """
+
 import asyncio
 import logging
 import traceback
+from typing import Any, Dict, List, Deque, Optional, cast
 from asyncio import Task
 from collections import deque
-from typing import Any, Deque, Dict, List, Optional, cast
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-from aea.connections.base import Connection, ConnectionStates
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
+from aea.connections.base import Connection, ConnectionStates
 from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID
-from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
-from packages.eightballer.connections.ccxt.interfaces.market import Market
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
+from packages.eightballer.connections.ccxt.interfaces.market import Market
+from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.connections.ccxt")
 

@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihipvpat6bnyepjkxonmhe5jufj4fbick65xfbq7mvrv5zxhxzf7y
-  __init__.py: bafybeiby6x7grato2jq5uqov6aopzaeikmofngcfb3g52ofq63k5ru77ye
+  __init__.py: bafybeihje7chatvg572u5puyes5xb5bt72gstbdssnldjj6ciniyfnmmha
   custom_types.py: bafybeifxaspmv7j7t7yk3jjiiyidod5kwilqu6vrzy2mfjdqidbcko7y2m
   default.proto: bafybeiazrnj42ik4qieg3o2pkdup2o2idkwppoouqe4bmv5unclhdgswma
   default_pb2.py: bafybeieq35o4roagivajdaooylnow6uapqowa3feknlfuzo5xvnhddsu7a
-  dialogues.py: bafybeifqrmv7pw27fnykwrhjoq2yik675ekhz5gutwfmrj2gemmutxynqu
+  dialogues.py: bafybeicznxrmfckg6mgh64ctkmkh5md65vtbx6a5otfbbl2aha7qjud6j4
   message.py: bafybeicepmd4y4qs6afxafpzegmvrbwkyywxxennlvq46bds64xbhmysum
   serialization.py: bafybeievpmq6zebklxyuwap6h2p3f3cc2fbencsp6s6zzdze35lwmvzi5m
-  tests/test_default_dialogues.py: bafybeihhrapqva5spvddwra3mgghtuqtqmc3jpta6h3u4gll3pprckd22i
+  tests/test_default_dialogues.py: bafybeic657felnzdqrrj2zsyztgmineuaq5pofykkyt4rb2bmh3rv2fpeq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

@@ -19,32 +19,32 @@
 
 """This package contains round behaviours of AbciApp."""
 
-from dataclasses import dataclass, field
+from typing import Any, Dict, Type, Hashable, Optional
 from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
+from dataclasses import field, dataclass
 from unittest.mock import MagicMock
 
 import pytest
 
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES
-from packages.eightballer.protocols.balances import BalancesMessage
-from packages.eightballer.protocols.balances.custom_types import Balances
 from packages.eightballer.protocols.markets import MarketsMessage
+from packages.eightballer.protocols.balances import BalancesMessage
+from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.eightballer.protocols.markets.custom_types import Markets
+from packages.eightballer.protocols.balances.custom_types import Balances
+from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.eightballer.skills.dex_data_retrieval.behaviours import (
     DEFAULT_RETRIES,
+    FetchDexOrdersBehaviour,
+    FetchDexMarketsBehaviour,
+    FetchDexTickersBehaviour,
+    FetchDexBalancesBehaviour,
+    FetchDexPositionsBehaviour,
     DexDataRetrievalBaseBehaviour,
     DexDataRetrievalRoundBehaviour,
-    FetchDexBalancesBehaviour,
-    FetchDexMarketsBehaviour,
-    FetchDexOrdersBehaviour,
-    FetchDexPositionsBehaviour,
-    FetchDexTickersBehaviour,
 )
-from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
-from packages.valory.skills.abstract_round_abci.base import AbciAppDB
-from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES
 
 
 @dataclass
@@ -134,6 +134,7 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
     def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
         """Run tests."""
 
+        del exchange_data
         self.fast_forward(test_case.initial_data)
 
         def get_ccxt_response(*args, **kwargs):
@@ -147,7 +148,6 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
         def from_balances_to_dict(*args, **kwargs):
             """Mock _from_balances_to_dict"""
             del args, kwargs
-            del exchange_data
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):
@@ -234,6 +234,7 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
     async def test_run_failed_api_call(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
         """Run tests."""
 
+        del exchange_data
         self.fast_forward(test_case.initial_data)
 
         mocker = MagicMock()
@@ -251,7 +252,6 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         def from_markets_to_dict(*args, **kwargs):
             """Mock _from_markets_to_dict"""
             del args, kwargs
-            del exchange_data
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):

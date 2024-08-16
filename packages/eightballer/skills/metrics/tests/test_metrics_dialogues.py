@@ -19,14 +19,15 @@
 # ------------------------------------------------------------------------------
 """This module contains the tests of the dialogue classes of the http_echo skill."""
 
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 
 from aea.test_tools.test_skill import COUNTERPARTY_AGENT_ADDRESS, BaseSkillTestCase
 
-from packages.eightballer.protocols.default.message import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.skills.metrics.dialogues import DefaultDialogue, DefaultDialogues, HttpDialogue, HttpDialogues
+from packages.eightballer.skills.metrics.dialogues import HttpDialogue, HttpDialogues, DefaultDialogue, DefaultDialogues
+from packages.eightballer.protocols.default.message import DefaultMessage
+
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 

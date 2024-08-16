@@ -6,40 +6,40 @@ description: A wrapper of CCXT.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifq5ivgiycne3cyn4arb2q3phuyartawkbi3hcfda7dileczaxazq
-  connection.py: bafybeibqzn6dgriwnqa6ri4hav3sapsmaxqagaexig5p2ui5t4fvomdmu4
-  custom.py: bafybeigakkrxyad2o7mrpzgxnhznqhlnxy34nipabg3him6hua22rpp7ta
-  dcxt/__init__.py: bafybeihn7e3tvsfwm7un2nzaztvxlhels47aab4h2fzwulyflrigznflpi
-  dcxt/balancer.py: bafybeiagu2wf2onkw67iwg44av7tmknjmhcumizd4bwof2uobxz3htbtju
+  __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
+  connection.py: bafybeiackrupkc3rgcjq44m3pfmmr4gurcqke4g3z6bikzke6yl2il7qqy
+  custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
+  dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
+  dcxt/balancer.py: bafybeig2l2nvhmfxayfv3376g4dr33tkaynlutnaefkkmlq2s64wj5ffam
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeiehy4ydhgkonnzqwnhovx46nboyrbjdjoprmh57ofm3c5tedjtnzm
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
-  dcxt/lyra_v2.py: bafybeiha2vk4ibopkxaxyojushl6rg7egnzynrzsxdkba36ee4s3z5aoxy
-  erc_20/__init__.py: bafybeibaib6srjfuq6kqwenmnoswieukz47c5iomzkhddi22lkgtvfth6q
+  dcxt/lyra_v2.py: bafybeid6jlkkdlrqqwr36e24nzgbahopp4pfedpzittmaxvp6foif2h7lu
+  erc_20/__init__.py: bafybeieo36mrv4bymsfm6hjj3w34vhjurv7tenmwbyjmy2a3ft5fxc72qm
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
-  erc_20/contract.py: bafybeigjff7bkyu4spjkbuje4tzviz7wcazr7xf7byf7mz575koif4vpe4
+  erc_20/contract.py: bafybeibt5c7oidfs3kdrfb3oiwxhmpu46kzin3qgj3pcbq7gds335rnify
   exchange.py: bafybeigvnewleyvxietfdcdxy3gtpysemcy56wkdthjmvyt65cmby627rq
-  interfaces/balance.py: bafybeiaaoegpn3mlisr37sdeopru34zxqiicn3627qugggdbwm73zdo4ny
-  interfaces/interface.py: bafybeibkalr75egxqojzjs5wog3dndkaqds2xusftxlvfnycl7xmpv3shi
-  interfaces/interface_base.py: bafybeic2qwt7aprhowoevntectf44jgrnnx5et2s3bzeisjxul7m2ecqye
-  interfaces/market.py: bafybeidypwhtnrkwdncxbrjsjdbtxzzom6djve7hb57asqfr6ttureyecq
-  interfaces/ohlcv.py: bafybeielfqqfe4x5724fcsudxaqucgbwyrm7d5locwe563vcptxdcpsdfa
-  interfaces/order.py: bafybeiccjnvcpbytqryjhfizc4bscdel3vxiradfbbfq5dxasau2au5p6a
-  interfaces/order_book.py: bafybeicy33lj5iszqlmhcwcsjoqcy37gcp2yc4txrpl5zzmnwln5mhhujy
-  interfaces/position.py: bafybeidrf2qhaekzlycfx3ryrrvyacevaykfs3tehghobv4pnronrjmb6e
-  interfaces/spot_asset.py: bafybeihmnmrktjstmy6x2rjd37d3tjpet25xk4w6aqs6oltttler546d3i
-  interfaces/ticker.py: bafybeih67ibthv3bba3uydwxiud5srcrs6bfuqlz6q4p6pwqbxwngthpbu
+  interfaces/balance.py: bafybeiebgyjtoanozc7prfsfo4d5kwbpiinq4nuafxbci2cu5vugfkv35e
+  interfaces/interface.py: bafybeic6fb4mb2rzhossctii4pgx4cajlfcgxvlbfwf4bsd26tm3epei2i
+  interfaces/interface_base.py: bafybeidbveccpnrhkwuua5g7ke3ycwav6uaa7nohdsxadwkodbpf2rdjfa
+  interfaces/market.py: bafybeig7rlxg6sfcdfehodq6zz4zn263n6e2sfjvx2ji2axxfpbupcyjem
+  interfaces/ohlcv.py: bafybeihxbonmsouzc2ntao4zmzze6nlsgbdbu63wvltio6yrsdehsimf24
+  interfaces/order.py: bafybeic4w3hhqczptflagwvbymd4cvuzsqij3ddc7vvb32gpkcuivphhvm
+  interfaces/order_book.py: bafybeiahn7qflpxtj6gm7vetnjp2pwfklqcdivhotcrah6oa5zyczobkom
+  interfaces/position.py: bafybeiay4mf2uls6lijttp7e5nqfpdhwm5omcyqyetqn24ej4phdvudzhq
+  interfaces/spot_asset.py: bafybeigmjwl57jvkmh7smcgya4arrlkajazrxzm2bximasy6mddfmvp57q
+  interfaces/ticker.py: bafybeihc5bddcgr4762ywo6ohxpqir3vnvrxalgdiem2fefrst4lehxt7u
   tests/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
   tests/data/key: bafybeibpiq3ximhcv3eoz2tlgehwgac4be7ex4yjeljo4gigjiekbyprw4
   tests/protocols/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
-  tests/protocols/test_market.py: bafybeid43ea24wmb43lvb2ztp6lofuba4cgfjklqcjesbkkrrrj7zffd54
-  tests/protocols/test_ohlcv_interface.py: bafybeifeb4fsjoaqyp5dcrfaqrl2yiysx3dts4xkwai5vy3it52etod77m
-  tests/protocols/test_order_interface.py: bafybeicsps5zvtrvie7knmyxkthkolaiapb6x5kf7zwn4siou72borkwyi
-  tests/protocols/test_positions_interface.py: bafybeifaian2uncrly75anrzqd3rj3zu4stxjf4og5mcyfzwi6qujo4au4
-  tests/protocols/test_spot_asset_interface.py: bafybeid6qnwd3a4ra4abfru6e5tb7mxxnpayrrryv5zn32i2diyolq3lv4
-  tests/protocols/test_tickers.py: bafybeihpom5zbcc6jotsytgnk7t2hnyrur5l5h6eee2k2vwisi2nb43vcm
-  tests/test_dcxt_connection.py: bafybeieck5cmbotawf76c5ghaflsdcazwvmyqs2vqlunixzgnvpkb3kkha
+  tests/protocols/test_market.py: bafybeicoiqsjuoohfryibaqygpctrq2yem4ja3yvded6pndh6k7i46tyeq
+  tests/protocols/test_ohlcv_interface.py: bafybeibcvwq24c6bcxzuf7f3l2y4huocmxwmkjrelfknjrn4vvxrxdp7wq
+  tests/protocols/test_order_interface.py: bafybeicfaoj6uxlz53aq7h2dhxuwx564dnrxjw4h2mjv4tavt3jqostxbu
+  tests/protocols/test_positions_interface.py: bafybeifjichogn4zhtsjwq5xad67xn3fw53b6xge22altinxlsqv457viy
+  tests/protocols/test_spot_asset_interface.py: bafybeid2knx2lkd5jz64a357vtcz35gfjtoqey4shmmjtygl3r7dx6kvwq
+  tests/protocols/test_tickers.py: bafybeicp3eqvgk2js7e7xrjhpmfxa4nxvrur2namnh2fc5ylpywqcjvppa
+  tests/test_dcxt_connection.py: bafybeictzukyjk3fbvc7pof4ow3bki62tiozvmx642ruvmggsv63lrtxlu
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
@@ -52,15 +52,15 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeihrnjigqe3cwzsybhfgb2745e3pxccojpqhy4bu7jtg62ugwnuole
-- eightballer/default:0.1.0:bafybeifmnebwgbsvplbtfosc4ovx42e5jfkkczprutxrjchudhzpby2cma
-- eightballer/markets:0.1.0:bafybeigoc5yg6r5shf6hivumnikuugjyr3uosyylleztjye5xrbw3q43f4
-- eightballer/ohlcv:0.1.0:bafybeiekgrxin3jge5j5gfygbgyemlqnciuyiauvrja3a4wmywlncddwee
-- eightballer/order_book:0.1.0:bafybeifdd3cmpowcuamszxvidnymkr37kn4wgavp2z6uihd6wuwalsabki
-- eightballer/orders:0.1.0:bafybeie5t3ue2hrb7o7lfwz2w4cb43xuad5fapuxh3vo7wyjo44yzj7774
-- eightballer/positions:0.1.0:bafybeicm52bv27yrvpyg3wn73hdg5hs6tlfj56ba37by3lgmqjxhss27cm
-- eightballer/spot_asset:0.1.0:bafybeibfw3gtaihkpevki6bc2e5gd5bc7rv7nkv4dnhrezdefo2busuvxi
-- eightballer/tickers:0.1.0:bafybeibbmsflypgdsn7p2gkfy5fstpkrb5wrwwobvdsbs33tkqnu2ihdr4
+- eightballer/balances:0.1.0:bafybeiajh5vzhcofdpemm3545t3yh6g4okpwnejvbqchxapo765batiitu
+- eightballer/default:0.1.0:bafybeid2kyktyf2kqmua5dscnax7ustvht7krpwda6modxog5xrplwtmym
+- eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
+- eightballer/ohlcv:0.1.0:bafybeibceyzlkap55isc7rcru3b3iosb2vhzz7xjt666k672bz6ejpsiyq
+- eightballer/order_book:0.1.0:bafybeibtpf6fjlzfjfvwskveb7usb3bi27fbnzd5ypwm5u4oyzjnb3s6yi
+- eightballer/orders:0.1.0:bafybeibprhniaoq3y2uzc4arwwl7yws3i54ahaicrphh5gtl4xxhxqexdy
+- eightballer/positions:0.1.0:bafybeib6v2rtylru3lmri6tpgug7sgsd3imzqrpma3nuiqgjzmtdrsblaa
+- eightballer/spot_asset:0.1.0:bafybeibrses5hkdzjtdbplkvvqfj7g64sopcdjwsstcyxujerttmpg4hxu
+- eightballer/tickers:0.1.0:bafybeicjbpa24tla2enenmlzipqhu6grutqso74q6y7is2cpk7acub3bca
 class_name: DcxtConnection
 config:
   exchanges:

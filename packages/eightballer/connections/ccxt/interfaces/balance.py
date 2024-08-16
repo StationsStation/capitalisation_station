@@ -2,15 +2,14 @@
 Base interface for balances protocol.
 """
 
-
 from typing import Optional
 
 from ccxt import RequestTimeout
 
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.balances.custom_types import Balance, Balances
-from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
+from packages.eightballer.protocols.balances.custom_types import Balance, Balances
+from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 
 
 def all_balances_from_api_call(api_call):

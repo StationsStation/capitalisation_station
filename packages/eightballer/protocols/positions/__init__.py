@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea 
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.serialization import PositionsSerializer
 
+
 PositionsMessage.serializer = PositionsSerializer

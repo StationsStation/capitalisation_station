@@ -22,8 +22,8 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.default.dialogues import DefaultDialogue, DefaultDialogues
 from packages.eightballer.protocols.default.message import DefaultMessage
+from packages.eightballer.protocols.default.dialogues import DefaultDialogue, DefaultDialogues
 
 
 class TestDialoguesDefault(BaseProtocolDialoguesTestCase):

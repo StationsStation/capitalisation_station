@@ -1,17 +1,18 @@
 """This package contains round behaviours of AbciApp."""
 
-from dataclasses import dataclass, field
+from typing import Any, Dict, Type, Hashable, Optional
 from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
+from dataclasses import field, dataclass
 
 import pytest
 
+from packages.valory.skills.abstract_round_abci.base import AbciAppDB
+from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.eightballer.skills.chained_dex_app.behaviours import DexDataAbciAppConsensusBehaviour
 from packages.eightballer.skills.dex_data_retrieval.behaviours import FetchDexPositionsBehaviour
-from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
-from packages.valory.skills.abstract_round_abci.base import AbciAppDB
-from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
+
 
 TEST_EXCHANGE = "lyra"
 

@@ -1,4 +1,5 @@
 """Test the ohlcv connection."""
+
 import asyncio
 
 import pytest
@@ -7,7 +8,7 @@ from aea.mail.base import Envelope
 from packages.eightballer.protocols.ohlcv import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
 
-from ..test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues, with_timeout
+from ..test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 
 @pytest.mark.asyncio

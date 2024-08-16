@@ -1,18 +1,19 @@
 """Interface."""
-from typing import Any, Callable, Dict, Optional
+
+from typing import Any, Dict, Callable, Optional
 
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID
-from packages.eightballer.connections.dcxt.interfaces.balance import BalanceInterface
-from packages.eightballer.connections.dcxt.interfaces.market import MarketInterface
 from packages.eightballer.connections.dcxt.interfaces.ohlcv import OhlcvInterface
 from packages.eightballer.connections.dcxt.interfaces.order import OrderInterface
-from packages.eightballer.connections.dcxt.interfaces.order_book import OrderBookInterface
-from packages.eightballer.connections.dcxt.interfaces.position import PositionInterface
-from packages.eightballer.connections.dcxt.interfaces.spot_asset import SpotAssetInterface
+from packages.eightballer.connections.dcxt.interfaces.market import MarketInterface
 from packages.eightballer.connections.dcxt.interfaces.ticker import TickerInterface
+from packages.eightballer.connections.dcxt.interfaces.balance import BalanceInterface
+from packages.eightballer.connections.dcxt.interfaces.position import PositionInterface
+from packages.eightballer.connections.dcxt.interfaces.order_book import OrderBookInterface
+from packages.eightballer.connections.dcxt.interfaces.spot_asset import SpotAssetInterface
 
 
 class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attributes

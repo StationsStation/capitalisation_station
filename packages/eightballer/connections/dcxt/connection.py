@@ -1,24 +1,26 @@
 """
 Connection for dcxt.
 """
-import asyncio
+
 import os
+import asyncio
 import traceback
+from typing import Any, Dict, List, Deque, Optional, cast
 from asyncio import Task
 from collections import deque
-from typing import Any, Deque, Dict, List, Optional, cast
 
-from aea.configurations.base import PublicId
-from aea.connections.base import Connection, ConnectionStates
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
+from aea.connections.base import Connection, ConnectionStates
+from aea.configurations.base import PublicId
 from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.connections.dcxt.interfaces.interface import ConnectionProtocolInterface
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
 from packages.eightballer.protocols.markets.custom_types import Market
+from packages.eightballer.connections.dcxt.interfaces.interface import ConnectionProtocolInterface
+
 
 POLL_INTERVAL_MS = 50
 RETRY_DELAY = POLL_INTERVAL_MS * 2
@@ -87,7 +89,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 "auth": {"private_key": private_key},
                 "logger": self.logger,
             }
-            params['kwargs'] = exchange_config.get("kwargs", {})
+            params["kwargs"] = exchange_config.get("kwargs", {})
             try:
                 exchange_class = getattr(dcxt, exchange_id)
                 exchange = exchange_class(**params)

@@ -19,9 +19,10 @@
 # pylint: disable=C0103,R0902,C0301,R1735
 
 """This module contains class representations corresponding to every custom type in the protocol specification."""
-from dataclasses import dataclass
+
 from enum import Enum
 from typing import List, Optional
+from dataclasses import dataclass
 
 
 class ErrorCode(Enum):

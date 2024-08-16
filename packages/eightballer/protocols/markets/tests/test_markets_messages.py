@@ -25,8 +25,9 @@ from typing import List
 import pytest
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.markets.custom_types import ErrorCode, Market, Markets
 from packages.eightballer.protocols.markets.message import MarketsMessage
+from packages.eightballer.protocols.markets.custom_types import Market, Markets, ErrorCode
+
 
 TEST_MARKET_CASE = {
     "id": "ETHBTC",

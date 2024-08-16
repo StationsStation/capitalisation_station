@@ -1,14 +1,15 @@
 """Implements the interface for market protocol."""
+
 from typing import Optional, cast
 
+from ccxt import RequestTimeout
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
-from ccxt import RequestTimeout
 
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.protocols.markets.dialogues import BaseMarketsDialogues, MarketsDialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
+from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
+from packages.eightballer.protocols.markets.custom_types import Market, Markets
+from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 
 
 def all_markets_from_api_call(api_call):

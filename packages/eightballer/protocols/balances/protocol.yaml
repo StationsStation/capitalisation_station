@@ -7,15 +7,15 @@ description: A protocol for passing balance data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeigalpw3zlh2sfmxw52dzxzsrnofbzb2fkucbravmi2dzsmpiwjtse
+  __init__.py: bafybeidbm52vudfjxmalofwrv5skp267v5x52isylcgndz62ggqz3jrmrm
   balances.proto: bafybeifl2dh3x5bqs5c5m22ljpzbfjzx6wvh2nioxvl7gc7aammcwqlzdi
   balances_pb2.py: bafybeieluy4t355zociyljqeb4gdvqqr2b2vjr5fguo7lgeleweuckgy7i
-  custom_types.py: bafybeiezgzcylgdbcx3z27sxqpfzxuw3dvh4eqytrmtz3wptqgoxw2uq5a
-  dialogues.py: bafybeigu6nhm36fi4fbxkcwjp55lbyhryladdyh6y3iad5sbofoeljse24
+  custom_types.py: bafybeify72qhqlesg3g4onhi3j43w35rvjtmzojh6qjdsvpvoh2db64dka
+  dialogues.py: bafybeicazmez22j22vwevfnqx3jkctntz4jd56pctiyf7ty2jzyuqpgxie
   message.py: bafybeihco7lhsh2zrq4x6trnudd4nzr7pni2lzvzcruyhw4f2dtgmviepi
   serialization.py: bafybeidjgh534jl7srdubhxm5a7g5owhwg65mnl3awigo4ldhoa75iclza
-  tests/test_balances_dialogues.py: bafybeia2jfxpgaoza6muswlkotlarqjaqed6gyalgy2iv7mn464tnjpw5a
-  tests/test_balances_messages.py: bafybeiewi53joxlus3v6obzvaswckmntuuate3e4cgharjfuvnjkoshh6a
+  tests/test_balances_dialogues.py: bafybeidxsrljdogjnkkvmlabcqsueogujqebv2jnvmsedbzpigdjj3ljom
+  tests/test_balances_messages.py: bafybeiewjtljkju3nazxsrjudronb52ji3vhu6pggfztd77kwnjfrm5wgy
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea 
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.serialization import OrdersSerializer
 
+
 OrdersMessage.serializer = OrdersSerializer

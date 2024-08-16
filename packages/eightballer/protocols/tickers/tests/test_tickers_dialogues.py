@@ -25,8 +25,8 @@ import pytest
 # pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
-from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, TickersDialogues
 from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, TickersDialogues
 
 
 @pytest.mark.skip("Not implemented yet")

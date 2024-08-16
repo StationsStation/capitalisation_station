@@ -1,17 +1,19 @@
 """Test the metrics skill."""
+
+import os
 import json
 import logging
-import os
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 from unittest.mock import patch
 
-from aea.protocols.dialogue.base import DialogueMessage
 from aea.test_tools.test_skill import BaseSkillTestCase
+from aea.protocols.dialogue.base import DialogueMessage
 
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.skills.metrics.dialogues import HttpDialogues
 from packages.eightballer.skills.metrics.handlers import HttpHandler
+from packages.eightballer.skills.metrics.dialogues import HttpDialogues
+
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 

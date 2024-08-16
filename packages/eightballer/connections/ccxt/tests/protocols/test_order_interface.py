@@ -7,10 +7,11 @@ import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 
-from ..test_ccxt_connection import DEFAULT_EXCHANGE_ID, BaseCcxtConnectionTest, get_dialogues, with_timeout
+from ..test_ccxt_connection import DEFAULT_EXCHANGE_ID, BaseCcxtConnectionTest, with_timeout, get_dialogues
+
 
 TEST_SETTLEMENTS = [
     {

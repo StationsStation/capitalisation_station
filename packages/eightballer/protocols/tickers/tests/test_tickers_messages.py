@@ -25,8 +25,9 @@ from typing import List
 
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.tickers.custom_types import ErrorCode, Ticker, Tickers
 from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers, ErrorCode
+
 
 RAW_TICKER = {
     "symbol": "ETH/BTC",

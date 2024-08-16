@@ -1,14 +1,16 @@
 """
 Interface for the order book protocol.
 """
+
 import asyncio
 from typing import Optional
 
 from aea.skills.base import Envelope
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
-from packages.eightballer.protocols.order_book.dialogues import BaseOrderBookDialogues, OrderBookDialogue
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
+from packages.eightballer.protocols.order_book.dialogues import OrderBookDialogue, BaseOrderBookDialogues
+from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+
 
 DEFAULT_INTERVAL = 0.1
 

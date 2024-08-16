@@ -1,18 +1,18 @@
 """
 Tests for the position interface.
 """
+
 import asyncio
 from unittest.mock import patch
 
 import pytest
 from aea.mail.base import Envelope
 
-from packages.eightballer.connections.dcxt.interfaces.interface_base import get_dialogues
-from packages.eightballer.protocols.positions.custom_types import Positions
-from packages.eightballer.protocols.positions.dialogues import BasePositionsDialogues, PositionsDialogue
 from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
+from packages.eightballer.protocols.positions.custom_types import Positions
 
-from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, get_dialogues, with_timeout
+from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 
 @pytest.mark.asyncio

@@ -1,6 +1,7 @@
 """
 Test order protocol
 """
+
 from abc import abstractmethod
 
 from aea.mail.base import Envelope

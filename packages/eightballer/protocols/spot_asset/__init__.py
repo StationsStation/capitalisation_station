@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 from packages.eightballer.protocols.spot_asset.serialization import SpotAssetSerializer
 
+
 SpotAssetMessage.serializer = SpotAssetSerializer

@@ -23,15 +23,16 @@
 # type: ignore # noqa: E800
 # pylint: skip-file
 
-from pathlib import Path
 from typing import cast
+from pathlib import Path
 
 import pytest
-from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
-from aea.contracts.base import Contract, contract_registry
 from aea_ledger_solana import SolanaApi, SolanaCrypto
+from aea.contracts.base import Contract, contract_registry
+from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 
 from packages.eightballer.contracts.spl_token.contract import SplToken
+
 
 PACKAGE_DIR = Path(__file__).parent.parent
 

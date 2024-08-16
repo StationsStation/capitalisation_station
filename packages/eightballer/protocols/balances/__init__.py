@@ -26,4 +26,5 @@ It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea 
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.serialization import BalancesSerializer
 
+
 BalancesMessage.serializer = BalancesSerializer

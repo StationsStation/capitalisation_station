@@ -1,4 +1,5 @@
 """Test the spot_asset protocol."""
+
 import asyncio
 from unittest.mock import MagicMock
 
@@ -6,10 +7,11 @@ import pytest
 from aea.mail.base import Envelope
 
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.protocols.orders.dialogues import BaseOrdersDialogues, OrdersDialogue
 from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 
-from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, get_dialogues, with_timeout
+from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, with_timeout, get_dialogues
+
 
 TEST_SETTLEMENTS = [
     {

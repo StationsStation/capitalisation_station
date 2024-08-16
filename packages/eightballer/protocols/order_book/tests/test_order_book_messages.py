@@ -26,8 +26,8 @@ from typing import List
 import pytest
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
-from packages.eightballer.protocols.order_book.custom_types import OrderBook
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
+from packages.eightballer.protocols.order_book.custom_types import OrderBook
 
 
 @pytest.mark.skip("Not implemented yet")

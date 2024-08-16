@@ -19,7 +19,9 @@
 # ------------------------------------------------------------------------------
 # pylint: disable=unused-import
 """Test the agent."""
+
 import pytest
+
 
 TARGET_AGENT = "eightballer/chained_dex_app:0.1.0"
 TARGET_SKILL = "eightballer/chined_dex_app:0.1.0"
