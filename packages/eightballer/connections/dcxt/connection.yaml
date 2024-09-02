@@ -77,6 +77,12 @@ config:
     ledger_id: optimism
     rpc_url: https://mainnet.optimism.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: base
+    rpc_url: https://base.llamarpc.com
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   target_skill_id: null
 excluded_protocols: []
 dependencies:

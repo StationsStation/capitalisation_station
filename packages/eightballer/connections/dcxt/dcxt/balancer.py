@@ -59,6 +59,7 @@ class SupportedLedgers(Enum):
 
     ETHEREUM = "ethereum"
     OPTIMISM = "optimism"
+    BASE = "base"
 
 
 class SupportedBalancerDeployments(Enum):
@@ -68,11 +69,13 @@ class SupportedBalancerDeployments(Enum):
 
     MAINNET = "mainnet"
     OPTIMISM = "optimism"
+    BASE = "base"
 
 
 LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.OPTIMISM: SupportedBalancerDeployments.OPTIMISM,
     SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
+    SupportedLedgers.BASE: SupportedBalancerDeployments.BASE,
 }
 
 WHITELISTED_POOLS = {
@@ -83,6 +86,11 @@ WHITELISTED_POOLS = {
     SupportedLedgers.OPTIMISM: [
         "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
         "0x9da11ff60bfc5af527f58fd61679c3ac98d040d9000000000000000000000100",
+    ],
+    SupportedLedgers.BASE: [
+        "0x5332584890d6e415a6dc910254d6430b8aab7e69000200000000000000000103",
+        "0xaac1a23e7910efa801c6f1ff94648480ab0325b90002000000000000000000fc",
+        "0x0c659734f1eef9c63b7ebdf78a164cdd745586db000000000000000000000046",
     ],
 }
 
@@ -97,11 +105,13 @@ LEDGER_TO_TOKEN_LIST = {
         "0x4200000000000000000000000000000000000006",
         "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
     ],
+    SupportedLedgers.BASE: ["0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca", "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"],
 }
 
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: ["0x6b175474e89094c44da98b954eedeac495271d0f"],
     SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
+    SupportedLedgers.BASE: ["0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"],
 }
 
 
@@ -280,7 +290,7 @@ class BalancerClient:
                     address=address,
                     symbol=symbol[0],
                     name=name[0],
-                    decimals=18,
+                    decimals=self.bal.decimals[address],
                 )
             # We now get get the price for the swap
             # We now make an erc20 representation of the token.

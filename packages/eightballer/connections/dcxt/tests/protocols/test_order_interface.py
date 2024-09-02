@@ -43,6 +43,7 @@ class TestOrdersExecution(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseOrdersDialogues, OrdersDialogue)
 
+    @pytest.mark.skip("Not implemented for spot assets.")
     @with_timeout(3)
     async def test_handles_get_orders(self) -> None:
         """Can handle ohlcv messages."""
@@ -74,6 +75,7 @@ class TestOrdersExecution(BaseDcxtConnectionTest):
             # we assume that the response is an error message as we have no authentification.
             assert response.message.performative == OrdersMessage.Performative.ERROR, f"Error: {response}"
 
+    @pytest.mark.skip("Not implemented for spot assets.")
     @with_timeout(3)
     async def test_handles_get_settlements(self) -> None:
         """Can handle ohlcv messages."""

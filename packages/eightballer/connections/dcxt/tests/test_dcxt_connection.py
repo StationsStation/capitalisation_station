@@ -65,6 +65,12 @@ TEST_EXCHANGE_DATA = """
     ledger_id: optimism
     rpc_url: https://mainnet.optimism.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: packages/eightballer/connections/dcxt/tests/data/key
+    wallet: null
+    ledger_id: base
+    rpc_url: https://base.llamarpc.com
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 """
 
 TEST_EXCHANGES = {f"{k['name']}_{k['ledger_id']}": k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
