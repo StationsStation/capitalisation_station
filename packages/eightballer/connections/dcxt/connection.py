@@ -27,6 +27,8 @@ RETRY_DELAY = POLL_INTERVAL_MS * 2
 RETRY_BACKOFF = 2
 PUBLIC_ID = PublicId.from_str("eightballer/dcxt:0.1.0")
 
+DEFAULT_ENCODING = "utf-8"
+
 
 class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attributes
     """Dcxt connection class."""
@@ -74,27 +76,15 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             done_callback=self._handle_done_task,
         )
 
-        for exchange_config in self.exchange_configs:
-            exchange_id = exchange_config["name"]
-            self.logger.info(f"Connecting to {exchange_id}")
-            key_path = exchange_config.get("key_path")
-
-            if key_path is not None:
-                with open(key_path, "r", encoding="utf8") as key_file:
-                    private_key = key_file.read()
-            else:
-                private_key = os.urandom(32).hex()
-
-            params = {
-                "auth": {"private_key": private_key},
-                "logger": self.logger,
-            }
-            params["kwargs"] = exchange_config.get("kwargs", {})
+        for exchange_id, exchange_config in self.exchange_configs.items():
+            exchange_name = exchange_config.get("name")
+            ledger_id = exchange_config.get("ledger_id")
+            self.logger.info(f"Connecting to {exchange_name} with ledger_id {ledger_id}")
             try:
-                exchange_class = getattr(dcxt, exchange_id)
-                exchange = exchange_class(**params)
+                exchange_class = getattr(dcxt, exchange_name)
+                exchange = exchange_class(**exchange_config)
             except AttributeError as exc:
-                raise ValueError(f"Exchange {exchange_id} not found in dcxt") from exc
+                raise ValueError(f"Exchange {exchange_name} not found in dcxt") from exc
             self._exchanges.update({exchange_id: exchange})
             self.logger.info(f"Successfully connected to {exchange_id}")
         self.state = ConnectionStates.connected

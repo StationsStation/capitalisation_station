@@ -7,11 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
-  connection.py: bafybeiackrupkc3rgcjq44m3pfmmr4gurcqke4g3z6bikzke6yl2il7qqy
+  connection.py: bafybeide2wzw55ddfud37wfhbegwl4ayclymeh3dwqaxd35d6qfs6uxdli
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeig2l2nvhmfxayfv3376g4dr33tkaynlutnaefkkmlq2s64wj5ffam
+  dcxt/balancer.py: bafybeiecnytewd27gz53257rvrsxacahfw7mgmeeb2ghydykxkwf7gzw7e
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
+  dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/defi_exchange.py: bafybeih7xelvpwwjz2esn2mdciksqv3q4mpjfxgxayxvrf345t2donxx4i
   dcxt/exceptions.py: bafybeiehy4ydhgkonnzqwnhovx46nboyrbjdjoprmh57ofm3c5tedjtnzm
   dcxt/hundred_x.py: bafybeich3t5eowkzr4fnqvycosnnq37kw753jcriit2gbfretrrieap6ny
@@ -36,10 +37,10 @@ fingerprint:
   tests/protocols/test_market.py: bafybeicoiqsjuoohfryibaqygpctrq2yem4ja3yvded6pndh6k7i46tyeq
   tests/protocols/test_ohlcv_interface.py: bafybeibcvwq24c6bcxzuf7f3l2y4huocmxwmkjrelfknjrn4vvxrxdp7wq
   tests/protocols/test_order_interface.py: bafybeicfaoj6uxlz53aq7h2dhxuwx564dnrxjw4h2mjv4tavt3jqostxbu
-  tests/protocols/test_positions_interface.py: bafybeifjichogn4zhtsjwq5xad67xn3fw53b6xge22altinxlsqv457viy
+  tests/protocols/test_positions_interface.py: bafybeicsjnq2fy7ed67bkqyjjzlbgosvmbrnsv6ca7r2r4c75zilns5swq
   tests/protocols/test_spot_asset_interface.py: bafybeid2knx2lkd5jz64a357vtcz35gfjtoqey4shmmjtygl3r7dx6kvwq
-  tests/protocols/test_tickers.py: bafybeicp3eqvgk2js7e7xrjhpmfxa4nxvrur2namnh2fc5ylpywqcjvppa
-  tests/test_dcxt_connection.py: bafybeictzukyjk3fbvc7pof4ow3bki62tiozvmx642ruvmggsv63lrtxlu
+  tests/protocols/test_tickers.py: bafybeihf4ls6fmqct7vtjwbwl33ckm23kix55emialwtit72mgkytq23nu
+  tests/test_dcxt_connection.py: bafybeiabwj2rvw5onxvejnrli3e7bwgf6u3h7qomcvebarbwfzuqxogwda
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
@@ -65,11 +66,17 @@ class_name: DcxtConnection
 config:
   exchanges:
   - name: balancer
-    environment: test
-    kwargs:
-      chain_id: mainnet
-      rpc_url: https://rpc.ankr.com/eth
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://rpc.ankr.com/eth
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: optimism
+    rpc_url: https://mainnet.optimism.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   target_skill_id: null
 excluded_protocols: []
 dependencies:

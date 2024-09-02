@@ -10,10 +10,12 @@ from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
 
-from ..test_dcxt_connection import DEFAULT_EXCHANGE_ID, BaseDcxtConnectionTest, with_timeout, get_dialogues
+from ..test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 
 TEST_MARKET = "BTC-PERP"
+
+TIMEOUT = 10
 
 
 @pytest.mark.asyncio
@@ -22,15 +24,15 @@ class TestFetchTickers(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    @with_timeout(30)
-    async def test_handles_get_all_tickers(self) -> None:
+    @with_timeout(TIMEOUT)
+    async def test_handles_get_all_tickers(self, exchange_id=list(TEST_EXCHANGES.keys()).pop()) -> None:
         """Can handle ohlcv messages."""
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id=DEFAULT_EXCHANGE_ID,
+            exchange_id=exchange_id,
         )
         envelope = Envelope(
             to=request.to,
@@ -45,21 +47,21 @@ class TestFetchTickers(BaseDcxtConnectionTest):
         assert response.message.performative == TickersMessage.Performative.ALL_TICKERS, f"Error: {response}"
 
 
+@pytest.mark.parametrize("exchange_id", TEST_EXCHANGES.keys())
 @pytest.mark.asyncio
 class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    @with_timeout(3)
-    async def test_handles_exchange_timeout(self) -> None:
+    async def test_handles_exchange_timeout(self, exchange_id) -> None:
         """Can handle ohlcv messages."""
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id=DEFAULT_EXCHANGE_ID,
+            exchange_id=exchange_id,
         )
         envelope = Envelope(
             to=request.to,
@@ -69,7 +71,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_tickers = mocker  # pylint: disable=W0212
+        self.connection._exchanges[exchange_id].fetch_tickers = mocker  # pylint: disable=W0212
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

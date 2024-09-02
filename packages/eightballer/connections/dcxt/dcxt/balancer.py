@@ -4,6 +4,7 @@ Balancer exchange.
 
 import json
 import traceback
+from enum import Enum
 from glob import glob
 from typing import cast
 from decimal import Decimal
@@ -48,20 +49,60 @@ ABI_MAPPING = {
 }
 
 ETH_KEYPATH = "ethereum_private_key.txt"
-
-OLAS_ADDRESS = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
-USDC_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
-WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-
-# Manuall retrieved from https://balancer.fi/pools/ethereum/v2/
-WHITELISTED_POOLS = [
-    "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
-    "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
-]
-
-WHITE_LISTED_TOKENS = [OLAS_ADDRESS, USDC_ADDRESS, WETH_ADDRESS]
-
 DEFAULT_AMOUNT_USD = 1
+
+
+class SupportedLedgers(Enum):
+    """
+    Supported ledgers.
+    """
+
+    ETHEREUM = "ethereum"
+    OPTIMISM = "optimism"
+
+
+class SupportedBalancerDeployments(Enum):
+    """
+    Supported balancer deployments.
+    """
+
+    MAINNET = "mainnet"
+    OPTIMISM = "optimism"
+
+
+LEDGER_IDS_CHAIN_NAMES = {
+    SupportedLedgers.OPTIMISM: SupportedBalancerDeployments.OPTIMISM,
+    SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
+}
+
+WHITELISTED_POOLS = {
+    SupportedLedgers.ETHEREUM: [
+        "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
+        "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
+    ],
+    SupportedLedgers.OPTIMISM: [
+        "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
+        "0x9da11ff60bfc5af527f58fd61679c3ac98d040d9000000000000000000000100",
+    ],
+}
+
+
+LEDGER_TO_TOKEN_LIST = {
+    SupportedLedgers.ETHEREUM: [
+        "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0",
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    ],
+    SupportedLedgers.OPTIMISM: [
+        "0x4200000000000000000000000000000000000006",
+        "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+    ],
+}
+
+LEDGER_TO_STABLECOINS = {
+    SupportedLedgers.ETHEREUM: ["0x6b175474e89094c44da98b954eedeac495271d0f"],
+    SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
+}
 
 
 class BalancerClient:
@@ -71,26 +112,22 @@ class BalancerClient:
 
     tokens: dict[str:Erc20Token] = {}
 
-    def __init__(self, *args, **kwargs):  # pylint: disable=super-init-not-called
-        del args
-        custom_kwargs = kwargs.get("kwargs", {})
-        self.chain_name = custom_kwargs.get("chain_id")
-        if not self.chain_name:
+    def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
+        if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
             raise ConfigurationError("Chain name not provided to BalancerClient")
 
-        self.rpc_url = custom_kwargs.get("rpc_url")
-        if not self.rpc_url:
-            raise ConfigurationError("RPC URL not provided to BalancerClient")
+        self.ledger_id = SupportedLedgers(ledger_id)
+        self.balancer_deployment = LEDGER_IDS_CHAIN_NAMES[self.ledger_id]
 
-        self.etherscan_api_key = custom_kwargs.get("etherscan_api_key")
-        if not self.etherscan_api_key:
-            raise ConfigurationError("Etherscan API key not provided to BalancerClient")
+        self.rpc_url = rpc_url
 
-        self.account = Account.from_key(  # pylint: disable=E1120
-            private_key=kwargs.get("auth").get("private_key").strip()
-        )  # pylint: disable=E1120
+        self.etherscan_api_key = etherscan_api_key
+
+        with open(key_path, "r", encoding=DEFAULT_ENCODING) as file:
+            key = file.read().strip()
+        self.account = Account.from_key(private_key=key)
         self.bal: balpy.balpy = balpy.balpy(
-            self.chain_name,
+            LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
                 "privateKey": self.account._private_key,
                 "customRPC": self.rpc_url,
@@ -102,7 +139,6 @@ class BalancerClient:
         self.gas_price_premium = kwargs.get("gas_price_premium", GAS_PRICE_PREMIUM)
 
         contract_dir = Path(__file__).parent.parent.parent.parent / "contracts" / "erc_20"
-
         configuration = cast(
             ContractConfig,
             load_component_configuration(
@@ -113,7 +149,6 @@ class BalancerClient:
         # Not a nice way to do this, but connections cannot have contracts as a dependency.
         self.erc20_contract = Contract.from_config(configuration)
         self.logger = kwargs.get("logger")
-
         self.tickers = {}
 
     async def fetch_markets(
@@ -155,7 +190,7 @@ class BalancerClient:
         balances = Balances(
             balances=[
                 Balance(
-                    asset_id=USDC_ADDRESS,
+                    asset_id=LEDGER_TO_STABLECOINS[self.ledger_id][0],
                     free=0,
                     used=0,
                     total=0,
@@ -171,8 +206,12 @@ class BalancerClient:
 
         :return: The pool IDs.
         """
-        # We read in the pool IDs from a file for now.
-        with open(Path(__file__).parent / "data" / "balancer" / "mainnet.json", "r", encoding=DEFAULT_ENCODING) as file:
+        # We read in the pool IDs from a file for now. we get this file from https://github.com/balancer/frontend-v2/blob/8563b8d33b6bff266148bd48d7ebc89f921374f4/src/lib/config/mainnet/pools.ts#L296
+        with open(
+            Path(__file__).parent / "data" / "balancer" / f"{self.balancer_deployment.value}.json",
+            "r",
+            encoding=DEFAULT_ENCODING,
+        ) as file:
             json_data = json.loads(file.read())["pools"]
         if "Element" in json_data:
             del json_data["Element"]
@@ -198,7 +237,7 @@ class BalancerClient:
         pools_of_interest = {}
         for pool_type in params:
             for pool_id in params[pool_type]:
-                if pool_id.lower() in WHITELISTED_POOLS:
+                if pool_id.lower() in WHITELISTED_POOLS[self.ledger_id]:
                     if pool_type not in pools_of_interest:
                         pools_of_interest[pool_type] = [pool_id]
                     else:
@@ -207,13 +246,10 @@ class BalancerClient:
         if not pools_of_interest:
             raise SorRetrievalException("No pools of interest found!")
         self.bal.getOnchainData(pools_of_interest)
-        # We setup a mulkticall to ensure we have the name of all of the pools.
 
         self.bal.mc.reset()
-        for token_address in self.bal.decimals:
-            if token_address not in WHITE_LISTED_TOKENS:
-                continue
 
+        for token_address in self.bal.decimals:
             contract = self.bal.erc20GetContract(token_address)
             self.bal.mc.addCall(
                 token_address,
@@ -222,12 +258,9 @@ class BalancerClient:
                 args=[],
             )
         name_data = self.bal.mc.execute()
-
         # We now get the symbols
         self.bal.mc.reset()
         for token_address in self.bal.decimals:
-            if token_address not in WHITE_LISTED_TOKENS:
-                continue
             contract = self.bal.erc20GetContract(token_address)
             self.bal.mc.addCall(
                 token_address,
@@ -240,7 +273,6 @@ class BalancerClient:
         # We create an array of ticker data.
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
             print(address, name[0], symbol[0])
-
             if address not in self.tokens:
                 self.tokens[address] = Erc20Token(
                     address=address,
@@ -252,16 +284,17 @@ class BalancerClient:
             # We now make an erc20 representation of the token.
 
         self.tickers = {}
-        for token_address in WHITE_LISTED_TOKENS:
-            if token_address == USDC_ADDRESS:
+        for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
+            if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
                 continue
 
+            stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
             token = self.tokens[token_address]
 
             # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
             ask_price = 1 / float(
                 self.get_price(
-                    amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=USDC_ADDRESS
+                    amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=stable_address
                 )
             )
             buy_amount = DEFAULT_AMOUNT_USD / ask_price
@@ -269,11 +302,10 @@ class BalancerClient:
             bid_price = 1 / float(
                 1
                 / self.get_price(
-                    amount=buy_amount, output_token_address=USDC_ADDRESS, input_token_address=token_address
+                    amount=buy_amount, output_token_address=stable_address, input_token_address=token_address
                 )
             )
-            symbol = f"{token.symbol}/USDC"
-            symbol = f"{token.address}/{USDC_ADDRESS}"
+            symbol = f"{token.address}/{stable_address}"
             ticker = Ticker(
                 symbol=symbol,
                 high=ask_price,
@@ -290,7 +322,7 @@ class BalancerClient:
         """
         gas_price = self.bal.web3.eth.gas_price * GAS_PRICE_PREMIUM
         params = {
-            "network": self.chain_name,
+            "network": self.balancer_deployment.value,
             "slippageTolerancePercent": "1.0",  # 1%
             "sor": {
                 "sellToken": input_token_address,
@@ -605,7 +637,7 @@ class BalancerClient:
         mc = self.bal.mc
         # We iterate over all the whitelisted tokens and get the balances.
         mc.reset()
-        for token_address in WHITE_LISTED_TOKENS:
+        for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
             if token_address not in self.tokens:
                 continue
             contract = self.bal.erc20GetContract(token_address)
@@ -624,7 +656,7 @@ class BalancerClient:
                     used=0,
                     total=balance[0],
                 )
-                for token_address, balance in zip(WHITE_LISTED_TOKENS, balance_data[0])
+                for token_address, balance in zip(LEDGER_TO_TOKEN_LIST[self.ledger_id], balance_data[0])
             ]
         )
         return balances

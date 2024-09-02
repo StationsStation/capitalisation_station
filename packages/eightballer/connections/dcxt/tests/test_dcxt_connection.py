@@ -25,6 +25,7 @@ import logging
 from typing import Type
 from unittest.mock import MagicMock
 
+import yaml
 import pytest
 from aea.common import Address
 from async_timeout import timeout
@@ -51,23 +52,42 @@ TEST_WALLET = "0x3A5c777edf22107d7FdFB3B02B0Cdfe8b75f3453"
 TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f89d4f4"
 
 
-TEST_EXCHANGES = [
-    {
-        "name": DEFAULT_EXCHANGE_ID,
-        "environment": "test",
-        "kwargs": {
-            "chain_id": "mainnet",
-            "rpc_url": "https://rpc.ankr.com/eth",
-            "etherscan_api_key": "YOUR_ETHERSCAN_API_KEY",
-        },
-        "key_path": TEST_KEY_PATH,
-        "wallet": TEST_WALLET,
-    },
-]
+TEST_EXCHANGE_DATA = """
+  - name: balancer
+    key_path: packages/eightballer/connections/dcxt/tests/data/key
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://rpc.ankr.com/eth
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: packages/eightballer/connections/dcxt/tests/data/key
+    wallet: null
+    ledger_id: optimism
+    rpc_url: https://mainnet.optimism.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+"""
+
+TEST_EXCHANGES = {f"{k['name']}-{k['ledger_id']}": k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
 
 
-def with_timeout(t):
+def with_timeout(t, *args, **kwargs):
     """Return the"""
+
+    def wrapper(corofunc):
+        async def run(*args, **kwargs):
+            with timeout(t):
+                return await corofunc(*args, **kwargs)
+
+        return run
+
+    return wrapper
+
+
+# We improve this with_timout function to be more generic, as presently it doesnt allow parameters
+
+
+def improved_with_timeout(t):
+    """Return the coroutine with a timeout. We specifcallly allow the function to take parameters"""
 
     def wrapper(corofunc):
         async def run(*args, **kwargs):
@@ -162,7 +182,7 @@ EXPECTED_FUNCTIONS = [
 
 @pytest.mark.parametrize(
     "exchange_id, function",
-    [(exchange["name"], function) for exchange in TEST_EXCHANGES for function in EXPECTED_FUNCTIONS],
+    [(exchange["name"], function) for exchange in TEST_EXCHANGES.values() for function in EXPECTED_FUNCTIONS],
 )
 class TestPluginConsitency:
     """Test the plugin consistency."""
