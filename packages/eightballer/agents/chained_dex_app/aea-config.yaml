@@ -150,19 +150,16 @@ config:
   exchanges:
   - name: balancer
     key_path: ethereum_private_key.txt
-    wallet: null
     ledger_id: ethereum
     rpc_url: https://rpc.ankr.com/eth
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
-    wallet: null
     ledger_id: optimism
     rpc_url: https://mainnet.optimism.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
-    wallet: null
     ledger_id: base
-    rpc_url: https://mainnet.optimism.io
+    rpc_url: https://base.llamarpc.com
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
