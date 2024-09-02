@@ -51,7 +51,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour,
 from packages.eightballer.skills.dex_data_retrieval.payloads import FetchDexTickersPayload
 
 
-DEFAULT_RETRIES = 6
+DEFAULT_RETRIES = 10
 DEFAULT_RETRY_DELAY = 5.0
 
 
@@ -140,7 +140,7 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
                     )
                     exchange_to_markets = None
                     break
-                exchange_to_markets.update(self._from_markets_to_dict(msg, exchange_id))
+                exchange_to_markets[exchange_id] = self._from_markets_to_dict(msg, exchange_id)
                 self.context.logger.info(f"Received {len(exchange_to_markets[exchange_id])} markets from {exchange_id}")
 
             self.context.logger.info(f"Fetched Exchanges: {exchange_ids}")
