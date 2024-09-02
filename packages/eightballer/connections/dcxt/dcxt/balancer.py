@@ -272,6 +272,8 @@ class BalancerClient:
 
         # We create an array of ticker data.
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
+            if not name or not symbol:
+                continue
             print(address, name[0], symbol[0])
             if address not in self.tokens:
                 self.tokens[address] = Erc20Token(

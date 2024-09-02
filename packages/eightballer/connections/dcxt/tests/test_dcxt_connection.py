@@ -67,7 +67,7 @@ TEST_EXCHANGE_DATA = """
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 """
 
-TEST_EXCHANGES = {f"{k['name']}-{k['ledger_id']}": k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
+TEST_EXCHANGES = {f"{k['name']}_{k['ledger_id']}": k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
 
 
 def with_timeout(t, *args, **kwargs):
@@ -144,7 +144,7 @@ class BaseDcxtConnectionTest:
         self.agent_identity = Identity("name", address="some string", public_key="some public_key")
         configuration = ConnectionConfig(
             target_skill_id=self.client_skill_id,
-            exchanges=TEST_EXCHANGES,
+            exchanges=list(TEST_EXCHANGES.values()),
             connection_id=DcxtConnection.connection_id,
         )
         self.connection = DcxtConnection(

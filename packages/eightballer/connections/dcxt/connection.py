@@ -76,9 +76,10 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             done_callback=self._handle_done_task,
         )
 
-        for exchange_id, exchange_config in self.exchange_configs.items():
+        for exchange_config in self.exchange_configs:
             exchange_name = exchange_config.get("name")
             ledger_id = exchange_config.get("ledger_id")
+            exchange_id = f"{exchange_name}_{ledger_id}"
             self.logger.info(f"Connecting to {exchange_name} with ledger_id {ledger_id}")
             try:
                 exchange_class = getattr(dcxt, exchange_name)

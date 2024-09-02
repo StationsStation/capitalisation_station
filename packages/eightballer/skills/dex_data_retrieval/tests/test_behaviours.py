@@ -83,7 +83,7 @@ BALANCES_TEST_CASE = BehaviourTestCase(
 
 @pytest.mark.parametrize(
     "exchange_id, exchange_data",
-    [(exchange["name"], exchange) for exchange in TEST_EXCHANGES],
+    [(exchange_id, exchange) for exchange_id, exchange in TEST_EXCHANGES.items()],
 )
 class BaseDexDataRetrievalTest(FSMBehaviourBaseCase):
     """Base test case."""
