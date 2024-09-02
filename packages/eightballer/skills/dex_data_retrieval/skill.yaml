@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibr3eckvo3uhkubyf3lhwqsfo2g7tm6zmrvgjwyh4oqh3cr4ktdiu
-  behaviours.py: bafybeif6geww5dpspo2f3zj4wbcmijkd6ljelta3x4esojxv6drwoan4qu
+  behaviours.py: bafybeigo2kmf7o5ntvgmksltwqabr67mk63ywgqy7uzzutvmsx3ftfrr2e
   check_cex_balances.yaml: bafybeigz4ba5jfscg2y6yoxxsmwc63ictz5iqneaann3fptgc2t5qohcra
   dialogues.py: bafybeicbvgvlc3wdgnkcz5zvfg43vlc3bam7a7baxkg3lxn3pk2wgps2wa
   fsm_specification.yaml: bafybeidbypph3ghds673b3xl5paxsnax5enwjdrrx7lwqyavusd4dju7te
@@ -17,7 +17,7 @@ fingerprint:
   payloads.py: bafybeifsdqu4nlqoc3egqxbbvqxkou4mfkq4xdszfyj7q25f26pab5hwqm
   rounds.py: bafybeifma4sdjudasunywyalzles5b3es4o7r3sg3ticzsavwk7mlplvhy
   tests/__init__.py: bafybeic6evwhxdwtdjvz7xv3dqqhdhd7uxyr55xhymeiqfe4ga7mfdptxm
-  tests/test_behaviours.py: bafybeiaori2jsrqt46bxvwnicckwm4lagqueqf6pjx2nfrdcx2ropoeu2q
+  tests/test_behaviours.py: bafybeif5t3vbhfmuetly3xuidp7yxk26njrpqbmmafuyp6zw5gz6rkzmcm
   tests/test_dialogues.py: bafybeihay3tmtk35penazgqj46su25s3bb62rbghjstao5hxcwpnbmexf4
   tests/test_handlers.py: bafybeidr7wzz4l5ppbi5qllxnukzavzbmddcdbrmddumfndmtqpeu6r7fm
   tests/test_models.py: bafybeifzr6ebperwfze4rj5lhote74lmq4vqjjt7hupjjsa4pv4zwrokpy
@@ -25,7 +25,7 @@ fingerprint:
   tests/test_rounds.py: bafybeibxg52porf4fu2neaoaeyc7wuhxkqdnowvze3kjz4wctmx2hnyws4
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeic3xuifxxcqypoiomlgycz52dw3yocptc3ewy56porib47pafdgea
+- eightballer/dcxt:0.1.0:bafybeieg2gm2t23ugl2bgqphnxdxk2efybhlspgsaahfsyivrhdfjn335i
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiajh5vzhcofdpemm3545t3yh6g4okpwnejvbqchxapo765batiitu
@@ -115,7 +115,9 @@ models:
         enabled: true
         reporting_enabled: false
         exchange_ids:
-        - balancer
+        - balancer_optimism
+        - balancer_base
+        - balancer_ethereum
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       finalize_timeout: 60.0
       genesis_config:

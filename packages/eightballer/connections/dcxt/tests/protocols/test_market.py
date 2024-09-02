@@ -9,6 +9,7 @@ from aea.mail.base import Envelope
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
+from packages.eightballer.connections.dcxt.tests.protocols.test_tickers import TIMEOUT
 
 from ..test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
@@ -19,7 +20,7 @@ class TestMarkets(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseMarketsDialogues, MarketsDialogue)
 
-    @with_timeout(3)
+    @with_timeout(TIMEOUT)
     async def test_handles_get_all_markets(
         self,
     ) -> None:
@@ -30,7 +31,7 @@ class TestMarkets(BaseDcxtConnectionTest):
             request, _ = dialogues.create(
                 counterparty=str(self.connection.connection_id),
                 performative=MarketsMessage.Performative.GET_ALL_MARKETS,
-                exchange_id=exchange["name"],
+                exchange_id=exchange,
             )
             envelope = Envelope(
                 to=request.to,
@@ -54,12 +55,13 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
     @pytest.mark.parametrize("exchange", TEST_EXCHANGES)
     async def test_handles_exchange_timeout(self, exchange) -> None:
         """Can handle ohlcv messages."""
+
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=MarketsMessage.Performative.GET_ALL_MARKETS,
-            exchange_id=exchange["name"],
+            exchange_id=exchange,
         )
         envelope = Envelope(
             to=request.to,
@@ -70,7 +72,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # simulate a raised exceptionS
 
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[exchange["name"]].fetch_markets = mocker  # pylint: disable=protected-access
+        self.connection._exchanges[exchange].fetch_markets = mocker  # pylint: disable=protected-access
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 
