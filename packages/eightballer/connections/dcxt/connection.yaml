@@ -34,9 +34,9 @@ fingerprint:
   tests/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
   tests/data/key: bafybeibpiq3ximhcv3eoz2tlgehwgac4be7ex4yjeljo4gigjiekbyprw4
   tests/protocols/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
-  tests/protocols/test_market.py: bafybeicoiqsjuoohfryibaqygpctrq2yem4ja3yvded6pndh6k7i46tyeq
+  tests/protocols/test_market.py: bafybeif3on3gp3nqvzvah2phz4ab2p46ll3twyjjphbitl6ckf6k7ysdby
   tests/protocols/test_ohlcv_interface.py: bafybeibcvwq24c6bcxzuf7f3l2y4huocmxwmkjrelfknjrn4vvxrxdp7wq
-  tests/protocols/test_order_interface.py: bafybeicfaoj6uxlz53aq7h2dhxuwx564dnrxjw4h2mjv4tavt3jqostxbu
+  tests/protocols/test_order_interface.py: bafybeiasbgfurlmxi26gfvmejtmujfuann5yykk2o2tqu3atr2vrzludwe
   tests/protocols/test_positions_interface.py: bafybeicsjnq2fy7ed67bkqyjjzlbgosvmbrnsv6ca7r2r4c75zilns5swq
   tests/protocols/test_spot_asset_interface.py: bafybeid2knx2lkd5jz64a357vtcz35gfjtoqey4shmmjtygl3r7dx6kvwq
   tests/protocols/test_tickers.py: bafybeihf4ls6fmqct7vtjwbwl33ckm23kix55emialwtit72mgkytq23nu
