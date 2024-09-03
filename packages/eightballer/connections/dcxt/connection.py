@@ -83,7 +83,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             self.logger.info(f"Connecting to {exchange_name} with ledger_id {ledger_id}")
             try:
                 exchange_class = getattr(dcxt, exchange_name)
-                exchange = exchange_class(**exchange_config)
+                exchange = exchange_class(**exchange_config, logger=self.logger)
             except AttributeError as exc:
                 raise ValueError(f"Exchange {exchange_name} not found in dcxt") from exc
             self._exchanges.update({exchange_id: exchange})
