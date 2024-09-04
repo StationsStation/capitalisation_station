@@ -352,7 +352,7 @@ class BalancerClient:
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
                 # // unix timestamp after which the trade will revert if it hasn't executed yet
-                "deadline": datetime.now().timestamp() + 60,
+                "deadline": datetime.now().timestamp() + 600,
             },
         }
 
