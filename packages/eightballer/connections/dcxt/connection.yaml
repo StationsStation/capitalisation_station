@@ -7,10 +7,10 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
-  connection.py: bafybeiglhzskibl4wx7bh5jkwx4o7wdq6lepj3uhaijyqjc2l5c5pcyzze
+  connection.py: bafybeib3qr3crn2ge5sjx7fb3fm3yz3cnivnsrmyx6nx7smnyjquh6stai
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeidmsl7pw3qs6t3ovzarv5576mmfsxcvdn26ybbvixvyzkvxrbjliy
+  dcxt/balancer.py: bafybeiby4geailvto2f2krew5butdcpwm7i3kbhuyye5tbceeq7p5valeq
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq

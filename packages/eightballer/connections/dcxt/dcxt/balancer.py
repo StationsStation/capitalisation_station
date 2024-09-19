@@ -29,7 +29,7 @@ from packages.eightballer.connections.dcxt.dcxt.exceptions import (
     ConfigurationError,
     SorRetrievalException,
 )
-from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
+from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 
 
 GAS_PRICE_PREMIUM = 20
@@ -104,6 +104,7 @@ LEDGER_TO_TOKEN_LIST = {
     SupportedLedgers.OPTIMISM: [
         "0x4200000000000000000000000000000000000006",
         "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
     ],
     SupportedLedgers.BASE: ["0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca", "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"],
 }
@@ -157,7 +158,7 @@ class BalancerClient:
         )
         configuration.directory = contract_dir
         # Not a nice way to do this, but connections cannot have contracts as a dependency.
-        self.erc20_contract = Contract.from_config(configuration)
+        self.erc20_contract: Erc20 = Contract.from_config(configuration)
         self.logger = kwargs.get("logger")
         self.tickers = {}
 
@@ -351,7 +352,7 @@ class BalancerClient:
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
                 # // unix timestamp after which the trade will revert if it hasn't executed yet
-                "deadline": datetime.now().timestamp() + 60,
+                "deadline": datetime.now().timestamp() + 600,
             },
         }
 
@@ -475,15 +476,15 @@ class BalancerClient:
         swap["funds"]["sender"] = safe_address
         swap["funds"]["recipient"] = safe_address
 
-        # Note this is a place holder for the approval amount assuming we have approved the token.
-        approved = 99999999999999999999999
+        erc_contract = self.bal.erc20GetContract(input_token_address)
+        approved = erc_contract.functions.allowance(owner=safe_address, spender=vault.address).call()
 
         # We approve the token if we have not already done so.
 
-        if approved < machine_amount:
+        if approved < machine_amount * 1e17:
             self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
-            contract = self.bal.erc20GetContract(input_token_address)
-            data = contract.encodeABI("approve", [vault.address, machine_amount])
+            data = erc_contract.encodeABI("approve", [vault.address, int(machine_amount * 1e18)])
+            vault_address = erc_contract.address
 
         else:
             try:
@@ -491,6 +492,7 @@ class BalancerClient:
                 vault = self.bal.balLoadContract("Vault")
                 function_name = "batchSwap"
                 data = vault.encodeABI(function_name, mc_args)
+                vault_address = vault.address
             except web3.exceptions.ContractLogicError as exc:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
@@ -502,12 +504,13 @@ class BalancerClient:
                     raise ApprovalError("ERC20: transfer amount exceeds allowance") from exc
                 raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
 
+        self.logger.info(f"Creating order for {symbol} with data: {data} to {vault_address}")
         return Order(
             exchange_id="balancer",
             symbol=symbol,
             data={
                 "data": data,
-                "vault_address": vault.address,
+                "vault_address": vault_address,
                 "chain_id": self.bal.web3.eth.chain_id,
             },
         )
@@ -521,6 +524,8 @@ class BalancerClient:
 
         vault = self.bal.balLoadContract("Vault")
 
+        # We do a call on the erc_20 not on the balancer contract as the balancer contract checks the spenders account.
+
         approved = self.bal.erc20GetAllowanceStandard(
             tokenAddress=input_token_address,
             allowedAddress=vault.address,
@@ -531,8 +536,8 @@ class BalancerClient:
         if approved < machine_amount:
             self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
             contract = self.bal.erc20GetContract(input_token_address)
-            data = contract.encodeABI("approve", [vault.address, machine_amount])
-
+            data = contract.encodeABI("approve", [vault.address, machine_amount * 3])
+            vault_address = contract.address
         else:
             try:
                 mc_args = self.bal.balFormatBatchSwapData(swap)
@@ -542,6 +547,7 @@ class BalancerClient:
                 fn = vault.get_function_by_name(fn_name=function_name)
                 # Assuming this does not revert, we have our call data for the order.
                 fn(*mc_args).call()
+                vault_address = vault.address
             except web3.exceptions.ContractLogicError as exc:
                 self.logger.error(exc)
                 self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
@@ -558,7 +564,7 @@ class BalancerClient:
             symbol=symbol,
             data={
                 "data": data,
-                "vault_address": vault.address,
+                "vault_address": vault_address,
                 "chain_id": self.bal.web3.eth.chain_id,
             },
         )
@@ -650,8 +656,6 @@ class BalancerClient:
         # We iterate over all the whitelisted tokens and get the balances.
         mc.reset()
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
-            if token_address not in self.tokens:
-                continue
             contract = self.bal.erc20GetContract(token_address)
             mc.addCall(
                 token_address,
