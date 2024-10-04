@@ -31,6 +31,7 @@ from aea.common import Address
 from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
+
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 
@@ -101,7 +102,7 @@ class BalancesDialogue(Dialogue):
         )
 
 
-class BaseBalancesDialogues(Model, Dialogues, ABC):
+class BaseBalancesDialogues(Dialogues, ABC):
     """This class keeps track of all balances dialogues."""
 
     END_STATES = frozenset(
@@ -133,7 +134,7 @@ class BaseBalancesDialogues(Model, Dialogues, ABC):
         )
 
 
-class BalancesDialogues(BaseBalancesDialogues):
+class BalancesDialogues(BaseBalancesDialogues, Model):
     """This class defines the dialogues used in Balances."""
 
     def __init__(self, **kwargs):

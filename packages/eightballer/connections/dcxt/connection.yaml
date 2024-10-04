@@ -10,7 +10,7 @@ fingerprint:
   connection.py: bafybeib3qr3crn2ge5sjx7fb3fm3yz3cnivnsrmyx6nx7smnyjquh6stai
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeieak5hflwvn77cpzgttb3jcshpiugth5l74avmhskno34ur75u724
+  dcxt/balancer.py: bafybeigj5zrt2imyk77p7o5yokzgsfzhwpulbpp4axpawgrldx4nohlx6i
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
@@ -22,7 +22,7 @@ fingerprint:
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeibt5c7oidfs3kdrfb3oiwxhmpu46kzin3qgj3pcbq7gds335rnify
   exchange.py: bafybeigvnewleyvxietfdcdxy3gtpysemcy56wkdthjmvyt65cmby627rq
-  interfaces/balance.py: bafybeiebgyjtoanozc7prfsfo4d5kwbpiinq4nuafxbci2cu5vugfkv35e
+  interfaces/balance.py: bafybeihujnx5b6dotoveh446gniumvw3w55hkfzma3s2xpe7tnhbyksj4m
   interfaces/interface.py: bafybeic6fb4mb2rzhossctii4pgx4cajlfcgxvlbfwf4bsd26tm3epei2i
   interfaces/interface_base.py: bafybeidbveccpnrhkwuua5g7ke3ycwav6uaa7nohdsxadwkodbpf2rdjfa
   interfaces/market.py: bafybeig7rlxg6sfcdfehodq6zz4zn263n6e2sfjvx2ji2axxfpbupcyjem
@@ -54,7 +54,7 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeiesdzmk3vfsd42slqjczpl4xomufcfdhaiipuvanbo5fk6utkkz2a
+- eightballer/balances:0.1.0:bafybeieczloag3mjzvd4y2qqpbrtx6suoqjww3v7mf3dgrez5xopmo4h3m
 - eightballer/default:0.1.0:bafybeid2kyktyf2kqmua5dscnax7ustvht7krpwda6modxog5xrplwtmym
 - eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
 - eightballer/ohlcv:0.1.0:bafybeibceyzlkap55isc7rcru3b3iosb2vhzz7xjt666k672bz6ejpsiyq
