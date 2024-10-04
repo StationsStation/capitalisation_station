@@ -25,7 +25,7 @@ from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.dialogues import (
     BalancesDialogue,
-    BalancesDialogues,
+    BaseBalancesDialogues as BalancesDialogues,
 )
 
 

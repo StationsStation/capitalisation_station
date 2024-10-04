@@ -116,6 +116,13 @@ LEDGER_TO_STABLECOINS = {
 }
 
 
+LEDGER_TO_NATIVE_SYMBOL = {
+    SupportedLedgers.ETHEREUM: "ETH",
+    SupportedLedgers.OPTIMISM: "ETH",
+    SupportedLedgers.BASE: "ETH",
+}
+
+
 class BalancerClient:
     """
     Balancer exchange.
@@ -190,28 +197,6 @@ class BalancerClient:
             raise SorRetrievalException(
                 f"Error fetching markets from chainId {self.chain_name} Balancer: {exc}"
             ) from exc
-
-    async def fetch_balances(self, *args, **kwargs):
-        """
-        Fetches the balances.
-
-        :return: The balances.
-        """
-        del args, kwargs
-        balances = Balances(
-            balances=[
-                Balance(
-                    asset_id=LEDGER_TO_STABLECOINS[self.ledger_id][0],
-                    free=0,
-                    used=0,
-                    total=0,
-                    exchange_id="balancer",
-                    ledger_id=self.ledger_id.value,
-                )
-            ]
-        )
-        breakpoint()
-        return balances
 
     @property
     def pool_ids(self):
@@ -653,29 +638,49 @@ class BalancerClient:
 
         :return: The balance.
         """
-        del args, kwargs
 
         mc = self.bal.mc
-        # We iterate over all the whitelisted tokens and get the balances.
         mc.reset()
+        use_external_address = kwargs.get("address", None)
+        address_to_check = self.account.address if not use_external_address else use_external_address
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
             contract = self.bal.erc20GetContract(token_address)
             mc.addCall(
                 token_address,
                 contract.abi,
                 "balanceOf",
-                args=[self.account.address],
+                args=[address_to_check],
             )
         balance_data = mc.execute()
+
+        def _from_decimals_amt_to_token(address, balance):
+            if address not in self.tokens:
+                breakpoint()
+            token = self.tokens[address]
+            result = Balance(
+                asset_id=address,
+                free=token.to_human(balance),
+                used=0,
+                total=token.to_human(balance),
+                is_native=False,
+            )
+            return result
+
+        native = self.bal.web3.eth.get_balance(address_to_check)
+
         balances = Balances(
             balances=[
-                Balance(
-                    asset_id=token_address,
-                    free=balance[0],
-                    used=0,
-                    total=balance[0],
-                )
+                _from_decimals_amt_to_token(token_address, balance[0])
                 for token_address, balance in zip(LEDGER_TO_TOKEN_LIST[self.ledger_id], balance_data[0])
+            ]
+            + [
+                Balance(
+                    asset_id=LEDGER_TO_NATIVE_SYMBOL[self.ledger_id],
+                    free=self.bal.web3.from_wei(native, "ether"),
+                    used=0,
+                    total=self.bal.web3.from_wei(native, "ether"),
+                    is_native=True,
+                )
             ]
         )
         return balances
