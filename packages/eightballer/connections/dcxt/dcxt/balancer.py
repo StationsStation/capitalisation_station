@@ -205,9 +205,12 @@ class BalancerClient:
                     free=0,
                     used=0,
                     total=0,
+                    exchange_id="balancer",
+                    ledger_id=self.ledger_id.value,
                 )
             ]
         )
+        breakpoint()
         return balances
 
     @property

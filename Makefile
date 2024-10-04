@@ -44,7 +44,7 @@ clean-test:
 .PHONY: hashes
 hashes: clean
 	poetry run autonomy packages lock
-	poetry run adev -v -n 0 lint
+	poetry run autonomy push-all
 
 lint:
 	poetry run adev -v -n 0 lint

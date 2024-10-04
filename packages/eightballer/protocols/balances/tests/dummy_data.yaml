@@ -1,0 +1,8 @@
+Balance:
+  asset_id: asset_id
+  free: 0.0
+  is_native: false
+  total: 0.0
+  used: 0.0
+Balances:
+  balances: []

@@ -6,25 +6,22 @@ message BalancesMessage{
 
   // Custom Types
   message Balance{
-    message Balance {
-      string asset_id = 1;
-      float free = 2;
-      float used = 3;
-      float total = 4;
-    }
+    string asset_id = 1;
+    float free = 2;
+    float used = 3;
+    float total = 4;
+    bool is_native = 5;
   }
 
   message Balances{
-    message Balances {
-      repeated Balance balances = 1;
-    }
+    repeated Balance balances = 1;
   }
 
   message ErrorCode{
     enum ErrorCodeEnum {
-      UNKNOWN_EXCHANGE = 0;
-      UNKNOWN_ASSET = 1;
-      API_ERROR = 2;
+      ERROR_CODE_ENUM_UNKNOWN_EXCHANGE = 0;
+      ERROR_CODE_ENUM_UNKNOWN_ASSET = 1;
+      ERROR_CODE_ENUM_API_ERROR = 2;
     }
     ErrorCodeEnum error_code = 1;
   }
@@ -32,14 +29,22 @@ message BalancesMessage{
 
   // Performatives and contents
   message Get_All_Balances_Performative{
-    string exchange_id = 1;
-    map<string, bytes> params = 2;
-    bool params_is_set = 3;
+    map<string, bytes> params = 1;
+    bool params_is_set = 2;
+    string exchange_id = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+    string address = 6;
+    bool address_is_set = 7;
   }
 
   message Get_Balance_Performative{
     string asset_id = 1;
     string exchange_id = 2;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
+    string address = 5;
+    bool address_is_set = 6;
   }
 
   message All_Balances_Performative{
