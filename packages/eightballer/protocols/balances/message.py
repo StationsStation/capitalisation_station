@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,17 +20,23 @@
 """This module contains balances's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
-# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.balances.custom_types import Balance as CustomBalance
-from packages.eightballer.protocols.balances.custom_types import Balances as CustomBalances
-from packages.eightballer.protocols.balances.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.balances.custom_types import (
+    Balance as CustomBalance,
+)
+from packages.eightballer.protocols.balances.custom_types import (
+    Balances as CustomBalances,
+)
+from packages.eightballer.protocols.balances.custom_types import (
+    ErrorCode as CustomErrorCode,
+)
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.balances.message")
 
@@ -62,17 +68,12 @@ class BalancesMessage(Message):
             """Get the string representation."""
             return str(self.value)
 
-    _performatives = {
-        "all_balances",
-        "balance",
-        "error",
-        "get_all_balances",
-        "get_balance",
-    }
+    _performatives = {"all_balances", "balance", "error", "get_all_balances", "get_balance"}
     __slots__: Tuple[str, ...] = tuple()
 
     class _SlotsCls:
         __slots__ = (
+            "address",
             "asset_id",
             "balance",
             "balances",
@@ -81,6 +82,7 @@ class BalancesMessage(Message):
             "error_data",
             "error_msg",
             "exchange_id",
+            "ledger_id",
             "message_id",
             "params",
             "performative",
@@ -142,6 +144,11 @@ class BalancesMessage(Message):
         return cast(int, self.get("target"))
 
     @property
+    def address(self) -> Optional[str]:
+        """Get the 'address' content from the message."""
+        return cast(Optional[str], self.get("address"))
+
+    @property
     def asset_id(self) -> str:
         """Get the 'asset_id' content from the message."""
         enforce(self.is_set("asset_id"), "'asset_id' content is not set.")
@@ -182,6 +189,11 @@ class BalancesMessage(Message):
         """Get the 'exchange_id' content from the message."""
         enforce(self.is_set("exchange_id"), "'exchange_id' content is not set.")
         return cast(str, self.get("exchange_id"))
+
+    @property
+    def ledger_id(self) -> Optional[str]:
+        """Get the 'ledger_id' content from the message."""
+        return cast(Optional[str], self.get("ledger_id"))
 
     @property
     def params(self) -> Optional[Dict[str, bytes]]:
@@ -232,12 +244,6 @@ class BalancesMessage(Message):
             expected_nb_of_contents = 0
             if self.performative == BalancesMessage.Performative.GET_ALL_BALANCES:
                 expected_nb_of_contents = 1
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
                 if self.is_set("params"):
                     expected_nb_of_contents += 1
                     params = cast(Dict[str, bytes], self.params)
@@ -258,6 +264,26 @@ class BalancesMessage(Message):
                                 type(value_of_params)
                             ),
                         )
+                enforce(
+                    isinstance(self.exchange_id, str),
+                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
+                        type(self.exchange_id)
+                    ),
+                )
+                if self.is_set("ledger_id"):
+                    expected_nb_of_contents += 1
+                    ledger_id = cast(str, self.ledger_id)
+                    enforce(
+                        isinstance(ledger_id, str),
+                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
+                    )
+                if self.is_set("address"):
+                    expected_nb_of_contents += 1
+                    address = cast(str, self.address)
+                    enforce(
+                        isinstance(address, str),
+                        "Invalid type for content 'address'. Expected 'str'. Found '{}'.".format(type(address)),
+                    )
             elif self.performative == BalancesMessage.Performative.GET_BALANCE:
                 expected_nb_of_contents = 2
                 enforce(
@@ -270,6 +296,20 @@ class BalancesMessage(Message):
                         type(self.exchange_id)
                     ),
                 )
+                if self.is_set("ledger_id"):
+                    expected_nb_of_contents += 1
+                    ledger_id = cast(str, self.ledger_id)
+                    enforce(
+                        isinstance(ledger_id, str),
+                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
+                    )
+                if self.is_set("address"):
+                    expected_nb_of_contents += 1
+                    address = cast(str, self.address)
+                    enforce(
+                        isinstance(address, str),
+                        "Invalid type for content 'address'. Expected 'str'. Found '{}'.".format(type(address)),
+                    )
             elif self.performative == BalancesMessage.Performative.ALL_BALANCES:
                 expected_nb_of_contents = 1
                 enforce(

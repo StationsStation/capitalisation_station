@@ -9,8 +9,8 @@ fingerprint:
   tests/test_agent.py: bafybeifqtbheyhwuhodux7s6xnrhwf5wg7tuoezec6e3hboq7dtokfrbh4
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeialymi7n2l6by65svzl6qinmncpniaethur5bghwkd57x4itd74eu
-- eightballer/dcxt:0.1.0:bafybeihes2id6qmqqybvdqfpchu6h3i5mpnhq6lztfxp52twd22iwqxacq
+- eightballer/ccxt:0.1.0:bafybeiam4jas4mdaaknkv6d2zulrfscwfgqgnca3benyafarw4yyfuop3m
+- eightballer/dcxt:0.1.0:bafybeibjaloudimuqa5z4w262t5pj44oeo2udcnm7m6r3qponh4xda47qu
 - eightballer/http_client:0.1.0:bafybeicv74672gixihzkeitlo55ciritxd74xedcdcptblszynpq2q5j4m
 - eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
 - eightballer/prometheus:0.1.1:bafybeihrohk66bebb4rek6pxq46tdvs64hxguj6bxqd6jpzumz5skrtvca
@@ -23,7 +23,7 @@ contracts:
 - valory/service_registry:0.1.0:bafybeieqgcuxmz4uxvlyb62mfsf33qy4xwa5lrij4vvcmrtcsfkng43oyq
 - eightballer/erc_20:0.1.0:bafybeiezbnm3f5zhuj5bsc542isnlh2fki5q4nmm2vsajzps4uuoamofo4
 protocols:
-- eightballer/balances:0.1.0:bafybeiajh5vzhcofdpemm3545t3yh6g4okpwnejvbqchxapo765batiitu
+- eightballer/balances:0.1.0:bafybeihu5iwqjbuzoh7nlbxua3cqme2dpsmbppjqj6swkriow4bpvfkbty
 - eightballer/default:0.1.0:bafybeid2kyktyf2kqmua5dscnax7ustvht7krpwda6modxog5xrplwtmym
 - eightballer/http:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
 - eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
@@ -43,8 +43,8 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/tendermint:0.1.0:bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeida4ta3txdlopkwif7gctdqhtfjxslu25h4h5ip3fqvq336hknp24
-- eightballer/dex_data_retrieval:0.1.0:bafybeidrowbyfzipu42s37h7ikpcf4qzbldlrsvhdelj37uzgcgryhsizm
+- eightballer/chained_dex_app:0.1.0:bafybeico66dierdfikstvag7vp4v7tmqj7mhldhry7rvqbzjrkneejhnbi
+- eightballer/dex_data_retrieval:0.1.0:bafybeifczlh3inrklfez2qimpplmzad67ol3ndhhh4n2s42cryp45mcshy
 - eightballer/metrics:0.1.0:bafybeibvlmywix6ggwrkhmsncxj7wfsp5u4bjooopamvlq7ijpy4frjicm
 - eightballer/prometheus:0.1.0:bafybeiafbgefdcah6mh2e37hvbcjzbocx4heugjifd2252wjg7bs7kb4wu
 - valory/abstract_abci:0.1.0:bafybeihu2bcgjk2tqjiq2zhk3uogtfszqn4osvdt7ho3fubdpdj4jgdfjm

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,16 +20,22 @@
 """Serialization module for balances protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=E0611,R0912,C0209,R1735
-from typing import cast
+from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.eightballer.protocols.balances import balances_pb2
-from packages.eightballer.protocols.balances.custom_types import Balance, Balances, ErrorCode
-from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.balances import balances_pb2  # type: ignore
+from packages.eightballer.protocols.balances.custom_types import (  # type: ignore
+    Balance,
+    Balances,
+    ErrorCode,
+)
+from packages.eightballer.protocols.balances.message import (  # type: ignore
+    BalancesMessage,
+)
 
 
 class BalancesSerializer(Serializer):
@@ -46,7 +52,7 @@ class BalancesSerializer(Serializer):
         msg = cast(BalancesMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        balances_msg = balances_pb2.BalancesMessage()
+        balances_msg = balances_pb2.BalancesMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -57,12 +63,20 @@ class BalancesSerializer(Serializer):
         performative_id = msg.performative
         if performative_id == BalancesMessage.Performative.GET_ALL_BALANCES:
             performative = balances_pb2.BalancesMessage.Get_All_Balances_Performative()  # type: ignore
-            exchange_id = msg.exchange_id
-            performative.exchange_id = exchange_id
             if msg.is_set("params"):
                 performative.params_is_set = True
                 params = msg.params
                 performative.params.update(params)
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
+            if msg.is_set("ledger_id"):
+                performative.ledger_id_is_set = True
+                ledger_id = msg.ledger_id
+                performative.ledger_id = ledger_id
+            if msg.is_set("address"):
+                performative.address_is_set = True
+                address = msg.address
+                performative.address = address
             balances_msg.get_all_balances.CopyFrom(performative)
         elif performative_id == BalancesMessage.Performative.GET_BALANCE:
             performative = balances_pb2.BalancesMessage.Get_Balance_Performative()  # type: ignore
@@ -70,6 +84,14 @@ class BalancesSerializer(Serializer):
             performative.asset_id = asset_id
             exchange_id = msg.exchange_id
             performative.exchange_id = exchange_id
+            if msg.is_set("ledger_id"):
+                performative.ledger_id_is_set = True
+                ledger_id = msg.ledger_id
+                performative.ledger_id = ledger_id
+            if msg.is_set("address"):
+                performative.address_is_set = True
+                address = msg.address
+                performative.address = address
             balances_msg.get_balance.CopyFrom(performative)
         elif performative_id == BalancesMessage.Performative.ALL_BALANCES:
             performative = balances_pb2.BalancesMessage.All_Balances_Performative()  # type: ignore
@@ -108,7 +130,7 @@ class BalancesSerializer(Serializer):
         :return: the 'Balances' message.
         """
         message_pb = ProtobufMessage()
-        balances_pb = balances_pb2.BalancesMessage()
+        balances_pb = balances_pb2.BalancesMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (
@@ -122,17 +144,29 @@ class BalancesSerializer(Serializer):
         performative_id = BalancesMessage.Performative(str(performative))
         performative_content = dict()  # type: Dict[str, Any]
         if performative_id == BalancesMessage.Performative.GET_ALL_BALANCES:
-            exchange_id = balances_pb.get_all_balances.exchange_id
-            performative_content["exchange_id"] = exchange_id
             if balances_pb.get_all_balances.params_is_set:
                 params = balances_pb.get_all_balances.params
                 params_dict = dict(params)
                 performative_content["params"] = params_dict
+            exchange_id = balances_pb.get_all_balances.exchange_id
+            performative_content["exchange_id"] = exchange_id
+            if balances_pb.get_all_balances.ledger_id_is_set:
+                ledger_id = balances_pb.get_all_balances.ledger_id
+                performative_content["ledger_id"] = ledger_id
+            if balances_pb.get_all_balances.address_is_set:
+                address = balances_pb.get_all_balances.address
+                performative_content["address"] = address
         elif performative_id == BalancesMessage.Performative.GET_BALANCE:
             asset_id = balances_pb.get_balance.asset_id
             performative_content["asset_id"] = asset_id
             exchange_id = balances_pb.get_balance.exchange_id
             performative_content["exchange_id"] = exchange_id
+            if balances_pb.get_balance.ledger_id_is_set:
+                ledger_id = balances_pb.get_balance.ledger_id
+                performative_content["ledger_id"] = ledger_id
+            if balances_pb.get_balance.address_is_set:
+                address = balances_pb.get_balance.address
+                performative_content["address"] = address
         elif performative_id == BalancesMessage.Performative.ALL_BALANCES:
             pb2_balances = balances_pb.all_balances.balances
             balances = Balances.decode(pb2_balances)

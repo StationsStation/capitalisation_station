@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,10 +25,9 @@ This module contains the classes required for balances dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, Optional, FrozenSet, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
-from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
@@ -39,10 +38,7 @@ class BalancesDialogue(Dialogue):
     """The balances dialogue class maintains state of a dialogue and manages it."""
 
     INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            BalancesMessage.Performative.GET_ALL_BALANCES,
-            BalancesMessage.Performative.GET_BALANCE,
-        }
+        {BalancesMessage.Performative.GET_ALL_BALANCES, BalancesMessage.Performative.GET_BALANCE}
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {
@@ -56,10 +52,7 @@ class BalancesDialogue(Dialogue):
         BalancesMessage.Performative.BALANCE: frozenset(),
         BalancesMessage.Performative.ERROR: frozenset(),
         BalancesMessage.Performative.GET_ALL_BALANCES: frozenset(
-            {
-                BalancesMessage.Performative.ALL_BALANCES,
-                BalancesMessage.Performative.ERROR,
-            }
+            {BalancesMessage.Performative.ALL_BALANCES, BalancesMessage.Performative.ERROR}
         ),
         BalancesMessage.Performative.GET_BALANCE: frozenset(
             {BalancesMessage.Performative.BALANCE, BalancesMessage.Performative.ERROR}
@@ -102,15 +95,11 @@ class BalancesDialogue(Dialogue):
         )
 
 
-class BaseBalancesDialogues(Dialogues, ABC):
+class BalancesDialogues(Dialogues, ABC):
     """This class keeps track of all balances dialogues."""
 
     END_STATES = frozenset(
-        {
-            BalancesDialogue.EndState.BALANCE,
-            BalancesDialogue.EndState.ALL_BALANCES,
-            BalancesDialogue.EndState.ERROR,
-        }
+        {BalancesDialogue.EndState.BALANCE, BalancesDialogue.EndState.ALL_BALANCES, BalancesDialogue.EndState.ERROR}
     )
 
     _keep_terminal_state_dialogues = False
@@ -118,7 +107,7 @@ class BaseBalancesDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
         dialogue_class: Type[BalancesDialogue] = BalancesDialogue,
     ) -> None:
         """
@@ -128,27 +117,11 @@ class BaseBalancesDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
-        del role_from_first_message
-
-        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message."""
-            del sender, message
-            return BalancesDialogue.Role.AGENT
-
         Dialogues.__init__(
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
             message_class=BalancesMessage,
             dialogue_class=dialogue_class,
-            role_from_first_message=_role_from_first_message,
+            role_from_first_message=role_from_first_message,
         )
-
-
-class BalancesDialogues(BaseBalancesDialogues, Model):
-    """This class keeps track of all balances dialogues."""
-
-    def __init__(self, **kwargs):
-        """Initialize dialogues."""
-        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
-        BaseBalancesDialogues.__init__(self, self_address=str(self.context.skill_id))

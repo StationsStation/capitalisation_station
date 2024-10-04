@@ -16,15 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
-"""
-This module contains the support resources for the balances protocol.
-
-It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
-"""
-
-from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.balances.serialization import BalancesSerializer
-
-
-BalancesMessage.serializer = BalancesSerializer
+"""Module for connection."""
