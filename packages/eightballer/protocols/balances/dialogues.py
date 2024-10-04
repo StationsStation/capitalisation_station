@@ -28,10 +28,16 @@ from abc import ABC
 from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
+from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
-
 from packages.eightballer.protocols.balances.message import BalancesMessage
+
+
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return BalancesDialogue.Role.AGENT
 
 
 class BalancesDialogue(Dialogue):
@@ -95,7 +101,7 @@ class BalancesDialogue(Dialogue):
         )
 
 
-class BalancesDialogues(Dialogues, ABC):
+class BaseBalancesDialogues(Model, Dialogues, ABC):
     """This class keeps track of all balances dialogues."""
 
     END_STATES = frozenset(
@@ -107,7 +113,7 @@ class BalancesDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[BalancesDialogue] = BalancesDialogue,
     ) -> None:
         """
@@ -125,3 +131,12 @@ class BalancesDialogues(Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
+
+
+class BalancesDialogues(BaseBalancesDialogues):
+    """This class defines the dialogues used in Balances."""
+
+    def __init__(self, **kwargs):
+        """Initialize dialogues."""
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
+        BaseBalancesDialogues.__init__(self, self_address=str(self.context.skill_id))

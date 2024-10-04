@@ -19,12 +19,12 @@ fingerprint:
   tests/test_strategy.py: bafybeieihcv3kg7unjehjk5ypdrg5urhoxgtd34zadxiiz37vjgbs2ntfm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeiam4jas4mdaaknkv6d2zulrfscwfgqgnca3benyafarw4yyfuop3m
-- eightballer/dcxt:0.1.0:bafybeibjaloudimuqa5z4w262t5pj44oeo2udcnm7m6r3qponh4xda47qu
+- eightballer/ccxt:0.1.0:bafybeihg5xhwggecnxwnuaxaxvcipjbggchhtdylnvib3ahj7y4dw6pjxa
+- eightballer/dcxt:0.1.0:bafybeihcde5ldl4znybf4cpjaj76a4b66zzubwzusxecctnrjn4wp6fcde
 - valory/http_client:0.23.0:bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeihu5iwqjbuzoh7nlbxua3cqme2dpsmbppjqj6swkriow4bpvfkbty
+- eightballer/balances:0.1.0:bafybeiesdzmk3vfsd42slqjczpl4xomufcfdhaiipuvanbo5fk6utkkz2a
 - eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
 - eightballer/orders:0.1.0:bafybeibprhniaoq3y2uzc4arwwl7yws3i54ahaicrphh5gtl4xxhxqexdy
 - eightballer/positions:0.1.0:bafybeib6v2rtylru3lmri6tpgug7sgsd3imzqrpma3nuiqgjzmtdrsblaa
