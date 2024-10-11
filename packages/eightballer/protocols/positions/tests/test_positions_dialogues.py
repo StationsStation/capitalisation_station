@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,18 +19,15 @@
 
 """Test dialogues module for positions protocol."""
 
-import pytest
-
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
-
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, PositionsDialogues
-from packages.eightballer.protocols.positions.custom_types import PositionSide
+from packages.eightballer.protocols.positions.dialogues import (
+    PositionsDialogue,
+    BasePositionsDialogues as PositionsDialogues,
+)
 
 
-@pytest.mark.skip("Not implemented yet")
 class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
     """Test for the 'positions' protocol dialogues."""
 
@@ -48,5 +45,5 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
             performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
             exchange_id="some str",
             params={"some str": b"some_bytes"},
-            side=PositionSide.LONG,
+            side=PositionSide(),
         )

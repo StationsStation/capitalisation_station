@@ -1,28 +1,78 @@
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2023 eightballer
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-# pylint: disable=C0103,R0902,C0301,R1735
-
 """This module contains class representations corresponding to every custom type in the protocol specification."""
 
 from enum import Enum
-from typing import List, Optional
-from dataclasses import dataclass
+from typing import Any, List
+
+from pydantic import BaseModel
+
+
+class BaseCustomEncoder(BaseModel):
+    """
+    This class is a base class for encoding and decoding protocol buffer objects.
+    """
+
+    @staticmethod
+    def encode(ps_response_protobuf_object, ps_response_object) -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
+        class in the 'ps_response_object' argument.
+
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
+        """
+        for key, value in ps_response_object.__dict__.items():
+            current_attr = getattr(ps_response_protobuf_object, key)
+            if isinstance(value, Enum):
+                type(value).encode(current_attr, value)
+                continue
+            if isinstance(value, dict):
+                current_attr.update(value)
+                continue
+            if isinstance(value, list):
+                current_attr.extend(value)
+                continue
+            setattr(ps_response_protobuf_object, key, value)
+
+    @classmethod
+    def decode(cls, ps_response_protobuf_object) -> "Any":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'ps_response_protobuf_object' argument.
+
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'ps_response_protobuf_object' argument.
+        """
+        keywords = [f for f in cls.__annotations__.keys()]
+        kwargs = {}
+        for keyword in keywords:
+            proto_attr = getattr(ps_response_protobuf_object, keyword)
+            if isinstance(proto_attr, Enum):
+                kwargs[keyword] = type(proto_attr).decode(proto_attr)
+                continue
+            if isinstance(proto_attr, list):
+                kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
+                continue
+            if isinstance(proto_attr, dict):
+                kwargs[keyword] = {k: v for (k, v) in proto_attr.items()}
+                continue
+            if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
+                kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
+                continue
+            kwargs[keyword] = proto_attr
+        return cls(**kwargs)
+
+    def __eq__(self, other):
+        """Check if two instances of this class are equal."""
+        return self.dict() == other.dict()
+
+    def __hash__(self):
+        """Return the hash value of this instance."""
+        return hash(self.dict())
 
 
 class ErrorCode(Enum):
@@ -37,7 +87,8 @@ class ErrorCode(Enum):
         """
         Encode an instance of this class into the protocol buffer object.
 
-        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class in the 'error_code_object' argument.
+        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
+        in the 'error_code_object' argument.
 
         :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
         :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
@@ -49,164 +100,45 @@ class ErrorCode(Enum):
         """
         Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
-        A new instance of this class is created that matches the protocol buffer object in the 'error_code_protobuf_object' argument.
+        A new instance of this class is created that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
 
         :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'error_code_protobuf_object' argument.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
         """
-        enum_value_from_pb2 = error_code_protobuf_object.error_code
-        return ErrorCode(enum_value_from_pb2)
+        return ErrorCode(error_code_protobuf_object.error_code)
 
 
-@dataclass
-class Ticker:
-    """This class represents an instance of Ticker.
-       {'symbol': 'ETH/BTC',
-    'timestamp': 1689259137293,
-    'datetime': '2023-07-13T14:38:57.293Z',
-    'high': 0.0619,
-    'low': 0.0615,
-    'bid': 0.0615,
-    'bidVolume': None,
-    'ask': 0.0617,
-    'askVolume': None,
-    'vwap': None,
-    'open': None,
-    'close': 0.0616,
-    'last': 0.0616,
-    'previousClose': None,
-    'change': None,
-    'percentage': None,
-    'average': None,
-    'baseVolume': None,
-    'quoteVolume': 51.5065,
-    'info': {'volume_usd': '96891.66',
-     'volume_notional': '3.17716209',
-     'volume': '51.5065',
-     'quote_currency': 'BTC',
-     'price_change': '0.0',
-     'mid_price': '0.0616',
-     'mark_price': '0.061577',
-     'low': '0.0615',
-     'last': '0.0616',
-     'instrument_name': 'ETH_BTC',
-     'high': '0.0619',
-     'estimated_delivery_price': '0.061577',
-     'creation_timestamp': '1689259137293',
-     'bid_price': '0.0615',
-     'base_currency': 'ETH',
-     'ask_price': '0.0617'}}"""
+class Ticker(BaseCustomEncoder):
+    """This class represents an instance of Ticker."""
 
-    symbol: Optional[str] = None
-    high: Optional[float] = None
-    low: Optional[float] = None
-    bid: Optional[float] = None
-    ask: Optional[float] = None
-    close: Optional[float] = None
-    last: Optional[float] = None
-    datetime: Optional[str] = None
-    timestamp: Optional[int] = None
-    quoteVolume: Optional[float] = None
-    info: Optional[dict] = None
-    bidVolume: Optional[float] = None
-    askVolume: Optional[float] = None
-    vwap: Optional[float] = None
-    open: Optional[float] = None
-    previousClose: Optional[float] = None
-    change: Optional[float] = None
-    percentage: Optional[float] = None
-    average: Optional[float] = None
-    baseVolume: Optional[float] = None
-
-    @staticmethod
-    def encode(ticker_protobuf_object, ticker_object: "Ticker") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the ticker_protobuf_object argument is matched with the instance of this class in the 'ticker_object' argument.
-
-        :param ticker_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param ticker_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        for attribute in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
-            attribute_value = getattr(ticker_object, attribute)
-            if attribute_value is not None:
-                setattr(ticker_protobuf_object.Ticker, attribute, attribute_value)
-
-    @classmethod
-    def decode(cls, ticker_protobuf_object) -> "Ticker":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the 'ticker_protobuf_object' argument.
-
-        :param ticker_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'ticker_protobuf_object' argument.
-        """
-        params = {}
-        for attribute in Ticker.__dataclass_fields__.keys():  # pylint: disable=no-member
-            attribute_value = getattr(ticker_protobuf_object.Ticker, attribute, None)
-            if attribute_value is not None:
-                params[attribute] = attribute_value
-        return cls(**params)
-
-    def __eq__(self, other):
-        if isinstance(other, Ticker):
-            return all(
-                getattr(self, field) == getattr(other, field)
-                for field in Ticker.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
-            )
-        return False
-
-    def as_json(self):
-        """
-        returns the json representation of the ticker
-        """
-        json = {}
-        for key, value in self.__dict__.items():
-            if value is not None:
-                json[key] = value
-        return json
+    symbol: str
+    timestamp: int
+    datetime: str
+    high: float
+    low: float
+    bid: float
+    bidVolume: float
+    ask: float
+    askVolume: float
+    vwap: float
+    open: float
+    close: float
+    last: float
+    previousClose: float
+    change: float
+    percentage: float
+    average: float
+    baseVolume: float
+    quoteVolume: float
+    info: str
 
 
-@dataclass
-class Tickers:
+class Tickers(BaseCustomEncoder):
     """This class represents an instance of Tickers."""
 
-    tickers: List[Ticker]
+    tickers: List[Ticker] = []
 
-    @staticmethod
-    def encode(tickers_protobuf_object, tickers_object: "Tickers") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
 
-        The protocol buffer object in the tickers_protobuf_object argument is matched with the instance of this class in the 'tickers_object' argument.
-
-        :param tickers_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param tickers_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        if tickers_object.tickers is None:
-            raise ValueError("tickers cannot be None!")
-        tickers_protobuf_object.Tickers.tickers = tickers_object.tickers
-
-    @classmethod
-    def decode(cls, tickers_protobuf_object) -> "Tickers":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the 'tickers_protobuf_object' argument.
-
-        :param tickers_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'tickers_protobuf_object' argument.
-        """
-        return cls(tickers=tickers_protobuf_object.Tickers.tickers)
-
-    def __eq__(self, other):
-        if isinstance(other, Tickers):
-            return all(
-                getattr(self, field) == getattr(other, field)
-                for field in Tickers.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if self and other and getattr(self, field) is not None and getattr(other, field) is not None
-            )
-        return False
+CUSTOM_ENUM_MAP = {"<class 'tickers_pb2.ErrorCode'>": ErrorCode}

@@ -17,32 +17,32 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for tickers protocol."""
+"""Test dialogues module for orders protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.dialogues import (
-    TickersDialogue,
-    BaseTickersDialogues as TickersDialogues,
+from packages.eightballer.protocols.orders.message import OrdersMessage
+from packages.eightballer.protocols.orders.dialogues import (
+    OrdersDialogue,
+    BaseOrdersDialogues as OrdersDialogues,
 )
+from packages.eightballer.protocols.orders.custom_types import Order
 
 
-class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
-    """Test for the 'tickers' protocol dialogues."""
+class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
+    """Test for the 'orders' protocol dialogues."""
 
-    MESSAGE_CLASS = TickersMessage
+    MESSAGE_CLASS = OrdersMessage
 
-    DIALOGUE_CLASS = TickersDialogue
+    DIALOGUE_CLASS = OrdersDialogue
 
-    DIALOGUES_CLASS = TickersDialogues
+    DIALOGUES_CLASS = OrdersDialogues
 
-    ROLE_FOR_THE_FIRST_MESSAGE = TickersDialogue.Role.AGENT  # CHECK
+    ROLE_FOR_THE_FIRST_MESSAGE = OrdersDialogue.Role.AGENT  # CHECK
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
         return dict(
-            performative=TickersMessage.Performative.GET_ALL_TICKERS,
-            exchange_id="some str",
-            params={"some str": b"some_bytes"},
+            performative=OrdersMessage.Performative.CREATE_ORDER,
+            order=Order(),  # check it please!
         )

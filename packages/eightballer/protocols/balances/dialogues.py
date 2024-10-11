@@ -25,21 +25,25 @@ This module contains the classes required for balances dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import Callable, Dict, FrozenSet, Type, cast
 
 from aea.common import Address
-from aea.skills.base import Model
 from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
+from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
 
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
-
+from aea.skills.base import Model
+from abc import ABC
+from typing import Callable, Dict, FrozenSet, Type, cast
+from aea.common import Address
+from aea.protocols.base import Message
+from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
+from packages.eightballer.protocols.balances.message import BalancesMessage
 def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
     """Infer the role of the agent from an incoming/outgoing first message"""
     del sender, message
     return BalancesDialogue.Role.AGENT
-
 
 class BalancesDialogue(Dialogue):
     """The balances dialogue class maintains state of a dialogue and manages it."""
@@ -102,7 +106,7 @@ class BalancesDialogue(Dialogue):
         )
 
 
-class BaseBalancesDialogues(Dialogues, ABC):
+class BaseBalancesDialogues(Dialogues, ABC):Dialogues, ABC):
     """This class keeps track of all balances dialogues."""
 
     END_STATES = frozenset(
@@ -132,7 +136,6 @@ class BaseBalancesDialogues(Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
-
 
 class BalancesDialogues(BaseBalancesDialogues, Model):
     """This class defines the dialogues used in Balances."""

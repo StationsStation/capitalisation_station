@@ -7,15 +7,19 @@ description: A protocol for passing position data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeien5mlkcicexs3gdp3kw5ukeado326ec4xsfthnsov7edwbbmu3gi
-  custom_types.py: bafybeihzcsppmg7zxykueueqyziqh6ow3igo3qbaku6lszudzdsax7j7rq
-  dialogues.py: bafybeih5m22kal6zr26lwickhnhdpsb4lwkartf4apts6c2lq5cwcer2vq
-  message.py: bafybeihuuwurihouixzo6ccjij4so6ea7laagflv6auyenxurc4uzabpgm
-  positions.proto: bafybeiarecol3osiwh25kcjjy4e2iscltvkevo6balhkdlawxr7ihgm6xy
-  positions_pb2.py: bafybeiexc3bifvoeg7yxk5c6of262kind62aqvvwzyuipzyj6wqtwsxhae
-  serialization.py: bafybeicnyrpctbeggwunqowgitv3sw2qy7l4ehpmv5i3a7uvwxaha7gjpu
-  tests/test_positions_dialogues.py: bafybeihtiond3j5eyxgq5ezmafjyqbirgwm3zyvtvh6x5yjt23j2sft2my
-  tests/test_positions_messages.py: bafybeialv4fbjxppr25rbuqoaleje7das7s3t6dicrb2wfrwhk6b7ps64q
+  README.md: bafybeia2urd5bct5hotyey7lvmupmcgy7xobxoo2b5lt32hsjjipbgppoe
+  __init__.py: bafybeid5nt3vzc2ccnmxdeztq4w6ynaaxgdcp4cjbmtn2ke2wmbpttqs5q
+  custom_types.py: bafybeiemc7ptagj7ipik2rvt5jg6g5ablmycqvigo7o646ml6xkevon2rm
+  dialogues.py: bafybeieya6hirsphqzfxls54bdqjonvuchexatqlrgd6glyfpiscj3qr64
+  message.py: bafybeiad6xlxv7uao7xu5pklivdpmi3wvqe4tkbtnsfxmd23g5fd2i5vey
+  positions.proto: bafybeif5l4koldgvugrjpanjkf733iawf5a5xgzareuvgejvhzi4333l6m
+  positions_pb2.py: bafybeihhszxpfh4bdiitfbgfpixvxqdvj6w7qki4tqdmirnqgqdxsiqn6m
+  protocol_spec.yaml: bafybeihg5nudno6cwokta36oyeojgstvcwm5tprjrwifegu3qicdlnkolm
+  serialization.py: bafybeif7uzxfugb3kyu7ggugpt6ctyvfylfuqzbbk67afwf7qupcrysywm
+  tests/__init__.py: bafybeig7bnllehxlaz56ue5amshk6mm3osy7gjeufzgwfufw3feopra2ya
+  tests/dummy_data.yaml: bafybeidxk2asecwhfogdkq2ybwuyhoo6s65hyjby3k4cymm7ilginsvqeu
+  tests/test_positions_dialogues.py: bafybeieonuaazwkzolpaia2y5zwh7bxnxrvoyzk3ng2copz6jurw4ldbc4
+  tests/test_positions_messages.py: bafybeigwjxvjuc4ksowwuttesa5ozoptjn5qlhl4v2tchw6xogzs5yogky
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

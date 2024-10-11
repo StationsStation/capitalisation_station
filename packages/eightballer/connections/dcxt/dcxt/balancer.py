@@ -91,9 +91,32 @@ WHITELISTED_POOLS = {
         "0x5332584890d6e415a6dc910254d6430b8aab7e69000200000000000000000103",
         "0xaac1a23e7910efa801c6f1ff94648480ab0325b90002000000000000000000fc",
         "0x0c659734f1eef9c63b7ebdf78a164cdd745586db000000000000000000000046",
+        "0xc771c1a5905420daec317b154eb13e4198ba97d0000000000000000000000023",
     ],
 }
 
+
+LEDGER_TO_STABLECOINS = {
+    SupportedLedgers.ETHEREUM: ["0x6b175474e89094c44da98b954eedeac495271d0f"],
+    SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
+    SupportedLedgers.BASE: [
+        "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",  # USDC
+        "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",  # DAI
+        "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",  # usdcb
+    ],
+}
+
+LEDGER_TO_NATIVE_SYMBOL = {
+    SupportedLedgers.ETHEREUM: "ETH",
+    SupportedLedgers.OPTIMISM: "ETH",
+    SupportedLedgers.BASE: "ETH",
+}
+
+LEDGER_TO_WRAPPER = {
+    SupportedLedgers.ETHEREUM: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    SupportedLedgers.OPTIMISM: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+    SupportedLedgers.BASE: "0x4200000000000000000000000000000000000006",
+}
 
 LEDGER_TO_TOKEN_LIST = {
     SupportedLedgers.ETHEREUM: [
@@ -106,20 +129,11 @@ LEDGER_TO_TOKEN_LIST = {
         "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
         "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
     ],
-    SupportedLedgers.BASE: ["0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca", "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"],
-}
-
-LEDGER_TO_STABLECOINS = {
-    SupportedLedgers.ETHEREUM: ["0x6b175474e89094c44da98b954eedeac495271d0f"],
-    SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
-    SupportedLedgers.BASE: ["0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"],
-}
-
-
-LEDGER_TO_NATIVE_SYMBOL = {
-    SupportedLedgers.ETHEREUM: "ETH",
-    SupportedLedgers.OPTIMISM: "ETH",
-    SupportedLedgers.BASE: "ETH",
+    SupportedLedgers.BASE: [
+        "0x54330d28ca3357f294334bdc454a032e7f353416",  # OLAS
+    ]
+    + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
+    + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]],
 }
 
 
@@ -286,11 +300,13 @@ class BalancerClient:
 
         self.tickers = {}
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
-            if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
-                continue
-
-            stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
             token = self.tokens[token_address]
+            if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
+                stable_address = [f for f in LEDGER_TO_STABLECOINS[self.ledger_id] if f != token_address][0]
+            else:
+                stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
+
+            symbol = f"{token.address}/{self.tokens[stable_address].address}"
 
             # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
             ask_price = 1 / float(
@@ -306,7 +322,6 @@ class BalancerClient:
                     amount=buy_amount, output_token_address=stable_address, input_token_address=token_address
                 )
             )
-            symbol = f"{token.address}/{stable_address}"
             ticker = Ticker(
                 symbol=symbol,
                 high=ask_price,
@@ -315,6 +330,32 @@ class BalancerClient:
                 bid=bid_price,
             )
             self.tickers[symbol] = ticker
+        # We also get a price of the wrapper token.
+        wrapper_token = self.tokens[LEDGER_TO_WRAPPER[self.ledger_id]]
+        symbol = f"{LEDGER_TO_NATIVE_SYMBOL[self.ledger_id]}/{self.tokens[stable_address].address}"
+        ask_price = 1 / float(
+            self.get_price(
+                amount=DEFAULT_AMOUNT_USD,
+                output_token_address=wrapper_token.address,
+                input_token_address=stable_address,
+            )
+        )
+        buy_amount = DEFAULT_AMOUNT_USD / ask_price
+        bid_price = 1 / float(
+            1
+            / self.get_price(
+                amount=buy_amount, output_token_address=stable_address, input_token_address=wrapper_token.address
+            )
+        )
+        ticker = Ticker(
+            symbol=symbol,
+            high=ask_price,
+            low=bid_price,
+            ask=ask_price,
+            bid=bid_price,
+        )
+        self.tickers[symbol] = ticker
+
         return Tickers(tickers=list(ticker for ticker in self.tickers.values()))
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
@@ -652,35 +693,34 @@ class BalancerClient:
                 args=[address_to_check],
             )
         balance_data = mc.execute()
-
-        def _from_decimals_amt_to_token(address, balance):
-            if address not in self.tokens:
-                breakpoint()
-            token = self.tokens[address]
-            result = Balance(
-                asset_id=address,
-                free=token.to_human(balance),
-                used=0,
-                total=token.to_human(balance),
-                is_native=False,
-            )
-            return result
-
         native = self.bal.web3.eth.get_balance(address_to_check)
 
         balances = Balances(
             balances=[
-                _from_decimals_amt_to_token(token_address, balance[0])
+                self._from_decimals_amt_to_token(token_address, balance[0])
                 for token_address, balance in zip(LEDGER_TO_TOKEN_LIST[self.ledger_id], balance_data[0])
             ]
             + [
                 Balance(
                     asset_id=LEDGER_TO_NATIVE_SYMBOL[self.ledger_id],
                     free=self.bal.web3.from_wei(native, "ether"),
-                    used=0,
                     total=self.bal.web3.from_wei(native, "ether"),
                     is_native=True,
+                    used=0,
                 )
             ]
         )
         return balances
+
+    def _from_decimals_amt_to_token(self, address, balance):
+        if address not in self.tokens:
+            return
+        token = self.tokens[address]
+        result = Balance(
+            asset_id=address,
+            free=token.to_human(balance),
+            used=0,
+            total=token.to_human(balance),
+            is_native=False,
+        )
+        return result

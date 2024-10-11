@@ -1,0 +1,32 @@
+Position:
+  collateral: 0.0
+  contractSize: 0.0
+  contracts: 0.0
+  datetime: datetime
+  entryPrice: 0.0
+  exchange_id: exchange_id
+  hedged: hedged
+  id: id
+  info: info
+  initialMargin: 0.0
+  initialMarginPercentage: 0.0
+  lastPrice: 0.0
+  lastUpdateTimestamp: 0
+  leverage: 0.0
+  liquidationPrice: 0.0
+  maintenanceMargin: 0.0
+  maintenanceMarginPercentage: 0.0
+  marginMode: marginMode
+  marginRatio: 0.0
+  markPrice: 0.0
+  notional: 0.0
+  percentage: 0.0
+  side: 0
+  size: 0.0
+  stop_loss_price: 0.0
+  symbol: symbol
+  take_profit_price: 0.0
+  timestamp: 0
+  unrealizedPnl: 0.0
+Positions:
+  positions: []
