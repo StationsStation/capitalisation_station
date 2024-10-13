@@ -7,53 +7,49 @@ message MarketsMessage{
   // Custom Types
   message ErrorCode{
     enum ErrorCodeEnum {
-      UNSUPPORTED_PROTOCOL = 0;
-      DECODING_ERROR = 1;
-      INVALID_MESSAGE = 2;
-      UNSUPPORTED_SKILL = 3;
-      INVALID_DIALOGUE = 4;
+      ERROR_CODE_ENUM_UNSUPPORTED_PROTOCOL = 0;
+      ERROR_CODE_ENUM_DECODING_ERROR = 1;
+      ERROR_CODE_ENUM_INVALID_MESSAGE = 2;
+      ERROR_CODE_ENUM_UNSUPPORTED_SKILL = 3;
+      ERROR_CODE_ENUM_INVALID_DIALOGUE = 4;
     }
     ErrorCodeEnum error_code = 1;
   }
 
   message Market{
-    message Market {
-      string id = 1;
-      string lowercaseId = 2;
-      string symbol = 3;
-      string base = 4;
-      string quote = 5;
-      string settle = 6;
-      string baseId = 7;
-      string quoteId = 8;
-      string settleId = 9;
-      string type = 10;
-      bool spot = 11;
-      bool margin = 12;
-      bool swap = 13;
-      bool future = 14;
-      bool option = 15;
-      bool active = 16;
-      bool contract = 17;
-      bool linear = 18;
-      bool inverse = 19;
-      float taker = 20;
-      float maker = 21;
-      float contractSize = 22;
-      float expiry = 23;
-      string expiryDatetime = 24;
-      float strike = 25;
-      string optionType = 26;
-      float precision = 27;
-      string limits = 28;
-      string info = 29;
-    }
+    string id = 1;
+    string lowercase_id = 2;
+    string symbol = 3;
+    string base = 4;
+    string quote = 5;
+    string settle = 6;
+    string base_id = 7;
+    string quote_id = 8;
+    string settle_id = 9;
+    string type = 10;
+    bool spot = 11;
+    bool margin = 12;
+    bool swap = 13;
+    bool future = 14;
+    bool option = 15;
+    bool active = 16;
+    bool contract = 17;
+    bool linear = 18;
+    bool inverse = 19;
+    float taker = 20;
+    float maker = 21;
+    float contract_size = 22;
+    float expiry = 23;
+    string expiry_datetime = 24;
+    float strike = 25;
+    string option_type = 26;
+    float precision = 27;
+    string limits = 28;
+    string info = 29;
   }
 
   message Markets{
-    message Markets {
-      repeated Market markets = 1;
-    }
+    repeated Market markets = 1;
   }
 
 

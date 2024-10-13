@@ -1,9 +1,78 @@
-"""This module contains class representations corresponding to every custom type in the protocol specification."""
+"""Custom types for the protocol."""
 
 from enum import Enum
 from typing import Any, List
 
 from pydantic import BaseModel
+
+
+class ErrorCode(Enum):
+    """This class represents an instance of ErrorCode."""
+
+    UNKNOWN_EXCHANGE = 0
+    UNKNOWN_POSITION = 1
+    API_ERROR = 2
+
+    @staticmethod
+    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
+        in the 'error_code_object' argument.
+
+        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
+        """
+        error_code_protobuf_object.error_code = error_code_object.value
+
+    @classmethod
+    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+
+        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+        """
+        return ErrorCode(error_code_protobuf_object.error_code)
+
+
+class PositionSide(Enum):
+    """This class represents an instance of PositionSide."""
+
+    LONG = 0
+    SHORT = 1
+
+    @staticmethod
+    def encode(position_side_protobuf_object, position_side_object: "PositionSide") -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the position_side_protobuf_object argument is matched with the instance of this
+        class in the 'position_side_object' argument.
+
+        :param position_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param position_side_object: an instance of this class to be encoded in the protocol buffer object.
+        """
+        position_side_protobuf_object.position_side = position_side_object.value
+
+    @classmethod
+    def decode(cls, position_side_protobuf_object) -> "PositionSide":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'position_side_protobuf_object' argument.
+
+        :param position_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'position_side_protobuf_object' argument.
+        """
+        return PositionSide(position_side_protobuf_object.position_side)
 
 
 class BaseCustomEncoder(BaseModel):
@@ -75,41 +144,6 @@ class BaseCustomEncoder(BaseModel):
         return hash(self.dict())
 
 
-class ErrorCode(Enum):
-    """This class represents an instance of ErrorCode."""
-
-    UNKNOWN_EXCHANGE = 0
-    UNKNOWN_POSITION = 1
-    API_ERROR = 2
-
-    @staticmethod
-    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
-        in the 'error_code_object' argument.
-
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        error_code_protobuf_object.error_code = error_code_object.value
-
-    @classmethod
-    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'error_code_protobuf_object' argument.
-
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
-        'error_code_protobuf_object' argument.
-        """
-        return ErrorCode(error_code_protobuf_object.error_code)
-
-
 class Position(BaseCustomEncoder):
     """This class represents an instance of Position."""
 
@@ -117,23 +151,23 @@ class Position(BaseCustomEncoder):
     symbol: str
     timestamp: int
     datetime: str
-    lastUpdateTimestamp: int
-    initialMargin: float
-    initialMarginPercentage: float
-    maintenanceMargin: float
-    maintenanceMarginPercentage: float
-    entryPrice: float
+    last_update_timestamp: int
+    initial_margin: float
+    initial_margin_percentage: float
+    maintenance_margin: float
+    maintenance_margin_percentage: float
+    entry_price: float
     notional: float
     leverage: float
-    unrealizedPnl: float
+    unrealized_pnl: float
     contracts: float
-    contractSize: float
-    marginRatio: float
-    liquidationPrice: float
-    markPrice: float
-    lastPrice: float
+    contract_size: float
+    margin_ratio: float
+    liquidation_price: float
+    mark_price: float
+    last_price: float
     collateral: float
-    marginMode: str
+    margin_mode: str
     side: PositionSide
     percentage: float
     info: str
@@ -142,40 +176,6 @@ class Position(BaseCustomEncoder):
     hedged: str
     stop_loss_price: float
     take_profit_price: float
-
-
-class PositionSide(Enum):
-    """This class represents an instance of PositionSide."""
-
-    LONG = 0
-    SHORT = 1
-
-    @staticmethod
-    def encode(position_side_protobuf_object, position_side_object: "PositionSide") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the position_side_protobuf_object argument is matched with the instance of this
-        class in the 'position_side_object' argument.
-
-        :param position_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param position_side_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        position_side_protobuf_object.position_side = position_side_object.value
-
-    @classmethod
-    def decode(cls, position_side_protobuf_object) -> "PositionSide":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'position_side_protobuf_object' argument.
-
-        :param position_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
-        'position_side_protobuf_object' argument.
-        """
-        return PositionSide(position_side_protobuf_object.position_side)
 
 
 class Positions(BaseCustomEncoder):

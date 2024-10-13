@@ -20,13 +20,23 @@
 """Test dialogues module for orders protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
+
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import (
     OrdersDialogue,
-    BaseOrdersDialogues as OrdersDialogues,
+    BaseOrdersDialogues,
 )
-from packages.eightballer.protocols.orders.custom_types import Order
+from packages.eightballer.protocols.orders.custom_types import Order, ErrorCode, OrderSide, OrderType, OrderStatus
+
+
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
@@ -36,7 +46,7 @@ class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = OrdersDialogue
 
-    DIALOGUES_CLASS = OrdersDialogues
+    DIALOGUES_CLASS = BaseOrdersDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = OrdersDialogue.Role.AGENT  # CHECK
 
@@ -44,5 +54,5 @@ class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
         """Make a dict with message contruction content for dialogues.create."""
         return dict(
             performative=OrdersMessage.Performative.CREATE_ORDER,
-            order=Order(),  # check it please!
+            order=Order(**load_data("Order")),  # check it please!
         )

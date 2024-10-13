@@ -17,32 +17,31 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for tickers protocol."""
+"""Test dialogues module for ohlcv protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.dialogues import (
-    TickersDialogue,
-    BaseTickersDialogues as TickersDialogues,
-)
+
+from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
 
 
-class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
-    """Test for the 'tickers' protocol dialogues."""
+class TestDialoguesOhlcv(BaseProtocolDialoguesTestCase):
+    """Test for the 'ohlcv' protocol dialogues."""
 
-    MESSAGE_CLASS = TickersMessage
+    MESSAGE_CLASS = OhlcvMessage
 
-    DIALOGUE_CLASS = TickersDialogue
+    DIALOGUE_CLASS = OhlcvDialogue
 
-    DIALOGUES_CLASS = TickersDialogues
+    DIALOGUES_CLASS = OhlcvDialogues
 
-    ROLE_FOR_THE_FIRST_MESSAGE = TickersDialogue.Role.AGENT  # CHECK
+    ROLE_FOR_THE_FIRST_MESSAGE = OhlcvDialogue.Role.AGENT  # CHECK
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
         return dict(
-            performative=TickersMessage.Performative.GET_ALL_TICKERS,
+            performative=OhlcvMessage.Performative.SUBSCRIBE,
             exchange_id="some str",
-            params={"some str": b"some_bytes"},
+            market_name="some str",
+            interval=12,
         )

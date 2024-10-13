@@ -25,6 +25,7 @@ from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
+
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.custom_types import (
     Position,

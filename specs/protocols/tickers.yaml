@@ -30,8 +30,6 @@ ct:ErrorCode: |
       API_ERROR = 2;
     }
   ErrorCodeEnum error_code = 1;
-ct:Tickers: |
-    repeated Ticker tickers = 1;
 ct:Ticker: |
     string symbol = 1;
     int64 timestamp = 2;
@@ -39,20 +37,22 @@ ct:Ticker: |
     float high = 4;
     float low = 5;
     float bid = 6;
-    float bidVolume = 7;
+    float bid_volume = 7;
     float ask = 8;
-    float askVolume = 9;
+    float ask_volume = 9;
     float vwap = 10;
     float open = 11;
     float close = 12;
     float last = 13;
-    float previousClose = 14;
+    float previous_close = 14;
     float change = 15;
     float percentage = 16;
     float average = 17;
-    float baseVolume = 18;
-    float quoteVolume = 19;
+    float base_volume = 18;
+    float quote_volume = 19;
     string info = 20;
+ct:Tickers: |
+    repeated Ticker tickers = 1;
 ...
 ---
 initiation: [get_all_tickers, get_ticker]

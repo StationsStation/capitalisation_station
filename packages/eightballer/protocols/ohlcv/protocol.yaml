@@ -3,20 +3,23 @@ author: eightballer
 version: 0.1.0
 protocol_specification_id: eightballer/ohlcv:0.1.0
 type: protocol
-description: A protocol for passing ohlcv (open, high, low, close, volume) data between
-  components.
+description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiam7kgiem3dtm4gxwe3cf4im2frxiqynwd733fftumrvessa2yj5i
-  custom_types.py: bafybeibck2uixnrg7nwofdqz3xg37fdfpfgyw3aeohnfxcnjjscxx5ahmm
-  dialogues.py: bafybeibt4ex6mgwoulanp4xnoder7tzpj3kwtlon322kyukl6fzk3j44vy
-  message.py: bafybeiduej3hdp6wm4wusl6uozv27jhh4pmferkqh2os6ffog35cfl6jda
-  ohlcv.proto: bafybeibihujekcbtreitcb4bhchfqnngv6iw4dkzf3ibu7pkylbznypfju
-  ohlcv_pb2.py: bafybeieujf3bc2u2jwiuy7esodednpt6i4fhuqv4e4kzkaiqfxret5ec64
-  serialization.py: bafybeibl3frfn7bf5icvrx7gynlb7qxw6pgcld6sjmupvysju7ywur2y7y
-  tests/__init__.py: bafybeigdw2ixe76kbmiaurisdse6vv453viypzxcen3nwnoe6zbvlcwory
-  tests/test_ohlcv.py: bafybeih3ucwo4opuncrqqgdh4dkaao7h5u3cg36oburvdk3c6aaybt5pki
+  README.md: bafybeiggwhnq5a63m3mzste7erogvmsre745bnzuyqrjehrc6u5zyokza4
+  __init__.py: bafybeifj4tlox3phg644xfyfyg5bvsxxlw7mv6ue5zrqbkyhrbiyuicily
+  custom_types.py: bafybeigpskyxoaj62punyjzgt4y4vqthbyvvvm44fika4ovxbbws57flru
+  dialogues.py: bafybeifpjpqp6zajvhhvoxprmmwzmovd4b2vpkjgjunpmmsq4yqicwhzam
+  message.py: bafybeidearsju3ejfrm6frz5brccgteae24fiwjmkrvghsmoo57lr2cfsm
+  ohlcv.proto: bafybeihwjdssrfvvtagrucw4o62ok4aoqehv5dzwau55deqlvavm4xlzqm
+  ohlcv_pb2.py: bafybeieiw5hllftwc7qofxidjmfflcuf7ug6o5ajfnslia26kfbytrmklq
+  protocol_spec.yaml: bafybeiadohai3emoipafl5zfwckltw77hqtrt5u3mzmzvmkbhmveu4vhti
+  serialization.py: bafybeidl46rnheug76akvs6tmbp2qnuey7y7hsovsmisgstkrlglem53ui
+  tests/__init__.py: bafybeig7bnllehxlaz56ue5amshk6mm3osy7gjeufzgwfufw3feopra2ya
+  tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
+  tests/test_ohlcv_dialogues.py: bafybeiajt222gnkpcsbgehkq7hkfl3rkavakcdwqwveeke5bqkwt4j5rcu
+  tests/test_ohlcv_messages.py: bafybeidkevah3c2s36t6w45btk4cdr5xv4uzfela6pxgdki3k3bciowupy
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

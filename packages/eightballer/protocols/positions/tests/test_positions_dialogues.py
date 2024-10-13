@@ -20,12 +20,23 @@
 """Test dialogues module for positions protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
+
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import (
     PositionsDialogue,
-    BasePositionsDialogues as PositionsDialogues,
+    BasePositionsDialogues,
 )
+from packages.eightballer.protocols.positions.custom_types import ErrorCode, PositionSide
+
+
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
@@ -35,7 +46,7 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = PositionsDialogue
 
-    DIALOGUES_CLASS = PositionsDialogues
+    DIALOGUES_CLASS = BasePositionsDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = PositionsDialogue.Role.AGENT  # CHECK
 
@@ -45,5 +56,5 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
             performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
             exchange_id="some str",
             params={"some str": b"some_bytes"},
-            side=PositionSide(),
+            side=PositionSide(0),
         )

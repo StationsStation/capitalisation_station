@@ -14,7 +14,19 @@ function generate_protocol {
     cd ..
     rm -rf $tmp_agent_name
     rm -rf packages/eightballer/agents/$tmp_agent_name
+    adev -v fmt -p  packages/eightballer/protocols/$1
+    adev -v lint -p packages/eightballer/protocols/$1
+    pytest packages/eightballer/protocols/$1
 }
 
+generate_protocol 'ohlcv'
 
+generate_protocol 'order_book'
+generate_protocol 'orders'
+generate_protocol 'markets'
+# 
+generate_protocol 'tickers'
 generate_protocol 'balances'
+generate_protocol 'positions'
+# generate_protocol 'spot_asset'
+

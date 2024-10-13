@@ -16,15 +16,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-
-"""
-This module contains the support resources for the tickers protocol.
-
-It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
-"""
-
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.serialization import TickersSerializer
-
-
-TickersMessage.serializer = TickersSerializer
+"""Module for connection."""

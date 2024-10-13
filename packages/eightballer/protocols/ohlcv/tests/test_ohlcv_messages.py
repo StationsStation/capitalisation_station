@@ -17,7 +17,7 @@
 #
 #                                                                             --
 
-"""Test messages module for tickers protocol."""
+"""Test messages module for ohlcv protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
@@ -25,12 +25,9 @@ from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.custom_types import (
-    Ticker,
-    Tickers,
-    ErrorCode,
-)
+
+from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
+from packages.eightballer.protocols.ohlcv.custom_types import ErrorCode
 
 
 def load_data(custom_type):
@@ -39,37 +36,48 @@ def load_data(custom_type):
         return yaml.safe_load(f)[custom_type]
 
 
-class TestMessageTickers(BaseProtocolMessagesTestCase):
-    """Test for the 'tickers' protocol message."""
+class TestMessageOhlcv(BaseProtocolMessagesTestCase):
+    """Test for the 'ohlcv' protocol message."""
 
-    MESSAGE_CLASS = TickersMessage
+    MESSAGE_CLASS = OhlcvMessage
 
-    def build_messages(self) -> List[TickersMessage]:  # type: ignore[override]
+    def build_messages(self) -> List[OhlcvMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
-            TickersMessage(
-                performative=TickersMessage.Performative.GET_ALL_TICKERS,
+            OhlcvMessage(
+                performative=OhlcvMessage.Performative.SUBSCRIBE,
                 exchange_id="some str",
-                params={"some str": b"some_bytes"},
+                market_name="some str",
+                interval=12,
             ),
-            TickersMessage(
-                performative=TickersMessage.Performative.GET_TICKER,
-                asset_id="some str",
+            OhlcvMessage(
+                performative=OhlcvMessage.Performative.CANDLESTICK,
                 exchange_id="some str",
+                market_name="some str",
+                interval=12,
+                open=1.0,
+                high=1.0,
+                low=1.0,
+                close=1.0,
+                volume=1.0,
+                timestamp=12,
             ),
-            TickersMessage(
-                performative=TickersMessage.Performative.ALL_TICKERS,
-                tickers=Tickers(**load_data("Tickers")),  # check it please!
+            OhlcvMessage(
+                performative=OhlcvMessage.Performative.HISTORY,
+                exchange_id="some str",
+                market_name="some str",
+                start_timestamp=12,
+                end_timestamp=12,
+                interval=12,
             ),
-            TickersMessage(
-                performative=TickersMessage.Performative.TICKER,
-                ticker=Ticker(**load_data("Ticker")),  # check it please!
-            ),
-            TickersMessage(
-                performative=TickersMessage.Performative.ERROR,
+            OhlcvMessage(
+                performative=OhlcvMessage.Performative.ERROR,
                 error_code=ErrorCode(0),  # check it please!
                 error_msg="some str",
                 error_data={"some str": b"some_bytes"},
+            ),
+            OhlcvMessage(
+                performative=OhlcvMessage.Performative.END,
             ),
         ]
 

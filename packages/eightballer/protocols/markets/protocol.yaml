@@ -3,19 +3,23 @@ author: eightballer
 version: 0.1.0
 protocol_specification_id: eightballer/markets:0.1.0
 type: protocol
-description: A protocol for passing market data between components.
+description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiedgfzg6naaj6sedy2tcxayxdfpsoc2fmwxgghik6nszztprsgubm
-  custom_types.py: bafybeifiazpm2hmjnjax6g3yiypt7hyj2ycmsb7y2nucohz22ctubfrv7m
-  dialogues.py: bafybeihenitvipnycug3vtt7ch5o4ruvs3gafm6gqhvh5dqi3o2whtxxpe
-  markets.proto: bafybeibihxjeibzycgd5e4rqifzq7wkaeqlzf2cmg75ppwl47murmygp6e
-  markets_pb2.py: bafybeigccteqjvs3426fp43ndouxalnvw2zej4by2gcxkais3d27jbua6i
-  message.py: bafybeib5uvpngqcsncjvcfwerd5fplmwup4qtprawxezv6lom5otntv4zy
-  serialization.py: bafybeigmszgfw4kg5y2bhrgbkcfjscbysy4s44m4dg3vzsuwujzrlstg6a
-  tests/test_markets_dialogues.py: bafybeiczwgchaumqhpn3pszp2sxpwa7eeytxcuelwkgxx5xtvwzyb7elj4
-  tests/test_markets_messages.py: bafybeicwiohne6dgaibttlrgo2dnnwhdlso7cn4adzo224pxry2a73z7ci
+  README.md: bafybeif44b735ztwpuuhakcsgn3aby2vnxso4kl2jfvaiwsop63ra4iuju
+  __init__.py: bafybeihub67rkwydf7aornp723w4nwfxkw4xoblicy3pmiatk2dbbblinm
+  custom_types.py: bafybeies2hfcx5cby4v2wlj5lvt4vizgovtxlnubwm76uvokv2mttvkdim
+  dialogues.py: bafybeif5xbujr2knmz5qmzeaxeffygo2fydlexictvggeswssbxkl4o5ba
+  markets.proto: bafybeic6hk3vwackuj3vu7velycryd6y2k423otm7e5v3uumcmucnvy5oa
+  markets_pb2.py: bafybeiahxash2ap3xwvqbmv5ddp5g4qddnfdfueb454pbrqeqhrvjfaqem
+  message.py: bafybeicxjkvy6ej4p5yqdpc3o5bi6uayunxwooy5vm5ocs5sixj22z4b4y
+  protocol_spec.yaml: bafybeiht3j6i7ui7ybllpwrnw56hkprzrmbuuaps75vymgizrk74qdzefm
+  serialization.py: bafybeicgh6dtbnbpv6srl67hhm4aypgtxb6zs4hw2weme2poeo4lytntm4
+  tests/__init__.py: bafybeig7bnllehxlaz56ue5amshk6mm3osy7gjeufzgwfufw3feopra2ya
+  tests/dummy_data.yaml: bafybeidn2xnxyoszvl5g6o5p6bdtboj7wnwzoelc5c5gc66y2pi4r7prp4
+  tests/test_markets_dialogues.py: bafybeiarbtu44mf5blndxczqg7stp7rzvaopytnzyvnxsbsj54gey3n4ci
+  tests/test_markets_messages.py: bafybeiamjxfvgy4eczig4hf4fl2vmgz25374by7wazdx43z5occvq3omku
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

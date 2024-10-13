@@ -9,8 +9,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeicgzsitppmod5w4s3frlo4o46uwnzs2qhtw6pbvt6sbdirdlyf7nm
   __init__.py: bafybeieae5wuyfkbjxht3gpsmatpqq745mrimul3jnqp5wkscbo2sqzwhq
-  custom_types.py: bafybeic57l55clgpergx4nzpcg44jegu5xal5dj3ts73lroompif7rr7xm
-  dialogues.py: bafybeiexh27dojgu5v52qu2phjchkppn766dewi4lz7atnnf2hm4wfebti
+  custom_types.py: bafybeic6gwtsy2rz54fx4rkz2dhukh5wwczzslcaoemvwbeq4jrloqtkaq
+  dialogues.py: bafybeifvqxeymdkoxeypnp3we5sn4nwfgs5uld37uel65gbz67ef7jypzq
   message.py: bafybeibexvqlxa2x2akqfenrxxonaw6uybtq7x7f3lxzeic6rmxkvophdu
   orders.proto: bafybeidbghm3kz4t2ofuvapa2vuckt5urn5qqw2qsipibtsa6i33jq5qdm
   orders_pb2.py: bafybeihj2ppgttemkaknywvtfkkrca3ijs3pumszpnzv7ex4xw7yu7ex2y
@@ -18,7 +18,7 @@ fingerprint:
   serialization.py: bafybeicpv6xweshpistj7qpcoajwe2nox65gou4w42jbzrco46zbag7dcy
   tests/__init__.py: bafybeig7bnllehxlaz56ue5amshk6mm3osy7gjeufzgwfufw3feopra2ya
   tests/dummy_data.yaml: bafybeicjpq3fto462agts4ydjufpynmt3wlohuvhttxjupkd2gono3dnai
-  tests/test_orders_dialogues.py: bafybeicckqls2l55sy7lladjzsjiopwnwdufkxj6oilyogsqoadv6idrla
+  tests/test_orders_dialogues.py: bafybeia6ynob2bp7adw4nvcaq4bl5tuxgfmohojwfjm552jadun3uzynnq
   tests/test_orders_messages.py: bafybeie6siduqv7luqy5gq4ropsy4dkys7k4zzsf5v2tam2l73r577n3o4
 fingerprint_ignore_patterns: []
 dependencies:

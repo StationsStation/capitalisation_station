@@ -10,7 +10,7 @@ fingerprint:
   connection.py: bafybeib3qr3crn2ge5sjx7fb3fm3yz3cnivnsrmyx6nx7smnyjquh6stai
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeifzenvttncflln4363gxhydkmgoe7rv7gwoxokjy6jdcrd52c6s6a
+  dcxt/balancer.py: bafybeihvggqr4c34wznlyw7xdq3azyqtjvi5m4uartyxo3tg7vw4dzlyke
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeifrt5vps3krbbr6n5rifkej6v4yjk7ybrw2mune3wnrdhujfso45m
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
@@ -26,7 +26,7 @@ fingerprint:
   interfaces/interface.py: bafybeic6fb4mb2rzhossctii4pgx4cajlfcgxvlbfwf4bsd26tm3epei2i
   interfaces/interface_base.py: bafybeidbveccpnrhkwuua5g7ke3ycwav6uaa7nohdsxadwkodbpf2rdjfa
   interfaces/market.py: bafybeig7rlxg6sfcdfehodq6zz4zn263n6e2sfjvx2ji2axxfpbupcyjem
-  interfaces/ohlcv.py: bafybeihxbonmsouzc2ntao4zmzze6nlsgbdbu63wvltio6yrsdehsimf24
+  interfaces/ohlcv.py: bafybeicl4vr4zshabsbxuu556niwdil44mcger2kgswmz6bhb5punjblim
   interfaces/order.py: bafybeic4w3hhqczptflagwvbymd4cvuzsqij3ddc7vvb32gpkcuivphhvm
   interfaces/order_book.py: bafybeiahn7qflpxtj6gm7vetnjp2pwfklqcdivhotcrah6oa5zyczobkom
   interfaces/position.py: bafybeiay4mf2uls6lijttp7e5nqfpdhwm5omcyqyetqn24ej4phdvudzhq
@@ -54,15 +54,15 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeieczloag3mjzvd4y2qqpbrtx6suoqjww3v7mf3dgrez5xopmo4h3m
+- eightballer/balances:0.1.0:bafybeiewv3cxu2pcxmv4exuclzxhwb4smc2q56tpvltywzvl3uqffz233q
 - eightballer/default:0.1.0:bafybeid2kyktyf2kqmua5dscnax7ustvht7krpwda6modxog5xrplwtmym
-- eightballer/markets:0.1.0:bafybeibewtfadlw4kyknbjjxxjokrndea5mlrgsj7whmbfvhp5ksmnrsi4
-- eightballer/ohlcv:0.1.0:bafybeibceyzlkap55isc7rcru3b3iosb2vhzz7xjt666k672bz6ejpsiyq
-- eightballer/order_book:0.1.0:bafybeibtpf6fjlzfjfvwskveb7usb3bi27fbnzd5ypwm5u4oyzjnb3s6yi
-- eightballer/orders:0.1.0:bafybeibprhniaoq3y2uzc4arwwl7yws3i54ahaicrphh5gtl4xxhxqexdy
-- eightballer/positions:0.1.0:bafybeib6v2rtylru3lmri6tpgug7sgsd3imzqrpma3nuiqgjzmtdrsblaa
+- eightballer/markets:0.1.0:bafybeigguuwpumkjkjxteyjo3pbvmpriz4njtowqjibrunqddgobklplqi
+- eightballer/ohlcv:0.1.0:bafybeidca7alktpcwy2agehpe7hgqtbkcdcbqfskkhnzzqyq2awx7fdguy
+- eightballer/order_book:0.1.0:bafybeih57ge4gp2duj4nbnhnyyba6lkgcpc6lf727iliet7wvxelffhqvq
+- eightballer/orders:0.1.0:bafybeibjel2iyrv7kd4hekdynismvo554wdyzbqhbcrtbapeqcpy4tpqte
+- eightballer/positions:0.1.0:bafybeidbobtknsmbb72br7nqxr47evwfdmaeut6fcukevobxrwybauzbya
 - eightballer/spot_asset:0.1.0:bafybeibrses5hkdzjtdbplkvvqfj7g64sopcdjwsstcyxujerttmpg4hxu
-- eightballer/tickers:0.1.0:bafybeicjbpa24tla2enenmlzipqhu6grutqso74q6y7is2cpk7acub3bca
+- eightballer/tickers:0.1.0:bafybeidzvkunldgha4osshioe6t2phkcogfwicxlbcnbq57y35ayjubgfe
 class_name: DcxtConnection
 config:
   exchanges:
