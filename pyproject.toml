@@ -19,22 +19,23 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "<3.12,>=3.9"
 cython = "<3.0.0"
-open-aea-ledger-solana = "==1.55.0"
-open-aea-ledger-cosmos = "==1.55.0"
-open-aea-ledger-ethereum = "==1.55.0"
-open-aea-cli-ipfs = "==1.55.0"
-open-aea-test-autonomy = "==0.15.2"
-open-autonomy = "==0.15.2"
-autonomy-dev = {version = "0.2.73", extras = ["all"]}
+open-aea-ledger-solana = "==1.57.0"
+open-aea-ledger-cosmos = "==1.57.0"
+open-aea-ledger-ethereum = "==1.57.0"
+open-aea-cli-ipfs = "1.57.0"
+open-aea-test-autonomy = "0.16.1"
+open-autonomy = "==0.16.1"
+autonomy-dev = {version = "==0.2.78", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
 lyra-v2-client = {path = "third_party/upstream/lyra_client"}
 balpy = {path = "third_party/forks/balpy"}
 multicaller = {path = "third_party/forks/multicaller"}
-pandas = "==1.3.5"
+pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"
+cytoolz = "==1.0.0"
 
 [tool.poetry.dev-dependencies]
 
