@@ -3,7 +3,7 @@
 import asyncio
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
-from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues
+from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, BaseSpotAssetDialogues
 from packages.eightballer.protocols.spot_asset.custom_types import Decimal
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
@@ -22,7 +22,7 @@ class SpotAssetInterface(BaseInterface):
 
     protocol_id = SpotAssetMessage.protocol_id
     dialogue_class = SpotAssetDialogue
-    dialogues_class = SpotAssetDialogues
+    dialogues_class = BaseSpotAssetDialogues
     _balances = {}
     started = False
 

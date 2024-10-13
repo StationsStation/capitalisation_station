@@ -25,25 +25,21 @@ This module contains the classes required for ohlcv dialogue management.
 """
 
 from abc import ABC
-from typing import Callable, Dict, FrozenSet, Type, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
-from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
-
-from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
-
 from aea.skills.base import Model
-from abc import ABC
-from typing import Callable, Dict, FrozenSet, Type, cast
-from aea.common import Address
 from aea.protocols.base import Message
-from aea.protocols.dialogue.base import Dialogue, DialogueLabel, Dialogues
+from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
+
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
+
+
 def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
     """Infer the role of the agent from an incoming/outgoing first message"""
     del sender, message
     return OhlcvDialogue.Role.AGENT
+
 
 class OhlcvDialogue(Dialogue):
     """The ohlcv dialogue class maintains state of a dialogue and manages it."""
@@ -99,7 +95,7 @@ class OhlcvDialogue(Dialogue):
         )
 
 
-class BaseOhlcvDialogues(Dialogues, ABC):Dialogues, ABC):
+class BaseOhlcvDialogues(Dialogues, ABC):
     """This class keeps track of all ohlcv dialogues."""
 
     END_STATES = frozenset({OhlcvDialogue.EndState.END, OhlcvDialogue.EndState.ERROR})
@@ -127,6 +123,7 @@ class BaseOhlcvDialogues(Dialogues, ABC):Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
+
 
 class OhlcvDialogues(BaseOhlcvDialogues, Model):
     """This class defines the dialogues used in Ohlcv."""

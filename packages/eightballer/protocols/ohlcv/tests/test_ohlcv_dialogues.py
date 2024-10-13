@@ -20,10 +20,20 @@
 """Test dialogues module for ohlcv protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
-from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
+from packages.eightballer.protocols.ohlcv.custom_types import ErrorCode
+
+
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestDialoguesOhlcv(BaseProtocolDialoguesTestCase):
@@ -33,7 +43,7 @@ class TestDialoguesOhlcv(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = OhlcvDialogue
 
-    DIALOGUES_CLASS = OhlcvDialogues
+    DIALOGUES_CLASS = BaseOhlcvDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = OhlcvDialogue.Role.AGENT  # CHECK
 

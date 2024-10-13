@@ -44,8 +44,7 @@ PACKAGE_DIR = Path(__file__).parent
 ABI_DIR = PACKAGE_DIR / "abis"
 
 ABI_MAPPING = {
-    Path(path).stem.upper(): open(path, encoding=DEFAULT_ENCODING).read()  # pylint: disable=R1732  # pylint: disable=R1732
-    for path in glob(str(ABI_DIR / "*.json"))
+    Path(path).stem.upper(): Path(path).read_text(encoding=DEFAULT_ENCODING) for path in glob(str(ABI_DIR / "*.json"))
 }
 
 ETH_KEYPATH = "ethereum_private_key.txt"
@@ -161,7 +160,7 @@ class BalancerClient:
         self.bal: balpy.balpy = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
-                "privateKey": self.account._private_key,
+                "privateKey": key,
                 "customRPC": self.rpc_url,
                 "etherscanApiKey": self.etherscan_api_key,
             },
@@ -230,17 +229,11 @@ class BalancerClient:
             del json_data["Element"]
         return json_data
 
-    async def fetch_tickers(self, *args, **kwargs):
+    async def build_tokens(self):
         """
-        Fetches the tickers.
-
-        :return: The tickers.
+        Build the tokens from the balancer pools.
+        We use onchain data to get the token data.
         """
-
-        # We temporarily assume that the tickers are the same as the markets, and use the pool IDs to get the tickers.
-
-        await self.fetch_markets(*args, **kwargs)
-
         params = (
             self.pool_ids
         )  # however as we are not able to collect for *all* ppols, we just select a few to get the data for.
@@ -295,8 +288,21 @@ class BalancerClient:
                     name=name[0],
                     decimals=self.bal.decimals[address],
                 )
-            # We now get get the price for the swap
-            # We now make an erc20 representation of the token.
+
+    async def fetch_tickers(self, *args, **kwargs):
+        """
+        Fetches the tickers.
+
+        :return: The tickers.
+        """
+
+        # We temporarily assume that the tickers are the same as the markets, and use the pool IDs to get the tickers.
+        if not self.tokens:
+            await self.build_tokens()
+
+        await self.fetch_markets(*args, **kwargs)
+        # We now get get the price for the swap
+        # We now make an erc20 representation of the token.
 
         self.tickers = {}
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
@@ -308,7 +314,6 @@ class BalancerClient:
 
             symbol = f"{token.address}/{self.tokens[stable_address].address}"
 
-            # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
             ask_price = 1 / float(
                 self.get_price(
                     amount=DEFAULT_AMOUNT_USD, output_token_address=token_address, input_token_address=stable_address
@@ -381,7 +386,10 @@ class BalancerClient:
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
                 # // unix timestamp after which the trade will revert if it hasn't executed yet
-                "deadline": datetime.now().timestamp() + 600,
+                "deadline": datetime.now(
+                    tz=datetime.timezone.utc,
+                ).timestamp()
+                + 600,
             },
         }
 
@@ -469,10 +477,11 @@ class BalancerClient:
             raise SorRetrievalException(f"Error querying SOR: {exc}") from exc
 
         swap = sor_result["batchSwap"]
-        self.logger.info(
+        msg = (
             f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n"
             + f"{json.dumps(swap, indent=4)}"
         )
+        self.logger.info(msg)
         tokens = swap["assets"]
         limits = swap["limits"]
         if not tokens or not limits:
@@ -545,8 +554,12 @@ class BalancerClient:
         )
 
     def _handle_eoa_txn(  # pylint: disable=unused-argument
-        self, swap, symbol, input_token_address, machine_amount, **kwargs
-    ) -> Order:  # pylint: disable=unused-argument
+        self,
+        swap,
+        symbol,
+        input_token_address,
+        machine_amount,
+    ) -> Order:
         """
         Handle the EOA transaction.
         """
@@ -673,7 +686,7 @@ class BalancerClient:
         """
         return None
 
-    async def fetch_balance(self, *args, **kwargs):
+    async def fetch_balance(self, **kwargs):
         """
         Fetch the balance.
 

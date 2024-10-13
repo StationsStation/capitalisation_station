@@ -85,7 +85,7 @@ class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
             performative=protocol_performative,
             **kwargs,
         )
-        msg._sender = str(self.context.skill_id)  # pylint: disable=protected-access
+        msg._sender = str(self.context.skill_id)  # noqa
         response = yield from self._do_request(msg, dialogue)
         return response
 
@@ -351,7 +351,7 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
         """Convert tickers message to dict."""
 
         def select_fields(ticker):
-            FIELDS = [  # pylint: disable=C0103
+            fields = [
                 "symbol",
                 "bid",
                 "bidVolume",
@@ -365,7 +365,7 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
                 "datetime",
                 "close",
             ]
-            return {k: v for k, v in ticker.items() if k in FIELDS}
+            return {k: v for k, v in ticker.items() if k in fields}
 
         return {
             exchange_id: [select_fields(t.as_json()) for t in tickers_msg.tickers.tickers],

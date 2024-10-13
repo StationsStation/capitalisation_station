@@ -41,7 +41,7 @@ from packages.eightballer.protocols.positions.custom_types import Position
 class BaseHandler(Handler):
     """This class scaffolds a handler."""
 
-    SUPPORTED_PROTOCOL = Optional[PublicId]
+    SUPPORTED_PROTOCOL = Optional[PublicId]  # noqa
 
     def setup(self) -> None:
         """Implement the setup."""

@@ -1,9 +1,46 @@
-"""This module contains class representations corresponding to every custom type in the protocol specification."""
+"""Custom types for the protocol."""
 
 from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel
+
+
+class ErrorCode(Enum):
+    """This class represents an instance of ErrorCode."""
+
+    UNSUPPORTED_PROTOCOL = 0
+    DECODING_ERROR = 1
+    INVALID_MESSAGE = 2
+    UNSUPPORTED_SKILL = 3
+    INVALID_DIALOGUE = 4
+
+    @staticmethod
+    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
+        in the 'error_code_object' argument.
+
+        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
+        """
+        error_code_protobuf_object.error_code = error_code_object.value
+
+    @classmethod
+    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+
+        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+        """
+        return ErrorCode(error_code_protobuf_object.error_code)
 
 
 class BaseCustomEncoder(BaseModel):
@@ -58,7 +95,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = {k: v for (k, v) in proto_attr.items()}
+                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
                 continue
             if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
                 kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
@@ -73,43 +110,6 @@ class BaseCustomEncoder(BaseModel):
     def __hash__(self):
         """Return the hash value of this instance."""
         return hash(self.dict())
-
-
-class ErrorCode(Enum):
-    """This class represents an instance of ErrorCode."""
-
-    UNSUPPORTED_PROTOCOL = 0
-    DECODING_ERROR = 1
-    INVALID_MESSAGE = 2
-    UNSUPPORTED_SKILL = 3
-    INVALID_DIALOGUE = 4
-
-    @staticmethod
-    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
-        in the 'error_code_object' argument.
-
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        error_code_protobuf_object.error_code = error_code_object.value
-
-    @classmethod
-    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'error_code_protobuf_object' argument.
-
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
-        'error_code_protobuf_object' argument.
-        """
-        return ErrorCode(error_code_protobuf_object.error_code)
 
 
 CUSTOM_ENUM_MAP = {"<class 'ohlcv_pb2.ErrorCode'>": ErrorCode}

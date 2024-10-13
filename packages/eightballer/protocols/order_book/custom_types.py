@@ -58,7 +58,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = {k: v for (k, v) in proto_attr.items()}
+                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
                 continue
             kwargs[keyword] = proto_attr
         return cls(**kwargs)

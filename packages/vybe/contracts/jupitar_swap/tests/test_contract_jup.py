@@ -62,20 +62,21 @@ class TestContractCommon:
             ContractConfig,
             load_component_configuration(ComponentType.CONTRACT, cls.path_to_contract),
         )
-        configuration._directory = cls.path_to_contract  # pylint: disable=protected-access
+        configuration._directory = cls.path_to_contract  # noqa
         if str(configuration.public_id) not in contract_registry.specs:
             # load contract into sys modules
             Contract.from_config(configuration)
         cls.contract = contract_registry.make(str(configuration.public_id))
 
-        CONFIG = {
+        config = {
             "address": DEFAULT_ADDRESS,
         }
-        cls.ledger_api = SolanaApi(**CONFIG)
+        cls.ledger_api = SolanaApi(**config)
         cls.faucet = SolanaFaucetApi()
 
     @staticmethod
     def retry_airdrop_if_result_none(faucet, address, amount=None):
+        """Retry airdrop if result is None."""
         cnt = 0
         tx = None
         while tx is None and cnt < 10:
@@ -85,6 +86,7 @@ class TestContractCommon:
         return tx
 
     def _generate_wealth_if_needed(self, api, address, amount=None) -> Union[str, None]:
+        """Generate wealth if needed."""
         balance = api.get_balance(address)
 
         if balance >= 1000000000:
@@ -109,6 +111,7 @@ class TestContractCommon:
 
     @staticmethod
     def _wait_get_receipt(solana_api: SolanaApi, transaction_digest: str) -> Tuple[Optional[JSONLike], bool]:
+        """Wait for the transaction to be settled and get the receipt."""
         transaction_receipt = None
         is_settled = False
         elapsed_time = 0
@@ -122,11 +125,9 @@ class TestContractCommon:
             is_settled = solana_api.is_transaction_settled(transaction_receipt)
         return transaction_receipt, is_settled
 
-    def json_to_versioned_tx(tx):
-        pass
-
     def _sign_and_settle(self, solana_api: SolanaApi, txn: dict, payer) -> Tuple[str, JSONLike]:
-        recent_blockhash = self.ledger_api.api.get_latest_blockhash().value.blockhash
+        """Sign and settle the transaction."""
+        recent_blockhash = solana_api.api.get_latest_blockhash().value.blockhash
         txn["message"][1]["recentBlockhash"] = json.loads(recent_blockhash.to_json())
         msg = MessageV0.from_json(json.dumps(txn["message"][1]))
         signed_transaction = VersionedTransaction(msg, [payer.entity])

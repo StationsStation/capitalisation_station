@@ -7,15 +7,19 @@ description: A protocol for exchanging any bytes message.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeihipvpat6bnyepjkxonmhe5jufj4fbick65xfbq7mvrv5zxhxzf7y
-  __init__.py: bafybeihje7chatvg572u5puyes5xb5bt72gstbdssnldjj6ciniyfnmmha
-  custom_types.py: bafybeifxaspmv7j7t7yk3jjiiyidod5kwilqu6vrzy2mfjdqidbcko7y2m
-  default.proto: bafybeiazrnj42ik4qieg3o2pkdup2o2idkwppoouqe4bmv5unclhdgswma
-  default_pb2.py: bafybeieq35o4roagivajdaooylnow6uapqowa3feknlfuzo5xvnhddsu7a
-  dialogues.py: bafybeicznxrmfckg6mgh64ctkmkh5md65vtbx6a5otfbbl2aha7qjud6j4
-  message.py: bafybeicepmd4y4qs6afxafpzegmvrbwkyywxxennlvq46bds64xbhmysum
-  serialization.py: bafybeievpmq6zebklxyuwap6h2p3f3cc2fbencsp6s6zzdze35lwmvzi5m
-  tests/test_default_dialogues.py: bafybeic657felnzdqrrj2zsyztgmineuaq5pofykkyt4rb2bmh3rv2fpeq
+  README.md: bafybeigblu34s2oqmv7es6jrbnziodhvmxq6eevy3w5guzzj3hzrvdacm4
+  __init__.py: bafybeibpfpxh7kj6upl5pfselzrv2r7xxvloyrjtqdd5ig2fwcfqbotfly
+  custom_types.py: bafybeif7iddsnkkjn2ngpcy7tnetko4qu5xfuerqxzyanxgnvbj7ghegpq
+  default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq
+  default_pb2.py: bafybeih4kyulvf4jyktn5l7i5e3kn66nalkdfok76vmgbjlrs7gpthuwpi
+  dialogues.py: bafybeib5mj2yebudfsjv27evp2hgerkhswqyrqawa4tieekr4yxnz6kef4
+  message.py: bafybeifpz2btqffmvofivbjbb3aq6e3wdngcoqvnodu3g5ng6xqkabrfr4
+  protocol_spec.yaml: bafybeiekmagbzy7be5rey4pdl6tmbqey7rili3o3dxr5gttttxea7hm6ja
+  serialization.py: bafybeievu2njollniwzm4a6ec2wcszjkegw6zx2vq3fmnq3goxq74rwqpi
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
+  tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
+  tests/test_default_dialogues.py: bafybeie65awtw47ksz3rej5bmkbzsfuhzgkncj4aqete4dzsrq6fxdido4
+  tests/test_default_messages.py: bafybeiazqnxtfrcba4cox4rvyienaf6djoypqaptsbkb2ajbxyaulqzbl4
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

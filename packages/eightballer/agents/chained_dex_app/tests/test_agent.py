@@ -20,14 +20,13 @@
 # pylint: disable=unused-import
 """Test the agent."""
 
-import pytest
-
-
 import subprocess
 from pathlib import Path
 
+import pytest
 from aea.test_tools.test_cases import AEATestCaseMany
 from aea_test_autonomy.configurations import ANY_ADDRESS, DEFAULT_REQUESTS_TIMEOUT
+
 
 AGENT_NAME = "chained_dex_app"
 AUTHOR = "eightballer"
@@ -49,9 +48,7 @@ class TestAgentLaunch(
     def test_run(self) -> None:
         """Run the ABCI skill."""
         agent_name = "base"
-        self.fetch_agent(
-            f"{AUTHOR}/{AGENT_NAME}:{VERSION}", agent_name, is_local=self.IS_LOCAL
-        )
+        self.fetch_agent(f"{AUTHOR}/{AGENT_NAME}:{VERSION}", agent_name, is_local=self.IS_LOCAL)
         self.set_agent_context(agent_name)
         self.generate_private_key("ethereum")
         self.generate_private_key("cosmos")
@@ -65,9 +62,7 @@ class TestAgentLaunch(
         assert is_running, "AEA not running within timeout!"
 
     @classmethod
-    def is_running(
-        cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT
-    ) -> bool:
+    def is_running(cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT) -> bool:
         """
         Check if the AEA is launched and running (ready to process messages).
 
@@ -75,8 +70,6 @@ class TestAgentLaunch(
         :param timeout: the timeout to wait for launch to complete
         :return: bool indicating status
         """
-        missing_strings = cls.missing_from_output(
-            process, (LAUNCH_SUCCEED_MESSAGE,), timeout, is_terminating=False
-        )
+        missing_strings = cls.missing_from_output(process, (LAUNCH_SUCCEED_MESSAGE,), timeout, is_terminating=False)
 
         return missing_strings == []

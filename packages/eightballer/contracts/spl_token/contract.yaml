@@ -9,7 +9,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
   contract.py: bafybeih3ddlhh7wc3kirahlqykjt33qs4oxw3ga4h5pmm377skjka4ddwq
-  tests/test_contract.py: bafybeigr66kukrir474lsjsalo2l6e4yl4fopwpqrgwekrmakkmjw7cliy
+  tests/__init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
+  tests/test_contract.py: bafybeidnzw2cuzmsx52jjeu57iuhrbrgqqpkwu2z6xclq2mzqzc4yu3tsy
 fingerprint_ignore_patterns: []
 class_name: SolanaProgramLibraryToken
 contract_interface_paths: {}

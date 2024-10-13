@@ -9,10 +9,11 @@ fingerprint:
   README.md: bafybeia4kcp4oc2bursyknhw5skjre3jvqv65abayqifdqongfdjgcts4u
   __init__.py: bafybeiajqexavi3ffoqbuxr6kaopalglvljy4f4mknwb4ta5y642vdwmjm
   contract.py: bafybeiegjkegygmfp3m2floexfxnkkkqyo5lamlhubittylynqbaanogna
-  tests/test_contract_jup.py: bafybeid674oinltcsoeicfy3p2xmg5mmqv7sjpjqopabpzqulofj5l5k6e
+  tests/__init__.py: bafybeieo36mrv4bymsfm6hjj3w34vhjurv7tenmwbyjmy2a3ft5fxc72qm
+  tests/test_contract_jup.py: bafybeif4yjlwktrtu75pl6vnoda2kozg326hmtpvwk6vtuf7qpfodnuera
 fingerprint_ignore_patterns: []
 class_name: JupitarSwapContract
 contract_interface_paths: {}
 dependencies: {}
 contracts:
-- eightballer/spl_token:0.1.0:bafybeicoelddoxodp3k7v5gop2hva2xvxqtosueeej2rad6huy4byxkjni
+- eightballer/spl_token:0.1.0:bafybeidlpaed4tbc72hmr6nkatkbt7rxenzzcgzxhrdsjmjhg6parmjf2m

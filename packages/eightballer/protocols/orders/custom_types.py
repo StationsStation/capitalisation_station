@@ -202,7 +202,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = {k: v for (k, v) in proto_attr.items()}
+                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
                 continue
             if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
                 kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
