@@ -24,7 +24,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeihrut6tiakbbzgiz52jsi23be6fzkaoy3v2lg6pfgq3yh2j6itufe
 - eightballer/tickers:0.1.0:bafybeigj37eqqv73yk2azs7smrflkfipoaud4ezkftabrrgcyjhu2ltfkm
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeic5tx4mgnjhvo2zd5nsu4ym77lszw77vxud5ixvlerh67b5k7koiy
+- eightballer/dex_data_retrieval:0.1.0:bafybeigciw3ux4vvtcr7ygcjrqyqkzg5hwaw4zdidaswrpjnrkjkbwzjli
 - valory/abstract_round_abci:0.1.0:bafybeiajjzuh6vf23crp55humonknirvv2f4s3dmdlfzch6tc5ow52pcgm
 - valory/registration_abci:0.1.0:bafybeiffipsowrqrkhjoexem7ern5ob4fabgif7wa6gtlszcoaop2e3oey
 - valory/reset_pause_abci:0.1.0:bafybeif4lgvbzsmzljesxbphycdv52ka7qnihyjrjpfaseclxadcmm6yiq

@@ -31,7 +31,7 @@ fingerprint:
   interfaces/order.py: bafybeifh2sunfy7venqzj7r227wfkucvezpwn5q6j2n3p5fzt5lywnbdwm
   interfaces/order_book.py: bafybeiht6k2ufporjdykh4jc4pvmverzvf2pav7z7bhxqde5sci5elmohi
   interfaces/position.py: bafybeiay4mf2uls6lijttp7e5nqfpdhwm5omcyqyetqn24ej4phdvudzhq
-  interfaces/spot_asset.py: bafybeigmjwl57jvkmh7smcgya4arrlkajazrxzm2bximasy6mddfmvp57q
+  interfaces/spot_asset.py: bafybeidfxawvbsuajrif5qida6r7unh2kpelzdwidfvsahjzr4ierb6wqq
   interfaces/ticker.py: bafybeihc5bddcgr4762ywo6ohxpqir3vnvrxalgdiem2fefrst4lehxt7u
   tests/__init__.py: bafybeiexec7gojkonwjlsanilnjtjysu5oqjn6lsdgumuryyquy2lm6mqe
   tests/data/key: bafybeibpiq3ximhcv3eoz2tlgehwgac4be7ex4yjeljo4gigjiekbyprw4
