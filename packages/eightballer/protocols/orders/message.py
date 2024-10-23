@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,21 +19,29 @@
 
 """This module contains orders's message definition."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object,too-complex
-# pylint: disable=C0209,C0301,C0103
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.orders.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.orders.custom_types import (
+    ErrorCode as CustomErrorCode,
+)
 from packages.eightballer.protocols.orders.custom_types import Order as CustomOrder
+from packages.eightballer.protocols.orders.custom_types import (
+    OrderSide as CustomOrderSide,
+)
+from packages.eightballer.protocols.orders.custom_types import (
+    OrderStatus as CustomOrderStatus,
+)
+from packages.eightballer.protocols.orders.custom_types import (
+    OrderType as CustomOrderType,
+)
 from packages.eightballer.protocols.orders.custom_types import Orders as CustomOrders
-from packages.eightballer.protocols.orders.custom_types import OrderSide as CustomOrderSide
-from packages.eightballer.protocols.orders.custom_types import OrderStatus as CustomOrderStatus
-from packages.eightballer.protocols.orders.custom_types import OrderType as CustomOrderType
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.orders.message")
 

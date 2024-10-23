@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ This module contains the classes required for orders dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, Optional, FrozenSet, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.skills.base import Model
@@ -33,6 +33,12 @@ from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.orders.message import OrdersMessage
+
+
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return OrdersDialogue.Role.AGENT
 
 
 class OrdersDialogue(Dialogue):
@@ -44,7 +50,6 @@ class OrdersDialogue(Dialogue):
             OrdersMessage.Performative.CANCEL_ORDER,
             OrdersMessage.Performative.GET_ORDER,
             OrdersMessage.Performative.GET_ORDERS,
-            OrdersMessage.Performative.GET_SETTLEMENTS,
         }
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
@@ -58,10 +63,7 @@ class OrdersDialogue(Dialogue):
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
         OrdersMessage.Performative.CANCEL_ORDER: frozenset(
-            {
-                OrdersMessage.Performative.ORDER_CANCELLED,
-                OrdersMessage.Performative.ERROR,
-            }
+            {OrdersMessage.Performative.ORDER_CANCELLED, OrdersMessage.Performative.ERROR}
         ),
         OrdersMessage.Performative.CREATE_ORDER: frozenset(
             {OrdersMessage.Performative.ORDER_CREATED, OrdersMessage.Performative.ERROR}
@@ -126,7 +128,7 @@ class BaseOrdersDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[OrdersDialogue] = OrdersDialogue,
     ) -> None:
         """
@@ -136,27 +138,20 @@ class BaseOrdersDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
-        del role_from_first_message
-
-        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message."""
-            del message, sender
-            return OrdersDialogue.Role.AGENT
-
         Dialogues.__init__(
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
             message_class=OrdersMessage,
             dialogue_class=dialogue_class,
-            role_from_first_message=_role_from_first_message,
+            role_from_first_message=role_from_first_message,
         )
 
 
 class OrdersDialogues(BaseOrdersDialogues, Model):
-    """Return a OrderDialogues class."""
+    """This class defines the dialogues used in Orders."""
 
     def __init__(self, **kwargs):
-        """Initialize."""
+        """Initialize dialogues."""
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
         BaseOrdersDialogues.__init__(self, self_address=str(self.context.skill_id))

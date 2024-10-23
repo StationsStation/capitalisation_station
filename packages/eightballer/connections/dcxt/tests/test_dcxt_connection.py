@@ -79,6 +79,8 @@ TEST_EXCHANGES = {f"{k['name']}_{k['ledger_id']}": k for k in yaml.safe_load(TES
 def with_timeout(t, *args, **kwargs):
     """Return the"""
 
+    del args, kwargs
+
     def wrapper(corofunc):
         async def run(*args, **kwargs):
             with timeout(t):

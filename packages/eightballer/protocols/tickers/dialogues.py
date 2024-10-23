@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ This module contains the classes required for tickers dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, Optional, FrozenSet, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.skills.base import Model
@@ -35,21 +35,20 @@ from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 from packages.eightballer.protocols.tickers.message import TickersMessage
 
 
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return TickersDialogue.Role.AGENT
+
+
 class TickersDialogue(Dialogue):
     """The tickers dialogue class maintains state of a dialogue and manages it."""
 
     INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            TickersMessage.Performative.GET_ALL_TICKERS,
-            TickersMessage.Performative.GET_TICKER,
-        }
+        {TickersMessage.Performative.GET_ALL_TICKERS, TickersMessage.Performative.GET_TICKER}
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            TickersMessage.Performative.TICKER,
-            TickersMessage.Performative.ALL_TICKERS,
-            TickersMessage.Performative.ERROR,
-        }
+        {TickersMessage.Performative.TICKER, TickersMessage.Performative.ALL_TICKERS, TickersMessage.Performative.ERROR}
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
         TickersMessage.Performative.ALL_TICKERS: frozenset(),
@@ -103,11 +102,7 @@ class BaseTickersDialogues(Dialogues, ABC):
     """This class keeps track of all tickers dialogues."""
 
     END_STATES = frozenset(
-        {
-            TickersDialogue.EndState.TICKER,
-            TickersDialogue.EndState.ALL_TICKERS,
-            TickersDialogue.EndState.ERROR,
-        }
+        {TickersDialogue.EndState.TICKER, TickersDialogue.EndState.ALL_TICKERS, TickersDialogue.EndState.ERROR}
     )
 
     _keep_terminal_state_dialogues = False
@@ -115,7 +110,7 @@ class BaseTickersDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[TickersDialogue] = TickersDialogue,
     ) -> None:
         """
@@ -125,30 +120,20 @@ class BaseTickersDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
-        del role_from_first_message
-
-        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-            """
-            Infer the role from the first message in the dialogue.
-
-            :param message: the first message in the dialogue.
-            """
-            del sender, message
-            return TickersDialogue.Role.AGENT
-
         Dialogues.__init__(
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
             message_class=TickersMessage,
             dialogue_class=dialogue_class,
-            role_from_first_message=_role_from_first_message,
+            role_from_first_message=role_from_first_message,
         )
 
 
 class TickersDialogues(BaseTickersDialogues, Model):
-    """This class keeps track of all tickers dialogues."""
+    """This class defines the dialogues used in Tickers."""
 
     def __init__(self, **kwargs):
+        """Initialize dialogues."""
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
         BaseTickersDialogues.__init__(self, self_address=str(self.context.skill_id))

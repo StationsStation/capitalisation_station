@@ -57,16 +57,16 @@ class TestContractCommon:
             ContractConfig,
             load_component_configuration(ComponentType.CONTRACT, cls.path_to_contract),
         )
-        configuration._directory = cls.path_to_contract  # pylint: disable=protected-access
+        configuration._directory = cls.path_to_contract  # noqa
         if str(configuration.public_id) not in contract_registry.specs:
             # load contract into sys modules
             Contract.from_config(configuration)
         cls.contract = contract_registry.make(str(configuration.public_id))
 
-        CONFIG = {
+        config = {
             "address": DEFAULT_ADDRESS,
         }
-        cls.ledger_api = EthereumApi(**CONFIG)
+        cls.ledger_api = EthereumApi(**config)
 
     @pytest.mark.parametrize(
         "address, expected_decimals",

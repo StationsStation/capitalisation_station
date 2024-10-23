@@ -62,7 +62,7 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.ExchangeError)
 
-        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_open_orders = mocker  # pylint: disable=protected-access
+        self.connection._exchanges[DEFAULT_EXCHANGE_ID].fetch_open_orders = mocker  # noqa
 
         await self.connection.send(envelope)
         await asyncio.sleep(1)
@@ -92,16 +92,16 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
             message=request,
         )
 
-        async def mock_fetch_settlements(*args, **kwargs):
+        async def mock_fetch_settlements(*args, **kwargs):  # noqa
             del args, kwargs
             return {"result": {"settlements": TEST_SETTLEMENTS}}
 
         # we create a mock object to simulate the response. We will return the 2 test settlement items.
         mocker = MagicMock()
         mocker.side_effect = mock_fetch_settlements
-        self.connection._exchanges[  # pylint: disable=protected-access
+        self.connection._exchanges[  # noqa
             DEFAULT_EXCHANGE_ID
-        ].private_get_get_settlement_history_by_currency = mocker  # pylint: disable=protected-access
+        ].private_get_get_settlement_history_by_currency = mocker  # noqa
         await self.connection.send(envelope)
         await asyncio.sleep(1)
         response = await self.connection.receive()

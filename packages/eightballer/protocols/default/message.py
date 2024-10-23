@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 fetchai
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,15 +19,18 @@
 
 """This module contains default's message definition."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object,C0209,C0301,C0103
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
 import logging
 from typing import Any, Dict, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.default.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.default.custom_types import (
+    ErrorCode as CustomErrorCode,
+)
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.default.message")
 

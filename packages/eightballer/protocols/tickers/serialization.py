@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,16 +20,22 @@
 """Serialization module for tickers protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=E0611,R0912,C0209,R1735
-from typing import cast
+from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.eightballer.protocols.tickers import tickers_pb2
-from packages.eightballer.protocols.tickers.custom_types import ErrorCode, Ticker, Tickers
-from packages.eightballer.protocols.tickers.message import TickersMessage
+from packages.eightballer.protocols.tickers import tickers_pb2  # type: ignore
+from packages.eightballer.protocols.tickers.custom_types import (  # type: ignore
+    ErrorCode,
+    Ticker,
+    Tickers,
+)
+from packages.eightballer.protocols.tickers.message import (  # type: ignore
+    TickersMessage,
+)
 
 
 class TickersSerializer(Serializer):
@@ -46,7 +52,7 @@ class TickersSerializer(Serializer):
         msg = cast(TickersMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        tickers_msg = tickers_pb2.TickersMessage()
+        tickers_msg = tickers_pb2.TickersMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -108,7 +114,7 @@ class TickersSerializer(Serializer):
         :return: the 'Tickers' message.
         """
         message_pb = ProtobufMessage()
-        tickers_pb = tickers_pb2.TickersMessage()
+        tickers_pb = tickers_pb2.TickersMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (

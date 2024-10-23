@@ -49,7 +49,7 @@ class OrderBookInterface(BaseInterface):
                 )
                 await connection.queue.put(envelope)
                 await asyncio.sleep(DEFAULT_INTERVAL)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:  # noqa
             response_message = dialogue.reply(
                 performative=OrderBookMessage.Performative.ERROR,
                 target_message=message,

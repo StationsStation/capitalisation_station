@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,17 +20,19 @@
 """This module contains tickers's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
-# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.tickers.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.tickers.custom_types import (
+    ErrorCode as CustomErrorCode,
+)
 from packages.eightballer.protocols.tickers.custom_types import Ticker as CustomTicker
 from packages.eightballer.protocols.tickers.custom_types import Tickers as CustomTickers
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.tickers.message")
 

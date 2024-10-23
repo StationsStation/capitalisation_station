@@ -2,12 +2,11 @@
 
 ## Description
 
-This is a protocol for two agents exchanging any bytes messages.
+...
 
 ## Specification
 
 ```yaml
----
 name: default
 author: eightballer
 version: 0.1.0
@@ -45,7 +44,4 @@ termination: [end, error]
 roles: {agent}
 end_states: [successful, failed]
 keep_terminal_state_dialogues: true
-...
 ```
-
-## Links

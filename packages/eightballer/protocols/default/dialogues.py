@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 fetchai
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -28,10 +28,17 @@ from abc import ABC
 from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
+from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.default.message import DefaultMessage
+
+
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return DefaultDialogue.Role.AGENT
 
 
 class DefaultDialogue(Dialogue):
@@ -45,11 +52,7 @@ class DefaultDialogue(Dialogue):
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
         DefaultMessage.Performative.BYTES: frozenset(
-            {
-                DefaultMessage.Performative.BYTES,
-                DefaultMessage.Performative.ERROR,
-                DefaultMessage.Performative.END,
-            }
+            {DefaultMessage.Performative.BYTES, DefaultMessage.Performative.ERROR, DefaultMessage.Performative.END}
         ),
         DefaultMessage.Performative.END: frozenset(),
         DefaultMessage.Performative.ERROR: frozenset(),
@@ -90,7 +93,7 @@ class DefaultDialogue(Dialogue):
         )
 
 
-class DefaultDialogues(Dialogues, ABC):
+class BaseDefaultDialogues(Dialogues, ABC):
     """This class keeps track of all default dialogues."""
 
     END_STATES = frozenset({DefaultDialogue.EndState.SUCCESSFUL, DefaultDialogue.EndState.FAILED})
@@ -100,7 +103,7 @@ class DefaultDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[DefaultDialogue] = DefaultDialogue,
     ) -> None:
         """
@@ -118,3 +121,12 @@ class DefaultDialogues(Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
+
+
+class DefaultDialogues(BaseDefaultDialogues, Model):
+    """This class defines the dialogues used in Default."""
+
+    def __init__(self, **kwargs):
+        """Initialize dialogues."""
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
+        BaseDefaultDialogues.__init__(self, self_address=str(self.context.skill_id))

@@ -44,7 +44,7 @@ class TestPositionInterface(BaseCcxtConnectionTest):
         )
         # we make sure that we mock the api call
         with patch.object(
-            self.connection._exchanges["deribit"],  # pylint: disable=protected-access
+            self.connection._exchanges["deribit"],  # noqa
             "fetch_positions",
             return_value=[],
         ):

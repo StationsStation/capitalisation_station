@@ -7,82 +7,77 @@ message OrdersMessage{
   // Custom Types
   message ErrorCode{
     enum ErrorCodeEnum {
-      UNKNOWN_MARKET = 0;
-      INSUFFICIENT_FUNDS = 1;
-      UNKNOWN_ORDER = 2;
-      API_ERROR = 3;
+      ERROR_CODE_ENUM_UNKNOWN_MARKET = 0;
+      ERROR_CODE_ENUM_INSUFFICIENT_FUNDS = 1;
+      ERROR_CODE_ENUM_UNKNOWN_ORDER = 2;
+      ERROR_CODE_ENUM_API_ERROR = 3;
     }
     ErrorCodeEnum error_code = 1;
   }
 
   message Order{
-    message Order {
-      string id = 1;
-      string client_order_id = 2;
-      string info = 3;
-      float timestamp = 4;
-      string datetime = 5;
-      float last_trade_timestamp = 6;
-      OrderStatus status = 7;
-      string symbol = 8;
-      OrderType type = 9;
-      string time_in_force = 10;
-      bool post_only = 11;
-      OrderSide side = 12;
-      float price = 13;
-      float stop_price = 14;
-      float trigger_price = 15;
-      float cost = 16;
-      float amount = 17;
-      float filled = 18;
-      float remaining = 19;
-      float fee = 20;
-      float average = 21;
-      string trades = 22;
-      string fees = 23;
-      float last_update_timestamp = 24;
-      bool reduce_only = 25;
-      float take_profit_price = 26;
-      float stop_loss_price = 27;
-      string exchange_id = 28;
-    }
-          
+    string id = 1;
+    string client_order_id = 2;
+    string info = 3;
+    float timestamp = 4;
+    string datetime = 5;
+    float last_trade_timestamp = 6;
+    OrderStatus status = 7;
+    string symbol = 8;
+    OrderType type = 9;
+    string time_in_force = 10;
+    bool post_only = 11;
+    OrderSide side = 12;
+    float price = 13;
+    float stop_price = 14;
+    float trigger_price = 15;
+    float cost = 16;
+    float amount = 17;
+    float filled = 18;
+    float remaining = 19;
+    float fee = 20;
+    float average = 21;
+    string trades = 22;
+    string fees = 23;
+    float last_update_timestamp = 24;
+    bool reduce_only = 25;
+    float take_profit_price = 26;
+    float stop_loss_price = 27;
+    string exchange_id = 28;
   }
 
   message OrderSide{
     enum OrderSideEnum{
-      BUY = 0;
-      SELL = 1;
+      ORDER_SIDE_ENUM_BUY = 0;
+      ORDER_SIDE_ENUM_SELL = 1;
     }
     OrderSideEnum order_side = 1;
   }
 
   message OrderStatus{
     enum OrderStatusEnum{
-      SUBMITTED = 0;
-      OPEN = 1;
-      PARTIALLY_FILLED = 2;
-      CANCELLED = 3;
-      FILLED = 4;
-      CLOSED = 5;
-      EXPIRED = 6;
-      FAILED = 8;
+      ORDER_STATUS_ENUM_SUBMITTED = 0;
+      ORDER_STATUS_ENUM_OPEN = 1;
+      ORDER_STATUS_ENUM_PARTIALLY_FILLED = 2;
+      ORDER_STATUS_ENUM_CANCELLED = 3;
+      ORDER_STATUS_ENUM_FILLED = 4;
+      ORDER_STATUS_ENUM_CLOSED = 5;
+      ORDER_STATUS_ENUM_EXPIRED = 6;
+      ORDER_STATUS_ENUM_FAILED = 8;
     }
     OrderStatusEnum order_status = 1;
   }
 
   message OrderType{
     enum OrderTypeEnum{
-      LIMIT = 0;
-      MARKET = 1;
+      ORDER_TYPE_ENUM_LIMIT = 0;
+      ORDER_TYPE_ENUM_MARKET = 1;
     }
     OrderTypeEnum order_type = 1;
   }
 
   message Orders{
-    message Orders {
-      repeated Order orders = 1;
-    }
+    repeated Order orders = 1;
   }
 
 

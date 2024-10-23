@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -28,20 +28,24 @@ from abc import ABC
 from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
+from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 
 
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return SpotAssetDialogue.Role.AGENT
+
+
 class SpotAssetDialogue(Dialogue):
     """The spot_asset dialogue class maintains state of a dialogue and manages it."""
 
     INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            SpotAssetMessage.Performative.GET_SPOT_ASSET,
-            SpotAssetMessage.Performative.GET_SPOT_ASSETS,
-        }
+        {SpotAssetMessage.Performative.GET_SPOT_ASSET, SpotAssetMessage.Performative.GET_SPOT_ASSETS}
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {
@@ -54,10 +58,7 @@ class SpotAssetDialogue(Dialogue):
         SpotAssetMessage.Performative.END: frozenset(),
         SpotAssetMessage.Performative.ERROR: frozenset(),
         SpotAssetMessage.Performative.GET_SPOT_ASSET: frozenset(
-            {
-                SpotAssetMessage.Performative.SPOT_ASSET,
-                SpotAssetMessage.Performative.ERROR,
-            }
+            {SpotAssetMessage.Performative.SPOT_ASSET, SpotAssetMessage.Performative.ERROR}
         ),
         SpotAssetMessage.Performative.GET_SPOT_ASSETS: frozenset(
             {
@@ -105,15 +106,11 @@ class SpotAssetDialogue(Dialogue):
         )
 
 
-class SpotAssetDialogues(Dialogues, ABC):
+class BaseSpotAssetDialogues(Dialogues, ABC):
     """This class keeps track of all spot_asset dialogues."""
 
     END_STATES = frozenset(
-        {
-            SpotAssetDialogue.EndState.END,
-            SpotAssetDialogue.EndState.ERROR,
-            SpotAssetDialogue.EndState.SPOT_ASSET,
-        }
+        {SpotAssetDialogue.EndState.END, SpotAssetDialogue.EndState.ERROR, SpotAssetDialogue.EndState.SPOT_ASSET}
     )
 
     _keep_terminal_state_dialogues = True
@@ -121,7 +118,7 @@ class SpotAssetDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[SpotAssetDialogue] = SpotAssetDialogue,
     ) -> None:
         """
@@ -139,3 +136,12 @@ class SpotAssetDialogues(Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
+
+
+class SpotAssetDialogues(BaseSpotAssetDialogues, Model):
+    """This class defines the dialogues used in Spot_asset."""
+
+    def __init__(self, **kwargs):
+        """Initialize dialogues."""
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
+        BaseSpotAssetDialogues.__init__(self, self_address=str(self.context.skill_id))

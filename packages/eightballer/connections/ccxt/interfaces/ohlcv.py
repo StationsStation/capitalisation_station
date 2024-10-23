@@ -4,7 +4,7 @@ import asyncio
 from typing import Any, List, Optional, cast
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
-from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
 from packages.eightballer.connections.ccxt.interfaces.market import Market
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
 
@@ -22,7 +22,7 @@ class OhlcvInterface(BaseInterface):
 
     protocol_id = OhlcvMessage.protocol_id
     dialogue_class = OhlcvDialogue
-    dialogues_class = OhlcvDialogues
+    dialogues_class = BaseOhlcvDialogues
 
     @staticmethod
     def _parse_data_to_msg(ccxt_data: List[List[int]], market: Any):

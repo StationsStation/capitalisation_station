@@ -20,7 +20,7 @@
 """This package contains a scaffold of a model."""
 
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 from dataclasses import dataclass
 
 import pandas as pd
@@ -87,9 +87,9 @@ class ReportingStrategy(Model):
 
     object_to_model = {}
     custom_type_mapping = {
-        Order: {Optional[OrderStatus], Optional[OrderType], Optional[OrderSide]},
-        Position: {
-            Optional[PositionSide],
+        Order: {Optional[OrderStatus], Optional[OrderType], Optional[OrderSide]},  # noqa
+        Position: {  # noqa
+            Optional[PositionSide],  # noqa
         },
     }
     session: Optional[Session] = None
@@ -196,8 +196,8 @@ class ReportingStrategy(Model):
             agent_address = Column(String)
             latest_update = Column(
                 DateTime,
-                default=func.now(),  # pylint: disable=E1102
-                onupdate=func.now(),  # pylint: disable=E1102
+                default=func.now(tz="UTC"),
+                onupdate=func.now(tz="UTC"),
             )
 
         # add the fields to the model
@@ -205,15 +205,15 @@ class ReportingStrategy(Model):
             # skip the id field
             if field == "id":
                 continue
-            if data.type in {Optional[bool], bool}:
+            if data.type in {Optional[bool], bool}:  # noqa
                 setattr(Model, field, Column(Boolean))
-            elif data.type in {Optional[str], str}:
+            elif data.type in {Optional[str], str}:  # noqa
                 setattr(Model, field, Column(String))
-            elif data.type in {Optional[int], int}:
+            elif data.type in {Optional[int], int}:  # noqa
                 setattr(Model, field, Column(BigInteger))
-            elif data.type in {Optional[float], float}:
+            elif data.type in {Optional[float], float}:  # noqa
                 setattr(Model, field, Column(Float))
-            elif data.type in {Optional[Dict[str, Any]], Optional[dict]}:
+            elif data.type in {Optional[dict[str, Any]], Optional[dict]}:  # noqa
                 setattr(Model, field, Column(String))
             elif data_class in self.custom_type_mapping:
                 if data.type not in self.custom_type_mapping[data_class]:
@@ -232,7 +232,7 @@ class ReportingStrategy(Model):
             raise ValueError("Connection string must be provided!")
         super().__init__(**kwargs)
 
-    def get_markets_df(
+    def get_markets_data(
         self,
     ) -> list:
         """Get all the markets for an exchange."""
@@ -265,8 +265,8 @@ class ReportingStrategy(Model):
             "symbol",
             "exchange_id",
         ]
-        markets_df = pd.DataFrame(markets_table, columns=markets_columns)
-        return markets_df.drop_duplicates()
+        markets_data = pd.DataFrame(markets_table, columns=markets_columns)
+        return markets_data.drop_duplicates()
 
     def from_positions_to_pivot(self, positions, view="all"):
         """
@@ -275,7 +275,7 @@ class ReportingStrategy(Model):
         - deribit_positions_pivot
         - rysk_positions_pivot
         """
-        markets_df = self.get_markets_df()
+        markets_data = self.get_markets_data()
         if view != "all":
             positions = filter(lambda position: position.exchange_id == view, positions)
         positions_table = [
@@ -294,18 +294,18 @@ class ReportingStrategy(Model):
         ]
 
         if not positions_table:
-            df = pd.DataFrame()
-            return self.save_pivot_to_db(df, view)
+            data = pd.DataFrame()
+            return self.save_pivot_to_db(data, view)
         positions_columns = ["symbol", "size", "exchange_id"]
-        positions_df = pd.DataFrame(positions_table, columns=positions_columns)
+        positions_data = pd.DataFrame(positions_table, columns=positions_columns)
 
         if view != "all":
-            positions_df = positions_df.groupby(["symbol", "exchange_id"]).sum().reset_index()
-            positions_df["side"] = positions_df["size"].apply(map_size_to_side)
-            merged_df = pd.merge(markets_df, positions_df, on=["symbol", "exchange_id"], how="inner")
+            positions_data = positions_data.groupby(["symbol", "exchange_id"]).sum().reset_index()
+            positions_data["side"] = positions_data["size"].apply(map_size_to_side)
+            merged_data = markets_data.merge(positions_data, on=["symbol", "exchange_id"], how="inner")
         else:
-            positions_df = (
-                positions_df.groupby(
+            positions_data = (
+                positions_data.groupby(
                     [
                         "symbol",
                     ]
@@ -313,42 +313,42 @@ class ReportingStrategy(Model):
                 .sum()
                 .reset_index()
             )
-            positions_df["side"] = positions_df["size"].apply(map_size_to_side)
-            merged_df = pd.merge(markets_df, positions_df, on=["symbol"], how="inner")
+            positions_data["side"] = positions_data["size"].apply(map_size_to_side)
+            merged_data = markets_data.merge(positions_data, on=["symbol"], how="inner")
 
-        merged_df["strike"] = merged_df["strike"].astype(float)
-        merged_df["expiryDatetime"] = merged_df["expiryDatetime"].astype(str)
-        merged_df["optionType"] = merged_df["optionType"].astype(str)
+        merged_data["strike"] = merged_data["strike"].astype(float)
+        merged_data["expiryDatetime"] = merged_data["expiryDatetime"].astype(str)
+        merged_data["optionType"] = merged_data["optionType"].astype(str)
 
-        pivot_df = pd.pivot_table(
-            merged_df,
+        pivot_data = pd.pivot_table(
+            merged_data,
             values="size",
             index=["strike", "side"],
             columns=["expiryDatetime", "optionType"],
             fill_value=0,
         )
-        pivot_df.sort_values(by=["strike"], inplace=True)
-        pivot_df.reset_index(inplace=True)
-        pivot_df.columns = [f"{i[:10]}_{j}" for i, j in pivot_df.columns]
-        return self.save_pivot_to_db(pivot_df, view)
+        pivot_data.sort_values(by=["strike"], inplace=True)
+        pivot_data.reset_index(inplace=True)
+        pivot_data.columns = [f"{i[:10]}_{j}" for i, j in pivot_data.columns]
+        return self.save_pivot_to_db(pivot_data, view)
 
-    def save_pivot_to_db(self, pivot_df, view="all"):
+    def save_pivot_to_db(self, pivot_data, view="all"):
         """
         Save the pivot table to the database.
         """
-        # if no df dont write
-        if not len(pivot_df):  # pylint: disable=len-as-condition
-            return pivot_df
+        # if no data dont write
+        if not len(pivot_data):  # pylint: disable=len-as-condition
+            return pivot_data
         with self.session.begin() as session:  # pylint: disable=E1101
             engine = session.get_bind()
-            pivot_df.to_sql(
+            pivot_data.to_sql(
                 f"{view}_positions_pivot",
                 engine,
                 if_exists="replace",
                 schema=self._schema,
                 index=False,
             )
-        return pivot_df
+        return pivot_data
 
     def get_exchanges(self, exchange_type: Optional[ExchangeType] = None):
         """Get the exchanges."""

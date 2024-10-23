@@ -121,6 +121,6 @@ class TestHttpHandler(BaseSkillTestCase):
     @classmethod
     def teardown(cls, *args, **kwargs):  # noqa
         """Teardown the test class."""
-        db_fn = "test.db"
-        if os.path.exists(db_fn):
-            os.remove("test.db")
+        db_fn = Path("test.db")
+        if db_fn.exists():
+            db_fn.unlink()

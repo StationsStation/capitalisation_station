@@ -6,7 +6,7 @@ import pytest
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.ohlcv import OhlcvMessage
-from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
 
 from ..test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
 
@@ -15,7 +15,7 @@ from ..test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dia
 class TestOhlcvBalance(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 
-    DIALOGUES = get_dialogues(OhlcvDialogues, OhlcvDialogue)
+    DIALOGUES = get_dialogues(BaseOhlcvDialogues, OhlcvDialogue)
 
     @with_timeout(3)
     async def test_handles_get_spot_message(self) -> None:

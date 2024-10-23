@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,15 +20,11 @@
 """
 This module contains the support resources for the ohlcv protocol.
 
-It was created with protocol buffer compiler version `libprotoc 3.6.1` and aea protocol generator version `1.0.0`.
+It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
 """
-
-from aea.configurations.data_types import PublicId
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.serialization import OhlcvSerializer
 
 
 OhlcvMessage.serializer = OhlcvSerializer
-
-PUBLIC_ID = PublicId.from_str("eightballer/ohlcv:0.1.0")

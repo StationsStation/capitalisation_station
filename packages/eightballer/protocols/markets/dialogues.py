@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ This module contains the classes required for markets dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, Optional, FrozenSet, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.skills.base import Model
@@ -35,21 +35,18 @@ from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 from packages.eightballer.protocols.markets.message import MarketsMessage
 
 
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return MarketsDialogue.Role.AGENT
+
+
 class MarketsDialogue(Dialogue):
     """The markets dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            MarketsMessage.Performative.GET_MARKET,
-            MarketsMessage.Performative.GET_ALL_MARKETS,
-        }
-    )
+    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset({MarketsMessage.Performative.GET_ALL_MARKETS})
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            MarketsMessage.Performative.ALL_MARKETS,
-            MarketsMessage.Performative.MARKET,
-            MarketsMessage.Performative.ERROR,
-        }
+        {MarketsMessage.Performative.ALL_MARKETS, MarketsMessage.Performative.MARKET, MarketsMessage.Performative.ERROR}
     )
     VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
         MarketsMessage.Performative.ALL_MARKETS: frozenset(),
@@ -103,11 +100,7 @@ class BaseMarketsDialogues(Dialogues, ABC):
     """This class keeps track of all markets dialogues."""
 
     END_STATES = frozenset(
-        {
-            MarketsDialogue.EndState.MARKET,
-            MarketsDialogue.EndState.ALL_MARKETS,
-            MarketsDialogue.EndState.ERROR,
-        }
+        {MarketsDialogue.EndState.MARKET, MarketsDialogue.EndState.ALL_MARKETS, MarketsDialogue.EndState.ERROR}
     )
 
     _keep_terminal_state_dialogues = False
@@ -115,7 +108,7 @@ class BaseMarketsDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[MarketsDialogue] = MarketsDialogue,
     ) -> None:
         """
@@ -125,27 +118,20 @@ class BaseMarketsDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
-        del role_from_first_message
-
-        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:  # pylint:
-            """Infer the role of the agent from an incoming/outgoing first message."""
-            del sender, message
-            return MarketsDialogue.Role.AGENT
-
         Dialogues.__init__(
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
             message_class=MarketsMessage,
             dialogue_class=dialogue_class,
-            role_from_first_message=_role_from_first_message,
+            role_from_first_message=role_from_first_message,
         )
 
 
 class MarketsDialogues(BaseMarketsDialogues, Model):
-    """Dialogue class for Markets."""
+    """This class defines the dialogues used in Markets."""
 
     def __init__(self, **kwargs):
-        """Initialize the Dialogue."""
+        """Initialize dialogues."""
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
         BaseMarketsDialogues.__init__(self, self_address=str(self.context.skill_id))

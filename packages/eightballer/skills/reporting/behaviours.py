@@ -41,6 +41,9 @@ from packages.eightballer.connections.ccxt.interfaces.order import (
 from_id_to_instrument_name = base_from_id_to_instrument_name
 
 
+SYSTEM_TZ = datetime.datetime.now().astimezone().tzinfo
+
+
 def from_instrument_name_to_id(instrument_name):
     """
     Simple helper function to convert instrument name to id.
@@ -65,7 +68,7 @@ def from_instrument_name_to_id(instrument_name):
     month = date[2:4]
     day = date[4:]
     # we need to pad the day with a  if it's a single digit
-    date_obj = datetime.datetime.strptime(str(month), "%m")
+    date_obj = datetime.datetime.strptime(str(month), "%m", tz=SYSTEM_TZ)  # noqa
     month = date_obj.strftime("%b").upper()
     if int(day) < 10:
         day = f"0{day}"
@@ -167,7 +170,7 @@ class EodReportingBehaviour(TickerBehaviour):
         """
         Takes report time and gets the next datetime of the report. Returns none if not ready.
         """
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(tz=SYSTEM_TZ)
         if now >= report_time:
             return report_time + datetime.timedelta(days=1)
         return None
@@ -211,7 +214,7 @@ class EodReportingBehaviour(TickerBehaviour):
         daily_report_times = kwargs.pop("daily_report_times")
         self.report_times = []
         for daily_report_time in daily_report_times:
-            yesterday = datetime.datetime.utcnow() - datetime.timedelta(days=1)
+            yesterday = datetime.datetime.now(tz=SYSTEM_TZ) - datetime.timedelta(days=1)
             report_time = datetime.time.fromisoformat(daily_report_time)
             yesterdays_report_time = yesterday.replace(
                 hour=report_time.hour,
@@ -338,7 +341,7 @@ class ReconciliationBehaviour(TickerBehaviour):
         """Check the settlements for the exchange."""
 
         dialogues = cast(OrdersDialogues, self.context.orders_dialogues)
-        current_timestamp = float(datetime.datetime.utcnow().timestamp())
+        current_timestamp = float(datetime.datetime.now(tz=datetime.timezone.utc).timestamp())
         target_id = self.get_target_id(exchange_id)
 
         msg, _ = dialogues.create(

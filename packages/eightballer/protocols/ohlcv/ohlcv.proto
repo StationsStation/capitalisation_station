@@ -28,11 +28,11 @@ message OhlcvMessage{
     string exchange_id = 1;
     string market_name = 2;
     int32 interval = 3;
-    float open = 4;
-    float high = 5;
-    float low = 6;
-    float close = 7;
-    float volume = 8;
+    double open = 4;
+    double high = 5;
+    double low = 6;
+    double close = 7;
+    double volume = 8;
     int32 timestamp = 9;
   }
 

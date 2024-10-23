@@ -7,15 +7,19 @@ description: A protocol for passing ticker data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiaca4glyi2rn66njrbtoqunvldk4ea2m7kdd6lz42mrvehav272bm
-  custom_types.py: bafybeidj4h52h6x5jtes5pncmoygslgj2hdezpxa46m43xbi5hh2dlffdi
-  dialogues.py: bafybeibgm772pctryo7trvsdipvngkbfavaojvpxtfqx75tssqtl7jlek4
-  message.py: bafybeidextk3hrbnwatkubhovhzfmdxrdqmwzt3zqrkwm7oep3iskg3nxy
-  serialization.py: bafybeih2hewf5xaj3gwy4szvab7svjk3cm7sogsxc6onjbo36nm7udlq34
-  tests/test_tickers_dialogues.py: bafybeidq5ccrypucpwt7ocxyk2b7eder5rccndphsfoj2ih6ptc4ldt3om
-  tests/test_tickers_messages.py: bafybeidbqixr4e5uwvnwvzknbagexddspxxx3p55jnxv2nssnou337efju
-  tickers.proto: bafybeihjhe2g5nqaqatbsl64i64blfeyqqlveaq7lfjj3typu5kcvx7mty
-  tickers_pb2.py: bafybeidoqaiyoly4lxr3izfhehoqfmj4gsz7pz6kximtck5qr36ouj6lry
+  README.md: bafybeicdclyan4w3xpbjfueftg5scsnx2xz2ucyszkykkmewbyaedkjhkm
+  __init__.py: bafybeibpc25pjjvkjtdxace7kxouz5z5bhndfi2v7msclqfvve5khvjnki
+  custom_types.py: bafybeid6tqrbebobkerlxa3yusewtakyamhdj3f5ng3fqajmrkixhtyil4
+  dialogues.py: bafybeicadf6drkwwqqfmnrxqux7som5hmpnbbfne5ddj3vb6isptj7zr2a
+  message.py: bafybeifu63ug6sdosgrfw6umgjgrejldzbtxzr4qkm5273afzcbjbem3ku
+  protocol_spec.yaml: bafybeiftqy4jbg42oagkp5e6a6oqlnefniwlc2uf4hjpjmz7yiyv23rpai
+  serialization.py: bafybeiciuaxs6qltfptbtzhent2y45ltjea4uifjfdyoq24yui6sv3uhji
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
+  tests/dummy_data.yaml: bafybeiddv4lavgwx3vqkmswsl2klmfp55ff2ooq6bgkwddo6zzcepunute
+  tests/test_tickers_dialogues.py: bafybeifzxyhkusxlqwumkvjwo246mgyjbfejixnjjljqqt2knsvv5fzh6i
+  tests/test_tickers_messages.py: bafybeiduaedya2rvgxdntams73vhm2x6xkerdy3ow5worq6vynt5mouita
+  tickers.proto: bafybeibtf3h4zjcdmhqtmr3ei6antp2xhwakocssjuztgde5egdyl5p2ra
+  tickers_pb2.py: bafybeift45bv25jbx5bzli37a34m6b5532moaqnpg3obu4hfwuuufqkcwm
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

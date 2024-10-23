@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,18 +19,26 @@
 
 """Test dialogues module for positions protocol."""
 
-import pytest
-
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=R1735
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, PositionsDialogues
-from packages.eightballer.protocols.positions.custom_types import PositionSide
+from packages.eightballer.protocols.positions.dialogues import (
+    PositionsDialogue,
+    BasePositionsDialogues,
+)
+from packages.eightballer.protocols.positions.custom_types import ErrorCode, PositionSide
 
 
-@pytest.mark.skip("Not implemented yet")
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
+
+
 class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
     """Test for the 'positions' protocol dialogues."""
 
@@ -38,7 +46,7 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = PositionsDialogue
 
-    DIALOGUES_CLASS = PositionsDialogues
+    DIALOGUES_CLASS = BasePositionsDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = PositionsDialogue.Role.AGENT  # CHECK
 
@@ -48,5 +56,5 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
             performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
             exchange_id="some str",
             params={"some str": b"some_bytes"},
-            side=PositionSide.LONG,
+            side=PositionSide(0),
         )
