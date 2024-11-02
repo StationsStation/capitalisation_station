@@ -45,7 +45,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeidodhiljldkfzdyvv3p7w2re5q44zlzorlfwopc4r7kcfgnnbm7oe
 - eightballer/prometheus:0.1.0:bafybeibssw6lcshlnxnwqcjebjxiwtnyw3nki7jkbnh4lnvtcq6aaqni5e
-- eightballer/simple_fsm:0.1.0:bafybeicknavzowsspc7b664r6qb5z5ugmbqjjblick6jbvbspz43j4y7ie
+- eightballer/simple_fsm:0.1.0:bafybeiebyq2j3icub5nfhlke2cocaahq3ehv74uwim5o3srzgf3hqeloue
 - valory/abstract_abci:0.1.0:bafybeidz54kvxhbdmpruzguuzzq7bjg4pekjb5amqobkxoy4oqknnobopu
 - valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
 customs:
@@ -89,11 +89,17 @@ config:
   port: 8888
   target_skill_id: eightballer/metrics:0.1.0
 ---
+public_id: eightballer/prometheus:0.1.1:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
+type: connection
+config:
+  host: 0.0.0.0
+  port: 8716
+---
 public_id: valory/abci:0.1.0:bafybeihofnsokowicviac6yz3uhur52l3mf54s2hz4i2je5ie4vlruouga
 type: connection
 config:
   host: ${str:localhost}
-  port: ${int:26650}
+  port: 26658
   use_tendermint: ${bool:false}
   target_skill_id: eightballer/chained_dex_app:0.1.0
 ---
@@ -102,12 +108,12 @@ type: connection
 config:
   exchanges:
   - name: mexc
-    api_key: ${str}
-    api_secret: ${str}
+    api_key: ${str:YOUR_KEY}
+    api_secret: ${str:YOUR_SECRET}
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
 public_id: eightballer/apprise:0.1.0
 type: connection
 config:
   endpoints:
-  - discord://1301137597397209098/HBrzFP69KOwgmOKq80jM3U6wZ6F1QFSvtF2uuceg0rZJZQPAmAJM4ReTfmZaw9ZkpF8h
+  - ${str:ntfy://ntfy.sh/agent-arbing}

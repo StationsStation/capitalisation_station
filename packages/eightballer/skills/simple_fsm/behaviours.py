@@ -35,7 +35,6 @@ from dataclasses import asdict
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 from aea.protocols.dialogue.base import Dialogue
-from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -107,7 +106,8 @@ class IdentifyOpportunityRound(State):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
-        self.arbitrage_strategy = ArbitrageStrategy()
+
+        # we have to import the strategy due to the loading sequence of the agent dependencies.
 
     async def act(self) -> None:
         """
@@ -148,7 +148,10 @@ class IdentifyOpportunityRound(State):
         Setup the state.
         """
         self.started = False
-
+        # We need to add to the PYTHONPATH=. to be able to import the strategy
+        sys.path.append(".")
+        from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
+        self.arbitrage_strategy = ArbitrageStrategy()
 
 class ErrorRound(State):
     """
