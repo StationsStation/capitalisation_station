@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ This module contains the classes required for positions dialogue management.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, Optional, FrozenSet, cast
+from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
 from aea.skills.base import Model
@@ -35,14 +35,17 @@ from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 from packages.eightballer.protocols.positions.message import PositionsMessage
 
 
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return PositionsDialogue.Role.AGENT
+
+
 class PositionsDialogue(Dialogue):
     """The positions dialogue class maintains state of a dialogue and manages it."""
 
     INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
-        {
-            PositionsMessage.Performative.GET_ALL_POSITIONS,
-            PositionsMessage.Performative.GET_POSITION,
-        }
+        {PositionsMessage.Performative.GET_ALL_POSITIONS, PositionsMessage.Performative.GET_POSITION}
     )
     TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
         {
@@ -55,16 +58,10 @@ class PositionsDialogue(Dialogue):
         PositionsMessage.Performative.ALL_POSITIONS: frozenset(),
         PositionsMessage.Performative.ERROR: frozenset(),
         PositionsMessage.Performative.GET_ALL_POSITIONS: frozenset(
-            {
-                PositionsMessage.Performative.ALL_POSITIONS,
-                PositionsMessage.Performative.ERROR,
-            }
+            {PositionsMessage.Performative.ALL_POSITIONS, PositionsMessage.Performative.ERROR}
         ),
         PositionsMessage.Performative.GET_POSITION: frozenset(
-            {
-                PositionsMessage.Performative.POSITION,
-                PositionsMessage.Performative.ERROR,
-            }
+            {PositionsMessage.Performative.POSITION, PositionsMessage.Performative.ERROR}
         ),
         PositionsMessage.Performative.POSITION: frozenset(),
     }
@@ -121,7 +118,7 @@ class BasePositionsDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Optional[Callable[[Message, Address], Dialogue.Role]] = None,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[PositionsDialogue] = PositionsDialogue,
     ) -> None:
         """
@@ -131,27 +128,20 @@ class BasePositionsDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
-        del role_from_first_message
-
-        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message."""
-            del sender, message
-            return PositionsDialogue.Role.AGENT
-
         Dialogues.__init__(
             self,
             self_address=self_address,
             end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
             message_class=PositionsMessage,
             dialogue_class=dialogue_class,
-            role_from_first_message=_role_from_first_message,
+            role_from_first_message=role_from_first_message,
         )
 
 
 class PositionsDialogues(BasePositionsDialogues, Model):
-    """Dialogue class"""
+    """This class defines the dialogues used in Positions."""
 
     def __init__(self, **kwargs):
-        """Initialize the dialogue class"""
+        """Initialize dialogues."""
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
         BasePositionsDialogues.__init__(self, self_address=str(self.context.skill_id))

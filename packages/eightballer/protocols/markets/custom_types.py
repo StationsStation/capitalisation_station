@@ -1,28 +1,9 @@
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2023 eightballer
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-# pylint: disable=C0103,R0902,C0301,R1735
-
-"""This module contains class representations corresponding to every custom type in the protocol specification."""
+"""Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass
+from typing import Any, List
+
+from pydantic import BaseModel
 
 
 class ErrorCode(Enum):
@@ -35,168 +16,140 @@ class ErrorCode(Enum):
     INVALID_DIALOGUE = 4
 
     @staticmethod
-    def encode(error_code_protobuf_object: Any, error_code_object: "ErrorCode") -> None:
+    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
         """
         Encode an instance of this class into the protocol buffer object.
-        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class in the 'error_code_object' argument.
+
+        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
+        in the 'error_code_object' argument.
+
         :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
         :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
         """
         error_code_protobuf_object.error_code = error_code_object.value
 
     @classmethod
-    def decode(cls, error_code_protobuf_object: Any) -> "ErrorCode":
+    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
         """
         Decode a protocol buffer object that corresponds with this class into an instance of this class.
-        A new instance of this class is created that matches the protocol buffer object in the 'error_code_protobuf_object' argument.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+
         :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'error_code_protobuf_object' argument.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
         """
-        enum_value_from_pb2 = error_code_protobuf_object.error_code
-        return ErrorCode(enum_value_from_pb2)
+        return ErrorCode(error_code_protobuf_object.error_code)
 
 
-@dataclass
-class Market:
+class BaseCustomEncoder(BaseModel):
     """
-    This class represents an instance of Market.
+    This class is a base class for encoding and decoding protocol buffer objects.
     """
+
+    @staticmethod
+    def encode(ps_response_protobuf_object, ps_response_object) -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
+        class in the 'ps_response_object' argument.
+
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
+        """
+        for key, value in ps_response_object.__dict__.items():
+            current_attr = getattr(ps_response_protobuf_object, key)
+            if isinstance(value, Enum):
+                type(value).encode(current_attr, value)
+                continue
+            if isinstance(value, dict):
+                current_attr.update(value)
+                continue
+            if isinstance(value, list):
+                current_attr.extend(value)
+                continue
+            setattr(ps_response_protobuf_object, key, value)
+
+    @classmethod
+    def decode(cls, ps_response_protobuf_object) -> "Any":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'ps_response_protobuf_object' argument.
+
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
+        'ps_response_protobuf_object' argument.
+        """
+        keywords = [f for f in cls.__annotations__.keys()]
+        kwargs = {}
+        for keyword in keywords:
+            proto_attr = getattr(ps_response_protobuf_object, keyword)
+            if isinstance(proto_attr, Enum):
+                kwargs[keyword] = type(proto_attr).decode(proto_attr)
+                continue
+            if isinstance(proto_attr, list):
+                kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
+                continue
+            if isinstance(proto_attr, dict):
+                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
+                continue
+            if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
+                kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
+                continue
+            kwargs[keyword] = proto_attr
+        return cls(**kwargs)
+
+    def __eq__(self, other):
+        """Check if two instances of this class are equal."""
+        return self.dict() == other.dict()
+
+    def __hash__(self):
+        """Return the hash value of this instance."""
+        return hash(self.dict())
+
+
+class Market(BaseCustomEncoder):
+    """This class represents an instance of Market."""
 
     id: str
-    lowercaseId: Optional[str] = None
-    symbol: Optional[str] = None
-    base: Optional[str] = None
-    quote: Optional[str] = None
-    settle: Optional[str] = None
-    baseId: Optional[str] = None
-    quoteId: Optional[str] = None
-    settleId: Optional[str] = None
-    type: Optional[str] = None
-    spot: Optional[bool] = None
-    margin: Optional[bool] = None
-    swap: Optional[bool] = None
-    future: Optional[bool] = None
-    option: Optional[bool] = None
-    active: Optional[bool] = None
-    contract: Optional[bool] = None
-    linear: Optional[bool] = None
-    inverse: Optional[bool] = None
-    taker: Optional[float] = None
-    maker: Optional[float] = None
-    contractSize: Optional[float] = None
-    expiry: Optional[float] = None
-    expiryDatetime: Optional[str] = None
-    strike: Optional[float] = None
-    optionType: Optional[str] = None
-    precision: Optional[float] = None
-    limits: Optional[str] = None
-    info: Optional[Dict[str, Any]] = None
-    exchange_id: Optional[str] = None
-    created: Optional[str] = None
-
-    @staticmethod
-    def encode(market_protobuf_object, market_object: "Market") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the market_protobuf_object argument is matched with the instance of this class in the 'market_object' argument.
-
-        :param market_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param market_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
-            if hasattr(market_object, attribute):
-                value = getattr(market_object, attribute)
-                setattr(market_protobuf_object.Market, attribute, value)
-            else:
-                setattr(market_protobuf_object.Market, attribute, None)
-
-    @classmethod
-    def decode(cls, market_protobuf_object) -> "Market":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the 'market_protobuf_object' argument.
-
-        :param market_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'market_protobuf_object' argument.
-        """
-        attribute_dict = dict()
-        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
-            if hasattr(market_protobuf_object.Market, attribute):
-                if getattr(market_protobuf_object.Market, attribute) is not None:
-                    attribute_dict[attribute] = getattr(market_protobuf_object.Market, attribute)
-        return cls(**attribute_dict)
-
-    def __eq__(self, other):
-        if isinstance(other, Market):
-            set_of_self_attributue = set(
-                i
-                for i in Market.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if getattr(self, i) is not None
-            )
-            set_of_other_attributue = set(
-                i
-                for i in Market.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if getattr(other, i) is not None
-            )
-            return set_of_self_attributue == set_of_other_attributue
-        return False
-
-    def to_json(self):
-        """TO a pretty dictionary string."""
-        result = {}
-        for attribute in Market.__dataclass_fields__.keys():  # pylint: disable=no-member
-            if hasattr(self, attribute):
-                value = getattr(self, attribute)
-                if value is not None:
-                    result[attribute] = value
-        return result
+    lowercase_id: str
+    symbol: str
+    base: str
+    quote: str
+    settle: str
+    base_id: str
+    quote_id: str
+    settle_id: str
+    type: str
+    spot: bool
+    margin: bool
+    swap: bool
+    future: bool
+    option: bool
+    active: bool
+    contract: bool
+    linear: bool
+    inverse: bool
+    taker: float
+    maker: float
+    contract_size: float
+    expiry: float
+    expiry_datetime: str
+    strike: float
+    option_type: str
+    precision: float
+    limits: str
+    info: str
 
 
-@dataclass
-class Markets:
+class Markets(BaseCustomEncoder):
     """This class represents an instance of Markets."""
 
-    markets: List[Market]
+    markets: List[Market] = []
 
-    @staticmethod
-    def encode(markets_protobuf_object, markets_object: "Markets") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
 
-        The protocol buffer object in the markets_protobuf_object argument is matched with the instance of this class in the 'markets_object' argument.
-
-        :param markets_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param markets_object: an instance of this class to be encoded in the protocol buffer object.
-        """
-        if markets_protobuf_object is None:
-            raise ValueError("The protocol buffer object 'markets_protobuf_object' is not initialized.")
-        markets_protobuf_object.Markets.markets = markets_object.markets
-
-    @classmethod
-    def decode(cls, markets_protobuf_object) -> "Markets":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the 'markets_protobuf_object' argument.
-
-        :param markets_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the 'markets_protobuf_object' argument.
-        """
-        return cls(markets_protobuf_object.Markets.markets)
-
-    def __eq__(self, other):
-        if isinstance(other, Markets):
-            set_of_self_attributue = set(
-                i
-                for i in Markets.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if getattr(self, i) is not None
-            )
-            set_of_other_attributue = set(
-                i
-                for i in Markets.__dataclass_fields__.keys()  # pylint: disable=no-member
-                if getattr(other, i) is not None
-            )
-            return set_of_self_attributue == set_of_other_attributue
-        return False
+CUSTOM_ENUM_MAP = {"<class 'markets_pb2.ErrorCode'>": ErrorCode}

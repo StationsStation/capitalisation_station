@@ -23,3 +23,4 @@ fingerprint:
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
+  pydantic: {}

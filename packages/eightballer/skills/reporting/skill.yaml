@@ -19,16 +19,16 @@ fingerprint:
   tests/test_strategy.py: bafybeihmttb7bkuzhnc5ez7rntwluncwjlw3tsvsad6n3fhs6tw6kbplry
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
-- eightballer/dcxt:0.1.0:bafybeieigub36d6j4ywe3zcqewfg5cz7yb5e6fqww7exxivv4753462xnm
+- eightballer/ccxt:0.1.0:bafybeifql6tfdq3iaiwana6tbp2qfj4w3ewjmfbqdd7tz7yhodh2l46txq
+- eightballer/dcxt:0.1.0:bafybeigwytf6u2vhuqh73vbtozkhmihhiqb4b5yp3kdbxuo7jxg3vtu6oq
 - valory/http_client:0.23.0:bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeiaspkbwgbsqwce7i55ssiyzy6eh5op4p4leyrqf7gtrvbzpusnija
-- eightballer/markets:0.1.0:bafybeifhafgchjxg5brwg6o5ya33vv73dwtvufdpoiicxjicvdy4gqh4ry
-- eightballer/orders:0.1.0:bafybeiey4dmsi7yuylzup4aosan27oqblap3r7wmpgb5xnja24w2jxetle
-- eightballer/positions:0.1.0:bafybeihrut6tiakbbzgiz52jsi23be6fzkaoy3v2lg6pfgq3yh2j6itufe
-- eightballer/tickers:0.1.0:bafybeigj37eqqv73yk2azs7smrflkfipoaud4ezkftabrrgcyjhu2ltfkm
+- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
+- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
+- eightballer/orders:0.1.0:bafybeicozrhzqxm66luftgzh4xvzw2oobsgs2tt4hwds6654dzrnhr6muy
+- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
+- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
 - valory/http:1.0.0:bafybeifugzl63kfdmwrxwphrnrhj7bn6iruxieme3a4ntzejf6kmtuwmae
 skills: []
 behaviours:

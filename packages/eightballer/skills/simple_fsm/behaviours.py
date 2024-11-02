@@ -28,13 +28,15 @@ import pathlib
 import datetime
 from abc import ABC
 from enum import Enum
-from typing import Any, Callable, Optional, Generator
+from typing import Any, Callable, Optional, Generator, cast
 from textwrap import dedent
 from dataclasses import asdict
 
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 from aea.protocols.dialogue.base import Dialogue
+from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
@@ -42,8 +44,9 @@ from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.orders.custom_types import Order
+from packages.eightballer.protocols.orders.custom_types import Order, OrderSide
 from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, AsyncBehaviour, TimeoutException
+from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 
 
 # Define states
@@ -259,7 +262,6 @@ class ExecuteOrdersRound(BaseConnectionRound):
         orders = order_file.read_text()
         orders = json.loads(orders)
         models = [Order.model_validate(o) for o in orders]
-        results = []
         for order in models:
             # We send the orders to the exchange.
             response = yield from self.get_response(
@@ -353,14 +355,50 @@ class CollectDataRound(BaseConnectionRound):
 class PostTradeRound(State):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
+        self.setup()
+        
+    def setup(self) -> None:
         self._is_done = False  # Initially, the state is not done
         self.started = False
 
     async def act(self) -> None:
         print("PostTradeRound: Performing action")
+        if self.started:
+            return
+        self.started = True
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(1)
+        await asyncio.sleep(0)
+        order_file = pathlib.Path("orders.json")
+        orders = order_file.read_text()
+        orders = json.loads(orders)
+        sell_order, buy_order = [Order.model_validate(o) for o in orders]
+
+        report_msg = f"""
+        ```
+        Sell Order:
+            Exchange: {sell_order.exchange_id}
+            Market:   {sell_order.symbol}
+            Status:   {sell_order.status}
+            Side:     {sell_order.side}
+            Price:    {sell_order.price}
+            Amount:   {sell_order.amount}
+        Buy Order:
+            Exchange: {buy_order.exchange_id}
+            Market:   {buy_order.symbol}
+            Status:   {buy_order.status}
+            Side:     {buy_order.side}
+            Price:    {buy_order.price}
+            Amount:   {buy_order.amount}
+
+        Profit %: {- (buy_order.price / sell_order.price * 100 - 100)}
+        ```
+        """
+
+        self.send_notification_to_user(
+            title="Post Trade Execution!",
+            msg=report_msg,
+        )
 
     def is_done(self) -> bool:
         return self._is_done
@@ -368,6 +406,22 @@ class PostTradeRound(State):
     @property
     def event(self) -> Optional[str]:
         return self._event
+
+    def send_notification_to_user(
+        self, title: str, msg: str, attach: str = None
+    ) -> None:
+        """Send notification to user."""
+        dialogues = cast(
+            UserInteractionDialogues, self.context.user_interaction_dialogues
+        )
+        msg, _ = dialogues.create(
+            counterparty=str(APPRISE_PUBLIC_ID),
+            performative=UserInteractionMessage.Performative.NOTIFICATION,
+            title=title,
+            body=msg,
+            attach=attach,
+        )
+        self.context.outbox.put_message(message=msg)
 
 
 class NoOpportunityRound(State):
@@ -404,7 +458,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("setupround", SetupRound(**kwargs), True)
 
         self.register_state("errorround", ErrorRound(**kwargs))
-        self.register_state("posttraderound", PostTradeRound(**kwargs))
+        self.register_state("posttraderound", PostTradeRound(**kwargs), False)
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
 
         self.register_state(

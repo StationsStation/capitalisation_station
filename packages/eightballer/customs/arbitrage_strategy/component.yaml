@@ -6,7 +6,7 @@ description: The custom component package.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiekvasrg5qidiqydd2vb6eq6luh4q2cdvgxq5ozbjb54wvtlvmfrq
-  strategy.py: bafybeiftqzbg6wqoz2plmxe3nf7bonbgw2p7ncpru2f5tto63uvbnjeq5m
+  __init__.py: bafybeiev7zrf6rnazkdyrujyzl5rdg4gxs7xqxvckbvskz25sdjqumlxfq
+  strategy.py: bafybeihxyz5sxbpubypipa5mqow7ylg5cap53vaelgbecoviyrvqkumue4
 fingerprint_ignore_patterns: []
 dependencies: {}

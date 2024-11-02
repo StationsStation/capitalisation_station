@@ -18,16 +18,16 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeiaspkbwgbsqwce7i55ssiyzy6eh5op4p4leyrqf7gtrvbzpusnija
-- eightballer/markets:0.1.0:bafybeifhafgchjxg5brwg6o5ya33vv73dwtvufdpoiicxjicvdy4gqh4ry
-- eightballer/orders:0.1.0:bafybeiey4dmsi7yuylzup4aosan27oqblap3r7wmpgb5xnja24w2jxetle
-- eightballer/positions:0.1.0:bafybeihrut6tiakbbzgiz52jsi23be6fzkaoy3v2lg6pfgq3yh2j6itufe
-- eightballer/tickers:0.1.0:bafybeigj37eqqv73yk2azs7smrflkfipoaud4ezkftabrrgcyjhu2ltfkm
+- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
+- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
+- eightballer/orders:0.1.0:bafybeicozrhzqxm66luftgzh4xvzw2oobsgs2tt4hwds6654dzrnhr6muy
+- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
+- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeigciw3ux4vvtcr7ygcjrqyqkzg5hwaw4zdidaswrpjnrkjkbwzjli
-- valory/abstract_round_abci:0.1.0:bafybeiajjzuh6vf23crp55humonknirvv2f4s3dmdlfzch6tc5ow52pcgm
-- valory/registration_abci:0.1.0:bafybeiffipsowrqrkhjoexem7ern5ob4fabgif7wa6gtlszcoaop2e3oey
-- valory/reset_pause_abci:0.1.0:bafybeif4lgvbzsmzljesxbphycdv52ka7qnihyjrjpfaseclxadcmm6yiq
+- eightballer/dex_data_retrieval:0.1.0:bafybeieut2brttlhvd3lrot3v7i5agbqcifn4qmhwx5qospb5ptfwdzrte
+- valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
+- valory/registration_abci:0.1.0:bafybeifkra3zbg5e4rhsuvjygracgp2jivqxezag7r4fshxetfp2jukkxe
+- valory/reset_pause_abci:0.1.0:bafybeiefmld4bv22k7rjxzmnvhfygizrftgkvrtputgfuvwrenrdpx233q
 behaviours:
   main:
     args: {}

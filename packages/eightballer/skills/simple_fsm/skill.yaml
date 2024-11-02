@@ -7,21 +7,23 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihq5frq7zpuewuiq2nmovdkqawt3jjm6cmq4p7n5lh4pgbkrgq7n4
-  behaviours.py: bafybeieh2zcwga4hz5fm7zjyhd5iazwaqvl3flxpdnph27z3vf43mj5s2a
-  dialogues.py: bafybeicbvgvlc3wdgnkcz5zvfg43vlc3bam7a7baxkg3lxn3pk2wgps2wa
-  handlers.py: bafybeifhtohtmuaqaryostriowntcnbe42gphhvqn6oajbf4k5boldctnq
-  my_model.py: bafybeierzteh5e2lsv2nf7zgtaezvzmle4viowcadnyla3gm6qh56xsenq
+  behaviours.py: bafybeieyyx42wpghcs67bbh3ax2bkn2mhnbcrv62hr6pjy2feu5klveyoy
+  dialogues.py: bafybeifxyaky2xc4xb3xatecv44epzkvtsxq4xlku5d5jiooyuljx5ftui
+  handlers.py: bafybeibenuk2zoseyyprpuzwmqp7cdv2rhdoru5zisbcuqsqx6xfvvfgzi
+  my_model.py: bafybeicwz3q5fkjbxgjfxzsmb4xshdsbhggpg75sgfmfuxfnr7ayemdkpy
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeibrbc4ribjw2sbmf6e2iyyjhytq3n7ldaci2asqfrnyul7fztgcyi
-- eightballer/ccxt:0.1.0:bafybeifzbofi44yvw3k5uowdojtgdacjakmro4ai4lyyu4bgdtibjlxzyq
+- eightballer/dcxt:0.1.0:bafybeigwytf6u2vhuqh73vbtozkhmihhiqb4b5yp3kdbxuo7jxg3vtu6oq
+- eightballer/ccxt:0.1.0:bafybeifql6tfdq3iaiwana6tbp2qfj4w3ewjmfbqdd7tz7yhodh2l46txq
+- eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeifb3albdq62qmhwclq7djtush4tlsmeypoq7tim2kunhdrus6yrqe
-- eightballer/positions:0.1.0:bafybeiembq4kn4fi6mkr6albuuvdx4wcg2pilkz74m5lsajsk7uq5e4sdm
-- eightballer/markets:0.1.0:bafybeicr27ryhnm7l4uanyke6mnxchpva3aqe5cwrnxklcciojba3uxc3q
-- eightballer/orders:0.1.0:bafybeics2wkusxfbu4atidjvczlrjjfp3oldpg4mezhcae2qzdyok5djgq
-- eightballer/balances:0.1.0:bafybeicjxjwmr4wubghu4fa3cdg7dhwpy6b3dhvuaqbzem3jvycooyyazm
+- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
+- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
+- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
+- eightballer/orders:0.1.0:bafybeicozrhzqxm66luftgzh4xvzw2oobsgs2tt4hwds6654dzrnhr6muy
+- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
+- eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
 behaviours:
@@ -61,6 +63,9 @@ models:
   requests:
     args: {}
     class_name: Requests
+  user_interaction_dialogues:
+    args: {}
+    class_name: UserInteractionDialogues
 dependencies: {}
 is_abstract: false
 customs: []

@@ -18,7 +18,6 @@ fingerprint:
   serialization.py: bafybeifu7vwwrswrxr3pnon2e7ec3c4mdjigok4tbudiu6cwa73qyqkpvi
   tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
   tests/dummy_data.yaml: bafybeieuc6yg6ttb6pmu6ukdo6l3xkcxuo23q5g6an3v2fufjnx7xq53ma
-  tests/test_order.py: bafybeicnof4fjrs3gj5qvkhjoaql7igu2hkta76c3rkc5rczywisnpcf64
   tests/test_orders_dialogues.py: bafybeichdm26r7tdnp43cr6odvj5sxdngjbxwibwby24v7c7vz6f2qrttu
   tests/test_orders_messages.py: bafybeidlqzhm2ykvgg3lfw6duibwictma5dmmormzwys5sqdvfqmbzedrq
 fingerprint_ignore_patterns: []

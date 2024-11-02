@@ -34,14 +34,14 @@ ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
 lyra-v2-client = {path = "third_party/upstream/lyra_client"}
-balpy = {path = "third_party/forks/balpy"}
-multicaller = {path = "third_party/forks/multicaller"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"
 cytoolz = "==1.0.0"
 async-timeout = "^4.0.3"
 openapi-core = "==0.14.5"
+open-balpy = "^0.0.7"
+open-multicaller = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 

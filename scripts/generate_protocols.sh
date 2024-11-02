@@ -19,15 +19,17 @@ function generate_protocol {
     pytest packages/eightballer/protocols/$1
 }
 
+
+
 generate_protocol 'default'
 generate_protocol 'spot_asset'
 generate_protocol 'ohlcv'
 
 generate_protocol 'order_book'
-generate_protocol 'orders'
 generate_protocol 'markets'
-# 
-generate_protocol 'tickers'
+
 generate_protocol 'balances'
 generate_protocol 'positions'
 
+generate_protocol 'tickers'
+generate_protocol 'orders'

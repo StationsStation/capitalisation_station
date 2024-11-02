@@ -9,19 +9,19 @@ description: A protocol to enable agents to subscribe to order books and receive
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiacg77zewdgscsnfivnlkacojc3mldao4guqgr27mb7egrd7uqkri
-  __init__.py: bafybeicucte3uu7dvf5b5lwsla3ljwoiaimlwovzcfsleemqeoqdgztgee
-  custom_types.py: bafybeibm3cg23rxtvzmassjuvmgghymtumdtkmpjgscpbfmdd33qxlb3w4
-  dialogues.py: bafybeigfcqttto3fahg7ephkmbivrwsgulnzzeaxrkl4to6vbm4qvbxzgm
-  message.py: bafybeifj4mwaoayo4xec7y57jchfcngmz6aa5luuwfsatkhdvrdedxazdy
+  README.md: bafybeidw4mczu5tnbc7qmxhdccdvukemv2tqjnzewlfijatb7his4ll3v4
+  __init__.py: bafybeihxrs2rfcd6bqb6fjyhkguucwb5y323pujequyu66dz2b2t6ogmdi
+  custom_types.py: bafybeidhyaovd2h5uga3bnrcxftceseteyq4fwpmobdc5oawnftqdsbrui
+  dialogues.py: bafybeihapzkzjygl4kfgbl7r2l5jrycvfbsjualamr6xq3xpgjyfl6iqqe
+  message.py: bafybeicw3xnqeih54newxe6n3gdow2m3xdl22du6ct7zm5hvh6hlxaomtq
   order_book.proto: bafybeih6v6przoxyjtgqgbhc6ffxmflny524tl7slryprpfcygljnssqma
-  order_book_pb2.py: bafybeiaa2l4fot4ycidijw4mhjnpibbboqpsix6ekp22nmkpkw67tbj76q
+  order_book_pb2.py: bafybeidffgyj23qiajnc4thgfx6axmlyqmnzobtjiaqbvwlvvlkfdldhqm
   protocol_spec.yaml: bafybeigbaj7tgnt7xz62kh4taunz22ymnd6w6rtdggnfbidcqypum7esc4
-  serialization.py: bafybeic7rdbqhhsljvpef4azba2me6ijlkssg5yjjjcpa4sr4ys2frclze
+  serialization.py: bafybeifc4cthbcec5tmyl7k4tjiln34czvjhi2opaznedumylr3f6tlmqa
   tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
   tests/dummy_data.yaml: bafybeifnryfgsysxior7xixnl23micbalu2ekh3rupvnfpsyphqxdisquq
-  tests/test_order_book_dialogues.py: bafybeic7tapjgz2u52wvltjnj4ul6lcwkgkuppb4lk7lui7rvt2nyjkgom
-  tests/test_order_book_messages.py: bafybeibxbmlll3q5j6q73esp3t2vs2bopxdsbge3wuqs6aathxcb3fieqi
+  tests/test_order_book_dialogues.py: bafybeihy3g5ytxtlmci7ei6e3igyohjp3g6rxlcj3lmgag44kln7entfoe
+  tests/test_order_book_messages.py: bafybeifbndwqde7unjofszom3agbmmxlfi5om3s6u4ulwsteism45dsmcu
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

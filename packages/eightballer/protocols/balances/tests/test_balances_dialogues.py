@@ -20,13 +20,23 @@
 """Test dialogues module for balances protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.dialogues import (
     BalancesDialogue,
-    BaseBalancesDialogues as BalancesDialogues,
+    BaseBalancesDialogues,
 )
+from packages.eightballer.protocols.balances.custom_types import ErrorCode
+
+
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestDialoguesBalances(BaseProtocolDialoguesTestCase):
@@ -36,7 +46,7 @@ class TestDialoguesBalances(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = BalancesDialogue
 
-    DIALOGUES_CLASS = BalancesDialogues
+    DIALOGUES_CLASS = BaseBalancesDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = BalancesDialogue.Role.AGENT  # CHECK
 
