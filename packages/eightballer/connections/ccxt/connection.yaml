@@ -2,7 +2,8 @@ name: ccxt
 author: eightballer
 version: 0.1.0
 type: connection
-description: A wrapper of CCXT.
+description: A wrapper of CCXT, enabling agents to connect to various centralised
+  exchanges.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

@@ -2,7 +2,9 @@ name: dcxt
 author: eightballer
 version: 0.1.0
 type: connection
-description: A wrapper of CCXT.
+description: A connection inspired by CCXT, but for DeFi protocols. Allows for agent
+  native access to DeFi protocols such as Balancer, Lyra, and HundredX. Enables agents
+  to interact with DeFi protocols in a standardized way.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

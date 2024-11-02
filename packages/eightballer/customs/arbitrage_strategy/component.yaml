@@ -2,7 +2,7 @@ name: arbitrage_strategy
 author: eightballer
 version: 0.1.0
 type: custom
-description: The custom component package.
+description: A simple arbitrage strategy that buys on one exchange and sells on another.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

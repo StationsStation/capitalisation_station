@@ -9,8 +9,8 @@ fingerprint:
   tests/test_agent.py: bafybeidrb6p7zrp3omjt4tacnwevo75zmu5t324imbpz4jb3jck6gc5pai
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeifql6tfdq3iaiwana6tbp2qfj4w3ewjmfbqdd7tz7yhodh2l46txq
-- eightballer/dcxt:0.1.0:bafybeic6uyrbrqjncjkcbf4hdv5obwo7xhjygukaytit6pgrl6u4tfbb4e
+- eightballer/ccxt:0.1.0:bafybeihzjqxcpgpxgxw335ujb3yaewo5hgkmrct23rmf7g7dalaowk7heu
+- eightballer/dcxt:0.1.0:bafybeifwz4pbh7wiop4ci5wec6txvbip7wj3c33scouejih6myteaxav2y
 - eightballer/http_client:0.1.0:bafybeidxqvcgobltkb5rgokakcfo25ntfhlffmpzqap6oid4ttmwbvn4qi
 - eightballer/http_server:0.1.0:bafybeid7u7cx2smnb3iz6zs6gt3k4ijwevm6yqqfo4pmziqoubl2p52ele
 - eightballer/prometheus:0.1.1:bafybeibiy3nvia5xjvey5gmwv56vi4w7kjbbb5xcug2lwp4f7ylnfpw2wu
@@ -43,8 +43,8 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/tendermint:0.1.0:bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeiesquklx45x3dmevd5iog2sho652xutlzumikjpzuw5uoqrbblh5m
-- eightballer/dex_data_retrieval:0.1.0:bafybeid6ytcag7fxdjyws6k3auuxxtk22edxw2t2mxaym5gnc7tv665gru
+- eightballer/chained_dex_app:0.1.0:bafybeigltd7gzplqydzw5fr7vjf4kf72rj4fwlm5ytjrm4oguvx5apghl4
+- eightballer/dex_data_retrieval:0.1.0:bafybeick6i4nf34krurcupn7udqujms43rom4ytoksgkigexvcyk7tpzv4
 - eightballer/metrics:0.1.0:bafybeidodhiljldkfzdyvv3p7w2re5q44zlzorlfwopc4r7kcfgnnbm7oe
 - eightballer/prometheus:0.1.0:bafybeibssw6lcshlnxnwqcjebjxiwtnyw3nki7jkbnh4lnvtcq6aaqni5e
 - valory/abstract_abci:0.1.0:bafybeidz54kvxhbdmpruzguuzzq7bjg4pekjb5amqobkxoy4oqknnobopu

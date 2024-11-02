@@ -2,7 +2,7 @@ name: simple_fsm
 author: eightballer
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: A simple single agent fsm to execute against arbitrage opportunities.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -13,8 +13,8 @@ fingerprint:
   my_model.py: bafybeicwz3q5fkjbxgjfxzsmb4xshdsbhggpg75sgfmfuxfnr7ayemdkpy
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeic6uyrbrqjncjkcbf4hdv5obwo7xhjygukaytit6pgrl6u4tfbb4e
-- eightballer/ccxt:0.1.0:bafybeifql6tfdq3iaiwana6tbp2qfj4w3ewjmfbqdd7tz7yhodh2l46txq
+- eightballer/dcxt:0.1.0:bafybeifwz4pbh7wiop4ci5wec6txvbip7wj3c33scouejih6myteaxav2y
+- eightballer/ccxt:0.1.0:bafybeihzjqxcpgpxgxw335ujb3yaewo5hgkmrct23rmf7g7dalaowk7heu
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
 protocols:

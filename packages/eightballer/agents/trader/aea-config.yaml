@@ -2,14 +2,14 @@ agent_name: trader
 author: eightballer
 version: 0.1.0
 license: Apache-2.0
-description: ''
+description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint: {}
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
-- eightballer/ccxt:0.1.0:bafybeifql6tfdq3iaiwana6tbp2qfj4w3ewjmfbqdd7tz7yhodh2l46txq
-- eightballer/dcxt:0.1.0:bafybeic6uyrbrqjncjkcbf4hdv5obwo7xhjygukaytit6pgrl6u4tfbb4e
+- eightballer/ccxt:0.1.0:bafybeihzjqxcpgpxgxw335ujb3yaewo5hgkmrct23rmf7g7dalaowk7heu
+- eightballer/dcxt:0.1.0:bafybeifwz4pbh7wiop4ci5wec6txvbip7wj3c33scouejih6myteaxav2y
 - eightballer/http_client:0.1.0:bafybeidxqvcgobltkb5rgokakcfo25ntfhlffmpzqap6oid4ttmwbvn4qi
 - eightballer/http_server:0.1.0:bafybeid7u7cx2smnb3iz6zs6gt3k4ijwevm6yqqfo4pmziqoubl2p52ele
 - eightballer/prometheus:0.1.1:bafybeibiy3nvia5xjvey5gmwv56vi4w7kjbbb5xcug2lwp4f7ylnfpw2wu
@@ -47,11 +47,11 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeidodhiljldkfzdyvv3p7w2re5q44zlzorlfwopc4r7kcfgnnbm7oe
 - eightballer/prometheus:0.1.0:bafybeibssw6lcshlnxnwqcjebjxiwtnyw3nki7jkbnh4lnvtcq6aaqni5e
-- eightballer/simple_fsm:0.1.0:bafybeiebyq2j3icub5nfhlke2cocaahq3ehv74uwim5o3srzgf3hqeloue
+- eightballer/simple_fsm:0.1.0:bafybeigbd6gb3gfknazo2hoc4gyveze5jance6n6ldqnxgj5o2p5z5w2wy
 - valory/abstract_abci:0.1.0:bafybeidz54kvxhbdmpruzguuzzq7bjg4pekjb5amqobkxoy4oqknnobopu
 - valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
 customs:
-- eightballer/arbitrage_strategy:0.1.0:bafybeifqliigvq7i4kyx6xux2tws24bnaokrbh4enbm4qazvodliymawry
+- eightballer/arbitrage_strategy:0.1.0:bafybeiaisg4c7xl5nzpg6o3mjllgoagaa6hdsuyw5tjjtracm6ud7xp7ly
 default_ledger: ethereum
 required_ledgers:
 - ethereum
