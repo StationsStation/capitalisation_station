@@ -7,88 +7,90 @@ message OrdersMessage{
   // Custom Types
   message ErrorCode{
     enum ErrorCodeEnum {
-      UNKNOWN_MARKET = 0;
-      INSUFFICIENT_FUNDS = 1;
-      UNKNOWN_ORDER = 2;
-      API_ERROR = 3;
+      ERROR_CODE_ENUM_UNKNOWN_MARKET = 0;
+      ERROR_CODE_ENUM_INSUFFICIENT_FUNDS = 1;
+      ERROR_CODE_ENUM_UNKNOWN_ORDER = 2;
+      ERROR_CODE_ENUM_API_ERROR = 3;
     }
     ErrorCodeEnum error_code = 1;
   }
 
   message Order{
-    message Order {
-      string id = 1;
-      string client_order_id = 2;
-      string info = 3;
-      float timestamp = 4;
-      string datetime = 5;
-      float last_trade_timestamp = 6;
-      OrderStatus status = 7;
-      string symbol = 8;
-      OrderType type = 9;
-      string time_in_force = 10;
-      bool post_only = 11;
-      OrderSide side = 12;
-      float price = 13;
-      float stop_price = 14;
-      float trigger_price = 15;
-      float cost = 16;
-      float amount = 17;
-      float filled = 18;
-      float remaining = 19;
-      float fee = 20;
-      float average = 21;
-      string trades = 22;
-      string fees = 23;
-      float last_update_timestamp = 24;
-      bool reduce_only = 25;
-      float take_profit_price = 26;
-      float stop_loss_price = 27;
-      string exchange_id = 28;
-    }
-          
+    float price = 1;
+    string symbol = 2;
+    OrderStatus status = 3;
+    OrderSide side = 4;
+    OrderType type = 5;
+    optional string exchange_id = 6;
+    optional string id = 7;
+    optional string client_order_id = 8;
+    optional string info = 9;
+    optional string ledger_id = 10;
+    optional string asset_a = 11;
+    optional string asset_b = 12;
+    optional float timestamp = 13;
+    optional string datetime = 14;
+    optional string time_in_force = 15;
+    optional bool post_only = 16;
+    optional float last_trade_timestamp = 17;
+    optional float stop_price = 18;
+    optional float trigger_price = 19;
+    optional float cost = 20;
+    optional float amount = 21;
+    optional float filled = 22;
+    optional float remaining = 23;
+    optional float fee = 24;
+    optional float average = 25;
+    optional string trades = 26;
+    optional string fees = 27;
+    optional float last_update_timestamp = 28;
+    optional bool reduce_only = 29;
+    optional float take_profit_price = 30;
+    optional float stop_loss_price = 31;
   }
 
   message OrderSide{
     enum OrderSideEnum{
-      BUY = 0;
-      SELL = 1;
+      ORDER_SIDE_ENUM_BUY = 0;
+      ORDER_SIDE_ENUM_SELL = 1;
     }
     OrderSideEnum order_side = 1;
   }
 
   message OrderStatus{
     enum OrderStatusEnum{
-      SUBMITTED = 0;
-      OPEN = 1;
-      PARTIALLY_FILLED = 2;
-      CANCELLED = 3;
-      FILLED = 4;
-      CLOSED = 5;
-      EXPIRED = 6;
-      FAILED = 8;
+      ORDER_STATUS_ENUM_NEW = 0;
+      ORDER_STATUS_ENUM_SUBMITTED = 1;
+      ORDER_STATUS_ENUM_OPEN = 2;
+      ORDER_STATUS_ENUM_PARTIALLY_FILLED = 3;
+      ORDER_STATUS_ENUM_CANCELLED = 4;
+      ORDER_STATUS_ENUM_FILLED = 5;
+      ORDER_STATUS_ENUM_CLOSED = 6;
+      ORDER_STATUS_ENUM_EXPIRED = 7;
+      ORDER_STATUS_ENUM_FAILED = 9;
     }
     OrderStatusEnum order_status = 1;
   }
 
   message OrderType{
     enum OrderTypeEnum{
-      LIMIT = 0;
-      MARKET = 1;
+      ORDER_TYPE_ENUM_LIMIT = 0;
+      ORDER_TYPE_ENUM_MARKET = 1;
     }
     OrderTypeEnum order_type = 1;
   }
 
   message Orders{
-    message Orders {
-      repeated Order orders = 1;
-    }
+    repeated Order orders = 1;
   }
 
 
   // Performatives and contents
   message Create_Order_Performative{
     Order order = 1;
+    string exchange_id = 2;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Created_Performative{
@@ -97,6 +99,9 @@ message OrdersMessage{
 
   message Cancel_Order_Performative{
     Order order = 1;
+    string exchange_id = 2;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Cancelled_Performative{
@@ -115,6 +120,8 @@ message OrdersMessage{
     bool side_is_set = 9;
     OrderStatus status = 10;
     bool status_is_set = 11;
+    string ledger_id = 12;
+    bool ledger_id_is_set = 13;
   }
 
   message Get_Settlements_Performative{
@@ -125,10 +132,15 @@ message OrdersMessage{
     bool end_timestamp_is_set = 5;
     double start_timestamp = 6;
     bool start_timestamp_is_set = 7;
+    string ledger_id = 8;
+    bool ledger_id_is_set = 9;
   }
 
   message Get_Order_Performative{
     Order order = 1;
+    string exchange_id = 2;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Performative{

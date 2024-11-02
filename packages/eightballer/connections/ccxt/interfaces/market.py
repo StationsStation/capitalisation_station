@@ -2,10 +2,10 @@
 
 from typing import Optional, cast
 
-from ccxt import RequestTimeout
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
 
+from ccxt import RequestTimeout
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 from packages.eightballer.protocols.markets.custom_types import Market, Markets

@@ -20,16 +20,56 @@
 # pylint: disable=unused-import
 """Test the agent."""
 
+import subprocess
+from pathlib import Path
+
 import pytest
+from aea.test_tools.test_cases import AEATestCaseMany
+from aea_test_autonomy.configurations import ANY_ADDRESS, DEFAULT_REQUESTS_TIMEOUT
 
 
-TARGET_AGENT = "eightballer/chained_dex_app:0.1.0"
-TARGET_SKILL = "eightballer/chined_dex_app:0.1.0"
-TIME_TO_FINISH = 60  # 1 minute
+AGENT_NAME = "chained_dex_app"
+AUTHOR = "eightballer"
+VERSION = "0.1.0"
+DEFAULT_LAUNCH_TIMEOUT = 10
+LAUNCH_SUCCEED_MESSAGE = "Start processing"
 
 
-@pytest.mark.integration
-@pytest.mark.skip(reason="Integration tests are not yet implemented.")
-def test_integration():
-    """Test the integration."""
-    pytest.skip("Integration tests are not yet implemented.")
+class TestAgentLaunch(
+    AEATestCaseMany,
+):
+    """Test that the Agent launches."""
+
+    IS_LOCAL = True
+    capture_log = True
+    cli_log_options = ["-v", "DEBUG"]
+    package_registry_src_rel = Path(__file__).parent.parent.parent.parent.parent
+
+    def test_run(self) -> None:
+        """Run the ABCI skill."""
+        agent_name = "base"
+        self.fetch_agent(f"{AUTHOR}/{AGENT_NAME}:{VERSION}", agent_name, is_local=self.IS_LOCAL)
+        self.set_agent_context(agent_name)
+        self.generate_private_key("ethereum")
+        self.generate_private_key("cosmos")
+        self.add_private_key("ethereum", "ethereum_private_key.txt")
+        self.add_private_key("cosmos", "cosmos_private_key.txt")
+        self.invoke(
+            "issue-certificates",
+        )
+        process = self.run_agent()
+        is_running = self.is_running(process)
+        assert is_running, "AEA not running within timeout!"
+
+    @classmethod
+    def is_running(cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT) -> bool:
+        """
+        Check if the AEA is launched and running (ready to process messages).
+
+        :param process: agent subprocess.
+        :param timeout: the timeout to wait for launch to complete
+        :return: bool indicating status
+        """
+        missing_strings = cls.missing_from_output(process, (LAUNCH_SUCCEED_MESSAGE,), timeout, is_terminating=False)
+
+        return missing_strings == []

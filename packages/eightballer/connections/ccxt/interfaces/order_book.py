@@ -3,9 +3,9 @@
 import asyncio
 from typing import Optional
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.skills.base import Envelope
 
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 from packages.eightballer.protocols.order_book.dialogues import OrderBookDialogue, BaseOrderBookDialogues
 from packages.eightballer.protocols.order_book.custom_types import OrderBook

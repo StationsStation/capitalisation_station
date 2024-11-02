@@ -9,12 +9,12 @@ from typing import Any, Dict, List, Deque, Optional, cast
 from asyncio import Task
 from collections import deque
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.connections.base import Connection, ConnectionStates
 from aea.protocols.dialogue.base import Dialogue
 
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
@@ -130,12 +130,14 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
             await exchange.close()
 
     async def send(self, envelope: Envelope) -> None:
+        """Send an envelope."""
         task = self._handle_req(envelope)
         task.add_done_callback(self._handle_done_task)
         self.executing_tasks.append(task)
         self.task_to_request[task] = envelope
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional[Envelope]:
+        """Receive an envelope."""
         envelope = cast(
             Envelope,
             await self.queue.get(),
@@ -144,6 +146,7 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         return envelope
 
     async def _execute(self, envelope=None) -> Optional[Message]:
+        """Execute the task."""
         dialogue: Dialogue
         try:
             dialogue = self.protocol_interface.validate_envelope(envelope)

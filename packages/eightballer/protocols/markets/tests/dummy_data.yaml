@@ -1,0 +1,32 @@
+Market:
+  active: false
+  base: base
+  base_id: base_id
+  contract: false
+  contract_size: 0.0
+  expiry: 0.0
+  expiry_datetime: expiry_datetime
+  future: false
+  id: id
+  info: info
+  inverse: false
+  limits: limits
+  linear: false
+  lowercase_id: lowercase_id
+  maker: 0.0
+  margin: false
+  option: false
+  option_type: option_type
+  precision: 0.0
+  quote: quote
+  quote_id: quote_id
+  settle: settle
+  settle_id: settle_id
+  spot: false
+  strike: 0.0
+  swap: false
+  symbol: symbol
+  taker: 0.0
+  type: type
+Markets:
+  markets: []

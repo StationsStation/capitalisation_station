@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -28,10 +28,17 @@ from abc import ABC
 from typing import Dict, Type, Callable, FrozenSet, cast
 
 from aea.common import Address
+from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
+
+
+def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+    """Infer the role of the agent from an incoming/outgoing first message"""
+    del sender, message
+    return OhlcvDialogue.Role.AGENT
 
 
 class OhlcvDialogue(Dialogue):
@@ -49,11 +56,7 @@ class OhlcvDialogue(Dialogue):
             {OhlcvMessage.Performative.CANDLESTICK, OhlcvMessage.Performative.ERROR}
         ),
         OhlcvMessage.Performative.SUBSCRIBE: frozenset(
-            {
-                OhlcvMessage.Performative.CANDLESTICK,
-                OhlcvMessage.Performative.ERROR,
-                OhlcvMessage.Performative.END,
-            }
+            {OhlcvMessage.Performative.CANDLESTICK, OhlcvMessage.Performative.ERROR, OhlcvMessage.Performative.END}
         ),
     }
 
@@ -92,7 +95,7 @@ class OhlcvDialogue(Dialogue):
         )
 
 
-class OhlcvDialogues(Dialogues, ABC):
+class BaseOhlcvDialogues(Dialogues, ABC):
     """This class keeps track of all ohlcv dialogues."""
 
     END_STATES = frozenset({OhlcvDialogue.EndState.END, OhlcvDialogue.EndState.ERROR})
@@ -102,7 +105,7 @@ class OhlcvDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
         dialogue_class: Type[OhlcvDialogue] = OhlcvDialogue,
     ) -> None:
         """
@@ -120,3 +123,12 @@ class OhlcvDialogues(Dialogues, ABC):
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,
         )
+
+
+class OhlcvDialogues(BaseOhlcvDialogues, Model):
+    """This class defines the dialogues used in Ohlcv."""
+
+    def __init__(self, **kwargs):
+        """Initialize dialogues."""
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
+        BaseOhlcvDialogues.__init__(self, self_address=str(self.context.skill_id))

@@ -161,10 +161,10 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
         mocker.is_result_ok = is_result_ok
         # we need to mock the get_dcxt_response method of the behaviour
         self.skill.behaviours["main"].current_behaviour.get_dcxt_response = mocker.get_dcxt_response
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._from_balances_to_dict = mocker.from_balances_to_dict
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._is_result_ok = mocker.is_result_ok
         for _ in range(DEFAULT_RETRIES):
@@ -211,10 +211,10 @@ class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
         mocker.is_result_ok = is_result_ok
         # we need to mock the get_ccxt_response method of the behaviour
         self.skill.behaviours["main"].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._from_markets_to_dict = mocker.from_markets_to_dict
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._is_result_ok = mocker.is_result_ok
 
@@ -264,10 +264,10 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         mocker.is_result_ok = is_result_ok
         # we need to mock the get_ccxt_response method of the behaviour
         self.skill.behaviours["main"].current_behaviour.get_ccxt_response = mocker.get_ccxt_response
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._from_markets_to_dict = mocker.from_markets_to_dict
-        self.skill.behaviours[  # pylint: disable=protected-access
+        self.skill.behaviours[  # noqa
             "main"
         ].current_behaviour._is_result_ok = mocker.is_result_ok
 

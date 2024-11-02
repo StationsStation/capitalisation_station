@@ -31,6 +31,7 @@ import pandas as pd
 from aea.test_tools.test_skill import BaseSkillTestCase
 
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
+from packages.eightballer.skills.reporting.behaviours import SYSTEM_TZ
 from packages.eightballer.skills.reporting.tests.cases import (
     EXCHANGE_1,
     EXCHANGE_2,
@@ -81,14 +82,14 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()
         positions = [POSITION_CASE_1]
-        # we mock the get_marketsdf method
-        strategy.get_markets_df = MagicMock(
+        # we mock the get_marketsdata method
+        strategy.get_markets_data = MagicMock(
             return_value=pd.DataFrame(
                 [
                     [
                         2000,
                         "option",
-                        datetime.now().isoformat(),
+                        datetime.now(tz=datetime.now().astimezone().tzinfo).isoformat(),
                         TEST_MARKET_NAME_1,
                         EXCHANGE_1,
                     ]
@@ -102,8 +103,8 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
                 ],
             )
         )
-        df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert list(df.values[0]) == [2000.0, "long", 1]
+        data = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
+        assert list(data.to_numpy()[0]) == [2000.0, "long", 1]
 
     def test_from_positions_to_pivot(self):
         """Test the act method of the price_polling behaviour."""
@@ -111,21 +112,21 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()
         positions = [POSITION_CASE_1, POSITION_CASE_2]
-        # we mock the get_marketsdf method
-        strategy.get_markets_df = MagicMock(
+        # we mock the get_marketsdata method
+        strategy.get_markets_data = MagicMock(
             return_value=pd.DataFrame(
                 [
                     [
                         2000,
                         "call",
-                        datetime.now().isoformat(),
+                        datetime.now(tz=SYSTEM_TZ).isoformat(),
                         TEST_MARKET_NAME_1,
                         EXCHANGE_1,
                     ],
                     [
                         2000,
                         "put",
-                        datetime.now().isoformat(),
+                        datetime.now(tz=SYSTEM_TZ).isoformat(),
                         TEST_MARKET_NAME_2,
                         EXCHANGE_1,
                     ],
@@ -139,8 +140,8 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
                 ],
             )
         )
-        df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert list(df.values[0]) == [2000.0, "long", 1, 1]
+        data = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
+        assert list(data.to_numpy()[0]) == [2000.0, "long", 1, 1]
 
     def test_nets_out_positions_in_pivot(self):
         """
@@ -153,14 +154,14 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         pos_2.side = "short"
         pos_2.size = -pos_1.size
         positions = [pos_1, pos_2]
-        # we mock the get_marketsdf method
-        strategy.get_markets_df = MagicMock(
+        # we mock the get_marketsdata method
+        strategy.get_markets_data = MagicMock(
             return_value=pd.DataFrame(
                 [
                     [
                         2000,
                         "option",
-                        datetime.now().isoformat(),
+                        datetime.now(tz=SYSTEM_TZ).isoformat(),
                         TEST_MARKET_NAME_1,
                         EXCHANGE_1,
                     ]
@@ -174,8 +175,8 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
                 ],
             )
         )
-        df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert list(df.values[0]) == [2000.0, "flat", 0]
+        data = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
+        assert list(data.to_numpy()[0]) == [2000.0, "flat", 0]
 
     def test_nets_out_positions_in_pivot_multiple(self):
         """
@@ -200,8 +201,8 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         pos_4.size = pos_1.size
 
         positions = [pos_1, pos_2, pos_3, pos_4]
-        # we mock the get_marketsdf method
-        strategy.get_markets_df = MagicMock(
+        # we mock the get_marketsdata method
+        strategy.get_markets_data = MagicMock(
             return_value=pd.DataFrame(
                 [
                     [1800, "call", "monday", TEST_MARKET_NAME_1, EXCHANGE_1],
@@ -218,16 +219,16 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
                 ],
             )
         )
-        df = strategy.from_positions_to_pivot(positions, EXCHANGE_2)
-        assert list(df.values[0]) == [1800.0, "short", -1, 0]
-        assert list(df.values[1]) == [1900.0, "long", 0, 1]
+        data = strategy.from_positions_to_pivot(positions, EXCHANGE_2)
+        assert list(data.to_numpy()[0]) == [1800.0, "short", -1, 0]
+        assert list(data.to_numpy()[1]) == [1900.0, "long", 0, 1]
 
         # we now check that the pivot is correct
-        df = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
-        assert list(df.values[0]) == [1800.0, "long", 1, 0]
-        assert list(df.values[1]) == [1900.0, "short", 0, -1]
+        data = strategy.from_positions_to_pivot(positions, EXCHANGE_1)
+        assert list(data.to_numpy()[0]) == [1800.0, "long", 1, 0]
+        assert list(data.to_numpy()[1]) == [1900.0, "short", 0, -1]
 
         # we confirm that the netted out pivot is correct
-        df = strategy.from_positions_to_pivot(positions)
-        assert list(df.values[0]) == [1800.0, "flat", 0, 0]
-        assert list(df.values[1]) == [1900.0, "flat", 0, 0]
+        data = strategy.from_positions_to_pivot(positions)
+        assert list(data.to_numpy()[0]) == [1800.0, "flat", 0, 0]
+        assert list(data.to_numpy()[1]) == [1900.0, "flat", 0, 0]

@@ -17,6 +17,8 @@ TEST_MARKET = "BTC-PERP"
 
 TIMEOUT = 10
 
+DEFAULT_EXCHANGE = list(TEST_EXCHANGES.keys()).pop()
+
 
 @pytest.mark.asyncio
 class TestFetchTickers(BaseDcxtConnectionTest):
@@ -25,7 +27,7 @@ class TestFetchTickers(BaseDcxtConnectionTest):
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
     @with_timeout(TIMEOUT)
-    async def test_handles_get_all_tickers(self, exchange_id=list(TEST_EXCHANGES.keys()).pop()) -> None:
+    async def test_handles_get_all_tickers(self, exchange_id=DEFAULT_EXCHANGE) -> None:
         """Can handle ohlcv messages."""
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
@@ -71,7 +73,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[exchange_id].fetch_tickers = mocker  # pylint: disable=W0212
+        self.connection._exchanges[exchange_id].fetch_tickers = mocker  # noqa
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

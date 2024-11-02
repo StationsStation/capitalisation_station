@@ -7,15 +7,20 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeic7pu6woonij27v4ihn73ga2cdm6odw4lpk4whldktrfpcxowfuim
-  custom_types.py: bafybeihm3cn22cwo3udpqagsxivzp6qcmmjcj677adzyhgxnil2xljgxle
-  dialogues.py: bafybeig7qxszlrxdiu7qgpvnheok5eyjdm2ayzxjs2motwu3bd2udfvsoe
-  message.py: bafybeieyjjr7qww5m3pzp4kjsbriacbq3pyxhech4h26jgh6geuuqmvz44
-  orders.proto: bafybeiaofejdygbj6l2s4fyeudiocx2pk6nkjkltrnaxxuahobqzzhtdbe
-  orders_pb2.py: bafybeicaruce2yrfjixacgr3pjciycfq644yye6zb7potc5vnoyok257de
-  serialization.py: bafybeihndgbuheuzjktfhm7siu3g7stzhqppfv6rgxggxmivn76zk3nfwu
-  tests/__init__.py: bafybeierwsy34eqeiawwmy6xasatflc7a7i6ae5nmdsx3ogspj3eqckzci
-  tests/test_order.py: bafybeicnof4fjrs3gj5qvkhjoaql7igu2hkta76c3rkc5rczywisnpcf64
+  README.md: bafybeic2uf7yi5tuqxinecctrhl7pyurqobgffs46spjd2kkrdjlezsj6q
+  __init__.py: bafybeieae5wuyfkbjxht3gpsmatpqq745mrimul3jnqp5wkscbo2sqzwhq
+  custom_types.py: bafybeicvtmoqltnghiww5lexbljqq6ir7tcyopupikweykqa27q5bugiiy
+  dialogues.py: bafybeibinanhydrhhx3wrbo3inubt3yqfixyrfbgk45mgu4i5kasbyrhwy
+  message.py: bafybeiaaj3k7rt4ag6cttve3z3ygft5q2n7mxqegegge5nqjn4cx74kzv4
+  orders.proto: bafybeihysfey2ssrod7trin4gbgnp4h5n4p4b2igbwr4z6w7pv65niecyq
+  orders_pb2.py: bafybeie746bjlz2ofhf2e4eldiplaxhdjafaiwcaqy4ca7dkpa23d7updq
+  protocol_spec.yaml: bafybeiaxruiv2ulg2qm24asdk7fgpivbyvhm7t3wt7zhy757kaxls747n4
+  serialization.py: bafybeifu7vwwrswrxr3pnon2e7ec3c4mdjigok4tbudiu6cwa73qyqkpvi
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
+  tests/dummy_data.yaml: bafybeieuc6yg6ttb6pmu6ukdo6l3xkcxuo23q5g6an3v2fufjnx7xq53ma
+  tests/test_orders_dialogues.py: bafybeichdm26r7tdnp43cr6odvj5sxdngjbxwibwby24v7c7vz6f2qrttu
+  tests/test_orders_messages.py: bafybeidlqzhm2ykvgg3lfw6duibwictma5dmmormzwys5sqdvfqmbzedrq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
+  pydantic: {}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,29 +17,42 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for markets protocol."""
+"""Test dialogues module for default protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.default.message import DefaultMessage
-from packages.eightballer.protocols.default.dialogues import DefaultDialogue, DefaultDialogues
+from packages.eightballer.protocols.default.dialogues import (
+    DefaultDialogue,
+    BaseDefaultDialogues,
+)
+from packages.eightballer.protocols.default.custom_types import ErrorCode
+
+
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestDialoguesDefault(BaseProtocolDialoguesTestCase):
-    """Test for the 'markets' protocol dialogues."""
+    """Test for the 'default' protocol dialogues."""
 
     MESSAGE_CLASS = DefaultMessage
 
     DIALOGUE_CLASS = DefaultDialogue
 
-    DIALOGUES_CLASS = DefaultDialogues
+    DIALOGUES_CLASS = BaseDefaultDialogues
 
-    ROLE_FOR_THE_FIRST_MESSAGE = DefaultDialogue.Role.AGENT
+    ROLE_FOR_THE_FIRST_MESSAGE = DefaultDialogue.Role.AGENT  # CHECK
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return {
-            "performative": DefaultMessage.Performative.BYTES,
-            "content": b"some bytes",
-        }
+        return dict(
+            performative=DefaultMessage.Performative.BYTES,
+            content=b"some_bytes",
+        )

@@ -5,7 +5,6 @@ from typing import Any, Dict, Optional, cast
 from datetime import datetime
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -13,6 +12,7 @@ from packages.eightballer.connections.ccxt.interfaces.interface_base import Base
 
 
 INTERVAL = 10
+SYSTEM_TZ = datetime.now().astimezone().tzinfo
 
 
 def from_id_to_instrument_name(instrument_id):
@@ -45,7 +45,7 @@ def from_id_to_instrument_name(instrument_id):
     else:
         raise ValueError(f"Invalid instrument id: {instrument_id}")
     # we need to pad the day with a  if it's a single digit
-    date_obj = datetime.strptime(str(month), "%b")
+    date_obj = datetime.strptime(str(month), "%b")  # noqa
     month = date_obj.strftime("%m").upper()
     if int(month) < 10:
         month = f"0{int(month)}"
@@ -77,6 +77,8 @@ def from_api_call(api_call: Dict[str, Any], exchange_id) -> Order:
     kwargs["type"] = map_order_type_to_enum(kwargs["type"])
     kwargs["side"] = OrderSide.BUY if kwargs["side"] == "buy" else OrderSide.SELL
     kwargs["exchange_id"] = exchange_id
+    del kwargs["trades"]
+    del kwargs["fees"]
     return Order(**kwargs)
 
 
@@ -90,7 +92,7 @@ def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
         "id": f"{timestamp}-{symbol}-delivery",
         "exchange_id": exchange_id,
         "timestamp": timestamp,
-        "datetime": datetime.fromtimestamp(timestamp / 1000),
+        "datetime": datetime.fromtimestamp(timestamp / 1000, tz=SYSTEM_TZ),
         "symbol": symbol,
         "amount": size,
         "price": price,
@@ -127,7 +129,9 @@ def map_status_to_enum(status):
         "filled": OrderStatus.FILLED,
     }
     if status not in mapping:
-        raise ValueError(f"Unknown status: {status}")
+        # We don't know what this status is we log the error and return the status as is
+        print(f"Unknown status: {status}")
+        return OrderStatus.NEW
     return mapping[status]
 
 
@@ -222,7 +226,7 @@ class OrderInterface(BaseInterface):
             )
             response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
-        except Exception as error:  # pylint: disable=W0703
+        except Exception as error:  # noqa
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
@@ -248,15 +252,17 @@ class OrderInterface(BaseInterface):
                 self.open_orders[exchange_id] = {}
             if order.id in self.open_orders[exchange_id]:
                 del self.open_orders[exchange_id][order.id]
-            connection.logger.warning(
+            msg = (
                 f"Couldn't fetch order {order.id} from {exchange_id}. Removed from open orders."
                 + f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-        except Exception as error:  # pylint: disable=W0703
-            connection.logger.warning(
+            connection.logger.warning(msg)
+        except Exception as error:  # noqa
+            msg = (
                 f"Couldn't fetch order {order.id} from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
+            connection.logger.warning(msg)
             return get_error(message, dialogue, str(error))
         response_message = dialogue.reply(
             target_message=message,
@@ -292,7 +298,7 @@ class OrderInterface(BaseInterface):
             )
             del self.open_orders[message.order.exchange_id][message.order.id]
             return response_message
-        except Exception as error:  # pylint: disable=W0703
+        except Exception as error:  # noqa
             connection.logger.info("Unknown Issue: %s", error)
             connection.logger.error(traceback.format_exc())
             return get_error(message, dialogue, str(error))

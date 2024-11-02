@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,16 +20,23 @@
 """Serialization module for positions protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=E0611,R0912,C0209,R1735
-from typing import cast
+from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.eightballer.protocols.positions import positions_pb2
-from packages.eightballer.protocols.positions.custom_types import ErrorCode, Position, Positions, PositionSide
-from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.eightballer.protocols.positions import positions_pb2  # type: ignore
+from packages.eightballer.protocols.positions.custom_types import (  # type: ignore
+    ErrorCode,
+    Position,
+    PositionSide,
+    Positions,
+)
+from packages.eightballer.protocols.positions.message import (  # type: ignore
+    PositionsMessage,
+)
 
 
 class PositionsSerializer(Serializer):
@@ -46,7 +53,7 @@ class PositionsSerializer(Serializer):
         msg = cast(PositionsMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        positions_msg = positions_pb2.PositionsMessage()
+        positions_msg = positions_pb2.PositionsMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -116,7 +123,7 @@ class PositionsSerializer(Serializer):
         :return: the 'Positions' message.
         """
         message_pb = ProtobufMessage()
-        positions_pb = positions_pb2.PositionsMessage()
+        positions_pb = positions_pb2.PositionsMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (

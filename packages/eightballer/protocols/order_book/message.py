@@ -20,15 +20,17 @@
 """This module contains order_book's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
-# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.order_book.custom_types import OrderBook as CustomOrderBook
+from packages.eightballer.protocols.order_book.custom_types import (
+    OrderBook as CustomOrderBook,
+)
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.order_book.message")
 

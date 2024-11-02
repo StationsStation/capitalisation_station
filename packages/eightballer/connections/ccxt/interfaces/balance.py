@@ -5,7 +5,6 @@ Base interface for balances protocol.
 from typing import Optional
 
 from ccxt import RequestTimeout
-
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
@@ -27,7 +26,7 @@ def all_balances_from_api_call(api_call):
     balances = []
     for asset, data in api_call.items():
         data["asset_id"] = asset
-        balances.append(Balance(**data))
+        balances.append(Balance(**data, is_native=False))
     return Balances(balances=balances)
 
 
@@ -49,8 +48,9 @@ class BalanceInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for key, value in message.params.items():
-                params[key] = value.decode()
+            if message.params is not None:
+                for key, value in message.params.items():
+                    params[key] = value.decode()
             balances = await exchange.fetch_balance(params=params)
             balances = all_balances_from_api_call(balances)
             response_message = dialogue.reply(

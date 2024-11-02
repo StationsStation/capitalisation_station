@@ -17,6 +17,9 @@ from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
 
 
+TZ = datetime.datetime.now().astimezone().tzinfo
+
+
 def to_market(api_result):
     """Convert to a market object.
         raw_resulot = {'instrument_type': 'perp',
@@ -315,7 +318,7 @@ def to_order(api_result):
         exchange_id="lyra",
         client_order_id=api_result["order_id"],
         timestamp=api_result["creation_timestamp"],
-        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"]).isoformat(),
+        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"], tz=TZ).isoformat(),
         last_trade_timestamp=api_result["creation_timestamp"],
         status=LYRA_ORDER_STATUS_MAP[api_result["order_status"]],
         symbol=api_result["instrument_name"],
@@ -410,7 +413,7 @@ class LyraClient:
         try:
             result = await self.client.fetch_tickers(**params)
             data = result.values()
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa
             print(f"Error: {error}")
             traceback.print_exc()
             data = []
@@ -427,7 +430,7 @@ class LyraClient:
         try:
             result = await self.client.get_collaterals()
             balances = [to_balance(balance) for balance in [result]]
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa
             traceback.print_exc()
             self.logger.error(f"Failed to fetch balances: {error}")
             balances = []
@@ -446,7 +449,7 @@ class LyraClient:
         try:
             result = await self.client.get_positions(**params)
             data = result
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa
             print(f"Error: {error}")
             traceback.print_exc()
             data = []
@@ -458,7 +461,7 @@ class LyraClient:
         params = kwargs.get("params", {})
         try:
             result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa
             print(f"Error: {error}")
             traceback.print_exc()
             result = []
@@ -474,7 +477,7 @@ class LyraClient:
         params = kwargs.get("params", {})
         try:
             result = await self.client.watch_order_book(instrument_name=args[0], **params)
-        except Exception as error:  # pylint: disable=broad-except
+        except Exception as error:  # noqa
             traceback.print_exc()
             raise error
         order_book = OrderBook(

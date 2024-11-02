@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,17 +19,26 @@
 
 """Test dialogues module for tickers protocol."""
 
-import pytest
-
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=R1735
+import os
+
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, TickersDialogues
+from packages.eightballer.protocols.tickers.dialogues import (
+    TickersDialogue,
+    BaseTickersDialogues,
+)
+from packages.eightballer.protocols.tickers.custom_types import ErrorCode
 
 
-@pytest.mark.skip("Not implemented yet")
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
+
+
 class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
     """Test for the 'tickers' protocol dialogues."""
 
@@ -37,7 +46,7 @@ class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = TickersDialogue
 
-    DIALOGUES_CLASS = TickersDialogues
+    DIALOGUES_CLASS = BaseTickersDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = TickersDialogue.Role.AGENT  # CHECK
 
@@ -46,5 +55,6 @@ class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
         return dict(
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
             exchange_id="some str",
+            ledger_id="some str",
             params={"some str": b"some_bytes"},
         )

@@ -79,15 +79,17 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         for exchange_config in self.exchange_configs:
             exchange_name = exchange_config.get("name")
             ledger_id = exchange_config.get("ledger_id")
-            exchange_id = f"{exchange_name}_{ledger_id}"
             self.logger.info(f"Connecting to {exchange_name} with ledger_id {ledger_id}")
             try:
                 exchange_class = getattr(dcxt, exchange_name)
                 exchange = exchange_class(**exchange_config, logger=self.logger)
             except AttributeError as exc:
                 raise ValueError(f"Exchange {exchange_name} not found in dcxt") from exc
-            self._exchanges.update({exchange_id: exchange})
-            self.logger.info(f"Successfully connected to {exchange_id}")
+
+            ledger_exchanges = self._exchanges.get(ledger_id, {})
+            ledger_exchanges.update({exchange_name: exchange})
+            self._exchanges.update({ledger_id: ledger_exchanges})
+            self.logger.info(f"Successfully connected to {exchange_name} with ledger_id {ledger_id}")
         self.state = ConnectionStates.connected
 
     async def disconnect(self) -> None:
@@ -118,16 +120,19 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 task.cancel()
 
         self.state = ConnectionStates.disconnected
-        for exchange in self._exchanges.values():
-            await exchange.close()
+        for exchanges in self._exchanges.values():
+            for exchange in exchanges.values():
+                await exchange.close()
 
     async def send(self, envelope: Envelope) -> None:
+        """Send a message."""
         task = self._handle_req(envelope)
         task.add_done_callback(self._handle_done_task)
         self.executing_tasks.append(task)
         self.task_to_request[task] = envelope
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional[Envelope]:
+        """Receive a message."""
         envelope = cast(
             Envelope,
             await self.queue.get(),

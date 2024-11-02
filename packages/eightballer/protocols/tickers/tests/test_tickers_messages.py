@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
+#                                                                             --
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,48 +15,29 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
-# ------------------------------------------------------------------------------
+#                                                                             --
 
 """Test messages module for tickers protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-# pylint: disable=R1735
-from typing import List
+import os
+from typing import Any, List
 
+import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
 
 from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers, ErrorCode
+from packages.eightballer.protocols.tickers.custom_types import (
+    Ticker,
+    Tickers,
+    ErrorCode,
+)
 
 
-RAW_TICKER = {
-    "symbol": "ETH/BTC",
-    "timestamp": 1689259137293,
-    "datetime": "2023-07-13T14:38:57.293Z",
-    "high": 0.0619,
-    "low": 0.0615,
-    "bid": 0.0615,
-    "bidVolume": None,
-    "ask": 0.0617,
-    "askVolume": None,
-    "vwap": None,
-    "open": None,
-    "close": 0.0616,
-    "last": 0.0616,
-    "previousClose": None,
-    "change": None,
-    "percentage": None,
-    "average": None,
-    "baseVolume": None,
-    "quoteVolume": 51.5065,
-    "info": {
-        "volume_usd": "96891.66",
-        "volume_notional": "3.17716209",
-        "volume": "51.5065",
-        "quote_currency": "BTC",
-        "price_change": "0.0",
-    },
-}
+def load_data(custom_type):
+    """Load test data."""
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)[custom_type]
 
 
 class TestMessageTickers(BaseProtocolMessagesTestCase):
@@ -70,54 +51,31 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
             TickersMessage(
                 performative=TickersMessage.Performative.GET_ALL_TICKERS,
                 exchange_id="some str",
+                ledger_id="some str",
                 params={"some str": b"some_bytes"},
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.GET_TICKER,
                 asset_id="some str",
                 exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.ALL_TICKERS,
-                tickers=Tickers(tickers=[]),
+                tickers=Tickers(**load_data("Tickers")),  # check it please!
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.TICKER,
-                ticker=Ticker(**RAW_TICKER),
+                ticker=Ticker(**load_data("Ticker")),  # check it please!
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.ERROR,
-                error_code=ErrorCode.API_ERROR,  # check it please!
+                error_code=ErrorCode(0),  # check it please!
                 error_msg="some str",
                 error_data={"some str": b"some_bytes"},
             ),
         ]
 
-    def build_inconsistent(self) -> List[TickersMessage]:  # type: ignore[override]
-        """Build inconsistent messages to be used for testing."""
-        return [
-            TickersMessage(
-                performative=TickersMessage.Performative.GET_ALL_TICKERS,
-                # skip content: exchange_id
-                params={"some str": b"some_bytes"},
-            ),
-            TickersMessage(
-                performative=TickersMessage.Performative.GET_TICKER,
-                # skip content: asset_id
-                exchange_id="some str",
-            ),
-            TickersMessage(
-                performative=TickersMessage.Performative.ALL_TICKERS,
-                # skip content: tickers
-            ),
-            TickersMessage(
-                performative=TickersMessage.Performative.TICKER,
-                # skip content: ticker
-            ),
-            TickersMessage(
-                performative=TickersMessage.Performative.ERROR,
-                # skip content: error_code
-                error_msg="some str",
-                error_data={"some str": b"some_bytes"},
-            ),
-        ]
+    def build_inconsistent(self):
+        """Build inconsistent message."""
+        return []

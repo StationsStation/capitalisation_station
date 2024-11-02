@@ -3,10 +3,10 @@
 import asyncio
 from unittest.mock import MagicMock
 
-import ccxt
 import pytest
 from aea.mail.base import Envelope
 
+import ccxt
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 
@@ -94,7 +94,7 @@ class TestConnectionHandlesExchangeErrors(BaseCcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=ccxt.errors.RequestTimeout)
-        self.connection._exchanges[TEST_EXCHANGE].fetch_markets = mocker  # pylint: disable=W0212
+        self.connection._exchanges[TEST_EXCHANGE].fetch_markets = mocker  # noqa
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

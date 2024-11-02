@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,17 +20,19 @@
 """This module contains tickers's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
-# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Dict, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
-from packages.eightballer.protocols.tickers.custom_types import ErrorCode as CustomErrorCode
+from packages.eightballer.protocols.tickers.custom_types import (
+    ErrorCode as CustomErrorCode,
+)
 from packages.eightballer.protocols.tickers.custom_types import Ticker as CustomTicker
 from packages.eightballer.protocols.tickers.custom_types import Tickers as CustomTickers
+
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.tickers.message")
 
@@ -73,6 +75,7 @@ class TickersMessage(Message):
             "error_data",
             "error_msg",
             "exchange_id",
+            "ledger_id",
             "message_id",
             "params",
             "performative",
@@ -166,6 +169,12 @@ class TickersMessage(Message):
         return cast(str, self.get("exchange_id"))
 
     @property
+    def ledger_id(self) -> str:
+        """Get the 'ledger_id' content from the message."""
+        enforce(self.is_set("ledger_id"), "'ledger_id' content is not set.")
+        return cast(str, self.get("ledger_id"))
+
+    @property
     def params(self) -> Optional[Dict[str, bytes]]:
         """Get the 'params' content from the message."""
         return cast(Optional[Dict[str, bytes]], self.get("params"))
@@ -225,12 +234,16 @@ class TickersMessage(Message):
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
             if self.performative == TickersMessage.Performative.GET_ALL_TICKERS:
-                expected_nb_of_contents = 1
+                expected_nb_of_contents = 2
                 enforce(
                     isinstance(self.exchange_id, str),
                     "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
                         type(self.exchange_id)
                     ),
+                )
+                enforce(
+                    isinstance(self.ledger_id, str),
+                    "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(self.ledger_id)),
                 )
                 if self.is_set("params"):
                     expected_nb_of_contents += 1
@@ -253,7 +266,7 @@ class TickersMessage(Message):
                             ),
                         )
             elif self.performative == TickersMessage.Performative.GET_TICKER:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 3
                 enforce(
                     isinstance(self.asset_id, str),
                     "Invalid type for content 'asset_id'. Expected 'str'. Found '{}'.".format(type(self.asset_id)),
@@ -263,6 +276,10 @@ class TickersMessage(Message):
                     "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
                         type(self.exchange_id)
                     ),
+                )
+                enforce(
+                    isinstance(self.ledger_id, str),
+                    "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(self.ledger_id)),
                 )
             elif self.performative == TickersMessage.Performative.ALL_TICKERS:
                 expected_nb_of_contents = 1

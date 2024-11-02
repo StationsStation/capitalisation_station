@@ -7,55 +7,53 @@ message TickersMessage{
   // Custom Types
   message ErrorCode{
     enum ErrorCodeEnum {
-      UNKNOWN_EXCHANGE = 0;
-      UNKNOWN_TICKER = 1;
-      API_ERROR = 2;
+      ERROR_CODE_ENUM_UNKNOWN_EXCHANGE = 0;
+      ERROR_CODE_ENUM_UNKNOWN_TICKER = 1;
+      ERROR_CODE_ENUM_API_ERROR = 2;
     }
     ErrorCodeEnum error_code = 1;
   }
 
   message Ticker{
-    message Ticker {
-      string symbol = 1;
-      int64 timestamp = 2;
-      string datetime = 3;
-      float high = 4;
-      float low = 5;
-      float bid = 6;
-      float bidVolume = 7;
-      float ask = 8;
-      float askVolume = 9;
-      float vwap = 10;
-      float open = 11;
-      float close = 12;
-      float last = 13;
-      float previousClose = 14;
-      float change = 15;
-      float percentage = 16;
-      float average = 17;
-      float baseVolume = 18;
-      float quoteVolume = 19;
-      string info = 20;
-    }
+    string symbol = 1;
+    int64 timestamp = 2;
+    string datetime = 3;
+    float ask = 4;
+    float bid = 5;
+    optional float bid_volume = 6;
+    optional float ask_volume = 7;
+    optional float high = 8;
+    optional float low = 9;
+    optional float vwap = 10;
+    optional float open = 11;
+    optional float close = 12;
+    optional float last = 13;
+    optional float previous_close = 14;
+    optional float change = 15;
+    optional float percentage = 16;
+    optional float average = 17;
+    optional float base_volume = 18;
+    optional float quote_volume = 19;
+    optional string info = 20;
   }
 
   message Tickers{
-    message Tickers{
-      repeated Ticker tickers = 1;
-    }
+    repeated Ticker tickers = 1;
   }
 
 
   // Performatives and contents
   message Get_All_Tickers_Performative{
     string exchange_id = 1;
-    map<string, bytes> params = 2;
-    bool params_is_set = 3;
+    string ledger_id = 2;
+    map<string, bytes> params = 3;
+    bool params_is_set = 4;
   }
 
   message Get_Ticker_Performative{
     string asset_id = 1;
     string exchange_id = 2;
+    string ledger_id = 3;
   }
 
   message All_Tickers_Performative{
