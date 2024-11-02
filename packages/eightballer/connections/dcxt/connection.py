@@ -125,12 +125,14 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 await exchange.close()
 
     async def send(self, envelope: Envelope) -> None:
+        """Send a message."""
         task = self._handle_req(envelope)
         task.add_done_callback(self._handle_done_task)
         self.executing_tasks.append(task)
         self.task_to_request[task] = envelope
 
     async def receive(self, *args: Any, **kwargs: Any) -> Optional[Envelope]:
+        """Receive a message."""
         envelope = cast(
             Envelope,
             await self.queue.get(),

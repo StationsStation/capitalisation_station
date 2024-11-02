@@ -14,6 +14,7 @@ from decimal import Decimal
 from pathlib import Path
 
 # pylint: disable=R0914,R0902,R0912
+# ruff: noqa: PLR0914,PLR0915
 from datetime import datetime, timezone
 
 import web3
@@ -39,6 +40,7 @@ GAS_PRICE_PREMIUM = 20
 GAS_SPEED = "fast"
 GAS_PRICE = 888
 
+TZ = datetime.now().astimezone().tzinfo
 
 DEFAULT_ENCODING = "utf-8"
 
@@ -47,7 +49,7 @@ PACKAGE_DIR = Path(__file__).parent
 ABI_DIR = PACKAGE_DIR / "abis"
 
 ABI_MAPPING = {
-    Path(path).stem.upper(): open(path, encoding=DEFAULT_ENCODING).read()  # pylint: disable=R1732  # pylint: disable=R1732
+    Path(path).stem.upper(): open(path, encoding=DEFAULT_ENCODING).read()  # noqa
     for path in glob(str(ABI_DIR / "*.json"))
 }
 
@@ -221,7 +223,7 @@ class BalancerClient:
         self.bal: balpy.balpy = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
-                "privateKey": self.account._private_key,
+                "privateKey": self.account._private_key,  # noqa
                 "customRPC": self.rpc_url,
                 "etherscanApiKey": self.etherscan_api_key,
             },
@@ -356,6 +358,7 @@ class BalancerClient:
 
         :return: The tickers.
         """
+        del args, kwargs
 
         # We temporarily assume that the tickers are the same as the markets, and use the pool IDs to get the tickers.
         if not self.tokens:
@@ -369,8 +372,6 @@ class BalancerClient:
                 stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
 
             symbol = f"{token.address}/{self.tokens[stable_address].address}"
-
-            # TODO Ensure we handle Decimals in the behaviours.  # pylint: disable=W0511
 
             try:
                 ask_price = 1 / float(
@@ -458,7 +459,7 @@ class BalancerClient:
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
                 # // unix timestamp after which the trade will revert if it hasn't executed yet
-                "deadline": datetime.now().timestamp() + 600,
+                "deadline": datetime.now(tz=TZ).timestamp() + 600,
             },
         }
 
@@ -531,7 +532,6 @@ class BalancerClient:
             raise ValueError("Size not provided to create order")
 
         asset_a_token = self.get_token(asset_a)
-        asset_b_token = self.get_token(asset_b)
 
         is_buy = kwargs.get("side") == "buy"
         if is_buy:
@@ -568,10 +568,11 @@ class BalancerClient:
                 return self.create_order(*args, **kwargs, retries=retries - 1)
             raise SorRetrievalException(f"Error querying SOR: {sor_result}")
 
-        self.logger.info(
+        msg = (
             f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n"
             + f"{json.dumps(sor_result, indent=4)}"
         )
+        self.logger.info(msg)
         batch_swap = self.bal.balSorResponseToBatchSwapFormat(params, sor_result).get("batchSwap", None)
 
         if not batch_swap:
@@ -648,6 +649,33 @@ class BalancerClient:
             },
         )
 
+    def _do_eoa_approval(self, input_token_address, machine_amount, vault, contract) -> None:
+        """
+        Do the EOA approval.
+        """
+        func = contract.functions.approve(vault.address, int(machine_amount * 1e24))
+        self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
+        tx_1 = func.build_transaction(
+            {
+                "from": self.account.address,
+                "nonce": self.bal.web3.eth.get_transaction_count(self.account.address),
+            }
+        )
+        signed_tx = self.account.sign_transaction(tx_1)
+        tx_hash_1 = self.bal.web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        # we wait for the transaction to be mined
+        self.logger.info(f"Transaction hash: {tx_hash_1.hex()} to {self.rpc_url}")
+        self.logger.info("Waiting for transaction to be mined")
+        # we wait for the next block to be sure that the transaction nonce is correct
+        self.logger.info("Waiting for next block")
+        current_block = self.bal.web3.eth.block_number
+        while current_block == self.bal.web3.eth.block_number:
+            time.sleep(0.1)
+        self.logger.info("Waiting for transaction to be mined")
+        receipt = self.bal.web3.eth.wait_for_transaction_receipt(tx_hash_1)
+        self.logger.info("Transaction mined")
+        self.logger.info(f"Receipt: {receipt}")
+
     def _handle_eoa_txn(  # pylint: disable=unused-argument
         self, swap, symbol, input_token_address, machine_amount, execute=True, **kwargs
     ) -> Order:  # pylint: disable=unused-argument
@@ -673,29 +701,8 @@ class BalancerClient:
             vault_address = contract.address
 
             if execute:
-                func = contract.functions.approve(vault.address, int(machine_amount * 1e24))
-                self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
-                tx_1 = func.build_transaction(
-                    {
-                        "from": self.account.address,
-                        "nonce": self.bal.web3.eth.get_transaction_count(self.account.address),
-                    }
-                )
-                signed_tx = self.account.sign_transaction(tx_1)
-                tx_hash_1 = self.bal.web3.eth.send_raw_transaction(signed_tx.rawTransaction)
-                # we wait for the transaction to be mined
-                self.logger.info(f"Transaction hash: {tx_hash_1.hex()} to {self.rpc_url}")
-                self.logger.info("Waiting for transaction to be mined")
-                # we wait for the next block to be sure that the transaction nonce is correct
-                self.logger.info("Waiting for next block")
-                current_block = self.bal.web3.eth.block_number
-                while current_block == self.bal.web3.eth.block_number:
-                    time.sleep(0.1)
-                self.logger.info("Waiting for transaction to be mined")
-                receipt = self.bal.web3.eth.wait_for_transaction_receipt(tx_hash_1)
-                self.logger.info("Transaction mined")
-                self.logger.info(f"Receipt: {receipt}")
                 # We recall the function to get the updated allowance.
+                self._do_eoa_approval(input_token_address, machine_amount, vault, contract)
                 return self._handle_eoa_txn(
                     swap, symbol, input_token_address, machine_amount, execute=execute, **kwargs
                 )
@@ -830,6 +837,7 @@ class BalancerClient:
 
         :return: The balance.
         """
+        del args
 
         mc = self.bal.mc
         mc.reset()
@@ -867,6 +875,9 @@ class BalancerClient:
         return balances
 
     def get_token(self, address):
+        """
+        Get the token from the address.
+        """
         if address not in self.tokens:
             # We retrieve the token from the balancer contract.
             contract = self.bal.erc20GetContract(address)
@@ -883,6 +894,9 @@ class BalancerClient:
         return token
 
     def _from_decimals_amt_to_token(self, address, balance):
+        """
+        Convert the balance to a token balance.
+        """
         token = self.get_token(address)
         result = Balance(
             asset_id=token.symbol,

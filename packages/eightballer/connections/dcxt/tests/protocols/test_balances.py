@@ -78,7 +78,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # simulate a raised exceptionS
 
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[exchange].fetch_markets = mocker  # pylint: disable=protected-access
+        self.connection._exchanges[exchange].fetch_markets = mocker  # noqa
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

@@ -55,10 +55,10 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
     ContractApiDialogues as BaseContractApiDialogues,
 )
-
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogues as BaseUserInteractionDialogues,
 )
+
 
 UserInteractionDialogues = BaseUserInteractionDialogues
 

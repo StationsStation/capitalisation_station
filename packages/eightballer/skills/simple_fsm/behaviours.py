@@ -35,24 +35,34 @@ from dataclasses import asdict
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 from aea.protocols.dialogue.base import Dialogue
-from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
-from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy
+from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide
-from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, AsyncBehaviour, TimeoutException
+from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
 
 
 # Define states
 
+PORTFOLIO_FILE = "portfolio.json"
+ORDERS_FILE = "orders.json"
+PRICES_FILE = "prices.json"
+
+TZ = datetime.datetime.now().astimezone().tzinfo
+
 
 class SetupRound(State):
+    """
+    This class implements the SetupRound state.
+    """
+
     clear_data = False
 
     def __init__(self, **kwargs: Any) -> None:
@@ -61,6 +71,9 @@ class SetupRound(State):
         self.started = False
 
     async def act(self) -> None:
+        """
+        Perform the action of the state.
+        """
         self.context.logger.info("SetupRound: Performing action")
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(0)
@@ -73,74 +86,114 @@ class SetupRound(State):
         self._is_done = True
 
     def is_done(self) -> bool:
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
     def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
 
 class IdentifyOpportunityRound(State):
+    """
+    This class implements the IdentifyOpportunityRound state.
+    """
+
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
         self.arbitrage_strategy = ArbitrageStrategy()
 
     async def act(self) -> None:
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
         print("IdentifyOpportunityRound: Performing action")
         self.started = True
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        with open("portfolio.json", "r") as f:
-            portfolio = json.load(f)
-        with open("prices.json", "r") as f:
-            prices = json.load(f)
+        portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text())
+        prices = json.loads(pathlib.Path(PRICES_FILE).read_text())
 
         orders = self.arbitrage_strategy.get_orders(portfolio, prices)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
-            with open("orders.json", "w") as f:
-                f.write(json.dumps([json.loads(o.model_dump_json()) for o in orders], indent=4))
+            orders = [json.loads(o.model_dump_json()) for o in orders]
+            pathlib.Path(ORDERS_FILE).write_text(json.dumps(orders, indent=4))
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
         await asyncio.sleep(0)
 
     def is_done(self) -> bool:
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
     def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
     def setup(self) -> None:
+        """
+        Setup the state.
+        """
         self.started = False
 
 
 class ErrorRound(State):
+    """
+    This class implements the ErrorRound state.
+    """
+
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
         self.started = False
 
     async def act(self) -> None:
+        """
+        Perform the action of the state.
+        """
         print("ErrorRound: Performing action")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(1)
 
     def is_done(self) -> bool:
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
     def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
 
 class BaseConnectionRound(BaseBehaviour):
+    """
+    This class implements the BaseConnectionRound state.
+    """
+
     matching_round = "baseconnectionround"
 
     def setup(self) -> None:
+        """
+        Setup the state.
+        """
         self._performative_to_dialogue_class = {
             OrdersMessage.Performative.GET_ORDERS: self.context.orders_dialogues,
             OrdersMessage.Performative.CREATE_ORDER: self.context.orders_dialogues,
@@ -148,20 +201,26 @@ class BaseConnectionRound(BaseBehaviour):
             TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
         }
         self.started = False
-        self._is_done = False
-        self._message = None
+        self._is_done = False  # noqa
+        self._message = None  # noqa
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
-        self._message = None
+        self._message = None  # noqa
 
     def is_done(self) -> bool:
-        return self._is_done
+        """
+        Return True if the state is done.
+        """
+        return self._is_done  # noqa
 
     @property
     def current_message(self) -> None:
-        return self._message
+        """
+        Return the current message.
+        """
+        return self._message  # noqa
 
     def get_response(
         self,
@@ -194,13 +253,13 @@ class BaseConnectionRound(BaseBehaviour):
         def callback_request(message: Message, current_behaviour: BaseBehaviour) -> None:
             """The callback request."""
             self.context.logger.debug(f"Callback request: {message}")
-            current_behaviour._message = message
+            current_behaviour._message = message  # noqa
 
         return callback_request
 
     def wait_for_message(
         self,
-        condition: Callable = lambda message: True,
+        condition: Callable = lambda message: True,  # noqa
         timeout: Optional[float] = None,
     ) -> Any:
         """
@@ -217,33 +276,46 @@ class BaseConnectionRound(BaseBehaviour):
         :yield: None
         """
         if timeout is not None:
-            deadline = datetime.datetime.now() + datetime.timedelta(0, timeout)
+            deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
         else:
             deadline = datetime.datetime.max
 
         try:
             while self.current_message is None:
-                yield
-                if timeout is not None and datetime.datetime.now() > deadline:
+                yield  # noqa
+                if timeout is not None and datetime.datetime.now(tz=TZ) > deadline:
                     raise TimeoutException()
             self.context.logger.debug(f"Received message: {self._message}")
             return self.current_message
         except TimeoutException:
             self.context.logger.info("Timeout!")
-            return None
+            return None  # noqa
 
     @property
     def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
     async def async_act_wrapper(self) -> Generator[Any, None, None]:
+        """
+        Wrapper for the async act method.
+        """
         return await self.async_act()
 
     async def async_act(self) -> None:
+        """
+        Perform the action of the state.
+        """
         self.act()
 
 
 class ExecuteOrdersRound(BaseConnectionRound):
+    """
+    This class implements the ExecuteOrdersRound state.
+    """
+
     matching_round = "executeordersround"
 
     def __init__(self, **kwargs: Any) -> None:
@@ -253,6 +325,9 @@ class ExecuteOrdersRound(BaseConnectionRound):
         self._message = None
 
     def act(self) -> None:
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
         self.started = True
@@ -288,9 +363,16 @@ class ExecuteOrdersRound(BaseConnectionRound):
 
 
 class CollectDataRound(BaseConnectionRound):
+    """
+    This class implements the CollectDataRound state.
+    """
+
     matching_round = "collectdataround"
 
     def act(self) -> Generator:
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
 
@@ -342,26 +424,27 @@ class CollectDataRound(BaseConnectionRound):
 
         # We write the portfolio to disk
         self.context.logger.info(f"Portfolio: {portfolio}")
-        with open("portfolio.json", "w") as f:
-            f.write(json.dumps(portfolio, indent=4))
-
-        with open("prices.json", "w") as f:
-            f.write(json.dumps(prices, indent=4))
+        pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4))
+        pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4))
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
 
 class PostTradeRound(State):
+    """This class implements the PostTradeRound state."""
+
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.setup()
-        
+
     def setup(self) -> None:
+        """Setup the state."""
         self._is_done = False  # Initially, the state is not done
         self.started = False
 
     async def act(self) -> None:
+        """Perform the action of the state."""
         print("PostTradeRound: Performing action")
         if self.started:
             return
@@ -401,19 +484,17 @@ class PostTradeRound(State):
         )
 
     def is_done(self) -> bool:
+        """Return True if the state is done."""
         return self._is_done
 
     @property
     def event(self) -> Optional[str]:
+        """Return the event."""
         return self._event
 
-    def send_notification_to_user(
-        self, title: str, msg: str, attach: str = None
-    ) -> None:
+    def send_notification_to_user(self, title: str, msg: str, attach: str = None) -> None:
         """Send notification to user."""
-        dialogues = cast(
-            UserInteractionDialogues, self.context.user_interaction_dialogues
-        )
+        dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
         msg, _ = dialogues.create(
             counterparty=str(APPRISE_PUBLIC_ID),
             performative=UserInteractionMessage.Performative.NOTIFICATION,
@@ -425,26 +506,41 @@ class PostTradeRound(State):
 
 
 class NoOpportunityRound(State):
+    """This class implements the NoOpportunityRound state."""
+
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
         self.started = False
 
     async def act(self) -> None:
+        """Perform the action of the state."""
+        if self.started:
+            return
         print("NoOpportunityRound: Performing action")
-        self._is_done = True
+        self._is_done = True  # noqa
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(0)
 
+    def setup(self) -> None:
+        """Setup the state."""
+        self.started = False
+        self._is_done = False  # noqa
+        super().setup()
+
     def is_done(self) -> bool:
-        return self._is_done
+        """Return True if the state is done."""
+        return self._is_done  # noqa
 
     @property
     def event(self) -> Optional[str]:
-        return self._event
+        """Return the event."""
+        return self._event  # noqa
 
 
 class ArbitrageabciappEvents(Enum):
+    """This class defines the events for the Arbitrageabciapp FSM."""
+
     DONE = "DONE"
     TIMEOUT = "TIMEOUT"
     OPPORTUNITY_FOUND = "OPPORTUNITY_FOUND"
@@ -499,7 +595,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         # We need to setup all the states.
         for state_name in self.states:
             state = self.get_state(state_name)
-            state._is_done = False
+            state._is_done = False  # noqa
             state.setup()
 
         self.current_task = None

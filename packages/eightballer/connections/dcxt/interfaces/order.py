@@ -14,6 +14,8 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import Base
 
 INTERVAL = 10
 
+TZ = datetime.now().astimezone().tzinfo
+
 
 def from_id_to_instrument_name(instrument_id):
     """
@@ -45,7 +47,7 @@ def from_id_to_instrument_name(instrument_id):
     else:
         raise ValueError(f"Invalid instrument id: {instrument_id}")
     # we need to pad the day with a  if it's a single digit
-    date_obj = datetime.strptime(str(month), "%b")
+    date_obj = datetime.strptime(str(month), "%b")  # noqa
     month = date_obj.strftime("%m").upper()
     if int(month) < 10:
         month = f"0{int(month)}"
@@ -65,7 +67,7 @@ def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
         "id": f"{timestamp}-{symbol}-delivery",
         "exchange_id": exchange_id,
         "timestamp": timestamp,
-        "datetime": datetime.fromtimestamp(timestamp / 1000),
+        "datetime": datetime.fromtimestamp(timestamp / 1000, tz=TZ),
         "symbol": symbol,
         "amount": size,
         "price": price,
@@ -175,7 +177,7 @@ class OrderInterface(BaseInterface):
             )
             response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
-        except Exception as error:  # pylint: disable=W0703
+        except Exception as error:  # noqa
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
@@ -201,11 +203,12 @@ class OrderInterface(BaseInterface):
                 self.open_orders[exchange_id] = {}
             if order.id in self.open_orders[exchange_id]:
                 del self.open_orders[exchange_id][order.id]
-            connection.logger.warning(
+            msg = (
                 f"Couldn't fetch order {order.id} from {exchange_id}. Removed from open orders."
                 + f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-        except Exception as error:  # pylint: disable=W0703
+            connection.logger.warning(msg)
+        except Exception as error:  # noqa
             connection.logger.warning(
                 f"Couldn't fetch order {order.id} from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."

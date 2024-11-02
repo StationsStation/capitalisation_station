@@ -32,6 +32,8 @@ RPC_MAPPING = {
 
 @dataclass
 class ExchangeConfig:
+    """Exchange configuration."""
+
     name: str
     key_path: str
     ledger_id: str
@@ -84,6 +86,7 @@ async def build_cli_tool(ledger_id: SupportedLedgers, exchange_id: SupportedExch
         rpc_url=RPC_MAPPING[SupportedLedgers(ledger_id)],
     )
     cli_tool.setup([exchange_config])
+    await cli_tool.connection.connect()
     return cli_tool
 
 
@@ -92,7 +95,7 @@ def create_envelope(cli_tool: DcxtCliTool, dialogues, performative, **kwargs):
     request, _ = dialogues.create(
         counterparty=str(cli_tool.connection.connection_id), performative=performative, **kwargs
     )
-    request._sender = "eightballer/dcxt_cli:0.1.0"
+    request._sender = "eightballer/dcxt_cli:0.1.0"  # noqa
     envelope = Envelope(
         to=request.to,
         sender=request.sender,
@@ -136,10 +139,10 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
 
-    for ledger in ledgers:
+    for _ledger in ledgers:
         for exchange_id in exchanges:
-            cli_tool = asyncio.run(build_cli_tool(ledger, exchange_id))
-            print(f"Connecting to {exchange_id!r} on {ledger!r}")
+            cli_tool = asyncio.run(build_cli_tool(_ledger, exchange_id))
+            print(f"Connecting to {exchange_id!r} on {_ledger!r}")
             asyncio.run(cli_tool.connection.connect())
             connections.append(cli_tool)
 
@@ -148,15 +151,16 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
                 cli_tool.ticker_dialogues,
                 TickersMessage.Performative.GET_ALL_TICKERS,
                 exchange_id=exchange_id,
-                ledger_id=ledger,
+                ledger_id=_ledger,
             )
             response = asyncio.run(send_and_await_response(cli_tool, envelope))
             print(response)
+    if output:
+        print(f"Writing output to {output}")
+    if portfolio_requires:
+        print(f"Checking portfolio requires {portfolio_requires}")
 
-    breakpoint()
 
-
-# We main a main command group dcxt
 @click.group()
 def main():
     """Dcxt connection cli tool."""
