@@ -65,6 +65,8 @@ class TickersSerializer(Serializer):
             performative = tickers_pb2.TickersMessage.Get_All_Tickers_Performative()  # type: ignore
             exchange_id = msg.exchange_id
             performative.exchange_id = exchange_id
+            ledger_id = msg.ledger_id
+            performative.ledger_id = ledger_id
             if msg.is_set("params"):
                 performative.params_is_set = True
                 params = msg.params
@@ -76,6 +78,8 @@ class TickersSerializer(Serializer):
             performative.asset_id = asset_id
             exchange_id = msg.exchange_id
             performative.exchange_id = exchange_id
+            ledger_id = msg.ledger_id
+            performative.ledger_id = ledger_id
             tickers_msg.get_ticker.CopyFrom(performative)
         elif performative_id == TickersMessage.Performative.ALL_TICKERS:
             performative = tickers_pb2.TickersMessage.All_Tickers_Performative()  # type: ignore
@@ -130,6 +134,8 @@ class TickersSerializer(Serializer):
         if performative_id == TickersMessage.Performative.GET_ALL_TICKERS:
             exchange_id = tickers_pb.get_all_tickers.exchange_id
             performative_content["exchange_id"] = exchange_id
+            ledger_id = tickers_pb.get_all_tickers.ledger_id
+            performative_content["ledger_id"] = ledger_id
             if tickers_pb.get_all_tickers.params_is_set:
                 params = tickers_pb.get_all_tickers.params
                 params_dict = dict(params)
@@ -139,6 +145,8 @@ class TickersSerializer(Serializer):
             performative_content["asset_id"] = asset_id
             exchange_id = tickers_pb.get_ticker.exchange_id
             performative_content["exchange_id"] = exchange_id
+            ledger_id = tickers_pb.get_ticker.ledger_id
+            performative_content["ledger_id"] = ledger_id
         elif performative_id == TickersMessage.Performative.ALL_TICKERS:
             pb2_tickers = tickers_pb.all_tickers.tickers
             tickers = Tickers.decode(pb2_tickers)

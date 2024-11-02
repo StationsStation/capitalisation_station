@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2022 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,20 +20,16 @@
 """This module contains spot_asset's message definition."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
+# pylint: disable=C0209,C0301,C0103
 import logging
 from typing import Any, Optional, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Message
 
-from packages.eightballer.protocols.spot_asset.custom_types import (
-    Decimal as CustomDecimal,
-)
-from packages.eightballer.protocols.spot_asset.custom_types import (
-    ErrorCode as CustomErrorCode,
-)
-
+from packages.eightballer.protocols.spot_asset.custom_types import Decimal as CustomDecimal
+from packages.eightballer.protocols.spot_asset.custom_types import ErrorCode as CustomErrorCode
 
 _default_logger = logging.getLogger("aea.packages.eightballer.protocols.spot_asset.message")
 
@@ -140,7 +136,10 @@ class SpotAssetMessage(Message):
     @property
     def available_without_borrow(self) -> CustomDecimal:
         """Get the 'available_without_borrow' content from the message."""
-        enforce(self.is_set("available_without_borrow"), "'available_without_borrow' content is not set.")
+        enforce(
+            self.is_set("available_without_borrow"),
+            "'available_without_borrow' content is not set.",
+        )
         return cast(CustomDecimal, self.get("available_without_borrow"))
 
     @property

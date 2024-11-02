@@ -7,19 +7,21 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeicgzsitppmod5w4s3frlo4o46uwnzs2qhtw6pbvt6sbdirdlyf7nm
+  README.md: bafybeic2uf7yi5tuqxinecctrhl7pyurqobgffs46spjd2kkrdjlezsj6q
   __init__.py: bafybeieae5wuyfkbjxht3gpsmatpqq745mrimul3jnqp5wkscbo2sqzwhq
-  custom_types.py: bafybeici23ygsqjpf7yaanc2iaku6uyi52jbnf7cvp6xyec5btx4xnjvbe
+  custom_types.py: bafybeicvtmoqltnghiww5lexbljqq6ir7tcyopupikweykqa27q5bugiiy
   dialogues.py: bafybeibinanhydrhhx3wrbo3inubt3yqfixyrfbgk45mgu4i5kasbyrhwy
-  message.py: bafybeibexvqlxa2x2akqfenrxxonaw6uybtq7x7f3lxzeic6rmxkvophdu
-  orders.proto: bafybeidbghm3kz4t2ofuvapa2vuckt5urn5qqw2qsipibtsa6i33jq5qdm
-  orders_pb2.py: bafybeihj2ppgttemkaknywvtfkkrca3ijs3pumszpnzv7ex4xw7yu7ex2y
-  protocol_spec.yaml: bafybeic7mjkvjumreg6wj37gggskducxdpaburwcccwkajgurw5x7wbr5y
-  serialization.py: bafybeicpv6xweshpistj7qpcoajwe2nox65gou4w42jbzrco46zbag7dcy
+  message.py: bafybeiaaj3k7rt4ag6cttve3z3ygft5q2n7mxqegegge5nqjn4cx74kzv4
+  orders.proto: bafybeihysfey2ssrod7trin4gbgnp4h5n4p4b2igbwr4z6w7pv65niecyq
+  orders_pb2.py: bafybeie746bjlz2ofhf2e4eldiplaxhdjafaiwcaqy4ca7dkpa23d7updq
+  protocol_spec.yaml: bafybeiaxruiv2ulg2qm24asdk7fgpivbyvhm7t3wt7zhy757kaxls747n4
+  serialization.py: bafybeifu7vwwrswrxr3pnon2e7ec3c4mdjigok4tbudiu6cwa73qyqkpvi
   tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
-  tests/dummy_data.yaml: bafybeicjpq3fto462agts4ydjufpynmt3wlohuvhttxjupkd2gono3dnai
-  tests/test_orders_dialogues.py: bafybeic7o5l2xypujbfdo2sde7u4fikpmeb537cy6rem5tk7t2m2di4xpu
-  tests/test_orders_messages.py: bafybeiei6sy3gzbanx5p7w6ebxk6krynxepyxlucmbd4iuyjjd52dksohm
+  tests/dummy_data.yaml: bafybeieuc6yg6ttb6pmu6ukdo6l3xkcxuo23q5g6an3v2fufjnx7xq53ma
+  tests/test_order.py: bafybeicnof4fjrs3gj5qvkhjoaql7igu2hkta76c3rkc5rczywisnpcf64
+  tests/test_orders_dialogues.py: bafybeichdm26r7tdnp43cr6odvj5sxdngjbxwibwby24v7c7vz6f2qrttu
+  tests/test_orders_messages.py: bafybeidlqzhm2ykvgg3lfw6duibwictma5dmmormzwys5sqdvfqmbzedrq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
+  pydantic: {}

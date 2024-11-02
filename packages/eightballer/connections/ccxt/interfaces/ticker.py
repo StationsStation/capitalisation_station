@@ -5,7 +5,6 @@ Implements the interface for the Ticker protocol.
 from typing import Optional
 
 from ccxt import RequestTimeout
-
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
@@ -18,6 +17,10 @@ def all_tickers_from_api_call(api_call):
     """
     tickers = []
     for ticker in api_call.values():
+        ticker["info"] = None
+        # We skip markets with no bid or ask
+        if not ticker.get("bid") or not ticker.get("ask"):
+            continue
         tickers.append(Ticker(**ticker))
     return Tickers(tickers=tickers)
 
@@ -38,8 +41,9 @@ class TickerInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
-            for key, value in message.params.items():
-                params[key] = value.decode()
+            if message.params is not None:
+                for key, value in message.params.items():
+                    params[key] = value.decode()
             tickers = await exchange.fetch_tickers(params=params)
             tickers = all_tickers_from_api_call(tickers)
             response_message = dialogue.reply(

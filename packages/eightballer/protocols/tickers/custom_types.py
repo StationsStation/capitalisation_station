@@ -1,7 +1,7 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, List
+from typing import Any, List, Optional
 
 from pydantic import BaseModel
 
@@ -116,23 +116,23 @@ class Ticker(BaseCustomEncoder):
     symbol: str
     timestamp: int
     datetime: str
-    high: float
-    low: float
-    bid: float
-    bid_volume: float
     ask: float
-    ask_volume: float
-    vwap: float
-    open: float
-    close: float
-    last: float
-    previous_close: float
-    change: float
-    percentage: float
-    average: float
-    base_volume: float
-    quote_volume: float
-    info: str
+    bid: float
+    bid_volume: Optional[float] = None
+    ask_volume: Optional[float] = None
+    high: Optional[float] = None
+    low: Optional[float] = None
+    vwap: Optional[float] = None
+    open: Optional[float] = None
+    close: Optional[float] = None
+    last: Optional[float] = None
+    previous_close: Optional[float] = None
+    change: Optional[float] = None
+    percentage: Optional[float] = None
+    average: Optional[float] = None
+    base_volume: Optional[float] = None
+    quote_volume: Optional[float] = None
+    info: Optional[str] = None
 
 
 class Tickers(BaseCustomEncoder):

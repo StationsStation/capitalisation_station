@@ -51,12 +51,14 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
             TickersMessage(
                 performative=TickersMessage.Performative.GET_ALL_TICKERS,
                 exchange_id="some str",
+                ledger_id="some str",
                 params={"some str": b"some_bytes"},
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.GET_TICKER,
                 asset_id="some str",
                 exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.ALL_TICKERS,

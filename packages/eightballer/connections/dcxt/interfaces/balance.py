@@ -25,11 +25,14 @@ class BalanceInterface(BaseInterface):
         """
         Get all balances from the exchange.
         """
-        exchange = connection.exchanges[f"{message.exchange_id}_{message.ledger_id}"]
+
+        exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:
-            params = {}
-            for key, value in message.params.items():
-                params[key] = value.decode()
+            if message.params is None:
+                params = {}
+            else:
+                for key, value in message.params.items():
+                    params[key] = value.decode()
             balances = await exchange.fetch_balance(
                 ledger_id=message.ledger_id, exchange_id=message.exchange_id, address=message.address, params=params
             )

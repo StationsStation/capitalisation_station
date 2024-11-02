@@ -55,4 +55,6 @@ class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
         return dict(
             performative=OrdersMessage.Performative.CREATE_ORDER,
             order=Order(**load_data("Order")),  # check it please!
+            exchange_id="some str",
+            ledger_id="some str",
         )

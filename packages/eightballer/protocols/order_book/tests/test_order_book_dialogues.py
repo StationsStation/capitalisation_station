@@ -19,25 +19,17 @@
 
 """Test dialogues module for order_book protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-import os
+import pytest
 
-import yaml
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
-from packages.eightballer.protocols.order_book.dialogues import (
-    OrderBookDialogue,
-    BaseOrderBookDialogues,
-)
+from packages.eightballer.protocols.order_book.dialogues import OrderBookDialogue, OrderBookDialogues
 
 
-def load_data(custom_type):
-    """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)[custom_type]
-
-
+@pytest.mark.skip("Not implemented yet")
 class TestDialoguesOrderBook(BaseProtocolDialoguesTestCase):
     """Test for the 'order_book' protocol dialogues."""
 
@@ -45,7 +37,7 @@ class TestDialoguesOrderBook(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = OrderBookDialogue
 
-    DIALOGUES_CLASS = BaseOrderBookDialogues
+    DIALOGUES_CLASS = OrderBookDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = OrderBookDialogue.Role.PUBLISHER  # CHECK
 

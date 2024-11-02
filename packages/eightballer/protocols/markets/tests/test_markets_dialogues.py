@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2023 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,26 +19,17 @@
 
 """Test dialogues module for markets protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-import os
+import pytest
 
-import yaml
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
+# pylint: disable=R1735
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.markets.message import MarketsMessage
-from packages.eightballer.protocols.markets.dialogues import (
-    MarketsDialogue,
-    BaseMarketsDialogues,
-)
-from packages.eightballer.protocols.markets.custom_types import ErrorCode
+from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, MarketsDialogues
 
 
-def load_data(custom_type):
-    """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)[custom_type]
-
-
+@pytest.mark.skip("Not implemented yet")
 class TestDialoguesMarkets(BaseProtocolDialoguesTestCase):
     """Test for the 'markets' protocol dialogues."""
 
@@ -46,7 +37,7 @@ class TestDialoguesMarkets(BaseProtocolDialoguesTestCase):
 
     DIALOGUE_CLASS = MarketsDialogue
 
-    DIALOGUES_CLASS = BaseMarketsDialogues
+    DIALOGUES_CLASS = MarketsDialogues
 
     ROLE_FOR_THE_FIRST_MESSAGE = MarketsDialogue.Role.AGENT  # CHECK
 

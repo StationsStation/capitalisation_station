@@ -9,12 +9,12 @@ from typing import Any, Dict, List, Deque, Optional, cast
 from asyncio import Task
 from collections import deque
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.connections.base import Connection, ConnectionStates
 from aea.protocols.dialogue.base import Dialogue
 
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode

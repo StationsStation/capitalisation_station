@@ -3,10 +3,10 @@
 import asyncio
 from unittest.mock import MagicMock
 
-import ccxt
 import pytest
 from aea.mail.base import Envelope
 
+import ccxt
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 

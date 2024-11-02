@@ -1,0 +1,66 @@
+name: simple_fsm
+author: eightballer
+version: 0.1.0
+type: skill
+description: The scaffold skill is a scaffold for your own skill implementation.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeihq5frq7zpuewuiq2nmovdkqawt3jjm6cmq4p7n5lh4pgbkrgq7n4
+  behaviours.py: bafybeieh2zcwga4hz5fm7zjyhd5iazwaqvl3flxpdnph27z3vf43mj5s2a
+  dialogues.py: bafybeicbvgvlc3wdgnkcz5zvfg43vlc3bam7a7baxkg3lxn3pk2wgps2wa
+  handlers.py: bafybeifhtohtmuaqaryostriowntcnbe42gphhvqn6oajbf4k5boldctnq
+  my_model.py: bafybeierzteh5e2lsv2nf7zgtaezvzmle4viowcadnyla3gm6qh56xsenq
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/dcxt:0.1.0:bafybeibrbc4ribjw2sbmf6e2iyyjhytq3n7ldaci2asqfrnyul7fztgcyi
+- eightballer/ccxt:0.1.0:bafybeifzbofi44yvw3k5uowdojtgdacjakmro4ai4lyyu4bgdtibjlxzyq
+contracts: []
+protocols:
+- eightballer/tickers:0.1.0:bafybeifb3albdq62qmhwclq7djtush4tlsmeypoq7tim2kunhdrus6yrqe
+- eightballer/positions:0.1.0:bafybeiembq4kn4fi6mkr6albuuvdx4wcg2pilkz74m5lsajsk7uq5e4sdm
+- eightballer/markets:0.1.0:bafybeicr27ryhnm7l4uanyke6mnxchpva3aqe5cwrnxklcciojba3uxc3q
+- eightballer/orders:0.1.0:bafybeics2wkusxfbu4atidjvczlrjjfp3oldpg4mezhcae2qzdyok5djgq
+- eightballer/balances:0.1.0:bafybeicjxjwmr4wubghu4fa3cdg7dhwpy6b3dhvuaqbzem3jvycooyyazm
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
+behaviours:
+  main:
+    args:
+      foo: bar
+    class_name: ArbitrageabciappFsmBehaviour
+handlers:
+  dex_balances_handler:
+    args: {}
+    class_name: DexBalancesHandler
+  dex_tickers_handler:
+    args: {}
+    class_name: DexTickersHandler
+  dex_orders_handler:
+    args: {}
+    class_name: DexOrdersHandler
+models:
+  arbitrage_strategy:
+    args:
+      ledgers:
+      - base
+      dexs:
+      - balancer
+      cexs:
+      - mexc
+    class_name: ArbitrageStrategy
+  orders_dialogues:
+    args: {}
+    class_name: OrdersDialogues
+  balances_dialogues:
+    args: {}
+    class_name: BalancesDialogues
+  tickers_dialogues:
+    args: {}
+    class_name: TickersDialogues
+  requests:
+    args: {}
+    class_name: Requests
+dependencies: {}
+is_abstract: false
+customs: []

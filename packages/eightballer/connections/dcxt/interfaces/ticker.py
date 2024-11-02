@@ -24,7 +24,7 @@ class TickerInterface(BaseInterface):
         """
         Get all tickers from the exchange.
         """
-        exchange = connection.exchanges[message.exchange_id]
+        exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:
             params = {}
 

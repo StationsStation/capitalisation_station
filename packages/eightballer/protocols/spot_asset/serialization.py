@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2022 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,22 +19,18 @@
 
 """Serialization module for spot_asset protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import Any, Dict, cast
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
+# pylint: disable=E0611,R0912,C0209,R1735
 
-from aea.mail.base_pb2 import DialogueMessage  # type: ignore
-from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
-from aea.protocols.base import Message  # type: ignore
-from aea.protocols.base import Serializer  # type: ignore
+from typing import cast
 
-from packages.eightballer.protocols.spot_asset import spot_asset_pb2  # type: ignore
-from packages.eightballer.protocols.spot_asset.custom_types import (  # type: ignore
-    Decimal,
-    ErrorCode,
-)
-from packages.eightballer.protocols.spot_asset.message import (  # type: ignore
-    SpotAssetMessage,
-)
+from aea.mail.base_pb2 import DialogueMessage
+from aea.mail.base_pb2 import Message as ProtobufMessage
+from aea.protocols.base import Message, Serializer
+
+from packages.eightballer.protocols.spot_asset import spot_asset_pb2
+from packages.eightballer.protocols.spot_asset.custom_types import Decimal, ErrorCode
+from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 
 
 class SpotAssetSerializer(Serializer):
@@ -51,7 +47,7 @@ class SpotAssetSerializer(Serializer):
         msg = cast(SpotAssetMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        spot_asset_msg = spot_asset_pb2.SpotAssetMessage()  # type: ignore
+        spot_asset_msg = spot_asset_pb2.SpotAssetMessage()
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -119,7 +115,7 @@ class SpotAssetSerializer(Serializer):
         :return: the 'SpotAsset' message.
         """
         message_pb = ProtobufMessage()
-        spot_asset_pb = spot_asset_pb2.SpotAssetMessage()  # type: ignore
+        spot_asset_pb = spot_asset_pb2.SpotAssetMessage()
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (

@@ -5,7 +5,6 @@ from typing import Any, Dict, Optional, cast
 from datetime import datetime
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -78,6 +77,8 @@ def from_api_call(api_call: Dict[str, Any], exchange_id) -> Order:
     kwargs["type"] = map_order_type_to_enum(kwargs["type"])
     kwargs["side"] = OrderSide.BUY if kwargs["side"] == "buy" else OrderSide.SELL
     kwargs["exchange_id"] = exchange_id
+    del kwargs["trades"]
+    del kwargs["fees"]
     return Order(**kwargs)
 
 
@@ -128,7 +129,9 @@ def map_status_to_enum(status):
         "filled": OrderStatus.FILLED,
     }
     if status not in mapping:
-        raise ValueError(f"Unknown status: {status}")
+        # We don't know what this status is we log the error and return the status as is
+        print(f"Unknown status: {status}")
+        return OrderStatus.NEW
     return mapping[status]
 
 

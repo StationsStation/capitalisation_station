@@ -8,18 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeigf4s3l4sc23s6glhxspc5gqry2uvr23dqbho6uaxjk5gj624fjlm
-  __init__.py: bafybeig5whdoliwybvp2tetkrhvjj7afwvdfmo7qcj7wzyamlq7nwsbvka
-  custom_types.py: bafybeigksqnlgsaocyyn3cqdrgfoxbyafajpheoovrnh7n2qbkw2fyzbja
-  dialogues.py: bafybeifuff36ekalz7wft54eyl46iw5rexdh6uwr5u7if5kvimfu2riulm
-  message.py: bafybeiewimww5z6yp3snyb4hzl7oluacahs6keshoo6ad2pjbbjxdcd66q
+  __init__.py: bafybeienph5j4dpjeaowykz4matffiigfuy7gek3yzigaghgp7cytuhn4a
+  custom_types.py: bafybeifgxsb42pyuhiehl35c4f4ds736mb2gosy4qtok2z2674vz3hrikq
+  dialogues.py: bafybeic3v6gu77olxafxk6qsroj6clpoyh2rglsqp46vxbuip65lpuos6e
+  message.py: bafybeifgxiemt5bbjo3q62s5ng4vlgk6ngdvrcgc537eont4jv2ehgay7i
   protocol_spec.yaml: bafybeih3mcnc3bt55kqqr5653cvnx72mcnekn7ay6wtdailitifknse424
-  serialization.py: bafybeihlmgagqmlsrhnewy3bcbwcbkpad5tmhwf2r5yudse4yky55s4jge
-  spot_asset.proto: bafybeieqolmjhlldlvax7fk6s73huz72yk2udvagx4asectfimzsqyd4n4
-  spot_asset_pb2.py: bafybeiarft6lxxifstm4wqbg6atg6oq2dn5vameycg2kg4asdfgri3xkuq
-  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
+  serialization.py: bafybeiggoc34mbc2aq5vo6njty254vocs2ifj5bxdwbqw4auvn4ezgrnaq
+  spot_asset.proto: bafybeieuoeojj3rktsxl2bzyondfg372i6276zmauhsalkjldk4ttasgxi
+  spot_asset_pb2.py: bafybeifwmbstbg2nnerdwdcksv2kidkbcp3tmiarrc4vmufg2sf5wjiuiu
+  tests/__init__.py: bafybeiceqkr32h2nowqnobnqc6y722cpfzosgmjc54fjkgmxi5dw5q7khq
   tests/dummy_data.yaml: bafybeiahxlf7rdgzarbogi4svbkvzrjgfopixsd3fj44njgtqzh2zwmxpq
+  tests/test_spot_asset.py: bafybeihv56n434czswf5stuf7e6r7lsmm25jkwl6tv7ophxzyti5vaifki
   tests/test_spot_asset_dialogues.py: bafybeialkabmdrf3syevce7dt24qwh5z5lkhhkuy3bpmfq27vogslwloju
   tests/test_spot_asset_messages.py: bafybeiek7a6tl2cw2zdewjdhampyxk7blq24pxsfzdwtgzchkrp3evdiqq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
+  pydantic: {}

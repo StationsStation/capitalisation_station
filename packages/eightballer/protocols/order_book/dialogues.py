@@ -35,12 +35,6 @@ from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 
 
-def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-    """Infer the role of the agent from an incoming/outgoing first message"""
-    del sender, message
-    return OrderBookDialogue.Role.SUBSCRIBER
-
-
 class OrderBookDialogue(Dialogue):
     """The order_book dialogue class maintains state of a dialogue and manages it."""
 
@@ -58,7 +52,10 @@ class OrderBookDialogue(Dialogue):
             }
         ),
         OrderBookMessage.Performative.SUBSCRIBE: frozenset(
-            {OrderBookMessage.Performative.ORDER_BOOK_UPDATE, OrderBookMessage.Performative.ERROR}
+            {
+                OrderBookMessage.Performative.ORDER_BOOK_UPDATE,
+                OrderBookMessage.Performative.ERROR,
+            }
         ),
         OrderBookMessage.Performative.UNSUBSCRIBE: frozenset(),
     }
@@ -68,6 +65,7 @@ class OrderBookDialogue(Dialogue):
 
         PUBLISHER = "publisher"
         SUBSCRIBER = "subscriber"
+        AGENT = "agent"
 
     class EndState(Dialogue.EndState):
         """This class defines the end states of a order_book dialogue."""
@@ -109,7 +107,7 @@ class BaseOrderBookDialogues(Dialogues, ABC):
     def __init__(
         self,
         self_address: Address,
-        role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
+        role_from_first_message: Callable[[Message, Address], Dialogue.Role],
         dialogue_class: Type[OrderBookDialogue] = OrderBookDialogue,
     ) -> None:
         """
@@ -119,6 +117,7 @@ class BaseOrderBookDialogues(Dialogues, ABC):
         :param dialogue_class: the dialogue class used
         :param role_from_first_message: the callable determining role from first message
         """
+
         Dialogues.__init__(
             self,
             self_address=self_address,
@@ -129,10 +128,20 @@ class BaseOrderBookDialogues(Dialogues, ABC):
         )
 
 
-class OrderBookDialogues(BaseOrderBookDialogues, Model):
-    """This class defines the dialogues used in Order_book."""
+class OrderBookDialogues(Model, BaseOrderBookDialogues):
+    """This class keeps track of all order_book dialogues."""
 
     def __init__(self, **kwargs):
-        """Initialize dialogues."""
+        """Initialize order_book dialogues."""
+
+        def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
+            """Infer the role of the agent from an incoming/outgoing first message"""
+            del message, sender
+            return OrderBookDialogue.Role.AGENT
+
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
-        BaseOrderBookDialogues.__init__(self, self_address=str(self.context.skill_id))
+        BaseOrderBookDialogues.__init__(
+            self,
+            self_address=str(self.context.skill_id),
+            role_from_first_message=_role_from_first_message,
+        )

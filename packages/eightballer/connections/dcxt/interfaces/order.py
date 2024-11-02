@@ -45,7 +45,7 @@ def from_id_to_instrument_name(instrument_id):
     else:
         raise ValueError(f"Invalid instrument id: {instrument_id}")
     # we need to pad the day with a  if it's a single digit
-    date_obj = datetime.strptime(str(month), "%b")  # noqa
+    date_obj = datetime.strptime(str(month), "%b")
     month = date_obj.strftime("%m").upper()
     if int(month) < 10:
         month = f"0{int(month)}"
@@ -65,7 +65,7 @@ def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
         "id": f"{timestamp}-{symbol}-delivery",
         "exchange_id": exchange_id,
         "timestamp": timestamp,
-        "datetime": datetime.fromtimestamp(timestamp / 1000, tz=datetime.now().astimezone().tzinfo),
+        "datetime": datetime.fromtimestamp(timestamp / 1000),
         "symbol": symbol,
         "amount": size,
         "price": price,
@@ -116,19 +116,21 @@ class OrderInterface(BaseInterface):
     ) -> Optional[OrdersMessage]:
         """Submit an order to the appropriate exchange."""
         order = message.order
-        exchange = connection.exchanges[order.exchange_id]
+        exchange = connection.exchanges[order.ledger_id][order.exchange_id]
         order_parsing_func = exchange.parse_order
 
         try:
+            if not order.info:
+                order.info = {}
             res = await exchange.create_order(
                 symbol=order.symbol,
                 amount=order.amount,
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
-                data=json.loads(
-                    order.data,
-                ),
+                data=order.info,
+                asset_a=order.asset_a,
+                asset_b=order.asset_b,
             )
             updated_order = order_parsing_func(res, order.exchange_id)
 
@@ -173,12 +175,11 @@ class OrderInterface(BaseInterface):
             )
             response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
-        except Exception as error:  # noqa
-            msg = (
+        except Exception as error:  # pylint: disable=W0703
+            connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            connection.logger.error(msg)
             return get_error(message, dialogue, str(error))
 
     async def get_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection):
@@ -200,17 +201,15 @@ class OrderInterface(BaseInterface):
                 self.open_orders[exchange_id] = {}
             if order.id in self.open_orders[exchange_id]:
                 del self.open_orders[exchange_id][order.id]
-            msg = (
+            connection.logger.warning(
                 f"Couldn't fetch order {order.id} from {exchange_id}. Removed from open orders."
                 + f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            connection.logger.warning(msg)
-        except Exception as error:  # noqa
-            msg = (
+        except Exception as error:  # pylint: disable=W0703
+            connection.logger.warning(
                 f"Couldn't fetch order {order.id} from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            connection.logger.warning(msg)
             return get_error(message, dialogue, str(error))
         response_message = dialogue.reply(
             target_message=message,
@@ -246,7 +245,7 @@ class OrderInterface(BaseInterface):
             )
             del self.open_orders[message.order.exchange_id][message.order.id]
             return response_message
-        except Exception as error:  # noqa
+        except Exception as error:  # pylint: disable=W0703
             connection.logger.info("Unknown Issue: %s", error)
             connection.logger.error(traceback.format_exc())
             return get_error(message, dialogue, str(error))
@@ -284,11 +283,9 @@ class OrderInterface(BaseInterface):
                 ),
             )
             return response_message
-        except Exception as error:  # noqa
-            msg = (
+        except Exception as error:  # pylint: disable=W0703
+            connection.logger.error(
                 f"Couldn't fetch settlements from {exchange.id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-
-            connection.logger.error(msg)
             return get_error(message, dialogue, str(error))

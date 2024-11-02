@@ -19,21 +19,17 @@
 
 """Serialization module for order_book protocol."""
 
-# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
-from typing import Any, Dict, cast
+# pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin,C0209,R1735
+# pylint: disable=E0611,R0912,C0209,R1735
+from typing import cast
 
-from aea.mail.base_pb2 import DialogueMessage  # type: ignore
-from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
-from aea.protocols.base import Message  # type: ignore
-from aea.protocols.base import Serializer  # type: ignore
+from aea.mail.base_pb2 import DialogueMessage
+from aea.mail.base_pb2 import Message as ProtobufMessage
+from aea.protocols.base import Message, Serializer
 
-from packages.eightballer.protocols.order_book import order_book_pb2  # type: ignore
-from packages.eightballer.protocols.order_book.custom_types import (  # type: ignore
-    OrderBook,
-)
-from packages.eightballer.protocols.order_book.message import (  # type: ignore
-    OrderBookMessage,
-)
+from packages.eightballer.protocols.order_book import order_book_pb2
+from packages.eightballer.protocols.order_book.custom_types import OrderBook
+from packages.eightballer.protocols.order_book.message import OrderBookMessage
 
 
 class OrderBookSerializer(Serializer):
@@ -50,7 +46,7 @@ class OrderBookSerializer(Serializer):
         msg = cast(OrderBookMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        order_book_msg = order_book_pb2.OrderBookMessage()  # type: ignore
+        order_book_msg = order_book_pb2.OrderBookMessage()
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -109,7 +105,7 @@ class OrderBookSerializer(Serializer):
         :return: the 'OrderBook' message.
         """
         message_pb = ProtobufMessage()
-        order_book_pb = order_book_pb2.OrderBookMessage()  # type: ignore
+        order_book_pb = order_book_pb2.OrderBookMessage()
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (

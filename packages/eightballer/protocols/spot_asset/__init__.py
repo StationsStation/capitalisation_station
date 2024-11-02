@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2022 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 """
 This module contains the support resources for the spot_asset protocol.
 
-It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
+It was created with protocol buffer compiler version `libprotoc 3.19.4` and aea protocol generator version `1.0.0`.
 """
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage

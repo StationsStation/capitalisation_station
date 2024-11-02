@@ -1,0 +1,12 @@
+name: arbitrage_strategy
+author: eightballer
+version: 0.1.0
+type: custom
+description: The custom component package.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiekvasrg5qidiqydd2vb6eq6luh4q2cdvgxq5ozbjb54wvtlvmfrq
+  strategy.py: bafybeiftqzbg6wqoz2plmxe3nf7bonbgw2p7ncpru2f5tto63uvbnjeq5m
+fingerprint_ignore_patterns: []
+dependencies: {}

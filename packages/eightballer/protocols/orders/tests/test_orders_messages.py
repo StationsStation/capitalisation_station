@@ -54,6 +54,8 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
             OrdersMessage(
                 performative=OrdersMessage.Performative.CREATE_ORDER,
                 order=Order(**load_data("Order")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.ORDER_CREATED,
@@ -62,6 +64,8 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
             OrdersMessage(
                 performative=OrdersMessage.Performative.CANCEL_ORDER,
                 order=Order(**load_data("Order")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.ORDER_CANCELLED,
@@ -75,6 +79,7 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
                 order_type=OrderType(0),
                 side=OrderSide(0),
                 status=OrderStatus(0),
+                ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_SETTLEMENTS,
@@ -82,10 +87,13 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
                 currency="some str",
                 end_timestamp=1.0,
                 start_timestamp=1.0,
+                ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_ORDER,
                 order=Order(**load_data("Order")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.ORDER,

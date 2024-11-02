@@ -55,5 +55,6 @@ class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
         return dict(
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
             exchange_id="some str",
+            ledger_id="some str",
             params={"some str": b"some_bytes"},
         )

@@ -2,10 +2,10 @@
 
 from typing import Any, Dict, Callable, Optional
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.connections.ccxt.interfaces.ohlcv import OhlcvInterface
 from packages.eightballer.connections.ccxt.interfaces.order import OrderInterface

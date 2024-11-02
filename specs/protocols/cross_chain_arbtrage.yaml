@@ -1,0 +1,81 @@
+name: cross_chain_arbitrage
+author: eightballer
+version: 0.1.0
+description: A protocol for managing cross-chain arbitrage activities between an arbitrageur and multiple exchanges.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+protocol_specification_id: eightballer/cross_chain_arbitrage:0.1.0
+speech_acts:
+  arbitrage_opportunity:
+    buy_side_exchange_id: pt:str
+    sell_side_exchange_id: pt:str
+    market_name: pt:str
+    available_volume: pt:float
+    buy_price: pt:float
+    sell_price: pt:float
+    note: pt:optional[pt:str]
+  rejected:
+    reason: ct:RejectionReason
+  buy_execution:
+    exchange_id: pt:str
+    ledger_id: pt:str
+    tx_hash: pt:str
+    volume: pt:float
+    price: pt:float
+    token_a_address: pt:str
+  sell_execution:
+    exchange_id: pt:str
+    ledger_id: pt:str
+    tx_hash: pt:str
+    volume: pt:float
+    price: pt:float
+    token_b_address: pt:str
+  hedge_execution:
+    exchange_id: pt:str
+    ledger_id: pt:str
+    tx_hash: pt:str
+    volume: pt:float
+    price: pt:float
+    token_a_address: pt:str
+  arbitrage_result:
+    result_code: ct:ArbitrageResult
+  error:
+    error_code: ct:ErrorCode
+    error_msg: pt:str
+---
+ct:RejectionReason: |
+  enum RejectionReasonEnum {
+      INSUFFICIENT_VOLUME = 0;
+      PRICE_MISMATCH = 1;
+      MARKET_CLOSED = 2;
+      TECHNICAL_ERROR = 3;
+    }
+  RejectionReasonEnum reason = 1;
+ct:ErrorCode: |
+  enum ErrorCodeEnum {
+      NOT_FOUND = 0;
+      INVALID_OPERATION = 1;
+      INTERNAL_ERROR = 2;
+    }
+  ErrorCodeEnum error_code = 1;
+ct:ArbitrageResultCode: |
+  enum ArbitrageResultCodeEnum {
+      SUCCESS = 0;
+      PARTIAL_SUCCESS = 1;
+      FAILED = 2;
+    }
+  ArbitrageResultCodeEnum result_code = 1;
+---
+initiation: [arbitrage_opportunity]
+reply:
+  arbitrage_opportunity: [buy_execution, sell_execution, rejected, error]
+  buy_execution: [sell_execution, arbitrage_result, error]
+  sell_execution: [buy_execution, arbitrage_result, error]
+  arbitrage_result: []
+  rejected: []
+  error: []
+termination: [arbitrage_result, rejected, error]
+roles: {arbitrageur, exchange}
+end_states: [arbitrage_result, rejected, error]
+keep_terminal_state_dialogues: false
+...

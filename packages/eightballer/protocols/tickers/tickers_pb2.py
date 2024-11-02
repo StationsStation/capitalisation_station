@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\rtickers.proto\x12\x1e\x61\x65\x61.eightballer.tickers.v0_1_0\"\xcd\x0e\n\x0eTickersMessage\x12^\n\x0b\x61ll_tickers\x18\x05 \x01(\x0b\x32G.aea.eightballer.tickers.v0_1_0.TickersMessage.All_Tickers_PerformativeH\x00\x12R\n\x05\x65rror\x18\x06 \x01(\x0b\x32\x41.aea.eightballer.tickers.v0_1_0.TickersMessage.Error_PerformativeH\x00\x12\x66\n\x0fget_all_tickers\x18\x07 \x01(\x0b\x32K.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_All_Tickers_PerformativeH\x00\x12\\\n\nget_ticker\x18\x08 \x01(\x0b\x32\x46.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_Ticker_PerformativeH\x00\x12T\n\x06ticker\x18\t \x01(\x0b\x32\x42.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker_PerformativeH\x00\x1a\xb1\x01\n\tErrorCode\x12Z\n\nerror_code\x18\x01 \x01(\x0e\x32\x46.aea.eightballer.tickers.v0_1_0.TickersMessage.ErrorCode.ErrorCodeEnum\"H\n\rErrorCodeEnum\x12\x14\n\x10UNKNOWN_EXCHANGE\x10\x00\x12\x12\n\x0eUNKNOWN_TICKER\x10\x01\x12\r\n\tAPI_ERROR\x10\x02\x1a\xd9\x02\n\x06Ticker\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\x12\x10\n\x08\x64\x61tetime\x18\x03 \x01(\t\x12\x0c\n\x04high\x18\x04 \x01(\x02\x12\x0b\n\x03low\x18\x05 \x01(\x02\x12\x0b\n\x03\x62id\x18\x06 \x01(\x02\x12\x12\n\nbid_volume\x18\x07 \x01(\x02\x12\x0b\n\x03\x61sk\x18\x08 \x01(\x02\x12\x12\n\nask_volume\x18\t \x01(\x02\x12\x0c\n\x04vwap\x18\n \x01(\x02\x12\x0c\n\x04open\x18\x0b \x01(\x02\x12\r\n\x05\x63lose\x18\x0c \x01(\x02\x12\x0c\n\x04last\x18\r \x01(\x02\x12\x16\n\x0eprevious_close\x18\x0e \x01(\x02\x12\x0e\n\x06\x63hange\x18\x0f \x01(\x02\x12\x12\n\npercentage\x18\x10 \x01(\x02\x12\x0f\n\x07\x61verage\x18\x11 \x01(\x02\x12\x13\n\x0b\x62\x61se_volume\x18\x12 \x01(\x02\x12\x14\n\x0cquote_volume\x18\x13 \x01(\x02\x12\x0c\n\x04info\x18\x14 \x01(\t\x1aQ\n\x07Tickers\x12\x46\n\x07tickers\x18\x01 \x03(\x0b\x32\x35.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker\x1a\xe2\x01\n\x1cGet_All_Tickers_Performative\x12\x13\n\x0b\x65xchange_id\x18\x01 \x01(\t\x12g\n\x06params\x18\x02 \x03(\x0b\x32W.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_All_Tickers_Performative.ParamsEntry\x12\x15\n\rparams_is_set\x18\x03 \x01(\x08\x1a-\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\x1a@\n\x17Get_Ticker_Performative\x12\x10\n\x08\x61sset_id\x18\x01 \x01(\t\x12\x13\n\x0b\x65xchange_id\x18\x02 \x01(\t\x1a\x63\n\x18\x41ll_Tickers_Performative\x12G\n\x07tickers\x18\x01 \x01(\x0b\x32\x36.aea.eightballer.tickers.v0_1_0.TickersMessage.Tickers\x1a\\\n\x13Ticker_Performative\x12\x45\n\x06ticker\x18\x01 \x01(\x0b\x32\x35.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker\x1a\x8d\x02\n\x12\x45rror_Performative\x12L\n\nerror_code\x18\x01 \x01(\x0b\x32\x38.aea.eightballer.tickers.v0_1_0.TickersMessage.ErrorCode\x12\x11\n\terror_msg\x18\x02 \x01(\t\x12\x64\n\nerror_data\x18\x03 \x03(\x0b\x32P.aea.eightballer.tickers.v0_1_0.TickersMessage.Error_Performative.ErrorDataEntry\x1a\x30\n\x0e\x45rrorDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\x42\x0e\n\x0cperformativeb\x06proto3'
+    b'\n\rtickers.proto\x12\x1e\x61\x65\x61.eightballer.tickers.v0_1_0\"\xf5\x10\n\x0eTickersMessage\x12^\n\x0b\x61ll_tickers\x18\x05 \x01(\x0b\x32G.aea.eightballer.tickers.v0_1_0.TickersMessage.All_Tickers_PerformativeH\x00\x12R\n\x05\x65rror\x18\x06 \x01(\x0b\x32\x41.aea.eightballer.tickers.v0_1_0.TickersMessage.Error_PerformativeH\x00\x12\x66\n\x0fget_all_tickers\x18\x07 \x01(\x0b\x32K.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_All_Tickers_PerformativeH\x00\x12\\\n\nget_ticker\x18\x08 \x01(\x0b\x32\x46.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_Ticker_PerformativeH\x00\x12T\n\x06ticker\x18\t \x01(\x0b\x32\x42.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker_PerformativeH\x00\x1a\xb1\x01\n\tErrorCode\x12Z\n\nerror_code\x18\x01 \x01(\x0e\x32\x46.aea.eightballer.tickers.v0_1_0.TickersMessage.ErrorCode.ErrorCodeEnum\"H\n\rErrorCodeEnum\x12\x14\n\x10UNKNOWN_EXCHANGE\x10\x00\x12\x12\n\x0eUNKNOWN_TICKER\x10\x01\x12\r\n\tAPI_ERROR\x10\x02\x1a\xdb\x04\n\x06Ticker\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\x12\x10\n\x08\x64\x61tetime\x18\x03 \x01(\t\x12\x0b\n\x03\x61sk\x18\x04 \x01(\x02\x12\x0b\n\x03\x62id\x18\x05 \x01(\x02\x12\x17\n\nbid_volume\x18\x06 \x01(\x02H\x00\x88\x01\x01\x12\x17\n\nask_volume\x18\x07 \x01(\x02H\x01\x88\x01\x01\x12\x11\n\x04high\x18\x08 \x01(\x02H\x02\x88\x01\x01\x12\x10\n\x03low\x18\t \x01(\x02H\x03\x88\x01\x01\x12\x11\n\x04vwap\x18\n \x01(\x02H\x04\x88\x01\x01\x12\x11\n\x04open\x18\x0b \x01(\x02H\x05\x88\x01\x01\x12\x12\n\x05\x63lose\x18\x0c \x01(\x02H\x06\x88\x01\x01\x12\x11\n\x04last\x18\r \x01(\x02H\x07\x88\x01\x01\x12\x1b\n\x0eprevious_close\x18\x0e \x01(\x02H\x08\x88\x01\x01\x12\x13\n\x06\x63hange\x18\x0f \x01(\x02H\t\x88\x01\x01\x12\x17\n\npercentage\x18\x10 \x01(\x02H\n\x88\x01\x01\x12\x14\n\x07\x61verage\x18\x11 \x01(\x02H\x0b\x88\x01\x01\x12\x18\n\x0b\x62\x61se_volume\x18\x12 \x01(\x02H\x0c\x88\x01\x01\x12\x19\n\x0cquote_volume\x18\x13 \x01(\x02H\r\x88\x01\x01\x12\x11\n\x04info\x18\x14 \x01(\tH\x0e\x88\x01\x01\x42\r\n\x0b_bid_volumeB\r\n\x0b_ask_volumeB\x07\n\x05_highB\x06\n\x04_lowB\x07\n\x05_vwapB\x07\n\x05_openB\x08\n\x06_closeB\x07\n\x05_lastB\x11\n\x0f_previous_closeB\t\n\x07_changeB\r\n\x0b_percentageB\n\n\x08_averageB\x0e\n\x0c_base_volumeB\x0f\n\r_quote_volumeB\x07\n\x05_info\x1aQ\n\x07Tickers\x12\x46\n\x07tickers\x18\x01 \x03(\x0b\x32\x35.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker\x1a\xf5\x01\n\x1cGet_All_Tickers_Performative\x12\x13\n\x0b\x65xchange_id\x18\x01 \x01(\t\x12\x11\n\tledger_id\x18\x02 \x01(\t\x12g\n\x06params\x18\x03 \x03(\x0b\x32W.aea.eightballer.tickers.v0_1_0.TickersMessage.Get_All_Tickers_Performative.ParamsEntry\x12\x15\n\rparams_is_set\x18\x04 \x01(\x08\x1a-\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\x1aS\n\x17Get_Ticker_Performative\x12\x10\n\x08\x61sset_id\x18\x01 \x01(\t\x12\x13\n\x0b\x65xchange_id\x18\x02 \x01(\t\x12\x11\n\tledger_id\x18\x03 \x01(\t\x1a\x63\n\x18\x41ll_Tickers_Performative\x12G\n\x07tickers\x18\x01 \x01(\x0b\x32\x36.aea.eightballer.tickers.v0_1_0.TickersMessage.Tickers\x1a\\\n\x13Ticker_Performative\x12\x45\n\x06ticker\x18\x01 \x01(\x0b\x32\x35.aea.eightballer.tickers.v0_1_0.TickersMessage.Ticker\x1a\x8d\x02\n\x12\x45rror_Performative\x12L\n\nerror_code\x18\x01 \x01(\x0b\x32\x38.aea.eightballer.tickers.v0_1_0.TickersMessage.ErrorCode\x12\x11\n\terror_msg\x18\x02 \x01(\t\x12\x64\n\nerror_data\x18\x03 \x03(\x0b\x32P.aea.eightballer.tickers.v0_1_0.TickersMessage.Error_Performative.ErrorDataEntry\x1a\x30\n\x0e\x45rrorDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\x42\x0e\n\x0cperformativeb\x06proto3'
 )
 
 _globals = globals()
@@ -28,27 +28,27 @@ if not _descriptor._USE_C_DESCRIPTORS:
     _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._loaded_options = None
     _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._serialized_options = b'8\001'
     _globals['_TICKERSMESSAGE']._serialized_start = 50
-    _globals['_TICKERSMESSAGE']._serialized_end = 1919
+    _globals['_TICKERSMESSAGE']._serialized_end = 2215
     _globals['_TICKERSMESSAGE_ERRORCODE']._serialized_start = 533
     _globals['_TICKERSMESSAGE_ERRORCODE']._serialized_end = 710
     _globals['_TICKERSMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_start = 638
     _globals['_TICKERSMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_end = 710
     _globals['_TICKERSMESSAGE_TICKER']._serialized_start = 713
-    _globals['_TICKERSMESSAGE_TICKER']._serialized_end = 1058
-    _globals['_TICKERSMESSAGE_TICKERS']._serialized_start = 1060
-    _globals['_TICKERSMESSAGE_TICKERS']._serialized_end = 1141
-    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE']._serialized_start = 1144
-    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE']._serialized_end = 1370
-    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE_PARAMSENTRY']._serialized_start = 1325
-    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE_PARAMSENTRY']._serialized_end = 1370
-    _globals['_TICKERSMESSAGE_GET_TICKER_PERFORMATIVE']._serialized_start = 1372
-    _globals['_TICKERSMESSAGE_GET_TICKER_PERFORMATIVE']._serialized_end = 1436
-    _globals['_TICKERSMESSAGE_ALL_TICKERS_PERFORMATIVE']._serialized_start = 1438
-    _globals['_TICKERSMESSAGE_ALL_TICKERS_PERFORMATIVE']._serialized_end = 1537
-    _globals['_TICKERSMESSAGE_TICKER_PERFORMATIVE']._serialized_start = 1539
-    _globals['_TICKERSMESSAGE_TICKER_PERFORMATIVE']._serialized_end = 1631
-    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE']._serialized_start = 1634
-    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE']._serialized_end = 1903
-    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._serialized_start = 1855
-    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._serialized_end = 1903
+    _globals['_TICKERSMESSAGE_TICKER']._serialized_end = 1316
+    _globals['_TICKERSMESSAGE_TICKERS']._serialized_start = 1318
+    _globals['_TICKERSMESSAGE_TICKERS']._serialized_end = 1399
+    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE']._serialized_start = 1402
+    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE']._serialized_end = 1647
+    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE_PARAMSENTRY']._serialized_start = 1602
+    _globals['_TICKERSMESSAGE_GET_ALL_TICKERS_PERFORMATIVE_PARAMSENTRY']._serialized_end = 1647
+    _globals['_TICKERSMESSAGE_GET_TICKER_PERFORMATIVE']._serialized_start = 1649
+    _globals['_TICKERSMESSAGE_GET_TICKER_PERFORMATIVE']._serialized_end = 1732
+    _globals['_TICKERSMESSAGE_ALL_TICKERS_PERFORMATIVE']._serialized_start = 1734
+    _globals['_TICKERSMESSAGE_ALL_TICKERS_PERFORMATIVE']._serialized_end = 1833
+    _globals['_TICKERSMESSAGE_TICKER_PERFORMATIVE']._serialized_start = 1835
+    _globals['_TICKERSMESSAGE_TICKER_PERFORMATIVE']._serialized_end = 1927
+    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE']._serialized_start = 1930
+    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE']._serialized_end = 2199
+    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._serialized_start = 2151
+    _globals['_TICKERSMESSAGE_ERROR_PERFORMATIVE_ERRORDATAENTRY']._serialized_end = 2199
 # @@protoc_insertion_point(module_scope)

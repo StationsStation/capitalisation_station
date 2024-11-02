@@ -5,7 +5,6 @@ Interface for the positios protocol.
 from typing import Optional
 
 from ccxt import BadSymbol, RequestTimeout, AuthenticationError
-
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Position, Positions

@@ -43,14 +43,14 @@ ct:ErrorCode: |
       API_ERROR = 2;
     }
   ErrorCodeEnum error_code = 1;
+ct:Balances: |
+      repeated Balance balances = 1;
 ct:Balance: |
       string asset_id = 1;
       float free = 2;
       float used = 3;
       float total = 4;
       bool is_native = 5;
-ct:Balances: |
-      repeated Balance balances = 1;
 ...
 ---
 initiation: [get_all_balances, get_balance]

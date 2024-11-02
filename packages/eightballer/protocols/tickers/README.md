@@ -18,10 +18,12 @@ protocol_specification_id: eightballer/tickers:0.1.0
 speech_acts:
   get_all_tickers:
     exchange_id: pt:str
+    ledger_id: pt:str
     params: pt:optional[pt:dict[pt:str, pt:bytes]]
   get_ticker:
     asset_id: pt:str
     exchange_id: pt:str
+    ledger_id: pt:str
   all_tickers:
     tickers: ct:Tickers
   ticker:
@@ -43,23 +45,23 @@ ct:Ticker: |
     string symbol = 1;
     int64 timestamp = 2;
     string datetime = 3;
-    float high = 4;
-    float low = 5;
-    float bid = 6;
-    float bid_volume = 7;
-    float ask = 8;
-    float ask_volume = 9;
-    float vwap = 10;
-    float open = 11;
-    float close = 12;
-    float last = 13;
-    float previous_close = 14;
-    float change = 15;
-    float percentage = 16;
-    float average = 17;
-    float base_volume = 18;
-    float quote_volume = 19;
-    string info = 20;
+    float ask = 4;
+    float bid = 5;
+    optional float bid_volume = 6;
+    optional float ask_volume = 7;
+    optional float high = 8;
+    optional float low = 9;
+    optional float vwap = 10;
+    optional float open = 11;
+    optional float close = 12;
+    optional float last = 13;
+    optional float previous_close = 14;
+    optional float change = 15;
+    optional float percentage = 16;
+    optional float average = 17;
+    optional float base_volume = 18;
+    optional float quote_volume = 19;
+    optional string info = 20;
 ct:Tickers: |
     repeated Ticker tickers = 1;
 ...

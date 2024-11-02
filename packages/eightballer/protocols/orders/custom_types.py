@@ -1,7 +1,7 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, List
+from typing import Any, List, Optional
 
 from pydantic import BaseModel
 
@@ -79,14 +79,15 @@ class OrderSide(Enum):
 class OrderStatus(Enum):
     """This class represents an instance of OrderStatus."""
 
-    SUBMITTED = 0
-    OPEN = 1
-    PARTIALLY_FILLED = 2
-    CANCELLED = 3
-    FILLED = 4
-    CLOSED = 5
-    EXPIRED = 6
-    FAILED = 8
+    NEW = 0
+    SUBMITTED = 1
+    OPEN = 2
+    PARTIALLY_FILLED = 3
+    CANCELLED = 4
+    FILLED = 5
+    CLOSED = 6
+    EXPIRED = 7
+    FAILED = 9
 
     @staticmethod
     def encode(order_status_protobuf_object, order_status_object: "OrderStatus") -> None:
@@ -222,34 +223,37 @@ class BaseCustomEncoder(BaseModel):
 class Order(BaseCustomEncoder):
     """This class represents an instance of Order."""
 
-    id: str
-    client_order_id: str
-    info: str
-    timestamp: float
-    datetime: str
-    last_trade_timestamp: float
-    status: OrderStatus
-    symbol: str
-    type: OrderType
-    time_in_force: str
-    post_only: bool
-    side: OrderSide
     price: float
-    stop_price: float
-    trigger_price: float
-    cost: float
-    amount: float
-    filled: float
-    remaining: float
-    fee: float
-    average: float
-    trades: str
-    fees: str
-    last_update_timestamp: float
-    reduce_only: bool
-    take_profit_price: float
-    stop_loss_price: float
-    exchange_id: str
+    symbol: str
+    status: OrderStatus
+    side: OrderSide
+    type: OrderType
+    exchange_id: Optional[str] = None
+    id: Optional[str] = None
+    client_order_id: Optional[str] = None
+    info: Optional[str] = None
+    ledger_id: Optional[str] = None
+    asset_a: Optional[str] = None
+    asset_b: Optional[str] = None
+    timestamp: Optional[float] = None
+    datetime: Optional[str] = None
+    time_in_force: Optional[str] = None
+    post_only: Optional[bool] = None
+    last_trade_timestamp: Optional[float] = None
+    stop_price: Optional[float] = None
+    trigger_price: Optional[float] = None
+    cost: Optional[float] = None
+    amount: Optional[float] = None
+    filled: Optional[float] = None
+    remaining: Optional[float] = None
+    fee: Optional[float] = None
+    average: Optional[float] = None
+    trades: Optional[str] = None
+    fees: Optional[str] = None
+    last_update_timestamp: Optional[float] = None
+    reduce_only: Optional[bool] = None
+    take_profit_price: Optional[float] = None
+    stop_loss_price: Optional[float] = None
 
 
 class Orders(BaseCustomEncoder):
