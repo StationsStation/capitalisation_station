@@ -9,7 +9,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
-  cli.py: bafybeicvbmu5xbtm4vitoalmb6d62vxxofd74zd3zittsv7cvfinvezyxa
+  cli.py: bafybeidk66ypucg53ihs73h5e4cs2e4pai63zrl4uiokxluwirdpt6kari
   connection.py: bafybeiftkmo5alzcpaxjwqb7yxb3bohfyj5hioa4xgsc7oj24px2gejj4u
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
@@ -66,7 +66,7 @@ protocols:
 - eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
 - eightballer/ohlcv:0.1.0:bafybeiat7aiynu64qxeprxs5u7624f6za5ptn6iwa3maij4ds3ygcxc5ai
 - eightballer/order_book:0.1.0:bafybeihi5wuqhwxu4jos3qjwwfdv44fiwzg5usgr44ql6jqsh5c6vtjbq4
-- eightballer/orders:0.1.0:bafybeicozrhzqxm66luftgzh4xvzw2oobsgs2tt4hwds6654dzrnhr6muy
+- eightballer/orders:0.1.0:bafybeifdjfunbrzojvryupizqgaoraztjke5v6pj3tcqntsihmztn2oome
 - eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
 - eightballer/spot_asset:0.1.0:bafybeiaq7wscqkotvpljbuvp4aafgsl636oyn5zb2tuk57db7gx2o4n56u
 - eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
