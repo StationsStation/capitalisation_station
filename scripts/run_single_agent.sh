@@ -34,4 +34,4 @@ else
 fi
 
 # finally, run the agent
-aea -s run
+aea -s run --env ../.env

@@ -51,6 +51,7 @@ from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehav
 # Define states
 
 PORTFOLIO_FILE = "portfolio.json"
+EXISTING_ORDERS_FILE = "existing_orders.json"
 ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
@@ -121,8 +122,9 @@ class IdentifyOpportunityRound(State):
         self._event = ArbitrageabciappEvents.DONE
         portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text())
         prices = json.loads(pathlib.Path(PRICES_FILE).read_text())
+        existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text())
 
-        orders = self.arbitrage_strategy.get_orders(portfolio, prices)
+        orders = self.arbitrage_strategy.get_orders(portfolio, prices, existing_orders)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
@@ -151,7 +153,9 @@ class IdentifyOpportunityRound(State):
         # We need to add to the PYTHONPATH=. to be able to import the strategy
         sys.path.append(".")
         from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
+
         self.arbitrage_strategy = ArbitrageStrategy()
+
 
 class ErrorRound(State):
     """
@@ -384,6 +388,7 @@ class CollectDataRound(BaseConnectionRound):
         portfolio = {}
         ledger_id = "cex"
         prices = {ledger_id: {}}
+        existing_orders = {ledger_id: {}}
         portfolio[ledger_id] = {}
         for exchange_id in self.context.arbitrage_strategy.cexs:
             balances = yield from self.get_response(
@@ -394,9 +399,16 @@ class CollectDataRound(BaseConnectionRound):
             tickers = yield from self.get_response(
                 TickersMessage.Performative.GET_ALL_TICKERS, connection_id=str(CCXT_PUBLIC_ID), exchange_id=exchange_id
             )
+            orders = yield from self.get_response(
+                OrdersMessage.Performative.GET_ORDERS,
+                connection_id=str(CCXT_PUBLIC_ID),
+                exchange_id=exchange_id,
+                symbol="OLAS/USDT",
+            )
 
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
             prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
+            existing_orders[ledger_id][exchange_id] = [o.model_dump() for o in orders.orders.orders]
 
         for exchange_id in self.context.arbitrage_strategy.dexs:
             for ledger_id in self.context.arbitrage_strategy.ledgers:
@@ -429,6 +441,7 @@ class CollectDataRound(BaseConnectionRound):
         self.context.logger.info(f"Portfolio: {portfolio}")
         pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4))
         pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4))
+        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(existing_orders, indent=4))
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

@@ -15,7 +15,7 @@ fingerprint:
   interfaces/interface_base.py: bafybeigxxtrzkxp3egpmwpe4n3mllhclyh7qdy76u5ynpb3ezgap6hewsu
   interfaces/market.py: bafybeifaujrfou223emcvdk5jzu2ikud5juxg5wwn575znnvrxzh6whz44
   interfaces/ohlcv.py: bafybeif25wmlxjugukknuy5hac7fj3upmkg6useh42k5e7cco5d4nei3gy
-  interfaces/order.py: bafybeieviilcbfureeq4qzbi72o5qf3byskrgsps7zbawhnznfka7j7qsm
+  interfaces/order.py: bafybeidt5ckiibbftzbottab4sbjpxkrffitvbl54ogeebvfvnsiyzmday
   interfaces/order_book.py: bafybeigzbmntgyb27qzcsmv54edkxka2le3i4tjsfmfc7szb2fxcjkabve
   interfaces/position.py: bafybeifsx42bbjdmpofxcgb7cyhu76dng6r3whwjawcx5xlzclhexax5xe
   interfaces/spot_asset.py: bafybeie5ckagfl6762s3lsu3brix6ovpcxgcgumnxkwiwmo4xmwcb4hizi
@@ -45,7 +45,7 @@ protocols:
 - eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
 - eightballer/ohlcv:0.1.0:bafybeiat7aiynu64qxeprxs5u7624f6za5ptn6iwa3maij4ds3ygcxc5ai
 - eightballer/order_book:0.1.0:bafybeihi5wuqhwxu4jos3qjwwfdv44fiwzg5usgr44ql6jqsh5c6vtjbq4
-- eightballer/orders:0.1.0:bafybeicozrhzqxm66luftgzh4xvzw2oobsgs2tt4hwds6654dzrnhr6muy
+- eightballer/orders:0.1.0:bafybeifdjfunbrzojvryupizqgaoraztjke5v6pj3tcqntsihmztn2oome
 - eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
 - eightballer/spot_asset:0.1.0:bafybeiaq7wscqkotvpljbuvp4aafgsl636oyn5zb2tuk57db7gx2o4n56u
 - eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm

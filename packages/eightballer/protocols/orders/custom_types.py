@@ -1,6 +1,6 @@
 """Custom types for the protocol."""
 
-from enum import Enum
+from enum import IntEnum as Enum
 from typing import Any, List, Optional
 
 from pydantic import BaseModel
