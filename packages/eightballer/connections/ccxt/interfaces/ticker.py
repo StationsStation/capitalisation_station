@@ -56,8 +56,8 @@ class TickerInterface(BaseInterface):
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.ERROR,
                 target_message=message,
-                code=TickersMessage.ErrorCode.API_ERROR,
-                message="The request has timed out.",
+                error_code=TickersMessage.ErrorCode.API_ERROR,
+                error_msg="The request has timed out.",
             )
         return response_message
 
