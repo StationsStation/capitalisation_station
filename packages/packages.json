@@ -14,15 +14,15 @@
         "contract/eightballer/spl_token/0.1.0": "bafybeidlpaed4tbc72hmr6nkatkbt7rxenzzcgzxhrdsjmjhg6parmjf2m",
         "contract/vybe/jupitar_swap/0.1.0": "bafybeigp2obqqzc24grhy6vkqay4mhxg4smvbkmzofkyx4zhopdhzdqlrq",
         "connection/eightballer/dcxt/0.1.0": "bafybeiahozb2qr6j4xsqrgqrwluvebgp22ongwuqjzabctstfcnnau64ny",
-        "connection/eightballer/ccxt/0.1.0": "bafybeigln5peq6r34dic2u6p5iab4kffcv6arsc27roabugqi3dnmbgjsa",
+        "connection/eightballer/ccxt/0.1.0": "bafybeidocctimxqtpn5k3yfkspjvmkocudhxvczbkcntecbhjsmh5dsz5a",
         "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeigf53dilv732gco2irsi4jwq52t2j3hzwn6qngs5hprazr3yvdkk4",
-        "skill/eightballer/reporting/0.1.0": "bafybeib4yv76gr7vsnpz5o3oikuqlbysgavvyqhf4twcdb7rhvavmijozq",
+        "skill/eightballer/reporting/0.1.0": "bafybeid4xpqdd2g2rkg764qafep75wnx6b47ea35efnko5cpixvmlgow6e",
         "skill/eightballer/metrics/0.1.0": "bafybeidodhiljldkfzdyvv3p7w2re5q44zlzorlfwopc4r7kcfgnnbm7oe",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeiehuki63klx7ceai2mfnql3nac2tabn5wgxd2f24edxkv6myrnnwy",
-        "skill/eightballer/simple_fsm/0.1.0": "bafybeifqdi5sx5lulmaddx72jl6ml5a6jaiewldr5araiimadx554k7cvq",
-        "agent/eightballer/chained_dex_app/0.1.0": "bafybeid57g2l3ub7he3bgidox2fqjbqoxqlkpvucj76pwanx4g7cweohsa",
-        "agent/eightballer/trader/0.1.0": "bafybeie4eikoelax424slz7uaqfpkb6pbul7nkngtafztjy6e4wy7jj6ge",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeibu7sdcrxlszkihcy5uiuf2zmb4bz4p5xpvva66ugqympo5squc7m"
+        "skill/eightballer/simple_fsm/0.1.0": "bafybeih4z46gh3lfxbc7icwuvpldzb4bzb7ppix4tagpk37qvybwl2oy34",
+        "agent/eightballer/chained_dex_app/0.1.0": "bafybeif3kaixnmkm5bjvqredx6cv7ibo2ghclo252gq62czyxgylqgfmqm",
+        "agent/eightballer/trader/0.1.0": "bafybeiguq5ffgojw27fx642azps5ym5daym4nj4m7h6kov746rw5sir2se",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeiaymzc3opx425kqkwshizxgtq7jszzncwpum4gnpoqzscahinlllm"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u",

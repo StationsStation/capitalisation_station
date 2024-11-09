@@ -124,7 +124,10 @@ class IdentifyOpportunityRound(State):
         prices = json.loads(pathlib.Path(PRICES_FILE).read_text())
         existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text())
 
-        orders = self.arbitrage_strategy.get_orders(portfolio, prices, existing_orders)
+        orders = self.arbitrage_strategy.get_orders(
+            portfolio=portfolio, 
+            prices=prices, 
+            existing_orders=existing_orders)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]

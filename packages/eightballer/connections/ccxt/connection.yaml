@@ -19,7 +19,7 @@ fingerprint:
   interfaces/order_book.py: bafybeigzbmntgyb27qzcsmv54edkxka2le3i4tjsfmfc7szb2fxcjkabve
   interfaces/position.py: bafybeifsx42bbjdmpofxcgb7cyhu76dng6r3whwjawcx5xlzclhexax5xe
   interfaces/spot_asset.py: bafybeie5ckagfl6762s3lsu3brix6ovpcxgcgumnxkwiwmo4xmwcb4hizi
-  interfaces/ticker.py: bafybeie2e3bf4wja5ko2dlvjsblwct7o464vw54fcenw73gy4jdtctn5l4
+  interfaces/ticker.py: bafybeiaawhtarkff2fbejogac5pfrx4kydpu6myspdrerk3g7s46sbvjoe
   tests/__init__.py: bafybeic7taeyhjort3vfpvtgrm2i6zawa4t2eurfpyui52fczqqg2wbimi
   tests/protocols/__init__.py: bafybeih5qkwgk6alfxrnxuhs6nmcpmtkjsnkcf5cbjyju44smnci63ri5m
   tests/protocols/test_market.py: bafybeihn2soul62ala4qbeyo3qjc7ln67niwxe7fmxgy7ivrwac72w5evy
