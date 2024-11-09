@@ -161,6 +161,9 @@ async def transfer_tokens(lp_token, sender_address, receiver_address, ledger):
 
 async def complete_any_pending_transfer(receiver_address):
     """Completes transfer of any LP tokens received from L2."""
+
+    # Needs to be called once in a while, since the average transfer takes 15-30 mins
+
     # ABI: function completeTransfer(bytes memory encodedVm) external;
     # https://github.com/wormhole-foundation/wormhole/blob/e717f538721739d9f6fc690e16bc7ef7cfd3ee4c/ethereum/contracts/bridge/interfaces/ITokenBridge.sol#L89
 
