@@ -168,22 +168,22 @@ async def complete_any_pending_transfer(receiver_address):
     # https://github.com/wormhole-foundation/wormhole/blob/e717f538721739d9f6fc690e16bc7ef7cfd3ee4c/ethereum/contracts/bridge/interfaces/ITokenBridge.sol#L89
 
     # Traverse dict and pull any formed VAAs
-    for chain in WORMHOLE_TOKEN_TRANSFERS:
-        for item in chain:
-            if receiver_address is NOT in item:
-                continue
+    items = token_receiver_mapping[receiver_address]
+    for item in items:
+        if receiver_address is NOT in item:
+            continue
 
-            # example: https://api.wormholescan.io/v1/signed_vaa/5/00000000000000000000000027428dd2d3dd32a4d7f7c497eaaa23130d894911/247208
-            response = fetch(item)
-            if response not None:
-                # Get Base64 VAA data
-                vaa_bytes_base64 = response["vaaBytes"]
-                # Get Hex VAA bytes
-                vaa_bytes_hex = hexlify(vaa_bytes_base64)
-                # Complete token transfer
-                tx = contract_or_abi(WORMHOLE_TOKEN_RELAYER_MAPPING[SupportedLedgers.ETHEREUM]).complete_transfer(
-                    encoded_vm: vaa_bytes_hex
-                ).send(receiver_address)
+        # example: https://api.wormholescan.io/v1/signed_vaa/5/00000000000000000000000027428dd2d3dd32a4d7f7c497eaaa23130d894911/247208
+        response = fetch(item)
+        if response not None:
+            # Get Base64 VAA data
+            vaa_bytes_base64 = response["vaaBytes"]
+            # Get Hex VAA bytes
+            vaa_bytes_hex = hexlify(vaa_bytes_base64)
+            # Complete token transfer
+            tx = contract_or_abi(WORMHOLE_TOKEN_RELAYER_MAPPING[SupportedLedgers.ETHEREUM]).complete_transfer(
+                encoded_vm: vaa_bytes_hex
+            ).send(receiver_address)
 
 
 @click.command()
