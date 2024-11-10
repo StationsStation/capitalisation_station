@@ -145,7 +145,7 @@ async def transfer_tokens(lp_token, sender_address, receiver_address, ledger):
             token: lp_token,
             amount,
             recipient_chain: WORMHOLE_CHAIN_ID_MAPPING[SupportedLedgers.ETHEREUM]
-            recipient: "0x" + "0".repeat(26) + address_without_0x(receiver_address),
+            recipient: "0x" + "0".repeat(24) + address_without_0x(receiver_address),
             arbiter_fee: 0,
             nonce: whatever
         ).send(sender_address)
