@@ -80,6 +80,7 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
                 side=OrderSide(0),
                 status=OrderStatus(0),
                 ledger_id="some str",
+                account="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_SETTLEMENTS,

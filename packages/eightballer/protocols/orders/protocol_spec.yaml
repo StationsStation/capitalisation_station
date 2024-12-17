@@ -26,6 +26,7 @@ speech_acts:
     side: pt:optional[ct:OrderSide]
     status: pt:optional[ct:OrderStatus]
     ledger_id: pt:optional[pt:str]
+    account: pt:optional[pt:str]
   get_settlements:
     exchange_id: pt:str
     currency: pt:optional[pt:str]

@@ -100,6 +100,7 @@ class OrdersMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
+            "account",
             "currency",
             "dialogue_reference",
             "end_timestamp",
@@ -173,6 +174,11 @@ class OrdersMessage(Message):
         """Get the target of the message."""
         enforce(self.is_set("target"), "target is not set.")
         return cast(int, self.get("target"))
+
+    @property
+    def account(self) -> Optional[str]:
+        """Get the 'account' content from the message."""
+        return cast(Optional[str], self.get("account"))
 
     @property
     def currency(self) -> Optional[str]:
@@ -393,6 +399,13 @@ class OrdersMessage(Message):
                     enforce(
                         isinstance(ledger_id, str),
                         "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
+                    )
+                if self.is_set("account"):
+                    expected_nb_of_contents += 1
+                    account = cast(str, self.account)
+                    enforce(
+                        isinstance(account, str),
+                        "Invalid type for content 'account'. Expected 'str'. Found '{}'.".format(type(account)),
                     )
             elif self.performative == OrdersMessage.Performative.GET_SETTLEMENTS:
                 expected_nb_of_contents = 1

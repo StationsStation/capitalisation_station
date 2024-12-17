@@ -33,7 +33,7 @@ CEX_LEDGER = "cex"
 CEX_EXCHANGE = "mexc"
 DEX_EXCHANGE = "balancer"
 DEFAULT_LEDGER = "base"
-DEFAULT_AMOUNT = 1.0
+DEFAULT_AMOUNT = 10.0
 
 
 class ArbitrageStrategy:

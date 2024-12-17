@@ -122,6 +122,8 @@ message OrdersMessage{
     bool status_is_set = 11;
     string ledger_id = 12;
     bool ledger_id_is_set = 13;
+    string account = 14;
+    bool account_is_set = 15;
   }
 
   message Get_Settlements_Performative{

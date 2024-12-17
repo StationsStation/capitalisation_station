@@ -1,23 +1,25 @@
 Ticker:
   ask: 0.0
-  ask_volume: 0
-  average: 0
-  base_volume: 0
+  ask_volume: 0.0
+  asset_a: asset_a
+  asset_b: asset_b
+  average: 0.0
+  base_volume: 0.0
   bid: 0.0
-  bid_volume: 0
-  change: 0
-  close: 0
+  bid_volume: 0.0
+  change: 0.0
+  close: 0.0
   datetime: datetime
-  high: 0
-  info: 0
-  last: 0
-  low: 0
-  open: 0
-  percentage: 0
-  previous_close: 0
-  quote_volume: 0
+  high: 0.0
+  info: info
+  last: 0.0
+  low: 0.0
+  open: 0.0
+  percentage: 0.0
+  previous_close: 0.0
+  quote_volume: 0.0
   symbol: symbol
   timestamp: 0
-  vwap: 0
+  vwap: 0.0
 Tickers:
   tickers: []
