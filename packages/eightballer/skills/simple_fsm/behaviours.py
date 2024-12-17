@@ -28,6 +28,7 @@ import pathlib
 import datetime
 from abc import ABC
 from enum import Enum
+from time import sleep
 from typing import Any, Callable, Optional, Generator, cast
 from textwrap import dedent
 from dataclasses import asdict
@@ -54,6 +55,8 @@ PORTFOLIO_FILE = "portfolio.json"
 EXISTING_ORDERS_FILE = "existing_orders.json"
 ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
+
+TIMEOUT_SECONDS = 10
 
 TZ = datetime.datetime.now().astimezone().tzinfo
 
@@ -124,10 +127,7 @@ class IdentifyOpportunityRound(State):
         prices = json.loads(pathlib.Path(PRICES_FILE).read_text())
         existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text())
 
-        orders = self.arbitrage_strategy.get_orders(
-            portfolio=portfolio, 
-            prices=prices, 
-            existing_orders=existing_orders)
+        orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
@@ -399,6 +399,13 @@ class CollectDataRound(BaseConnectionRound):
                 connection_id=str(CCXT_PUBLIC_ID),
                 exchange_id=exchange_id,
             )
+
+            if balances.performative == BalancesMessage.Performative.ERROR:
+                self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
+                self.started = False
+                sleep(TIMEOUT_SECONDS)
+                return
+
             tickers = yield from self.get_response(
                 TickersMessage.Performative.GET_ALL_TICKERS, connection_id=str(CCXT_PUBLIC_ID), exchange_id=exchange_id
             )

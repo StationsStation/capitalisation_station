@@ -43,3 +43,5 @@ packages/valory/skills/reset_pause_abci
 
 packages/eightballer/protocols/user_interaction
 packages/eightballer/connections/apprise
+trader
+prod_trader

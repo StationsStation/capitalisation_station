@@ -156,7 +156,7 @@ class OrderInterface(BaseInterface):
         """Retrieve the open orders from the exchange."""
 
         def _get_kwargs():
-            possible_kwargs = ["currency"]
+            possible_kwargs = ["currency", "account"]
             kwargs = {}
             for key in possible_kwargs:
                 if hasattr(message, key):
@@ -165,7 +165,7 @@ class OrderInterface(BaseInterface):
                         kwargs[key] = kwarg
             return kwargs
 
-        exchange = connection.exchanges[message.exchange_id]
+        exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         exchange_id = message.exchange_id
         try:
             open_orders = await exchange.fetch_open_orders(params=_get_kwargs())
