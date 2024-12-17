@@ -1,0 +1,56 @@
+name: bridge_asset
+author: eightballer
+version: 0.1.0
+description: A protocol for bridging assets between different ledgers.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+protocol_specification_id: eightballer/bridge_asset:0.1.0
+speech_acts:
+  initialise_bridge:
+    bridge: ct:Bridge
+  initialise_claim:
+    initialisation_tx_hash: pt:str
+  bridge:
+    initialisation_tx_hash: pt:optional[pt:str]
+    call_data: pt:optional[pt:bytes]
+  claim:
+    claim_tx_hash: pt:optional[pt:str]
+    call_data: pt:optional[pt:bytes]
+  error:
+    error_code: ct:ErrorCode
+    error_msg: pt:str
+    error_data: pt:dict[pt:str, pt:bytes]
+---
+ct:ErrorCode: |
+  enum ErrorCodeEnum {
+      UNKNOWN_ASSET = 0;
+      INSUFFICIENT_BALANCE = 1;
+      UNSUPPORTED_TO_LEDGER = 2;
+      UNSUPPORTED_FROM_LEDGER = 3;
+      INVALID_OPERATION = 4;
+    }
+  ErrorCodeEnum error_code = 1;
+  
+ct:Bridge: |
+    string asset_id = 1;
+    string to_ledger_id = 2;
+    string is_eoa = 3;
+    float amount = 4;
+
+    amount: pt:float
+    to_ledger_id: pt:str
+    from_ledger_id: pt:optional[pt:str]
+    is_eoa: pt:bool
+---
+initiation: [initialise_bridge, initialise_claim]
+reply:
+  initialise_bridge: [bridge, error]
+  initialise_claim: [claim, error]
+  bridge: [initialise_claim, error]
+  claim: []
+  error: []
+termination: [claim, error]
+roles: {agent, ledger}
+end_states: [claim, error]
+keep_terminal_state_dialogues: false
+...
