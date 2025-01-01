@@ -25,21 +25,6 @@ from aea.skills.base import Model
 
 from packages.valory.skills.abstract_round_abci.models import FrozenMixin
 
-
-class ArbitrageStrategy(Model):
-    """This class scaffolds a model."""
-
-    dexs: list = []
-    cexs: list = []
-
-    def __init__(self, **kwargs):
-        """Initialize the model."""
-        self.cexs = kwargs.pop("cexs", [])
-        self.dexs = kwargs.pop("dexs", [])
-        self.ledgers = kwargs.pop("ledgers", [])
-        super().__init__(**kwargs)
-
-
 class Requests(Model, FrozenMixin):
     """Keep the current pending requests."""
 
@@ -49,3 +34,21 @@ class Requests(Model, FrozenMixin):
         self.request_id_to_callback: Dict[str, Callable] = {}
         super().__init__(*args, **kwargs)
         self._frozen = True
+
+
+class ArbitrageStrategy(Model):
+    """This class scaffolds a model."""
+
+    dexs: list = []
+    cexs: list = []
+    ledgers: list = []
+    order_size: float = 0.0
+
+    def __init__(self, **kwargs):
+        """Initialize the model."""
+        self.cexs = kwargs.pop("cexs", [])
+        self.dexs = kwargs.pop("dexs", [])
+        self.ledgers = kwargs.pop("ledgers", [])
+        self.order_size = kwargs.pop("order_size", 0)
+        super().__init__(**kwargs)
+

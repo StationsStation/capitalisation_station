@@ -20,7 +20,6 @@ from functools import cache
 from collections import defaultdict
 
 import web3
-from tqdm import tqdm
 from balpy import balpy
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import Account
@@ -839,7 +838,7 @@ class BalancerClient:
         interval = 2000
         end = self.bal.web3.eth.block_number
         account = params.get("account")
-        for i in tqdm(range(0, end - start, interval)):
+        for i in range(0, end - start, interval):
             start = start + i
             to = start + interval
             if to > end:
@@ -859,7 +858,7 @@ class BalancerClient:
         trades = {}
 
         transaction_data = {}
-        for tx_hash, events in tqdm(event_bundles.items()):
+        for tx_hash, events in event_bundles.items():
             trades[tx_hash] = parse_transaction(events, tx_hash)
             transaction_data[tx_hash] = self.bal.web3.eth.get_transaction(tx_hash)
 
