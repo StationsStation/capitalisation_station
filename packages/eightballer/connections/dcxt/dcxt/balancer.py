@@ -113,7 +113,8 @@ WHITELISTED_POOLS = {
     SupportedLedgers.POLYGON_POS: [],
     SupportedLedgers.MODE: [
         "0xd1dbea51c7f23f61d020e2602d0d157d132faafc00020000000000000000000e",
-        "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",# Add Mode pool IDs here once available -TO_DO
+        "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",
+        "0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007" # Add Mode pool IDs here once available -TO_DO
     ]
 }
 
@@ -140,7 +141,8 @@ LEDGER_TO_STABLECOINS = {
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
     ],
     SupportedLedgers.MODE: [
-        "0xd988097fb8612cc24eeC14542bC03424c656005f",  # USDC on Mode
+        "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
+        "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138"
     ]
 }
 
@@ -211,7 +213,8 @@ LEDGER_TO_TOKEN_LIST = {
     ),
     SupportedLedgers.MODE: set(
         [
-            "0xcfD1D50ce23C46D3Cf6407487B2F8934e96DC8f9",  # OLAS
+            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",
+            "0xdfc7c877a950e49d2610114102175a06c2e3167a"  # OLAS
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
@@ -243,12 +246,6 @@ class BalancerClient:
         self.logger = kwargs.get("logger", logging.getLogger(__name__))
         self.logger.info(f"Initializing BalancerClient for ledger {ledger_id} with RPC {rpc_url}")
 
-        if self.balancer_deployment == SupportedBalancerDeployments.MODE:
-            balpy.balpy.networkParams["mode"] = {
-                "id": 34443,
-                "blockExplorerUrl": "explorer.mode.network",
-                "balFrontend": "app.balancer.fi/#/mode"
-            }
         self.bal = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
@@ -398,6 +395,7 @@ class BalancerClient:
             await self.build_tokens()
 
         self.tickers = {}
+        breakpoint()
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
             token = self.tokens[token_address]
             if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
