@@ -7,6 +7,7 @@ import time
 import asyncio
 import decimal
 import traceback
+import logging
 from enum import Enum
 from glob import glob
 from typing import cast
@@ -72,6 +73,7 @@ class SupportedLedgers(Enum):
     ARBITRUM = "arbitrum"
     OPTIMISM = "optimism"
     BASE = "base"
+    MODE = "mode"
 
 
 class SupportedBalancerDeployments(Enum):
@@ -82,12 +84,14 @@ class SupportedBalancerDeployments(Enum):
     MAINNET = "mainnet"
     OPTIMISM = "optimism"
     BASE = "base"
+    MODE = "mode"
 
 
 LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.OPTIMISM: SupportedBalancerDeployments.OPTIMISM,
     SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
     SupportedLedgers.BASE: SupportedBalancerDeployments.BASE,
+    SupportedLedgers.MODE: SupportedBalancerDeployments.MODE,
 }
 
 WHITELISTED_POOLS = {
@@ -107,6 +111,11 @@ WHITELISTED_POOLS = {
         "0xc771c1a5905420daec317b154eb13e4198ba97d0000000000000000000000023",
     ],
     SupportedLedgers.POLYGON_POS: [],
+    SupportedLedgers.MODE: [
+        "0xd1dbea51c7f23f61d020e2602d0d157d132faafc00020000000000000000000e",
+        "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",
+        "0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007" # Add Mode pool IDs here once available -TO_DO
+    ]
 }
 
 
@@ -131,6 +140,10 @@ LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ARBITRUM: [
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
     ],
+    SupportedLedgers.MODE: [
+        "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
+        "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138"
+    ]
 }
 
 LEDGER_TO_NATIVE_SYMBOL = {
@@ -140,6 +153,7 @@ LEDGER_TO_NATIVE_SYMBOL = {
     SupportedLedgers.GNOSIS: "xDAI",
     SupportedLedgers.POLYGON_POS: "POL",
     SupportedLedgers.ARBITRUM: "ETH",
+    SupportedLedgers.MODE: "ETH",
 }
 
 LEDGER_TO_WRAPPER = {
@@ -149,6 +163,7 @@ LEDGER_TO_WRAPPER = {
     SupportedLedgers.GNOSIS: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
     SupportedLedgers.POLYGON_POS: "0x0000000000000000000000000000000000001010",
     SupportedLedgers.ARBITRUM: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+    SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
 }
 
 LEDGER_TO_TOKEN_LIST = {
@@ -196,6 +211,14 @@ LEDGER_TO_TOKEN_LIST = {
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ARBITRUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ARBITRUM]]
     ),
+    SupportedLedgers.MODE: set(
+        [
+            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",
+            "0xdfc7c877a950e49d2610114102175a06c2e3167a"  # OLAS
+        ]
+        + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
+        + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
+    ),
 }
 
 
@@ -209,7 +232,6 @@ class BalancerClient:
     def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
         if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
             raise ConfigurationError("Chain name not provided to BalancerClient")
-
         self.ledger_id = SupportedLedgers(ledger_id)
         self.balancer_deployment = LEDGER_IDS_CHAIN_NAMES[self.ledger_id]
 
@@ -220,10 +242,14 @@ class BalancerClient:
         with open(key_path, "r", encoding=DEFAULT_ENCODING) as file:
             key = file.read().strip()
         self.account = Account.from_key(private_key=key)
-        self.bal: balpy.balpy = balpy.balpy(
+
+        self.logger = kwargs.get("logger", logging.getLogger(__name__))
+        self.logger.info(f"Initializing BalancerClient for ledger {ledger_id} with RPC {rpc_url}")
+
+        self.bal = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
-                "privateKey": self.account._private_key,  # noqa
+                "privateKey": self.account._private_key,
                 "customRPC": self.rpc_url,
                 "etherscanApiKey": self.etherscan_api_key,
             },
@@ -283,6 +309,7 @@ class BalancerClient:
         :return: The pool IDs.
         """
         # We read in the pool IDs from a file for now. we get this file from https://github.com/balancer/frontend-v2/blob/8563b8d33b6bff266148bd48d7ebc89f921374f4/src/lib/config/mainnet/pools.ts#L296
+        print("Path for base balancer",Path(__file__).parent / "data" / "balancer" / f"{self.balancer_deployment.value}.json")
         with open(
             Path(__file__).parent / "data" / "balancer" / f"{self.balancer_deployment.value}.json",
             "r",
@@ -300,7 +327,6 @@ class BalancerClient:
         )  # however as we are not able to collect for *all* ppols, we just select a few to get the data for.
 
         # We use olas USDC as the base pair for now.
-
         pools_of_interest = {}
         for pool_type in params:
             for pool_id in params[pool_type]:
@@ -312,6 +338,7 @@ class BalancerClient:
 
         if not pools_of_interest:
             raise SorRetrievalException("No pools of interest found!")
+        print("Pools of interest", pools_of_interest)  
         self.bal.getOnchainData(pools_of_interest)
 
         self.bal.mc.reset()
@@ -340,7 +367,9 @@ class BalancerClient:
         # We create an array of ticker data.
         for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
             if not name or not symbol:
+                self.logger.warning(f"Missing name or symbol for token {address}")
                 continue
+            self.logger.debug(f"Adding token: {address} {name[0]} {symbol[0]}")
             print(address, name[0], symbol[0])
             if address not in self.tokens:
                 self.tokens[address] = Erc20Token(
@@ -359,11 +388,14 @@ class BalancerClient:
         :return: The tickers.
         """
         del args, kwargs
-
+        self.logger.debug("Fetching tickers")
         # We temporarily assume that the tickers are the same as the markets, and use the pool IDs to get the tickers.
         if not self.tokens:
+            self.logger.info("No tokens found, building token data")
             await self.build_tokens()
+
         self.tickers = {}
+        breakpoint()
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
             token = self.tokens[token_address]
             if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
@@ -606,23 +638,23 @@ class BalancerClient:
         """
 
         vault = self.bal.balLoadContract("Vault")
-
+        print(f"Handling vault for {vault}")
         swap["funds"]["sender"] = safe_address
         swap["funds"]["recipient"] = safe_address
 
         erc_contract = self.bal.erc20GetContract(input_token_address)
         approved = erc_contract.functions.allowance(owner=safe_address, spender=vault.address).call()
 
-        # We approve the token if we have not already done so.
+        # We approve the token if we have not already done so.         
 
         if approved < machine_amount * 1e17:
             self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
             data = erc_contract.encodeABI("approve", [vault.address, int(machine_amount * 1e18)])
             vault_address = erc_contract.address
-
         else:
             try:
                 mc_args = self.bal.balFormatBatchSwapData(swap)
+
                 vault = self.bal.balLoadContract("Vault")
                 function_name = "batchSwap"
                 data = vault.encodeABI(function_name, mc_args)
