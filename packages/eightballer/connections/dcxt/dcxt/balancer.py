@@ -932,6 +932,7 @@ class BalancerClient:
         token = self.get_token(address)
         result = Balance(
             asset_id=token.symbol,
+            contract_address=token.address,
             free=token.to_human(balance),
             used=0,
             total=token.to_human(balance),

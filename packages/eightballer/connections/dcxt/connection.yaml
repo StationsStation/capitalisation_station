@@ -13,7 +13,7 @@ fingerprint:
   connection.py: bafybeiftkmo5alzcpaxjwqb7yxb3bohfyj5hioa4xgsc7oj24px2gejj4u
   custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
   dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeibuspziqneymjyxg64u24dss5w3yw2mubeso3tahk7bjzsr67l5b4
+  dcxt/balancer.py: bafybeie7qbcx6rjhknkyfs3v25f7gugar4uyvp5qnx4gc5uuxqkk435zxq
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
@@ -26,7 +26,7 @@ fingerprint:
   erc_20/contract.py: bafybeibt5c7oidfs3kdrfb3oiwxhmpu46kzin3qgj3pcbq7gds335rnify
   exchange.py: bafybeibddxjj4io6yk7a3xbh6lz5wv2x7ookz7nvbqovte7xmk6c5plv3u
   interfaces/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  interfaces/balance.py: bafybeibvrmbxrse7vcvgu7sxusemahnkywfaaefqtwno5ghorm7jphyghu
+  interfaces/balance.py: bafybeih7lhagmplgowzrq3k64yaar7wt4mj45jyefgb7vyaalk4fhrylbm
   interfaces/interface.py: bafybeic6fb4mb2rzhossctii4pgx4cajlfcgxvlbfwf4bsd26tm3epei2i
   interfaces/interface_base.py: bafybeidbveccpnrhkwuua5g7ke3ycwav6uaa7nohdsxadwkodbpf2rdjfa
   interfaces/market.py: bafybeig7rlxg6sfcdfehodq6zz4zn263n6e2sfjvx2ji2axxfpbupcyjem
@@ -61,12 +61,12 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
+- eightballer/balances:0.1.0:bafybeicd6xekatd6xhnwt2vzgffa3pgpvbzkhkxzrjyj3kzzll5xbr22tu
 - eightballer/default:0.1.0:bafybeihvq6grqqogxdplmuc5hzpg4pug5f5qanit3f27lx2btxp5d2w35e
 - eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
 - eightballer/ohlcv:0.1.0:bafybeiat7aiynu64qxeprxs5u7624f6za5ptn6iwa3maij4ds3ygcxc5ai
 - eightballer/order_book:0.1.0:bafybeihi5wuqhwxu4jos3qjwwfdv44fiwzg5usgr44ql6jqsh5c6vtjbq4
-- eightballer/orders:0.1.0:bafybeifdjfunbrzojvryupizqgaoraztjke5v6pj3tcqntsihmztn2oome
+- eightballer/orders:0.1.0:bafybeic3s3pah3zdxtwq3yk2osmnwfhtv4h6f2hkbrundzkzorvlvwwaxy
 - eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
 - eightballer/spot_asset:0.1.0:bafybeiaq7wscqkotvpljbuvp4aafgsl636oyn5zb2tuk57db7gx2o4n56u
 - eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
