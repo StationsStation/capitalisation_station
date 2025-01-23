@@ -1,5 +1,6 @@
 Balance:
   asset_id: asset_id
+  contract_address: contract_address
   free: 0.0
   is_native: false
   total: 0.0
