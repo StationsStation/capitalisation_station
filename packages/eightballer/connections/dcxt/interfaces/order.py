@@ -121,18 +121,27 @@ class OrderInterface(BaseInterface):
         exchange = connection.exchanges[order.ledger_id][order.exchange_id]
         order_parsing_func = exchange.parse_order
 
+        if hasattr(message, "asset_a") or hasattr(message, "asset_b"):
+            kwargs = {
+                "asset_a": message.asset_a,
+                "asset_b": message.asset_b,
+            }
+        else:
+            asset_a, asset_b = order.symbol.split("/")
+            kwargs = {
+                "asset_a": asset_a,
+                "asset_b": asset_b,
+            }
+
         try:
-            if not order.info:
-                order.info = {}
             res = await exchange.create_order(
                 symbol=order.symbol,
                 amount=order.amount,
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
-                data=order.info,
-                asset_a=order.asset_a,
-                asset_b=order.asset_b,
+                data=json.loads(order.info) if order.info is not None else {},
+                **kwargs,
             )
             updated_order = order_parsing_func(res, order.exchange_id)
 
