@@ -21,12 +21,13 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import get_
 
 
 RPC_MAPPING = {
-    # SupportedLedgers.ETHEREUM: "http://eth.chains.wtf:8545",
+    SupportedLedgers.ETHEREUM: "https://rpc.ankr.com/eth",
     SupportedLedgers.BASE: "https://rpc.ankr.com/base",
     SupportedLedgers.OPTIMISM: "https://rpc.ankr.com/optimism",
     SupportedLedgers.GNOSIS: "https://rpc.ankr.com/gnosis",
     SupportedLedgers.POLYGON_POS: "https://rpc.ankr.com/polygon",
     SupportedLedgers.ARBITRUM: "https://rpc.ankr.com/arbitrum",
+    SupportedLedgers.MODE: "https://mainnet.mode.network",
 }
 
 
