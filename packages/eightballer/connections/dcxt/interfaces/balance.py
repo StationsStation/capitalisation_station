@@ -28,9 +28,8 @@ class BalanceInterface(BaseInterface):
 
         exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:
-            if message.params is None:
-                params = {}
-            else:
+            params = {}
+            if message.params is not None:
                 for key, value in message.params.items():
                     params[key] = value.decode()
             balances = await exchange.fetch_balance(

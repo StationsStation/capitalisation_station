@@ -49,6 +49,7 @@ ct:Balance: |
       float used = 3;
       float total = 4;
       bool is_native = 5;
+      optional string contract_address = 6;
 ct:Balances: |
       repeated Balance balances = 1;
 ...

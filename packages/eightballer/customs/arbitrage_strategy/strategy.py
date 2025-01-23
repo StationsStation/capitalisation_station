@@ -39,7 +39,12 @@ DEFAULT_AMOUNT = 1.0
 class ArbitrageStrategy:
     """A simple arbitrage strategy."""
 
-    def get_orders(self, portfolio: Dict[str, float], prices: Dict[str, float]) -> Dict[str, float]:
+    def get_orders(
+        self,
+        portfolio: Dict[str, float],
+        prices: Dict[str, float],
+        **kwargs,
+    ) -> Dict[str, float]:
         """
         Get orders give a set of prices and balances.
 
@@ -47,6 +52,8 @@ class ArbitrageStrategy:
         :param balances: the balances
         :return: the orders
         """
+        del kwargs
+
         cex_balances = {asset["asset_id"]: asset for asset in portfolio[CEX_LEDGER][CEX_EXCHANGE]}
         dex_balances = {asset["asset_id"]: asset for asset in portfolio[DEFAULT_LEDGER][DEX_EXCHANGE]}
         asset_a, asset_b = CEX_MARKET.split("/")

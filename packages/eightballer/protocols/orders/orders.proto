@@ -16,11 +16,11 @@ message OrdersMessage{
   }
 
   message Order{
-    float price = 1;
     string symbol = 2;
     OrderStatus status = 3;
     OrderSide side = 4;
     OrderType type = 5;
+    optional float price = 1;
     optional string exchange_id = 6;
     optional string id = 7;
     optional string client_order_id = 8;

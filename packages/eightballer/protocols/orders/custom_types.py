@@ -223,11 +223,11 @@ class BaseCustomEncoder(BaseModel):
 class Order(BaseCustomEncoder):
     """This class represents an instance of Order."""
 
-    price: float
     symbol: str
     status: OrderStatus
     side: OrderSide
     type: OrderType
+    price: Optional[float] = None
     exchange_id: Optional[str] = None
     id: Optional[str] = None
     client_order_id: Optional[str] = None

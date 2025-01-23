@@ -216,13 +216,16 @@ class OrderInterface(BaseInterface):
         exchange = connection.exchanges[message.exchange_id]
         exchange_id = message.exchange_id
         try:
-            open_orders = await exchange.fetch_open_orders(params=_get_kwargs())
-            open_orders = self.process_api_orders(exchange_id, open_orders)
-            self.open_orders[exchange_id] = open_orders
+            orders = await exchange.fetch_orders(
+                params=_get_kwargs(),
+                symbol=message.symbol if hasattr(message, "symbol") else None,
+            )
+            orders = self.process_api_orders(exchange_id, orders)
+            self.open_orders[exchange_id] = orders
             response_message = dialogue.reply(
                 target_message=message,
                 performative=OrdersMessage.Performative.ORDERS,
-                orders=Orders(list(open_orders.values())),
+                orders=Orders(orders=list(orders.values())),
             )
             response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
