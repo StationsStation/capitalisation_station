@@ -1,7 +1,7 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, List
+from typing import Any, List, Optional
 
 from pydantic import BaseModel
 
@@ -118,6 +118,7 @@ class Balance(BaseCustomEncoder):
     used: float
     total: float
     is_native: bool
+    contract_address: Optional[str] = None
 
 
 class Balances(BaseCustomEncoder):
