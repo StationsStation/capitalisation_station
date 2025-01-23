@@ -28,8 +28,8 @@ function generate_protocol {
 # generate_protocol 'order_book'
 # generate_protocol 'markets'
 
+generate_protocol 'orders'
 generate_protocol 'balances'
 # generate_protocol 'positions'
 # 
 # generate_protocol 'tickers'
-# generate_protocol 'orders'

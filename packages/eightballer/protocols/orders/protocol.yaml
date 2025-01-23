@@ -7,19 +7,19 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeic2uf7yi5tuqxinecctrhl7pyurqobgffs46spjd2kkrdjlezsj6q
-  __init__.py: bafybeieae5wuyfkbjxht3gpsmatpqq745mrimul3jnqp5wkscbo2sqzwhq
-  custom_types.py: bafybeigrvptddvtd5gytvjekc764hvil2lateodwr7arsydonqcfvpr7fm
-  dialogues.py: bafybeibinanhydrhhx3wrbo3inubt3yqfixyrfbgk45mgu4i5kasbyrhwy
-  message.py: bafybeiaaj3k7rt4ag6cttve3z3ygft5q2n7mxqegegge5nqjn4cx74kzv4
-  orders.proto: bafybeihysfey2ssrod7trin4gbgnp4h5n4p4b2igbwr4z6w7pv65niecyq
-  orders_pb2.py: bafybeie746bjlz2ofhf2e4eldiplaxhdjafaiwcaqy4ca7dkpa23d7updq
-  protocol_spec.yaml: bafybeiaxruiv2ulg2qm24asdk7fgpivbyvhm7t3wt7zhy757kaxls747n4
-  serialization.py: bafybeifu7vwwrswrxr3pnon2e7ec3c4mdjigok4tbudiu6cwa73qyqkpvi
-  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
-  tests/dummy_data.yaml: bafybeieuc6yg6ttb6pmu6ukdo6l3xkcxuo23q5g6an3v2fufjnx7xq53ma
-  tests/test_orders_dialogues.py: bafybeichdm26r7tdnp43cr6odvj5sxdngjbxwibwby24v7c7vz6f2qrttu
-  tests/test_orders_messages.py: bafybeidlqzhm2ykvgg3lfw6duibwictma5dmmormzwys5sqdvfqmbzedrq
+  README.md: bafybeidd3sg34oh4m6uvrzqmant3tnu3mjexa5z2x7r6con5nx4hkdzequ
+  __init__.py: bafybeib7lrdpkoqc2xibeo7opcbmxfimwlajuoo2nea5uo5dfsfms4fzfm
+  custom_types.py: bafybeigcrvsv6634na2lnauuhdo4fyl2fk7p32ai7qg7gzwjbtukffgwm4
+  dialogues.py: bafybeierwhavpehb2imdi4tm5swcquinywbri23auuecygoskomlngwmbq
+  message.py: bafybeiezqsbmg64e4d4zgo4p3vu7bz7j2f2szdotlrq2grlclyx56umabi
+  orders.proto: bafybeihydwktyughr2bg6afdksyd4tdmvmp2c7jonlwfkl6svxxpa3esha
+  orders_pb2.py: bafybeib4pqhjvn36u4ctgnhk7ts5o57rexqaolnbv6f2v44emx5vfk37ui
+  protocol_spec.yaml: bafybeicdmqgbadoxgzj3hq3r6ehvm5x7blxwt3uhlbiexz3rybqfkevrc4
+  serialization.py: bafybeih7tpilwxjytuendi7tyxhep7jdpzfcogenqpnl4udu3omklopjye
+  tests/__init__.py: bafybeicbb4pohduwkdoewodrm6alh6y6dk7ftggebu4m5mwwv57shkhtnq
+  tests/dummy_data.yaml: bafybeidpep422lgwzc6hedcmsnay5ojbzv7ow3adlgcsxde5yv3dxmile4
+  tests/test_orders_dialogues.py: bafybeigmxujugpylkoue7xu2nmwjfcqj6ijkfyny6yza6jh4ac7c622liq
+  tests/test_orders_messages.py: bafybeiao5gzmdhqiokjf35obpckbcnsshudf3wdlt5csxkxwbzrxeurdiy
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
