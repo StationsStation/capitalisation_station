@@ -27,6 +27,7 @@ RPC_MAPPING = {
     SupportedLedgers.GNOSIS: "https://rpc.ankr.com/gnosis",
     SupportedLedgers.POLYGON_POS: "https://rpc.ankr.com/polygon",
     SupportedLedgers.ARBITRUM: "https://rpc.ankr.com/arbitrum",
+    SupportedLedgers.MODE: "https://mainnet.mode.network",
 }
 
 

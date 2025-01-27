@@ -71,6 +71,7 @@ class SupportedLedgers(Enum):
     ARBITRUM = "arbitrum"
     OPTIMISM = "optimism"
     BASE = "base"
+    MODE = "mode"
 
 
 class SupportedBalancerDeployments(Enum):
@@ -87,6 +88,7 @@ LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.OPTIMISM: SupportedBalancerDeployments.OPTIMISM,
     SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
     SupportedLedgers.BASE: SupportedBalancerDeployments.BASE,
+    SupportedLedgers.MODE: SupportedBalancerDeployments.MODE,
 }
 
 WHITELISTED_POOLS = {
@@ -104,6 +106,11 @@ WHITELISTED_POOLS = {
         "0xaac1a23e7910efa801c6f1ff94648480ab0325b90002000000000000000000fc",
         "0x0c659734f1eef9c63b7ebdf78a164cdd745586db000000000000000000000046",
         "0xc771c1a5905420daec317b154eb13e4198ba97d0000000000000000000000023",
+    ],
+    SupportedLedgers.MODE: [
+        "0xd1dbea51c7f23f61d020e2602d0d157d132faafc00020000000000000000000e",
+        "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",
+        "0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007" # Add Mode pool IDs here once available -TO_DO
     ],
     SupportedLedgers.POLYGON_POS: [],
 }
@@ -130,6 +137,10 @@ LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ARBITRUM: [
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
     ],
+    SupportedLedgers.MODE: [
+        "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
+        "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138"
+    ]
 }
 
 LEDGER_TO_NATIVE_SYMBOL = {
@@ -139,6 +150,7 @@ LEDGER_TO_NATIVE_SYMBOL = {
     SupportedLedgers.GNOSIS: "xDAI",
     SupportedLedgers.POLYGON_POS: "POL",
     SupportedLedgers.ARBITRUM: "ETH",
+    SupportedLedgers.MODE: "ETH",
 }
 
 LEDGER_TO_WRAPPER = {
@@ -148,6 +160,7 @@ LEDGER_TO_WRAPPER = {
     SupportedLedgers.GNOSIS: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
     SupportedLedgers.POLYGON_POS: "0x0000000000000000000000000000000000001010",
     SupportedLedgers.ARBITRUM: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+    SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
 }
 
 LEDGER_TO_TOKEN_LIST = {
@@ -194,6 +207,14 @@ LEDGER_TO_TOKEN_LIST = {
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ARBITRUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ARBITRUM]]
+    ),
+    SupportedLedgers.MODE: set(
+        [
+            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",
+            "0xdfc7c877a950e49d2610114102175a06c2e3167a"  # OLAS
+        ]
+        + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
+        + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
     ),
 }
 
