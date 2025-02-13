@@ -214,10 +214,7 @@ class BaseConnectionRound(BaseBehaviour):
         return response
 
     def get_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
-        """Wrapper for callback request which depends on whether the message has not been handled on time.
-
-        :return: the request callback.
-        """
+        """Wrapper for callback request which depends on whether the message has not been handled on time."""
 
         def callback_request(message: Message, current_behaviour: BaseBehaviour) -> None:
             """The callback request."""
@@ -238,10 +235,6 @@ class BaseConnectionRound(BaseBehaviour):
         This is a local method that does not depend on the global clock,
         so the usage of datetime.now() is acceptable here.
 
-        :param condition: a callable
-        :param timeout: max time to wait (in seconds)
-        :return: a message
-        :yield: None
         """
         if timeout is not None:
             deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
@@ -388,10 +381,10 @@ class CollectDataRound(BaseConnectionRound):
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
-                self.context.logger.info(f"Got balances for {exchange_id} on {ledger_id}")
-                self.context.logger.info(f"Got tickers for {exchange_id} on {ledger_id}")
-                self.context.logger.info(f"Balances: {balances}")
-                self.context.logger.info(f"Tickers: {tickers}")
+                self.context.logger.debug(f"Got balances for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Got tickers for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Balances: {balances}")
+                self.context.logger.debug(f"Tickers: {tickers}")
                 portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
                 prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
 
