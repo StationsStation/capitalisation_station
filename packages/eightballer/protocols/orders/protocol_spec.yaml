@@ -26,6 +26,7 @@ speech_acts:
     status: pt:optional[ct:OrderStatus]
     exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
+    account: pt:optional[pt:str]
   get_settlements:
     currency: pt:optional[pt:str]
     end_timestamp: pt:optional[pt:float]

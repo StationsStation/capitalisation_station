@@ -1,8 +1,8 @@
-name: cex_dex_arbitrage
+name: sol_evm_arbitrage
 author: eightballer
 version: 0.1.0
 description: An agent service to demonstrate simple usage of DCXT and CCXT libraries
-  to perform arbitrage between a CEX and DEX.
+  to perform arbitrage between solana and ethereum.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint: {}
@@ -26,14 +26,11 @@ type: connection
 public_id: eightballer/ccxt:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
 type: connection
 config:
-  exchanges:
-  - name: mexc
-    api_key: ${MEXC_API_KEY:str}
-    api_secret: ${MEXC_API_SECRET:str}
+  exchanges: []
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
 public_id: eightballer/apprise:0.1.0
 type: connection
 config:
   endpoints:
-  - ${NTFY_ENDPOINT:str:ntfy://ntfy.sh/agent-arbing}
+  - ${APPRISE_ENDPOINT:str}

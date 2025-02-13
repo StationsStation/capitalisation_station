@@ -111,20 +111,21 @@ message OrdersMessage{
   }
 
   message Get_Orders_Performative{
-    string symbol = 1;
-    bool symbol_is_set = 2;
-    string currency = 3;
-    bool currency_is_set = 4;
-    OrderType order_type = 5;
-    bool order_type_is_set = 6;
-    OrderSide side = 7;
-    bool side_is_set = 8;
-    OrderStatus status = 9;
-    bool status_is_set = 10;
-    string exchange_id = 11;
-    bool exchange_id_is_set = 12;
-    string ledger_id = 13;
-    bool ledger_id_is_set = 14;
+    string exchange_id = 1;
+    string symbol = 2;
+    bool symbol_is_set = 3;
+    string currency = 4;
+    bool currency_is_set = 5;
+    OrderType order_type = 6;
+    bool order_type_is_set = 7;
+    OrderSide side = 8;
+    bool side_is_set = 9;
+    OrderStatus status = 10;
+    bool status_is_set = 11;
+    string ledger_id = 12;
+    bool ledger_id_is_set = 13;
+    string account = 14;
+    bool account_is_set = 15;
   }
 
   message Get_Settlements_Performative{

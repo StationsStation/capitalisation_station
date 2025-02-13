@@ -6,23 +6,23 @@ description: A simple single agent fsm to execute against arbitrage opportunitie
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeieck6sk7g3pksiidqtmagjvo4pmpootnyt5erim7kmplt6l4tek2u
-  dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
-  handlers.py: bafybeie43nnzdlctivmcmlwliv2owof4umqpdvkp7slccixbiwyr5s4ugi
-  my_model.py: bafybeif62hlkvkfugy3lbigy2th4kslk5pdh4xmtmprm2eznxmfk3cdk7u
+  __init__.py: bafybeihq5frq7zpuewuiq2nmovdkqawt3jjm6cmq4p7n5lh4pgbkrgq7n4
+  behaviours.py: bafybeihs7dcg7qwgjoweyhp363pbchbp6q2qvl3sgvgedpkrw6zqepipsq
+  dialogues.py: bafybeieq5pnb5ejejfv4ugqre3iuvwjz5twimknz3rtmbm7yg5tfrikapa
+  handlers.py: bafybeibenuk2zoseyyprpuzwmqp7cdv2rhdoru5zisbcuqsqx6xfvvfgzi
+  my_model.py: bafybeiayo5fxolkcgcjkzwu2l4hs2hure6mza573ile6aaemvcnrypnhmq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeihxhqmtcoosqb5tjsapg6snpgvwn4ikcpbv53lv7hhe2geg2qzy7u
-- eightballer/ccxt:0.1.0:bafybeib53qlnw7wx64dqjeppbjzmcwqhu23w3gyrny7b7bvbbp2vrwbzri
+- eightballer/dcxt:0.1.0:bafybeid6wa7jdpun4yfi3c373o6zf6z4f4tbwnd3xt2l6owtzq5bfkxicu
+- eightballer/ccxt:0.1.0:bafybeibf3rgak6l5bqr3sligqy2vgt24ohrbwc7j24w6vj25vdtkb6pfzi
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
-- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
-- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
-- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
+- eightballer/tickers:0.1.0:bafybeibkzzwhx4uznhtbte5ikjhihoinkf2idrne245kcyju76amla3oxu
+- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
+- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
+- eightballer/orders:0.1.0:bafybeicjjos6lwyv2ixqpf4dgoxxg6s675b6snrr4ig5352s3rkwybduzi
+- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
@@ -44,10 +44,15 @@ handlers:
 models:
   arbitrage_strategy:
     args:
+      order_size: 0.1
       ledgers:
       - base
+      - solana
       dexs:
-      - balancer
+      - balancer:
+        - base
+      - juniper:
+        - solana
       cexs:
       - mexc
     class_name: ArbitrageStrategy
