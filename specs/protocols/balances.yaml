@@ -9,18 +9,16 @@ protocol_specification_id: eightballer/balances:0.1.0
 speech_acts:
   get_all_balances:
     params: pt:optional[pt:dict[pt:str, pt:bytes]]
-    exchange_id: pt:optional[pt:str]
+    exchange_id: pt:str
     ledger_id: pt:optional[pt:str]
     address: pt:optional[pt:str]
   get_balance:
     asset_id: pt:str
-    exchange_id: pt:optional[pt:str]
+    exchange_id: pt:str
     ledger_id: pt:optional[pt:str]
     address: pt:optional[pt:str]
   all_balances:
     balances: ct:Balances
-    ledger_id: pt:optional[pt:str]
-    exchange_id: pt:optional[pt:str]
   balance:
     balance: ct:Balance
   error:
@@ -42,7 +40,6 @@ ct:Balance: |
       float used = 3;
       float total = 4;
       bool is_native = 5;
-      optional string contract_address = 6;
 ct:Balances: |
       repeated Balance balances = 1;
 ...

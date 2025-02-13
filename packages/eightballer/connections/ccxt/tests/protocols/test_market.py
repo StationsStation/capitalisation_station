@@ -7,9 +7,10 @@ import pytest
 from aea.mail.base import Envelope
 
 import ccxt
-from ccxt.tests.test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
+
+from ..test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
 
 
 TEST_EXCHANGE = "deribit"

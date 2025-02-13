@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 dassy23
@@ -25,7 +26,7 @@ import requests
 from aea.common import JSONLike
 from aea_ledger_solana import SolanaApi
 from aea.contracts.base import Contract
-from solders.transaction import VersionedTransaction
+from solders.transaction import VersionedTransaction  # noqa
 from aea.configurations.base import PublicId
 
 
@@ -40,7 +41,7 @@ class JupitarSwapContract(Contract):
 
     @classmethod
     def get_swap_transaction(
-        cls,
+        cls,  # noqa
         ledger_api: SolanaApi,
         authority,
         input_mint,
@@ -89,4 +90,5 @@ class JupitarSwapContract(Contract):
             "slippageBps": slippage_bps,
         }
         resp = requests.get(f"{JUPITAR_URL}/quote", timeout=TIMEOUT, params=params)
-        return resp.json()
+        quote = resp.json()
+        return quote

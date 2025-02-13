@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeia4kcp4oc2bursyknhw5skjre3jvqv65abayqifdqongfdjgcts4u
-  __init__.py: bafybeidkwxijpczdjccvc4yu727n2achwvlrui6zsaaa7tl22ektoivyp4
-  contract.py: bafybeibvynqrndlha73kk7fbd5cvifi575ojl7tq57idvtig5ujawec2yi
-  tests/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
-  tests/test_contract_jup.py: bafybeihutga3cdudgfsyri3b2deqtdwhblspebqwz5rx6gdcf3tt2yczfa
+  __init__.py: bafybeiajqexavi3ffoqbuxr6kaopalglvljy4f4mknwb4ta5y642vdwmjm
+  contract.py: bafybeiegjkegygmfp3m2floexfxnkkkqyo5lamlhubittylynqbaanogna
+  tests/__init__.py: bafybeieo36mrv4bymsfm6hjj3w34vhjurv7tenmwbyjmy2a3ft5fxc72qm
+  tests/test_contract_jup.py: bafybeif4yjlwktrtu75pl6vnoda2kozg326hmtpvwk6vtuf7qpfodnuera
 fingerprint_ignore_patterns: []
 class_name: JupitarSwapContract
 contract_interface_paths: {}
 dependencies: {}
 contracts:
-- eightballer/spl_token:0.1.0:bafybeihv74or7knawxpfxk3hbn766qo2lpbowvn27ipr2julgsihgp3upy
+- eightballer/spl_token:0.1.0:bafybeidlpaed4tbc72hmr6nkatkbt7rxenzzcgzxhrdsjmjhg6parmjf2m

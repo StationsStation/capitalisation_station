@@ -95,14 +95,15 @@ install_tool() {
     esac
 
     if [ "$tool" = "protoc" ]; then
-        if ! which protoc &> /dev/null; then
-            mv bin/protoc $venv_dir/protoc
+        if ! command -v protoc &> /dev/null; then
+            sudo mv bin/protoc $venv_dir/protoc
         else
             echo "protoc is already installed, skipping..."
         fi
     elif [ "$tool" = "protolint" ]; then
-        if ! which protolint &> /dev/null; then
-            mv protolint $venv_dir/protolint
+        if ! command -v protolint &> /dev/null; then
+	    echo $venv_dir
+            sudo mv protolint $venv_dir/protolint
         else
             echo "protolint is already installed, skipping..."
         fi
@@ -137,12 +138,10 @@ function install_poetry_deps() {
 
     echo "Installing package dependencies via poetry..."
     echo "Using poetry executable: $poetry_executable"
-    export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-    poetry install --all-extras > /dev/null || exit 1
+    poetry install > /dev/null || exit 1
     echo "Checking if aea is installed"
     poetry run aea --version
     echo "Done installing dependencies"
-
 }
 # Main execution
 
@@ -157,10 +156,7 @@ function set_env_file () {
 function setup_autonomy() {
     echo "Setting up autonomy"
     echo 'Initializing the author and remote for aea and syncing packages...'
-
-    # Extract author from config file with fallback to ci
-    author=$(grep "^author:" ~/.aea/cli_config.yaml 2>/dev/null | sed 's/author:[[:space:]]*//') || author="ci"
-
+    author=$(cat ~/.aea/cli_config.yaml | yq -r '.author') || author="ci"
     poetry run aea init --remote --author $author > /dev/null || exit 1
     echo 'Done initializing the author and remote for aea using the author: ' $author
     echo 'To change the author, run the command;

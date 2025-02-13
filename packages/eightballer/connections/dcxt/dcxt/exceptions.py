@@ -1,4 +1,6 @@
-"""Custom exceptions for the DCXT package."""
+"""
+Custom exceptions for the DCXT package.
+"""
 
 
 class Reversion(Exception):

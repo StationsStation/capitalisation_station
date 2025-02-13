@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ from packages.eightballer.protocols.order_book.dialogues import (
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -50,10 +51,10 @@ class TestDialoguesOrderBook(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return {
-            "performative": OrderBookMessage.Performative.SUBSCRIBE,
-            "exchange_id": "some str",
-            "symbol": "some str",
-            "precision": "some str",
-            "interval": 12,
-        }
+        return dict(
+            performative=OrderBookMessage.Performative.SUBSCRIBE,
+            exchange_id="some str",
+            symbol="some str",
+            precision="some str",
+            interval=12,
+        )

@@ -1,6 +1,6 @@
 """Implements the interface for market protocol."""
 
-from typing import cast
+from typing import Optional, cast
 
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
@@ -18,7 +18,7 @@ class MarketInterface(BaseInterface):
     dialogue_class = MarketsDialogue
     dialogues_class = BaseMarketsDialogues
 
-    async def get_all_markets(self, message: MarketsMessage, dialogue: Dialogue, connection) -> Message | None:
+    async def get_all_markets(self, message: MarketsMessage, dialogue: Dialogue, connection) -> Optional[Message]:
         """Get all markets from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
@@ -35,7 +35,7 @@ class MarketInterface(BaseInterface):
         except dcxt.exceptions.RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(
-                Message | None,
+                Optional[Message],
                 dialogue.reply(
                     performative=MarketsMessage.Performative.ERROR,
                     target_message=message,

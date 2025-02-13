@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -21,8 +22,7 @@
 import json
 import time
 from abc import ABC
-from typing import Any, cast
-from collections.abc import Generator
+from typing import Any, Set, Type, Generator, cast
 
 from aea.mail.base import Message
 
@@ -73,10 +73,11 @@ class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
         protocol_performative: Message.Performative,
         **kwargs,
     ) -> Generator[None, None, Any]:
-        """Get a ccxt response."""
+        """
+        Get a ccxt response.
+        """
         if protocol_performative not in self._performative_to_dialogue_class:
-            msg = f"Unsupported protocol performative '{protocol_performative}'"
-            raise ValueError(msg)
+            raise ValueError(f"Unsupported protocol performative '{protocol_performative}'")
         dialogue_class = self._performative_to_dialogue_class[protocol_performative]
 
         msg, dialogue = dialogue_class.create(
@@ -101,9 +102,9 @@ class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
 
 
 class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
-    """FetchDexMarketsBehaviour."""
+    """FetchDexMarketsBehaviour"""
 
-    matching_round: type[AbstractRound] = FetchDexMarketsRound
+    matching_round: Type[AbstractRound] = FetchDexMarketsRound
     behaviour_id = "fetch_dex_markets_behaviour"
 
     def async_act(self) -> Generator:
@@ -169,9 +170,9 @@ class FetchDexMarketsBehaviour(DexDataRetrievalBaseBehaviour):
 
 
 class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
-    """FetchDexBalancesBehaviour."""
+    """FetchDexBalancesBehaviour"""
 
-    matching_round: type[AbstractRound] = FetchDexBalancesRound
+    matching_round: Type[AbstractRound] = FetchDexBalancesRound
     behaviour_id = "fetch_dex_balances_behaviour"
 
     def async_act(self) -> Generator:
@@ -218,9 +219,9 @@ class FetchDexBalancesBehaviour(DexDataRetrievalBaseBehaviour):
 
 
 class FetchDexOrdersBehaviour(DexDataRetrievalBaseBehaviour):
-    """FetchDexOrdersBehaviour."""
+    """FetchDexOrdersBehaviour"""
 
-    matching_round: type[AbstractRound] = FetchDexOrdersRound
+    matching_round: Type[AbstractRound] = FetchDexOrdersRound
     behaviour_id = "fetch_dex_orders_behaviour"
 
     def async_act(self) -> Generator:
@@ -259,9 +260,9 @@ class FetchDexOrdersBehaviour(DexDataRetrievalBaseBehaviour):
 
 
 class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
-    """FetchDexPositionsBehaviour."""
+    """FetchDexPositionsBehaviour"""
 
-    matching_round: type[AbstractRound] = FetchDexPositionsRound
+    matching_round: Type[AbstractRound] = FetchDexPositionsRound
     behaviour_id = "fetch_dex_positions_behaviour"
 
     def async_act(self) -> Generator:
@@ -309,9 +310,9 @@ class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
 
 
 class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
-    """FetchDexTickersBehaviour."""
+    """FetchDexTickersBehaviour"""
 
-    matching_round: type[AbstractRound] = FetchDexTickersRound
+    matching_round: Type[AbstractRound] = FetchDexTickersRound
     behaviour_id = "fetch_dex_tickers_behaviour"
 
     def async_act(self) -> Generator:
@@ -372,11 +373,11 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
 
 
 class DexDataRetrievalRoundBehaviour(AbstractRoundBehaviour):
-    """RoundBehaviour."""
+    """RoundBehaviour"""
 
     initial_behaviour_cls = FetchDexMarketsBehaviour
     abci_app_cls = DexDataRetrievalAbciApp  # type: ignore
-    behaviours: set[type[BaseBehaviour]] = {
+    behaviours: Set[Type[BaseBehaviour]] = {
         FetchDexBalancesBehaviour,
         FetchDexMarketsBehaviour,
         FetchDexTickersBehaviour,

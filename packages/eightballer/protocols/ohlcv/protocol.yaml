@@ -8,18 +8,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiggwhnq5a63m3mzste7erogvmsre745bnzuyqrjehrc6u5zyokza4
-  __init__.py: bafybeihcbdotc6iklyipuh54h2x3jdh2lmh36z2fm2cdcuczcr5wvt2cdq
-  custom_types.py: bafybeifrwgqisu7hjm3m3fxvjvjfbgqbrafqopnzy4ctjmznifh7annvzu
-  dialogues.py: bafybeiamwukerq3slt2dahcz6qv2o3jebaolaeivqmr6wziy2fvwb4k7su
-  message.py: bafybeifs4lr4sgwmowzgq77poc64kabvogg4vyyt2nac4te6k2asrcqosq
+  __init__.py: bafybeifj4tlox3phg644xfyfyg5bvsxxlw7mv6ue5zrqbkyhrbiyuicily
+  custom_types.py: bafybeicr4jexatx7cvw5trk2zsjsfrkpttggqgjylgjkgo6llo3f2ulzym
+  dialogues.py: bafybeicmvdgcev7fsico2z3thoffdv3sqkuq6xjh2gvhlq4ib7ycicytmq
+  message.py: bafybeidearsju3ejfrm6frz5brccgteae24fiwjmkrvghsmoo57lr2cfsm
   ohlcv.proto: bafybeihwjdssrfvvtagrucw4o62ok4aoqehv5dzwau55deqlvavm4xlzqm
-  ohlcv_pb2.py: bafybeigssqq4i3d6pfh2slcqbgorqze3ix7mq4pjmagq7schiisc7ykefu
+  ohlcv_pb2.py: bafybeieiw5hllftwc7qofxidjmfflcuf7ug6o5ajfnslia26kfbytrmklq
   protocol_spec.yaml: bafybeiadohai3emoipafl5zfwckltw77hqtrt5u3mzmzvmkbhmveu4vhti
-  serialization.py: bafybeiapne6vmy22bw6kdcaivev7kf4jklpu32k6xjx3iqjbywbrvf3nvy
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  serialization.py: bafybeidl46rnheug76akvs6tmbp2qnuey7y7hsovsmisgstkrlglem53ui
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
   tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
-  tests/test_ohlcv_dialogues.py: bafybeidnhsbh7omwuopanmd5pwdjtk33qezvhxwygojzv5gqqc4slle5ba
-  tests/test_ohlcv_messages.py: bafybeiefjrxfxmycdcfgplducc6jhyxqjoal4z6klkj4w5apgverygou64
+  tests/test_ohlcv_dialogues.py: bafybeihgulswzf6j2osigsyfu6nisrgbo3oh2w5yjhwrhk6m7f3jtrmfdu
+  tests/test_ohlcv_messages.py: bafybeig2ieqc22bwn44xlcfsi2pkyo7d5mqak2rm2aecrgqqavggfosy6a
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

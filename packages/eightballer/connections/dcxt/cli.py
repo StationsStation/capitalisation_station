@@ -1,4 +1,6 @@
-"""Cli tool to enable fast access to the dcxt connection."""
+"""
+Cli tool to enable fast access to the dcxt connection.
+"""
 
 import asyncio
 import contextlib
@@ -28,13 +30,12 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import get_
 
 
 RPC_MAPPING = {
-    SupportedLedgers.ETHEREUM: "https://ethereum.rpc.subquery.network/public",
+    SupportedLedgers.ETHEREUM: "http://eth-archive.chains.wtf:8545",
     SupportedLedgers.BASE: "https://rpc.ankr.com/base",
     SupportedLedgers.OPTIMISM: "https://rpc.ankr.com/optimism",
     SupportedLedgers.GNOSIS: "https://rpc.ankr.com/gnosis",
     SupportedLedgers.POLYGON_POS: "https://rpc.ankr.com/polygon",
     SupportedLedgers.ARBITRUM: "https://rpc.ankr.com/arbitrum",
-    SupportedLedgers.MODE: "https://mainnet.mode.network",
 }
 
 
@@ -121,11 +122,12 @@ def create_envelope(cli_tool: DcxtCliTool, dialogues, performative, **kwargs):
         counterparty=str(cli_tool.connection.connection_id), performative=performative, **kwargs
     )
     request._sender = "eightballer/dcxt_cli:0.1.0"  # noqa
-    return Envelope(
+    envelope = Envelope(
         to=request.to,
         sender=request.sender,
         message=request,
     )
+    return envelope
 
 
 async def send_and_await_response(cli_tool: DcxtCliTool, envelope: Envelope):
@@ -145,18 +147,20 @@ async def send_and_await_response(cli_tool: DcxtCliTool, envelope: Envelope):
 @click.option("--portfolio-requires", type=click.Path(), default=None)
 @click.option("--output", type=click.Path(), default=None)
 def check_balances(account: str, ledger: str, output: str, portfolio_requires: str, supported_exchanges: str):
-    """Check the balances of the account.
+    """
+    Check the balances of the account.
     Use the --ledger option to specify the ledger.
 
     Example:
-    -------
     check_balances 0x1234 --ledger ethereum
-
     """
     print(f"Checking balances for account {account} on ledger `{ledger}`.")
     print()
     connections = []
-    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
+    if ledger == "all":
+        ledgers = [f.value for f in SupportedLedgers]
+    else:
+        ledgers = [ledger]
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
@@ -304,10 +308,11 @@ def fetch_trades(
 @click.group()
 def main():
     """Dcxt connection cli tool."""
+    pass
 
 
 main.add_command(check_balances)
 main.add_command(fetch_trades)
 
 if __name__ == "__main__":
-    main()
+    main()  # noqa

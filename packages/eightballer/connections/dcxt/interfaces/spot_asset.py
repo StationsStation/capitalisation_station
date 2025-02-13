@@ -72,12 +72,11 @@ class SpotAssetInterface(BaseInterface):
                 res = await exchange.fetch_balance(message.name)
             connection.logger.debug("Updated balances: %s", message.exchange_id)
             if exchange is None:
-                msg = "Unsupported exchange {message.exchange_id}"
-                raise ValueError(msg)
+                raise ValueError("Unsupported exchange {message.exchange_id}")
             self._parse_result_other(res, message)
             return self._balances[message.exchange_id][message.name]
         except Exception as error:  # pylint: disable=W0703
-            connection.logger.exception(f"FAILED TO POLL WITH -> {error}!")
+            connection.logger.error(f"FAILED TO POLL WITH -> {error}!")
 
     async def _poll_balances(self, message, connection):
         connection.logger.info("Starting to poll balances : %s", message.name)

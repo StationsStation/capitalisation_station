@@ -1,10 +1,11 @@
 """Interface."""
 
-from typing import TYPE_CHECKING, Any
+from typing import Any, Dict, Callable, Optional
 
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
+import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.connections.ccxt.interfaces.ohlcv import OhlcvInterface
 from packages.eightballer.connections.ccxt.interfaces.order import OrderInterface
@@ -14,12 +15,6 @@ from packages.eightballer.connections.ccxt.interfaces.balance import BalanceInte
 from packages.eightballer.connections.ccxt.interfaces.position import PositionInterface
 from packages.eightballer.connections.ccxt.interfaces.order_book import OrderBookInterface
 from packages.eightballer.connections.ccxt.interfaces.spot_asset import SpotAssetInterface
-
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    import ccxt.async_support as ccxt
 
 
 class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attributes
@@ -32,7 +27,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         self.polling_tasks = kwargs.get("polling_tasks")
         self.executing_tasks = kwargs.get("executing_tasks")
         self.queue = kwargs.get("queue")
-        self.exchanges: dict[str, ccxt.Exchange] = kwargs.get("exchanges")
+        self.exchanges: Dict[str, ccxt.Exchange] = kwargs.get("exchanges")
         self.supported_protocols = {
             SpotAssetInterface.protocol_id: SpotAssetInterface(),
             OhlcvInterface.protocol_id: OhlcvInterface(),
@@ -57,7 +52,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         handler: Callable[[Any], Any] = interface.get_handler(performative)
         return await handler(msg, dialogue, connection=self)
 
-    def build_envelope(self, request: Envelope | None, response_message: Message | None):
+    def build_envelope(self, request: Optional[Envelope], response_message: Optional[Message]):
         """Build the envelope."""
         response_envelope = None
 

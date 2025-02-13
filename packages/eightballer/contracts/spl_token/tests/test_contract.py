@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -19,7 +20,7 @@
 # ------------------------------------------------------------------------------
 
 """The tests module contains the tests of the packages/contracts/orca_whirlpool dir."""
-# type: ignore
+# type: ignore # noqa: E800
 # pylint: skip-file
 
 from typing import cast
@@ -68,7 +69,7 @@ class TestContractCommon:
         cls.ledger_api = SolanaApi(**config)
 
     @pytest.mark.parametrize(
-        ("address", "symbol", "expected_decimals"),
+        "address, symbol, expected_decimals",
         [
             (SOL_ADDDRESS, "SOL", 9),
             (OLAS_ADDRESS, "OLAS", 8),

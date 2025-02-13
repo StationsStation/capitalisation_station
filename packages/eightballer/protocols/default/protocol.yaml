@@ -8,18 +8,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeigblu34s2oqmv7es6jrbnziodhvmxq6eevy3w5guzzj3hzrvdacm4
-  __init__.py: bafybeigl56bk6g36e2ohbn3lq55d6km6v5aojxd7eoddyjplsolkqq6oty
-  custom_types.py: bafybeiebp4xamgafadxbbtewddnufrcq3et3xsbkl7ucovqzbxpvlorote
+  __init__.py: bafybeibpfpxh7kj6upl5pfselzrv2r7xxvloyrjtqdd5ig2fwcfqbotfly
+  custom_types.py: bafybeif7iddsnkkjn2ngpcy7tnetko4qu5xfuerqxzyanxgnvbj7ghegpq
   default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq
-  default_pb2.py: bafybeia7wihf7mjwcbbabi5x6qcfhjxkesg6svqfgb7u6fb2bggdgvteqq
-  dialogues.py: bafybeiheiq447pflh66mygilwtp55ndiik5kzwz55atroj5bxb4cnjo36a
-  message.py: bafybeicix3s6tt74opxoxct6qsvz5s57ber7a65buiovxyyitefw3ypu4y
+  default_pb2.py: bafybeih4kyulvf4jyktn5l7i5e3kn66nalkdfok76vmgbjlrs7gpthuwpi
+  dialogues.py: bafybeib5mj2yebudfsjv27evp2hgerkhswqyrqawa4tieekr4yxnz6kef4
+  message.py: bafybeifpz2btqffmvofivbjbb3aq6e3wdngcoqvnodu3g5ng6xqkabrfr4
   protocol_spec.yaml: bafybeiekmagbzy7be5rey4pdl6tmbqey7rili3o3dxr5gttttxea7hm6ja
-  serialization.py: bafybeiaj4565mqfghkmrokai2u2hocztf4ruwdws3ko3hrybhi6wuaczuu
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  serialization.py: bafybeievu2njollniwzm4a6ec2wcszjkegw6zx2vq3fmnq3goxq74rwqpi
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
   tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
-  tests/test_default_dialogues.py: bafybeigyvy4g6mobywt4xw6wzgiwqkgq7tilrffuhwv5xty7hlt6pzu3nm
-  tests/test_default_messages.py: bafybeidu6hvbrs5yskdxffhx4m464jsxitwxm53i6rki5wpdftozxtdomy
+  tests/test_default_dialogues.py: bafybeie65awtw47ksz3rej5bmkbzsfuhzgkncj4aqete4dzsrq6fxdido4
+  tests/test_default_messages.py: bafybeiazqnxtfrcba4cox4rvyienaf6djoypqaptsbkb2ajbxyaulqzbl4
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

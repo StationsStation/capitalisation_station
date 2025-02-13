@@ -1,6 +1,6 @@
 """Implements the interface for market protocol."""
 
-from typing import cast
+from typing import Optional, cast
 
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
@@ -23,19 +23,20 @@ def all_markets_from_api_call(api_call):
 
     for market in api_call:
         for key, value in market.items():
-            if key in {
+            if key in [
                 "tick_size",
                 "taker_commission",
                 "maker_commission",
                 "strike",
                 "min_trade_amount",
                 "contract_size",
-            }:
+            ]:
                 market[key] = cast_to_float(value)
 
-    return Markets(
+    markets = Markets(
         markets=[Market(**market) for market in api_call],
     )
+    return markets
 
 
 class MarketInterface(BaseInterface):
@@ -45,7 +46,7 @@ class MarketInterface(BaseInterface):
     dialogue_class = MarketsDialogue
     dialogues_class = BaseMarketsDialogues
 
-    async def get_all_markets(self, message: MarketsMessage, dialogue: Dialogue, connection) -> Message | None:
+    async def get_all_markets(self, message: MarketsMessage, dialogue: Dialogue, connection) -> Optional[Message]:
         """Get all markets from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
@@ -54,7 +55,7 @@ class MarketInterface(BaseInterface):
                 params["currency"] = message.currency
             markets = await exchange.fetch_markets(params=params)
             response_message = cast(
-                Message | None,
+                Optional[Message],
                 dialogue.reply(
                     performative=MarketsMessage.Performative.ALL_MARKETS,
                     target_message=message,
@@ -66,7 +67,7 @@ class MarketInterface(BaseInterface):
         except RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(
-                Message | None,
+                Optional[Message],
                 dialogue.reply(
                     performative=MarketsMessage.Performative.ERROR,
                     target_message=message,

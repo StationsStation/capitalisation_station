@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,7 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the support resources for the order_book protocol.
+"""
+This module contains the support resources for the order_book protocol.
 
 It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
 """

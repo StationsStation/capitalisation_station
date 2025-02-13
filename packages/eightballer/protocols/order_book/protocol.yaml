@@ -10,18 +10,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeidw4mczu5tnbc7qmxhdccdvukemv2tqjnzewlfijatb7his4ll3v4
-  __init__.py: bafybeiepdjuc776ctv74a4ukfjt6kdr75f3t45or7rugya46bisq56doli
-  custom_types.py: bafybeie62hxfxfvg5wjuhnuhptw3zvajto7ume2epllq575b2t4jehpv4u
-  dialogues.py: bafybeiaiexmbyok22bvmubbx5fvt6ilpm4sjv4vivkbmrlk4fkzwm6yvru
-  message.py: bafybeidigkcqyti6ssoi3j7wvtejawpj53nqunxopcxuk3r4ew5qhijnxa
+  __init__.py: bafybeihxrs2rfcd6bqb6fjyhkguucwb5y323pujequyu66dz2b2t6ogmdi
+  custom_types.py: bafybeidhyaovd2h5uga3bnrcxftceseteyq4fwpmobdc5oawnftqdsbrui
+  dialogues.py: bafybeihapzkzjygl4kfgbl7r2l5jrycvfbsjualamr6xq3xpgjyfl6iqqe
+  message.py: bafybeicw3xnqeih54newxe6n3gdow2m3xdl22du6ct7zm5hvh6hlxaomtq
   order_book.proto: bafybeih6v6przoxyjtgqgbhc6ffxmflny524tl7slryprpfcygljnssqma
-  order_book_pb2.py: bafybeiclkswsezvjmupanhsti7egweixfwh2htp4j3kct5vdcebhj7yziy
+  order_book_pb2.py: bafybeidffgyj23qiajnc4thgfx6axmlyqmnzobtjiaqbvwlvvlkfdldhqm
   protocol_spec.yaml: bafybeigbaj7tgnt7xz62kh4taunz22ymnd6w6rtdggnfbidcqypum7esc4
-  serialization.py: bafybeiarpafujerygrlxftopx7qfov7tlazehqak2tlex4ial575u23mou
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  serialization.py: bafybeifc4cthbcec5tmyl7k4tjiln34czvjhi2opaznedumylr3f6tlmqa
+  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
   tests/dummy_data.yaml: bafybeifnryfgsysxior7xixnl23micbalu2ekh3rupvnfpsyphqxdisquq
-  tests/test_order_book_dialogues.py: bafybeiewhikhbslqfdrxsmipl2xe3fb7vnrsnup6plheerq73ezo3cl7j4
-  tests/test_order_book_messages.py: bafybeif4tkfsabbynv4ntjnszexb6dypxlvar34kumpsa4zrtyquwfzrpm
+  tests/test_order_book_dialogues.py: bafybeihy3g5ytxtlmci7ei6e3igyohjp3g6rxlcj3lmgag44kln7entfoe
+  tests/test_order_book_messages.py: bafybeifbndwqde7unjofszom3agbmmxlfi5om3s6u4ulwsteism45dsmcu
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

@@ -7,9 +7,10 @@ import pytest
 from aea.mail.base import Envelope
 
 import ccxt
-from ccxt.tests.test_ccxt_connection import DEFAULT_EXCHANGE_ID, BaseCcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
+
+from ..test_ccxt_connection import DEFAULT_EXCHANGE_ID, BaseCcxtConnectionTest, with_timeout, get_dialogues
 
 
 TEST_SETTLEMENTS = [
@@ -100,7 +101,7 @@ class TestOrdersExecution(BaseCcxtConnectionTest):
         mocker.side_effect = mock_fetch_settlements
         self.connection._exchanges[  # noqa
             DEFAULT_EXCHANGE_ID
-        ].private_get_get_settlement_history_by_currency = mocker
+        ].private_get_get_settlement_history_by_currency = mocker  # noqa
         await self.connection.send(envelope)
         await asyncio.sleep(1)
         response = await self.connection.receive()

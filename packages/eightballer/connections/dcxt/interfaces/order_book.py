@@ -1,6 +1,9 @@
-"""Interface for the order book protocol."""
+"""
+Interface for the order book protocol.
+"""
 
 import asyncio
+from typing import Optional
 
 from aea.skills.base import Envelope
 
@@ -13,7 +16,9 @@ DEFAULT_INTERVAL = 0.1
 
 
 class OrderBookInterface(BaseInterface):
-    """Interface for positions protocol."""
+    """
+    Interface for positions protocol.
+    """
 
     protocol_id = OrderBookMessage.protocol_id
     dialogue_class = OrderBookDialogue
@@ -21,8 +26,10 @@ class OrderBookInterface(BaseInterface):
 
     async def subscribe(
         self, message: OrderBookMessage, dialogue: OrderBookDialogue, connection
-    ) -> OrderBookMessage | None:
-        """Get a position from the exchange."""
+    ) -> Optional[OrderBookMessage]:
+        """
+        Get a position from the exchange.
+        """
         exchange = connection.exchanges[message.exchange_id]
         connection.logger.info(f"Subscribing to {message.exchange_id} order book. Symbol: {message.symbol}")
         try:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -18,7 +19,7 @@
 
 """This package contains a scaffold of a model."""
 
-from typing import TYPE_CHECKING, Any
+from typing import Any, Dict, Callable
 
 from aea.skills.base import Model
 
@@ -33,10 +34,6 @@ class Requests(Model, FrozenMixin):
         self.request_id_to_callback: Dict[str, Callable] = {}
         super().__init__(*args, **kwargs)
         self._frozen = True
-
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 
 class ArbitrageStrategy(Model):
@@ -55,13 +52,3 @@ class ArbitrageStrategy(Model):
         self.order_size = kwargs.pop("order_size", 0)
         super().__init__(**kwargs)
 
-
-class Requests(Model, FrozenMixin):
-    """Keep the current pending requests."""
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        # mapping from dialogue reference nonce to a callback
-        self.request_id_to_callback: dict[str, Callable] = {}
-        super().__init__(*args, **kwargs)
-        self._frozen = True
