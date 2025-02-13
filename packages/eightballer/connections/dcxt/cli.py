@@ -19,7 +19,7 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import get_
 
 
 RPC_MAPPING = {
-    # SupportedLedgers.ETHEREUM: "http://eth.chains.wtf:8545",
+    SupportedLedgers.ETHEREUM: "https://ethereum.rpc.subquery.network/public",
     SupportedLedgers.BASE: "https://rpc.ankr.com/base",
     SupportedLedgers.OPTIMISM: "https://rpc.ankr.com/optimism",
     SupportedLedgers.GNOSIS: "https://rpc.ankr.com/gnosis",

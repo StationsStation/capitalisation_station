@@ -91,6 +91,7 @@ WHITELISTED_POOLS = {
         "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
         "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
         "0x4e1325ff075a387e3d337f5f12638d6d72b127800001000000000000000006d7",
+        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000"
     ],
     SupportedLedgers.OPTIMISM: [
         "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
@@ -113,7 +114,8 @@ WHITELISTED_POOLS = {
 
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: [
-        "0x6b175474e89094c44da98b954eedeac495271d0f"  # DAI
+        "0x6b175474e89094c44da98b954eedeac495271d0f", # DAI,
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"  # USDC
     ],
     SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
     SupportedLedgers.BASE: [
@@ -380,7 +382,8 @@ class BalancerClient:
             else:
                 stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
 
-            symbol = f"{token.address}/{self.tokens[stable_address].address}"
+            stable_token = self.get_token(stable_address)
+            symbol = f"{token.address}/{stable_address}"
 
             try:
                 ask_price = 1 / float(
