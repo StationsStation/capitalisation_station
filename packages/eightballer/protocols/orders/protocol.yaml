@@ -1,0 +1,26 @@
+name: orders
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/orders:0.1.0
+type: protocol
+description: A protocol for representing orders.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeichczdecmmn5ri5xr2dxwl3xfai3hnqmtxsjiwi7ailbj2xtyweie
+  __init__.py: bafybeigavdklcqngyu5mgifu3xs5h5mpmlphfpbrbrnonylqvgd3ujpt6q
+  custom_types.py: bafybeicisqamskgpqo2i3as5p57o4gpwra7xiyg2qqeoliozsvbfxsylby
+  dialogues.py: bafybeifot2xfxjpdwazgbz4rwde66i2swkw7g4oyswbjs6mg3baevxudbe
+  message.py: bafybeicqd3eyxt6wehsq5v3q3dyirmeq72ml3vfdsk3rhf5j4js7upjplu
+  orders.proto: bafybeibhrsbinibdzvirjz6csqkfeukszjtso5bps4pzcuxgntubwfzkd4
+  orders_pb2.py: bafybeic7aawav3ym6xytr27fj37vcqqan7jemdvkepvlubtubkduqatptm
+  protocol_spec.yaml: bafybeidnbqgodxmbhb6ia6jgkpoaccy4rgozzbgumb34hchowmfamqk6r4
+  serialization.py: bafybeifgv73fxg4d2efivp7jg4hsmmwtjrrwqr2hmxhwdgfcelxzrrcacm
+  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  tests/dummy_data.yaml: bafybeidpep422lgwzc6hedcmsnay5ojbzv7ow3adlgcsxde5yv3dxmile4
+  tests/test_orders_dialogues.py: bafybeiffwqazrrndawcfnwiaptoseqk7qlqlv7uqdmmdmcfxwaql5duzyq
+  tests/test_orders_messages.py: bafybeidn7vk23fwc5rpknej3n5qyv5sre7bfkytgivj4lzconxuc2eglve
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}

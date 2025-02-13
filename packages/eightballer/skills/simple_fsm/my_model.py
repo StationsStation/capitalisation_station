@@ -24,6 +24,7 @@ from aea.skills.base import Model
 
 from packages.valory.skills.abstract_round_abci.models import FrozenMixin
 
+
 class Requests(Model, FrozenMixin):
     """Keep the current pending requests."""
 

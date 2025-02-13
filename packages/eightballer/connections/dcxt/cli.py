@@ -248,7 +248,7 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
         return round(row["total"] * price, 2)
 
     all_balances["usd_value"] = all_balances.apply(get_value, axis=1)
-    all_balances.sort_values(by="usd_value", ascending=False, inplace=True)
+    all_balances = all_balances.sort_values(by="usd_value", ascending=False)
 
     rich_display_dataframe(all_balances, title="Balances with USD Value")
 
@@ -270,10 +270,7 @@ def fetch_trades(
     supported_exchanges: str,
 ):
     """Fetch trades."""
-    if ledger == "all":
-        ledgers = [f.value for f in SupportedLedgers]
-    else:
-        ledgers = [ledger]
+    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]

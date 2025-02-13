@@ -27,7 +27,7 @@ import pathlib
 import datetime
 from enum import Enum
 from time import sleep
-from typing import Any, Callable, Optional, Generator, cast
+from typing import Any, cast
 from textwrap import dedent
 from collections.abc import Callable, Generator
 
@@ -110,7 +110,7 @@ class IdentifyOpportunityRound(State):
         portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text(encoding="utf-8"))
         prices = json.loads(pathlib.Path(PRICES_FILE).read_text(encoding="utf-8"))
         existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text(encoding="utf-8"))
-        
+
         orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")

@@ -9,8 +9,8 @@ fingerprint:
   tests/test_agent.py: bafybeigwyoxlepm7omcfv2j42uzvxd6xupncluenld3m3wk4jjfmtqa2yu
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeib53qlnw7wx64dqjeppbjzmcwqhu23w3gyrny7b7bvbbp2vrwbzri
-- eightballer/dcxt:0.1.0:bafybeihxhqmtcoosqb5tjsapg6snpgvwn4ikcpbv53lv7hhe2geg2qzy7u
+- eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
+- eightballer/dcxt:0.1.0:bafybeih74mfedrpeahtrl4rotavxtzedn5prw2gr4ws3ilacbx5l6ojnxy
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 - eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
@@ -29,11 +29,11 @@ protocols:
 - eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
 - eightballer/ohlcv:0.1.0:bafybeicaxvy6itmm52gqofmm7yq5xgojyrge6uczgwcsxeykxjju5xk66a
 - eightballer/order_book:0.1.0:bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky
-- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
 - eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
+- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 - valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
 - valory/acn:1.1.0:bafybeic6h55ov5lrzbah6fate54c4u6spopcexxspw3abotbmffabfddeu
@@ -43,8 +43,8 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeiaskhdbpypqmuy7bm6u27kzi4kzhnmx7ldibsvljd3pdvzknt7hga
-- eightballer/dex_data_retrieval:0.1.0:bafybeiaz7a5o2r5jdh333imjli5hd4k6zr6tn556rduajg5llxfedxushi
+- eightballer/chained_dex_app:0.1.0:bafybeigcjqlhphthlmsfp4dwwbhjg2hz2fbotcbhtirtxydkvbj33undym
+- eightballer/dex_data_retrieval:0.1.0:bafybeifkvagb6y4gfnp4y7dp3af7rfyxcbvmytk353cslwhjeroxylbce4
 - eightballer/metrics:0.1.0:bafybeifp6dohkmn2thbokbreio3d3ej3wwhfihea3zokty7nlp2hh42jua
 - eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
 - valory/abstract_abci:0.1.0:bafybeifv2dynqo3o57nr6jntsvdkduytz3f6i52csv2bjwrr4qhi4mkm7i

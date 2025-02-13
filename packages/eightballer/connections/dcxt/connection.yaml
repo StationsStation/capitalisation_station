@@ -9,15 +9,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
-  cli.py: bafybeidlabyahes5jul2bulnhizklgi2rmmzvpva63wcudujerylu3onva
-  connection.py: bafybeiftkmo5alzcpaxjwqb7yxb3bohfyj5hioa4xgsc7oj24px2gejj4u
-  custom.py: bafybeie6t7wdj7q5csjzkovzyg6ljtbxvt2iaypfwrd5lgppkgw5s7xfbm
-  dcxt/__init__.py: bafybeif3lplp6ol35z4nqaqfisvmelotaaqwh7yj4gpg53fliiv4z2jxgm
-  dcxt/balancer.py: bafybeihoe2jcx3r24goxez5sy6t5ggwonbeaxbtm6qld2vmgzgo6vcbobu
+  cli.py: bafybeihc33wi66pxt3a37rxgtjm5uduexfkvpzm5raq22sxguly7hju2gu
+  connection.py: bafybeidpxd6rfntfcvzu75vf2m6oyxhl5oxwptubtqzplf344drgtvr4zq
+  custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
+  dcxt/__init__.py: bafybeicppsz5rx2nbnluphrx67k6txtokhhc6vexak5zrzw7s44tyv5vdq
+  dcxt/balancer.py: bafybeiay44jy3tg2u2u2zg4a7lu7rnf2djyumlxtrg3upf3kz4z43ci274
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
+  dcxt/data/token_list.json: bafybeicphchojbfinyesiq4khowo6kr3wm3zljz2kerde6o24k3aou5lf4
   dcxt/defi_exchange.py: bafybeiacrggzt76kf4a32mdn6jk74nquxhglb4x6lb45rzplkzwurq3nci
   dcxt/exceptions.py: bafybeihjzhm7daxmaazx7iszmgyagjkggijnztq7c6t7zeftyfrdoae6jm
   dcxt/hundred_x.py: bafybeifryvzvhkumrvt6yg755lhcsuqi7mend3h7t2gxtnvdxpt5bjw3xy
@@ -32,7 +33,7 @@ fingerprint:
   interfaces/interface_base.py: bafybeieuqfbvi5kucgwxcywt4lfsf7a25gbe5llr2hv4iubpvaazr4ayea
   interfaces/market.py: bafybeia3jb74cyyj6nxobkyrvhzzi66eky5r2smtur6wnwalvzsmonm77y
   interfaces/ohlcv.py: bafybeifok6ch2mzpn5qzkyykroozrjrswosrlznxgnakn76librey76ufa
-  interfaces/order.py: bafybeiez4dzbglvalcch5ohmue6ydte6w4sw7w3gsirxw5z6viotuadvbi
+  interfaces/order.py: bafybeidhv5vpqa43ukn4csxcar37ca5fpavx43ziqlksqtmkyd3nbks76i
   interfaces/order_book.py: bafybeidfvpunblqq7buuww42wlhmjlgmcgp2scb2geng4shkb3hg2k3aqu
   interfaces/position.py: bafybeidptjspw3yu642sy224ix2qvtwiuslkizqpj5fhxtlq33durbo6m4
   interfaces/spot_asset.py: bafybeiapvhgxyfufnk5iuleoznzxcugc3g6wnjqrliokc4ikmsulekba6q
@@ -62,15 +63,15 @@ restricted_to_protocols:
 - eightballer/spot_asset:0.1.0
 - eightballer/tickers:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeigz4dish3j7bxrjb5srqrltjw2px7eygjjkgovo3hkkmpqc6uoywm
-- eightballer/default:0.1.0:bafybeihvq6grqqogxdplmuc5hzpg4pug5f5qanit3f27lx2btxp5d2w35e
-- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
-- eightballer/ohlcv:0.1.0:bafybeiat7aiynu64qxeprxs5u7624f6za5ptn6iwa3maij4ds3ygcxc5ai
-- eightballer/order_book:0.1.0:bafybeihi5wuqhwxu4jos3qjwwfdv44fiwzg5usgr44ql6jqsh5c6vtjbq4
-- eightballer/orders:0.1.0:bafybeicjjos6lwyv2ixqpf4dgoxxg6s675b6snrr4ig5352s3rkwybduzi
-- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
-- eightballer/spot_asset:0.1.0:bafybeiaq7wscqkotvpljbuvp4aafgsl636oyn5zb2tuk57db7gx2o4n56u
-- eightballer/tickers:0.1.0:bafybeibkzzwhx4uznhtbte5ikjhihoinkf2idrne245kcyju76amla3oxu
+- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
+- eightballer/default:0.1.0:bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a
+- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
+- eightballer/ohlcv:0.1.0:bafybeicaxvy6itmm52gqofmm7yq5xgojyrge6uczgwcsxeykxjju5xk66a
+- eightballer/order_book:0.1.0:bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky
+- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
+- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
+- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
 class_name: DcxtConnection
 config:
   exchanges:

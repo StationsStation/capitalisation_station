@@ -2,7 +2,6 @@
 
 import json
 import time
-import decimal
 import traceback
 from enum import Enum
 from glob import glob
@@ -13,7 +12,6 @@ from pathlib import Path
 # pylint: disable=R0914,R0902,R0912
 # ruff: noqa: PLR0914,PLR0915
 from datetime import UTC, datetime
-from datetime import datetime, timezone
 from functools import cache
 from collections import defaultdict
 
@@ -100,7 +98,7 @@ WHITELISTED_POOLS = {
         "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
         "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
         "0x4e1325ff075a387e3d337f5f12638d6d72b127800001000000000000000006d7",
-        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000"
+        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000",
     ],
     SupportedLedgers.OPTIMISM: [
         "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
@@ -123,13 +121,13 @@ WHITELISTED_POOLS = {
 
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: [
-        "0x6b175474e89094c44da98b954eedeac495271d0f", # DAI,
+        "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI,
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"  # USDC
         "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
     ],
     SupportedLedgers.OPTIMISM: [
-        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",  #
+        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
         "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",  # USDT
     ],
     SupportedLedgers.BASE: [
@@ -143,7 +141,7 @@ LEDGER_TO_STABLECOINS = {
         "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",  # USDC
     ],
     SupportedLedgers.POLYGON_POS: [
-        "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",  #
+        "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
         "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",  # USDC
     ],
     SupportedLedgers.ARBITRUM: [
@@ -235,10 +233,8 @@ TOKEN_LIST_PATH = Path(__file__).parent / "data" / "token_list.json"
 
 
 def read_token_list(chain_id: int):
-    """
-    Read the token list.
-    """
-    with open(TOKEN_LIST_PATH, "r", encoding=DEFAULT_ENCODING) as file:
+    """Read the token list."""
+    with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:
         token_list = json.loads(file.read())["tokens"]
 
     tokens = filter(lambda t: t["chainId"] == chain_id, token_list)
@@ -252,8 +248,8 @@ class BalancerClient:
 
     def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
         if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
-            msg = "Chain name not provided to BalancerClient"
-            raise ConfigurationError(f"Incorrect chain name `{ledger_id}` provided to BalancerClient")
+            msg = f"Incorrect chain name `{ledger_id}` provided to BalancerClient"
+            raise ConfigurationError(msg)
 
         self.ledger_id = SupportedLedgers(ledger_id)
         self.balancer_deployment = LEDGER_IDS_CHAIN_NAMES[self.ledger_id]
@@ -411,7 +407,7 @@ class BalancerClient:
             token = self.get_token(token_address)
             symbol = f"{token.symbol}/USD"
             usd_price = prices[token.address.lower()]
-            timestamp = datetime.now(tz=timezone.utc)
+            timestamp = datetime.now(tz=UTC)
             ticker = Ticker(
                 symbol=symbol,
                 asset_a=token.symbol,
@@ -424,7 +420,7 @@ class BalancerClient:
                 datetime=timestamp.isoformat(),
             )
             self.tickers[symbol] = ticker
-        return Tickers(tickers=list(ticker for ticker in self.tickers.values()))
+        return Tickers(tickers=list(self.tickers.values()))
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
         """Given the data, we get the params for the swap from the balancer exchange."""
@@ -788,7 +784,6 @@ class BalancerClient:
         """
         vault = self.bal.balLoadContract("Vault")
         params = kwargs.get("params", {})
-        individual_transactions = {}
 
         def parse_transaction(events, txn_hash):
             def net_out_swaps(swap_events):
@@ -830,7 +825,7 @@ class BalancerClient:
         end = self.bal.web3.eth.block_number
         account = params.get("account")
         for i in range(0, end - start, interval):
-            start = start + i
+            start += i
             to = start + interval
             if to > end:
                 to = end - 1
@@ -853,7 +848,7 @@ class BalancerClient:
             trades[tx_hash] = parse_transaction(events, tx_hash)
             transaction_data[tx_hash] = self.bal.web3.eth.get_transaction(tx_hash)
 
-        relevant_transactions = {k: v for k, v in transaction_data.items() if v["from"] == account}
+        {k: v for k, v in transaction_data.items() if v["from"] == account}
 
         breakpoint()
 
@@ -926,13 +921,6 @@ class BalancerClient:
     @cache
     def get_token(self, address):
         """Get the token from the address."""
-        if address not in self.tokens:
-            # We retrieve the token from the balancer contract.
-            contract = self.bal.erc20GetContract(address)
-            name = contract.functions.name().call()
-            symbol = contract.functions.symbol().call()
-            decimals = contract.functions.decimals().call()
-            self.tokens[address] = Erc20Token(
         # We check if the token is already in the raw token data.
         if address in self.tokens:
             return self.tokens[address]
