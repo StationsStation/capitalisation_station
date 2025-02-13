@@ -21,7 +21,10 @@ function generate_protocol {
 
 
 
-generate_protocol 'liquidity_provision'
+
+generate_protocol 'tickers'
+generate_protocol 'balances'
+# generate_protocol 'liquidity_provision'
 # generate_protocol 'default'
 # generate_protocol 'spot_asset'
 # generate_protocol 'ohlcv'
@@ -30,8 +33,6 @@ generate_protocol 'liquidity_provision'
 # generate_protocol 'markets'
 
 # generate_protocol 'orders'
-# generate_protocol 'balances'
 # generate_protocol 'positions'
 # 
-# generate_protocol 'tickers'
 # generate_protocol 'orders'

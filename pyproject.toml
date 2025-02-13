@@ -27,7 +27,7 @@ open-aea-cli-ipfs = "==1.63.0"
 open-aea= "==1.63.0"
 open-aea-test-autonomy = "==0.19.2"
 open-autonomy = "==0.19.2"
-autonomy-dev = {version = "==0.2.121", extras = ["all"]}
+autonomy-dev = {version = "==0.2.123", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
@@ -38,11 +38,11 @@ sqlalchemy = "==1.4.45"
 cytoolz = "==1.0.0"
 async-timeout = "^4.0.3"
 openapi-core = "==0.14.5"
-open-balpy = "^0.0.7"
+open-balpy = "<1"
 open-multicaller = "^0.2.0"
 tomli = "^2.2.1"
 
-[tool.poetry.dev-dependencies]
+[poetry.group.dev.dependencies]
 
 
 [tool.poetry.extras]
