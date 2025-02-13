@@ -1,6 +1,4 @@
-"""
-Cli tool to enable fast access to the dcxt connection.
-"""
+"""Cli tool to enable fast access to the dcxt connection."""
 
 import asyncio
 from dataclasses import asdict, dataclass
@@ -97,20 +95,18 @@ def create_envelope(cli_tool: DcxtCliTool, dialogues, performative, **kwargs):
         counterparty=str(cli_tool.connection.connection_id), performative=performative, **kwargs
     )
     request._sender = "eightballer/dcxt_cli:0.1.0"  # noqa
-    envelope = Envelope(
+    return Envelope(
         to=request.to,
         sender=request.sender,
         message=request,
     )
-    return envelope
 
 
 async def send_and_await_response(cli_tool: DcxtCliTool, envelope: Envelope):
     """Send and await response."""
     await cli_tool.connection.send(envelope)
     await asyncio.sleep(1)
-    response = await cli_tool.connection.receive()
-    return response
+    return await cli_tool.connection.receive()
 
 
 @click.command()
@@ -122,20 +118,18 @@ async def send_and_await_response(cli_tool: DcxtCliTool, envelope: Envelope):
 @click.option("--portfolio-requires", type=click.Path(), default=None)
 @click.option("--output", type=click.Path(), default=None)
 def check_balances(account: str, ledger: str, output: str, portfolio_requires: str, supported_exchanges: str):
-    """
-    Check the balances of the account.
+    """Check the balances of the account.
     Use the --ledger option to specify the ledger.
 
     Example:
+    -------
     check_balances 0x1234 --ledger ethereum
+
     """
     print(f"Checking balances for account {account} on ledger `{ledger}`.")
     print()
     connections = []
-    if ledger == "all":
-        ledgers = [f.value for f in SupportedLedgers]
-    else:
-        ledgers = [ledger]
+    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
@@ -165,10 +159,9 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
 @click.group()
 def main():
     """Dcxt connection cli tool."""
-    pass
 
 
 main.add_command(check_balances)
 
 if __name__ == "__main__":
-    main()  # noqa
+    main()

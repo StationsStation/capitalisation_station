@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -93,7 +92,8 @@ class MarketsReportingHandler(BaseHandler):
         elif message.performative == MarketsMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
 
 
 class BalancesReportingHandler(BaseHandler):
@@ -102,9 +102,7 @@ class BalancesReportingHandler(BaseHandler):
     SUPPORTED_PROTOCOL = BalancesMessage.protocol_id
 
     def handle(self, message: Message) -> None:
-        """
-        handle reports on balances.
-        """
+        """Handle reports on balances."""
         self.context.logger.debug(f"Reporting on balances: {message}")
         new_instances = []
         existing_instances = []
@@ -125,7 +123,8 @@ class BalancesReportingHandler(BaseHandler):
         elif message.performative == BalancesMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
 
 
 class OrdersReportingHandler(BaseHandler):
@@ -134,9 +133,7 @@ class OrdersReportingHandler(BaseHandler):
     SUPPORTED_PROTOCOL = OrdersMessage.protocol_id
 
     def handle(self, message: Message) -> None:
-        """
-        handle reports on orders.
-        """
+        """Handle reports on orders."""
         self.context.logger.debug(f"Reporting on orders: {message}")
         new_instances = []
         existing_instances = []
@@ -153,10 +150,10 @@ class OrdersReportingHandler(BaseHandler):
             if existing_instances:
                 self.strategy.bulk_update_instances(existing_instances)
 
-        elif message.performative in [
+        elif message.performative in {
             OrdersMessage.Performative.ORDER,
             OrdersMessage.Performative.CREATE_ORDER,
-        ]:
+        }:
             order = message.order
             _order = self._parse_order(order)
             instance = self.strategy.get_instance(_order, "id")
@@ -167,7 +164,8 @@ class OrdersReportingHandler(BaseHandler):
         elif message.performative == OrdersMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
 
     def _parse_order(self, order: Order):
         """Parse the order."""
@@ -186,9 +184,7 @@ class TickersReportingHandler(BaseHandler):
     SUPPORTED_PROTOCOL = TickersMessage.protocol_id
 
     def handle(self, message: Message) -> None:
-        """
-        handle reports on tickers.
-        """
+        """Handle reports on tickers."""
         self.context.logger.debug(f"Reporting on tickers: {message}")
         new_instances = []
         existing_instances = []
@@ -209,7 +205,8 @@ class TickersReportingHandler(BaseHandler):
         elif message.performative == TickersMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
 
 
 class PositionsReportingHandler(BaseHandler):
@@ -218,9 +215,7 @@ class PositionsReportingHandler(BaseHandler):
     SUPPORTED_PROTOCOL = PositionsMessage.protocol_id
 
     def handle(self, message: Message) -> None:
-        """
-        handle reports on positions.
-        """
+        """Handle reports on positions."""
         self.context.logger.debug(f"Reporting on positions: {message}")
         new_instances = []
         existing_instances = []
@@ -241,7 +236,8 @@ class PositionsReportingHandler(BaseHandler):
         elif message.performative == PositionsMessage.Performative.ERROR:
             self._handle_error(message)
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
         if new_instances:
             self.strategy.bulk_add_instances(new_instances)
         if existing_instances:
@@ -251,14 +247,11 @@ class PositionsReportingHandler(BaseHandler):
             self.strategy.pivot_all_positions()
 
     def _handle_position(self, position: Position, message) -> None:
-        """
-        We refactor the position to be a dict.
-        """
+        """We refactor the position to be a dict."""
         position.agent_address = self.context.agent_address
         position.info = json.dumps(position.info)
         position.id = f"{message.exchange_id}_{position.symbol}_{self.context.agent_address}"
-        instance = self.strategy.get_instance(position, "id")
-        return instance
+        return self.strategy.get_instance(position, "id")
 
     def _handle_error(self, message: Message):
         self.context.logger.error(f"Error in {self.__class__.__name__} handler: {message}")
@@ -282,13 +275,14 @@ class PositionsReportingHandler(BaseHandler):
             else:
                 self.context.logger.error(f"Could not find dialogue for {message.performative}")
         else:
-            raise ValueError(f"Cannot handle message of performative {message.performative}")
+            msg = f"Cannot handle message of performative {message.performative}"
+            raise ValueError(msg)
 
 
 class HttpHandler(BaseHandler):
     """The HTTP response handler."""
 
-    SUPPORTED_PROTOCOL: Optional[PublicId] = HttpMessage.protocol_id
+    SUPPORTED_PROTOCOL: PublicId | None = HttpMessage.protocol_id
     allowed_response_performatives = frozenset({HttpMessage.Performative.RESPONSE})
 
     def handle(self, message: Message) -> None:
@@ -300,8 +294,11 @@ class HttpHandler(BaseHandler):
                 if json.loads(msg.body)["ok"]:
                     self.context.logger.debug("success")
                 else:
-                    raise ValueError(f"FAILED http error: status_code={msg.status_code}")
+                    msg = f"FAILED http error: status_code={msg.status_code}"
+                    raise ValueError(msg)
             else:
-                raise ValueError(f"FAILED http error: status_code={msg.status_code}")
+                msg = f"FAILED http error: status_code={msg.status_code}"
+                raise ValueError(msg)
         else:
-            raise ValueError(f"Cannot handle message of performative {msg.performative}")
+            msg = f"Cannot handle message of performative {msg.performative}"
+            raise ValueError(msg)

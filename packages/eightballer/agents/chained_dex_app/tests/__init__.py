@@ -1,3 +1,1 @@
-"""
-Base test case for the agent.
-"""
+"""Base test case for the agent."""

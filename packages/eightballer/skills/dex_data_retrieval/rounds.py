@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -21,7 +20,6 @@
 
 import json
 from enum import Enum
-from typing import Set, Dict, Tuple, Optional
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -42,28 +40,27 @@ from packages.eightballer.skills.dex_data_retrieval.payloads import (
 
 
 class Event(Enum):
-    """AbciApp Events"""
+    """AbciApp Events."""
 
     FAILED = "failed"
     DONE = "done"
 
 
 class SynchronizedData(BaseSynchronizedData):
-    """
-    Class to represent the synchronized data.
+    """Class to represent the synchronized data.
 
     This data is replicated by the tendermint application.
     """
 
 
 class FetchDexBalancesRound(CollectSameUntilThresholdRound):
-    """FetchDexBalancesRound"""
+    """FetchDexBalancesRound."""
 
     payload_class = FetchDexBalancesPayload
     payload_attribute = "dex_balances"
     synchronized_data_class = SynchronizedData
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
         if not self.threshold_reached:
             return None
@@ -76,13 +73,13 @@ class FetchDexBalancesRound(CollectSameUntilThresholdRound):
 
 
 class FetchDexMarketsRound(CollectSameUntilThresholdRound):
-    """FetchDexMarketsRound"""
+    """FetchDexMarketsRound."""
 
     payload_class = FetchDexMarketsPayload
     payload_attribute = "dex_markets"
     synchronized_data_class = SynchronizedData
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
         if not self.threshold_reached:
             return None
@@ -95,13 +92,13 @@ class FetchDexMarketsRound(CollectSameUntilThresholdRound):
 
 
 class FetchDexOrdersRound(CollectSameUntilThresholdRound):
-    """FetchDexOrdersRound"""
+    """FetchDexOrdersRound."""
 
     payload_class = FetchDexOrdersPayload
     payload_attribute = "dex_orders"
     synchronized_data_class = SynchronizedData
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
         if not self.threshold_reached:
             return None
@@ -113,13 +110,13 @@ class FetchDexOrdersRound(CollectSameUntilThresholdRound):
 
 
 class FetchDexPositionsRound(CollectSameUntilThresholdRound):
-    """FetchDexPositionsRound"""
+    """FetchDexPositionsRound."""
 
     payload_class = FetchDexPositionsPayload
     payload_attribute = "dex_positions"
     synchronized_data_class = SynchronizedData
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
         if not self.threshold_reached:
             return None
@@ -130,13 +127,13 @@ class FetchDexPositionsRound(CollectSameUntilThresholdRound):
 
 
 class FetchDexTickersRound(CollectSameUntilThresholdRound):
-    """FetchDexTickersRound"""
+    """FetchDexTickersRound."""
 
     payload_class = FetchDexTickersPayload
     payload_attribute = "dex_tickers"
     synchronized_data_class = SynchronizedData
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
         if not self.threshold_reached:
             return None
@@ -147,18 +144,18 @@ class FetchDexTickersRound(CollectSameUntilThresholdRound):
 
 
 class FailedDexRound(DegenerateRound):
-    """FailedDexRound"""
+    """FailedDexRound."""
 
 
 class RetrievedDexDataRound(DegenerateRound):
-    """RetrievedDexDataRound"""
+    """RetrievedDexDataRound."""
 
 
 class DexDataRetrievalAbciApp(AbciApp[Event]):
-    """DexDataRetrievalAbciApp"""
+    """DexDataRetrievalAbciApp."""
 
     initial_round_cls: AppState = FetchDexMarketsRound
-    initial_states: Set[AppState] = {FetchDexMarketsRound}
+    initial_states: set[AppState] = {FetchDexMarketsRound}
     transition_function: AbciAppTransitionFunction = {
         FetchDexBalancesRound: {
             Event.DONE: FetchDexPositionsRound,
@@ -183,13 +180,13 @@ class DexDataRetrievalAbciApp(AbciApp[Event]):
         RetrievedDexDataRound: {},
         FailedDexRound: {},
     }
-    final_states: Set[AppState] = {RetrievedDexDataRound, FailedDexRound}
+    final_states: set[AppState] = {RetrievedDexDataRound, FailedDexRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = set({})
-    db_pre_conditions: Dict[AppState, Set[str]] = {
+    cross_period_persisted_keys: set[str] = set({})
+    db_pre_conditions: dict[AppState, set[str]] = {
         FetchDexMarketsRound: set({}),
     }
-    db_post_conditions: Dict[AppState, Set[str]] = {
+    db_post_conditions: dict[AppState, set[str]] = {
         RetrievedDexDataRound: {
             "dex_balances",
             "dex_markets",

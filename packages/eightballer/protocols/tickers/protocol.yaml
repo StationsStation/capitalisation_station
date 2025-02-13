@@ -8,16 +8,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeid2huu3okhbo3kp7mx57uvcnedfkkxolwvidesltau4lcwhtdlc6u
-  __init__.py: bafybeidamzahjeljpnd72lm3srhlca6zuoj2iy2clvoyy76zjp3b366xua
-  custom_types.py: bafybeibchquxaftpo7krszluf3n3ydot2hp3bby2jrezean64uv3edefzi
-  dialogues.py: bafybeie2wq5urmtji5w2al2ruwrh2h43zaxxef77fh2ovumcn6nabh6pf4
+  __init__.py: bafybeigk3gue6mjjzimfq3oy2s4x4ct4oy3ynzrglpc6ihwnhqdeia7o2m
+  custom_types.py: bafybeigvlciyyegfc6cltcxjqsydwtvfbsy2qw3hr4lrzlopgnkwggpesu
+  dialogues.py: bafybeifjhgzgvujdrwtuua6do2wlayf44ojfzgk24wlv43t3oahymuokwi
   message.py: bafybeiegc2ndww2qml2zc4m54ipf6fsvns7ufg5adxc2fy63bygibqndy4
   protocol_spec.yaml: bafybeie2ecmky3nlfg62nyo4lawz6kwwiuqmisasyo4kn2cr3axc3wazgm
   serialization.py: bafybeihlffrxya3lc7t6laie7q24lh3ej25chxw26t36yt23gm3df5dibu
-  tests/__init__.py: bafybeiap5b4ozevzknmxm4t34y2jphskf6r2r6wymoidcnu44ff2ouchgi
+  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
   tests/dummy_data.yaml: bafybeiddv4lavgwx3vqkmswsl2klmfp55ff2ooq6bgkwddo6zzcepunute
-  tests/test_tickers_dialogues.py: bafybeierqzccw6znvmx63twh44ocds2yrqcrb5wqc6uerg42qzcnjqqwzy
-  tests/test_tickers_messages.py: bafybeidbbcl4cyo7gl3quf7cyts3zy6aytl3uml74dssjiv4scyeiirb3i
+  tests/test_tickers_dialogues.py: bafybeidc7ihpzzmb2yis3qfd6sj6csoxsdhhnpsyddeprhs5t6xqreol4q
+  tests/test_tickers_messages.py: bafybeibedolvzk4ngibpgfjtned6kahjmadulr7c3i74sshzrobzflnhfa
   tickers.proto: bafybeiazx47n6xqrvzl774q3p3n2ajqlbb7ws3yx2qr7qaiwdygkw62wmi
   tickers_pb2.py: bafybeieozvxrnaottrgbznvebypykog4j774mbmdywy3gjyslbxe3ff2pa
 fingerprint_ignore_patterns: []

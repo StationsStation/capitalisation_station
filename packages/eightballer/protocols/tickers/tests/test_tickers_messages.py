@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #                                                                             --
 #
 #   Copyright 2025 eightballer
@@ -21,10 +20,10 @@
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
-from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
+
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.custom_types import (
     Ticker,
@@ -35,7 +34,7 @@ from packages.eightballer.protocols.tickers.custom_types import (
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -44,7 +43,7 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = TickersMessage
 
-    def build_messages(self) -> List[TickersMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[TickersMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             TickersMessage(

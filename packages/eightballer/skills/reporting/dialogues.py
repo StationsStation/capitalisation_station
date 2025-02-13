@@ -1,6 +1,4 @@
-"""
-Dialogs for the application.
-"""
+"""Dialogs for the application."""
 
 from typing import Any
 
@@ -29,8 +27,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
     """This class keeps track of all http dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
         :param kwargs: keyword arguments
         """
@@ -39,7 +36,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> BaseDialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message
+            """Infer the role of the agent from an incoming/outgoing first message.
 
             :param message: an incoming/outgoing first message
             :param receiver_address: the address of the receiving agent

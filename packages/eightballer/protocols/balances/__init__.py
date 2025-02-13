@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 eightballer
@@ -17,8 +16,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the balances protocol.
+"""This module contains the support resources for the balances protocol.
 
 It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
 """

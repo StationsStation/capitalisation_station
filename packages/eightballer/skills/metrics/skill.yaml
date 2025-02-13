@@ -8,17 +8,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
-  __init__.py: bafybeibe74nso5vkkzrpukuo3ezoogflifkb6j6olmkj3gihhkzvmfxppy
-  dialogues.py: bafybeifzfc2iuyxihctkmmsmfvcflia7o24fpeidivynd65kijrhq3jj64
-  handlers.py: bafybeihg4pzbkp2zwpwh66myayf42zxbhvtxapxzqd6llms7aqovixfvdy
+  __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
+  dialogues.py: bafybeiaq3ql4ehbarwudlkfojnk23vptgtjilw5pruvn2fschqjxhbhoji
+  handlers.py: bafybeihobysnwwxuk6jxbquf53gcwzms4ceg3hvzt73gyepbuthceugcci
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeiecaxnjnni4pt5l34ka63amekgxvidhgiv2of5volnqab7ocug46m
-  tests/test_metrics_dialogues.py: bafybeib7ersop56fs6y4pnuq2ksvakp4fgzk4nrdwdkvch5m54mqalqfgi
+  tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
+  tests/test_metrics_dialogues.py: bafybeibkp2u6bumcb7ahv64qt6xu45xx3zwzyetsz5qqikkcliobsba4nu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeihvq6grqqogxdplmuc5hzpg4pug5f5qanit3f27lx2btxp5d2w35e
+- eightballer/default:0.1.0:bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a
 - eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
 skills: []
 behaviours: {}

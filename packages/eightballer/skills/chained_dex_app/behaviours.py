@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -19,8 +18,6 @@
 
 """This module contains the behaviours for the 'abci' skill."""
 
-from typing import Set, Type
-
 from packages.valory.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
 from packages.valory.skills.registration_abci.behaviours import (
     RegistrationStartupBehaviour,
@@ -36,7 +33,7 @@ class DexDataAbciAppConsensusBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = RegistrationStartupBehaviour
     abci_app_cls = ChaineddexAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = {
+    behaviours: set[type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *DexDataRetrievalRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,

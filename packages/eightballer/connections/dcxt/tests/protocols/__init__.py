@@ -1,5 +1,1 @@
-"""
-
-Init file
-
-"""
+"""Init file."""

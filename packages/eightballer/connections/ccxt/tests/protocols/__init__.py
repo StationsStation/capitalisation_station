@@ -1,3 +1,1 @@
-"""
-Readme for the protocols
-"""
+"""Readme for the protocols."""

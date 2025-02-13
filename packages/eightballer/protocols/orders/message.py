@@ -203,10 +203,9 @@ class OrdersMessage(Message):
         return cast(str, self.get("error_msg"))
 
     @property
-    def exchange_id(self) -> str:
+    def exchange_id(self) -> Optional[str]:
         """Get the 'exchange_id' content from the message."""
-        enforce(self.is_set("exchange_id"), "'exchange_id' content is not set.")
-        return cast(str, self.get("exchange_id"))
+        return cast(Optional[str], self.get("exchange_id"))
 
     @property
     def ledger_id(self) -> Optional[str]:
@@ -293,17 +292,18 @@ class OrdersMessage(Message):
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
             if self.performative == OrdersMessage.Performative.CREATE_ORDER:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
                     "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
+                if self.is_set("exchange_id"):
+                    expected_nb_of_contents += 1
+                    exchange_id = cast(str, self.exchange_id)
+                    enforce(
+                        isinstance(exchange_id, str),
+                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
+                    )
                 if self.is_set("ledger_id"):
                     expected_nb_of_contents += 1
                     ledger_id = cast(str, self.ledger_id)
@@ -318,17 +318,18 @@ class OrdersMessage(Message):
                     "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.CANCEL_ORDER:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
                     "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
+                if self.is_set("exchange_id"):
+                    expected_nb_of_contents += 1
+                    exchange_id = cast(str, self.exchange_id)
+                    enforce(
+                        isinstance(exchange_id, str),
+                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
+                    )
                 if self.is_set("ledger_id"):
                     expected_nb_of_contents += 1
                     ledger_id = cast(str, self.ledger_id)
@@ -343,13 +344,7 @@ class OrdersMessage(Message):
                     "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
             elif self.performative == OrdersMessage.Performative.GET_ORDERS:
-                expected_nb_of_contents = 1
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
+                expected_nb_of_contents = 0
                 if self.is_set("symbol"):
                     expected_nb_of_contents += 1
                     symbol = cast(str, self.symbol)
@@ -387,6 +382,13 @@ class OrdersMessage(Message):
                         isinstance(status, CustomOrderStatus),
                         "Invalid type for content 'status'. Expected 'OrderStatus'. Found '{}'.".format(type(status)),
                     )
+                if self.is_set("exchange_id"):
+                    expected_nb_of_contents += 1
+                    exchange_id = cast(str, self.exchange_id)
+                    enforce(
+                        isinstance(exchange_id, str),
+                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
+                    )
                 if self.is_set("ledger_id"):
                     expected_nb_of_contents += 1
                     ledger_id = cast(str, self.ledger_id)
@@ -395,13 +397,7 @@ class OrdersMessage(Message):
                         "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
                     )
             elif self.performative == OrdersMessage.Performative.GET_SETTLEMENTS:
-                expected_nb_of_contents = 1
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
+                expected_nb_of_contents = 0
                 if self.is_set("currency"):
                     expected_nb_of_contents += 1
                     currency = cast(str, self.currency)
@@ -434,18 +430,26 @@ class OrdersMessage(Message):
                         isinstance(ledger_id, str),
                         "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
                     )
+                if self.is_set("exchange_id"):
+                    expected_nb_of_contents += 1
+                    exchange_id = cast(str, self.exchange_id)
+                    enforce(
+                        isinstance(exchange_id, str),
+                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
+                    )
             elif self.performative == OrdersMessage.Performative.GET_ORDER:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.order, CustomOrder),
                     "Invalid type for content 'order'. Expected 'Order'. Found '{}'.".format(type(self.order)),
                 )
-                enforce(
-                    isinstance(self.exchange_id, str),
-                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
-                        type(self.exchange_id)
-                    ),
-                )
+                if self.is_set("exchange_id"):
+                    expected_nb_of_contents += 1
+                    exchange_id = cast(str, self.exchange_id)
+                    enforce(
+                        isinstance(exchange_id, str),
+                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
+                    )
                 if self.is_set("ledger_id"):
                     expected_nb_of_contents += 1
                     ledger_id = cast(str, self.ledger_id)

@@ -6,7 +6,7 @@ description: A simple arbitrage strategy that buys on one exchange and sells on 
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiev7zrf6rnazkdyrujyzl5rdg4gxs7xqxvckbvskz25sdjqumlxfq
-  strategy.py: bafybeid67v7pcfto27qyglotxs7piw32lakdllfpo6ltiz2uf3g7rhpdvi
+  __init__.py: bafybeiejn3ahy33huktlei2koe47mzoc5obnajkwhufpfcugbmnqqtj2bi
+  strategy.py: bafybeietm4kgq2yqcv65ydo4jnfqgm5clnewzwl7eqz57mbscsy5rcclbq
 fingerprint_ignore_patterns: []
 dependencies: {}

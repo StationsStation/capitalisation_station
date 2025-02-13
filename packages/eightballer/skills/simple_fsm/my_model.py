@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2024 eightballer
@@ -19,11 +18,15 @@
 
 """This package contains a scaffold of a model."""
 
-from typing import Any, Dict, Callable
+from typing import TYPE_CHECKING, Any
 
 from aea.skills.base import Model
 
 from packages.valory.skills.abstract_round_abci.models import FrozenMixin
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class ArbitrageStrategy(Model):
@@ -46,6 +49,6 @@ class Requests(Model, FrozenMixin):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the state."""
         # mapping from dialogue reference nonce to a callback
-        self.request_id_to_callback: Dict[str, Callable] = {}
+        self.request_id_to_callback: dict[str, Callable] = {}
         super().__init__(*args, **kwargs)
         self._frozen = True

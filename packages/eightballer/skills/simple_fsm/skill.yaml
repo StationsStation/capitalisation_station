@@ -6,23 +6,23 @@ description: A simple single agent fsm to execute against arbitrage opportunitie
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeihq5frq7zpuewuiq2nmovdkqawt3jjm6cmq4p7n5lh4pgbkrgq7n4
-  behaviours.py: bafybeibdjd73sd3d3do42tkz246odcffo7jcfgsrdicgsh5doo2thjx2ty
-  dialogues.py: bafybeieq5pnb5ejejfv4ugqre3iuvwjz5twimknz3rtmbm7yg5tfrikapa
-  handlers.py: bafybeibenuk2zoseyyprpuzwmqp7cdv2rhdoru5zisbcuqsqx6xfvvfgzi
-  my_model.py: bafybeicwz3q5fkjbxgjfxzsmb4xshdsbhggpg75sgfmfuxfnr7ayemdkpy
+  __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
+  behaviours.py: bafybeieck6sk7g3pksiidqtmagjvo4pmpootnyt5erim7kmplt6l4tek2u
+  dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
+  handlers.py: bafybeie43nnzdlctivmcmlwliv2owof4umqpdvkp7slccixbiwyr5s4ugi
+  my_model.py: bafybeif62hlkvkfugy3lbigy2th4kslk5pdh4xmtmprm2eznxmfk3cdk7u
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeib6mtibpm2k3b2jmceqp5oa7oeesm6ejpyrhekvcybxtdctef73ny
-- eightballer/ccxt:0.1.0:bafybeifyve4nd66y4lpxbah2fs6mjevrfvvrzfv6perg4ulhwneh2e4gse
+- eightballer/dcxt:0.1.0:bafybeihxhqmtcoosqb5tjsapg6snpgvwn4ikcpbv53lv7hhe2geg2qzy7u
+- eightballer/ccxt:0.1.0:bafybeib53qlnw7wx64dqjeppbjzmcwqhu23w3gyrny7b7bvbbp2vrwbzri
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeidrgpijcjp4znty3lzm5rn7wowgxh2f2v7uikzsetbkoynoziel5i
-- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
-- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
-- eightballer/orders:0.1.0:bafybeic3s3pah3zdxtwq3yk2osmnwfhtv4h6f2hkbrundzkzorvlvwwaxy
-- eightballer/balances:0.1.0:bafybeidbqb44oiae7fxbygnsn7t7vlnvndghwid7mhmtrui7p45qusy77y
+- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
+- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
+- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm

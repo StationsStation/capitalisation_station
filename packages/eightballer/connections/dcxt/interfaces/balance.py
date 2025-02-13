@@ -1,8 +1,4 @@
-"""
-Base interface for balances protocol.
-"""
-
-from typing import Optional
+"""Base interface for balances protocol."""
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.balances.message import BalancesMessage
@@ -11,9 +7,7 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import Base
 
 
 class BalanceInterface(BaseInterface):
-    """
-    Interface for balances protocol.
-    """
+    """Interface for balances protocol."""
 
     protocol_id = BalancesMessage.protocol_id
     dialogue_class = BalancesDialogue
@@ -21,10 +15,8 @@ class BalanceInterface(BaseInterface):
 
     async def get_all_balances(
         self, message: BalancesMessage, dialogue: BalancesDialogue, connection
-    ) -> Optional[BalancesMessage]:
-        """
-        Get all balances from the exchange.
-        """
+    ) -> BalancesMessage | None:
+        """Get all balances from the exchange."""
 
         exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:

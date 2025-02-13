@@ -27,11 +27,11 @@ speech_acts:
     exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
   get_settlements:
-    exchange_id: pt:str
     currency: pt:optional[pt:str]
     end_timestamp: pt:optional[pt:float]
     start_timestamp: pt:optional[pt:float]
     ledger_id: pt:optional[pt:str]
+    exchange_id: pt:optional[pt:str]
   get_order:
     order: ct:Order
     exchange_id: pt:optional[pt:str]
