@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -22,7 +21,6 @@
 # pylint: disable=W0201
 import os
 import logging
-from typing import Type
 from unittest.mock import MagicMock
 
 import yaml
@@ -77,7 +75,7 @@ TEST_EXCHANGES = {f"{k['name']}_{k['ledger_id']}": k for k in yaml.safe_load(TES
 
 
 def with_timeout(t, *args, **kwargs):
-    """Return the"""
+    """Return the."""
 
     del args, kwargs
 
@@ -95,7 +93,7 @@ def with_timeout(t, *args, **kwargs):
 
 
 def improved_with_timeout(t):
-    """Return the coroutine with a timeout. We specifcallly allow the function to take parameters"""
+    """Return the coroutine with a timeout. We specifcallly allow the function to take parameters."""
 
     def wrapper(corofunc):
         async def run(*args, **kwargs):
@@ -107,20 +105,20 @@ def improved_with_timeout(t):
     return wrapper
 
 
-def get_dialogues(target_dialogues: Type[Dialogues], target_dialogue: Type[Dialogue]) -> object:
+def get_dialogues(target_dialogues: type[Dialogues], target_dialogue: type[Dialogue]) -> object:
     """Factory method to generate dialogue classes."""
 
     class MetaClass(target_dialogues):
         """The dialogues class keeps track of all dcxt dialogues."""
 
-        def __init__(self, address: Type[Address]) -> None:
+        def __init__(self, address: type[Address]) -> None:
             """Initialize dialogues."""
             self._address = address
 
             def role_from_first_message(  # pylint: disable=unused-argument
                 message: Message, receiver_address: Address
             ) -> Dialogue.Role:
-                """Infer the role of the agent from an incoming/outgoing first message
+                """Infer the role of the agent from an incoming/outgoing first message.
 
                 :param message: an incoming/outgoing first message
                 :param receiver_address: the address of the receiving agent
@@ -181,7 +179,7 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 
 
 EXPECTED_FUNCTIONS = [
-    "get_all_markets",  #           get all markets
+    "get_all_markets",  # get all markets
     "subscribe",  # order book      subscribe
     "create_order",  # create order create_order
     "get_order",  # get order:      tx hash

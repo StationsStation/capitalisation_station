@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -88,15 +87,15 @@ class ReportingStrategy(Model):
     object_to_model = {}
     custom_type_mapping = {
         Order: {Optional[OrderStatus], Optional[OrderType], Optional[OrderSide]},  # noqa
-        Position: {  # noqa
+        Position: {
             Optional[PositionSide],  # noqa
         },
     }
-    session: Optional[Session] = None
-    engine: Optional[Any] = None
-    base: Optional[Any] = None
-    agent_model: Optional[Any] = None
-    _schema: Optional[str] = None
+    session: Session | None = None
+    engine: Any | None = None
+    base: Any | None = None
+    agent_model: Any | None = None
+    _schema: str | None = None
 
     def setup(self) -> None:
         """Implement the setup."""
@@ -116,7 +115,8 @@ class ReportingStrategy(Model):
 
     def _get_agent_model(self):
         """Check if the agent is already in the database, if not add it.
-        Use the agent address as the unique identifier."""
+        Use the agent address as the unique identifier.
+        """
         with self.session.begin() as session:  # pylint: disable=E1101
             agent = (
                 session.query(self.object_to_model[Agent]).filter_by(agent_address=self.context.agent_address).first()
@@ -140,7 +140,7 @@ class ReportingStrategy(Model):
             self.update(new_exchange)
 
     def get_model(self, data_class):
-        """We make a generic function to get the model for a dataclass"""
+        """We make a generic function to get the model for a dataclass."""
         return self.object_to_model[data_class]
 
     def get_instance(self, data_class_instance, key):
@@ -180,15 +180,11 @@ class ReportingStrategy(Model):
             session.commit()
 
     def _create_sqlalchemy_model(self, data_class):
-        """
-        Create a sqlalchemy model from a dataclass.
-        """
+        """Create a sqlalchemy model from a dataclass."""
         class_name = data_class.__name__
 
         class Model(self.base):
-            """
-            This class scaffolds a model.
-            """
+            """This class scaffolds a model."""
 
             __tablename__ = class_name.lower()
             __table_args__ = {}
@@ -217,11 +213,13 @@ class ReportingStrategy(Model):
                 setattr(Model, field, Column(String))
             elif data_class in self.custom_type_mapping:
                 if data.type not in self.custom_type_mapping[data_class]:
-                    raise ValueError(f"Type {data.type} not supported!")
+                    msg = f"Type {data.type} not supported!"
+                    raise ValueError(msg)
                 # we need to create a relationship here to the custom type...
                 setattr(Model, field, Column(String))
             else:
-                raise ValueError(f"Type {data.type} not supported!")
+                msg = f"Type {data.type} not supported!"
+                raise ValueError(msg)
         Model.__name__ = class_name
         return Model
 
@@ -229,7 +227,8 @@ class ReportingStrategy(Model):
         """Initialize the model."""
         self._connection_string = kwargs.pop("connection_string")
         if self._connection_string is None:
-            raise ValueError("Connection string must be provided!")
+            msg = "Connection string must be provided!"
+            raise ValueError(msg)
         super().__init__(**kwargs)
 
     def get_markets_data(
@@ -269,11 +268,10 @@ class ReportingStrategy(Model):
         return markets_data.drop_duplicates()
 
     def from_positions_to_pivot(self, positions, view="all"):
-        """
-        Pivot the positions, creating the following tables:
+        """Pivot the positions, creating the following tables:
         - all_positions_pivot
         - deribit_positions_pivot
-        - rysk_positions_pivot
+        - rysk_positions_pivot.
         """
         markets_data = self.get_markets_data()
         if view != "all":
@@ -327,15 +325,13 @@ class ReportingStrategy(Model):
             columns=["expiryDatetime", "optionType"],
             fill_value=0,
         )
-        pivot_data.sort_values(by=["strike"], inplace=True)
-        pivot_data.reset_index(inplace=True)
+        pivot_data = pivot_data.sort_values(by=["strike"])
+        pivot_data = pivot_data.reset_index()
         pivot_data.columns = [f"{i[:10]}_{j}" for i, j in pivot_data.columns]
         return self.save_pivot_to_db(pivot_data, view)
 
     def save_pivot_to_db(self, pivot_data, view="all"):
-        """
-        Save the pivot table to the database.
-        """
+        """Save the pivot table to the database."""
         # if no data dont write
         if not len(pivot_data):  # pylint: disable=len-as-condition
             return pivot_data
@@ -350,7 +346,7 @@ class ReportingStrategy(Model):
             )
         return pivot_data
 
-    def get_exchanges(self, exchange_type: Optional[ExchangeType] = None):
+    def get_exchanges(self, exchange_type: ExchangeType | None = None):
         """Get the exchanges."""
         query = {
             "agent_address": self.context.agent_address,
@@ -393,8 +389,7 @@ class ReportingStrategy(Model):
                 orders = orders.filter(orm_model.latest_update >= since)
             if until:
                 orders = orders.filter(orm_model.latest_update <= until)
-            orders = orders.all()
-        return orders
+            return orders.all()
 
     def get_positions(
         self,
@@ -416,8 +411,7 @@ class ReportingStrategy(Model):
             position_query = session.query(model).filter_by(agent_address=self.context.agent_address).filter_by(**query)
             if open_only:
                 position_query = position_query.filter(model.size != 0)
-            positions = position_query.all()
-        return positions
+            return position_query.all()
 
     def get_balances(self, exchange=None):
         """Gets a snapshot of the balances."""
@@ -427,10 +421,9 @@ class ReportingStrategy(Model):
             query["exchange_id"] = exchange
         # we now query the database
         with self.session.begin() as session:  # pylint: disable=E1101
-            balances = (
+            return (
                 session.query(self.object_to_model[Balance])
                 .filter_by(agent_address=self.context.agent_address)
                 .filter_by(**query)
                 .all()
             )
-        return balances

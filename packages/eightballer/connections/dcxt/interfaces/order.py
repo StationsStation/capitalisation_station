@@ -2,7 +2,7 @@
 
 import json
 import traceback
-from typing import Any, Dict, Optional, cast
+from typing import Any, cast
 from datetime import datetime
 
 from packages.eightballer.connections.dcxt import dcxt
@@ -18,11 +18,10 @@ TZ = datetime.now().astimezone().tzinfo
 
 
 def from_id_to_instrument_name(instrument_id):
-    """
-    Convert from the id to the instrument name.
+    """Convert from the id to the instrument name.
     input:
         ETH-27OCT23-2000-C
-        ETH-27OCT23-2000-P
+        ETH-27OCT23-2000-P.
 
     output:
         ETH/USD:ETH-231027-2000-C
@@ -31,7 +30,8 @@ def from_id_to_instrument_name(instrument_id):
     """
     parts = instrument_id.split("-")
     if len(parts) != 4:
-        raise ValueError(f"Invalid instrument id: {instrument_id}")
+        msg = f"Invalid instrument id: {instrument_id}"
+        raise ValueError(msg)
     symbol = parts[0]
 
     date = parts[1]
@@ -45,7 +45,8 @@ def from_id_to_instrument_name(instrument_id):
         day = date[:1]
 
     else:
-        raise ValueError(f"Invalid instrument id: {instrument_id}")
+        msg = f"Invalid instrument id: {instrument_id}"
+        raise ValueError(msg)
     # we need to pad the day with a  if it's a single digit
     date_obj = datetime.strptime(str(month), "%b")  # noqa
     month = date_obj.strftime("%m").upper()
@@ -57,7 +58,7 @@ def from_id_to_instrument_name(instrument_id):
     return f"{symbol}/USD:ETH-{date}-{parts[2]}-{parts[3]}"
 
 
-def order_from_settlement(settlement: Dict[str, Any], exchange_id) -> Order:
+def order_from_settlement(settlement: dict[str, Any], exchange_id) -> Order:
     """Create an order from a settlement txn."""
     size = float(settlement["position"])
     timestamp = int(settlement["timestamp"])
@@ -84,8 +85,8 @@ class PollingError(Exception):
 
 def get_error(message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str) -> OrdersMessage:
     """Get the error message."""
-    response_message = cast(
-        Optional[OrdersMessage],
+    return cast(
+        OrdersMessage | None,
         dialogue.reply(
             performative=OrdersMessage.Performative.ERROR,
             target_message=message,
@@ -94,7 +95,6 @@ def get_error(message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str) 
             error_data={"msg": b"{error_msg}"},
         ),
     )
-    return response_message
 
 
 class OrderInterface(BaseInterface):
@@ -103,43 +103,50 @@ class OrderInterface(BaseInterface):
     protocol_id = OrdersMessage.protocol_id
     dialogue_class = OrdersDialogue
     dialogues_class = BaseOrdersDialogues
-    exchange_to_orders: Dict[str, list] = {}
-    open_orders: Dict[str, list] = {}
+    exchange_to_orders: dict[str, list] = {}
+    open_orders: dict[str, list] = {}
 
-    def process_api_orders(self, exchange_id: str, api_orders: Dict[str, dict], connection) -> Dict[str, Order]:
-        """Process orders from the api to internal hashmap"""
+    def process_api_orders(self, exchange_id: str, api_orders: dict[str, dict], connection) -> dict[str, Order]:
+        """Process orders from the api to internal hashmap."""
         orders = {order["id"]: connection.exchange[exchange_id].parse_order(order, exchange_id) for order in api_orders}
         if exchange_id not in self.open_orders:
             self.open_orders[exchange_id] = orders
         return orders
 
-    async def create_order(
-        self, message: OrdersMessage, dialogue: OrdersDialogue, connection
-    ) -> Optional[OrdersMessage]:
+    async def create_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection) -> OrdersMessage | None:
         """Submit an order to the appropriate exchange."""
         order = message.order
         exchange = connection.exchanges[order.ledger_id][order.exchange_id]
         order_parsing_func = exchange.parse_order
 
+        if hasattr(message, "asset_a") or hasattr(message, "asset_b"):
+            kwargs = {
+                "asset_a": message.asset_a,
+                "asset_b": message.asset_b,
+            }
+        else:
+            asset_a, asset_b = order.symbol.split("/")
+            kwargs = {
+                "asset_a": asset_a,
+                "asset_b": asset_b,
+            }
+
         try:
-            if not order.info:
-                order.info = {}
             res = await exchange.create_order(
                 symbol=order.symbol,
                 amount=order.amount,
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
-                data=order.info,
-                asset_a=order.asset_a,
-                asset_b=order.asset_b,
+                data=json.loads(order.info) if order.info is not None else {},
+                **kwargs,
             )
             updated_order = order_parsing_func(res, order.exchange_id)
 
         except dcxt.exceptions.InsufficientFunds as base_error:
             order.status = OrderStatus.CANCELLED
             updated_order = order
-            connection.logger.error(f"FAILED TO CREATE ORDER -> insufficient funds! {str(base_error)}")
+            connection.logger.exception(f"FAILED TO CREATE ORDER -> insufficient funds! {base_error!s}")
         except (dcxt.exceptions.ExchangeNotAvailable, dcxt.exceptions.InvalidOrder) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
@@ -221,17 +228,16 @@ class OrderInterface(BaseInterface):
         )
         response_envelope = connection.build_envelope(request=message, response_message=response_message)
         connection.queue.put_nowait(response_envelope)
+        return None
 
-    async def cancel_order(
-        self, message: OrdersMessage, dialogue: OrdersDialogue, connection
-    ) -> Optional[OrdersMessage]:
+    async def cancel_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection) -> OrdersMessage | None:
         """Cancel the order."""
         if (order := self.get_order_from_message(message)) is None:
             connection.logger.error(
                 "Trying to cancel an order which has already been cancelled: %s",
                 message.order.id,
             )
-            return
+            return None
 
         exchange = connection.exchanges[message.order.exchange_id]
         try:
@@ -239,7 +245,7 @@ class OrderInterface(BaseInterface):
             connection.logger.info("Cancel order request: %s", res)
             order.status = OrderStatus.CANCELLED
             response_message = cast(
-                Optional[OrdersMessage],
+                OrdersMessage | None,
                 dialogue.reply(
                     target_message=message,
                     performative=OrdersMessage.Performative.ORDER_CANCELLED,
@@ -250,7 +256,7 @@ class OrderInterface(BaseInterface):
             return response_message
         except Exception as error:  # pylint: disable=W0703
             connection.logger.info("Unknown Issue: %s", error)
-            connection.logger.error(traceback.format_exc())
+            connection.logger.exception(traceback.format_exc())
             return get_error(message, dialogue, str(error))
 
     def get_order_from_message(self, message):
@@ -258,9 +264,7 @@ class OrderInterface(BaseInterface):
         return self.open_orders[message.order.exchange_id].get(message.order.id)
 
     async def get_settlements(self, message: OrdersMessage, dialogue, connection):
-        """
-        Implement the get settlements method.
-        """
+        """Implement the get settlements method."""
         exchange = connection.exchanges[message.exchange_id]
 
         params = {}
@@ -272,8 +276,8 @@ class OrderInterface(BaseInterface):
             params["start_timestamp"] = message.start_timestamp
         try:
             settlements = await exchange.private_get_get_settlement_history_by_currency(params=params)
-            response_message = cast(
-                Optional[OrdersMessage],
+            return cast(
+                OrdersMessage | None,
                 dialogue.reply(
                     target_message=message,
                     performative=OrdersMessage.Performative.ORDERS,
@@ -285,9 +289,8 @@ class OrderInterface(BaseInterface):
                     ),
                 ),
             )
-            return response_message
         except Exception as error:  # pylint: disable=W0703
-            connection.logger.error(
+            connection.logger.exception(
                 f"Couldn't fetch settlements from {exchange.id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )

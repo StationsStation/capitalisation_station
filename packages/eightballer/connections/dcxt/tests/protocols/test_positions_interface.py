@@ -1,6 +1,4 @@
-"""
-Tests for the position interface.
-"""
+"""Tests for the position interface."""
 
 import asyncio
 from unittest.mock import patch
@@ -8,11 +6,10 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 
+from dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Positions
-
-from ..test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 
 EXCHANGE_ID = list(TEST_EXCHANGES.keys()).pop()
@@ -20,18 +17,14 @@ EXCHANGE_ID = list(TEST_EXCHANGES.keys()).pop()
 
 @pytest.mark.asyncio
 class TestPositionInterface(BaseDcxtConnectionTest):
-    """
-    Test the position interface.
-    """
+    """Test the position interface."""
 
     DIALOGUES = get_dialogues(BasePositionsDialogues, PositionsDialogue)
 
     @pytest.mark.asyncio
     @with_timeout(4)
     async def test_get_all_positions(self, exchange_id=EXCHANGE_ID) -> None:
-        """
-        Test the get all positions method.
-        """
+        """Test the get all positions method."""
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(

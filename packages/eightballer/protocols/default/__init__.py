@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,8 +16,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""
-This module contains the support resources for the default protocol.
+"""This module contains the support resources for the default protocol.
 
 It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
 """

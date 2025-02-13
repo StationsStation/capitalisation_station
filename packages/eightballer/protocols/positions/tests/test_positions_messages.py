@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 #                                                                             --
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,7 +20,6 @@
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
-from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
@@ -37,7 +35,7 @@ from packages.eightballer.protocols.positions.custom_types import (
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -46,7 +44,7 @@ class TestMessagePositions(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = PositionsMessage
 
-    def build_messages(self) -> List[PositionsMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[PositionsMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             PositionsMessage(

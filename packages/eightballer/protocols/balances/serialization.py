@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -67,8 +67,10 @@ class BalancesSerializer(Serializer):
                 performative.params_is_set = True
                 params = msg.params
                 performative.params.update(params)
-            exchange_id = msg.exchange_id
-            performative.exchange_id = exchange_id
+            if msg.is_set("exchange_id"):
+                performative.exchange_id_is_set = True
+                exchange_id = msg.exchange_id
+                performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -82,8 +84,10 @@ class BalancesSerializer(Serializer):
             performative = balances_pb2.BalancesMessage.Get_Balance_Performative()  # type: ignore
             asset_id = msg.asset_id
             performative.asset_id = asset_id
-            exchange_id = msg.exchange_id
-            performative.exchange_id = exchange_id
+            if msg.is_set("exchange_id"):
+                performative.exchange_id_is_set = True
+                exchange_id = msg.exchange_id
+                performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -97,6 +101,14 @@ class BalancesSerializer(Serializer):
             performative = balances_pb2.BalancesMessage.All_Balances_Performative()  # type: ignore
             balances = msg.balances
             Balances.encode(performative.balances, balances)
+            if msg.is_set("ledger_id"):
+                performative.ledger_id_is_set = True
+                ledger_id = msg.ledger_id
+                performative.ledger_id = ledger_id
+            if msg.is_set("exchange_id"):
+                performative.exchange_id_is_set = True
+                exchange_id = msg.exchange_id
+                performative.exchange_id = exchange_id
             balances_msg.all_balances.CopyFrom(performative)
         elif performative_id == BalancesMessage.Performative.BALANCE:
             performative = balances_pb2.BalancesMessage.Balance_Performative()  # type: ignore
@@ -148,8 +160,9 @@ class BalancesSerializer(Serializer):
                 params = balances_pb.get_all_balances.params
                 params_dict = dict(params)
                 performative_content["params"] = params_dict
-            exchange_id = balances_pb.get_all_balances.exchange_id
-            performative_content["exchange_id"] = exchange_id
+            if balances_pb.get_all_balances.exchange_id_is_set:
+                exchange_id = balances_pb.get_all_balances.exchange_id
+                performative_content["exchange_id"] = exchange_id
             if balances_pb.get_all_balances.ledger_id_is_set:
                 ledger_id = balances_pb.get_all_balances.ledger_id
                 performative_content["ledger_id"] = ledger_id
@@ -159,8 +172,9 @@ class BalancesSerializer(Serializer):
         elif performative_id == BalancesMessage.Performative.GET_BALANCE:
             asset_id = balances_pb.get_balance.asset_id
             performative_content["asset_id"] = asset_id
-            exchange_id = balances_pb.get_balance.exchange_id
-            performative_content["exchange_id"] = exchange_id
+            if balances_pb.get_balance.exchange_id_is_set:
+                exchange_id = balances_pb.get_balance.exchange_id
+                performative_content["exchange_id"] = exchange_id
             if balances_pb.get_balance.ledger_id_is_set:
                 ledger_id = balances_pb.get_balance.ledger_id
                 performative_content["ledger_id"] = ledger_id
@@ -171,6 +185,12 @@ class BalancesSerializer(Serializer):
             pb2_balances = balances_pb.all_balances.balances
             balances = Balances.decode(pb2_balances)
             performative_content["balances"] = balances
+            if balances_pb.all_balances.ledger_id_is_set:
+                ledger_id = balances_pb.all_balances.ledger_id
+                performative_content["ledger_id"] = ledger_id
+            if balances_pb.all_balances.exchange_id_is_set:
+                exchange_id = balances_pb.all_balances.exchange_id
+                performative_content["exchange_id"] = exchange_id
         elif performative_id == BalancesMessage.Performative.BALANCE:
             pb2_balance = balances_pb.balance.balance
             balance = Balance.decode(pb2_balance)

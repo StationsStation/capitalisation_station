@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,7 @@
 """This package contains a scaffold of a behaviour."""
 
 import datetime
-from typing import Any, Dict, List, cast
+from typing import Any, cast
 
 from aea.skills.behaviours import TickerBehaviour
 
@@ -45,11 +44,10 @@ SYSTEM_TZ = datetime.datetime.now().astimezone().tzinfo
 
 
 def from_instrument_name_to_id(instrument_name):
-    """
-    Simple helper function to convert instrument name to id.
+    """Simple helper function to convert instrument name to id.
     input:
         ETH/USD:ETH-231027-2000-C
-        ETH/USD:ETH-231027-2000-P
+        ETH/USD:ETH-231027-2000-P.
 
     output:
        "ETH-27OCT23-2000-C"
@@ -57,12 +55,14 @@ def from_instrument_name_to_id(instrument_name):
 
     parts = instrument_name.split(":")
     if len(parts) != 2:
-        raise ValueError(f"Invalid instrument name: {instrument_name}")
+        msg = f"Invalid instrument name: {instrument_name}"
+        raise ValueError(msg)
     symbol = parts[1]
     # we now need to extract the date and strike
     parts = symbol.split("-")
     if len(parts) != 4:
-        raise ValueError(f"Invalid instrument name: {instrument_name}")
+        msg = f"Invalid instrument name: {instrument_name}"
+        raise ValueError(msg)
     date = parts[1]
     year = date[:2]
     month = date[2:4]
@@ -81,9 +81,9 @@ class EodReportingBehaviour(TickerBehaviour):
 
     enabled: bool
     interval: int
-    daily_report_times: List[datetime.time]
+    daily_report_times: list[datetime.time]
     uploader: Any
-    _reported_today: Dict[str, datetime.date] = {}
+    _reported_today: dict[str, datetime.date] = {}
 
     def setup(self) -> None:
         """Implement the setup."""
@@ -167,22 +167,19 @@ class EodReportingBehaviour(TickerBehaviour):
         """Implement the task teardown."""
 
     def get_report_time(self, report_time: datetime.time) -> datetime.datetime:
-        """
-        Takes report time and gets the next datetime of the report. Returns none if not ready.
-        """
+        """Takes report time and gets the next datetime of the report. Returns none if not ready."""
         now = datetime.datetime.now(tz=SYSTEM_TZ)
         if now >= report_time:
             return report_time + datetime.timedelta(days=1)
         return None
 
     def act(self) -> None:
-        """
-        For each daily report time, check if it's time to report and report if so
+        """For each daily report time, check if it's time to report and report if so
         create the report;
         - get the data
         - format the data
         - upload the data (if enabled)
-        - set the next report time
+        - set the next report time.
 
         We have a list of report times, then a map of the next time they are scheduled to run.
         so we need to check if we've already reported today
@@ -232,15 +229,15 @@ class EodReportingBehaviour(TickerBehaviour):
         if uploader["class_name"] == SlackUploader.__name__:
             self.uploader = SlackUploader(**config)
         else:
-            raise ValueError(f"Unknown uploader class: {uploader['class_name']}")
+            msg = f"Unknown uploader class: {uploader['class_name']}"
+            raise ValueError(msg)
 
         self.context.logger.info(f"Reporting Uploader: {self.uploader}")
         self.context.logger.info(f"Reporting Uploader Daily Report Times: {self.report_times}")
 
 
 class ReconciliationBehaviour(TickerBehaviour):
-    """
-    Reconciliation Behaviour.
+    """Reconciliation Behaviour.
 
     The behaviour will:
     -> check the database for any orders that are open.
@@ -294,9 +291,7 @@ class ReconciliationBehaviour(TickerBehaviour):
             self.check_settlements(exchange_id)
 
     def check_order_status(self, order: Order) -> None:
-        """
-        We send a messsage to the ccxt connection.
-        """
+        """We send a messsage to the ccxt connection."""
         dialogues = cast(OrdersDialogue, self.context.orders_dialogues)
         target_id = self.get_target_id(order.exchange_id)
         msg, _ = dialogues.create(
@@ -307,9 +302,7 @@ class ReconciliationBehaviour(TickerBehaviour):
         self.context.outbox.put_message(msg)
 
     def check_position_status(self, position: Any, exchange_id) -> None:
-        """
-        We send a messsage to the ccxt connection.
-        """
+        """We send a messsage to the ccxt connection."""
         dialogues = cast(PositionsDialogue, self.context.positions_dialogues)
 
         # we need to do a little bit of parsing here to get the symbol unfortunately. WTF CCXT?
@@ -334,14 +327,15 @@ class ReconciliationBehaviour(TickerBehaviour):
         elif exchange_type == ExchangeType.CEX.value:
             target_id = CCXT_PUBLIC_ID
         else:
-            raise ValueError(f"Unknown exchange type: {exchange_type}")
+            msg = f"Unknown exchange type: {exchange_type}"
+            raise ValueError(msg)
         return str(target_id)
 
     def check_settlements(self, exchange_id) -> None:
         """Check the settlements for the exchange."""
 
         dialogues = cast(OrdersDialogues, self.context.orders_dialogues)
-        current_timestamp = float(datetime.datetime.now(tz=datetime.timezone.utc).timestamp())
+        current_timestamp = float(datetime.datetime.now(tz=datetime.UTC).timestamp())
         target_id = self.get_target_id(exchange_id)
 
         msg, _ = dialogues.create(

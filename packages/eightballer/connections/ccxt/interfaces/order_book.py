@@ -1,7 +1,6 @@
 """Order protocol handler."""
 
 import asyncio
-from typing import Optional
 
 from aea.skills.base import Envelope
 
@@ -16,9 +15,7 @@ DEFAULT_INTERVAL = 0.1
 
 
 class OrderBookInterface(BaseInterface):
-    """
-    Interface for positions protocol.
-    """
+    """Interface for positions protocol."""
 
     protocol_id = OrderBookMessage.protocol_id
     dialogue_class = OrderBookDialogue
@@ -26,10 +23,8 @@ class OrderBookInterface(BaseInterface):
 
     async def subscribe(
         self, message: OrderBookMessage, dialogue: OrderBookDialogue, connection
-    ) -> Optional[OrderBookMessage]:
-        """
-        Get a position from the exchange.
-        """
+    ) -> OrderBookMessage | None:
+        """Get a position from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
             while True:
@@ -57,7 +52,7 @@ class OrderBookInterface(BaseInterface):
                         connection.logger.warning(f"Out of order nonce error for {message.exchange_id}. Retrying...")
                         continue
 
-                    raise error
+                    raise
                 finally:
                     await asyncio.sleep(DEFAULT_INTERVAL)
 

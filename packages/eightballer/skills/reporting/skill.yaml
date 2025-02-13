@@ -6,17 +6,17 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibhxj6luibeojtowjdm3nhkpdxq3qlu6c7z66c7i425fy5i4yhn2m
-  behaviours.py: bafybeihz42ysciumjmrmw6hudpezuf7xclrxpwusd6rhokwuy2c4aty2si
-  dialogues.py: bafybeihmy5bw7cshzpelxq4qhye27y7yv2oiojbsmmt2skpjp5rv7gfn34
-  handlers.py: bafybeibwdmze5lou3vi24nhq4eqr3xbl4c4plitywolrre5gfp2kyp3564
-  slack.py: bafybeibjudhkti7j7zi3n3obffirl2r6musdizmsdmcbdraceywovlf2da
-  strategy.py: bafybeidpyahgxfyrqa4ri6lrti2rlfztyrdtldwlz6b7leqskanxpqkyxm
-  tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
-  tests/cases.py: bafybeidrgyl67tqqxkrr2jzjttadbg6klc7hnp6f33ixnvomrn6yc4medu
-  tests/test_behaviour.py: bafybeifhszwiha55kwvxagk74xmnn5mezjtychzmsfkbgqnijh7zvmfk4m
-  tests/test_handlers.py: bafybeicw43nx7nvnpcfht7mpygeqlcnksuusklrcoiooynwo7dgmy62gem
-  tests/test_strategy.py: bafybeihmttb7bkuzhnc5ez7rntwluncwjlw3tsvsad6n3fhs6tw6kbplry
+  __init__.py: bafybeicckwn6vc53mifuyrvfbd4jokm5jj7rktlqfzw3nynyfqfpglwvii
+  behaviours.py: bafybeiba4u7rq7qver3k4olwgr5adymhms3pfpcnfmrbxe3kifbuxj32pu
+  dialogues.py: bafybeicyad32miifithd3eetq6lac6bihk5xhea4xgahn5bormfdqw3by4
+  handlers.py: bafybeifjp5htyrppcfw43o4s4zz745ynrh2repaij2hymhcu4wsjriyrwq
+  slack.py: bafybeifu4yup7pbw4gvgo7yxzkm62f25msu53kmmi5wmofwllt7d73mlfa
+  strategy.py: bafybeig3ln7v2qh4a52tfva4oi43rljz344hd3jppdjguvwn6ploqchkve
+  tests/__init__.py: bafybeidqvfmjxcrhqif6hzu3zejykhgzgeyuxarega3th7gz7bccpr76om
+  tests/cases.py: bafybeiehp5er3nvb6nu6yaxu5ym3pnukyvvmx567llcui4346jca5vjhxm
+  tests/test_behaviour.py: bafybeibsqcondmk3spbd3mlcu3fjajwpleczrnn7pco2mc367o4qnvy3n4
+  tests/test_handlers.py: bafybeigguqwcyrxaszyuwm3dwtrm5e36xigohztq53glzec4rlk5nrkyve
+  tests/test_strategy.py: bafybeiahxldt52hhih22tkqlpfgtoetltasmenbzmnqvkrhqh5nkdnsbry
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt:0.1.0:bafybeibf3rgak6l5bqr3sligqy2vgt24ohrbwc7j24w6vj25vdtkb6pfzi

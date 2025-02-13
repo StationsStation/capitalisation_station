@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -30,12 +29,11 @@ from packages.eightballer.protocols.balances.dialogues import (
     BalancesDialogue,
     BaseBalancesDialogues,
 )
-from packages.eightballer.protocols.balances.custom_types import ErrorCode
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -52,10 +50,10 @@ class TestDialoguesBalances(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=BalancesMessage.Performative.GET_ALL_BALANCES,
-            params={"some str": b"some_bytes"},
-            exchange_id="some str",
-            ledger_id="some str",
-            address="some str",
-        )
+        return {
+            "performative": BalancesMessage.Performative.GET_ALL_BALANCES,
+            "params": {"some str": b"some_bytes"},
+            "exchange_id": "some str",
+            "ledger_id": "some str",
+            "address": "some str",
+        }

@@ -1,8 +1,4 @@
-"""
-Implements the interface for the Ticker protocol.
-"""
-
-from typing import Optional
+"""Implements the interface for the Ticker protocol."""
 
 from ccxt import RequestTimeout
 from packages.eightballer.protocols.tickers.message import TickersMessage
@@ -12,9 +8,7 @@ from packages.eightballer.connections.ccxt.interfaces.interface_base import Base
 
 
 def all_tickers_from_api_call(api_call):
-    """
-    Get all tickers from the exchange.
-    """
+    """Get all tickers from the exchange."""
     tickers = []
     for ticker in api_call.values():
         ticker["info"] = None
@@ -34,10 +28,8 @@ class TickerInterface(BaseInterface):
 
     async def get_all_tickers(
         self, message: TickersMessage, dialogue: TickersDialogue, connection
-    ) -> Optional[TickersMessage]:
-        """
-        Get all tickers from the exchange.
-        """
+    ) -> TickersMessage | None:
+        """Get all tickers from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
@@ -61,12 +53,8 @@ class TickerInterface(BaseInterface):
             )
         return response_message
 
-    async def get_ticker(
-        self, message: TickersMessage, dialogue: TickersDialogue, connection
-    ) -> Optional[TickersMessage]:
-        """
-        Get a ticker from the exchange.
-        """
+    async def get_ticker(self, message: TickersMessage, dialogue: TickersDialogue, connection) -> TickersMessage | None:
+        """Get a ticker from the exchange."""
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
