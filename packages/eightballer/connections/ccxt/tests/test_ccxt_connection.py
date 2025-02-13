@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2022 Valory AG
@@ -21,6 +22,7 @@
 # pylint: disable=W0201
 import os
 import logging
+from typing import Type
 from unittest.mock import MagicMock
 
 import pytest
@@ -50,7 +52,7 @@ default_test_exchanges = [
 
 
 def with_timeout(t):
-    """Return the."""
+    """Return the"""
 
     def wrapper(corofunc):
         async def run(*args, **kwargs):
@@ -62,20 +64,20 @@ def with_timeout(t):
     return wrapper
 
 
-def get_dialogues(target_dialogues: type[Dialogues], target_dialogue: type[Dialogue]) -> object:
+def get_dialogues(target_dialogues: Type[Dialogues], target_dialogue: Type[Dialogue]) -> object:
     """Factory method to generate dialogue classes."""
 
     class MetaClass(target_dialogues):
         """The dialogues class keeps track of all ccxt dialogues."""
 
-        def __init__(self, address: type[Address]) -> None:
+        def __init__(self, address: Type[Address]) -> None:
             """Initialize dialogues."""
             self._address = address
 
             def role_from_first_message(  # pylint: disable=unused-argument
                 message: Message, receiver_address: Address
             ) -> Dialogue.Role:
-                """Infer the role of the agent from an incoming/outgoing first message.
+                """Infer the role of the agent from an incoming/outgoing first message
 
                 :param message: an incoming/outgoing first message
                 :param receiver_address: the address of the receiving agent

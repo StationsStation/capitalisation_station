@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -66,10 +66,8 @@ class OrdersSerializer(Serializer):
             performative = orders_pb2.OrdersMessage.Create_Order_Performative()  # type: ignore
             order = msg.order
             Order.encode(performative.order, order)
-            if msg.is_set("exchange_id"):
-                performative.exchange_id_is_set = True
-                exchange_id = msg.exchange_id
-                performative.exchange_id = exchange_id
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -84,10 +82,8 @@ class OrdersSerializer(Serializer):
             performative = orders_pb2.OrdersMessage.Cancel_Order_Performative()  # type: ignore
             order = msg.order
             Order.encode(performative.order, order)
-            if msg.is_set("exchange_id"):
-                performative.exchange_id_is_set = True
-                exchange_id = msg.exchange_id
-                performative.exchange_id = exchange_id
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -100,6 +96,8 @@ class OrdersSerializer(Serializer):
             orders_msg.order_cancelled.CopyFrom(performative)
         elif performative_id == OrdersMessage.Performative.GET_ORDERS:
             performative = orders_pb2.OrdersMessage.Get_Orders_Performative()  # type: ignore
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
             if msg.is_set("symbol"):
                 performative.symbol_is_set = True
                 symbol = msg.symbol
@@ -120,10 +118,6 @@ class OrdersSerializer(Serializer):
                 performative.status_is_set = True
                 status = msg.status
                 OrderStatus.encode(performative.status, status)
-            if msg.is_set("exchange_id"):
-                performative.exchange_id_is_set = True
-                exchange_id = msg.exchange_id
-                performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -135,6 +129,8 @@ class OrdersSerializer(Serializer):
             orders_msg.get_orders.CopyFrom(performative)
         elif performative_id == OrdersMessage.Performative.GET_SETTLEMENTS:
             performative = orders_pb2.OrdersMessage.Get_Settlements_Performative()  # type: ignore
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
             if msg.is_set("currency"):
                 performative.currency_is_set = True
                 currency = msg.currency
@@ -151,19 +147,13 @@ class OrdersSerializer(Serializer):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
                 performative.ledger_id = ledger_id
-            if msg.is_set("exchange_id"):
-                performative.exchange_id_is_set = True
-                exchange_id = msg.exchange_id
-                performative.exchange_id = exchange_id
             orders_msg.get_settlements.CopyFrom(performative)
         elif performative_id == OrdersMessage.Performative.GET_ORDER:
             performative = orders_pb2.OrdersMessage.Get_Order_Performative()  # type: ignore
             order = msg.order
             Order.encode(performative.order, order)
-            if msg.is_set("exchange_id"):
-                performative.exchange_id_is_set = True
-                exchange_id = msg.exchange_id
-                performative.exchange_id = exchange_id
+            exchange_id = msg.exchange_id
+            performative.exchange_id = exchange_id
             if msg.is_set("ledger_id"):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
@@ -223,9 +213,8 @@ class OrdersSerializer(Serializer):
             pb2_order = orders_pb.create_order.order
             order = Order.decode(pb2_order)
             performative_content["order"] = order
-            if orders_pb.create_order.exchange_id_is_set:
-                exchange_id = orders_pb.create_order.exchange_id
-                performative_content["exchange_id"] = exchange_id
+            exchange_id = orders_pb.create_order.exchange_id
+            performative_content["exchange_id"] = exchange_id
             if orders_pb.create_order.ledger_id_is_set:
                 ledger_id = orders_pb.create_order.ledger_id
                 performative_content["ledger_id"] = ledger_id
@@ -237,9 +226,8 @@ class OrdersSerializer(Serializer):
             pb2_order = orders_pb.cancel_order.order
             order = Order.decode(pb2_order)
             performative_content["order"] = order
-            if orders_pb.cancel_order.exchange_id_is_set:
-                exchange_id = orders_pb.cancel_order.exchange_id
-                performative_content["exchange_id"] = exchange_id
+            exchange_id = orders_pb.cancel_order.exchange_id
+            performative_content["exchange_id"] = exchange_id
             if orders_pb.cancel_order.ledger_id_is_set:
                 ledger_id = orders_pb.cancel_order.ledger_id
                 performative_content["ledger_id"] = ledger_id
@@ -248,6 +236,8 @@ class OrdersSerializer(Serializer):
             order = Order.decode(pb2_order)
             performative_content["order"] = order
         elif performative_id == OrdersMessage.Performative.GET_ORDERS:
+            exchange_id = orders_pb.get_orders.exchange_id
+            performative_content["exchange_id"] = exchange_id
             if orders_pb.get_orders.symbol_is_set:
                 symbol = orders_pb.get_orders.symbol
                 performative_content["symbol"] = symbol
@@ -266,9 +256,6 @@ class OrdersSerializer(Serializer):
                 pb2_status = orders_pb.get_orders.status
                 status = OrderStatus.decode(pb2_status)
                 performative_content["status"] = status
-            if orders_pb.get_orders.exchange_id_is_set:
-                exchange_id = orders_pb.get_orders.exchange_id
-                performative_content["exchange_id"] = exchange_id
             if orders_pb.get_orders.ledger_id_is_set:
                 ledger_id = orders_pb.get_orders.ledger_id
                 performative_content["ledger_id"] = ledger_id
@@ -276,6 +263,8 @@ class OrdersSerializer(Serializer):
                 account = orders_pb.get_orders.account
                 performative_content["account"] = account
         elif performative_id == OrdersMessage.Performative.GET_SETTLEMENTS:
+            exchange_id = orders_pb.get_settlements.exchange_id
+            performative_content["exchange_id"] = exchange_id
             if orders_pb.get_settlements.currency_is_set:
                 currency = orders_pb.get_settlements.currency
                 performative_content["currency"] = currency
@@ -288,16 +277,12 @@ class OrdersSerializer(Serializer):
             if orders_pb.get_settlements.ledger_id_is_set:
                 ledger_id = orders_pb.get_settlements.ledger_id
                 performative_content["ledger_id"] = ledger_id
-            if orders_pb.get_settlements.exchange_id_is_set:
-                exchange_id = orders_pb.get_settlements.exchange_id
-                performative_content["exchange_id"] = exchange_id
         elif performative_id == OrdersMessage.Performative.GET_ORDER:
             pb2_order = orders_pb.get_order.order
             order = Order.decode(pb2_order)
             performative_content["order"] = order
-            if orders_pb.get_order.exchange_id_is_set:
-                exchange_id = orders_pb.get_order.exchange_id
-                performative_content["exchange_id"] = exchange_id
+            exchange_id = orders_pb.get_order.exchange_id
+            performative_content["exchange_id"] = exchange_id
             if orders_pb.get_order.ledger_id_is_set:
                 ledger_id = orders_pb.get_order.ledger_id
                 performative_content["ledger_id"] = ledger_id

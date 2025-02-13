@@ -1,4 +1,6 @@
-"""Base exchange class."""
+"""
+Base exchange class.
+"""
 
 from enum import Enum
 

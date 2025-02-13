@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023
@@ -25,14 +26,16 @@ import json
 import asyncio
 import pathlib
 import datetime
+from abc import ABC
 from enum import Enum
 from time import sleep
 from typing import Any, Callable, Optional, Generator, cast
 from textwrap import dedent
-from collections.abc import Callable, Generator
+from dataclasses import asdict
 
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
+from aea.protocols.dialogue.base import Dialogue
 
 from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -59,7 +62,9 @@ TZ = datetime.datetime.now().astimezone().tzinfo
 
 
 class SetupRound(State):
-    """This class implements the SetupRound state."""
+    """
+    This class implements the SetupRound state.
+    """
 
     clear_data = False
 
@@ -69,7 +74,9 @@ class SetupRound(State):
         self.started = False
 
     async def act(self) -> None:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
         self.context.logger.info("SetupRound: Performing action")
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(0)
@@ -82,17 +89,23 @@ class SetupRound(State):
         self._is_done = True
 
     def is_done(self) -> bool:
-        """Return True if the state is done."""
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
-    def event(self) -> str | None:
-        """Return the event."""
+    def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
 
 class IdentifyOpportunityRound(State):
-    """This class implements the IdentifyOpportunityRound state."""
+    """
+    This class implements the IdentifyOpportunityRound state.
+    """
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -101,35 +114,44 @@ class IdentifyOpportunityRound(State):
         # we have to import the strategy due to the loading sequence of the agent dependencies.
 
     async def act(self) -> None:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
+        print("IdentifyOpportunityRound: Performing action")
         self.started = True
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text(encoding="utf-8"))
-        prices = json.loads(pathlib.Path(PRICES_FILE).read_text(encoding="utf-8"))
-        existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text(encoding="utf-8"))
-        
+        portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text())
+        prices = json.loads(pathlib.Path(PRICES_FILE).read_text())
+        existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text())
+
         orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
-            pathlib.Path(ORDERS_FILE).write_text(json.dumps(orders, indent=4), encoding="utf-8")
+            pathlib.Path(ORDERS_FILE).write_text(json.dumps(orders, indent=4))
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
         await asyncio.sleep(0)
 
     def is_done(self) -> bool:
-        """Return True if the state is done."""
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
-    def event(self) -> str | None:
-        """Return the event."""
+    def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
     def setup(self) -> None:
-        """Setup the state."""
+        """
+        Setup the state.
+        """
         self.started = False
         # We need to add to the PYTHONPATH=. to be able to import the strategy
         sys.path.append(".")
@@ -139,7 +161,9 @@ class IdentifyOpportunityRound(State):
 
 
 class ErrorRound(State):
-    """This class implements the ErrorRound state."""
+    """
+    This class implements the ErrorRound state.
+    """
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -147,28 +171,39 @@ class ErrorRound(State):
         self.started = False
 
     async def act(self) -> None:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
+        print("ErrorRound: Performing action")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(1)
 
     def is_done(self) -> bool:
-        """Return True if the state is done."""
+        """
+        Return True if the state is done.
+        """
         return self._is_done
 
     @property
-    def event(self) -> str | None:
-        """Return the event."""
+    def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
 
 class BaseConnectionRound(BaseBehaviour):
-    """This class implements the BaseConnectionRound state."""
+    """
+    This class implements the BaseConnectionRound state.
+    """
 
     matching_round = "baseconnectionround"
 
     def setup(self) -> None:
-        """Setup the state."""
+        """
+        Setup the state.
+        """
         self._performative_to_dialogue_class = {
             OrdersMessage.Performative.GET_ORDERS: self.context.orders_dialogues,
             OrdersMessage.Performative.CREATE_ORDER: self.context.orders_dialogues,
@@ -176,22 +211,26 @@ class BaseConnectionRound(BaseBehaviour):
             TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
         }
         self.started = False
-        self._is_done = False
-        self._message = None
+        self._is_done = False  # noqa
+        self._message = None  # noqa
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._is_done = False  # Initially, the state is not done
-        self._message = None
+        self._message = None  # noqa
 
     def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
+        """
+        Return True if the state is done.
+        """
+        return self._is_done  # noqa
 
     @property
     def current_message(self) -> None:
-        """Return the current message."""
-        return self._message
+        """
+        Return the current message.
+        """
+        return self._message  # noqa
 
     def get_response(
         self,
@@ -199,7 +238,9 @@ class BaseConnectionRound(BaseBehaviour):
         connection_id: str,
         **kwargs,
     ) -> Generator[None, None, Any]:
-        """Get a ccxt response."""
+        """
+        Get a ccxt response.
+        """
 
         dialogue_class = self._performative_to_dialogue_class[protocol_performative]
 
@@ -229,9 +270,10 @@ class BaseConnectionRound(BaseBehaviour):
     def wait_for_message(
         self,
         condition: Callable = lambda message: True,  # noqa
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
     ) -> Any:
-        """Wait for message.
+        """
+        Wait for message.
 
         Care must be taken. This method does not handle concurrent requests.
         Use directly after a request is being sent.
@@ -250,9 +292,9 @@ class BaseConnectionRound(BaseBehaviour):
 
         try:
             while self.current_message is None:
-                yield
+                yield  # noqa
                 if timeout is not None and datetime.datetime.now(tz=TZ) > deadline:
-                    raise TimeoutException
+                    raise TimeoutException()
             self.context.logger.debug(f"Received message: {self._message}")
             return self.current_message
         except TimeoutException:
@@ -260,21 +302,29 @@ class BaseConnectionRound(BaseBehaviour):
             return None  # noqa
 
     @property
-    def event(self) -> str | None:
-        """Return the event."""
+    def event(self) -> Optional[str]:
+        """
+        Return the event.
+        """
         return self._event
 
     async def async_act_wrapper(self) -> Generator[Any, None, None]:
-        """Wrapper for the async act method."""
+        """
+        Wrapper for the async act method.
+        """
         return await self.async_act()
 
     async def async_act(self) -> None:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
         self.act()
 
 
 class ExecuteOrdersRound(BaseConnectionRound):
-    """This class implements the ExecuteOrdersRound state."""
+    """
+    This class implements the ExecuteOrdersRound state.
+    """
 
     matching_round = "executeordersround"
 
@@ -285,10 +335,13 @@ class ExecuteOrdersRound(BaseConnectionRound):
         self._message = None
 
     def act(self) -> None:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
         self.started = True
+        print("ExecuteOrdersRound: Performing action")
 
         order_file = pathlib.Path("orders.json")
         orders = order_file.read_text()
@@ -306,9 +359,9 @@ class ExecuteOrdersRound(BaseConnectionRound):
             self.context.logger.info(
                 dedent(f"""
             Id: {response.order.id}
-            Exchange: {response.order.exchange_id}
-            Market:   {response.order.symbol}
-            Status:   {response.order.status}
+            Exchange: {response.order.exchange_id} 
+            Market:   {response.order.symbol} 
+            Status:   {response.order.status} 
             Side:     {response.order.side}
             Price:    {response.order.price}
             Amount:   {response.order.amount}
@@ -320,12 +373,16 @@ class ExecuteOrdersRound(BaseConnectionRound):
 
 
 class CollectDataRound(BaseConnectionRound):
-    """This class implements the CollectDataRound state."""
+    """
+    This class implements the CollectDataRound state.
+    """
 
     matching_round = "collectdataround"
 
     def act(self) -> Generator:
-        """Perform the action of the state."""
+        """
+        Perform the action of the state.
+        """
         if self.started:
             return
 
@@ -341,7 +398,6 @@ class CollectDataRound(BaseConnectionRound):
                 BalancesMessage.Performative.GET_ALL_BALANCES,
                 connection_id=str(CCXT_PUBLIC_ID),
                 exchange_id=exchange_id,
-                ledger_id=ledger_id,
             )
 
             if balances.performative == BalancesMessage.Performative.ERROR:
@@ -351,16 +407,12 @@ class CollectDataRound(BaseConnectionRound):
                 return
 
             tickers = yield from self.get_response(
-                TickersMessage.Performative.GET_ALL_TICKERS,
-                connection_id=str(CCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
+                TickersMessage.Performative.GET_ALL_TICKERS, connection_id=str(CCXT_PUBLIC_ID), exchange_id=exchange_id
             )
             orders = yield from self.get_response(
                 OrdersMessage.Performative.GET_ORDERS,
                 connection_id=str(CCXT_PUBLIC_ID),
                 exchange_id=exchange_id,
-                ledger_id=ledger_id,
                 symbol="OLAS/USDT",
             )
 
@@ -397,9 +449,9 @@ class CollectDataRound(BaseConnectionRound):
 
         # We write the portfolio to disk
         self.context.logger.info(f"Portfolio: {portfolio}")
-        pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4), encoding="utf-8")
-        pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4), encoding="utf-8")
-        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(existing_orders, indent=4), encoding="utf-8")
+        pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4))
+        pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4))
+        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(existing_orders, indent=4))
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
@@ -419,6 +471,7 @@ class PostTradeRound(State):
 
     async def act(self) -> None:
         """Perform the action of the state."""
+        print("PostTradeRound: Performing action")
         if self.started:
             return
         self.started = True
@@ -428,7 +481,7 @@ class PostTradeRound(State):
         order_file = pathlib.Path("orders.json")
         orders = order_file.read_text()
         orders = json.loads(orders)
-        sell_order, buy_order = (Order.model_validate(o) for o in orders)
+        sell_order, buy_order = [Order.model_validate(o) for o in orders]
 
         report_msg = f"""
         ```
@@ -461,11 +514,11 @@ class PostTradeRound(State):
         return self._is_done
 
     @property
-    def event(self) -> str | None:
+    def event(self) -> Optional[str]:
         """Return the event."""
         return self._event
 
-    def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
+    def send_notification_to_user(self, title: str, msg: str, attach: str = None) -> None:
         """Send notification to user."""
         dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
         msg, _ = dialogues.create(
@@ -490,24 +543,25 @@ class NoOpportunityRound(State):
         """Perform the action of the state."""
         if self.started:
             return
-        self._is_done = True
+        print("NoOpportunityRound: Performing action")
+        self._is_done = True  # noqa
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(0)
 
     def setup(self) -> None:
         """Setup the state."""
         self.started = False
-        self._is_done = False
+        self._is_done = False  # noqa
         super().setup()
 
     def is_done(self) -> bool:
         """Return True if the state is done."""
-        return self._is_done
+        return self._is_done  # noqa
 
     @property
-    def event(self) -> str | None:
+    def event(self) -> Optional[str]:
         """Return the event."""
-        return self._event
+        return self._event  # noqa
 
 
 class ArbitrageabciappEvents(Enum):
@@ -586,13 +640,14 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         if self.current_task:
             if not self.current_task.done():
                 return
-            failed = self.current_task.exception()
-            if failed:
-                self.context.logger.error(f"Error in state {self.current}: {failed}")
+            else:
+                failed = self.current_task.exception()
+                if failed:
+                    self.context.logger.error(f"Error in state {self.current}: {failed}")
+                    self.current_task = None
+                    self.current = "errorround"
+                    return
                 self.current_task = None
-                self.current = "errorround"
-                return
-            self.current_task = None
 
         current_state = self.get_state(self.current)
         if current_state is None:
@@ -621,4 +676,5 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
 
     def terminate(self) -> None:
         """Implement the termination."""
+        print("Terminating the agent.")
         os._exit(0)

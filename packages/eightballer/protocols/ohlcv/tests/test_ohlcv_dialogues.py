@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -26,11 +27,12 @@ from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
+from packages.eightballer.protocols.ohlcv.custom_types import ErrorCode
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -47,9 +49,9 @@ class TestDialoguesOhlcv(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return {
-            "performative": OhlcvMessage.Performative.SUBSCRIBE,
-            "exchange_id": "some str",
-            "market_name": "some str",
-            "interval": 12,
-        }
+        return dict(
+            performative=OhlcvMessage.Performative.SUBSCRIBE,
+            exchange_id="some str",
+            market_name="some str",
+            interval=12,
+        )

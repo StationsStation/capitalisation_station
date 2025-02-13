@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -29,12 +30,12 @@ from packages.eightballer.protocols.positions.dialogues import (
     PositionsDialogue,
     BasePositionsDialogues,
 )
-from packages.eightballer.protocols.positions.custom_types import PositionSide
+from packages.eightballer.protocols.positions.custom_types import ErrorCode, PositionSide
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -51,9 +52,9 @@ class TestDialoguesPositions(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return {
-            "performative": PositionsMessage.Performative.GET_ALL_POSITIONS,
-            "exchange_id": "some str",
-            "params": {"some str": b"some_bytes"},
-            "side": PositionSide(0),
-        }
+        return dict(
+            performative=PositionsMessage.Performative.GET_ALL_POSITIONS,
+            exchange_id="some str",
+            params={"some str": b"some_bytes"},
+            side=PositionSide(0),
+        )

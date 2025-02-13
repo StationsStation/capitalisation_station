@@ -1,8 +1,10 @@
-"""An interface for the Lyra API."""
+"""
+An interface for the Lyra API.
+"""
 
 import datetime
 import traceback
-from typing import Any
+from typing import Any, Dict
 
 from lyra.enums import OrderType as LyraOrderType, OrderStatus as LyraOrderStatus, InstrumentType, UnderlyingCurrency
 from lyra.async_client import AsyncClient
@@ -43,11 +45,11 @@ def to_market(api_result):
     'aggregate_funding': '244.249950785486024857',
     'funding_rate': '-0.0000125'},
     'base_asset_address': '0xAFB6Bb95cd70D5367e2C39e9dbEb422B9815339D',
-    'base_asset_sub_id': '0'}.
+    'base_asset_sub_id': '0'}
 
     """
 
-    return Market(
+    market = Market(
         id=api_result["instrument_name"],
         lowercaseId=api_result["instrument_name"].lower(),
         symbol=api_result["instrument_name"],
@@ -64,10 +66,12 @@ def to_market(api_result):
         taker=api_result["taker_fee_rate"],
         maker=api_result["maker_fee_rate"],
     )
+    return market
 
 
 def to_ticker(api_result):
-    """Parse from the API result to a Ticker object.
+    """
+    Parse from the API result to a Ticker object.
     {
     'instrument_type': 'perp',
     'instrument_name': 'ETH-PERP',
@@ -113,7 +117,7 @@ def to_ticker(api_result):
     },
     'timestamp': 1710755194000,
     'min_price': '3413.85',
-    'max_price': '3763.6'.
+    'max_price': '3763.6'
     """
     return Ticker(
         symbol=api_result["instrument_name"],
@@ -134,7 +138,8 @@ def to_ticker(api_result):
 
 
 def to_balance(api_result):
-    """{
+    """
+    {
     'asset_type': 'erc20',
     'asset_name': 'USDC',
     'currency': 'USDC',
@@ -145,7 +150,7 @@ def to_balance(api_result):
     'pending_interest': '7.24768252198952647395145769493641777913569316E-8',
     'initial_margin': '0.0039877010299821909547479670266056928085163235664368',
     'maintenance_margin': '0.0039877010299821909547479670266056928085163235664368'
-    }.
+    }
     """
     return Balance(
         asset_id=api_result["currency"],
@@ -156,7 +161,8 @@ def to_balance(api_result):
 
 
 def to_position(api_result):
-    """[
+    """
+    [
     {
         'instrument_type': 'option',
         'instrument_name': 'ETH-20240322-3900-C',
@@ -205,7 +211,7 @@ def to_position(api_result):
         'liquidation_price': None,
         'creation_timestamp': 1710434366705
     }
-    ].
+    ]
     """
     return Position(
         id=api_result["instrument_name"],
@@ -238,7 +244,8 @@ LYRA_ORDER_TYPE_MAP = {
 
 
 def to_order(api_result):
-    """{
+    """
+        {
         'subaccount_id': 305,
         'order_id': 'fff6bf6d-4fc2-42d3-be76-da209e7ca1eb',
         'instrument_name': 'ETH-20240322-3900-C',
@@ -270,7 +277,7 @@ def to_order(api_result):
         'trigger_price_type': None,
         'trigger_price': None,
         'trigger_reject_message': None
-        }.
+        }
 
         converts to;'
         @dataclass
@@ -326,7 +333,7 @@ def from_camelize(name: str) -> str:
 
 
 def map_status_to_enum(status):
-    """Map the status to order protocol status."""
+    """Map the status to order protocol status"""
     mapping = {
         "open": OrderStatus.OPEN,
         "new": OrderStatus.OPEN,
@@ -336,8 +343,7 @@ def map_status_to_enum(status):
         "filled": OrderStatus.FILLED,
     }
     if status not in mapping:
-        msg = f"Unknown status: {status}"
-        raise ValueError(msg)
+        raise ValueError(f"Unknown status: {status}")
     return mapping[status]
 
 
@@ -348,8 +354,7 @@ def map_order_type_to_enum(order_type: str) -> OrderType:
         "market": OrderType.MARKET,
     }
     if order_type not in mapping:
-        msg = f"Unknown order type: {order_type}"
-        raise ValueError(msg)
+        raise ValueError(f"Unknown order type: {order_type}")
     return mapping[order_type]
 
 
@@ -364,7 +369,7 @@ class LyraClient:
         self.client = AsyncClient()
         self.logger = kwargs.get("logger")
 
-    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
+    def parse_order(self, api_call: Dict[str, Any], exchange_id) -> Order:
         """Create an order from an api call."""
         kwargs = {from_camelize(key): value for key, value in api_call.items()}
         if all(
@@ -391,9 +396,10 @@ class LyraClient:
             params["type"] = InstrumentType(params["type"].lower())
         result = await self.client.fetch_instruments(**params)
         markets = [to_market(market) for market in result]
-        return Markets(
+        markets = Markets(
             markets=markets,
         )
+        return markets
 
     async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
@@ -408,13 +414,15 @@ class LyraClient:
             result = await self.client.fetch_tickers(**params)
             data = result.values()
         except Exception as error:  # noqa
+            print(f"Error: {error}")
             traceback.print_exc()
             data = []
 
         tickers = [to_ticker(ticker) for ticker in data]
-        return Tickers(
+        tickers = Tickers(
             tickers=tickers,
         )
+        return tickers
 
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
@@ -422,14 +430,15 @@ class LyraClient:
         try:
             result = await self.client.get_collaterals()
             balances = [to_balance(balance) for balance in [result]]
-        except Exception as error:
+        except Exception as error:  # noqa
             traceback.print_exc()
-            self.logger.exception(f"Failed to fetch balances: {error}")
+            self.logger.error(f"Failed to fetch balances: {error}")
             balances = []
 
-        return Balances(
+        balances = Balances(
             balances=balances,
         )
+        return balances
 
     async def fetch_positions(self, *args, **kwargs):
         """Fetch all positions."""
@@ -441,6 +450,7 @@ class LyraClient:
             result = await self.client.get_positions(**params)
             data = result
         except Exception as error:  # noqa
+            print(f"Error: {error}")
             traceback.print_exc()
             data = []
         return data
@@ -452,26 +462,29 @@ class LyraClient:
         try:
             result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
         except Exception as error:  # noqa
+            print(f"Error: {error}")
             traceback.print_exc()
             result = []
 
         orders = [to_order(order) for order in result]
-        return Orders(
+        orders = Orders(
             orders=orders,
         )
+        return orders
 
     async def watch_order_book(self, *args, **kwargs):
         """Watch the order book."""
         params = kwargs.get("params", {})
         try:
             result = await self.client.watch_order_book(instrument_name=args[0], **params)
-        except Exception:
+        except Exception as error:  # noqa
             traceback.print_exc()
-            raise
-        return OrderBook(
+            raise error
+        order_book = OrderBook(
             **result,
             exchange_id=self.exchange_id,
         )
+        return order_book
 
     async def close(self):
         """Close the client."""

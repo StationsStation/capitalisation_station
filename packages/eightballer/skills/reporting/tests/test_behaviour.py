@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2021-2023 8baller
@@ -41,7 +42,9 @@ ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 class TestOrder:
-    """Test order class."""
+    """
+    Test order class.
+    """
 
     id: str = "test_id"
     exchange_id: str = "lyra"
@@ -66,7 +69,7 @@ class BaseReportingTestCase(BaseSkillTestCase, ABC):
         if Path(DB_FILE).exists():
             Path(DB_FILE).unlink()
 
-    @pytest.mark.skip
+    @pytest.mark.skip()
     def test_act(self):
         """Test the act method of the price_polling behaviour."""
         # operation
@@ -78,18 +81,24 @@ class BaseReportingTestCase(BaseSkillTestCase, ABC):
 
 
 class TestEodSetup(BaseReportingTestCase):
-    """Test that the setup is correct."""
+    """
+    Test that the setup is correct.
+    """
 
     behaviour_name = "eod_reporting"
 
 
 class TestReconciliationSetup(BaseReportingTestCase):
-    """Test that the setup is correct."""
+    """
+    Test that the setup is correct.
+    """
 
     behaviour_name = "reconciliation_reporting"
 
     def test_creates_order_request(self):
-        """We check that the reconcilliation behaviour puts a request on the order queue."""
+        """
+        We check that the reconcilliation behaviour puts a request on the order queue.
+        """
 
         behaviour = self.skill.behaviours[self.behaviour_name]
         behaviour.setup()
@@ -123,43 +132,49 @@ class TestReconciliationSetup(BaseReportingTestCase):
         )
 
     @pytest.mark.parametrize(
-        ("in_string", "out_string"),
+        "in_string, out_string",
         [
-            ("ETH/USD:ETH-231027-2000-C", "ETH-27OCT23-2000-C"),
-            ("ETH/USD:ETH-231027-2000-P", "ETH-27OCT23-2000-P"),
-            ("ETH/USD:ETH-230825-1500-P", "ETH-25AUG23-1500-P"),
+            ["ETH/USD:ETH-231027-2000-C", "ETH-27OCT23-2000-C"],
+            ["ETH/USD:ETH-231027-2000-P", "ETH-27OCT23-2000-P"],
+            ["ETH/USD:ETH-230825-1500-P", "ETH-25AUG23-1500-P"],
         ],
     )
     def test_from_instrument_name_to_id(self, in_string, out_string):
-        """Test if it is possible to convert from instrument to id."""
+        """
+        Test if it is possible to convert from instrument to id.
+        """
         assert from_instrument_name_to_id(in_string) == out_string
 
     @pytest.mark.parametrize(
-        ("in_string", "out_string"),
+        "in_string, out_string",
         [
-            ("ETH-27OCT23-2000-C", "ETH/USD:ETH-231027-2000-C"),
-            ("ETH-27OCT23-2000-P", "ETH/USD:ETH-231027-2000-P"),
-            ("ETH-25AUG23-1500-P", "ETH/USD:ETH-230825-1500-P"),
-            ("ETH-30SEP22-1300-P", "ETH/USD:ETH-220930-1300-P"),
-            ("ETH-11AUG23-1750-P", "ETH/USD:ETH-230811-1750-P"),
-            ("ETH-4AUG23-1900-C", "ETH/USD:ETH-230804-1900-C"),
-            ("ETH-4AUG23-1950-C", "ETH/USD:ETH-230804-1950-C"),
-            ("ETH-2AUG23-1825-C", "ETH/USD:ETH-230802-1825-C"),
-            ("ETH-2AUG23-1850-C", "ETH/USD:ETH-230802-1850-C"),
-            ("ETH-28JUL23-1850-P", "ETH/USD:ETH-230728-1850-P"),
-            ("ETH-28JUL23-2000-C", "ETH/USD:ETH-230728-2000-C"),
-            ("ETH-28JUL23-2100-C", "ETH/USD:ETH-230728-2100-C"),
-            ("ETH-30JUN23-2000-C", "ETH/USD:ETH-230630-2000-C"),
-            ("ETH-16JUN23-1950-C", "ETH/USD:ETH-230616-1950-C"),
-            ("ETH-27JAN23-1300-P", "ETH/USD:ETH-230127-1300-P"),
-            ("ETH-30DEC22-1300-P", "ETH/USD:ETH-221230-1300-P"),
-            ("ETH-18NOV22-1400-P", "ETH/USD:ETH-221118-1400-P"),
-            ("ETH-11NOV22-1400-P", "ETH/USD:ETH-221111-1400-P"),
-            ("ETH-9NOV22-1500-P", "ETH/USD:ETH-221109-1500-P"),
-            ("ETH-4NOV22-1250-P", "ETH/USD:ETH-221104-1250-P"),
-            ("ETH-24OCT22-1325-C", "ETH/USD:ETH-221024-1325-C"),
+            ["ETH-27OCT23-2000-C", "ETH/USD:ETH-231027-2000-C"],
+            ["ETH-27OCT23-2000-P", "ETH/USD:ETH-231027-2000-P"],
+            ["ETH-25AUG23-1500-P", "ETH/USD:ETH-230825-1500-P"],
+            ["ETH-30SEP22-1300-P", "ETH/USD:ETH-220930-1300-P"],
+            ["ETH-25AUG23-1500-P", "ETH/USD:ETH-230825-1500-P"],
+            ["ETH-11AUG23-1750-P", "ETH/USD:ETH-230811-1750-P"],
+            ["ETH-4AUG23-1900-C", "ETH/USD:ETH-230804-1900-C"],
+            ["ETH-4AUG23-1950-C", "ETH/USD:ETH-230804-1950-C"],
+            ["ETH-2AUG23-1825-C", "ETH/USD:ETH-230802-1825-C"],
+            ["ETH-2AUG23-1850-C", "ETH/USD:ETH-230802-1850-C"],
+            ["ETH-28JUL23-1850-P", "ETH/USD:ETH-230728-1850-P"],
+            ["ETH-28JUL23-2000-C", "ETH/USD:ETH-230728-2000-C"],
+            ["ETH-28JUL23-2100-C", "ETH/USD:ETH-230728-2100-C"],
+            ["ETH-30JUN23-2000-C", "ETH/USD:ETH-230630-2000-C"],
+            ["ETH-16JUN23-1950-C", "ETH/USD:ETH-230616-1950-C"],
+            ["ETH-27JAN23-1300-P", "ETH/USD:ETH-230127-1300-P"],
+            ["ETH-30DEC22-1300-P", "ETH/USD:ETH-221230-1300-P"],
+            ["ETH-18NOV22-1400-P", "ETH/USD:ETH-221118-1400-P"],
+            ["ETH-11NOV22-1400-P", "ETH/USD:ETH-221111-1400-P"],
+            ["ETH-9NOV22-1500-P", "ETH/USD:ETH-221109-1500-P"],
+            ["ETH-4NOV22-1250-P", "ETH/USD:ETH-221104-1250-P"],
+            ["ETH-24OCT22-1325-C", "ETH/USD:ETH-221024-1325-C"],
+            ["ETH-30SEP22-1300-P", "ETH/USD:ETH-220930-1300-P"],
         ],
     )
     def test_from_id_to_instrument_name(self, in_string, out_string):
-        """Test if it is possible to convert from id to instrument."""
+        """
+        Test if it is possible to convert from id to instrument.
+        """
         assert from_id_to_instrument_name(in_string) == out_string

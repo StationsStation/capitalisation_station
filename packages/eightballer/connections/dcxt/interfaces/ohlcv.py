@@ -1,7 +1,7 @@
 """Interface for the ohlcv."""
 
 import asyncio
-from typing import Any, cast
+from typing import Any, List, Optional, cast
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
@@ -13,8 +13,7 @@ def _seconds_to_timeframe(seconds=60):
     """Seconds to timeframe."""
     mapping = {60: "1m", 15: "15s"}
     if seconds not in mapping:
-        msg = f"Seconds not in timeframe mapping {seconds}"
-        raise ValueError(msg)
+        raise ValueError(f"Seconds not in timeframe mapping {seconds}")
     return mapping[seconds]
 
 
@@ -26,10 +25,10 @@ class OhlcvInterface(BaseInterface):
     dialogues_class = BaseOhlcvDialogues
 
     @staticmethod
-    def _parse_data_to_msg(dcxt_data: list[list[int]], market: Any):
-        """Parse dcxt data to msg."""
+    def _parse_data_to_msg(dcxt_data: List[List[int]], market: Any):
+        """parse dcxt data to msg."""
         keys = ["timestamp", "open", "high", "low", "close", "volume"]
-        candle = dict(zip(keys, dcxt_data[-1], strict=False))
+        candle = dict(zip(keys, dcxt_data[-1]))
 
         return OhlcvMessage(
             performative=OhlcvMessage.Performative.CANDLESTICK,
@@ -55,14 +54,15 @@ class OhlcvInterface(BaseInterface):
             connection.logger.info(f"Starting to sleep until: {market.interval} for ")
             await asyncio.sleep(market.interval)
 
-    async def subscribe(self, message: OhlcvMessage, dialogue: OhlcvDialogue, connection) -> OhlcvMessage | None:
+    async def subscribe(self, message: OhlcvMessage, dialogue: OhlcvDialogue, connection) -> Optional[OhlcvMessage]:
         """Register market to begin polling for ohlcv."""
         task = connection.loop.create_task(self._poll_market(message, connection))
         connection.polling_tasks.append(task)
-        return cast(
-            OhlcvMessage | None,
+        response_message = cast(
+            Optional[OhlcvMessage],
             dialogue.reply(
                 performative=OhlcvMessage.Performative.END,
                 target_message=message,
             ),
         )
+        return response_message

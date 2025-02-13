@@ -33,7 +33,7 @@ class TestOrderHandler(BaseSkillTestCase):
             Path(DB_FILE).unlink()
 
     @classmethod
-    def setup(cls):  # pylint: disable=W0221
+    def setup(cls):  #  pylint: disable=W0221
         """Setup the test class."""
         super().setup_class()
         cls.handler = cast(
@@ -121,7 +121,7 @@ class TestPositionHandler(BaseSkillTestCase):
     path_to_skill = PATH_TO_SKILL
 
     @classmethod
-    def setup(cls):  # pylint: disable=W0221
+    def setup(cls):  #  pylint: disable=W0221
         """Setup the test class."""
         super().setup_class()
         cls.handler = cast(
@@ -143,7 +143,9 @@ class TestPositionHandler(BaseSkillTestCase):
         }
 
     def test_handle_position_message(self):
-        """Test the handle position of the position handler."""
+        """
+        Test the handle position of the position handler.
+        """
         self.handler.setup()
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()
@@ -167,7 +169,9 @@ class TestPositionHandler(BaseSkillTestCase):
         self.assert_quantity_in_outbox(0)
 
     def test_handle_position_bad_symbol_message(self):
-        """Test the handle position of the position handler."""
+        """
+        Test the handle position of the position handler.
+        """
         self.handler.setup()
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()

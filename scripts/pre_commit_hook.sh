@@ -12,9 +12,9 @@ function check_output_command() {
 }
 
 function process() {
-    poetry run adev -n 0 -v fmt -co 
+    adev -n 0 -v fmt -co 
     check_output_command "Error in formatting the code"
-    poetry run adev -n 0 -v lint -co
+    adev -n 0 -v lint -co
     check_output_command "Error in linting the code"
 }
 

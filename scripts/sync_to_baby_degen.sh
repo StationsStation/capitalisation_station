@@ -5,7 +5,6 @@ set -e
 DOWN_STREAM_REPO=../../downstream/baby-degen
 adev deps update \
     -c $DOWN_STREAM_REPO \
-    --manual \
     -p .
 
 cd $DOWN_STREAM_REPO 

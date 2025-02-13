@@ -5,9 +5,10 @@ import asyncio
 import pytest
 from aea.mail.base import Envelope
 
-from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.ohlcv import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
+
+from ..test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 
 @pytest.mark.asyncio

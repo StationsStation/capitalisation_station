@@ -1,4 +1,8 @@
-"""Interface for the positios protocol."""
+"""
+Interface for the positios protocol.
+"""
+
+from typing import Optional
 
 from ccxt import BadSymbol, RequestTimeout, AuthenticationError
 from packages.eightballer.protocols.positions.message import PositionsMessage
@@ -8,7 +12,9 @@ from packages.eightballer.connections.ccxt.interfaces.interface_base import Base
 
 
 def all_positions_from_api_call(api_call):
-    """Get all positions from the exchange."""
+    """
+    Get all positions from the exchange.
+    """
     positions = []
     for position in api_call:
         if "size" in position.get("info", {}):
@@ -18,7 +24,9 @@ def all_positions_from_api_call(api_call):
 
 
 class PositionInterface(BaseInterface):
-    """Interface for positions protocol."""
+    """
+    Interface for positions protocol.
+    """
 
     protocol_id = PositionsMessage.protocol_id
     dialogue_class = PositionsDialogue
@@ -26,8 +34,10 @@ class PositionInterface(BaseInterface):
 
     async def get_all_positions(
         self, message: PositionsMessage, dialogue: PositionsDialogue, connection
-    ) -> PositionsMessage | None:
-        """Get all positions from the exchange."""
+    ) -> Optional[PositionsMessage]:
+        """
+        Get all positions from the exchange.
+        """
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}
@@ -56,15 +66,17 @@ class PositionInterface(BaseInterface):
                 error_msg="Authentication error",
             )
         except Exception as error:
-            connection.logger.exception(f"Error: {error}")
-            raise
+            connection.logger.error(f"Error: {error}")
+            raise error
 
         return response_message
 
     async def get_position(
         self, message: PositionsMessage, dialogue: PositionsDialogue, connection
-    ) -> PositionsMessage | None:
-        """Get a position from the exchange."""
+    ) -> Optional[PositionsMessage]:
+        """
+        Get a position from the exchange.
+        """
         exchange = connection.exchanges[message.exchange_id]
         try:
             position = await exchange.fetch_position(

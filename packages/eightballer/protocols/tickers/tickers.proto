@@ -46,36 +46,24 @@ message TickersMessage{
 
   // Performatives and contents
   message Get_All_Tickers_Performative{
-    string ledger_id = 1;
-    bool ledger_id_is_set = 2;
-    string exchange_id = 3;
-    bool exchange_id_is_set = 4;
-    map<string, bytes> params = 5;
-    bool params_is_set = 6;
+    string exchange_id = 1;
+    string ledger_id = 2;
+    map<string, bytes> params = 3;
+    bool params_is_set = 4;
   }
 
   message Get_Ticker_Performative{
     string asset_id = 1;
     string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
+    string ledger_id = 3;
   }
 
   message All_Tickers_Performative{
     Tickers tickers = 1;
-    string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
   }
 
   message Ticker_Performative{
     Ticker ticker = 1;
-    string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
   }
 
   message Error_Performative{

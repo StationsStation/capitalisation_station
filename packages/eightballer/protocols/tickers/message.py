@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 eightballer
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -163,14 +163,16 @@ class TickersMessage(Message):
         return cast(str, self.get("error_msg"))
 
     @property
-    def exchange_id(self) -> Optional[str]:
+    def exchange_id(self) -> str:
         """Get the 'exchange_id' content from the message."""
-        return cast(Optional[str], self.get("exchange_id"))
+        enforce(self.is_set("exchange_id"), "'exchange_id' content is not set.")
+        return cast(str, self.get("exchange_id"))
 
     @property
-    def ledger_id(self) -> Optional[str]:
+    def ledger_id(self) -> str:
         """Get the 'ledger_id' content from the message."""
-        return cast(Optional[str], self.get("ledger_id"))
+        enforce(self.is_set("ledger_id"), "'ledger_id' content is not set.")
+        return cast(str, self.get("ledger_id"))
 
     @property
     def params(self) -> Optional[Dict[str, bytes]]:
@@ -232,21 +234,17 @@ class TickersMessage(Message):
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
             if self.performative == TickersMessage.Performative.GET_ALL_TICKERS:
-                expected_nb_of_contents = 0
-                if self.is_set("ledger_id"):
-                    expected_nb_of_contents += 1
-                    ledger_id = cast(str, self.ledger_id)
-                    enforce(
-                        isinstance(ledger_id, str),
-                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
-                    )
-                if self.is_set("exchange_id"):
-                    expected_nb_of_contents += 1
-                    exchange_id = cast(str, self.exchange_id)
-                    enforce(
-                        isinstance(exchange_id, str),
-                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
-                    )
+                expected_nb_of_contents = 2
+                enforce(
+                    isinstance(self.exchange_id, str),
+                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
+                        type(self.exchange_id)
+                    ),
+                )
+                enforce(
+                    isinstance(self.ledger_id, str),
+                    "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(self.ledger_id)),
+                )
                 if self.is_set("params"):
                     expected_nb_of_contents += 1
                     params = cast(Dict[str, bytes], self.params)
@@ -268,65 +266,33 @@ class TickersMessage(Message):
                             ),
                         )
             elif self.performative == TickersMessage.Performative.GET_TICKER:
-                expected_nb_of_contents = 1
+                expected_nb_of_contents = 3
                 enforce(
                     isinstance(self.asset_id, str),
                     "Invalid type for content 'asset_id'. Expected 'str'. Found '{}'.".format(type(self.asset_id)),
                 )
-                if self.is_set("exchange_id"):
-                    expected_nb_of_contents += 1
-                    exchange_id = cast(str, self.exchange_id)
-                    enforce(
-                        isinstance(exchange_id, str),
-                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
-                    )
-                if self.is_set("ledger_id"):
-                    expected_nb_of_contents += 1
-                    ledger_id = cast(str, self.ledger_id)
-                    enforce(
-                        isinstance(ledger_id, str),
-                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
-                    )
+                enforce(
+                    isinstance(self.exchange_id, str),
+                    "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(
+                        type(self.exchange_id)
+                    ),
+                )
+                enforce(
+                    isinstance(self.ledger_id, str),
+                    "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(self.ledger_id)),
+                )
             elif self.performative == TickersMessage.Performative.ALL_TICKERS:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.tickers, CustomTickers),
                     "Invalid type for content 'tickers'. Expected 'Tickers'. Found '{}'.".format(type(self.tickers)),
                 )
-                if self.is_set("exchange_id"):
-                    expected_nb_of_contents += 1
-                    exchange_id = cast(str, self.exchange_id)
-                    enforce(
-                        isinstance(exchange_id, str),
-                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
-                    )
-                if self.is_set("ledger_id"):
-                    expected_nb_of_contents += 1
-                    ledger_id = cast(str, self.ledger_id)
-                    enforce(
-                        isinstance(ledger_id, str),
-                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
-                    )
             elif self.performative == TickersMessage.Performative.TICKER:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.ticker, CustomTicker),
                     "Invalid type for content 'ticker'. Expected 'Ticker'. Found '{}'.".format(type(self.ticker)),
                 )
-                if self.is_set("exchange_id"):
-                    expected_nb_of_contents += 1
-                    exchange_id = cast(str, self.exchange_id)
-                    enforce(
-                        isinstance(exchange_id, str),
-                        "Invalid type for content 'exchange_id'. Expected 'str'. Found '{}'.".format(type(exchange_id)),
-                    )
-                if self.is_set("ledger_id"):
-                    expected_nb_of_contents += 1
-                    ledger_id = cast(str, self.ledger_id)
-                    enforce(
-                        isinstance(ledger_id, str),
-                        "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
-                    )
             elif self.performative == TickersMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
                 enforce(

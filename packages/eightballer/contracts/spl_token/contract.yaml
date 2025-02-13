@@ -7,10 +7,10 @@ description: Implements a number of simple methods to enable interaction with a 
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
-  contract.py: bafybeihczrf2miim6c6kbovub5cm6wrr7pkjjwnzmvolbr65pk3p3vg76e
-  tests/__init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
-  tests/test_contract.py: bafybeiaqcio3bzeu5ej6t43yy7kbi52ncy4moucmuiqlymqtbl7b6xlyyq
+  __init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
+  contract.py: bafybeih3ddlhh7wc3kirahlqykjt33qs4oxw3ga4h5pmm377skjka4ddwq
+  tests/__init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
+  tests/test_contract.py: bafybeidnzw2cuzmsx52jjeu57iuhrbrgqqpkwu2z6xclq2mzqzc4yu3tsy
 fingerprint_ignore_patterns: []
 class_name: SolanaProgramLibraryToken
 contract_interface_paths: {}

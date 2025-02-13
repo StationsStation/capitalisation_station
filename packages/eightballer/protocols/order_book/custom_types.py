@@ -1,28 +1,26 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any
+from typing import Any, List
 
 from pydantic import BaseModel
 
 
 class BaseCustomEncoder(BaseModel):
-    """This class is a base class for encoding and decoding protocol buffer objects."""
+    """
+    This class is a base class for encoding and decoding protocol buffer objects.
+    """
 
     @staticmethod
-    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
-        """Encode an instance of this class into the protocol buffer object.
+    def encode(ps_response_protobuf_object, ps_response_object) -> None:
+        """
+        Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
         class in the 'ps_response_object' argument.
 
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
-
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
         """
         for key, value in ps_response_object.__dict__.items():
             current_attr = getattr(ps_response_protobuf_object, key)
@@ -38,21 +36,18 @@ class BaseCustomEncoder(BaseModel):
             setattr(ps_response_protobuf_object, key, value)
 
     @classmethod
-    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+    def decode(cls, ps_response_protobuf_object) -> "Any":
+        """
+        Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
 
+        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
+        :return: A new instance of this class that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-
         """
-        keywords = list(cls.__annotations__.keys())
+        keywords = [f for f in cls.__annotations__.keys()]
         kwargs = {}
         for keyword in keywords:
             proto_attr = getattr(ps_response_protobuf_object, keyword)
@@ -63,7 +58,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = dict(proto_attr.items())
+                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
                 continue
             kwargs[keyword] = proto_attr
         return cls(**kwargs)
@@ -82,8 +77,8 @@ class OrderBook(BaseCustomEncoder):
 
     exchange_id: str
     symbol: str
-    bids: list[int] = []
-    asks: list[int] = []
+    bids: List[int] = []
+    asks: List[int] = []
     timestamp: int
     datetime: str
     nonce: int

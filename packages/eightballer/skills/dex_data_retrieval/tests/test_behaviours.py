@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -18,11 +19,10 @@
 
 """This package contains round behaviours of AbciApp."""
 
-from typing import Any
+from typing import Any, Dict, Type, Hashable, Optional
 from pathlib import Path
 from dataclasses import field, dataclass
 from unittest.mock import MagicMock
-from collections.abc import Hashable
 
 import pytest
 
@@ -49,12 +49,12 @@ from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TES
 
 @dataclass
 class BehaviourTestCase:
-    """BehaviourTestCase."""
+    """BehaviourTestCase"""
 
     name: str
-    initial_data: dict[str, Hashable]
+    initial_data: Dict[str, Hashable]
     event: Event
-    kwargs: dict[str, Any] = field(default_factory=dict)
+    kwargs: Dict[str, Any] = field(default_factory=dict)
 
 
 MARKETS_TEST_CASE = BehaviourTestCase(
@@ -83,7 +83,7 @@ BALANCES_TEST_CASE = BehaviourTestCase(
 
 @pytest.mark.parametrize(
     "exchange_id, exchange_data",
-    list(TEST_EXCHANGES.items()),
+    [(exchange_id, exchange) for exchange_id, exchange in TEST_EXCHANGES.items()],
 )
 class BaseDexDataRetrievalTest(FSMBehaviourBaseCase):
     """Base test case."""
@@ -91,19 +91,19 @@ class BaseDexDataRetrievalTest(FSMBehaviourBaseCase):
     path_to_skill = Path(__file__).parent.parent
 
     behaviour: DexDataRetrievalRoundBehaviour
-    behaviour_class: type[DexDataRetrievalBaseBehaviour]
-    next_behaviour_class: type[DexDataRetrievalBaseBehaviour]
+    behaviour_class: Type[DexDataRetrievalBaseBehaviour]
+    next_behaviour_class: Type[DexDataRetrievalBaseBehaviour]
     synchronized_data: SynchronizedData
     done_event = Event.DONE
 
     @property
     def current_behaviour_id(self) -> str:
-        """Current RoundBehaviour's behaviour id."""
+        """Current RoundBehaviour's behaviour id"""
 
         return self.behaviour.current_behaviour.behaviour_id
 
-    def fast_forward(self, data: dict[str, Any] | None = None) -> None:
-        """Fast-forward on initialization."""
+    def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
+        """Fast-forward on initialization"""
 
         data = data if data is not None else {}
         self.fast_forward_to_behaviour(
@@ -114,7 +114,7 @@ class BaseDexDataRetrievalTest(FSMBehaviourBaseCase):
         assert self.current_behaviour_id == self.behaviour_class.behaviour_id
 
     def complete(self, event: Event) -> None:
-        """Complete test."""
+        """Complete test"""
 
         self.behaviour.act_wrapper()
         self.mock_a2a_transaction()
@@ -125,10 +125,10 @@ class BaseDexDataRetrievalTest(FSMBehaviourBaseCase):
 
 #  for some reason, this test fails, however it actually runs.
 class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
-    """Tests FetchDexBalancesBehaviour."""
+    """Tests FetchDexBalancesBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexBalancesBehaviour
-    next_behaviour_class: type[BaseBehaviour] = ...
+    behaviour_class: Type[BaseBehaviour] = FetchDexBalancesBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = ...
 
     @pytest.mark.parametrize("test_case", [])
     def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
@@ -138,7 +138,7 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
         self.fast_forward(test_case.initial_data)
 
         def get_ccxt_response(*args, **kwargs):
-            """Mock get_dcxt_response."""
+            """Mock get_dcxt_response"""
             del args, kwargs
             yield BalancesMessage(
                 performative=BalancesMessage.Performative.ALL_BALANCES,
@@ -146,12 +146,12 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
             )
 
         def from_balances_to_dict(*args, **kwargs):
-            """Mock _from_balances_to_dict."""
+            """Mock _from_balances_to_dict"""
             del args, kwargs
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):
-            """Mock is_result_ok."""
+            """Mock is_result_ok"""
             del args, kwargs
             return True
 
@@ -174,10 +174,10 @@ class TestFetchDexBalancesBehaviour(BaseDexDataRetrievalTest):
 
 @pytest.mark.asyncio
 class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
-    """Tests FetchDexMarketsBehaviour."""
+    """Tests FetchDexMarketsBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexMarketsBehaviour
-    next_behaviour_class: type[BaseBehaviour] = FetchDexTickersBehaviour
+    behaviour_class: Type[BaseBehaviour] = FetchDexMarketsBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = FetchDexTickersBehaviour
 
     @pytest.mark.parametrize("test_case", [MARKETS_TEST_CASE])
     async def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
@@ -189,7 +189,7 @@ class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
         mocker = MagicMock()
 
         def get_ccxt_response(*args, **kwargs):
-            """Mock get_ccxt_response."""
+            """Mock get_ccxt_response"""
             del args, kwargs
             yield MarketsMessage(
                 performative=MarketsMessage.Performative.ALL_MARKETS,
@@ -197,12 +197,12 @@ class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
             )
 
         def from_markets_to_dict(*args, **kwargs):
-            """Mock _from_markets_to_dict."""
+            """Mock _from_markets_to_dict"""
             del args, kwargs
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):
-            """Mock is_result_ok."""
+            """Mock is_result_ok"""
             del args, kwargs
             return True
 
@@ -225,10 +225,10 @@ class TestFetchDexMarketsBehaviour(BaseDexDataRetrievalTest):
 
 @pytest.mark.asyncio
 class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
-    """Tests FetchDexMarketsBehaviour."""
+    """Tests FetchDexMarketsBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexMarketsBehaviour
-    next_behaviour_class: type[BaseBehaviour] = FetchDexMarketsBehaviour
+    behaviour_class: Type[BaseBehaviour] = FetchDexMarketsBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = FetchDexMarketsBehaviour
 
     @pytest.mark.parametrize("test_case", [MARKETS_FAILED_TEST_CASE])
     async def test_run_failed_api_call(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
@@ -240,7 +240,7 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         mocker = MagicMock()
 
         def get_ccxt_response(*args, **kwargs):
-            """Mock get_ccxt_response."""
+            """Mock get_ccxt_response"""
             del args, kwargs
             yield MarketsMessage(
                 performative=MarketsMessage.Performative.ERROR,
@@ -250,12 +250,12 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
             )
 
         def from_markets_to_dict(*args, **kwargs):
-            """Mock _from_markets_to_dict."""
+            """Mock _from_markets_to_dict"""
             del args, kwargs
             return {exchange_id: [1, 2]}
 
         def is_result_ok(*args, **kwargs):
-            """Mock _is_result_ok."""
+            """Mock _is_result_ok"""
             del args, kwargs
             return False
 
@@ -277,7 +277,7 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
         self.complete(test_case.event)
 
     def complete(self, event: Event) -> None:
-        """Complete test."""
+        """Complete test"""
 
         self.behaviour.act_wrapper()
         self.mock_a2a_transaction()
@@ -287,10 +287,10 @@ class TestFetchDexMarketsBehaviourFailures(BaseDexDataRetrievalTest):
 
 
 class TestFetchDexOrdersBehaviour(BaseDexDataRetrievalTest):
-    """Tests FetchDexOrdersBehaviour."""
+    """Tests FetchDexOrdersBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexOrdersBehaviour
-    next_behaviour_class: type[BaseBehaviour] = ...
+    behaviour_class: Type[BaseBehaviour] = FetchDexOrdersBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = ...
 
     @pytest.mark.parametrize("test_case", [])
     def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:
@@ -303,10 +303,10 @@ class TestFetchDexOrdersBehaviour(BaseDexDataRetrievalTest):
 
 
 class TestFetchDexPositionsBehaviour(BaseDexDataRetrievalTest):
-    """Tests FetchDexPositionsBehaviour."""
+    """Tests FetchDexPositionsBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexPositionsBehaviour
-    next_behaviour_class: type[BaseBehaviour] = ...
+    behaviour_class: Type[BaseBehaviour] = FetchDexPositionsBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = ...
 
     @pytest.mark.parametrize("test_case", [])
     def test_run(self, test_case: BehaviourTestCase, exchange_id, exchange_data) -> None:

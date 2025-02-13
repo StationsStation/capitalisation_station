@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -120,7 +121,8 @@ class Erc20(Contract):
         ledger_api: LedgerApi,
         contract_address: str,
     ) -> JSONLike:
-        """Handler method for the 'get_token' requests.
+        """
+        Handler method for the 'get_token' requests.
 
         Implement this method in the sub class if you want
         to handle the contract requests manually.

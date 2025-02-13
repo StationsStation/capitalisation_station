@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023
@@ -19,6 +20,8 @@
 
 """This package contains a simple arbitrage strategy."""
 
+from typing import Dict
+
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 
 
@@ -38,11 +41,12 @@ class ArbitrageStrategy:
 
     def get_orders(
         self,
-        portfolio: dict[str, float],
-        prices: dict[str, float],
+        portfolio: Dict[str, float],
+        prices: Dict[str, float],
         **kwargs,
-    ) -> dict[str, float]:
-        """Get orders give a set of prices and balances.
+    ) -> Dict[str, float]:
+        """
+        Get orders give a set of prices and balances.
 
         :param prices: the prices
         :param balances: the balances
@@ -85,7 +89,9 @@ class ArbitrageStrategy:
         token_a_balance,
         token_b_balance,
     ):
-        """Calculate the orders to execute."""
+        """
+        Calculate the orders to execute.
+        """
         # we calculate if there is an arbitrage opportunity
         best_bid = max(cex_price["bid"], dex_price["bid"])  # highest bid
         best_ask = min(cex_price["ask"], dex_price["ask"])  # lowest ask
@@ -98,11 +104,14 @@ class ArbitrageStrategy:
 
             if cex_price["bid"] > dex_price["ask"]:
                 # buy on dex and sell on cex
+                print(f"buy on dex for {dex_price['ask']} and sell on cex for {cex_price['bid']}")
                 # We need to check we have enough of the asset we are using to buy on dex
                 if token_b_balance["free"] < DEFAULT_AMOUNT * dex_price["ask"]:
-                    return None
+                    print("Not enough balance on dex to buy")
+                    return
                 if asset_a_balance["free"] < DEFAULT_AMOUNT:
-                    return None
+                    print("Not enough balance on cex to sell")
+                    return
 
                 buy_order = Order(
                     price=dex_price["ask"],
@@ -128,12 +137,15 @@ class ArbitrageStrategy:
                     type=OrderType.MARKET,
                 )
             else:
+                print(f"buy on cex for {cex_price['ask']} and sell on dex for {dex_price['bid']}")
                 # buy on cex and sell on dex
                 # We need to check we have enough of the asset we are using to buy on cex
                 if asset_b_balance["free"] < DEFAULT_AMOUNT * cex_price["ask"]:
-                    return None
+                    print("Not enough balance on cex to buy")
+                    return
                 if token_a_balance["free"] < DEFAULT_AMOUNT:
-                    return None
+                    print("Not enough balance on dex to sell")
+                    return
 
                 buy_order = Order(
                     price=cex_price["ask"],
@@ -160,4 +172,6 @@ class ArbitrageStrategy:
                     type=OrderType.MARKET,
                 )
             return [sell_order, buy_order]
-        return []
+        else:
+            print("No arbitrage opportunity best bid is less than best ask")
+            return []

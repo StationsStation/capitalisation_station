@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -18,9 +19,8 @@
 
 """This package contains the tests for rounds of HelloWorld."""
 
-from typing import Any
+from typing import Any, Dict, List, Type, Mapping, Callable, Hashable
 from dataclasses import field, dataclass
-from collections.abc import Mapping, Callable, Hashable
 
 import pytest
 
@@ -38,15 +38,15 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import BaseRou
 
 @dataclass
 class RoundTestCase:
-    """RoundTestCase."""
+    """RoundTestCase"""
 
     name: str
-    initial_data: dict[str, Hashable]
+    initial_data: Dict[str, Hashable]
     payloads: Mapping[str, BaseTxPayload]
-    final_data: dict[str, Hashable]
+    final_data: Dict[str, Hashable]
     event: Event
-    synchronized_data_attr_checks: list[Callable] = field(default_factory=list)
-    kwargs: dict[str, Any] = field(default_factory=dict)
+    synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
+    kwargs: Dict[str, Any] = field(default_factory=dict)
 
 
 MAX_PARTICIPANTS: int = 4
@@ -55,13 +55,13 @@ MAX_PARTICIPANTS: int = 4
 class BaseHelloWorldRoundTest(BaseRoundTestClass):
     """Base test class for HelloWorld rounds."""
 
-    round_cls: type[AbstractRound]
+    round_cls: Type[AbstractRound]
     synchronized_data: SynchronizedData
     _synchronized_data_class = SynchronizedData
     _event_class = Event
 
     def run_test(self, test_case: RoundTestCase) -> None:
-        """Run the test."""
+        """Run the test"""
 
         self.synchronized_data.update(**test_case.initial_data)
 

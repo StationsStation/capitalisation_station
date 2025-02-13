@@ -1,4 +1,8 @@
-"""Base interface for balances protocol."""
+"""
+Base interface for balances protocol.
+"""
+
+from typing import Optional
 
 from ccxt import RequestTimeout
 from packages.eightballer.protocols.balances.message import BalancesMessage
@@ -8,7 +12,9 @@ from packages.eightballer.connections.ccxt.interfaces.interface_base import Base
 
 
 def all_balances_from_api_call(api_call):
-    """Get all balances from the exchange."""
+    """
+    Get all balances from the exchange.
+    """
     for key in [
         "info",
         "free",
@@ -25,7 +31,9 @@ def all_balances_from_api_call(api_call):
 
 
 class BalanceInterface(BaseInterface):
-    """Interface for balances protocol."""
+    """
+    Interface for balances protocol.
+    """
 
     protocol_id = BalancesMessage.protocol_id
     dialogue_class = BalancesDialogue
@@ -33,8 +41,10 @@ class BalanceInterface(BaseInterface):
 
     async def get_all_balances(
         self, message: BalancesMessage, dialogue: BalancesDialogue, connection
-    ) -> BalancesMessage | None:
-        """Get all balances from the exchange."""
+    ) -> Optional[BalancesMessage]:
+        """
+        Get all balances from the exchange.
+        """
         exchange = connection.exchanges[message.exchange_id]
         try:
             params = {}

@@ -1,4 +1,6 @@
-"""Contains cases for the reporting tests."""
+"""
+Contains cases for the reporting tests.
+"""
 
 from packages.eightballer.protocols.markets.custom_types import Market
 from packages.eightballer.protocols.positions.custom_types import Position, PositionSide

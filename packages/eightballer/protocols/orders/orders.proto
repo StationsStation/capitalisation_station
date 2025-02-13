@@ -16,11 +16,11 @@ message OrdersMessage{
   }
 
   message Order{
+    float price = 1;
     string symbol = 2;
     OrderStatus status = 3;
     OrderSide side = 4;
     OrderType type = 5;
-    optional float price = 1;
     optional string exchange_id = 6;
     optional string id = 7;
     optional string client_order_id = 8;
@@ -89,9 +89,8 @@ message OrdersMessage{
   message Create_Order_Performative{
     Order order = 1;
     string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Created_Performative{
@@ -101,9 +100,8 @@ message OrdersMessage{
   message Cancel_Order_Performative{
     Order order = 1;
     string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Cancelled_Performative{
@@ -129,24 +127,22 @@ message OrdersMessage{
   }
 
   message Get_Settlements_Performative{
-    string currency = 1;
-    bool currency_is_set = 2;
-    double end_timestamp = 3;
-    bool end_timestamp_is_set = 4;
-    double start_timestamp = 5;
-    bool start_timestamp_is_set = 6;
-    string ledger_id = 7;
-    bool ledger_id_is_set = 8;
-    string exchange_id = 9;
-    bool exchange_id_is_set = 10;
+    string exchange_id = 1;
+    string currency = 2;
+    bool currency_is_set = 3;
+    double end_timestamp = 4;
+    bool end_timestamp_is_set = 5;
+    double start_timestamp = 6;
+    bool start_timestamp_is_set = 7;
+    string ledger_id = 8;
+    bool ledger_id_is_set = 9;
   }
 
   message Get_Order_Performative{
     Order order = 1;
     string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
   }
 
   message Order_Performative{

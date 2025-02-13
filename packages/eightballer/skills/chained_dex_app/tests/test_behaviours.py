@@ -1,9 +1,8 @@
 """This package contains round behaviours of AbciApp."""
 
-from typing import Any
+from typing import Any, Dict, Type, Hashable, Optional
 from pathlib import Path
 from dataclasses import field, dataclass
-from collections.abc import Hashable
 
 import pytest
 
@@ -20,12 +19,12 @@ TEST_EXCHANGE = "lyra"
 
 @dataclass
 class BehaviourTestCase:
-    """BehaviourTestCase."""
+    """BehaviourTestCase"""
 
     name: str
-    initial_data: dict[str, Hashable]
+    initial_data: Dict[str, Hashable]
     event: Event
-    kwargs: dict[str, Any] = field(default_factory=dict)
+    kwargs: Dict[str, Any] = field(default_factory=dict)
 
 
 TEST_CASE = BehaviourTestCase(
@@ -41,19 +40,19 @@ class BaseChainedDexTest(FSMBehaviourBaseCase):
     path_to_skill = Path(__file__).parent.parent
 
     behaviour: DexDataAbciAppConsensusBehaviour
-    behaviour_class: type[BaseBehaviour]
-    next_behaviour_class: type[BaseBehaviour]
+    behaviour_class: Type[BaseBehaviour]
+    next_behaviour_class: Type[BaseBehaviour]
     synchronized_data: SynchronizedData
     done_event = Event.DONE
 
     @property
     def current_behaviour_id(self) -> str:
-        """Current RoundBehaviour's behaviour id."""
+        """Current RoundBehaviour's behaviour id"""
 
         return self.behaviour.current_behaviour.behaviour_id
 
-    def fast_forward(self, data: dict[str, Any] | None = None) -> None:
-        """Fast-forward on initialization."""
+    def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
+        """Fast-forward on initialization"""
 
         data = data if data is not None else {}
         self.fast_forward_to_behaviour(
@@ -64,7 +63,7 @@ class BaseChainedDexTest(FSMBehaviourBaseCase):
         assert self.current_behaviour_id == self.behaviour_class.behaviour_id
 
     def complete(self, event: Event) -> None:
-        """Complete test."""
+        """Complete test"""
 
         self.behaviour.act_wrapper()
         self.mock_a2a_transaction()
@@ -74,10 +73,10 @@ class BaseChainedDexTest(FSMBehaviourBaseCase):
 
 
 class TestChained(BaseChainedDexTest):
-    """Tests FetchDexPositionsBehaviour."""
+    """Tests FetchDexPositionsBehaviour"""
 
-    behaviour_class: type[BaseBehaviour] = FetchDexPositionsBehaviour
-    next_behaviour_class: type[BaseBehaviour] = ...
+    behaviour_class: Type[BaseBehaviour] = FetchDexPositionsBehaviour
+    next_behaviour_class: Type[BaseBehaviour] = ...
 
     @pytest.mark.parametrize("test_case", [TEST_CASE])
     def test_run(self, test_case: BehaviourTestCase) -> None:
