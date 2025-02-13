@@ -11,6 +11,7 @@ message BalancesMessage{
     float used = 3;
     float total = 4;
     bool is_native = 5;
+    optional string contract_address = 6;
   }
 
   message Balances{
@@ -32,23 +33,29 @@ message BalancesMessage{
     map<string, bytes> params = 1;
     bool params_is_set = 2;
     string exchange_id = 3;
+    bool exchange_id_is_set = 4;
+    string ledger_id = 5;
+    bool ledger_id_is_set = 6;
+    string address = 7;
+    bool address_is_set = 8;
+  }
+
+  message Get_Balance_Performative{
+    string asset_id = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
     string ledger_id = 4;
     bool ledger_id_is_set = 5;
     string address = 6;
     bool address_is_set = 7;
   }
 
-  message Get_Balance_Performative{
-    string asset_id = 1;
-    string exchange_id = 2;
-    string ledger_id = 3;
-    bool ledger_id_is_set = 4;
-    string address = 5;
-    bool address_is_set = 6;
-  }
-
   message All_Balances_Performative{
     Balances balances = 1;
+    string ledger_id = 2;
+    bool ledger_id_is_set = 3;
+    string exchange_id = 4;
+    bool exchange_id_is_set = 5;
   }
 
   message Balance_Performative{

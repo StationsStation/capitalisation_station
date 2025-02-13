@@ -1,6 +1,4 @@
-"""
-Imports supported decentralised exchanges.
-"""
+"""Imports supported decentralised exchanges."""
 
 from packages.eightballer.connections.dcxt.dcxt import exceptions as base_exceptions
 

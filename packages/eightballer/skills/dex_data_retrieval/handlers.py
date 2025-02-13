@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -46,9 +45,7 @@ IpfsHandler = BaseIpfsHandler
 
 
 class DexMarketsHandler(AbstractResponseHandler):
-    """
-    This class implements a handler for DexMarketsHandler messages.
-    """
+    """This class implements a handler for DexMarketsHandler messages."""
 
     SUPPORTED_PROTOCOL = MarketsMessage.protocol_id
     allowed_response_performatives = frozenset(
@@ -61,9 +58,7 @@ class DexMarketsHandler(AbstractResponseHandler):
 
 
 class DexOrdersHandler(AbstractResponseHandler):
-    """
-    This class implements a handler for DexOrdersHandler messages.
-    """
+    """This class implements a handler for DexOrdersHandler messages."""
 
     SUPPORTED_PROTOCOL = OrdersMessage.protocol_id
     allowed_response_performatives = frozenset(
@@ -78,9 +73,7 @@ class DexOrdersHandler(AbstractResponseHandler):
 
 
 class DexBalancesHandler(AbstractResponseHandler):
-    """
-    This class implements a handler for DexBalancesHandler messages.
-    """
+    """This class implements a handler for DexBalancesHandler messages."""
 
     SUPPORTED_PROTOCOL = BalancesMessage.protocol_id
     allowed_response_performatives = frozenset(
@@ -93,9 +86,7 @@ class DexBalancesHandler(AbstractResponseHandler):
 
 
 class DexPositionsHandler(AbstractResponseHandler):
-    """
-    This class implements a handler for DexPositionsHandler messages.
-    """
+    """This class implements a handler for DexPositionsHandler messages."""
 
     SUPPORTED_PROTOCOL = PositionsMessage.protocol_id
     allowed_response_performatives = frozenset(
@@ -108,9 +99,7 @@ class DexPositionsHandler(AbstractResponseHandler):
 
 
 class DexTickersHandler(AbstractResponseHandler):
-    """
-    This class implements a handler for DexTickersHandler messages.
-    """
+    """This class implements a handler for DexTickersHandler messages."""
 
     SUPPORTED_PROTOCOL = TickersMessage.protocol_id
     allowed_response_performatives = frozenset(

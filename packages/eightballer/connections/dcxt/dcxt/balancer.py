@@ -1,10 +1,7 @@
-"""
-Balancer exchange.
-"""
+"""Balancer exchange."""
 
 import json
 import time
-import asyncio
 import decimal
 import traceback
 from enum import Enum
@@ -15,6 +12,7 @@ from pathlib import Path
 
 # pylint: disable=R0914,R0902,R0912
 # ruff: noqa: PLR0914,PLR0915
+from datetime import UTC, datetime
 from datetime import datetime, timezone
 from functools import cache
 from collections import defaultdict
@@ -64,9 +62,7 @@ GAS_PRICE = 888
 
 
 class SupportedLedgers(Enum):
-    """
-    Supported ledgers.
-    """
+    """Supported ledgers."""
 
     ETHEREUM = "ethereum"
     GNOSIS = "gnosis"
@@ -74,16 +70,16 @@ class SupportedLedgers(Enum):
     ARBITRUM = "arbitrum"
     OPTIMISM = "optimism"
     BASE = "base"
+    MODE = "mode"
 
 
 class SupportedBalancerDeployments(Enum):
-    """
-    Supported balancer deployments.
-    """
+    """Supported balancer deployments."""
 
     MAINNET = "mainnet"
     OPTIMISM = "optimism"
     BASE = "base"
+    MODE = "mode"
     GNOSIS = "gnosis"
     ARBITRUM = "arbitrum"
     POLYGON = "polygon"
@@ -93,6 +89,7 @@ LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.OPTIMISM: SupportedBalancerDeployments.OPTIMISM,
     SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
     SupportedLedgers.BASE: SupportedBalancerDeployments.BASE,
+    SupportedLedgers.MODE: SupportedBalancerDeployments.MODE,
     SupportedLedgers.GNOSIS: SupportedBalancerDeployments.GNOSIS,
     SupportedLedgers.ARBITRUM: SupportedBalancerDeployments.ARBITRUM,
     SupportedLedgers.POLYGON_POS: SupportedBalancerDeployments.POLYGON,
@@ -103,6 +100,7 @@ WHITELISTED_POOLS = {
         "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
         "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
         "0x4e1325ff075a387e3d337f5f12638d6d72b127800001000000000000000006d7",
+        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000"
     ],
     SupportedLedgers.OPTIMISM: [
         "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
@@ -114,12 +112,19 @@ WHITELISTED_POOLS = {
         "0x0c659734f1eef9c63b7ebdf78a164cdd745586db000000000000000000000046",
         "0xc771c1a5905420daec317b154eb13e4198ba97d0000000000000000000000023",
     ],
+    SupportedLedgers.MODE: [
+        "0xd1dbea51c7f23f61d020e2602d0d157d132faafc00020000000000000000000e",
+        "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",
+        "0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007",
+    ],
     SupportedLedgers.POLYGON_POS: [],
 }
 
 
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: [
+        "0x6b175474e89094c44da98b954eedeac495271d0f", # DAI,
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"  # USDC
         "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
     ],
@@ -145,6 +150,10 @@ LEDGER_TO_STABLECOINS = {
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
         "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
     ],
+    SupportedLedgers.MODE: [
+        "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
+        "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138",
+    ],
 }
 
 LEDGER_TO_NATIVE_SYMBOL = {
@@ -154,6 +163,7 @@ LEDGER_TO_NATIVE_SYMBOL = {
     SupportedLedgers.GNOSIS: "xDAI",
     SupportedLedgers.POLYGON_POS: "POL",
     SupportedLedgers.ARBITRUM: "ETH",
+    SupportedLedgers.MODE: "ETH",
 }
 
 LEDGER_TO_WRAPPER = {
@@ -163,6 +173,7 @@ LEDGER_TO_WRAPPER = {
     SupportedLedgers.GNOSIS: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
     SupportedLedgers.POLYGON_POS: "0x0000000000000000000000000000000000001010",
     SupportedLedgers.ARBITRUM: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+    SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
 }
 
 LEDGER_TO_TOKEN_LIST = {
@@ -210,6 +221,14 @@ LEDGER_TO_TOKEN_LIST = {
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ARBITRUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ARBITRUM]]
     ),
+    SupportedLedgers.MODE: set(
+        [
+            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",
+            "0xdfc7c877a950e49d2610114102175a06c2e3167a",  # OLAS
+        ]
+        + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
+        + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
+    ),
 }
 
 TOKEN_LIST_PATH = Path(__file__).parent / "data" / "token_list.json"
@@ -227,14 +246,13 @@ def read_token_list(chain_id: int):
 
 
 class BalancerClient:
-    """
-    Balancer exchange.
-    """
+    """Balancer exchange."""
 
     tokens: dict[str:Erc20Token] = {}
 
     def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
         if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
+            msg = "Chain name not provided to BalancerClient"
             raise ConfigurationError(f"Incorrect chain name `{ledger_id}` provided to BalancerClient")
 
         self.ledger_id = SupportedLedgers(ledger_id)
@@ -244,7 +262,7 @@ class BalancerClient:
 
         self.etherscan_api_key = etherscan_api_key
 
-        with open(key_path, "r", encoding=DEFAULT_ENCODING) as file:
+        with open(key_path, encoding=DEFAULT_ENCODING) as file:
             key = file.read().strip()
         self.account = Account.from_key(private_key=key)
         self.bal: balpy.balpy = balpy.balpy(
@@ -278,8 +296,7 @@ class BalancerClient:
         self,
         params: dict,
     ):
-        """
-        Fetches the markets.
+        """Fetches the markets.
 
         :return: The markets.
         """
@@ -300,21 +317,18 @@ class BalancerClient:
                 markets=[Market(**market) for market in markets],
             )
         except SorRetrievalException as exc:
-            raise SorRetrievalException(
-                f"Error fetching markets from chainId {self.chain_name} Balancer: {exc}"
-            ) from exc
+            msg = f"Error fetching markets from chainId {self.chain_name} Balancer: {exc}"
+            raise SorRetrievalException(msg) from exc
 
     @property
     def pool_ids(self):
-        """
-        Get the pool IDs.
+        """Get the pool IDs.
 
         :return: The pool IDs.
         """
         # We read in the pool IDs from a file for now. we get this file from https://github.com/balancer/frontend-v2/blob/8563b8d33b6bff266148bd48d7ebc89f921374f4/src/lib/config/mainnet/pools.ts#L296
         with open(
             Path(__file__).parent / "data" / "balancer" / f"{self.balancer_deployment.value}.json",
-            "r",
             encoding=DEFAULT_ENCODING,
         ) as file:
             json_data = json.loads(file.read())["pools"]
@@ -340,7 +354,8 @@ class BalancerClient:
                         pools_of_interest[pool_type].append(pool_id)
 
         if not pools_of_interest:
-            raise SorRetrievalException("No pools of interest found!")
+            msg = "No pools of interest found!"
+            raise SorRetrievalException(msg)
         self.bal.getOnchainData(pools_of_interest)
 
         self.bal.mc.reset()
@@ -367,10 +382,9 @@ class BalancerClient:
         symbol_data = self.bal.mc.execute()
 
         # We create an array of ticker data.
-        for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0]):
+        for address, name, symbol in zip(self.bal.decimals, name_data[0], symbol_data[0], strict=False):
             if not name or not symbol:
                 continue
-            print(address, name[0], symbol[0])
             if address not in self.tokens:
                 self.tokens[address] = Erc20Token(
                     address=address,
@@ -382,8 +396,7 @@ class BalancerClient:
             # We now make an erc20 representation of the token.
 
     async def fetch_tickers(self, *args, **kwargs):
-        """
-        Fetches the tickers.
+        """Fetches the tickers.
 
         :return: The tickers.
         """
@@ -411,30 +424,12 @@ class BalancerClient:
                 datetime=timestamp.isoformat(),
             )
             self.tickers[symbol] = ticker
-        # We also get a price of the wrapper token.
-        symbol = f"{LEDGER_TO_NATIVE_SYMBOL[self.ledger_id]}/USD"
-        usd_price = prices[LEDGER_TO_WRAPPER[self.ledger_id].lower()]
-        timestamp = datetime.now(tz=timezone.utc)
-        ticker = Ticker(
-            symbol=symbol,
-            asset_a=LEDGER_TO_NATIVE_SYMBOL[self.ledger_id],
-            asset_b="USD",
-            high=usd_price,
-            low=usd_price,
-            ask=usd_price,
-            bid=usd_price,
-            timestamp=int(timestamp.timestamp()),
-            datetime=timestamp.isoformat(),
-        )
-        self.tickers[symbol] = ticker
         return Tickers(tickers=list(ticker for ticker in self.tickers.values()))
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
-        """
-        Given the data, we get the params for the swap from the balancer exchange.
-        """
+        """Given the data, we get the params for the swap from the balancer exchange."""
         gas_price = self.bal.web3.eth.gas_price * GAS_PRICE_PREMIUM
-        params = {
+        return {
             "network": self.balancer_deployment.value,
             "slippageTolerancePercent": "0.1",  # 1%
             "sor": {
@@ -446,8 +441,8 @@ class BalancerClient:
             },
             "batchSwap": {
                 "funds": {
-                    "sender": self.account.address,  #      // your address
-                    "recipient": self.account.address,  #   // your address
+                    "sender": self.account.address,  # // your address
+                    "recipient": self.account.address,  # // your address
                     "fromInternalBalance": False,  # // to/from internal balance
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
@@ -456,12 +451,8 @@ class BalancerClient:
             },
         }
 
-        return params
-
     def get_price(self, input_token_address: str, output_token_address: str, amount: float) -> float:
-        """
-        Get the price of the token.
-        """
+        """Get the price of the token."""
 
         params = self.get_params_for_swap(
             input_token_address=input_token_address,
@@ -472,20 +463,17 @@ class BalancerClient:
         try:
             sor_result = self.bal.balSorQuery(params)
         except Exception as exc:  # pylint: disable=W0718
-            self.logger.error(exc)
-            self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
+            self.logger.exception(exc)
+            self.logger.exception(f"Error querying SOR: {traceback.format_exc()}")
 
         if not sor_result.get("returnAmount", None):
-            raise SorRetrievalException(
-                f"No limits found for swap. Implies incorrect configuration of swap params: {params}"
-            )
+            msg = f"No limits found for swap. Implies incorrect configuration of swap params: {params}"
+            raise SorRetrievalException(msg)
         amount_out = float(sor_result["returnAmount"])
-        rate = Decimal(amount_out) / Decimal(amount)
-        return rate
+        return Decimal(amount_out) / Decimal(amount)
 
     async def fetch_ticker(self, *args, **kwargs):
-        """
-        Fetches a ticker.
+        """Fetches a ticker.
 
         :return: The ticker.
         """
@@ -493,8 +481,7 @@ class BalancerClient:
         raise NotImplementedError
 
     async def fetch_positions(self, **kwargs):
-        """
-        Fetches the positions, notice as this is a balancer exchange, we do not have positions.
+        """Fetches the positions, notice as this is a balancer exchange, we do not have positions.
         We therefore return an empty list.
 
         :return: The
@@ -508,21 +495,21 @@ class BalancerClient:
         retries=1,
         **kwargs,
     ) -> Order:
-        """
-        Create an order.
+        """Create an order.
 
         :return: The order.
         """
-        print(f"Creating order with args: {args} and kwargs: {kwargs}")
 
         symbol = kwargs.get("symbol", None)
         if not symbol:
-            raise ValueError("Symbol not provided to create order")
+            msg = "Symbol not provided to create order"
+            raise ValueError(msg)
 
         asset_a, asset_b = kwargs.get("asset_a"), kwargs.get("asset_b")
         human_amount = kwargs.get("amount", None)
         if not human_amount:
-            raise ValueError("Size not provided to create order")
+            msg = "Size not provided to create order"
+            raise ValueError(msg)
 
         asset_a_token = self.get_token(asset_a)
 
@@ -530,7 +517,7 @@ class BalancerClient:
         if is_buy:
             input_token_address = asset_b
             output_token_address = asset_a
-            amount = human_amount * kwargs.get("price")
+            amount = human_amount * kwargs.get("price") if kwargs.get("price") else human_amount
             machine_amount = asset_a_token.to_machine(amount)
             self.logger.info(f"Creating buy order for {human_amount} {asset_a} -> {asset_b}")
         else:
@@ -548,9 +535,10 @@ class BalancerClient:
         try:
             sor_result = self.bal.balSorQuery(params)
         except Exception as exc:  # pylint: disable=W0703
-            self.logger.error(exc)
-            self.logger.error(f"Error querying SOR: {traceback.format_exc()}")
-            raise SorRetrievalException(f"Error querying SOR: {exc}") from exc
+            self.logger.exception(exc)
+            self.logger.exception(f"Error querying SOR: {traceback.format_exc()}")
+            msg = f"Error querying SOR: {exc}"
+            raise SorRetrievalException(msg) from exc
 
         # We now parse the result;
 
@@ -559,7 +547,8 @@ class BalancerClient:
             if retries > 0:
                 self.logger(f"Retrying transaction. {retries} retries left")
                 return self.create_order(*args, **kwargs, retries=retries - 1)
-            raise SorRetrievalException(f"Error querying SOR: {sor_result}")
+            msg = f"Error querying SOR: {sor_result}"
+            raise SorRetrievalException(msg)
 
         msg = (
             f"Recommended swap: for {human_amount} {input_token_address} -> {output_token_address}\n"
@@ -569,7 +558,8 @@ class BalancerClient:
         batch_swap = self.bal.balSorResponseToBatchSwapFormat(params, sor_result).get("batchSwap", None)
 
         if not batch_swap:
-            raise SorRetrievalException(f"Error parsing SOR response: {sor_result}")
+            msg = f"Error parsing SOR response: {sor_result}"
+            raise SorRetrievalException(msg)
 
         # we now do the txn if its not a multi sig.
         extra_data = kwargs.get("data", None)
@@ -593,10 +583,11 @@ class BalancerClient:
             side=kwargs.get("side"),
         )
 
-    def _handle_safe_txn(self, swap, symbol, input_token_address, machine_amount, safe_address) -> Order:
-        """
-        Handle the EOA transaction.
-        """
+    def _handle_safe_txn(
+        self, swap, symbol, input_token_address, machine_amount, safe_address, side=None, **kwargs
+    ) -> Order:
+        """Handle the EOA transaction."""
+        del kwargs
 
         vault = self.bal.balLoadContract("Vault")
 
@@ -621,31 +612,36 @@ class BalancerClient:
                 data = vault.encodeABI(function_name, mc_args)
                 vault_address = vault.address
             except web3.exceptions.ContractLogicError as exc:
-                self.logger.error(exc)
-                self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
+                self.logger.exception(exc)
+                self.logger.exception(f"Error calling batchSwapFn: {traceback.format_exc()}")
                 if "BAL#508" in str(exc):
-                    raise ExchangeError(
-                        "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
-                    ) from exc
+                    msg = "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
+                    raise ExchangeError(msg) from exc
                 if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
-                    raise ApprovalError("ERC20: transfer amount exceeds allowance") from exc
-                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
+                    msg = "ERC20: transfer amount exceeds allowance"
+                    raise ApprovalError(msg) from exc
+                msg = f"Error calling batchSwapFn: {exc}"
+                raise SorRetrievalException(msg) from exc
 
         self.logger.info(f"Creating order for {symbol} with data: {data} to {vault_address}")
         return Order(
             exchange_id="balancer",
             symbol=symbol,
-            data={
-                "data": data,
-                "vault_address": vault_address,
-                "chain_id": self.bal.web3.eth.chain_id,
-            },
+            status=OrderStatus.NEW,
+            side=OrderSide.BUY if side == "buy" else OrderSide.SELL,
+            type=OrderType.MARKET,
+            ledger_id=self.ledger_id.value,
+            info=json.dumps(
+                {
+                    "data": data,
+                    "vault_address": vault_address,
+                    "chain_id": self.bal.web3.eth.chain_id,
+                }
+            ),
         )
 
     def _do_eoa_approval(self, input_token_address, machine_amount, vault, contract) -> None:
-        """
-        Do the EOA approval.
-        """
+        """Do the EOA approval."""
         func = contract.functions.approve(vault.address, int(machine_amount * 1e24))
         self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
         tx_1 = func.build_transaction(
@@ -672,9 +668,7 @@ class BalancerClient:
     def _handle_eoa_txn(  # pylint: disable=unused-argument
         self, swap, symbol, input_token_address, machine_amount, execute=True, **kwargs
     ) -> Order:  # pylint: disable=unused-argument
-        """
-        Handle the EOA transaction.
-        """
+        """Handle the EOA transaction."""
 
         vault = self.bal.balLoadContract("Vault")
 
@@ -720,15 +714,16 @@ class BalancerClient:
                     )
                     self.logger.info(f"Transaction hash: {tx_hash!r} to {self.rpc_url}")
             except web3.exceptions.ContractLogicError as exc:
-                self.logger.error(exc)
-                self.logger.error(f"Error calling batchSwapFn: {traceback.format_exc()}")
+                self.logger.exception(exc)
+                self.logger.exception(f"Error calling batchSwapFn: {traceback.format_exc()}")
                 if "BAL#508" in str(exc):
-                    raise ExchangeError(
-                        "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
-                    ) from exc
+                    msg = "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
+                    raise ExchangeError(msg) from exc
                 if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
-                    raise ApprovalError(f"ERC20: transfer amount exceeds allowance: {exc}") from exc
-                raise SorRetrievalException(f"Error calling batchSwapFn: {exc}") from exc
+                    msg = f"ERC20: transfer amount exceeds allowance: {exc}"
+                    raise ApprovalError(msg) from exc
+                msg = f"Error calling batchSwapFn: {exc}"
+                raise SorRetrievalException(msg) from exc
 
         return Order(
             id=tx_hash if execute else None,
@@ -750,8 +745,7 @@ class BalancerClient:
         )
 
     def parse_order(self, order, *args, **kwargs):
-        """
-        Parse the order.
+        """Parse the order.
 
         :return: The order.
         """
@@ -759,8 +753,7 @@ class BalancerClient:
         return order
 
     async def cancel_order(self, *args, **kwargs):
-        """
-        Cancel an order.
+        """Cancel an order.
 
         :return: The order tx hash
 
@@ -774,8 +767,7 @@ class BalancerClient:
         raise NotImplementedError
 
     async def get_order(self, *args, **kwargs):
-        """
-        Get an order.
+        """Get an order.
 
         :return: The order.
         """
@@ -783,8 +775,7 @@ class BalancerClient:
         raise NotImplementedError
 
     async def fetch_open_orders(self, *args, **kwargs):
-        """
-        Get an order.
+        """Get an order.
 
         :return: The orders as an array.
 
@@ -869,8 +860,7 @@ class BalancerClient:
         return Orders(orders=[])
 
     async def get_all_markets(self, *args, **kwargs):
-        """
-        Get all markets.
+        """Get all markets.
 
         :return: The markets.
         """
@@ -878,8 +868,7 @@ class BalancerClient:
         raise NotImplementedError
 
     async def subscribe(self, *args, **kwargs):
-        """
-        Subscribe to the order book.
+        """Subscribe to the order book.
 
         :return: The order book.
         """
@@ -887,16 +876,14 @@ class BalancerClient:
         raise NotImplementedError
 
     async def close(self):
-        """
-        Close the connection.
+        """Close the connection.
 
         :return: None
         """
-        return None
+        return
 
     async def fetch_balance(self, *args, **kwargs):
-        """
-        Fetch the balance.
+        """Fetch the balance.
 
         :return: The balance.
         """
@@ -905,7 +892,7 @@ class BalancerClient:
         mc = self.bal.mc
         mc.reset()
         use_external_address = kwargs.get("address", None)
-        address_to_check = self.account.address if not use_external_address else use_external_address
+        address_to_check = use_external_address or self.account.address
         self.logger.info(
             f"Checking balance for {address_to_check} with for tokens {LEDGER_TO_TOKEN_LIST[self.ledger_id]}"
         )
@@ -920,10 +907,10 @@ class BalancerClient:
         balance_data = mc.execute()
         native = self.bal.web3.eth.get_balance(address_to_check)
 
-        balances = Balances(
+        return Balances(
             balances=[
                 self._from_decimals_amt_to_token(token_address, balance[0])
-                for token_address, balance in zip(LEDGER_TO_TOKEN_LIST[self.ledger_id], balance_data[0])
+                for token_address, balance in zip(LEDGER_TO_TOKEN_LIST[self.ledger_id], balance_data[0], strict=False)
             ]
             + [
                 Balance(
@@ -935,13 +922,17 @@ class BalancerClient:
                 )
             ]
         )
-        return balances
 
     @cache
     def get_token(self, address):
-        """
-        Get the token from the address.
-        """
+        """Get the token from the address."""
+        if address not in self.tokens:
+            # We retrieve the token from the balancer contract.
+            contract = self.bal.erc20GetContract(address)
+            name = contract.functions.name().call()
+            symbol = contract.functions.symbol().call()
+            decimals = contract.functions.decimals().call()
+            self.tokens[address] = Erc20Token(
         # We check if the token is already in the raw token data.
         if address in self.tokens:
             return self.tokens[address]
@@ -969,15 +960,13 @@ class BalancerClient:
         return self.get_token(address)
 
     def _from_decimals_amt_to_token(self, address, balance):
-        """
-        Convert the balance to a token balance.
-        """
+        """Convert the balance to a token balance."""
         token = self.get_token(address)
-        result = Balance(
+        return Balance(
             asset_id=token.symbol,
+            contract_address=token.address,
             free=token.to_human(balance),
             used=0,
             total=token.to_human(balance),
             is_native=False,
         )
-        return result

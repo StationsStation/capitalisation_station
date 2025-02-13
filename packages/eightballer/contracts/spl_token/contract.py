@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -57,13 +56,12 @@ class SolanaProgramLibraryToken(Contract):
 
     @classmethod
     def get_token(
-        cls,  # noqa
+        cls,
         ledger_api: LedgerApi,
         contract_address: str,
         symbol: str,
     ) -> JSONLike:  # pylint: disable=unused-argument
-        """
-        Handler method for the 'get_token' requests.
+        """Handler method for the 'get_token' requests.
 
         Implement this method in the sub class if you want
         to handle the contract requests manually.
@@ -80,13 +78,12 @@ class SolanaProgramLibraryToken(Contract):
 
     @classmethod
     def get_balance(
-        cls,  # noqa
+        cls,
         ledger_api: LedgerApi,
         contract_address: str,
         address: str,
     ) -> JSONLike:
-        """
-        Handler method for the 'get_balance' requests.
+        """Handler method for the 'get_balance' requests.
 
         Implement this method in the sub class if you want
         to handle the contract requests manually.

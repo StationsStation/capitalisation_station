@@ -1,3 +1,1 @@
-"""
-Init file for the ccxt interfaces package.
-"""
+"""Init file for the ccxt interfaces package."""

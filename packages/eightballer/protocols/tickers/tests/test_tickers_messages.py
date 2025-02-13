@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 #                                                                             --
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,7 +20,6 @@
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
-from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
@@ -36,7 +34,7 @@ from packages.eightballer.protocols.tickers.custom_types import (
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -45,13 +43,13 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = TickersMessage
 
-    def build_messages(self) -> List[TickersMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[TickersMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             TickersMessage(
                 performative=TickersMessage.Performative.GET_ALL_TICKERS,
-                exchange_id="some str",
                 ledger_id="some str",
+                exchange_id="some str",
                 params={"some str": b"some_bytes"},
             ),
             TickersMessage(
@@ -63,10 +61,14 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
             TickersMessage(
                 performative=TickersMessage.Performative.ALL_TICKERS,
                 tickers=Tickers(**load_data("Tickers")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.TICKER,
                 ticker=Ticker(**load_data("Ticker")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.ERROR,

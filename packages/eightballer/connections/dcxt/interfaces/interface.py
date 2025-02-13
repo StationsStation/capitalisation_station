@@ -1,6 +1,6 @@
 """Interface."""
 
-from typing import Any, Dict, Callable, Optional
+from typing import TYPE_CHECKING, Any
 
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
@@ -16,6 +16,10 @@ from packages.eightballer.connections.dcxt.interfaces.order_book import OrderBoo
 from packages.eightballer.connections.dcxt.interfaces.spot_asset import SpotAssetInterface
 
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+
 class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attributes
     """Interface for the supported protocols."""
 
@@ -26,7 +30,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         self.polling_tasks = kwargs.get("polling_tasks")
         self.executing_tasks = kwargs.get("executing_tasks")
         self.queue = kwargs.get("queue")
-        self.exchanges: Dict[str, Any] = kwargs.get("exchanges")
+        self.exchanges: dict[str, Any] = kwargs.get("exchanges")
         self.supported_protocols = {
             SpotAssetInterface.protocol_id: SpotAssetInterface(),
             OhlcvInterface.protocol_id: OhlcvInterface(),
@@ -51,7 +55,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         handler: Callable[[Any], Any] = interface.get_handler(performative)
         return await handler(msg, dialogue, connection=self)
 
-    def build_envelope(self, request: Optional[Envelope], response_message: Optional[Message]):
+    def build_envelope(self, request: Envelope | None, response_message: Message | None):
         """Build the envelope."""
         response_envelope = None
 

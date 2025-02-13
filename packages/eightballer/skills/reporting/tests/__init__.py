@@ -1,3 +1,1 @@
-"""
-Initializes the reporting tests package.
-"""
+"""Initializes the reporting tests package."""

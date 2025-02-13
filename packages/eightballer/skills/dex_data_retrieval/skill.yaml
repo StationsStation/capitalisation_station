@@ -7,22 +7,22 @@ description: This ABCI is designed to collect data from dexs such that it can be
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibr3eckvo3uhkubyf3lhwqsfo2g7tm6zmrvgjwyh4oqh3cr4ktdiu
-  behaviours.py: bafybeigj4veucwxqbz5fevopokroe4e67fa7gjk7yl65yb3udt2xvv2dyi
+  __init__.py: bafybeietsymwzilixsungxwi2ypv5242kwysg3fpesuj2nhnh6fujxwcdi
+  behaviours.py: bafybeihuhigfca3tpvoup756bw4j5vi54pdouphyptx4unrfngqjame7ru
   check_cex_balances.yaml: bafybeigz4ba5jfscg2y6yoxxsmwc63ictz5iqneaann3fptgc2t5qohcra
-  dialogues.py: bafybeicbvgvlc3wdgnkcz5zvfg43vlc3bam7a7baxkg3lxn3pk2wgps2wa
+  dialogues.py: bafybeigrcbdpv36pydquczdp2a7mnqfk57t3glg2e2gsogzw66i74djvdm
   fsm_specification.yaml: bafybeidbypph3ghds673b3xl5paxsnax5enwjdrrx7lwqyavusd4dju7te
-  handlers.py: bafybeibaux43hhvas72f5nouze6t5scx5rt4q4ajqxlfr5dpwfmuremupu
-  models.py: bafybeih2kc42kzgai6fyeuepznyyfahrg52amlgjove74qpcb225leyh5i
-  payloads.py: bafybeifsdqu4nlqoc3egqxbbvqxkou4mfkq4xdszfyj7q25f26pab5hwqm
-  rounds.py: bafybeifma4sdjudasunywyalzles5b3es4o7r3sg3ticzsavwk7mlplvhy
-  tests/__init__.py: bafybeicqln5tyudb5bzg27wale3xjvuliat6ipn6hntg5pqtnllex4pyre
-  tests/test_behaviours.py: bafybeidp6qbhwmcycvhx4im7pwchrpjy6yelhqawlnj4eded5jeli6y5qy
-  tests/test_dialogues.py: bafybeihay3tmtk35penazgqj46su25s3bb62rbghjstao5hxcwpnbmexf4
-  tests/test_handlers.py: bafybeidr7wzz4l5ppbi5qllxnukzavzbmddcdbrmddumfndmtqpeu6r7fm
-  tests/test_models.py: bafybeifzr6ebperwfze4rj5lhote74lmq4vqjjt7hupjjsa4pv4zwrokpy
-  tests/test_payloads.py: bafybeie7o3edz7y5mfibjze3ktcpjxtlhawsujnui4eh6u25gvdxpqnuge
-  tests/test_rounds.py: bafybeibxg52porf4fu2neaoaeyc7wuhxkqdnowvze3kjz4wctmx2hnyws4
+  handlers.py: bafybeigsbeckynnqri2b6qhy6wfefj4ozsa65a6taqvbcmamppdxn3qtwa
+  models.py: bafybeigysi64hrxsm2jyuy3hwo5umulh4lq6i4m24s5m4wwb6jzb2psmee
+  payloads.py: bafybeifvigkcuv6qs7r47myj5towpyri5wiur6ylxqo4w7y3eglcinjesa
+  rounds.py: bafybeia2vyjnbxaglepi5rgk4jp7l5lrdxrdrxkawzlgutxoyrahur26aq
+  tests/__init__.py: bafybeifiiu2gpv7v4mgwar33hcguxk7p6n27nh64viejxkuomf2uguj6em
+  tests/test_behaviours.py: bafybeibypy4xw3goat72nngqjowryy5p4smwmi6bv6cgbvdsh4reht7v5u
+  tests/test_dialogues.py: bafybeihkk3xs6dxrco4yup2ao5rj23ijh7cwb4am5kamgghqpm44vmhfnu
+  tests/test_handlers.py: bafybeicsslzmvse5wat2kwxtpao7inwwqymg2vrsqvtbjrqeffi2xq6vky
+  tests/test_models.py: bafybeichjk466nga4norjbslh5y63knhypqtc74yl34xldnaiutoynr7ly
+  tests/test_payloads.py: bafybeicqwwdkq5x3v6evylvs5l5lur6ghxgbn3ixl3kwisalgzwgrkewsi
+  tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/dcxt:0.1.0:bafybeid6wa7jdpun4yfi3c373o6zf6z4f4tbwnd3xt2l6owtzq5bfkxicu
@@ -34,7 +34,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
 - eightballer/tickers:0.1.0:bafybeibkzzwhx4uznhtbte5ikjhihoinkf2idrne245kcyju76amla3oxu
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
+- valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
 behaviours:
   main:
     args: {}

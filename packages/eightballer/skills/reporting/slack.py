@@ -1,6 +1,4 @@
-"""
-Module to upload the report to Slack.
-"""
+"""Module to upload the report to Slack."""
 
 from typing import cast
 

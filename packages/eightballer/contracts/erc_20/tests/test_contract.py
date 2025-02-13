@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 eightballer
@@ -20,7 +19,7 @@
 # ------------------------------------------------------------------------------
 
 """The tests module contains the tests of the packages/contracts/orca_whirlpool dir."""
-# type: ignore # noqa: E800
+# type: ignore
 # pylint: skip-file
 
 from typing import cast
@@ -69,7 +68,7 @@ class TestContractCommon:
         cls.ledger_api = EthereumApi(**config)
 
     @pytest.mark.parametrize(
-        "address, expected_decimals",
+        ("address", "expected_decimals"),
         [
             (DAI_ADDRESS, 18),
             (OLAS_ADDRESS, 18),

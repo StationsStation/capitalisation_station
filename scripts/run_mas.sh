@@ -36,8 +36,7 @@ fi
 autonomy fetch --service $1 --local --alias service
 cd service 
 autonomy build-image --extra-dependency hypothesis
-cp ../.env .env
-autonomy deploy build $MAS_KEYPATH
+autonomy deploy build $MAS_KEYPATH 
 
 echo "-----------------------------"
 echo "Service $1 built!"

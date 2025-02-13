@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2021-2022 Valory AG
@@ -19,12 +18,12 @@
 # ------------------------------------------------------------------------------
 
 """The tests module contains the tests of the packages/contracts/orca_whirlpool dir."""
-# type: ignore # noqa: E800
+# type: ignore
 # pylint: skip-file
 
 import json
 import time
-from typing import Tuple, Union, Optional, cast
+from typing import cast
 from pathlib import Path
 
 import pytest
@@ -85,32 +84,29 @@ class TestContractCommon:
             time.sleep(2)
         return tx
 
-    def _generate_wealth_if_needed(self, api, address, amount=None) -> Union[str, None]:
+    def _generate_wealth_if_needed(self, api, address, amount=None) -> str | None:
         """Generate wealth if needed."""
         balance = api.get_balance(address)
 
         if balance >= 1000000000:
             return "not required"
-        else:
-            faucet = SolanaFaucetApi()
-            cnt = 0
-            transaction_digest = None
-            while transaction_digest is None and cnt < 10:
-                transaction_digest = faucet.get_wealth(address, amount)
-                cnt += 1
-                time.sleep(2)
+        faucet = SolanaFaucetApi()
+        cnt = 0
+        transaction_digest = None
+        while transaction_digest is None and cnt < 10:
+            transaction_digest = faucet.get_wealth(address, amount)
+            cnt += 1
+            time.sleep(2)
 
-            if transaction_digest == None:
-                return "failed"
-            else:
-                transaction_receipt, is_settled = self._wait_get_receipt(api, transaction_digest)
-                if is_settled is True:
-                    return "success"
-                else:
-                    return "failed"
+        if transaction_digest is None:
+            return "failed"
+        _transaction_receipt, is_settled = self._wait_get_receipt(api, transaction_digest)
+        if is_settled is True:
+            return "success"
+        return "failed"
 
     @staticmethod
-    def _wait_get_receipt(solana_api: SolanaApi, transaction_digest: str) -> Tuple[Optional[JSONLike], bool]:
+    def _wait_get_receipt(solana_api: SolanaApi, transaction_digest: str) -> tuple[JSONLike | None, bool]:
         """Wait for the transaction to be settled and get the receipt."""
         transaction_receipt = None
         is_settled = False
@@ -125,7 +121,7 @@ class TestContractCommon:
             is_settled = solana_api.is_transaction_settled(transaction_receipt)
         return transaction_receipt, is_settled
 
-    def _sign_and_settle(self, solana_api: SolanaApi, txn: dict, payer) -> Tuple[str, JSONLike]:
+    def _sign_and_settle(self, solana_api: SolanaApi, txn: dict, payer) -> tuple[str, JSONLike]:
         """Sign and settle the transaction."""
         recent_blockhash = solana_api.api.get_latest_blockhash().value.blockhash
         txn["message"][1]["recentBlockhash"] = json.loads(recent_blockhash.to_json())
@@ -139,7 +135,7 @@ class TestContractCommon:
     @pytest.mark.skip("This test is is only for local testing.")
     @pytest.mark.ledger
     @pytest.mark.parametrize(
-        "input_mint, output_mint, amount",
+        ("input_mint", "output_mint", "amount"),
         [
             (SOL_ADDDRESS, OLAS_ADDRESS, 88888),
             (OLAS_ADDRESS, SOL_ADDDRESS, 15555),
@@ -166,7 +162,7 @@ class TestContractCommon:
 
     @pytest.mark.ledger
     @pytest.mark.parametrize(
-        "input_mint, output_mint, amount",
+        ("input_mint", "output_mint", "amount"),
         [
             ((SOL_ADDDRESS, "SOL"), (OLAS_ADDRESS, "OLAS"), 0.001),
             ((OLAS_ADDRESS, "OLAS"), (SOL_ADDDRESS, "SOL"), 1),
