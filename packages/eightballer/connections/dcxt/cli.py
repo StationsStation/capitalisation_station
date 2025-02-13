@@ -238,17 +238,22 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
     print()
     all_balances = pd.DataFrame(all_balances_rows)
     asset_pivot = all_balances.pivot_table(index=["ledger"], columns="asset_id", values="total", aggfunc="sum")
+    asset_pivot = asset_pivot.fillna(0)
     rich_display_dataframe(asset_pivot, title="Assets Pivoted by Ledger")
 
     # We calculate the portfolio value in USD
     # We will use the tickers to get the price of the assets
     # We will then calculate the value of the portfolio in USD
     def get_value(row):
-        price = tickers[row["ledger"]][row["exchange"]][row["asset_id"]].bid
-        return round(row["total"] * price, 2)
+        try:
+            price = tickers[row["ledger"]][row["exchange"]][row["asset_id"]].bid
+            return round(row["total"] * price, 2)
+        except KeyError:
+            return 0
 
     all_balances["usd_value"] = all_balances.apply(get_value, axis=1)
     all_balances = all_balances.sort_values(by="usd_value", ascending=False)
+    all_balances = all_balances[all_balances["usd_value"] > 0]
 
     rich_display_dataframe(all_balances, title="Balances with USD Value")
 
@@ -294,8 +299,6 @@ def fetch_trades(
             )
             response = asyncio.run(send_and_await_response(cli_tool, envelope))
             trades[_ledger][exchange_id] = response.orders.orders
-
-    breakpoint()
 
 
 @click.group()

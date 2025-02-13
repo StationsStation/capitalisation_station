@@ -13,7 +13,7 @@ fingerprint:
   my_model.py: bafybeiehzaov5waan3c7utbxl2lmrwl5utek3gdsbjeogkpcfsuquaonzy
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeih74mfedrpeahtrl4rotavxtzedn5prw2gr4ws3ilacbx5l6ojnxy
+- eightballer/dcxt:0.1.0:bafybeifu6dfjdu5sgnib5efqkufyh2ajwqotxtdlmmerpsc5u7gn3taey4
 - eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
