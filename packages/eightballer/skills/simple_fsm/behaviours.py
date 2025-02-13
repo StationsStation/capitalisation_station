@@ -366,10 +366,10 @@ class CollectDataRound(BaseConnectionRound):
 
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
             prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
-            existing_orders[ledger_id][exchange_id] = [o.model_dump() for o in orders.orders.orders]
+            existing_orders[ledger_id][exchange_id] = [o.dict() for o in orders.orders.orders]
 
-        for exchange_id in self.context.arbitrage_strategy.dexs:
-            for ledger_id in self.context.arbitrage_strategy.ledgers:
+        for exchange_id, ledger_ids in self.context.arbitrage_strategy.dexs.items():
+            for ledger_id in ledger_ids:
                 if ledger_id not in portfolio:
                     portfolio[ledger_id] = {}
                 if ledger_id not in prices:
@@ -399,7 +399,7 @@ class CollectDataRound(BaseConnectionRound):
         self.context.logger.info(f"Portfolio: {portfolio}")
         pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4), encoding="utf-8")
         pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4), encoding="utf-8")
-        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(existing_orders, indent=4), encoding="utf-8")
+        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps([], indent=4), encoding="utf-8")
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

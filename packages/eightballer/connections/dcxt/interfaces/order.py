@@ -119,10 +119,10 @@ class OrderInterface(BaseInterface):
         exchange = connection.exchanges[order.ledger_id][order.exchange_id]
         order_parsing_func = exchange.parse_order
 
-        if hasattr(message, "asset_a") or hasattr(message, "asset_b"):
+        if hasattr(message.order, "asset_a") or hasattr(message.order, "asset_b"):
             kwargs = {
-                "asset_a": message.asset_a,
-                "asset_b": message.asset_b,
+                "asset_a": message.order.asset_a,
+                "asset_b": message.order.asset_b,
             }
         else:
             asset_a, asset_b = order.symbol.split("/")

@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeidxji5whhrgkdokq6iqo4xo52zdhkb7ef4jehnw4cs2xjv72x44ne
+  behaviours.py: bafybeih3f77njo7t6atewydu4q4xd6mfdbhg4mt6caukjosayt5324vvsq
   dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
   handlers.py: bafybeie43nnzdlctivmcmlwliv2owof4umqpdvkp7slccixbiwyr5s4ugi
   my_model.py: bafybeiehzaov5waan3c7utbxl2lmrwl5utek3gdsbjeogkpcfsuquaonzy
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeifu6dfjdu5sgnib5efqkufyh2ajwqotxtdlmmerpsc5u7gn3taey4
+- eightballer/dcxt:0.1.0:bafybeiabzb5y7ywew2afkhvqwgqk2fgwz75v6et4rjdlg4krvgjjtrqk7e
 - eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
@@ -45,14 +45,9 @@ models:
   arbitrage_strategy:
     args:
       order_size: 0.1
-      ledgers:
-      - base
-      - solana
       dexs:
-      - balancer:
+        balancer:
         - base
-      - juniper:
-        - solana
       cexs:
       - mexc
     class_name: ArbitrageStrategy

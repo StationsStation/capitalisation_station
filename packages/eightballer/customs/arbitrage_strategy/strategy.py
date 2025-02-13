@@ -22,13 +22,13 @@
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 
 
-CEX_MARKET = "OLAS/USDT"
-DEX_MARKET = "OLAS/USDC"
-DEX_ADDRESSES = "0x54330d28ca3357f294334bdc454a032e7f353416/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
-
 CEX_LEDGER = "cex"
 CEX_EXCHANGE = "mexc"
 DEX_EXCHANGE = "balancer"
+
+DEX_MARKET = "OLAS/USDC"
+CEX_MARKET = "OLAS/USDT"
+
 DEFAULT_LEDGER = "base"
 DEFAULT_AMOUNT = 10.0
 
@@ -52,16 +52,20 @@ class ArbitrageStrategy:
 
         cex_balances = {asset["asset_id"]: asset for asset in portfolio[CEX_LEDGER][CEX_EXCHANGE]}
         dex_balances = {asset["asset_id"]: asset for asset in portfolio[DEFAULT_LEDGER][DEX_EXCHANGE]}
+
         asset_a, asset_b = CEX_MARKET.split("/")
         token_a, token_b = DEX_MARKET.split("/")
-        token_a_address, token_b_address = DEX_ADDRESSES.split("/")
+        token_a_address, token_b_address = (
+            dex_balances[token_a]["contract_address"],
+            dex_balances[token_b]["contract_address"],
+        )
 
         asset_a_balance, asset_b_balance = cex_balances[asset_a], cex_balances[asset_b]
         token_a_balance, token_b_balance = dex_balances[token_a], dex_balances[token_b]
 
         dex_prices = {price["symbol"]: price for price in prices[DEFAULT_LEDGER][DEX_EXCHANGE]}
         cex_price = {price["symbol"]: price for price in prices["cex"][CEX_EXCHANGE]}[CEX_MARKET]
-        dex_price = dex_prices[DEX_ADDRESSES]
+        dex_price = dex_prices[DEX_MARKET[:-1]]
 
         return self._calculate_orders(
             cex_price,
@@ -89,8 +93,11 @@ class ArbitrageStrategy:
         # we calculate if there is an arbitrage opportunity
         best_bid = max(cex_price["bid"], dex_price["bid"])  # highest bid
         best_ask = min(cex_price["ask"], dex_price["ask"])  # lowest ask
+        delta = best_bid - best_ask
+        percent = delta / best_ask
+        min_profit = 0.0  # 0%
 
-        if best_bid > best_ask:
+        if percent > min_profit:
             # there is an arbitrage opportunity
             # we calculate the amount to trade based on a default order size.
             # We verify that we have enough balance on both exchanges
@@ -125,7 +132,7 @@ class ArbitrageStrategy:
                     side=OrderSide.SELL,
                     status=OrderStatus.NEW,
                     amount=DEFAULT_AMOUNT,
-                    type=OrderType.MARKET,
+                    type=OrderType.LIMIT,
                 )
             else:
                 # buy on cex and sell on dex
@@ -143,14 +150,14 @@ class ArbitrageStrategy:
                     side=OrderSide.BUY,
                     amount=DEFAULT_AMOUNT,
                     status=OrderStatus.NEW,
-                    type=OrderType.MARKET,
+                    type=OrderType.LIMIT,
                 )
 
                 sell_order = Order(
                     exchange_id=DEX_EXCHANGE,
                     market=DEX_MARKET,
+                    symbol=DEX_MARKET,
                     side=OrderSide.SELL,
-                    symbol=DEX_ADDRESSES,
                     price=dex_price["bid"],
                     amount=DEFAULT_AMOUNT,
                     ledger_id=DEFAULT_LEDGER,

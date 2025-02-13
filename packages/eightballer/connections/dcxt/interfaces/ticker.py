@@ -31,6 +31,7 @@ class TickerInterface(BaseInterface):
                 target_message=message,
                 tickers=tickers,
                 exchange_id=message.exchange_id,
+                ledger_id=message.ledger_id,
             )
         except dcxt.exceptions.RequestTimeout:
             response_message = dialogue.reply(

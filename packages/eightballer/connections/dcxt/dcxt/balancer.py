@@ -506,7 +506,6 @@ class BalancerClient:
         if not human_amount:
             msg = "Size not provided to create order"
             raise ValueError(msg)
-
         asset_a_token = self.get_token(asset_a)
 
         is_buy = kwargs.get("side") == "buy"
