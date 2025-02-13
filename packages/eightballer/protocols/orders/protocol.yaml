@@ -7,19 +7,19 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeidd3sg34oh4m6uvrzqmant3tnu3mjexa5z2x7r6con5nx4hkdzequ
-  __init__.py: bafybeib7lrdpkoqc2xibeo7opcbmxfimwlajuoo2nea5uo5dfsfms4fzfm
-  custom_types.py: bafybeigcrvsv6634na2lnauuhdo4fyl2fk7p32ai7qg7gzwjbtukffgwm4
-  dialogues.py: bafybeierwhavpehb2imdi4tm5swcquinywbri23auuecygoskomlngwmbq
-  message.py: bafybeiezqsbmg64e4d4zgo4p3vu7bz7j2f2szdotlrq2grlclyx56umabi
-  orders.proto: bafybeihydwktyughr2bg6afdksyd4tdmvmp2c7jonlwfkl6svxxpa3esha
-  orders_pb2.py: bafybeib4pqhjvn36u4ctgnhk7ts5o57rexqaolnbv6f2v44emx5vfk37ui
-  protocol_spec.yaml: bafybeicdmqgbadoxgzj3hq3r6ehvm5x7blxwt3uhlbiexz3rybqfkevrc4
-  serialization.py: bafybeih7tpilwxjytuendi7tyxhep7jdpzfcogenqpnl4udu3omklopjye
-  tests/__init__.py: bafybeicbb4pohduwkdoewodrm6alh6y6dk7ftggebu4m5mwwv57shkhtnq
+  README.md: bafybeif5fq7kaaonda6lftqgljhg3lllqarjqzvwrs6ybtsj576mb223by
+  __init__.py: bafybeigavdklcqngyu5mgifu3xs5h5mpmlphfpbrbrnonylqvgd3ujpt6q
+  custom_types.py: bafybeicisqamskgpqo2i3as5p57o4gpwra7xiyg2qqeoliozsvbfxsylby
+  dialogues.py: bafybeifot2xfxjpdwazgbz4rwde66i2swkw7g4oyswbjs6mg3baevxudbe
+  message.py: bafybeib4cqseiy7o5ds4xsepk2tseduokfga34fj4sooslwxvug6ch2wiq
+  orders.proto: bafybeiai44a22fnukjmsxv6mp2buly5xhkp6dvvamve4ftf4ueqais4x7m
+  orders_pb2.py: bafybeiejhikqxp2dsx7lrj6iy77cqr7wcamqs6fg6xvrtudpyueh2m4knu
+  protocol_spec.yaml: bafybeietsthdv2pttz2w4apqzzbbifodwclwpmvj5mip4jr6faguiwjpea
+  serialization.py: bafybeiewbqfgfdaewsaitsylhrneykxaackyhkbaum73z3tisq4tidpizi
+  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
   tests/dummy_data.yaml: bafybeidpep422lgwzc6hedcmsnay5ojbzv7ow3adlgcsxde5yv3dxmile4
-  tests/test_orders_dialogues.py: bafybeigmxujugpylkoue7xu2nmwjfcqj6ijkfyny6yza6jh4ac7c622liq
-  tests/test_orders_messages.py: bafybeiao5gzmdhqiokjf35obpckbcnsshudf3wdlt5csxkxwbzrxeurdiy
+  tests/test_orders_dialogues.py: bafybeiffwqazrrndawcfnwiaptoseqk7qlqlv7uqdmmdmcfxwaql5duzyq
+  tests/test_orders_messages.py: bafybeia6faipacqcdyjjb2ehpujho2yc427dx2ktx5boawyurzalklz2pq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

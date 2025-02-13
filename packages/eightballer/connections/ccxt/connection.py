@@ -1,25 +1,27 @@
-"""
-Connection for ccxt.
-"""
+"""Connection for ccxt."""
 
 import asyncio
 import logging
 import traceback
-from typing import Any, Dict, List, Deque, Optional, cast
+from typing import TYPE_CHECKING, Any, cast
 from asyncio import Task
 from collections import deque
 
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.connections.base import Connection, ConnectionStates
-from aea.protocols.dialogue.base import Dialogue
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
 from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
-from packages.eightballer.connections.ccxt.interfaces.market import Market
 from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
+
+
+if TYPE_CHECKING:
+    from aea.protocols.dialogue.base import Dialogue
+
+    from packages.eightballer.connections.ccxt.interfaces.market import Market
 
 
 _default_logger = logging.getLogger("aea.packages.eightballer.connections.ccxt")
@@ -37,8 +39,7 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
     protocol_interface = ConnectionProtocolInterface
 
     def __init__(self, **kwargs: Any) -> None:
-        """
-        Initialize the connection
+        """Initialize the connection.
 
         :param kwargs: keyword arguments passed to component base
         """
@@ -47,21 +48,20 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
 
         self._balances = None
 
-        self._exchanges: Dict[str, ccxt.Exchange] = {}
-        self._markets: Dict[str, Market]
+        self._exchanges: dict[str, ccxt.Exchange] = {}
+        self._markets: dict[str, Market]
         self._orders: asyncio.Queue = asyncio.Queue()
 
-        self.done_task_checker: Optional[Task] = None
-        self.task_to_request: Dict[Task, Envelope] = {}
-        self.executing_tasks: List[Task] = []
-        self.done_tasks: Deque[Task] = deque()
-        self.polling_tasks: List[Task] = []
-        self.queue: Optional[asyncio.Queue] = None
+        self.done_task_checker: Task | None = None
+        self.task_to_request: dict[Task, Envelope] = {}
+        self.executing_tasks: list[Task] = []
+        self.done_tasks: deque[Task] = deque()
+        self.polling_tasks: list[Task] = []
+        self.queue: asyncio.Queue | None = None
         self.exchange_to_orders = {}
 
     async def connect(self) -> None:
-        """
-        Start done task checker as a coroutine
+        """Start done task checker as a coroutine.
 
         :return:
         """
@@ -93,7 +93,8 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
                 exchange_class = getattr(ccxt, exchange_id)
                 exchange = exchange_class(params)
             except AttributeError as exc:
-                raise ValueError(f"Exchange {exchange_id} not found in ccxt") from exc
+                msg = f"Exchange {exchange_id} not found in ccxt"
+                raise ValueError(msg) from exc
             self._exchanges.update({exchange_id: exchange})
             self.logger.info(f"Successfully connected to {exchange_id}")
         self.state = ConnectionStates.connected
@@ -136,7 +137,7 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.executing_tasks.append(task)
         self.task_to_request[task] = envelope
 
-    async def receive(self, *args: Any, **kwargs: Any) -> Optional[Envelope]:
+    async def receive(self, *args: Any, **kwargs: Any) -> Envelope | None:
         """Receive an envelope."""
         envelope = cast(
             Envelope,
@@ -145,14 +146,14 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         del args, kwargs
         return envelope
 
-    async def _execute(self, envelope=None) -> Optional[Message]:
+    async def _execute(self, envelope=None) -> Message | None:
         """Execute the task."""
         dialogue: Dialogue
         try:
             dialogue = self.protocol_interface.validate_envelope(envelope)
             return await self.protocol_interface.handle_envelope(envelope)
         except Exception as error:  # pylint: disable=broad-except
-            self.logger.error(f"Couldn't execute task, e={error} traceback={traceback.print_exc()}")
+            self.logger.exception(f"Couldn't execute task, e={error} traceback={traceback.print_exc()}")
             return self.get_error_message(error, envelope.message, dialogue)
 
     def _handle_req(self, envelope) -> Task:
@@ -163,7 +164,7 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         """Handle completed task."""
         request = self.task_to_request.pop(task, None)
         self.executing_tasks.remove(task)
-        response_message: Optional[Message] = task.result()
+        response_message: Message | None = task.result()
         response_envelope = self.protocol_interface.build_envelope(request, response_message)
         if response_envelope is None:
             return
@@ -173,8 +174,8 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
     def get_error_message(
         self,
         error: str,
-        request: Optional[Message],
-        response_message: Optional[Message],
+        request: Message | None,
+        response_message: Message | None,
     ):
         """Get the error message."""
         self.logger.error("Unable to handle protocol : %s message", request.performative)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023 Valory AG
@@ -19,7 +18,7 @@
 
 """This module contains the shared state for the abci skill of AbciApp."""
 
-from typing import Any, Dict, List, Union, Optional
+from typing import Any
 from dataclasses import dataclass
 
 from packages.valory.skills.abstract_round_abci.models import (
@@ -36,11 +35,11 @@ class DexDataRetrievalConfig:
     """Config for the DexDataRetrieval skill."""
 
     enabled: bool
-    exchange_ids: List[str]
+    exchange_ids: list[str]
     retries: int
     backoff: float
     reporting_enabled: bool
-    extra_kwargs: Optional[Dict[str, Dict[str, Union[str, int, float, bool]]]] = None
+    extra_kwargs: dict[str, dict[str, str | int | float | bool]] | None = None
 
 
 class SharedState(BaseSharedState):
@@ -52,7 +51,7 @@ class SharedState(BaseSharedState):
 class Params(BaseParams):
     """Parameters."""
 
-    dex_data_retrieval_config: Dict[str, Any]
+    dex_data_retrieval_config: dict[str, Any]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""

@@ -1,3 +1,1 @@
-"""
-Tests for the ccxt connection.
-"""
+"""Tests for the ccxt connection."""

@@ -1,7 +1,7 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -16,28 +16,35 @@ class ErrorCode(Enum):
 
     @staticmethod
     def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
         in the 'error_code_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               error_code_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         error_code_protobuf_object.error_code = error_code_object.value
 
     @classmethod
     def decode(cls, error_code_protobuf_object) -> "ErrorCode":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
+
+
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return ErrorCode(error_code_protobuf_object.error_code)
 
@@ -50,28 +57,35 @@ class OrderSide(Enum):
 
     @staticmethod
     def encode(order_side_protobuf_object, order_side_object: "OrderSide") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the order_side_protobuf_object argument is matched with the instance of this class
         in the 'order_side_object' argument.
 
-        :param order_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param order_side_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               order_side_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_side_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         order_side_protobuf_object.order_side = order_side_object.value
 
     @classmethod
     def decode(cls, order_side_protobuf_object) -> "OrderSide":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'order_side_protobuf_object' argument.
 
-        :param order_side_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'order_side_protobuf_object' argument.
+
+
+        Args:
+        ----
+               order_side_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return OrderSide(order_side_protobuf_object.order_side)
 
@@ -91,28 +105,35 @@ class OrderStatus(Enum):
 
     @staticmethod
     def encode(order_status_protobuf_object, order_status_object: "OrderStatus") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the order_status_protobuf_object argument is matched with the instance of this
         class in the 'order_status_object' argument.
 
-        :param order_status_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param order_status_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               order_status_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_status_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         order_status_protobuf_object.order_status = order_status_object.value
 
     @classmethod
     def decode(cls, order_status_protobuf_object) -> "OrderStatus":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'order_status_protobuf_object' argument.
 
-        :param order_status_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'order_status_protobuf_object' argument.
+
+
+        Args:
+        ----
+               order_status_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return OrderStatus(order_status_protobuf_object.order_status)
 
@@ -125,47 +146,56 @@ class OrderType(Enum):
 
     @staticmethod
     def encode(order_type_protobuf_object, order_type_object: "OrderType") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the order_type_protobuf_object argument is matched with the instance of this class
         in the 'order_type_object' argument.
 
-        :param order_type_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param order_type_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               order_type_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_type_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         order_type_protobuf_object.order_type = order_type_object.value
 
     @classmethod
     def decode(cls, order_type_protobuf_object) -> "OrderType":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'order_type_protobuf_object' argument.
 
-        :param order_type_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'order_type_protobuf_object' argument.
+
+
+        Args:
+        ----
+               order_type_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return OrderType(order_type_protobuf_object.order_type)
 
 
 class BaseCustomEncoder(BaseModel):
-    """
-    This class is a base class for encoding and decoding protocol buffer objects.
-    """
+    """This class is a base class for encoding and decoding protocol buffer objects."""
 
     @staticmethod
-    def encode(ps_response_protobuf_object, ps_response_object) -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
         class in the 'ps_response_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         for key, value in ps_response_object.__dict__.items():
             current_attr = getattr(ps_response_protobuf_object, key)
@@ -181,18 +211,21 @@ class BaseCustomEncoder(BaseModel):
             setattr(ps_response_protobuf_object, key, value)
 
     @classmethod
-    def decode(cls, ps_response_protobuf_object) -> "Any":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
+
+
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
-        keywords = [f for f in cls.__annotations__.keys()]
+        keywords = list(cls.__annotations__.keys())
         kwargs = {}
         for keyword in keywords:
             proto_attr = getattr(ps_response_protobuf_object, keyword)
@@ -203,7 +236,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
+                kwargs[keyword] = dict(proto_attr.items())
                 continue
             if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
                 kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
@@ -227,39 +260,39 @@ class Order(BaseCustomEncoder):
     status: OrderStatus
     side: OrderSide
     type: OrderType
-    price: Optional[float] = None
-    exchange_id: Optional[str] = None
-    id: Optional[str] = None
-    client_order_id: Optional[str] = None
-    info: Optional[str] = None
-    ledger_id: Optional[str] = None
-    asset_a: Optional[str] = None
-    asset_b: Optional[str] = None
-    timestamp: Optional[float] = None
-    datetime: Optional[str] = None
-    time_in_force: Optional[str] = None
-    post_only: Optional[bool] = None
-    last_trade_timestamp: Optional[float] = None
-    stop_price: Optional[float] = None
-    trigger_price: Optional[float] = None
-    cost: Optional[float] = None
-    amount: Optional[float] = None
-    filled: Optional[float] = None
-    remaining: Optional[float] = None
-    fee: Optional[float] = None
-    average: Optional[float] = None
-    trades: Optional[str] = None
-    fees: Optional[str] = None
-    last_update_timestamp: Optional[float] = None
-    reduce_only: Optional[bool] = None
-    take_profit_price: Optional[float] = None
-    stop_loss_price: Optional[float] = None
+    price: float | None = None
+    exchange_id: str | None = None
+    id: str | None = None
+    client_order_id: str | None = None
+    info: str | None = None
+    ledger_id: str | None = None
+    asset_a: str | None = None
+    asset_b: str | None = None
+    timestamp: float | None = None
+    datetime: str | None = None
+    time_in_force: str | None = None
+    post_only: bool | None = None
+    last_trade_timestamp: float | None = None
+    stop_price: float | None = None
+    trigger_price: float | None = None
+    cost: float | None = None
+    amount: float | None = None
+    filled: float | None = None
+    remaining: float | None = None
+    fee: float | None = None
+    average: float | None = None
+    trades: str | None = None
+    fees: str | None = None
+    last_update_timestamp: float | None = None
+    reduce_only: bool | None = None
+    take_profit_price: float | None = None
+    stop_loss_price: float | None = None
 
 
 class Orders(BaseCustomEncoder):
     """This class represents an instance of Orders."""
 
-    orders: List[Order] = []
+    orders: list[Order] = []
 
 
 CUSTOM_ENUM_MAP = {

@@ -6,28 +6,28 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeieq7ntezkqnkmquqafmfwwn2sghcm3y4b6pw4nbyxaagzejainl6u
-  behaviours.py: bafybeiei4wmqpkhhj75donuviharffmzotcif6pdgluufaj4gxszyo4sei
-  composition.py: bafybeifm6lmlpkjmgf5n7p2oxbfylojgjvq57g5ljwx6d76tvwf437y4we
-  dialogues.py: bafybeigbufmeiryggdxqldrcd565gactjwlc47vtacducyohhds7gg5oxm
-  handlers.py: bafybeiexpp4paaklmrspyhlm66qo24ksazqvxtyenizn4loz3iyhppy7fu
-  my_model.py: bafybeig4qnykqae6fip5ispjsvttzto2lfst2bgj72qyyl6argvbtmtqqm
-  tests/__init__.py: bafybeiddvydebdxub67dnzrzeva6ul4rknc2acnhwogpddvupl2gpb775y
-  tests/test_behaviours.py: bafybeibpulodvi5uraceue7zl3s66v55y6pmvrbtmp4752l6bf3tluy4jq
+  __init__.py: bafybeiadapoomcxzwi3gf46tlbb2agwostxeuzxgl2ldjqkyjnne6ysb4a
+  behaviours.py: bafybeibmowhk635npu6gayfddh3tjchsk4sp5qxhbzfq3wptr2h7gt4gka
+  composition.py: bafybeif7oi3ib63akpe37k5zskwkshrr5wcdemp62qdp2nmavnnzzofnay
+  dialogues.py: bafybeihcddkozzuys744puqkpkn5eklzrqompyt3gr2c6cxwvdr57hecgy
+  handlers.py: bafybeidn6f2k7rlklz3yghha2arojfl4dgfduvludbpinefhnv5jq37gcq
+  my_model.py: bafybeid47dsgcfaodr4a74xfdb4iuntrb2dxks57oyxq7wrzkzr65audhy
+  tests/__init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
+  tests/test_behaviours.py: bafybeidzxsaff5zunmlu62iiyffrfgivod2uvribo5v56uulsf6k4ivzpi
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeicd6xekatd6xhnwt2vzgffa3pgpvbzkhkxzrjyj3kzzll5xbr22tu
-- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
-- eightballer/orders:0.1.0:bafybeic3s3pah3zdxtwq3yk2osmnwfhtv4h6f2hkbrundzkzorvlvwwaxy
-- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
-- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
+- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
+- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
+- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeihtymgp635gsor3n36symyygqpncz5kdu7qzlghedaduixy5nkdka
-- valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
-- valory/registration_abci:0.1.0:bafybeifkra3zbg5e4rhsuvjygracgp2jivqxezag7r4fshxetfp2jukkxe
-- valory/reset_pause_abci:0.1.0:bafybeiefmld4bv22k7rjxzmnvhfygizrftgkvrtputgfuvwrenrdpx233q
+- eightballer/dex_data_retrieval:0.1.0:bafybeiaz7a5o2r5jdh333imjli5hd4k6zr6tn556rduajg5llxfedxushi
+- valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
+- valory/registration_abci:0.1.0:bafybeigp2g6uhhgjlkqyhjlk4abfjuecmulnwlki6acbpfu45thslqujlu
+- valory/reset_pause_abci:0.1.0:bafybeidhqvc4cl6alvkql5kadiv7snudl7o2ctfqbmhrihtejm3zhkmbby
 behaviours:
   main:
     args: {}

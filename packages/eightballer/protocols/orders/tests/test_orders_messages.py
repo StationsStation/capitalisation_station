@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #                                                                             --
 #
 #   Copyright 2025 eightballer
@@ -21,7 +20,6 @@
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
-from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
@@ -39,7 +37,7 @@ from packages.eightballer.protocols.orders.custom_types import (
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -48,7 +46,7 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
 
     MESSAGE_CLASS = OrdersMessage
 
-    def build_messages(self) -> List[OrdersMessage]:  # type: ignore[override]
+    def build_messages(self) -> list[OrdersMessage]:  # type: ignore[override]
         """Build the messages to be used for testing."""
         return [
             OrdersMessage(
@@ -73,21 +71,21 @@ class TestMessageOrders(BaseProtocolMessagesTestCase):
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_ORDERS,
-                exchange_id="some str",
                 symbol="some str",
                 currency="some str",
                 order_type=OrderType(0),
                 side=OrderSide(0),
                 status=OrderStatus(0),
+                exchange_id="some str",
                 ledger_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_SETTLEMENTS,
-                exchange_id="some str",
                 currency="some str",
                 end_timestamp=1.0,
                 start_timestamp=1.0,
                 ledger_id="some str",
+                exchange_id="some str",
             ),
             OrdersMessage(
                 performative=OrdersMessage.Performative.GET_ORDER,

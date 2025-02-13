@@ -17,33 +17,33 @@ protocol_specification_id: eightballer/orders:0.1.0
 speech_acts:
   create_order:
     order: ct:Order
-    exchange_id: pt:str
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
   order_created:
     order: ct:Order
   cancel_order:
     order: ct:Order
-    exchange_id: pt:str
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
   order_cancelled:
     order: ct:Order
   get_orders:
-    exchange_id: pt:str
     symbol: pt:optional[pt:str]
     currency: pt:optional[pt:str]
     order_type: pt:optional[ct:OrderType]
     side: pt:optional[ct:OrderSide]
     status: pt:optional[ct:OrderStatus]
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
   get_settlements:
-    exchange_id: pt:str
     currency: pt:optional[pt:str]
     end_timestamp: pt:optional[pt:float]
     start_timestamp: pt:optional[pt:float]
     ledger_id: pt:optional[pt:str]
+    exchange_id: pt:optional[pt:str]
   get_order:
     order: ct:Order
-    exchange_id: pt:str
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
   order:
     order: ct:Order

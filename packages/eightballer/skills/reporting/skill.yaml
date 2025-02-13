@@ -6,30 +6,30 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibhxj6luibeojtowjdm3nhkpdxq3qlu6c7z66c7i425fy5i4yhn2m
-  behaviours.py: bafybeihz42ysciumjmrmw6hudpezuf7xclrxpwusd6rhokwuy2c4aty2si
-  dialogues.py: bafybeihmy5bw7cshzpelxq4qhye27y7yv2oiojbsmmt2skpjp5rv7gfn34
-  handlers.py: bafybeibwdmze5lou3vi24nhq4eqr3xbl4c4plitywolrre5gfp2kyp3564
-  slack.py: bafybeibjudhkti7j7zi3n3obffirl2r6musdizmsdmcbdraceywovlf2da
-  strategy.py: bafybeidpyahgxfyrqa4ri6lrti2rlfztyrdtldwlz6b7leqskanxpqkyxm
-  tests/__init__.py: bafybeif6hxw235tldsfacq2xyloyuw4kkkrkj4hpqbrknraxmsmdv7dviq
-  tests/cases.py: bafybeidrgyl67tqqxkrr2jzjttadbg6klc7hnp6f33ixnvomrn6yc4medu
-  tests/test_behaviour.py: bafybeifhszwiha55kwvxagk74xmnn5mezjtychzmsfkbgqnijh7zvmfk4m
-  tests/test_handlers.py: bafybeicw43nx7nvnpcfht7mpygeqlcnksuusklrcoiooynwo7dgmy62gem
-  tests/test_strategy.py: bafybeihmttb7bkuzhnc5ez7rntwluncwjlw3tsvsad6n3fhs6tw6kbplry
+  __init__.py: bafybeicckwn6vc53mifuyrvfbd4jokm5jj7rktlqfzw3nynyfqfpglwvii
+  behaviours.py: bafybeiba4u7rq7qver3k4olwgr5adymhms3pfpcnfmrbxe3kifbuxj32pu
+  dialogues.py: bafybeicyad32miifithd3eetq6lac6bihk5xhea4xgahn5bormfdqw3by4
+  handlers.py: bafybeifjp5htyrppcfw43o4s4zz745ynrh2repaij2hymhcu4wsjriyrwq
+  slack.py: bafybeifu4yup7pbw4gvgo7yxzkm62f25msu53kmmi5wmofwllt7d73mlfa
+  strategy.py: bafybeig3ln7v2qh4a52tfva4oi43rljz344hd3jppdjguvwn6ploqchkve
+  tests/__init__.py: bafybeidqvfmjxcrhqif6hzu3zejykhgzgeyuxarega3th7gz7bccpr76om
+  tests/cases.py: bafybeiehp5er3nvb6nu6yaxu5ym3pnukyvvmx567llcui4346jca5vjhxm
+  tests/test_behaviour.py: bafybeibsqcondmk3spbd3mlcu3fjajwpleczrnn7pco2mc367o4qnvy3n4
+  tests/test_handlers.py: bafybeigguqwcyrxaszyuwm3dwtrm5e36xigohztq53glzec4rlk5nrkyve
+  tests/test_strategy.py: bafybeiahxldt52hhih22tkqlpfgtoetltasmenbzmnqvkrhqh5nkdnsbry
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeibdg3pdj4x3ffzp34d7cvox6v55bfnlie47j6mpxt7g6akbdbpmf4
-- eightballer/dcxt:0.1.0:bafybeic2ory7i7ajryv3cnuehpttcbpkaj2ljk32fhzm3ggeg6woi3hh7a
-- valory/http_client:0.23.0:bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u
+- eightballer/ccxt:0.1.0:bafybeib53qlnw7wx64dqjeppbjzmcwqhu23w3gyrny7b7bvbbp2vrwbzri
+- eightballer/dcxt:0.1.0:bafybeihxhqmtcoosqb5tjsapg6snpgvwn4ikcpbv53lv7hhe2geg2qzy7u
+- valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeicd6xekatd6xhnwt2vzgffa3pgpvbzkhkxzrjyj3kzzll5xbr22tu
-- eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
-- eightballer/orders:0.1.0:bafybeic3s3pah3zdxtwq3yk2osmnwfhtv4h6f2hkbrundzkzorvlvwwaxy
-- eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
-- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
-- valory/http:1.0.0:bafybeifugzl63kfdmwrxwphrnrhj7bn6iruxieme3a4ntzejf6kmtuwmae
+- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
+- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
+- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
+- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
 skills: []
 behaviours:
   eod_reporting:

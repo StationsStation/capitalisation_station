@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 eightballer
@@ -30,12 +29,12 @@ from packages.eightballer.protocols.orders.dialogues import (
     OrdersDialogue,
     BaseOrdersDialogues,
 )
-from packages.eightballer.protocols.orders.custom_types import Order, ErrorCode, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -52,9 +51,9 @@ class TestDialoguesOrders(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=OrdersMessage.Performative.CREATE_ORDER,
-            order=Order(**load_data("Order")),  # check it please!
-            exchange_id="some str",
-            ledger_id="some str",
-        )
+        return {
+            "performative": OrdersMessage.Performative.CREATE_ORDER,
+            "order": Order(**load_data("Order")),  # check it please!
+            "exchange_id": "some str",
+            "ledger_id": "some str",
+        }

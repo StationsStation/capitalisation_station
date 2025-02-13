@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2021-2023 8baller
@@ -49,9 +48,7 @@ DB_FILE = "test.db"
 
 
 class TestOrder:
-    """
-    Test order class.
-    """
+    """Test order class."""
 
     id: str = "test_id"
     exchange_id: str = "test_exchange_id"
@@ -144,9 +141,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         assert list(data.to_numpy()[0]) == [2000.0, "long", 1, 1]
 
     def test_nets_out_positions_in_pivot(self):
-        """
-        Test that the positions are netted out correctly.
-        """
+        """Test that the positions are netted out correctly."""
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()
         pos_1 = POSITION_CASE_1
@@ -179,9 +174,7 @@ class TestReportingStrategy(BaseSkillTestCase, ABC):
         assert list(data.to_numpy()[0]) == [2000.0, "flat", 0]
 
     def test_nets_out_positions_in_pivot_multiple(self):
-        """
-        Test that the positions are netted out correctly.
-        """
+        """Test that the positions are netted out correctly."""
         strategy = cast(ReportingStrategy, self.skill.skill_context.reporting_strategy)
         strategy.setup()
         pos_1 = POSITION_CASE_1

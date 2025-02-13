@@ -8,18 +8,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeieuye5x6wumody72mpyn4vf4w24flb4tuyedl6je6bguzb2bc5wna
-  __init__.py: bafybeid5nt3vzc2ccnmxdeztq4w6ynaaxgdcp4cjbmtn2ke2wmbpttqs5q
-  custom_types.py: bafybeicaw2hkpidxxvibiuzgk4srm2apsyhdq7crs2k4krndql542rblca
-  dialogues.py: bafybeiaib4rqbxavncqeowmmt64pzp52tw4gjgx6ury7arjpb247mxltf4
-  message.py: bafybeiad6xlxv7uao7xu5pklivdpmi3wvqe4tkbtnsfxmd23g5fd2i5vey
+  __init__.py: bafybeiebv2f5kwmbqcggcjrs5ce3g2gpuacvi2rjwr432o6634e2nvajr4
+  custom_types.py: bafybeihf46aad5qivyywocury6vgvcr5fi2jxusnr77eenc4ldn3ulcemi
+  dialogues.py: bafybeiepzo4veugplminz6cdlcxgnefv3eqxt4qmrbshwpvs7rercmh4qu
+  message.py: bafybeid2thph5premj3daoggm6e6ewpeqkj2x7yft4uawpehcsq4yz2lie
   positions.proto: bafybeialiwal2tqvdp6lyggcg7yllncnoggu72zigt3ak2pp2b5cnurhvi
-  positions_pb2.py: bafybeifci4dtye3yqdluxcftzfp5xyhzuf2jto4wvf26x2riyapqcuz7bi
+  positions_pb2.py: bafybeid4inpb2yy5esyba25k6rhnqv6cz57vcz4idvdpqwk5e5cwerm25y
   protocol_spec.yaml: bafybeicqup47k7qczecocgjraonpuhjs3zyof7myzssfirdprxexrt3pdy
-  serialization.py: bafybeif7uzxfugb3kyu7ggugpt6ctyvfylfuqzbbk67afwf7qupcrysywm
-  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
+  serialization.py: bafybeihyycffimwykv77ukeummi6cchqy6xn2xton56wyr3g5uegjqjn5e
+  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
   tests/dummy_data.yaml: bafybeifkukihssmlls5jhgynykuoskca4rvm2w3j3bzrrzuxr2ctucyxei
-  tests/test_positions_dialogues.py: bafybeic3yfaeyqvzm4e4wxebqddg7qbv3pl25zaa7mtexl2ottmpug237u
-  tests/test_positions_messages.py: bafybeifl5mnkqtjomrnmzsmsnfrob3ga6omhyja4nyirkebt3onzn6kpca
+  tests/test_positions_dialogues.py: bafybeifgult6yzn54vhyszspntsvrnf4aji3lqgdv3vhcqtzvqo2bmqq2m
+  tests/test_positions_messages.py: bafybeigvhyuvuwxosqe2ylazqzznwhvdglbs3hcjksf3kpcu2tzxmfrjte
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

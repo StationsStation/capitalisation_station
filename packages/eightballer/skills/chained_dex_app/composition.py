@@ -1,6 +1,4 @@
-"""
-Musi
-"""
+"""Musi."""
 
 from packages.valory.skills.reset_pause_abci.rounds import (
     ResetPauseAbciApp,

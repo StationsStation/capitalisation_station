@@ -1,7 +1,7 @@
 """Custom types for the protocol."""
 
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -15,47 +15,56 @@ class ErrorCode(Enum):
 
     @staticmethod
     def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
         in the 'error_code_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               error_code_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         error_code_protobuf_object.error_code = error_code_object.value
 
     @classmethod
     def decode(cls, error_code_protobuf_object) -> "ErrorCode":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
+
+
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return ErrorCode(error_code_protobuf_object.error_code)
 
 
 class BaseCustomEncoder(BaseModel):
-    """
-    This class is a base class for encoding and decoding protocol buffer objects.
-    """
+    """This class is a base class for encoding and decoding protocol buffer objects."""
 
     @staticmethod
-    def encode(ps_response_protobuf_object, ps_response_object) -> None:
-        """
-        Encode an instance of this class into the protocol buffer object.
+    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
+        """Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
         class in the 'ps_response_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         for key, value in ps_response_object.__dict__.items():
             current_attr = getattr(ps_response_protobuf_object, key)
@@ -71,18 +80,21 @@ class BaseCustomEncoder(BaseModel):
             setattr(ps_response_protobuf_object, key, value)
 
     @classmethod
-    def decode(cls, ps_response_protobuf_object) -> "Any":
-        """
-        Decode a protocol buffer object that corresponds with this class into an instance of this class.
+    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
+
+
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
-        keywords = [f for f in cls.__annotations__.keys()]
+        keywords = list(cls.__annotations__.keys())
         kwargs = {}
         for keyword in keywords:
             proto_attr = getattr(ps_response_protobuf_object, keyword)
@@ -93,7 +105,7 @@ class BaseCustomEncoder(BaseModel):
                 kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
                 continue
             if isinstance(proto_attr, dict):
-                kwargs[keyword] = {k: v for k, v in proto_attr.items()}
+                kwargs[keyword] = dict(proto_attr.items())
                 continue
             if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
                 kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
@@ -118,13 +130,13 @@ class Balance(BaseCustomEncoder):
     used: float
     total: float
     is_native: bool
-    contract_address: Optional[str] = None
+    contract_address: str | None = None
 
 
 class Balances(BaseCustomEncoder):
     """This class represents an instance of Balances."""
 
-    balances: List[Balance] = []
+    balances: list[Balance] = []
 
 
 CUSTOM_ENUM_MAP = {"<class 'balances_pb2.ErrorCode'>": ErrorCode}
