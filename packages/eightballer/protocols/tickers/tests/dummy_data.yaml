@@ -1,6 +1,8 @@
 Ticker:
   ask: 0.0
   ask_volume: 0.0
+  asset_a: asset_a
+  asset_b: asset_b
   average: 0.0
   base_volume: 0.0
   bid: 0.0

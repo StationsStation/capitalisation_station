@@ -45,10 +45,10 @@ protocols:
 - eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
 - eightballer/ohlcv:0.1.0:bafybeicaxvy6itmm52gqofmm7yq5xgojyrge6uczgwcsxeykxjju5xk66a
 - eightballer/order_book:0.1.0:bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky
-- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
+- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
 class_name: CcxtConnection
 config:
   exchanges:

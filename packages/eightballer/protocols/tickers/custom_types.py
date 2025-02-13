@@ -130,6 +130,8 @@ class Ticker(BaseCustomEncoder):
     datetime: str
     ask: float
     bid: float
+    asset_a: str | None = None
+    asset_b: str | None = None
     bid_volume: float | None = None
     ask_volume: float | None = None
     high: float | None = None

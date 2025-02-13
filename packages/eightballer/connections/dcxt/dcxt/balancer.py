@@ -2,7 +2,6 @@
 
 import json
 import time
-import decimal
 import traceback
 from enum import Enum
 from glob import glob
@@ -13,6 +12,8 @@ from pathlib import Path
 # pylint: disable=R0914,R0902,R0912
 # ruff: noqa: PLR0914,PLR0915
 from datetime import UTC, datetime
+from functools import cache
+from collections import defaultdict
 
 import web3
 from balpy import balpy
@@ -77,6 +78,9 @@ class SupportedBalancerDeployments(Enum):
     OPTIMISM = "optimism"
     BASE = "base"
     MODE = "mode"
+    GNOSIS = "gnosis"
+    ARBITRUM = "arbitrum"
+    POLYGON = "polygon"
 
 
 LEDGER_IDS_CHAIN_NAMES = {
@@ -84,6 +88,9 @@ LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.ETHEREUM: SupportedBalancerDeployments.MAINNET,
     SupportedLedgers.BASE: SupportedBalancerDeployments.BASE,
     SupportedLedgers.MODE: SupportedBalancerDeployments.MODE,
+    SupportedLedgers.GNOSIS: SupportedBalancerDeployments.GNOSIS,
+    SupportedLedgers.ARBITRUM: SupportedBalancerDeployments.ARBITRUM,
+    SupportedLedgers.POLYGON_POS: SupportedBalancerDeployments.POLYGON,
 }
 
 WHITELISTED_POOLS = {
@@ -91,7 +98,7 @@ WHITELISTED_POOLS = {
         "0xebdd200fe52997142215f7603bc28a80becdadeb000200000000000000000694",
         "0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019",
         "0x4e1325ff075a387e3d337f5f12638d6d72b127800001000000000000000006d7",
-        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000"
+        "0x06df3b2bbb68adc0000000000000000000000000000000000000000000000000",
     ],
     SupportedLedgers.OPTIMISM: [
         "0x5bb3e58887264b667f915130fd04bbb56116c27800020000000000000000012a",
@@ -114,10 +121,15 @@ WHITELISTED_POOLS = {
 
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: [
-        "0x6b175474e89094c44da98b954eedeac495271d0f", # DAI,
-        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"  # USDC
+        "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI,
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
+        "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
     ],
-    SupportedLedgers.OPTIMISM: ["0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"],
+    SupportedLedgers.OPTIMISM: [
+        "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+        "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",  # USDT
+    ],
     SupportedLedgers.BASE: [
         "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",  # USDC
         "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",  # DAI
@@ -130,9 +142,11 @@ LEDGER_TO_STABLECOINS = {
     ],
     SupportedLedgers.POLYGON_POS: [
         "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+        "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",  # USDC
     ],
     SupportedLedgers.ARBITRUM: [
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
     ],
     SupportedLedgers.MODE: [
         "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
@@ -215,6 +229,17 @@ LEDGER_TO_TOKEN_LIST = {
     ),
 }
 
+TOKEN_LIST_PATH = Path(__file__).parent / "data" / "token_list.json"
+
+
+def read_token_list(chain_id: int):
+    """Read the token list."""
+    with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:
+        token_list = json.loads(file.read())["tokens"]
+
+    tokens = filter(lambda t: t["chainId"] == chain_id, token_list)
+    return {t["address"]: t for t in tokens}
+
 
 class BalancerClient:
     """Balancer exchange."""
@@ -223,7 +248,7 @@ class BalancerClient:
 
     def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
         if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
-            msg = "Chain name not provided to BalancerClient"
+            msg = f"Incorrect chain name `{ledger_id}` provided to BalancerClient"
             raise ConfigurationError(msg)
 
         self.ledger_id = SupportedLedgers(ledger_id)
@@ -260,6 +285,8 @@ class BalancerClient:
         self.erc20_contract: Erc20 = Contract.from_config(configuration)
         self.logger = kwargs.get("logger")
         self.tickers = {}
+        self.raw_token_data = read_token_list(self.bal.web3.eth.chain_id)
+        self.tokens = {}
 
     async def fetch_markets(
         self,
@@ -372,80 +399,27 @@ class BalancerClient:
         del args, kwargs
 
         # We temporarily assume that the tickers are the same as the markets, and use the pool IDs to get the tickers.
-        if not self.tokens:
-            await self.build_tokens()
-        self.tickers = {}
+        prices = self.bal.graph.getCurrentPrices(
+            chain=self.balancer_deployment.value,
+        )
+        prices = {price["address"]: price["price"] for price in prices}
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
-            token = self.tokens[token_address]
-            if token_address in LEDGER_TO_STABLECOINS[self.ledger_id]:
-                stable_address = next(f for f in LEDGER_TO_STABLECOINS[self.ledger_id] if f != token_address)
-            else:
-                stable_address = LEDGER_TO_STABLECOINS[self.ledger_id][0]
-
-            stable_token = self.get_token(stable_address)
-            symbol = f"{token.address}/{stable_address}"
-
-            try:
-                ask_price = 1 / float(
-                    self.get_price(
-                        amount=DEFAULT_AMOUNT_USD,
-                        output_token_address=token_address,
-                        input_token_address=stable_address,
-                    )
-                )
-                buy_amount = DEFAULT_AMOUNT_USD / ask_price
-
-                bid_price = 1 / float(
-                    1
-                    / self.get_price(
-                        amount=buy_amount, output_token_address=stable_address, input_token_address=token_address
-                    )
-                )
-                timestamp = datetime.now(tz=UTC)
-
-                ticker = Ticker(
-                    symbol=symbol,
-                    high=ask_price,
-                    low=bid_price,
-                    ask=ask_price,
-                    bid=bid_price,
-                    timestamp=int(timestamp.timestamp()),
-                    datetime=timestamp.isoformat(),
-                )
-                self.tickers[symbol] = ticker
-            except (ZeroDivisionError, decimal.DivisionByZero) as exc:
-                self.logger.debug(exc)
-                self.logger.info(f"Error querying {symbol} SOR: {traceback.format_exc()}")
-        # We also get a price of the wrapper token.
-        wrapper_token = self.tokens[LEDGER_TO_WRAPPER[self.ledger_id]]
-        symbol = f"{LEDGER_TO_NATIVE_SYMBOL[self.ledger_id]}/{self.tokens[stable_address].address}"
-        try:
-            ask_price = float(
-                self.get_price(
-                    amount=DEFAULT_AMOUNT_USD,
-                    output_token_address=wrapper_token.address,
-                    input_token_address=stable_address,
-                )
-            )
-
-            bid_price = self.get_price(
-                amount=buy_amount, output_token_address=stable_address, input_token_address=wrapper_token.address
-            )
+            token = self.get_token(token_address)
+            symbol = f"{token.symbol}/USD"
+            usd_price = prices[token.address.lower()]
             timestamp = datetime.now(tz=UTC)
-
             ticker = Ticker(
                 symbol=symbol,
-                high=ask_price,
-                low=bid_price,
-                ask=ask_price,
-                bid=bid_price,
+                asset_a=token.symbol,
+                asset_b="USD",
+                high=usd_price,
+                low=usd_price,
+                ask=usd_price,
+                bid=usd_price,
                 timestamp=int(timestamp.timestamp()),
                 datetime=timestamp.isoformat(),
             )
             self.tickers[symbol] = ticker
-        except (ZeroDivisionError, decimal.DivisionByZero) as exc:
-            self.logger.exception(exc)
-            self.logger.exception(f"Error querying {symbol} SOR: {traceback.format_exc()}")
         return Tickers(tickers=list(self.tickers.values()))
 
     def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
@@ -808,7 +782,76 @@ class BalancerClient:
         This would get the pending order from the mempool, and the filled orders from the chain.
 
         """
-        del args, kwargs
+        vault = self.bal.balLoadContract("Vault")
+        params = kwargs.get("params", {})
+
+        def parse_transaction(events, txn_hash):
+            def net_out_swaps(swap_events):
+                # This dictionary will hold net amounts for each token address
+                token_balances = defaultdict(lambda: {"spent": 0, "received": 0})
+
+                # Loop over each swap event and net out the amounts
+                for event in swap_events:
+                    # Extract the details from each swap event
+                    token_in = event["args"]["tokenIn"]
+                    token_out = event["args"]["tokenOut"]
+                    amount_in = event["args"]["amountIn"]
+                    amount_out = event["args"]["amountOut"]
+
+                    # Update the 'spent' (tokenIn) and 'received' (tokenOut) amounts
+                    token_balances[token_in]["spent"] += amount_in
+                    token_balances[token_out]["received"] += amount_out
+
+                # Calculate the net balances for each token
+                net_balances = {}
+                for token, balances in token_balances.items():
+                    net_bal = balances["received"] - balances["spent"]
+                    if net_bal != 0:
+                        net_balances[token] = net_bal
+
+                return net_balances
+
+            net_balances = net_out_swaps(events)
+            for address, raw_balance in net_balances.items():
+                token = self.get_token(address)
+                balance = token.to_human(raw_balance)
+                net_balances[address] = balance
+            return net_balances
+
+        all_events = []
+        # We have to batch up the events as the filter can only return 10k events at a time
+        start = 21076969
+        interval = 2000
+        end = self.bal.web3.eth.block_number
+        account = params.get("account")
+        for i in range(0, end - start, interval):
+            start += i
+            to = start + interval
+            if to > end:
+                to = end - 1
+            if start >= end:
+                break
+            events = vault.events.Swap.create_filter(fromBlock=start, toBlock=to, address=account).get_all_entries()
+            all_events.extend(events)
+
+        # We create a bundle of events for each transaction
+        event_bundles = defaultdict(list)
+        for event in events:
+            tx_hash = event["transactionHash"].hex()
+            event_bundles[tx_hash].append(event)
+
+        # We now parse all the individual transactions
+        trades = {}
+
+        transaction_data = {}
+        for tx_hash, events in event_bundles.items():
+            trades[tx_hash] = parse_transaction(events, tx_hash)
+            transaction_data[tx_hash] = self.bal.web3.eth.get_transaction(tx_hash)
+
+        {k: v for k, v in transaction_data.items() if v["from"] == account}
+
+        breakpoint()
+
         return Orders(orders=[])
 
     async def get_all_markets(self, *args, **kwargs):
@@ -875,21 +918,34 @@ class BalancerClient:
             ]
         )
 
+    @cache
     def get_token(self, address):
         """Get the token from the address."""
-        if address not in self.tokens:
-            # We retrieve the token from the balancer contract.
-            contract = self.bal.erc20GetContract(address)
-            name = contract.functions.name().call()
-            symbol = contract.functions.symbol().call()
-            decimals = contract.functions.decimals().call()
-            self.tokens[address] = Erc20Token(
+        # We check if the token is already in the raw token data.
+        if address in self.tokens:
+            return self.tokens[address]
+        if address in self.raw_token_data:
+            token_data = self.raw_token_data[address]
+            token = Erc20Token(
                 address=address,
-                name=name,
-                symbol=symbol,
-                decimals=decimals,
+                symbol=token_data["symbol"],
+                name=token_data["name"],
+                decimals=token_data["decimals"],
             )
-        return self.tokens[address]
+            self.tokens[address] = token
+            return self.get_token(address)
+        # We retrieve the token from the balancer contract.
+        contract = self.bal.erc20GetContract(address)
+        name = contract.functions.name().call()
+        symbol = contract.functions.symbol().call()
+        decimals = contract.functions.decimals().call()
+        self.tokens[address] = Erc20Token(
+            address=address,
+            name=name,
+            symbol=symbol,
+            decimals=decimals,
+        )
+        return self.get_token(address)
 
     def _from_decimals_amt_to_token(self, address, balance):
         """Convert the balance to a token balance."""

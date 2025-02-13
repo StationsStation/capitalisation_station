@@ -7,21 +7,21 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeieck6sk7g3pksiidqtmagjvo4pmpootnyt5erim7kmplt6l4tek2u
+  behaviours.py: bafybeidxji5whhrgkdokq6iqo4xo52zdhkb7ef4jehnw4cs2xjv72x44ne
   dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
   handlers.py: bafybeie43nnzdlctivmcmlwliv2owof4umqpdvkp7slccixbiwyr5s4ugi
-  my_model.py: bafybeif62hlkvkfugy3lbigy2th4kslk5pdh4xmtmprm2eznxmfk3cdk7u
+  my_model.py: bafybeiehzaov5waan3c7utbxl2lmrwl5utek3gdsbjeogkpcfsuquaonzy
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeihxhqmtcoosqb5tjsapg6snpgvwn4ikcpbv53lv7hhe2geg2qzy7u
-- eightballer/ccxt:0.1.0:bafybeib53qlnw7wx64dqjeppbjzmcwqhu23w3gyrny7b7bvbbp2vrwbzri
+- eightballer/dcxt:0.1.0:bafybeifu6dfjdu5sgnib5efqkufyh2ajwqotxtdlmmerpsc5u7gn3taey4
+- eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
 - eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeibzxvvwawrg33vcjry4macuxnxi526zggwfbee2jurjntjwzy7bzm
+- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/orders:0.1.0:bafybeieprmnki35sx4tpm4nqkpoyjoxwml4e32znskrm4dti37vj5a7nay
+- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
 - eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
@@ -44,10 +44,15 @@ handlers:
 models:
   arbitrage_strategy:
     args:
+      order_size: 0.1
       ledgers:
       - base
+      - solana
       dexs:
-      - balancer
+      - balancer:
+        - base
+      - juniper:
+        - solana
       cexs:
       - mexc
     class_name: ArbitrageStrategy

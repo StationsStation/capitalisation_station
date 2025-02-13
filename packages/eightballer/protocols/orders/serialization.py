@@ -128,6 +128,10 @@ class OrdersSerializer(Serializer):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
                 performative.ledger_id = ledger_id
+            if msg.is_set("account"):
+                performative.account_is_set = True
+                account = msg.account
+                performative.account = account
             orders_msg.get_orders.CopyFrom(performative)
         elif performative_id == OrdersMessage.Performative.GET_SETTLEMENTS:
             performative = orders_pb2.OrdersMessage.Get_Settlements_Performative()  # type: ignore
@@ -268,6 +272,9 @@ class OrdersSerializer(Serializer):
             if orders_pb.get_orders.ledger_id_is_set:
                 ledger_id = orders_pb.get_orders.ledger_id
                 performative_content["ledger_id"] = ledger_id
+            if orders_pb.get_orders.account_is_set:
+                account = orders_pb.get_orders.account
+                performative_content["account"] = account
         elif performative_id == OrdersMessage.Performative.GET_SETTLEMENTS:
             if orders_pb.get_settlements.currency_is_set:
                 currency = orders_pb.get_settlements.currency

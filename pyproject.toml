@@ -86,6 +86,8 @@ ensure_newline_before_comments = true
 line_length = 120
 skip_gitignore = true
 
+[tool.poetry.scripts]
+dcxt = "packages.eightballer.connections.dcxt.cli:main"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
