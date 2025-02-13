@@ -320,15 +320,15 @@ tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
 name = "autonomy-dev"
-version = "0.2.123"
+version = "0.2.124"
 description = "A collection of tooling to enable open source development of autonomy tools"
 optional = false
 python-versions = "<3.12,>=3.10"
 groups = ["main"]
 markers = "python_version <= \"3.11\" and (implementation_name == \"cpython\" or implementation_name == \"pypy\")"
 files = [
-    {file = "autonomy_dev-0.2.123-py3-none-any.whl", hash = "sha256:26826c1411ade7501e4b5ea755adb527fb40c04e80b74b3a5610e6f69caec80f"},
-    {file = "autonomy_dev-0.2.123.tar.gz", hash = "sha256:9129d9a4db973a60fe5fb51e9de823ec092db9d35dc6934a486bac352b54be7a"},
+    {file = "autonomy_dev-0.2.124-py3-none-any.whl", hash = "sha256:fee4cdd6638562833a7796003822288696d805f3805089617a6f83f6a14249fa"},
+    {file = "autonomy_dev-0.2.124.tar.gz", hash = "sha256:76e72b62e9c15fbb4bbccd9859f4248f0d7b295767568749aa9af88af50f2ce6"},
 ]
 
 [package.dependencies]
@@ -5997,4 +5997,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "ff5df0e876d5799a6d5758a46728bece2e3c692775d49313ffb1db79e776e344"
+content-hash = "cd2e7748fd3a05e93e40da3c7e77ca17cc0e39f1f0864decfb5a09caaaaa1188"
