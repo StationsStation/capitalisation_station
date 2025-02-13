@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package aea.eightballer.liquidity_provision.v0_1_0;
+
+message LiquidityProvisionMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_INVALID_POOL = 0;
+      ERROR_CODE_ENUM_INVALID_TOKEN = 1;
+      ERROR_CODE_ENUM_INSUFFICIENT_AMOUNT = 2;
+      ERROR_CODE_ENUM_TIMEOUT = 3;
+      ERROR_CODE_ENUM_UNKNOWN_ERROR = 4;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+
+  // Performatives and contents
+  message Add_Liquidity_Performative{
+    string pool_id = 1;
+    repeated string token_ids = 2;
+    repeated int32 amounts = 3;
+    int32 min_mint_amount = 4;
+    int32 deadline = 5;
+    bytes user_data = 6;
+    bool user_data_is_set = 7;
+    string exchange_id = 8;
+    string ledger_id = 9;
+    bool ledger_id_is_set = 10;
+  }
+
+  message Remove_Liquidity_Performative{
+    string pool_id = 1;
+    repeated string token_ids = 2;
+    int32 burn_amount = 3;
+    repeated int32 min_amounts = 4;
+    int32 deadline = 5;
+    bytes user_data = 6;
+    bool user_data_is_set = 7;
+    string exchange_id = 8;
+    string ledger_id = 9;
+    bool ledger_id_is_set = 10;
+  }
+
+  message Query_Liquidity_Performative{
+    string pool_id = 1;
+    string exchange_id = 2;
+    string ledger_id = 3;
+    bool ledger_id_is_set = 4;
+  }
+
+  message Liquidity_Added_Performative{
+    string pool_id = 1;
+    int32 minted_tokens = 2;
+  }
+
+  message Liquidity_Removed_Performative{
+    string pool_id = 1;
+    repeated int32 received_amounts = 2;
+  }
+
+  message Liquidity_Status_Performative{
+    string pool_id = 1;
+    int32 current_liquidity = 2;
+    repeated int32 available_tokens = 3;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string description = 2;
+  }
+
+
+  oneof performative{
+    Add_Liquidity_Performative add_liquidity = 5;
+    Error_Performative error = 6;
+    Liquidity_Added_Performative liquidity_added = 7;
+    Liquidity_Removed_Performative liquidity_removed = 8;
+    Liquidity_Status_Performative liquidity_status = 9;
+    Query_Liquidity_Performative query_liquidity = 10;
+    Remove_Liquidity_Performative remove_liquidity = 11;
+  }
+}

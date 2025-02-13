@@ -1,5 +1,3 @@
-
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 eightballer
@@ -17,7 +15,18 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""
-Tests for the protocol.
+
+"""This module contains the support resources for the liquidity_provision protocol.
+
+It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
 """
 
+from packages.eightballer.protocols.liquidity_provision.message import (
+    LiquidityProvisionMessage,
+)
+from packages.eightballer.protocols.liquidity_provision.serialization import (
+    LiquidityProvisionSerializer,
+)
+
+
+LiquidityProvisionMessage.serializer = LiquidityProvisionSerializer

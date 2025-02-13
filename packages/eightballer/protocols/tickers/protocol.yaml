@@ -7,19 +7,19 @@ description: A protocol for passing ticker data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeicl3yiqlux5wdwyuizmki5dsitd46m3ree5mtcas2xeb7wpirpfhq
-  __init__.py: bafybeibpc25pjjvkjtdxace7kxouz5z5bhndfi2v7msclqfvve5khvjnki
-  custom_types.py: bafybeifnrvqimcfkiujgsg726kwf4ducgs2thpakaqe4cbsddbduilquzu
-  dialogues.py: bafybeicadf6drkwwqqfmnrxqux7som5hmpnbbfne5ddj3vb6isptj7zr2a
-  message.py: bafybeihlvebjnrelwzzdis4wjg36gzx6cpqryaas2ayczbgwtfm3eummou
-  protocol_spec.yaml: bafybeigz2xot6hmvqjg6afqf6w6nf72cjvpgpdpxtlripxd2lfokmm7fgi
-  serialization.py: bafybeihziqgswm54qovf2gptwby5jqsiyopqfa7p4zdmbcb2rhm5iyqqx4
-  tests/__init__.py: bafybeifmesqmldjbxngjnmfcvjphbxrl7ttrur3ihgq42j2l4jdonwrfk4
-  tests/dummy_data.yaml: bafybeiakxhpnmx4o2znamrli4ddihptmwv73haab7y2pekz75spdrcas4q
-  tests/test_tickers_dialogues.py: bafybeievdgmjrrn3qhpfxb5ri6tknbgohxtbluaecn7gptffwsk4a6ncya
-  tests/test_tickers_messages.py: bafybeidqlk4mz34k6pmhlpsq6e4c2tyvygbc664unaqbwrfrhnphhluaf4
-  tickers.proto: bafybeiarkntpsdkw4fgnqhdpoepz2c45fwui5yuvr5qfp5xg4pdrch5mui
-  tickers_pb2.py: bafybeia4a5whkc247ji7e6h37jt54q4srfzoeopbjrbcu5vzdeqocgenna
+  README.md: bafybeid2huu3okhbo3kp7mx57uvcnedfkkxolwvidesltau4lcwhtdlc6u
+  __init__.py: bafybeidamzahjeljpnd72lm3srhlca6zuoj2iy2clvoyy76zjp3b366xua
+  custom_types.py: bafybeibchquxaftpo7krszluf3n3ydot2hp3bby2jrezean64uv3edefzi
+  dialogues.py: bafybeie2wq5urmtji5w2al2ruwrh2h43zaxxef77fh2ovumcn6nabh6pf4
+  message.py: bafybeiegc2ndww2qml2zc4m54ipf6fsvns7ufg5adxc2fy63bygibqndy4
+  protocol_spec.yaml: bafybeie2ecmky3nlfg62nyo4lawz6kwwiuqmisasyo4kn2cr3axc3wazgm
+  serialization.py: bafybeihlffrxya3lc7t6laie7q24lh3ej25chxw26t36yt23gm3df5dibu
+  tests/__init__.py: bafybeiap5b4ozevzknmxm4t34y2jphskf6r2r6wymoidcnu44ff2ouchgi
+  tests/dummy_data.yaml: bafybeiddv4lavgwx3vqkmswsl2klmfp55ff2ooq6bgkwddo6zzcepunute
+  tests/test_tickers_dialogues.py: bafybeierqzccw6znvmx63twh44ocds2yrqcrb5wqc6uerg42qzcnjqqwzy
+  tests/test_tickers_messages.py: bafybeidbbcl4cyo7gl3quf7cyts3zy6aytl3uml74dssjiv4scyeiirb3i
+  tickers.proto: bafybeiazx47n6xqrvzl774q3p3n2ajqlbb7ws3yx2qr7qaiwdygkw62wmi
+  tickers_pb2.py: bafybeieozvxrnaottrgbznvebypykog4j774mbmdywy3gjyslbxe3ff2pa
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

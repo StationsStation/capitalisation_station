@@ -25,7 +25,6 @@ from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
-
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.custom_types import (
     Balance,
@@ -65,6 +64,8 @@ class TestMessageBalances(BaseProtocolMessagesTestCase):
             BalancesMessage(
                 performative=BalancesMessage.Performative.ALL_BALANCES,
                 balances=Balances(**load_data("Balances")),  # check it please!
+                ledger_id="some str",
+                exchange_id="some str",
             ),
             BalancesMessage(
                 performative=BalancesMessage.Performative.BALANCE,

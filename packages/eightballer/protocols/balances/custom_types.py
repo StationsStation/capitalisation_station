@@ -21,8 +21,12 @@ class ErrorCode(Enum):
         The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
         in the 'error_code_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param error_code_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               error_code_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         error_code_protobuf_object.error_code = error_code_object.value
 
@@ -34,9 +38,12 @@ class ErrorCode(Enum):
         A new instance of this class is created that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
 
-        :param error_code_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'error_code_protobuf_object' argument.
+
+
+        Args:
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         return ErrorCode(error_code_protobuf_object.error_code)
 
@@ -47,15 +54,19 @@ class BaseCustomEncoder(BaseModel):
     """
 
     @staticmethod
-    def encode(ps_response_protobuf_object, ps_response_object) -> None:
+    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
         """
         Encode an instance of this class into the protocol buffer object.
 
         The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
         class in the 'ps_response_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :param ps_response_object: an instance of this class to be encoded in the protocol buffer object.
+
+
+        Args:
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
+
         """
         for key, value in ps_response_object.__dict__.items():
             current_attr = getattr(ps_response_protobuf_object, key)
@@ -71,16 +82,19 @@ class BaseCustomEncoder(BaseModel):
             setattr(ps_response_protobuf_object, key, value)
 
     @classmethod
-    def decode(cls, ps_response_protobuf_object) -> "Any":
+    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
         """
         Decode a protocol buffer object that corresponds with this class into an instance of this class.
 
         A new instance of this class is created that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
 
-        :param ps_response_protobuf_object: the protocol buffer object whose type corresponds with this class.
-        :return: A new instance of this class that matches the protocol buffer object in the
         'ps_response_protobuf_object' argument.
+
+
+        Args:
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
         """
         keywords = [f for f in cls.__annotations__.keys()]
         kwargs = {}
@@ -102,11 +116,19 @@ class BaseCustomEncoder(BaseModel):
         return cls(**kwargs)
 
     def __eq__(self, other):
-        """Check if two instances of this class are equal."""
+        """
+        Check if two instances of this class are equal.
+
+
+        """
         return self.dict() == other.dict()
 
     def __hash__(self):
-        """Return the hash value of this instance."""
+        """
+        Return the hash value of this instance.
+
+
+        """
         return hash(self.dict())
 
 

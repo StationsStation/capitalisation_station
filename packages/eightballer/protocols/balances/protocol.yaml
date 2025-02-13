@@ -7,19 +7,19 @@ description: A protocol for passing balance data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeihsca64yau2e7j6vmnzdggvtecaiuz5n4gdghiqlcbtyj3pkt3upi
+  README.md: bafybeidax6cu2wcmuc4dx762h2vbzcitjhmbugvw76suvkgnw4c4fziq7y
   __init__.py: bafybeie3w3g6wdw5mr4mbqdg6t5w5n3iywi54udzy3xk62mvu2lpga6zza
-  balances.proto: bafybeieyefcfhpwhhwguqhgmhpjwp4prgzfkk56umacukgzqpk2c34okf4
-  balances_pb2.py: bafybeibmogiogpjytxntu7jql4mpx6vun7wogcwgkmk4lwgdaoy47fffpm
-  custom_types.py: bafybeicby47fegnrjwbyqduuj5ropqffcyj6tu33x53toz34fiibevl2wi
-  dialogues.py: bafybeic5uwxjbwsx7w275h6vlstiyzxdtk6fumfuq5tsyifubhgofy77oa
-  message.py: bafybeidrp2lwd3vmsenu2vzg7e6crqrp6fbg45tnpaj2k43x2lyrvpypvy
-  protocol_spec.yaml: bafybeihgw3wcj47qvqsdibl4g6b6v3swzl72kz36xdjogoqxfseri3zopu
-  serialization.py: bafybeif2dy25iieqcpxzdmdaoipj6ydvrh3fu6djhohkio375w4fxcrpza
-  tests/__init__.py: bafybeicbb4pohduwkdoewodrm6alh6y6dk7ftggebu4m5mwwv57shkhtnq
+  balances.proto: bafybeihtghazozjiqsoojzw4fozycfgtxanlpj3lrxlo5ybaxvoqxaikme
+  balances_pb2.py: bafybeiarv35oxy4jspli557tcaqyluvl66xzficvjuljw75cxbypzbhc7y
+  custom_types.py: bafybeie4noqubkyzqozonxgv3yxoof3ee7fth3ypgia7cg5vb57gyma5nu
+  dialogues.py: bafybeidpydwzugx7nx7lwfkfiix2t6hlqytbdrdx7q525gbanay4tppvty
+  message.py: bafybeiaifpxfdnol3hyl2j5q2tuywbttkdoqlxargtprpr22k3oetzshay
+  protocol_spec.yaml: bafybeibnd6uu42gikzpiwypfj6lch5434zzr4hsicf52tphoei5bsdj7ce
+  serialization.py: bafybeiakzxq6vliqdu37i64lma4absjymtqexut4sztq2xt6xi4i53njnu
+  tests/__init__.py: bafybeiap5b4ozevzknmxm4t34y2jphskf6r2r6wymoidcnu44ff2ouchgi
   tests/dummy_data.yaml: bafybeifo5ciswn4w76txjrnmwghmywkq7vunwowpieyw6cqtfvrgtmzcsy
-  tests/test_balances_dialogues.py: bafybeif74djnngj2ftgzskwk4mr6thpxzbnfazcnonvss774wbor455ld4
-  tests/test_balances_messages.py: bafybeihpcgtinlfopecrsa46qwu5qzdc7han6bl7zextni4w52h6w6ydwy
+  tests/test_balances_dialogues.py: bafybeic6u37vm5vq5uflvt6f6zs3t7iuewwbpqyz5haivsxjqbqjlirp3y
+  tests/test_balances_messages.py: bafybeifg6qlpebetzafycffydvwudvghr4fzjgsf2fgs2owjhvzkibf7ju
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

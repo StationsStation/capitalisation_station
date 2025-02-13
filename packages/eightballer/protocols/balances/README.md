@@ -18,16 +18,18 @@ protocol_specification_id: eightballer/balances:0.1.0
 speech_acts:
   get_all_balances:
     params: pt:optional[pt:dict[pt:str, pt:bytes]]
-    exchange_id: pt:str
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
     address: pt:optional[pt:str]
   get_balance:
     asset_id: pt:str
-    exchange_id: pt:str
+    exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
     address: pt:optional[pt:str]
   all_balances:
     balances: ct:Balances
+    ledger_id: pt:optional[pt:str]
+    exchange_id: pt:optional[pt:str]
   balance:
     balance: ct:Balance
   error:

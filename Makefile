@@ -1,5 +1,7 @@
 # Makefile
 
+HOOKS_DIR = .git/hooks
+
 .PHONY: clean
 clean: clean-build clean-pyc clean-test clean-docs
 
@@ -56,35 +58,23 @@ test:
 	poetry run adev -v test
 
 install:
+	@echo "Setting up Git hooks..."
+
+	# Create symlinks for pre-commit and pre-push hooks
+	cp scripts/pre_commit_hook.sh $(HOOKS_DIR)/pre-commit
+	cp scripts/pre_push_hook.sh $(HOOKS_DIR)/pre-push
+	chmod +x $(HOOKS_DIR)/pre-commit
+	chmod +x $(HOOKS_DIR)/pre-push
+	@echo "Git hooks have been installed."
+	@echo "Installing dependencies..."
 	bash install.sh
+	@echo "Dependencies installed."
+	@echo "Syncing packages..."
 	poetry run autonomy packages sync
+	@echo "Packages synced."
 
  sync:
 	git pull
 	poetry run autonomy packages sync
 
 all: fmt lint test hashes
-
-
-metadata:
-	# pending updates.
-	# poetry run adev metadata generate . protocol/eightballer/balances/0.1.0 06 && adev -v metadata validate mints/06.json
-	# poetry run adev metadata generate . protocol/eightballer/markets/0.1.0 07 && adev -v metadata validate mints/07.json
-	# poetry run adev metadata generate . protocol/eightballer/ohlcv/0.1.0 08 && adev -v metadata validate mints/08.json
-	# poetry run adev metadata generate . protocol/eightballer/orders/0.1.0 09 && adev -v metadata validate mints/09.json
-	# poetry run adev metadata generate . protocol/eightballer/positions/0.1.0 10 && adev -v metadata validate mints/10.json
-	# poetry run adev metadata generate . protocol/eightballer/spot_asset/0.1.0 11 && adev -v metadata validate mints/11.json
-	# poetry run adev metadata generate . protocol/eightballer/tickers/0.1.0 12 && adev -v metadata validate mints/12.json
-
-	# minted.
-	# poetry run adev metadata generate . protocol/eightballer/order_book/0.1.0 13 && adev -v metadata validate mints/13.json
-	# poetry run adev metadata generate . contract/eightballer/spl_token/0.1.0 14 && adev -v metadata validate mints/14.json
-	# poetry run adev metadata generate . contract/vybe/jupitar_swap/0.1.0 15 && adev -v metadata validate mints/15.json
-	# poetry run adev metadata generate . connection/eightballer/dcxt/0.1.0 16 && adev -v metadata validate mints/16.json
-	# poetry run adev metadata generate . connection/eightballer/ccxt/0.1.0 17 && adev -v metadata validate mints/17.json
-
-	# poetry run adev metadata generate . custom/eightballer/arbitrage_strategy/0.1.0 18 && adev -v metadata validate mints/18.json
-	# poetry run adev metadata generate . skill/eightballer/simple_fsm/0.1.0 19 && adev -v metadata validate mints/19.json
-
-	poetry run adev metadata generate . agent/eightballer/trader/0.1.0 20 && adev -v metadata validate mints/20.json
-	poetry run adev metadata generate . service/eightballer/cex_dex_arbitrage/0.1.0 21 && adev -v metadata validate mints/21.json

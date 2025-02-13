@@ -395,16 +395,24 @@ class CollectDataRound(BaseConnectionRound):
                 BalancesMessage.Performative.GET_ALL_BALANCES,
                 connection_id=str(CCXT_PUBLIC_ID),
                 exchange_id=exchange_id,
+                ledger_id=ledger_id,
             )
+            print(f"Got balances for {exchange_id} on {ledger_id}")
             tickers = yield from self.get_response(
-                TickersMessage.Performative.GET_ALL_TICKERS, connection_id=str(CCXT_PUBLIC_ID), exchange_id=exchange_id
+                TickersMessage.Performative.GET_ALL_TICKERS, 
+                connection_id=str(CCXT_PUBLIC_ID), 
+                exchange_id=exchange_id,
+                ledger_id=ledger_id,
             )
+            print(f"Got tickers for {exchange_id} on {ledger_id}")
             orders = yield from self.get_response(
                 OrdersMessage.Performative.GET_ORDERS,
                 connection_id=str(CCXT_PUBLIC_ID),
                 exchange_id=exchange_id,
+                ledger_id=ledger_id,
                 symbol="OLAS/USDT",
             )
+            print(f"Got orders for {exchange_id} on {ledger_id}")
 
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
             prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]

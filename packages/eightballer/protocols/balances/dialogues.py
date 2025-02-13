@@ -1,22 +1,3 @@
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2025 eightballer
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
 """
 This module contains the classes required for balances dialogue management.
 
@@ -31,7 +12,6 @@ from aea.common import Address
 from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
-
 from packages.eightballer.protocols.balances.message import BalancesMessage
 
 
@@ -88,17 +68,17 @@ class BalancesDialogue(Dialogue):
         """
         Initialize a dialogue.
 
-        :param dialogue_label: the identifier of the dialogue
-        :param self_address: the address of the entity for whom this dialogue is maintained
-        :param role: the role of the agent this dialogue is maintained for
-        :param message_class: the message class used
+
+
+        Args:
+               dialogue_label:  the identifier of the dialogue
+               self_address:  the address of the entity for whom this dialogue is maintained
+               role:  the role of the agent this dialogue is maintained for
+               message_class:  the message class used
+
         """
         Dialogue.__init__(
-            self,
-            dialogue_label=dialogue_label,
-            message_class=message_class,
-            self_address=self_address,
-            role=role,
+            self, dialogue_label=dialogue_label, message_class=message_class, self_address=self_address, role=role
         )
 
 
@@ -108,7 +88,6 @@ class BaseBalancesDialogues(Dialogues, ABC):
     END_STATES = frozenset(
         {BalancesDialogue.EndState.BALANCE, BalancesDialogue.EndState.ALL_BALANCES, BalancesDialogue.EndState.ERROR}
     )
-
     _keep_terminal_state_dialogues = False
 
     def __init__(
@@ -120,9 +99,13 @@ class BaseBalancesDialogues(Dialogues, ABC):
         """
         Initialize dialogues.
 
-        :param self_address: the address of the entity for whom dialogues are maintained
-        :param dialogue_class: the dialogue class used
-        :param role_from_first_message: the callable determining role from first message
+
+
+        Args:
+               self_address:  the address of the entity for whom dialogues are maintained
+               dialogue_class:  the dialogue class used
+               role_from_first_message:  the callable determining role from first message
+
         """
         Dialogues.__init__(
             self,
@@ -140,4 +123,6 @@ class BalancesDialogues(BaseBalancesDialogues, Model):
     def __init__(self, **kwargs):
         """Initialize dialogues."""
         Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
-        BaseBalancesDialogues.__init__(self, self_address=str(self.context.skill_id))
+        BaseBalancesDialogues.__init__(
+            self, self_address=str(self.context.skill_id), role_from_first_message=_role_from_first_message
+        )

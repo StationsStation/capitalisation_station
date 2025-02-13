@@ -25,16 +25,16 @@ fingerprint:
   tests/test_rounds.py: bafybeibxg52porf4fu2neaoaeyc7wuhxkqdnowvze3kjz4wctmx2hnyws4
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeic2ory7i7ajryv3cnuehpttcbpkaj2ljk32fhzm3ggeg6woi3hh7a
+- eightballer/dcxt:0.1.0:bafybeib6mtibpm2k3b2jmceqp5oa7oeesm6ejpyrhekvcybxtdctef73ny
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeicd6xekatd6xhnwt2vzgffa3pgpvbzkhkxzrjyj3kzzll5xbr22tu
+- eightballer/balances:0.1.0:bafybeidbqb44oiae7fxbygnsn7t7vlnvndghwid7mhmtrui7p45qusy77y
 - eightballer/markets:0.1.0:bafybeiaxxmemvchkrlfoqlqtqmvlgikdtcjgcllmtyb7uck6w2n74k7tvq
 - eightballer/orders:0.1.0:bafybeic3s3pah3zdxtwq3yk2osmnwfhtv4h6f2hkbrundzkzorvlvwwaxy
 - eightballer/positions:0.1.0:bafybeigrmezj55eywbjbd4yplkhjaa7oqcwbjiu3ju6cmmcgrpxnvbazlu
-- eightballer/tickers:0.1.0:bafybeiccdlqdnarfwjsr4qxhfv6ywun4yx5g3dlbrtupda253gtpfjnimm
+- eightballer/tickers:0.1.0:bafybeidrgpijcjp4znty3lzm5rn7wowgxh2f2v7uikzsetbkoynoziel5i
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicogmx5rixmmsvelrpkxeegrldnjwh4thyngdagycnp2e2ee4amva
+- valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
 behaviours:
   main:
     args: {}

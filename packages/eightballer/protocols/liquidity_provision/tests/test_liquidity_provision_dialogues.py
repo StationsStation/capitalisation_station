@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 eightballer
@@ -17,44 +16,50 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test dialogues module for balances protocol."""
+"""Test dialogues module for liquidity_provision protocol."""
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 import os
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
-from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.protocols.balances.dialogues import (
-    BalancesDialogue,
-    BaseBalancesDialogues,
+
+from packages.eightballer.protocols.liquidity_provision.message import (
+    LiquidityProvisionMessage,
 )
-from packages.eightballer.protocols.balances.custom_types import ErrorCode
+from packages.eightballer.protocols.liquidity_provision.dialogues import (
+    LiquidityProvisionDialogue,
+    BaseLiquidityProvisionDialogues,
+)
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
-class TestDialoguesBalances(BaseProtocolDialoguesTestCase):
-    """Test for the 'balances' protocol dialogues."""
+class TestDialoguesLiquidityProvision(BaseProtocolDialoguesTestCase):
+    """Test for the 'liquidity_provision' protocol dialogues."""
 
-    MESSAGE_CLASS = BalancesMessage
+    MESSAGE_CLASS = LiquidityProvisionMessage
 
-    DIALOGUE_CLASS = BalancesDialogue
+    DIALOGUE_CLASS = LiquidityProvisionDialogue
 
-    DIALOGUES_CLASS = BaseBalancesDialogues
+    DIALOGUES_CLASS = BaseLiquidityProvisionDialogues
 
-    ROLE_FOR_THE_FIRST_MESSAGE = BalancesDialogue.Role.AGENT  # CHECK
+    ROLE_FOR_THE_FIRST_MESSAGE = LiquidityProvisionDialogue.Role.LIQUIDITY_PROVIDER  # CHECK
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=BalancesMessage.Performative.GET_ALL_BALANCES,
-            params={"some str": b"some_bytes"},
-            exchange_id="some str",
-            ledger_id="some str",
-            address="some str",
-        )
+        return {
+            "performative": LiquidityProvisionMessage.Performative.ADD_LIQUIDITY,
+            "pool_id": "some str",
+            "token_ids": ("some str",),
+            "amounts": (12,),
+            "min_mint_amount": 12,
+            "deadline": 12,
+            "user_data": b"some_bytes",
+            "exchange_id": "some str",
+            "ledger_id": "some str",
+        }

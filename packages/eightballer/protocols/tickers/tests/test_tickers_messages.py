@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #                                                                             --
 #
-#   Copyright 2024 eightballer
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ from typing import Any, List
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolMessagesTestCase
-
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.custom_types import (
     Ticker,
@@ -50,8 +49,8 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
         return [
             TickersMessage(
                 performative=TickersMessage.Performative.GET_ALL_TICKERS,
-                exchange_id="some str",
                 ledger_id="some str",
+                exchange_id="some str",
                 params={"some str": b"some_bytes"},
             ),
             TickersMessage(
@@ -63,10 +62,14 @@ class TestMessageTickers(BaseProtocolMessagesTestCase):
             TickersMessage(
                 performative=TickersMessage.Performative.ALL_TICKERS,
                 tickers=Tickers(**load_data("Tickers")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.TICKER,
                 ticker=Ticker(**load_data("Ticker")),  # check it please!
+                exchange_id="some str",
+                ledger_id="some str",
             ),
             TickersMessage(
                 performative=TickersMessage.Performative.ERROR,
