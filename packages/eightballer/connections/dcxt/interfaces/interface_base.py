@@ -28,12 +28,7 @@ def get_dialogues(target_dialogues: Dialogues, target_dialogue: Dialogue) -> obj
             def role_from_first_message(  # pylint: disable=unused-argument
                 message: Message, receiver_address: Address
             ) -> Dialogue.Role:
-                """Infer the role of the agent from an incoming/outgoing first message.
-
-                :param message: an incoming/outgoing first message
-                :param receiver_address: the address of the receiving agent
-                :return: The role of the agent
-                """
+                """Infer the role of the agent from an incoming/outgoing first message."""
                 del message, receiver_address  # pragma: nocover
                 return target_dialogue.Role.AGENT
 
@@ -62,11 +57,7 @@ class BaseInterface:
         self._dialogues = get_dialogues(self.dialogues_class, self.dialogue_class)
 
     def get_handler(self, performative: Any) -> Callable[[Any], Any]:
-        """Get the handler method, given the message performative.
-
-        :param performative: the message performative.
-        :return: the method that will send the request.
-        """
+        """Get the handler method, given the message performative."""
         handler = getattr(self, performative.value, None)
         if handler is None:
             msg = f"Performative not recognized: {performative.value}"

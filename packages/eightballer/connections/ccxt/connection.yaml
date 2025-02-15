@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidigaejr254acwhxybywxhll7x7k5bfaxmm3evakg3ftvku4a26z4
-  connection.py: bafybeiflaazfl2izhxdvkia52yzdgelcrljr6d6yq3uf22t63wz7e4tgma
+  connection.py: bafybeifxv37vi53wuqu7qr4lxg2mrztwb53smr6vk2l2i3p336i7nfxyau
   interfaces/__init__.py: bafybeifdh6zocdvygxq64hr47ueajgsv67pvaaei5ffwu5c5a6nhssoz5y
-  interfaces/balance.py: bafybeic7it2omykihnwpbe6w7alsalqcdajfqd7zb77hogb5kcqvakzote
+  interfaces/balance.py: bafybeiduhpqcclxuyljhnqdwopuz2p6o2n6crbehvf6btsylpuj342dkzi
   interfaces/interface.py: bafybeiamxjpvmi4vetaxdsjob4u7u56fh35on6bjvshph666epdosr7dfm
-  interfaces/interface_base.py: bafybeibdldz4howdcxlzkn6lm7skblvava4cne2o3o6xs3eg52wkgql2ly
+  interfaces/interface_base.py: bafybeif4emuu6q3to7nnso2fr3nicldg4bwz4ivxwrbyqrcd22ub2btxp4
   interfaces/market.py: bafybeig3qm7ejbkavuxisfw6wvo3pbnantejpjufpxmmop4wtmlwkv3tqe
   interfaces/ohlcv.py: bafybeic5pbyzqumkfwpgpvkl36dfw6afk5u7prfqimon4h3dvytzvjhueq
-  interfaces/order.py: bafybeid6i2mxdw5h7i4conrsfhu5wiwyx4yu3bb42er4bcu4zdu54wxz5a
+  interfaces/order.py: bafybeigeqlyvnik77wkhvlzggdjme5uh7qxovevupmxlaszyvjazo4uiqm
   interfaces/order_book.py: bafybeihz7rgcn4bytwzg5x36c5xla5ttxel7fqnq4f4ribzngi5ngcwrxq
   interfaces/position.py: bafybeible3kqrebcuelfhklpq6m6vmkrwaiyqgo7zdzxqo6yrchveyeckm
   interfaces/spot_asset.py: bafybeigv6xe7sikpvld3hmedcsxulwefyogc3trrm65h3ngsenwcq6sgc4
@@ -27,7 +27,7 @@ fingerprint:
   tests/protocols/test_order_interface.py: bafybeieblhogueg5z2n3qjpzk6yo7ecjuulltpn6jcpvccuetglxpwjkge
   tests/protocols/test_positions_interface.py: bafybeieobwon4hnnapwtg5ytaiwhsa2wjvhbs3wazkjynos5vupifei3g4
   tests/protocols/test_spot_asset_interface.py: bafybeifliryxe5y2pxnl2kap34hy4yetizl254spz2qf3s5dwgceq5rk7y
-  tests/test_ccxt_connection.py: bafybeicpyysq4jhpoc2zg3fowo6piklei3kau3eg3hc2nsoknxinc62kgy
+  tests/test_ccxt_connection.py: bafybeidihj75alisygsqbwnkhck3p3r3jftpcjjzyhb5h2yxehrogazj7e
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
@@ -48,7 +48,7 @@ protocols:
 - eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
+- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
 class_name: CcxtConnection
 config:
   exchanges:

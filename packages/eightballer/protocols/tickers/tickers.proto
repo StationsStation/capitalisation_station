@@ -50,16 +50,23 @@ message TickersMessage{
     bool ledger_id_is_set = 2;
     string exchange_id = 3;
     bool exchange_id_is_set = 4;
-    map<string, bytes> params = 5;
+    bytes params = 5;
     bool params_is_set = 6;
   }
 
   message Get_Ticker_Performative{
-    string asset_id = 1;
-    string exchange_id = 2;
-    bool exchange_id_is_set = 3;
-    string ledger_id = 4;
-    bool ledger_id_is_set = 5;
+    string symbol = 1;
+    bool symbol_is_set = 2;
+    string asset_a = 3;
+    bool asset_a_is_set = 4;
+    string asset_b = 5;
+    bool asset_b_is_set = 6;
+    string exchange_id = 7;
+    bool exchange_id_is_set = 8;
+    string ledger_id = 9;
+    bool ledger_id_is_set = 10;
+    bytes params = 11;
+    bool params_is_set = 12;
   }
 
   message All_Tickers_Performative{

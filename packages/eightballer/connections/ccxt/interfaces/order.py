@@ -1,10 +1,12 @@
 """Order protocol handler."""
 
+import json
 import traceback
 from typing import Any, cast
 from datetime import datetime
 
 import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
+from ccxt.base.errors import NotSupported
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -178,6 +180,7 @@ class OrderInterface(BaseInterface):
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
+                params=json.loads(order.info) if order.info is not None else {},
             )
             updated_order = from_api_call(res, order.exchange_id)
             updated_order.client_order_id = order.client_order_id
@@ -218,21 +221,24 @@ class OrderInterface(BaseInterface):
                 params=_get_kwargs(),
                 symbol=message.symbol if hasattr(message, "symbol") else None,
             )
-            orders = self.process_api_orders(exchange_id, orders)
-            self.open_orders[exchange_id] = orders
-            response_message = dialogue.reply(
-                target_message=message,
-                performative=OrdersMessage.Performative.ORDERS,
-                orders=Orders(orders=list(orders.values())),
-            )
-            response_envelope = connection.build_envelope(request=message, response_message=response_message)
-            connection.queue.put_nowait(response_envelope)
+        except NotSupported as error:  # noqa
+            orders = await exchange.fetch_open_orders()
         except Exception as error:  # noqa
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
             return get_error(message, dialogue, str(error))
+        orders = self.process_api_orders(exchange_id, orders)
+        self.open_orders[exchange_id] = orders
+        response_message = dialogue.reply(
+            target_message=message,
+            performative=OrdersMessage.Performative.ORDERS,
+            orders=Orders(orders=list(orders.values())),
+        )
+        response_envelope = connection.build_envelope(request=message, response_message=response_message)
+        connection.queue.put_nowait(response_envelope)
+        return None
 
     async def get_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection):
         """Retrieve an order from the exchange."""

@@ -7,18 +7,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeidgik4cfowyxzxtlzubywe524ro2wxsiok7jfwjzaaivenl3ybeby
+  behaviours.py: bafybeifu4xljyuwr3jz3ucebuf2ljrt7imxunfecvj6mpy5bm5dkhr7ree
   dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
   handlers.py: bafybeie43nnzdlctivmcmlwliv2owof4umqpdvkp7slccixbiwyr5s4ugi
-  my_model.py: bafybeiehzaov5waan3c7utbxl2lmrwl5utek3gdsbjeogkpcfsuquaonzy
+  strategy.py: bafybeiet3jgxkx5fupogkughq3yeuzzizrgae6j6jyfigbdu35txx7xn2m
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeiabzb5y7ywew2afkhvqwgqk2fgwz75v6et4rjdlg4krvgjjtrqk7e
-- eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
-- eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
+- eightballer/dcxt:0.1.0:bafybeidi5eb4xedqsazjksefhujmik2keennh4oxyyrq73t63ya5ffcuv4
+- eightballer/ccxt:0.1.0:bafybeiakskxkscwf22jvkfwyxwsxxyt2gnkbs7mefqcjzak3k7v3q4pmxm
+- eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
+- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
 - eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
@@ -28,8 +28,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
 behaviours:
   main:
-    args:
-      foo: bar
+    args: {}
     class_name: ArbitrageabciappFsmBehaviour
 handlers:
   dex_balances_handler:
@@ -41,6 +40,9 @@ handlers:
   dex_orders_handler:
     args: {}
     class_name: DexOrdersHandler
+  user_interaction_handler:
+    args: {}
+    class_name: UserInteractionHandler
 models:
   arbitrage_strategy:
     args:

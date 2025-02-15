@@ -41,6 +41,7 @@ openapi-core = "==0.14.5"
 open-balpy = "<1"
 open-multicaller = "^0.2.0"
 tomli = "^2.2.1"
+apprise = "^1.9.2"
 
 [poetry.group.dev.dependencies]
 

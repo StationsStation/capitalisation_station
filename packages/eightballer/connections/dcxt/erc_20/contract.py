@@ -125,10 +125,6 @@ class Erc20(Contract):
         Implement this method in the sub class if you want
         to handle the contract requests manually.
 
-        :param ledger_api: the ledger apis.
-        :param contract_address: the contract address.
-        :param symbol: the symbol of the token.
-        :return: token_data # noqa: DAR202
         """
 
         decimals = cls.decimals(ledger_api, contract_address)["int"]

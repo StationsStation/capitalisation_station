@@ -69,7 +69,8 @@ class TickersMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
-            "asset_id",
+            "asset_a",
+            "asset_b",
             "dialogue_reference",
             "error_code",
             "error_data",
@@ -79,6 +80,7 @@ class TickersMessage(Message):
             "message_id",
             "params",
             "performative",
+            "symbol",
             "target",
             "ticker",
             "tickers",
@@ -139,10 +141,14 @@ class TickersMessage(Message):
         return cast(int, self.get("target"))
 
     @property
-    def asset_id(self) -> str:
-        """Get the 'asset_id' content from the message."""
-        enforce(self.is_set("asset_id"), "'asset_id' content is not set.")
-        return cast(str, self.get("asset_id"))
+    def asset_a(self) -> Optional[str]:
+        """Get the 'asset_a' content from the message."""
+        return cast(Optional[str], self.get("asset_a"))
+
+    @property
+    def asset_b(self) -> Optional[str]:
+        """Get the 'asset_b' content from the message."""
+        return cast(Optional[str], self.get("asset_b"))
 
     @property
     def error_code(self) -> CustomErrorCode:
@@ -173,9 +179,14 @@ class TickersMessage(Message):
         return cast(Optional[str], self.get("ledger_id"))
 
     @property
-    def params(self) -> Optional[Dict[str, bytes]]:
+    def params(self) -> Optional[bytes]:
         """Get the 'params' content from the message."""
-        return cast(Optional[Dict[str, bytes]], self.get("params"))
+        return cast(Optional[bytes], self.get("params"))
+
+    @property
+    def symbol(self) -> Optional[str]:
+        """Get the 'symbol' content from the message."""
+        return cast(Optional[str], self.get("symbol"))
 
     @property
     def ticker(self) -> CustomTicker:
@@ -249,30 +260,34 @@ class TickersMessage(Message):
                     )
                 if self.is_set("params"):
                     expected_nb_of_contents += 1
-                    params = cast(Dict[str, bytes], self.params)
+                    params = cast(bytes, self.params)
                     enforce(
-                        isinstance(params, dict),
-                        "Invalid type for content 'params'. Expected 'dict'. Found '{}'.".format(type(params)),
+                        isinstance(params, bytes),
+                        "Invalid type for content 'params'. Expected 'bytes'. Found '{}'.".format(type(params)),
                     )
-                    for key_of_params, value_of_params in params.items():
-                        enforce(
-                            isinstance(key_of_params, str),
-                            "Invalid type for dictionary keys in content 'params'. Expected 'str'. Found '{}'.".format(
-                                type(key_of_params)
-                            ),
-                        )
-                        enforce(
-                            isinstance(value_of_params, bytes),
-                            "Invalid type for dictionary values in content 'params'. Expected 'bytes'. Found '{}'.".format(
-                                type(value_of_params)
-                            ),
-                        )
             elif self.performative == TickersMessage.Performative.GET_TICKER:
-                expected_nb_of_contents = 1
-                enforce(
-                    isinstance(self.asset_id, str),
-                    "Invalid type for content 'asset_id'. Expected 'str'. Found '{}'.".format(type(self.asset_id)),
-                )
+                expected_nb_of_contents = 0
+                if self.is_set("symbol"):
+                    expected_nb_of_contents += 1
+                    symbol = cast(str, self.symbol)
+                    enforce(
+                        isinstance(symbol, str),
+                        "Invalid type for content 'symbol'. Expected 'str'. Found '{}'.".format(type(symbol)),
+                    )
+                if self.is_set("asset_a"):
+                    expected_nb_of_contents += 1
+                    asset_a = cast(str, self.asset_a)
+                    enforce(
+                        isinstance(asset_a, str),
+                        "Invalid type for content 'asset_a'. Expected 'str'. Found '{}'.".format(type(asset_a)),
+                    )
+                if self.is_set("asset_b"):
+                    expected_nb_of_contents += 1
+                    asset_b = cast(str, self.asset_b)
+                    enforce(
+                        isinstance(asset_b, str),
+                        "Invalid type for content 'asset_b'. Expected 'str'. Found '{}'.".format(type(asset_b)),
+                    )
                 if self.is_set("exchange_id"):
                     expected_nb_of_contents += 1
                     exchange_id = cast(str, self.exchange_id)
@@ -286,6 +301,13 @@ class TickersMessage(Message):
                     enforce(
                         isinstance(ledger_id, str),
                         "Invalid type for content 'ledger_id'. Expected 'str'. Found '{}'.".format(type(ledger_id)),
+                    )
+                if self.is_set("params"):
+                    expected_nb_of_contents += 1
+                    params = cast(bytes, self.params)
+                    enforce(
+                        isinstance(params, bytes),
+                        "Invalid type for content 'params'. Expected 'bytes'. Found '{}'.".format(type(params)),
                     )
             elif self.performative == TickersMessage.Performative.ALL_TICKERS:
                 expected_nb_of_contents = 1

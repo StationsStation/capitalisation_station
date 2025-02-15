@@ -18,7 +18,7 @@ def all_balances_from_api_call(api_call):
         api_call.pop(key, None)
 
     balances = []
-    for asset, data in api_call.items():
+    for asset, data in [(asset, data) for asset, data in api_call.items() if data is not None]:
         data["asset_id"] = asset
         balances.append(Balance(**data, is_native=False))
     return Balances(balances=balances)

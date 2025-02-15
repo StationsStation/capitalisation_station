@@ -1,9 +1,10 @@
 """Implements the interface for the Ticker protocol."""
 
+import json
+
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
-from packages.eightballer.protocols.tickers.custom_types import Ticker
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
@@ -45,13 +46,14 @@ class TickerInterface(BaseInterface):
 
     async def get_ticker(self, message: TickersMessage, dialogue: TickersDialogue, connection) -> TickersMessage | None:
         """Get a ticker from the exchange."""
-        exchange = connection.exchanges[message.exchange_id]
+        exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:
-            params = {}
-            for key, value in message.params.items():
-                params[key] = value.decode()
-            ticker = await exchange.fetch_ticker(message.symbol, params=params)
-            ticker = Ticker(**ticker)
+            ticker = await exchange.fetch_ticker(
+                message.symbol,
+                message.asset_a,
+                message.asset_b,
+                json.loads(message.params.decode("utf-8")) if message.params is not None else None,
+            )
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.TICKER,
                 target_message=message,

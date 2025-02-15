@@ -25,17 +25,6 @@ from aea.skills.base import Model
 from packages.valory.skills.abstract_round_abci.models import FrozenMixin
 
 
-class Requests(Model, FrozenMixin):
-    """Keep the current pending requests."""
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        # mapping from dialogue reference nonce to a callback
-        self.request_id_to_callback: Dict[str, Callable] = {}
-        super().__init__(*args, **kwargs)
-        self._frozen = True
-
-
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -47,13 +36,16 @@ class ArbitrageStrategy(Model):
     cexs: list = []
     ledgers: list = []
     order_size: float = 0.0
+    fetch_all_tickers = False
 
     def __init__(self, **kwargs):
         """Initialize the model."""
         self.cexs = kwargs.pop("cexs", [])
         self.dexs = kwargs.pop("dexs", [])
         self.ledgers = kwargs.pop("ledgers", [])
-        self.order_size = kwargs.pop("order_size", 0)
+        self.order_size = kwargs.pop("order_size")
+        self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
+
         super().__init__(**kwargs)
 
 

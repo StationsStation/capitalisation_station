@@ -66,10 +66,16 @@ class SolanaProgramLibraryToken(Contract):
         Implement this method in the sub class if you want
         to handle the contract requests manually.
 
-        :param ledger_api: the ledger apis.
-        :param contract_address: the contract address.
-        :param symbol: the symbol of the token.
-        :return: token_data # noqa: DAR202
+        Args:
+        ----
+        ledger_api(LedgerApi): the ledger apis.
+        contract_address(str): the contract address.
+        symbol(str): the symbol of the token.
+
+        Returns:
+        -------
+        token_data(JSONLike): the token data.
+
         """
 
         decimals = ledger_api.get_state(contract_address).data.parsed["info"]["decimals"]
@@ -88,10 +94,16 @@ class SolanaProgramLibraryToken(Contract):
         Implement this method in the sub class if you want
         to handle the contract requests manually.
 
-        :param ledger_api: the ledger apis.
-        :param contract_address: the contract address.
-        :param address: the address of the account.
-        :return: balance
+        Args:
+        ----
+        ledger_api(LedgerApi): the ledger apis.
+        contract_address(str): the contract address.
+        address(str): the address.
+
+        Returns:
+        -------
+        balance(JSONLike): the balance.
+
         """
         if contract_address == SOL_ADDDRESS:
             return ledger_api.get_balance(address)

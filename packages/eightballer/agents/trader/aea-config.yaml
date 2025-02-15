@@ -7,9 +7,9 @@ aea_version: '>=1.55.0, <2.0.0'
 fingerprint: {}
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeierswjrgca2kazpouohz5kqaa4g2bhqyjhfacppiiwlyojeyjwnnu
-- eightballer/ccxt:0.1.0:bafybeic3nwt3llowkiupgfcokvtj2gqo2wez5qyzqjnn6tgmlzfdqygfbm
-- eightballer/dcxt:0.1.0:bafybeiabzb5y7ywew2afkhvqwgqk2fgwz75v6et4rjdlg4krvgjjtrqk7e
+- eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
+- eightballer/ccxt:0.1.0:bafybeiakskxkscwf22jvkfwyxwsxxyt2gnkbs7mefqcjzak3k7v3q4pmxm
+- eightballer/dcxt:0.1.0:bafybeidi5eb4xedqsazjksefhujmik2keennh4oxyyrq73t63ya5ffcuv4
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 - eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
@@ -19,9 +19,9 @@ connections:
 - valory/ledger:0.19.0:bafybeibiayfscw4badpr545f47hsvc2r5lgfpgzib5q4h4u6kkosdsytby
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
 contracts:
-- eightballer/erc_20:0.1.0:bafybeiavi3glhykl3qhgcx4tmtxjzdq6fdl44h5mf66kynsq64snvj4lta
-- eightballer/spl_token:0.1.0:bafybeihv74or7knawxpfxk3hbn766qo2lpbowvn27ipr2julgsihgp3upy
-- vybe/jupitar_swap:0.1.0:bafybeieznbc33elmoxdjtjfflrawhesgv25aja2xc5qoxev3zopyrhnjqe
+- eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
+- eightballer/spl_token:0.1.0:bafybeih475g6pgu23t6upqwqdmenucig7npaf5zha7atxidmbb36nh6no4
+- vybe/jupitar_swap:0.1.0:bafybeicz6k7y3ii3ltehlhm63dgowj3z7l2cami35ycrqf37bnvyr2jlca
 - valory/service_registry:0.1.0:bafybeibuq4p66jdpnrq7viz4zylydu3zneteukfy3gwdgp273vptnq3dvi
 protocols:
 - eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
@@ -34,7 +34,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
 - eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
 - eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeihz3pkmx22cnkqptfxykkbioprrur5ysrc3guazilj52oqjvg25sy
+- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 - valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
@@ -45,13 +45,13 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/metrics:0.1.0:bafybeifp6dohkmn2thbokbreio3d3ej3wwhfihea3zokty7nlp2hh42jua
+- eightballer/metrics:0.1.0:bafybeib75valh7sd5za6msuahonys6nvn322rnkjcd6kjg6odnkpfgj5bi
 - eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
-- eightballer/simple_fsm:0.1.0:bafybeigkm75xwd7jw2onypx27bzokkcwwrvwlm4nd6zr7e6ujrn3tw76fa
+- eightballer/simple_fsm:0.1.0:bafybeici2pt7575bvrj4sezfx3cxw2qjnhfuw2uspbfp2o7tj6oi7pfmgi
 - valory/abstract_abci:0.1.0:bafybeifv2dynqo3o57nr6jntsvdkduytz3f6i52csv2bjwrr4qhi4mkm7i
 - valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
 customs:
-- eightballer/arbitrage_strategy:0.1.0:bafybeiegv5ls5evreudchkabvtob7hz2sbzyfzus2kkc2cyic2uqtctbuy
+- eightballer/arbitrage_strategy:0.1.0:bafybeidreddfg5345o5afqwtn7pxm3qufkyattyjklkm2ko3kcem7zfloy
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -112,6 +112,9 @@ config:
   - name: mexc
     api_key: ${str:YOUR_KEY}
     api_secret: ${str:YOUR_SECRET}
+  - name: poloniex
+    api_key: ${str:YOUR_KEY}
+    api_secret: ${str:YOUR_SECRET}
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
 public_id: eightballer/apprise:0.1.0
@@ -130,3 +133,29 @@ config:
     ledger_id: base
     rpc_url: https://base-pokt.nodies.app
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: mode
+    rpc_url: https://mode.drpc.org
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: gnosis
+    rpc_url: http://gnosis.chains.wtf:8545
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+---
+public_id: eightballer/simple_fsm:0.1.0:bafybeigkm75xwd7jw2onypx27bzokkcwwrvwlm4nd6zr7e6ujrn3tw76fa
+type: skill
+models:
+  arbitrage_strategy:
+    args:
+      order_size: 10.0
+      dexs:
+        balancer:
+        - mode
+        - base
+        - gnosis
+      cexs:
+      - mexc

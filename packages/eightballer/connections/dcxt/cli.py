@@ -31,23 +31,23 @@ RPC_MAPPING = {
     SupportedLedgers.ETHEREUM: "https://ethereum.rpc.subquery.network/public",
     SupportedLedgers.BASE: "https://rpc.ankr.com/base",
     SupportedLedgers.OPTIMISM: "https://rpc.ankr.com/optimism",
-    SupportedLedgers.GNOSIS: "https://rpc.ankr.com/gnosis",
+    SupportedLedgers.GNOSIS: "http://gnosis.chains.wtf:8545",
     SupportedLedgers.POLYGON_POS: "https://rpc.ankr.com/polygon",
     SupportedLedgers.ARBITRUM: "https://rpc.ankr.com/arbitrum",
     SupportedLedgers.MODE: "https://mainnet.mode.network",
 }
 
 
-def rich_display_dataframe(df, title="Dataframe") -> None:
+def rich_display_dataframe(data, title="Dataframe") -> None:
     """Display dataframe as table using rich library."""
 
     # ensure dataframe contains only string values
-    df = df.astype(str)
+    data = data.astype(str)
 
     table = Table(title=title)
-    for col in df.columns:
+    for col in data.columns:
         table.add_column(col)
-    for row in df.values:
+    for row in data.to_numpy():
         with contextlib.suppress(NotRenderableError):
             table.add_row(*row)
     print(table)
@@ -136,33 +136,11 @@ async def send_and_await_response(cli_tool: DcxtCliTool, envelope: Envelope):
     return response.message
 
 
-@click.command()
-@click.argument("account", type=click.STRING)
-@click.option("--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), default="all")
-@click.option(
-    "--supported-exchanges", type=click.Choice([f.value for f in SupportedExchanges] + ["all"]), default="all"
-)
-@click.option("--portfolio-requires", type=click.Path(), default=None)
-@click.option("--output", type=click.Path(), default=None)
-def check_balances(account: str, ledger: str, output: str, portfolio_requires: str, supported_exchanges: str):
-    """Check the balances of the account.
-    Use the --ledger option to specify the ledger.
-
-    Example:
-    -------
-    check_balances 0x1234 --ledger ethereum
-
-    """
-    print(f"Checking balances for account {account} on ledger `{ledger}`.")
-    print()
-    connections = []
-    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
-
-    if supported_exchanges == "all":
-        exchanges = [f.value for f in SupportedExchanges]
-
+def get_data(ledgers, exchanges, account, connections):
+    """Retrieve the balances and tickers for the account."""
     tickers = {}
     balances = {}
+    all_balances = {}
     for _ledger in ledgers:
         if _ledger not in tickers:
             tickers[_ledger] = {}
@@ -195,24 +173,56 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
             balances[_ledger][exchange_id] = response.balances.balances
 
     all_balances = {}
-    for ledger, exchange_balances in balances.items():
-        if ledger not in all_balances:
-            all_balances[ledger] = {}
+    for _ledger, exchange_balances in balances.items():
+        if _ledger not in all_balances:
+            all_balances[_ledger] = {}
         for exchange_id, account_balances in exchange_balances.items():
             data = [balance.dict() for balance in account_balances]
-            df = pd.DataFrame(data)[["asset_id", "total"]]
-            all_balances[ledger][exchange_id] = account_balances
-            title = f"Balances for {exchange_id} on {ledger}"
+            data_df = pd.DataFrame(data)[["asset_id", "total"]]
+            all_balances[_ledger][exchange_id] = account_balances
+            title = f"Balances for {exchange_id} on {_ledger}"
             print()
-            rich_display_dataframe(df, title=title)
+            rich_display_dataframe(data_df, title=title)
+    return all_balances, tickers
+
+
+@click.command()
+@click.argument("account", type=click.STRING)
+@click.option("--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), default="all")
+@click.option(
+    "--supported-exchanges", type=click.Choice([f.value for f in SupportedExchanges] + ["all"]), default="all"
+)
+@click.option("--portfolio-requires", type=click.Path(), default=None)
+@click.option("--output", type=click.Path(), default=None)
+def check_balances(account: str, ledger: str, output: str, portfolio_requires: str, supported_exchanges: str):
+    """Check the balances of the account.
+    Use the --ledger option to specify the ledger.
+
+    Example:
+    -------
+    check_balances 0x1234 --ledger ethereum
+
+    """
+    print(f"Checking balances for account {account} on ledger `{ledger}`.")
+    print(f"Supported exchanges: {supported_exchanges}")
+    print("Portfolio requires:", portfolio_requires)
+    print("Output:", output) if output else None
+    print()
+    connections = []
+    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
+
+    if supported_exchanges == "all":
+        exchanges = [f.value for f in SupportedExchanges]
+
+    all_balances, tickers = get_data(ledgers, exchanges, account, connections)
 
     # We create a portfolio consisting of all the balances
     aggregated_portfolio = {}
-    for ledger, exchange_balances in all_balances.items():
-        for exchange_id, account_balances in exchange_balances.items():
-            for balance in account_balances:
-                if balance.asset_id not in aggregated_portfolio:
-                    aggregated_portfolio[balance.asset_id] = 0
+    for exchange_balances in all_balances.values():
+        for account_balances in exchange_balances.values():
+            for balance in filter(lambda x: x.asset_id not in aggregated_portfolio, account_balances):
+                aggregated_portfolio[balance.asset_id] = 0
+            for balance in filter(lambda x: x.asset_id in aggregated_portfolio, account_balances):
                 aggregated_portfolio[balance.asset_id] += balance.total
 
     print()
@@ -223,12 +233,12 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
     # for the portfolio
 
     all_balances_rows = []
-    for ledger, exchange_balances in all_balances.items():
+    for _ledger, exchange_balances in all_balances.items():
         for exchange_id, account_balances in exchange_balances.items():
             for balance in account_balances:
                 all_balances_rows.append(
                     {
-                        "ledger": ledger,
+                        "ledger": _ledger,
                         "exchange": exchange_id,
                         "asset_id": balance.asset_id,
                         "total": balance.total,

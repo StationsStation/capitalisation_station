@@ -30,9 +30,12 @@ def get_dialogues(target_dialogues: Dialogues, target_dialogue: Dialogue) -> obj
             ) -> Dialogue.Role:
                 """Infer the role of the agent from an incoming/outgoing first message.
 
-                :param message: an incoming/outgoing first message
-                :param receiver_address: the address of the receiving agent
-                :return: The role of the agent
+                Args:
+                ----
+                message(Message): an incoming/outgoing first message
+                receiver_address(Address): the address of the receiving agent
+                :return(Role): The role of the agent
+
                 """
                 del message, receiver_address  # pragma: nocover
                 return target_dialogue.Role.AGENT
@@ -64,8 +67,12 @@ class BaseInterface:
     def get_handler(self, performative: Any) -> Callable[[Any], Any]:
         """Get the handler method, given the message performative.
 
-        :param performative: the message performative.
-        :return: the method that will send the request.
+        Args:
+        ----
+        performative: the message performative.
+
+        :return(Callable): the method that will send the request.
+
         """
         handler = getattr(self, performative.value, None)
         if handler is None:

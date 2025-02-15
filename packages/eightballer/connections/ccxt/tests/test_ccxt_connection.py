@@ -77,9 +77,12 @@ def get_dialogues(target_dialogues: type[Dialogues], target_dialogue: type[Dialo
             ) -> Dialogue.Role:
                 """Infer the role of the agent from an incoming/outgoing first message.
 
-                :param message: an incoming/outgoing first message
-                :param receiver_address: the address of the receiving agent
-                :return: The role of the agent
+                Args:
+                ----
+                message(Message): an incoming/outgoing first message
+                receiver_address(Address): the address of the receiving agent
+                :return(Role): The role of the agent
+
                 """
                 del receiver_address, message  # pragma: nocover
                 return target_dialogue.Role.AGENT

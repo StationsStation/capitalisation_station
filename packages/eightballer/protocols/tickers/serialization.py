@@ -74,12 +74,22 @@ class TickersSerializer(Serializer):
             if msg.is_set("params"):
                 performative.params_is_set = True
                 params = msg.params
-                performative.params.update(params)
+                performative.params = params
             tickers_msg.get_all_tickers.CopyFrom(performative)
         elif performative_id == TickersMessage.Performative.GET_TICKER:
             performative = tickers_pb2.TickersMessage.Get_Ticker_Performative()  # type: ignore
-            asset_id = msg.asset_id
-            performative.asset_id = asset_id
+            if msg.is_set("symbol"):
+                performative.symbol_is_set = True
+                symbol = msg.symbol
+                performative.symbol = symbol
+            if msg.is_set("asset_a"):
+                performative.asset_a_is_set = True
+                asset_a = msg.asset_a
+                performative.asset_a = asset_a
+            if msg.is_set("asset_b"):
+                performative.asset_b_is_set = True
+                asset_b = msg.asset_b
+                performative.asset_b = asset_b
             if msg.is_set("exchange_id"):
                 performative.exchange_id_is_set = True
                 exchange_id = msg.exchange_id
@@ -88,6 +98,10 @@ class TickersSerializer(Serializer):
                 performative.ledger_id_is_set = True
                 ledger_id = msg.ledger_id
                 performative.ledger_id = ledger_id
+            if msg.is_set("params"):
+                performative.params_is_set = True
+                params = msg.params
+                performative.params = params
             tickers_msg.get_ticker.CopyFrom(performative)
         elif performative_id == TickersMessage.Performative.ALL_TICKERS:
             performative = tickers_pb2.TickersMessage.All_Tickers_Performative()  # type: ignore
@@ -164,17 +178,26 @@ class TickersSerializer(Serializer):
                 performative_content["exchange_id"] = exchange_id
             if tickers_pb.get_all_tickers.params_is_set:
                 params = tickers_pb.get_all_tickers.params
-                params_dict = dict(params)
-                performative_content["params"] = params_dict
+                performative_content["params"] = params
         elif performative_id == TickersMessage.Performative.GET_TICKER:
-            asset_id = tickers_pb.get_ticker.asset_id
-            performative_content["asset_id"] = asset_id
+            if tickers_pb.get_ticker.symbol_is_set:
+                symbol = tickers_pb.get_ticker.symbol
+                performative_content["symbol"] = symbol
+            if tickers_pb.get_ticker.asset_a_is_set:
+                asset_a = tickers_pb.get_ticker.asset_a
+                performative_content["asset_a"] = asset_a
+            if tickers_pb.get_ticker.asset_b_is_set:
+                asset_b = tickers_pb.get_ticker.asset_b
+                performative_content["asset_b"] = asset_b
             if tickers_pb.get_ticker.exchange_id_is_set:
                 exchange_id = tickers_pb.get_ticker.exchange_id
                 performative_content["exchange_id"] = exchange_id
             if tickers_pb.get_ticker.ledger_id_is_set:
                 ledger_id = tickers_pb.get_ticker.ledger_id
                 performative_content["ledger_id"] = ledger_id
+            if tickers_pb.get_ticker.params_is_set:
+                params = tickers_pb.get_ticker.params
+                performative_content["params"] = params
         elif performative_id == TickersMessage.Performative.ALL_TICKERS:
             pb2_tickers = tickers_pb.all_tickers.tickers
             tickers = Tickers.decode(pb2_tickers)
