@@ -43,6 +43,8 @@ min_profit = 0.0  # 0%
 class ArbitrageStrategy:
     """A simple arbitrage strategy."""
 
+    unaffordable = []
+
     def get_orders(
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
@@ -82,11 +84,14 @@ class ArbitrageStrategy:
                     prices,
                 )
                 order_set.append((delta, orders))
-        optimal_orders = max(order_set, key=operator.itemgetter(0))
-        missed_opportunity = filter(lambda x: x[0] == -99, order_set)
-        for _opportunity in missed_opportunity:
-            pass
-        return optimal_orders[1]
+        opportunities = list(filter(lambda x: x[0] != -99, order_set))
+        unaffordable = list(filter(lambda x: x[0] == -99, order_set))
+        if unaffordable:
+            self.unaffordable = unaffordable
+        if opportunities:
+            optimal_orders = max(opportunities, key=operator.itemgetter(0))
+            return optimal_orders[1]
+        return []
 
     def get_orders_for_ledger(
         self,
