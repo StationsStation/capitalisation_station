@@ -10,6 +10,7 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+import web3
 
 
 INTERVAL = 10
@@ -147,7 +148,11 @@ class OrderInterface(BaseInterface):
             order.status = OrderStatus.CANCELLED
             updated_order = order
             connection.logger.exception(f"FAILED TO CREATE ORDER -> insufficient funds! {base_error!s}")
-        except (dcxt.exceptions.ExchangeNotAvailable, dcxt.exceptions.InvalidOrder) as base_error:
+        except (
+            dcxt.exceptions.ExchangeNotAvailable, 
+            dcxt.exceptions.InvalidOrder,
+            web3.exceptions.TimeExhausted,
+            ) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
             target_message=message,

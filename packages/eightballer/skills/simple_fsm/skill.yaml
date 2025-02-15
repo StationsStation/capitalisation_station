@@ -13,7 +13,7 @@ fingerprint:
   strategy.py: bafybeiet3jgxkx5fupogkughq3yeuzzizrgae6j6jyfigbdu35txx7xn2m
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeiekkd7wyj6i6lntbofyvjc4qo62tvhxbrh6vihrc2cua3sdtrbuhu
+- eightballer/dcxt:0.1.0:bafybeibew35aevrd4jeo33cpc7i4v4yiz7r6uwff35ffajuwey3ed5lday
 - eightballer/ccxt:0.1.0:bafybeiakskxkscwf22jvkfwyxwsxxyt2gnkbs7mefqcjzak3k7v3q4pmxm
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
 contracts: []

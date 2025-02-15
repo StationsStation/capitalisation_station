@@ -32,7 +32,7 @@ fingerprint:
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
   interfaces/market.py: bafybeia3jb74cyyj6nxobkyrvhzzi66eky5r2smtur6wnwalvzsmonm77y
   interfaces/ohlcv.py: bafybeifok6ch2mzpn5qzkyykroozrjrswosrlznxgnakn76librey76ufa
-  interfaces/order.py: bafybeidqjdofehevgnnsysfenshtntj4asnllujpz7rj555ncvai3zez2u
+  interfaces/order.py: bafybeiakw7gzr73ujqgb4opbizw4cccrhmz6vk5lkieqrpjrqjuqwy4fuu
   interfaces/order_book.py: bafybeidfvpunblqq7buuww42wlhmjlgmcgp2scb2geng4shkb3hg2k3aqu
   interfaces/position.py: bafybeidptjspw3yu642sy224ix2qvtwiuslkizqpj5fhxtlq33durbo6m4
   interfaces/spot_asset.py: bafybeiapvhgxyfufnk5iuleoznzxcugc3g6wnjqrliokc4ikmsulekba6q
