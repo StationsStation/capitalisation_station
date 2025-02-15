@@ -3,7 +3,8 @@ author: eightballer
 version: 0.1.0
 type: connection
 description: A connection inspired by CCXT, but for DeFi protocols. Allows for agent
-  native access to DeFi protocols such as Balancer, Derive. Enables agents to interact with DeFi protocols in a standardized way.
+  native access to DeFi protocols such as Balancer, Derive. Enables agents to interact
+  with DeFi protocols in a standardized way.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -11,7 +12,7 @@ fingerprint:
   cli.py: bafybeibjfrouq2vwm326jdfmeht5dpcszgl2odx3cam6pmfgf42dibeufe
   connection.py: bafybeia37jnhg6rwm6mrbb7bfb25ydr3aojrkafy53vphksopkb6snkmum
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
-  dcxt/__init__.py: bafybeicppsz5rx2nbnluphrx67k6txtokhhc6vexak5zrzw7s44tyv5vdq
+  dcxt/__init__.py: bafybeicnsvtgigmftl2pfbtnhxoy5k63rangz6azzlyquy444gmm6m3mya
   dcxt/balancer.py: bafybeihgy76k2rhiykk43dadsoxcrznxkgfqdbr3mdguy2qbpdnexm6hzm
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
@@ -19,19 +20,19 @@ fingerprint:
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/token_list.json: bafybeicphchojbfinyesiq4khowo6kr3wm3zljz2kerde6o24k3aou5lf4
   dcxt/defi_exchange.py: bafybeiacrggzt76kf4a32mdn6jk74nquxhglb4x6lb45rzplkzwurq3nci
+  dcxt/derive.py: bafybeiazzyoejg53d433tcihlhr7vu6uza77a4ptjnfgxjqpsp6mcgwxra
   dcxt/exceptions.py: bafybeihjzhm7daxmaazx7iszmgyagjkggijnztq7c6t7zeftyfrdoae6jm
-  dcxt/lyra_v2.py: bafybeicsocdkgii6drbber42f5mtbfhygxjzrpaxlhmpsshjg7ycfd5ova
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeid3edbnncnz2j4dts4n4gkri63mgb2rhwz5ezliz2ubydztjwhagy
   exchange.py: bafybeiagocbzffofgaaylwe4cgvspdsn7xhf65averbytdogocadqmoaeq
-  interfaces/__init__.py: bafybeicppsz5rx2nbnluphrx67k6txtokhhc6vexak5zrzw7s44tyv5vdq
+  interfaces/__init__.py: bafybeicnsvtgigmftl2pfbtnhxoy5k63rangz6azzlyquy444gmm6m3mya
   interfaces/balance.py: bafybeieuzqha5sadkc46qdsyd5ipdwzxil5kilu7wuimevfakvofisiojq
   interfaces/interface.py: bafybeighlngozm7kxgy5iwlq7idoxq5ws7jxsss7kvqe5h7qiqwdtfgdhi
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
   interfaces/market.py: bafybeia3jb74cyyj6nxobkyrvhzzi66eky5r2smtur6wnwalvzsmonm77y
   interfaces/ohlcv.py: bafybeifok6ch2mzpn5qzkyykroozrjrswosrlznxgnakn76librey76ufa
-  interfaces/order.py: bafybeidqjdofehevgnnsysfenshtntj4asnllujpz7rj555ncvai3zez2u
+  interfaces/order.py: bafybeihamqgcbonyepbovse7x77cp57cu5zhgpmmerfsxbeinoxq6eybny
   interfaces/order_book.py: bafybeidfvpunblqq7buuww42wlhmjlgmcgp2scb2geng4shkb3hg2k3aqu
   interfaces/position.py: bafybeidptjspw3yu642sy224ix2qvtwiuslkizqpj5fhxtlq33durbo6m4
   interfaces/spot_asset.py: bafybeiapvhgxyfufnk5iuleoznzxcugc3g6wnjqrliokc4ikmsulekba6q
