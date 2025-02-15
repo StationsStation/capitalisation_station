@@ -2,6 +2,8 @@
 
 import json
 
+import requests
+
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
@@ -59,7 +61,12 @@ class TickerInterface(BaseInterface):
                 target_message=message,
                 ticker=ticker,
             )
-        except dcxt.exceptions.RequestTimeout:
+        except (
+            dcxt.exceptions.RequestTimeout,
+            requests.exceptions.Timeout,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ReadTimeout,
+        ):
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.ERROR,
                 target_message=message,
