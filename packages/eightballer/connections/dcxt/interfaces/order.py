@@ -5,6 +5,8 @@ import traceback
 from typing import Any, cast
 from datetime import datetime
 
+import requests
+
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
@@ -147,7 +149,11 @@ class OrderInterface(BaseInterface):
             order.status = OrderStatus.CANCELLED
             updated_order = order
             connection.logger.exception(f"FAILED TO CREATE ORDER -> insufficient funds! {base_error!s}")
-        except (dcxt.exceptions.ExchangeNotAvailable, dcxt.exceptions.InvalidOrder) as base_error:
+        except (
+            dcxt.exceptions.ExchangeNotAvailable,
+            dcxt.exceptions.InvalidOrder,
+            requests.exceptions.HTTPError,
+        ) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
             target_message=message,
