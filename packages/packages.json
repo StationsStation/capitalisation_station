@@ -1,6 +1,6 @@
 {
     "dev": {
-        "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidreddfg5345o5afqwtn7pxm3qufkyattyjklkm2ko3kcem7zfloy",
+        "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeibnmv2orrtn7kpha3hfc4tj7ugfpjhbqpignhin635wcbwr33diua",
         "protocol/eightballer/default/0.1.0": "bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a",
         "protocol/eightballer/orders/0.1.0": "bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom",
         "protocol/eightballer/order_book/0.1.0": "bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky",
@@ -20,11 +20,11 @@
         "skill/eightballer/reporting/0.1.0": "bafybeifcdlnf4742wxe6v467n2naq63dfdrrptbfs3dnrme5ml5voq64ce",
         "skill/eightballer/metrics/0.1.0": "bafybeib75valh7sd5za6msuahonys6nvn322rnkjcd6kjg6odnkpfgj5bi",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeidrqlveffocymsrytqt3bmsruc4mcieksz3of7wnlszr7vf6us6ou",
-        "skill/eightballer/simple_fsm/0.1.0": "bafybeici2pt7575bvrj4sezfx3cxw2qjnhfuw2uspbfp2o7tj6oi7pfmgi",
+        "skill/eightballer/simple_fsm/0.1.0": "bafybeighge6dpcnhuwt7mwb3ackrp3fk5q74ug7ge2xobtmkgxlknlvpmy",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeifm3vwnknntgmq5ar4meh5y5y5yybzfq67cyq5mxnskfjxrda6e2i",
-        "agent/eightballer/trader/0.1.0": "bafybeiby726kfgbwzittr6lhcxisumtj74wftrpc5p6cm3dvuxileugtoa",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeicuf5vbbp6lsxxv7yikwazlparbgb3up2umx5wrpx27rc3rumtteq",
-        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeigalijv4gvvbsu6lxhik2ax277ws6vtmlfj43mucfwmrv6w7ckkue"
+        "agent/eightballer/trader/0.1.0": "bafybeig5lh6y4eb2xqddw6mhw7zgm3s57pgi5hnot3myfyqmpj5xqm3w2m",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeidsd2pxjar2ejaiehxr5cb25d5pwi22vhxbizcoyswiliavdyte4i",
+        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeidrueiiuri34ns2t3u4iww43snjtkkwllelq7k56latcagyq2hff4"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",

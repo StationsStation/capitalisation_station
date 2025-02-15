@@ -159,7 +159,7 @@ class ArbitrageStrategy:
                     return -99, [
                         dedent(f"""
                         Insufficient funds for {percent:5f}% arbitrage:
-                            Buy on `{ledger}` `{DEX_EXCHANGE}` and Buy on `{cex_exchange}`
+                            Buy on `{ledger}` `{DEX_EXCHANGE}` and Sell on `{cex_exchange}`
                             Sell Available: {sell_avail=} Required {sell_required=}
                             Buy Available: {buy_avail=} Required {buy_required=}
                         """)
