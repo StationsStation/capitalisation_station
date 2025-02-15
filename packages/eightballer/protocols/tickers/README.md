@@ -19,11 +19,14 @@ speech_acts:
   get_all_tickers:
     ledger_id: pt:optional[pt:str]
     exchange_id: pt:optional[pt:str]
-    params: pt:optional[pt:dict[pt:str, pt:bytes]]
+    params: pt:optional[pt:bytes]
   get_ticker:
-    asset_id: pt:str
+    symbol: pt:optional[pt:str]
+    asset_a: pt:optional[pt:str]
+    asset_b: pt:optional[pt:str]
     exchange_id: pt:optional[pt:str]
     ledger_id: pt:optional[pt:str]
+    params: pt:optional[pt:bytes]
   all_tickers:
     tickers: ct:Tickers
     exchange_id: pt:optional[pt:str]

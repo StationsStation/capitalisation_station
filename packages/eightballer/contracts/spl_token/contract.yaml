@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
-  contract.py: bafybeihczrf2miim6c6kbovub5cm6wrr7pkjjwnzmvolbr65pk3p3vg76e
+  contract.py: bafybeigp5llr4rhwtoczyqp4duad7z4izqmd43kpzrj7mthi47rthyjh6a
   tests/__init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
   tests/test_contract.py: bafybeiaqcio3bzeu5ej6t43yy7kbi52ncy4moucmuiqlymqtbl7b6xlyyq
 fingerprint_ignore_patterns: []

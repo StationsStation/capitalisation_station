@@ -54,5 +54,5 @@ class TestDialoguesTickers(BaseProtocolDialoguesTestCase):
             "performative": TickersMessage.Performative.GET_ALL_TICKERS,
             "ledger_id": "some str",
             "exchange_id": "some str",
-            "params": {"some str": b"some_bytes"},
+            "params": b"some_bytes",
         }

@@ -18,6 +18,10 @@
 
 """This package contains a scaffold of a handler."""
 
+from typing import cast
+
+from aea.skills.base import Handler
+
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
@@ -33,6 +37,8 @@ from packages.valory.skills.abstract_round_abci.handlers import (
     ContractApiHandler as BaseContractApiHandler,
     AbstractResponseHandler,
 )
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 
 
 ABCIHandler = BaseABCIRoundHandler
@@ -109,3 +115,20 @@ class DexTickersHandler(AbstractResponseHandler):
             TickersMessage.Performative.ERROR,
         }
     )
+
+
+class UserInteractionHandler(Handler):
+    """This class implements a handler for DexMarketsHandler messages."""
+
+    SUPPORTED_PROTOCOL = UserInteractionMessage.protocol_id
+
+    def setup(self):
+        """Set up the handler."""
+
+    def handle(self, message: UserInteractionMessage):
+        """Handle a message."""
+        dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
+        dialogues.update(message)
+
+    def teardown(self):
+        """Tear down the handler."""

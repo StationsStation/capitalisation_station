@@ -41,9 +41,19 @@ from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
+from packages.eightballer.connections.dcxt.dcxt.balancer import (
+    LEDGER_TO_OLAS,
+    LEDGER_TO_WETH,
+    LEDGER_TO_STABLECOINS,
+    SupportedLedgers,
+)
+from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
+
+
+DEFAULT_ENCODING = "utf-8"
 
 
 # Define states
@@ -174,6 +184,7 @@ class BaseConnectionRound(BaseBehaviour):
             OrdersMessage.Performative.CREATE_ORDER: self.context.orders_dialogues,
             BalancesMessage.Performative.GET_ALL_BALANCES: self.context.balances_dialogues,
             TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
+            TickersMessage.Performative.GET_TICKER: self.context.tickers_dialogues,
         }
         self.started = False
         self._is_done = False
@@ -214,10 +225,7 @@ class BaseConnectionRound(BaseBehaviour):
         return response
 
     def get_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
-        """Wrapper for callback request which depends on whether the message has not been handled on time.
-
-        :return: the request callback.
-        """
+        """Wrapper for callback request which depends on whether the message has not been handled on time."""
 
         def callback_request(message: Message, current_behaviour: BaseBehaviour) -> None:
             """The callback request."""
@@ -238,10 +246,6 @@ class BaseConnectionRound(BaseBehaviour):
         This is a local method that does not depend on the global clock,
         so the usage of datetime.now() is acceptable here.
 
-        :param condition: a callable
-        :param timeout: max time to wait (in seconds)
-        :return: a message
-        :yield: None
         """
         if timeout is not None:
             deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
@@ -294,6 +298,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
         orders = order_file.read_text()
         orders = json.loads(orders)
         models = [Order.model_validate(o) for o in orders]
+        new_orders = []
         for order in models:
             # We send the orders to the exchange.
             response = yield from self.get_response(
@@ -314,7 +319,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
             Amount:   {response.order.amount}
             """)
             )
+            new_orders.append(response.order)
 
+        new_orders = [json.loads(o.model_dump_json()) for o in new_orders]
+
+        pathlib.Path(ORDERS_FILE).write_text(json.dumps(new_orders, indent=4), encoding="utf-8")
+        # We write the orders to disk
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
@@ -346,9 +356,7 @@ class CollectDataRound(BaseConnectionRound):
 
             if balances.performative == BalancesMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
-                self.started = False
-                sleep(TIMEOUT_SECONDS)
-                return
+                return self._handle_error()
 
             tickers = yield from self.get_response(
                 TickersMessage.Performative.GET_ALL_TICKERS,
@@ -356,6 +364,11 @@ class CollectDataRound(BaseConnectionRound):
                 exchange_id=exchange_id,
                 ledger_id=ledger_id,
             )
+
+            if tickers.performative == TickersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
+                return self._handle_error()
+
             orders = yield from self.get_response(
                 OrdersMessage.Performative.GET_ORDERS,
                 connection_id=str(CCXT_PUBLIC_ID),
@@ -363,46 +376,129 @@ class CollectDataRound(BaseConnectionRound):
                 ledger_id=ledger_id,
                 symbol="OLAS/USDT",
             )
+            if orders.performative == OrdersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
+                return self._handle_error()
 
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
             prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
-            existing_orders[ledger_id][exchange_id] = [o.model_dump() for o in orders.orders.orders]
+            existing_orders[ledger_id][exchange_id] = [o.dict() for o in orders.orders.orders]
 
-        for exchange_id in self.context.arbitrage_strategy.dexs:
-            for ledger_id in self.context.arbitrage_strategy.ledgers:
+        for exchange_id, ledger_ids in self.context.arbitrage_strategy.dexs.items():
+            for ledger_id in ledger_ids:
                 if ledger_id not in portfolio:
                     portfolio[ledger_id] = {}
                 if ledger_id not in prices:
                     prices[ledger_id] = {}
-
-                self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
                 balances = yield from self.get_response(
                     BalancesMessage.Performative.GET_ALL_BALANCES,
                     connection_id=str(DCXT_PUBLIC_ID),
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
-                tickers = yield from self.get_response(
-                    TickersMessage.Performative.GET_ALL_TICKERS,
-                    connection_id=str(DCXT_PUBLIC_ID),
+                if balances.performative == BalancesMessage.Performative.ERROR:
+                    self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
+                    return self._handle_error()
+
+                tickers = yield from self.get_tickers(
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
-                self.context.logger.info(f"Got balances for {exchange_id} on {ledger_id}")
-                self.context.logger.info(f"Got tickers for {exchange_id} on {ledger_id}")
-                self.context.logger.info(f"Balances: {balances}")
-                self.context.logger.info(f"Tickers: {tickers}")
+                if not tickers:
+                    self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
+                    return self._handle_error()
+
+                self.context.logger.debug(f"Got balances for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Got tickers for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Balances: {balances}")
+                self.context.logger.debug(f"Tickers: {tickers}")
                 portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
-                prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
+                prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers]
 
         # We write the portfolio to disk
-        self.context.logger.info(f"Portfolio: {portfolio}")
+        self.context.logger.debug(f"Portfolio: {portfolio}")
         pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4), encoding="utf-8")
         pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4), encoding="utf-8")
-        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(existing_orders, indent=4), encoding="utf-8")
+        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps([], indent=4), encoding="utf-8")
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
+
+    def _handle_error(
+        self,
+    ) -> None:
+        """In the case that data is not retrieved, handled the necessary error."""
+        self.started = False
+        sleep(TIMEOUT_SECONDS)
+
+    def get_tickers(
+        self, exchange_id: str, ledger_id: str, use_weth: bool = True, use_stables: bool = True
+    ) -> Generator:
+        """Get the tickers from a specific exchange."""
+        performative = (
+            TickersMessage.Performative.GET_ALL_TICKERS
+            if self.context.arbitrage_strategy.fetch_all_tickers
+            else TickersMessage.Performative.GET_TICKER
+        )
+
+        if performative == TickersMessage.Performative.GET_TICKER:
+            # we want to get the wrapped base token
+            supported_ledger = SupportedLedgers[ledger_id.upper()]
+            asset_a = LEDGER_TO_OLAS[supported_ledger]
+            params = []
+
+            def encode_dict(d: dict) -> bytes:
+                """Encode a dictionary."""
+                return json.dumps(d).encode(DEFAULT_ENCODING)
+
+            if use_weth:
+                asset_b = LEDGER_TO_WETH[supported_ledger]
+                params.append(
+                    {
+                        "asset_a": asset_a,
+                        "asset_b": asset_b,
+                        "params": encode_dict({"amount": self.context.arbitrage_strategy.order_size}),
+                    }
+                )
+            if use_stables:
+                for asset_b in LEDGER_TO_STABLECOINS[supported_ledger]:
+                    params.append(
+                        {
+                            "asset_a": asset_a,
+                            "asset_b": asset_b,
+                            "params": encode_dict({"amount": self.context.arbitrage_strategy.order_size}),
+                        }
+                    )
+            tickers = Tickers(tickers=[])
+            for param in params:
+                ticker = yield from self.get_response(
+                    performative,
+                    connection_id=str(DCXT_PUBLIC_ID),
+                    exchange_id=exchange_id,
+                    ledger_id=ledger_id,
+                    **param,
+                )
+                if ticker.performative == TickersMessage.Performative.ERROR:
+                    self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
+                    self.started = False
+                    sleep(TIMEOUT_SECONDS)
+                    return
+                tickers.tickers.append(ticker.ticker)
+
+        else:
+            tickers = yield from self.get_response(
+                performative,
+                connection_id=str(DCXT_PUBLIC_ID),
+                exchange_id=exchange_id,
+                ledger_id=ledger_id,
+            )
+            if tickers.performative == TickersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
+                self.started = False
+                sleep(TIMEOUT_SECONDS)
+                return
+        return tickers
 
 
 class PostTradeRound(State):
@@ -430,30 +526,34 @@ class PostTradeRound(State):
         orders = json.loads(orders)
         sell_order, buy_order = (Order.model_validate(o) for o in orders)
 
-        report_msg = f"""
-        ```
-        Sell Order:
-            Exchange: {sell_order.exchange_id}
-            Market:   {sell_order.symbol}
-            Status:   {sell_order.status}
-            Side:     {sell_order.side}
-            Price:    {sell_order.price}
-            Amount:   {sell_order.amount}
-        Buy Order:
-            Exchange: {buy_order.exchange_id}
-            Market:   {buy_order.symbol}
-            Status:   {buy_order.status}
-            Side:     {buy_order.side}
-            Price:    {buy_order.price}
-            Amount:   {buy_order.amount}
+        def get_explorer_link(order: Order) -> str:
+            """Get the explorer link."""
+            explorers = {
+                "mode": "https://modescan.io/tx/",
+                "base": "https://basescan.org/tx/",
+                "gnosis": "https://gnosisscan.io/tx/",
+            }
+            if order.ledger_id not in explorers:
+                return ""
+            return f"{explorers[order.ledger_id]}{order.id}"
 
-        Profit %: {- (buy_order.price / sell_order.price * 100 - 100)}
-        ```
-        """
+        delta = -(buy_order.price / sell_order.price * 100 - 100)
+        value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
+        report_msg_table = dedent(f"""
+        [Sell]({get_explorer_link(sell_order)}) {sell_order.exchange_id} {sell_order.ledger_id}
 
+        {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.amount * sell_order.price:5f}
+
+        [Buy]({get_explorer_link(buy_order)}) {buy_order.exchange_id} {buy_order.ledger_id}
+
+        {buy_order.amount}@{buy_order.price:5f}  total: {buy_order.amount * buy_order.price:5f}
+
+        Delta: {-delta:5f}%
+        Value captured: {value_captured_gross:6f}
+        """)
         self.send_notification_to_user(
-            title="Post Trade Execution!",
-            msg=report_msg,
+            title="Post Successful Arbitrage Execution!",
+            msg=report_msg_table,
         )
 
     def is_done(self) -> bool:

@@ -38,10 +38,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
     protocol_interface = ConnectionProtocolInterface
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize the connection.
-
-        :param kwargs: keyword arguments passed to component base
-        """
+        """Initialize the connection."""
         super().__init__(**kwargs)  # pragma: no cover
         self.exchange_configs = self.configuration.config.get("exchanges")
 
@@ -60,10 +57,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.exchange_to_orders = {}
 
     async def connect(self) -> None:
-        """Start done task checker as a coroutine.
-
-        :return:
-        """
+        """Start done task checker as a coroutine."""
         self.queue = asyncio.Queue()
         self.protocol_interface = ConnectionProtocolInterface(
             loop=self.loop,
