@@ -1,6 +1,6 @@
 {
     "dev": {
-        "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidkvzdi3nbf64m3dnj2h4zhf4m62slyu632hf7agleb4h2ba6nude",
+        "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeibpl6zpfbgiwapybvey33azhfwcpxisjfizxurqbyk37iddkm4rn4",
         "protocol/eightballer/default/0.1.0": "bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a",
         "protocol/eightballer/orders/0.1.0": "bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom",
         "protocol/eightballer/order_book/0.1.0": "bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky",
@@ -22,9 +22,9 @@
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeicvxbehtyetv6e43bg3n3h6okmopb2sc6rvrjdbd7f4zon43oyyum",
         "skill/eightballer/simple_fsm/0.1.0": "bafybeidp3nwyfuvdtcca3fqibklwfjnu76penl6q6moszqmguwsfxcgoci",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeiarbgnwko3xp5fm5jfaoqfbnvjezdv725fxbtja25r4wodfyynhfi",
-        "agent/eightballer/trader/0.1.0": "bafybeidtffq5b4jc32nisljd4i3azw44pfygozz3i42zcd3sw7nktrlihm",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeicspxafspebaf7cty5yjcn25qpgrzyxn5dwp5edn2aecmqyqghnnq",
-        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeiho64yopcxi6ql4oyzckfobseplzmk7ebn2jbto6h3fn4glvr7jzy"
+        "agent/eightballer/trader/0.1.0": "bafybeigdadqko2unedloowhevrgzpcjedizh6qqjjqwwvszilkbu74z7ey",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeihsyixdgnynqg32hvdtbj7bae5mypug5byjkqbag3plc6qi3627vq",
+        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeideq7ebdsfgdgvjvvomuhse2pprqv6a3bliqrdqtfxunmwiy6ke3e"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",

@@ -6,7 +6,7 @@ description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
   tests/__init__.py: bafybeibk76alseqt3ufreyev7rnz5zuk6dcftt7c2ob54gmhpt6xrhkg2y
-  tests/test_agent.py: bafybeidmwxvuce6buk6ywpcviir7gtraog4b7vomcdkvdbsmgcfj6gqfha
+  tests/test_agent.py: bafybeieitwxe4mkyfntw4n2hsjfka6xvbdpbg2del4bstevorqjabodl2u
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
@@ -53,7 +53,7 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeidnxfm5lbkvlhov53hhv3fmoo7slngre27t3mdihjp75tpd76lf3i
 - valory/abstract_round_abci:0.1.0:bafybeigyuls35k6rc2x5j5pcnrghfyojzqzjshhfoaco47ctfm3wjiapce
 customs:
-- eightballer/arbitrage_strategy:0.1.0:bafybeidkvzdi3nbf64m3dnj2h4zhf4m62slyu632hf7agleb4h2ba6nude
+- eightballer/arbitrage_strategy:0.1.0:bafybeibpl6zpfbgiwapybvey33azhfwcpxisjfizxurqbyk37iddkm4rn4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
