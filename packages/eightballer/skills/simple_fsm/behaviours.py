@@ -301,6 +301,9 @@ class ExecuteOrdersRound(BaseConnectionRound):
         orders = json.loads(orders)
         models = [Order.model_validate(o) for o in orders]
         new_orders = []
+
+        failed_orders = []
+
         for order in models:
             # We send the orders to the exchange.
             response = yield from self.get_response(
@@ -310,6 +313,11 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 ledger_id=order.ledger_id,
                 exchange_id=order.exchange_id,
             )
+            if response.performative == OrdersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error creating order: {response.error_code} {response.error_msg} {order}")
+                failed_orders.append(order)
+                continue
+
             self.context.logger.info(
                 dedent(f"""
             Id: {response.order.id}
@@ -690,7 +698,8 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             failed = self.current_task.exception()
             if failed:
-                self.context.logger.error(f"Error in state {self.current}: {failed}")
+                self.context.logger.error(f"Error in state {self.current}: {self.current_task.print_stack()}")
+                self.context.logger.info(f"Breaking on error. {self.current} -> errorround")
                 self.current_task = None
                 self.current = "errorround"
                 return

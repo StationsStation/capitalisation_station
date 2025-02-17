@@ -78,7 +78,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: ethereum
-    rpc_url: https://rpc.ankr.com/eth
+    rpc_url: https://eth.public-rpc.com
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
@@ -90,7 +90,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: https://rpc.ankr.com/base
+    rpc_url: https://base-mainnet.public.blastapi.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   target_skill_id: null
 excluded_protocols: []
