@@ -23,8 +23,7 @@
         "skill/eightballer/simple_fsm/0.1.0": "bafybeidp3nwyfuvdtcca3fqibklwfjnu76penl6q6moszqmguwsfxcgoci",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeiarbgnwko3xp5fm5jfaoqfbnvjezdv725fxbtja25r4wodfyynhfi",
         "agent/eightballer/trader/0.1.0": "bafybeicbjdtjhl3htaxnho4pc7sv2uzcrt5weicpdu6qbmwqk4fazfcvei",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeigwdr2amuv3pdlkp5sznzutubdgwnyb5ngrpukfplofarpzhkq6ne",
-        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeidlqrznodv6vpvlxl7ppzbwn67bcebg6mrnuj5vzzh6upoxwvjuby"
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeiesconvgcmi64uq5z3655pbrol5ztmqfswmzyllty7pvz7dcqxfei"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",

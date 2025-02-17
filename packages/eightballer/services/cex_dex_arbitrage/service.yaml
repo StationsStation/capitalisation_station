@@ -5,7 +5,10 @@ description: An agent service to demonstrate simple usage of DCXT and CCXT libra
   to perform arbitrage between a CEX and DEX.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
-fingerprint: {}
+fingerprint:
+  .env.example: bafybeihzd3yocyrtad63nzjthcqpxnktjgdumhacil72khllev3kmte56m
+  tests/__init__.py: bafybeihpgdohyyc24ihd5un42q3ymbvaszrkbkjyprdiaojl42qhzdfnze
+  tests/test_service.py: bafybeicslmnjnf43pbzmwlqr7p7xw2iktcrnuq6l7klkrc5r4yberg66u4
 fingerprint_ignore_patterns: []
 agent: eightballer/trader:0.1.0:bafybeicbjdtjhl3htaxnho4pc7sv2uzcrt5weicpdu6qbmwqk4fazfcvei
 number_of_agents: 1
