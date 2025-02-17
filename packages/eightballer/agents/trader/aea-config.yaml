@@ -8,8 +8,8 @@ fingerprint: {}
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
-- eightballer/ccxt:0.1.0:bafybeiakskxkscwf22jvkfwyxwsxxyt2gnkbs7mefqcjzak3k7v3q4pmxm
-- eightballer/dcxt:0.1.0:bafybeibew35aevrd4jeo33cpc7i4v4yiz7r6uwff35ffajuwey3ed5lday
+- eightballer/ccxt:0.1.0:bafybeidxfhn5u5kblb6hsckjcxhjaranyoyyowf67j54mf5i3vgviolbjy
+- eightballer/dcxt:0.1.0:bafybeig6akg6xw7o74lxz6qs5cbk3xh3kypb2elai4r2g4kyupenoew65u
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 - eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
@@ -45,9 +45,9 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/metrics:0.1.0:bafybeib75valh7sd5za6msuahonys6nvn322rnkjcd6kjg6odnkpfgj5bi
+- eightballer/metrics:0.1.0:bafybeibw2tnqzo5sx3wuwv7g2erqzs3smrnwwjl6urvm6j6lzywhbxqx5y
 - eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
-- eightballer/simple_fsm:0.1.0:bafybeife26fwod6ozcldcwhqhckcwtowyimxeqaygc3d2vdwfhtyf2wtfy
+- eightballer/simple_fsm:0.1.0:bafybeidp3nwyfuvdtcca3fqibklwfjnu76penl6q6moszqmguwsfxcgoci
 - valory/abstract_abci:0.1.0:bafybeidnxfm5lbkvlhov53hhv3fmoo7slngre27t3mdihjp75tpd76lf3i
 - valory/abstract_round_abci:0.1.0:bafybeigyuls35k6rc2x5j5pcnrghfyojzqzjshhfoaco47ctfm3wjiapce
 customs:
@@ -131,7 +131,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: https://base-pokt.nodies.app
+    rpc_url: https://mainnet.base.org
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt

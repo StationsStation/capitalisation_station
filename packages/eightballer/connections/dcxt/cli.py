@@ -198,7 +198,9 @@ def get_data(ledgers, exchanges, account, connections):
 
 @click.command()
 @click.argument("account", type=click.STRING)
-@click.option("--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), default="all")
+@click.option(
+    "-l", "--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), multiple=True, default=["all"]
+)
 @click.option(
     "--supported-exchanges", type=click.Choice([f.value for f in SupportedExchanges] + ["all"]), default="all"
 )
@@ -219,7 +221,7 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
     print("Output:", output) if output else None
     print()
     connections = []
-    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
+    ledgers = [f.value for f in SupportedLedgers] if ledger == ["all"] else ledger
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
