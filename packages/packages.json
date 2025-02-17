@@ -12,8 +12,8 @@
         "protocol/eightballer/tickers/0.1.0": "bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm",
         "protocol/eightballer/liquidity_provision/0.1.0": "bafybeiarhfsr2tqlpkvd3kk3clz5iur5o3wvqxntbyli5krdu2qztmigue",
         "contract/eightballer/erc_20/0.1.0": "bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu",
-        "contract/eightballer/spl_token/0.1.0": "bafybeih475g6pgu23t6upqwqdmenucig7npaf5zha7atxidmbb36nh6no4",
-        "contract/vybe/jupitar_swap/0.1.0": "bafybeicz6k7y3ii3ltehlhm63dgowj3z7l2cami35ycrqf37bnvyr2jlca",
+        "contract/eightballer/spl_token/0.1.0": "bafybeie4cecjpdec5a5xa4iala5a3qideapdex7iz2lmk5zhvzspgcxopi",
+        "contract/vybe/jupitar_swap/0.1.0": "bafybeia7pfzbz6ybamqnvwt52cdiggbwto6fxkh2pv2sd6mfnef7h4pxxq",
         "connection/eightballer/dcxt/0.1.0": "bafybeig6akg6xw7o74lxz6qs5cbk3xh3kypb2elai4r2g4kyupenoew65u",
         "connection/eightballer/ccxt/0.1.0": "bafybeidxfhn5u5kblb6hsckjcxhjaranyoyyowf67j54mf5i3vgviolbjy",
         "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeig5lpgojgqsm6tnczazb3bmr46gt5iw6274y4xo4pddxyvv3lx6oa",
@@ -22,9 +22,9 @@
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeicvxbehtyetv6e43bg3n3h6okmopb2sc6rvrjdbd7f4zon43oyyum",
         "skill/eightballer/simple_fsm/0.1.0": "bafybeidp3nwyfuvdtcca3fqibklwfjnu76penl6q6moszqmguwsfxcgoci",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeiarbgnwko3xp5fm5jfaoqfbnvjezdv725fxbtja25r4wodfyynhfi",
-        "agent/eightballer/trader/0.1.0": "bafybeife5gs6dlq2sghuhdth4zlknozavkhvpb3mz3oqkp6eqqb74n64ba",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeif5fjmqrva6bmrppnt5qwppm6k2wjveq2pcvomx4xjqw3m2v3v5ci",
-        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeic5ujgbaazm4nokcgpcuv2fmctor5jxlkjlyw7445sslocm6t4rum"
+        "agent/eightballer/trader/0.1.0": "bafybeifkaa7dhzihnmyxjdfxggiqyigoy4pemwjuxmgofofegv3yjcw4ti",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeiceqwgpvezkh2oqf6dochi4bfxqo2dbma4uoduj4vqttfczmctr5a",
+        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeibemw5qfwx4bgv6c44hkt7pnx3caeh6llvf4nlxjdtq7eqlsvptvy"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",

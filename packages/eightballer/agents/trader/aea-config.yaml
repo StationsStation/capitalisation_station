@@ -20,8 +20,8 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
 contracts:
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
-- eightballer/spl_token:0.1.0:bafybeih475g6pgu23t6upqwqdmenucig7npaf5zha7atxidmbb36nh6no4
-- vybe/jupitar_swap:0.1.0:bafybeicz6k7y3ii3ltehlhm63dgowj3z7l2cami35ycrqf37bnvyr2jlca
+- eightballer/spl_token:0.1.0:bafybeie4cecjpdec5a5xa4iala5a3qideapdex7iz2lmk5zhvzspgcxopi
+- vybe/jupitar_swap:0.1.0:bafybeia7pfzbz6ybamqnvwt52cdiggbwto6fxkh2pv2sd6mfnef7h4pxxq
 - valory/service_registry:0.1.0:bafybeihcl5myw3oomyzzzgybeg23medskgi4nw5osatbnsoqnfy24sxoje
 protocols:
 - eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
