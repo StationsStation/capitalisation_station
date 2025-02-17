@@ -6,11 +6,11 @@ from pathlib import Path
 from aea.test_tools.test_cases import AEATestCaseMany
 
 
-AGENT_NAME = "new_agent"
+AGENT_NAME = "trader"
 AUTHOR = "eightballer"
 VERSION = "0.1.0"
 DEFAULT_LAUNCH_TIMEOUT = 10
-LAUNCH_SUCCEED_MESSAGE = "Start processing"
+LAUNCH_SUCCEED_MESSAGE = "Successfully connected to"
 
 
 class TestAgentLaunch(AEATestCaseMany):
@@ -28,9 +28,13 @@ class TestAgentLaunch(AEATestCaseMany):
         self.set_agent_context(agent_name)
         self.generate_private_key("ethereum")
         self.add_private_key("ethereum", "ethereum_private_key.txt")
+
+        self.invoke(
+            "issue-certificates",
+        )
         process = self.run_agent()
         is_running = self.is_running(process)
-        assert is_running, "AEA not running within timeout!"
+        assert is_running, f"AEA not running within timeout! {process.stdout} {process.stderr}"
 
     @classmethod
     def is_running(cls, process: subprocess.Popen, timeout: int = DEFAULT_LAUNCH_TIMEOUT) -> bool:
