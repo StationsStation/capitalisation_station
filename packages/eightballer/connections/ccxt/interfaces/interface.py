@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
-from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.connections.ccxt.interfaces.ohlcv import OhlcvInterface
 from packages.eightballer.connections.ccxt.interfaces.order import OrderInterface
 from packages.eightballer.connections.ccxt.interfaces.market import MarketInterface
@@ -65,7 +64,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
             to = request.sender if request is not None else response_message.to  # pylint: disable=C0103
             response_envelope = Envelope(
                 to=to,
-                sender=str(PUBLIC_ID),
+                sender="eightballer/ccxt:0.1.0",
                 message=response_message,
             )
         return response_envelope

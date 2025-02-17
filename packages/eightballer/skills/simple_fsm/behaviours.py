@@ -34,11 +34,11 @@ from collections.abc import Callable, Generator
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 
-from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.connections.ccxt.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.connections.dcxt.dcxt.balancer import (

@@ -5,16 +5,20 @@ import asyncio
 import pytest
 from aea.mail.base import Envelope
 
-from ccxt.tests.test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.ohlcv import OhlcvMessage
-from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, OhlcvDialogues
+from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
+from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
+    BaseCcxtConnectionTest,
+    with_timeout,
+    get_dialogues,
+)
 
 
 @pytest.mark.asyncio
 class TestOhlcvBalance(BaseCcxtConnectionTest):
     """Test protocol messages are handled."""
 
-    DIALOGUES = get_dialogues(OhlcvDialogues, OhlcvDialogue)
+    DIALOGUES = get_dialogues(BaseOhlcvDialogues, OhlcvDialogue)
 
     @with_timeout(3)
     async def test_handles_get_spot_message(self) -> None:

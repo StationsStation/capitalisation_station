@@ -6,10 +6,14 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 
-from ccxt.tests.test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Positions
+from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
+    BaseCcxtConnectionTest,
+    with_timeout,
+    get_dialogues,
+)
 
 
 @pytest.mark.asyncio

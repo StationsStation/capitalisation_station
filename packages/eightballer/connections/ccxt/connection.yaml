@@ -7,26 +7,26 @@ description: A wrapper of CCXT, enabling agents to connect to various centralise
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeidigaejr254acwhxybywxhll7x7k5bfaxmm3evakg3ftvku4a26z4
-  connection.py: bafybeifxv37vi53wuqu7qr4lxg2mrztwb53smr6vk2l2i3p336i7nfxyau
+  __init__.py: bafybeicxqnmnipke3vj2emp3iat7u4ynx4272thfrbpk4wginu2ou37eey
+  connection.py: bafybeiagdytxzoa3fw3vh5wldfkfzb3h3il7kkijofhpwkobwb6ynar2kq
   interfaces/__init__.py: bafybeifdh6zocdvygxq64hr47ueajgsv67pvaaei5ffwu5c5a6nhssoz5y
-  interfaces/balance.py: bafybeiekfldsbw2tmb66ufxodheuejbfebfuwmi4ecwpbinyjwwwn4zmvq
-  interfaces/interface.py: bafybeiamxjpvmi4vetaxdsjob4u7u56fh35on6bjvshph666epdosr7dfm
-  interfaces/interface_base.py: bafybeif4emuu6q3to7nnso2fr3nicldg4bwz4ivxwrbyqrcd22ub2btxp4
-  interfaces/market.py: bafybeig3qm7ejbkavuxisfw6wvo3pbnantejpjufpxmmop4wtmlwkv3tqe
+  interfaces/balance.py: bafybeifaqx6cllzfngpsko663jdnbrclfe7rci6ucbbs2btnh32spix4xi
+  interfaces/interface.py: bafybeidppqllhhhxugzr5mxl4axxq4kdjcvftpi5drtn4cn6izmibwu3ui
+  interfaces/interface_base.py: bafybeifowcuub5folgnl2p7fb63friwqvwhfx6tbaxlydo5yowurukifoy
+  interfaces/market.py: bafybeidrw37inaamnvcpy577i3boyqasikach4essa4uffb7enwnfnlxkm
   interfaces/ohlcv.py: bafybeic5pbyzqumkfwpgpvkl36dfw6afk5u7prfqimon4h3dvytzvjhueq
-  interfaces/order.py: bafybeigeqlyvnik77wkhvlzggdjme5uh7qxovevupmxlaszyvjazo4uiqm
-  interfaces/order_book.py: bafybeihz7rgcn4bytwzg5x36c5xla5ttxel7fqnq4f4ribzngi5ngcwrxq
-  interfaces/position.py: bafybeible3kqrebcuelfhklpq6m6vmkrwaiyqgo7zdzxqo6yrchveyeckm
+  interfaces/order.py: bafybeihcvt2vnyvq5otguq2vpcpc3uhrx3dbalpbwmlo2ja7c4dr6jewm4
+  interfaces/order_book.py: bafybeicvpqg3tmn7foklkki6kbtn3gbhtlujzsbktzarccntzgjvxhmare
+  interfaces/position.py: bafybeif366dofexrbwqixpufrwbje72ll3fytuxbnbohwkxgs5pipbhzye
   interfaces/spot_asset.py: bafybeigv6xe7sikpvld3hmedcsxulwefyogc3trrm65h3ngsenwcq6sgc4
-  interfaces/ticker.py: bafybeihp6k5nloaohftdpt76vywulf3l63jzhoeck4naa4ki7yyv5bvytq
+  interfaces/ticker.py: bafybeibkyipqgafv6uifmj55q2pnaushdw74s6dgmit7h5vwwo2hxxy6ry
   tests/__init__.py: bafybeiebajfemcsogufwq777ixgn7oba24mnzf7rfdtm3j56zmsuoynieq
   tests/protocols/__init__.py: bafybeiccdwfzxsjapnyaygkm4dbtdgbvturvqhuru26i37ujadp7tz7xe4
-  tests/protocols/test_market.py: bafybeicykbgnkru6sau7whaxqiufkybm4myq3lc3kwuzergr7ajpcllxq4
-  tests/protocols/test_ohlcv_interface.py: bafybeihz2sykv7o7oub6anzxeb4oemo4mqtiicxkdibyjwfhn2ymhr6kha
-  tests/protocols/test_order_interface.py: bafybeieblhogueg5z2n3qjpzk6yo7ecjuulltpn6jcpvccuetglxpwjkge
-  tests/protocols/test_positions_interface.py: bafybeieobwon4hnnapwtg5ytaiwhsa2wjvhbs3wazkjynos5vupifei3g4
-  tests/protocols/test_spot_asset_interface.py: bafybeifliryxe5y2pxnl2kap34hy4yetizl254spz2qf3s5dwgceq5rk7y
+  tests/protocols/test_market.py: bafybeifeeud7yl4f7wgd62kqhf5dsvg3hjy3j6ghj4gajqkkqj4aykscqy
+  tests/protocols/test_ohlcv_interface.py: bafybeiadlp4ac4wohg5u7peqhhhxe5kzdkk3cykja3st26rjloa6ntgkdi
+  tests/protocols/test_order_interface.py: bafybeidcld3hlvvfsytgjv5zvgdsi3b4am2ntpim6yzeayfcyv7ubstfwm
+  tests/protocols/test_positions_interface.py: bafybeibxjh64o2acoxqqgck2ixhpecfwdhvyniw5iqvtzggzq2ejf3qya4
+  tests/protocols/test_spot_asset_interface.py: bafybeibssiiauxyd6x5o2onfyczglx3k53k3x7uqoh7hmne25avpqx2lue
   tests/test_ccxt_connection.py: bafybeidihj75alisygsqbwnkhck3p3r3jftpcjjzyhb5h2yxehrogazj7e
 fingerprint_ignore_patterns: []
 connections: []
