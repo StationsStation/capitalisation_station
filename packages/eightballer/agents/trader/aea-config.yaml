@@ -4,7 +4,9 @@ version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
-fingerprint: {}
+fingerprint:
+  tests/__init__.py: bafybeibk76alseqt3ufreyev7rnz5zuk6dcftt7c2ob54gmhpt6xrhkg2y
+  tests/test_agent.py: bafybeidmwxvuce6buk6ywpcviir7gtraog4b7vomcdkvdbsmgcfj6gqfha
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi

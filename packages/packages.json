@@ -22,9 +22,9 @@
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeicvxbehtyetv6e43bg3n3h6okmopb2sc6rvrjdbd7f4zon43oyyum",
         "skill/eightballer/simple_fsm/0.1.0": "bafybeidp3nwyfuvdtcca3fqibklwfjnu76penl6q6moszqmguwsfxcgoci",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeiarbgnwko3xp5fm5jfaoqfbnvjezdv725fxbtja25r4wodfyynhfi",
-        "agent/eightballer/trader/0.1.0": "bafybeifkaa7dhzihnmyxjdfxggiqyigoy4pemwjuxmgofofegv3yjcw4ti",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeiceqwgpvezkh2oqf6dochi4bfxqo2dbma4uoduj4vqttfczmctr5a",
-        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeibemw5qfwx4bgv6c44hkt7pnx3caeh6llvf4nlxjdtq7eqlsvptvy"
+        "agent/eightballer/trader/0.1.0": "bafybeidtffq5b4jc32nisljd4i3azw44pfygozz3i42zcd3sw7nktrlihm",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeicspxafspebaf7cty5yjcn25qpgrzyxn5dwp5edn2aecmqyqghnnq",
+        "service/eightballer/sol_evm_arbitrage/0.1.0": "bafybeiho64yopcxi6ql4oyzckfobseplzmk7ebn2jbto6h3fn4glvr7jzy"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",
