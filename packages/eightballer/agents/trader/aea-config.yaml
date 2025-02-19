@@ -5,12 +5,11 @@ license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
-  tests/__init__.py: bafybeibk76alseqt3ufreyev7rnz5zuk6dcftt7c2ob54gmhpt6xrhkg2y
-  tests/test_agent.py: bafybeidfa4lcyvaxy7qudsk5rhakzkaf3axo26e65qudo34ziatar54uma
+  tests/test_trader_agent.py: bafybeidfa4lcyvaxy7qudsk5rhakzkaf3axo26e65qudo34ziatar54uma
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
-- eightballer/ccxt:0.1.0:bafybeibwpba3gjv2rcwt4r36plq6swadn3toostzfx3pg4rmcpkmb333me
+- eightballer/ccxt:0.1.0:bafybeih7v6asbpr54ubpi5c5xjkhvxtxysgahby5ur7zz6xmxnf3vg3r5m
 - eightballer/dcxt:0.1.0:bafybeig6akg6xw7o74lxz6qs5cbk3xh3kypb2elai4r2g4kyupenoew65u
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
@@ -49,7 +48,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeibw2tnqzo5sx3wuwv7g2erqzs3smrnwwjl6urvm6j6lzywhbxqx5y
 - eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
-- eightballer/simple_fsm:0.1.0:bafybeig7sfziy6ksw3nye4sp625onogmfijkoyzfnox7mwwaqw643p4y3e
+- eightballer/simple_fsm:0.1.0:bafybeibiqtj7thv2mgpc2nhtvar2t4jufloxu7lbfy3xmizbnbwkho43ym
 - valory/abstract_abci:0.1.0:bafybeidnxfm5lbkvlhov53hhv3fmoo7slngre27t3mdihjp75tpd76lf3i
 - valory/abstract_round_abci:0.1.0:bafybeigyuls35k6rc2x5j5pcnrghfyojzqzjshhfoaco47ctfm3wjiapce
 customs:

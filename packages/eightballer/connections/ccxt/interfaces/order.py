@@ -8,7 +8,6 @@ import traceback
 from typing import Any, cast
 from datetime import datetime
 
-from ccxt import ExchangeError
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -236,7 +235,7 @@ class OrderInterface(BaseInterface):
                 params=_get_kwargs(),
                 symbol=message.symbol if hasattr(message, "symbol") else None,
             )
-        except ExchangeError as error:
+        except ccxt.ExchangeError as error:
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
@@ -245,7 +244,7 @@ class OrderInterface(BaseInterface):
         except ccxt.NotSupported as error:  # noqa
             try:
                 orders = await exchange.fetch_open_orders()
-            except (ExchangeError, ccxt.NotSupported) as error:
+            except (ccxt.ExchangeError, ccxt.NotSupported) as error:
                 connection.logger.warning(
                     f"Couldn't fetch open orders from {exchange_id}."
                     f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."

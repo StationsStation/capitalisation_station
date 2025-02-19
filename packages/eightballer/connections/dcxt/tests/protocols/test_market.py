@@ -57,10 +57,12 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
 
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
+        exchange_id, ledger_id = exchange
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=MarketsMessage.Performative.GET_ALL_MARKETS,
-            exchange_id=exchange,
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
         )
         envelope = Envelope(
             to=request.to,
@@ -71,7 +73,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # simulate a raised exceptionS
 
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[exchange].fetch_markets = mocker  # noqa
+        self.connection._exchanges[ledger_id][exchange_id].fetch_markets = mocker  # noqa
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

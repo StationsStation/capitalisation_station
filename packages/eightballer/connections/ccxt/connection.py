@@ -17,13 +17,14 @@ from aea.configurations.base import PublicId
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
-from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
 
+from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface  # noqa
 
 site_packages_path = site.getsitepackages()[0]
-ccxt_path = os.path.join(site_packages_path, "ccxt")
+ccxt_path = os.path.join(site_packages_path, )
 
-sys.path.insert(0, ccxt_path)
+sys.path.append(ccxt_path)
+
 
 # we have to perform the import after the path is inserted due to the naming conflict
 

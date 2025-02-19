@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicxqnmnipke3vj2emp3iat7u4ynx4272thfrbpk4wginu2ou37eey
-  connection.py: bafybeiagdytxzoa3fw3vh5wldfkfzb3h3il7kkijofhpwkobwb6ynar2kq
+  connection.py: bafybeia3fnueeyqkupvpzx2smfsn7dg5q7oucm4e74ac4k2fjeg3cuv6me
   interfaces/__init__.py: bafybeifdh6zocdvygxq64hr47ueajgsv67pvaaei5ffwu5c5a6nhssoz5y
   interfaces/balance.py: bafybeifaqx6cllzfngpsko663jdnbrclfe7rci6ucbbs2btnh32spix4xi
   interfaces/interface.py: bafybeidppqllhhhxugzr5mxl4axxq4kdjcvftpi5drtn4cn6izmibwu3ui
   interfaces/interface_base.py: bafybeifowcuub5folgnl2p7fb63friwqvwhfx6tbaxlydo5yowurukifoy
   interfaces/market.py: bafybeidrw37inaamnvcpy577i3boyqasikach4essa4uffb7enwnfnlxkm
   interfaces/ohlcv.py: bafybeic5pbyzqumkfwpgpvkl36dfw6afk5u7prfqimon4h3dvytzvjhueq
-  interfaces/order.py: bafybeihcvt2vnyvq5otguq2vpcpc3uhrx3dbalpbwmlo2ja7c4dr6jewm4
+  interfaces/order.py: bafybeic5homir2stwjqia7rqtumfheaplkz27llmyeqaiwv6xlgdqszydm
   interfaces/order_book.py: bafybeicvpqg3tmn7foklkki6kbtn3gbhtlujzsbktzarccntzgjvxhmare
   interfaces/position.py: bafybeif366dofexrbwqixpufrwbje72ll3fytuxbnbohwkxgs5pipbhzye
   interfaces/spot_asset.py: bafybeigv6xe7sikpvld3hmedcsxulwefyogc3trrm65h3ngsenwcq6sgc4
