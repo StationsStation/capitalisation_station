@@ -9,8 +9,6 @@ from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues
 from aea.configurations.data_types import PublicId
 
-from packages.eightballer.connections.ccxt import PUBLIC_ID
-
 
 class UnknownPerformatives(Exception):
     """Exception for unknown performatives."""
@@ -42,7 +40,7 @@ def get_dialogues(target_dialogues: Dialogues, target_dialogue: Dialogue) -> obj
 
             target_dialogues.__init__(
                 self,
-                self_address=str(PUBLIC_ID),
+                self_address="eightballer/ccxt:0.1.0",
                 role_from_first_message=role_from_first_message,
                 dialogue_class=target_dialogue,
             )

@@ -35,7 +35,7 @@ from packages.eightballer.contracts.spl_token.contract import SplToken
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
-DEFAULT_ADDRESS = "https://belita-kndiva-fast-mainnet.helius-rpc.com/"
+DEFAULT_ADDRESS = "https://solana.drpc.org/"
 
 SOL_ADDDRESS = "So11111111111111111111111111111111111111112"
 OLAS_ADDRESS = "Ez3nzG9ofodYCvEmw73XhQ87LWNYVRM2s7diB5tBZPyM"

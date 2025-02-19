@@ -1,10 +1,22 @@
 """Interface for the positios protocol."""
 
-from ccxt import BadSymbol, RequestTimeout, AuthenticationError
+import os
+import site
+import importlib
+
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Position, Positions
 from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+
+
+site_packages_path = site.getsitepackages()[0]
+ccxt_path = os.path.join(site_packages_path, "ccxt")
+
+ccxt_spec = importlib.util.spec_from_file_location(
+    "ccxt", os.path.join(ccxt_path, "ccxt", "async_support", "__init__.py")
+)
+ccxt = importlib.util.module_from_spec(ccxt_spec)
 
 
 def all_positions_from_api_call(api_call):
@@ -41,14 +53,14 @@ class PositionInterface(BaseInterface):
                 positions=positions,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except ccxt.RequestTimeout:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Request timeout",
             )
-        except AuthenticationError:
+        except ccxt.AuthenticationError:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
@@ -78,21 +90,21 @@ class PositionInterface(BaseInterface):
                 position=position,
                 exchange_id=message.exchange_id,
             )
-        except RequestTimeout:
+        except ccxt.RequestTimeout:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.API_ERROR,
                 error_msg="Request timeout",
             )
-        except BadSymbol:
+        except ccxt.BadSymbol:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,
                 error_code=PositionsMessage.ErrorCode.UNKNOWN_POSITION,
                 error_msg=message.position_id,
             )
-        except AuthenticationError:
+        except ccxt.AuthenticationError:
             response_message = dialogue.reply(
                 performative=PositionsMessage.Performative.ERROR,
                 target_message=message,

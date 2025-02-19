@@ -20,14 +20,14 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 cython = "<3.0.0"
-open-aea-ledger-solana = "==1.63.0"
-open-aea-ledger-cosmos = "==1.63.0"
-open-aea-ledger-ethereum = "==1.63.0"
-open-aea-cli-ipfs = "==1.63.0"
-open-aea= "==1.63.0"
-open-aea-test-autonomy = "==0.19.2"
-open-autonomy = "==0.19.2"
-autonomy-dev = {version = "==0.2.124", extras = ["all"]}
+open-aea-ledger-solana = "==1.64.0"
+open-aea-ledger-cosmos = "==1.64.0"
+open-aea-ledger-ethereum = "==1.64.0"
+open-aea-cli-ipfs = "==1.64.0"
+open-aea= "==1.64.0"
+open-aea-test-autonomy = "==0.19.3"
+open-autonomy = "==0.19.3"
+autonomy-dev = {version = "==0.2.128", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
