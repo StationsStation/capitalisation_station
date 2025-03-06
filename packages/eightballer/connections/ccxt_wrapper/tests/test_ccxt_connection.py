@@ -31,7 +31,7 @@ from aea.protocols.base import Message
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue, Dialogues
 
-from packages.eightballer.connections.ccxt.connection import CcxtConnection
+from packages.eightballer.connections.ccxt_wrapper.connection import CcxtConnection
 
 
 logger = logging.getLogger(__name__)

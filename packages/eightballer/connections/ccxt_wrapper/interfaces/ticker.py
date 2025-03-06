@@ -7,7 +7,7 @@ import importlib
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 site_packages_path = site.getsitepackages()[0]

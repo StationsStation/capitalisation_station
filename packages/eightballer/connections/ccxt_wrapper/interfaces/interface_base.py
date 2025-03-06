@@ -40,7 +40,7 @@ def get_dialogues(target_dialogues: Dialogues, target_dialogue: Dialogue) -> obj
 
             target_dialogues.__init__(
                 self,
-                self_address="eightballer/ccxt:0.1.0",
+                self_address="eightballer/ccxt_wrapper:0.1.0",
                 role_from_first_message=role_from_first_message,
                 dialogue_class=target_dialogue,
             )

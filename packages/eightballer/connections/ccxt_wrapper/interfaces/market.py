@@ -11,7 +11,7 @@ from aea.protocols.dialogue.base import Dialogue
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 site_packages_path = site.getsitepackages()[0]

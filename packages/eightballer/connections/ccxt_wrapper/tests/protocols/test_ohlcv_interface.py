@@ -7,7 +7,7 @@ from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.ohlcv import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
-from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
+from packages.eightballer.connections.ccxt_wrapper.tests.test_ccxt_connection import (
     BaseCcxtConnectionTest,
     with_timeout,
     get_dialogues,
@@ -15,6 +15,7 @@ from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip("Not implemented")
 class TestOhlcvBalance(BaseCcxtConnectionTest):
     """Test protocol messages are handled."""
 

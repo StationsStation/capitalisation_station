@@ -59,7 +59,7 @@ TEST_EXCHANGE_DATA = """
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 """
 
-TEST_EXCHANGES = {(k['name'], k['ledger_id']): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
+TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
 
 
 def with_timeout(t, *args, **kwargs):

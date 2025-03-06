@@ -35,6 +35,7 @@ from packages.eightballer.connections.dcxt.connection import PUBLIC_ID as DCXT_P
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.skills.dex_data_retrieval.models import Params
 from packages.eightballer.skills.dex_data_retrieval.rounds import (
+    Event as Events,
     SynchronizedData,
     FetchDexOrdersRound,
     FetchDexMarketsRound,
@@ -57,6 +58,8 @@ DEFAULT_RETRY_DELAY = 5.0
 
 class DexDataRetrievalBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the dex_data_retrieval skill."""
+
+    done_event = Events.DONE
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -222,6 +225,7 @@ class FetchDexOrdersBehaviour(DexDataRetrievalBaseBehaviour):
 
     matching_round: type[AbstractRound] = FetchDexOrdersRound
     behaviour_id = "fetch_dex_orders_behaviour"
+    done_event = Events.DONE
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -263,6 +267,7 @@ class FetchDexPositionsBehaviour(DexDataRetrievalBaseBehaviour):
 
     matching_round: type[AbstractRound] = FetchDexPositionsRound
     behaviour_id = "fetch_dex_positions_behaviour"
+    done_event = Events.DONE
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -313,6 +318,7 @@ class FetchDexTickersBehaviour(DexDataRetrievalBaseBehaviour):
 
     matching_round: type[AbstractRound] = FetchDexTickersRound
     behaviour_id = "fetch_dex_tickers_behaviour"
+    done_event = Events.DONE
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""

@@ -5,8 +5,8 @@ from typing import Any, cast
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
-from packages.eightballer.connections.ccxt.interfaces.market import Market
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.market import Market
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 def _seconds_to_timeframe(seconds=60):

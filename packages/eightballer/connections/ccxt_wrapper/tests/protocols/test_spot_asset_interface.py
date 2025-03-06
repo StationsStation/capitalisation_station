@@ -7,7 +7,7 @@ from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues
-from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
+from packages.eightballer.connections.ccxt_wrapper.tests.test_ccxt_connection import (
     BaseCcxtConnectionTest,
     with_timeout,
     get_dialogues,

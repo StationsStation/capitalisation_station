@@ -57,7 +57,10 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    async def test_handles_exchange_timeout(self, exchange_id,) -> None:
+    async def test_handles_exchange_timeout(
+        self,
+        exchange_id,
+    ) -> None:
         """Can handle ohlcv messages."""
         exchange_id, ledger_id = exchange_id
         await self.connection.connect()

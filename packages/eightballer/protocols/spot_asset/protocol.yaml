@@ -16,7 +16,7 @@ fingerprint:
   serialization.py: bafybeihyt7lklrdxy4jzqetx7zsixug2rk23opzkzhu7i3j7u3g3tvny4q
   spot_asset.proto: bafybeieqolmjhlldlvax7fk6s73huz72yk2udvagx4asectfimzsqyd4n4
   spot_asset_pb2.py: bafybeidcvivup3zzkmtzyvlr5brinfu63azqeuq4y3psge22xavwvkkqfq
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
   tests/dummy_data.yaml: bafybeiahxlf7rdgzarbogi4svbkvzrjgfopixsd3fj44njgtqzh2zwmxpq
   tests/test_spot_asset_dialogues.py: bafybeigerx7xnokntpolr5y7zcu5ze7h6fvt6cgj27umvqj6whmd6uumom
   tests/test_spot_asset_messages.py: bafybeifllu2ogomaxg7wotqen3t2ry6qic3ympaexe7kawfuojqdif63xu

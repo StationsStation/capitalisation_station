@@ -10,7 +10,7 @@ from aea.skills.base import Envelope
 from packages.eightballer.protocols.order_book.message import OrderBookMessage
 from packages.eightballer.protocols.order_book.dialogues import OrderBookDialogue, BaseOrderBookDialogues
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 site_packages_path = site.getsitepackages()[0]

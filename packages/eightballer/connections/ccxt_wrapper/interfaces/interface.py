@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, Any
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 
-from packages.eightballer.connections.ccxt.interfaces.ohlcv import OhlcvInterface
-from packages.eightballer.connections.ccxt.interfaces.order import OrderInterface
-from packages.eightballer.connections.ccxt.interfaces.market import MarketInterface
-from packages.eightballer.connections.ccxt.interfaces.ticker import TickerInterface
-from packages.eightballer.connections.ccxt.interfaces.balance import BalanceInterface
-from packages.eightballer.connections.ccxt.interfaces.position import PositionInterface
-from packages.eightballer.connections.ccxt.interfaces.order_book import OrderBookInterface
-from packages.eightballer.connections.ccxt.interfaces.spot_asset import SpotAssetInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.ohlcv import OhlcvInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.order import OrderInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.market import MarketInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.ticker import TickerInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.balance import BalanceInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.position import PositionInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.order_book import OrderBookInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.spot_asset import SpotAssetInterface
 
 
 if TYPE_CHECKING:

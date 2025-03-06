@@ -17,11 +17,13 @@ from aea.configurations.base import PublicId
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface import ConnectionProtocolInterface
 
-from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface  # noqa
 
 site_packages_path = site.getsitepackages()[0]
-ccxt_path = os.path.join(site_packages_path, )
+ccxt_path = os.path.join(
+    site_packages_path,
+)
 
 sys.path.append(ccxt_path)
 
@@ -34,12 +36,12 @@ import ccxt.async_support as ccxt  # noqa
 if TYPE_CHECKING:
     from aea.protocols.dialogue.base import Dialogue
 
-    from packages.eightballer.connections.ccxt.interfaces.market import Market
+    from packages.eightballer.connections.ccxt_wrapper.interfaces.market import Market
 
 
 _default_logger = logging.getLogger("aea.packages.eightballer.connections.ccxt")
 
-PUBLIC_ID = PublicId.from_str("eightballer/ccxt:0.1.0")
+PUBLIC_ID = PublicId.from_str("eightballer/ccxt_wrapper:0.1.0")
 
 POLL_INTERVAL_MS = 50
 RETRY_DELAY = POLL_INTERVAL_MS * 2

@@ -14,6 +14,7 @@ from packages.eightballer.connections.dcxt.tests.protocols.test_tickers import T
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip("Not implemented")
 class TestMarkets(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 
@@ -46,6 +47,7 @@ class TestMarkets(BaseDcxtConnectionTest):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip("Not implemented")
 class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 

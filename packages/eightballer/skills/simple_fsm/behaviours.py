@@ -38,7 +38,6 @@ from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.connections.ccxt.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.connections.dcxt.dcxt.balancer import (
@@ -49,6 +48,7 @@ from packages.eightballer.connections.dcxt.dcxt.balancer import (
 )
 from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
 

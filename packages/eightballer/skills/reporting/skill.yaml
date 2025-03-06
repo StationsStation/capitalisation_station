@@ -7,28 +7,28 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicckwn6vc53mifuyrvfbd4jokm5jj7rktlqfzw3nynyfqfpglwvii
-  behaviours.py: bafybeiba4u7rq7qver3k4olwgr5adymhms3pfpcnfmrbxe3kifbuxj32pu
+  behaviours.py: bafybeidgqq54dyw52nwnens3eavvnkyozz22ylak5heewvtayafrvlwrim
   dialogues.py: bafybeib5rxgfedhq2l5q33cr7al5rvcdszxggiujrk4nwz7cgonxzxerpu
-  handlers.py: bafybeifjp5htyrppcfw43o4s4zz745ynrh2repaij2hymhcu4wsjriyrwq
+  handlers.py: bafybeibjgfeofu2cw7gm6tdrjp3z275hvpa3fcmerbzhbrxtb74pss665m
   slack.py: bafybeifu4yup7pbw4gvgo7yxzkm62f25msu53kmmi5wmofwllt7d73mlfa
-  strategy.py: bafybeig3ln7v2qh4a52tfva4oi43rljz344hd3jppdjguvwn6ploqchkve
+  strategy.py: bafybeiacak4zkvppiqudkc46453uqmqzh5huud5bw53jizs5abj6ajqvbi
   tests/__init__.py: bafybeidqvfmjxcrhqif6hzu3zejykhgzgeyuxarega3th7gz7bccpr76om
-  tests/cases.py: bafybeiehp5er3nvb6nu6yaxu5ym3pnukyvvmx567llcui4346jca5vjhxm
-  tests/test_behaviour.py: bafybeibsqcondmk3spbd3mlcu3fjajwpleczrnn7pco2mc367o4qnvy3n4
-  tests/test_handlers.py: bafybeigguqwcyrxaszyuwm3dwtrm5e36xigohztq53glzec4rlk5nrkyve
+  tests/cases.py: bafybeifvkeajwg67hrryev6ajj2tsj376ge5sxrg4qevoyjxuwly3n6twu
+  tests/test_behaviour.py: bafybeibqopuyiqkzhzbievx7ermwohkm7moy7wktwvq4v2vf4kkxvlpibe
+  tests/test_handlers.py: bafybeiaoiozbmcsbuagdonfwb6n53ritzb25udvyeolfemn3paoxd22btu
   tests/test_strategy.py: bafybeiahxldt52hhih22tkqlpfgtoetltasmenbzmnqvkrhqh5nkdnsbry
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeih7v6asbpr54ubpi5c5xjkhvxtxysgahby5ur7zz6xmxnf3vg3r5m
-- eightballer/dcxt:0.1.0:bafybeig6akg6xw7o74lxz6qs5cbk3xh3kypb2elai4r2g4kyupenoew65u
+- eightballer/ccxt_wrapper:0.1.0:bafybeibm43y6kwb4kyd3h2cevc2g5d6rstrkf42x4bdqabjqkhnmegmm6u
+- eightballer/dcxt:0.1.0:bafybeidunaqh7o2nbni3umbw2bep3dnco5fxkm327byulhenumo3jftixq
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
-- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
-- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
-- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
+- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
+- eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
+- eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
+- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
+- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
 skills: []
 behaviours:

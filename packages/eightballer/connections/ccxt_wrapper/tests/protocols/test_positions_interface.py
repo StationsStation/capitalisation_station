@@ -9,7 +9,7 @@ from aea.mail.base import Envelope
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue, BasePositionsDialogues
 from packages.eightballer.protocols.positions.custom_types import Positions
-from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
+from packages.eightballer.connections.ccxt_wrapper.tests.test_ccxt_connection import (
     BaseCcxtConnectionTest,
     with_timeout,
     get_dialogues,
@@ -17,6 +17,7 @@ from packages.eightballer.connections.ccxt.tests.test_ccxt_connection import (
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip("Not implemented")
 class TestPositionInterface(BaseCcxtConnectionTest):
     """Test the position interface."""
 

@@ -15,4 +15,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""Tests for the protocol."""
+"""Module for scaffolded component."""

@@ -6,11 +6,11 @@ description: ''
 aea_version: '>=1.35.0, <2.0.0'
 fingerprint:
   tests/__init__.py: bafybeibraxfmr5puv7g26bkckx3bxesc2wcjuwmd4gs4qirmgdvtbqa7ua
-  tests/test_agent.py: bafybeicowtnq5n4ick4cqbhsgeiuvue4q5dmtdcdljeihdwptiu54vqevu
+  tests/test_agent.py: bafybeigphs33rilpz6oeog4xfsm656g7q6cxv4icewmp675l4ikmh4dq7u
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt:0.1.0:bafybeih7v6asbpr54ubpi5c5xjkhvxtxysgahby5ur7zz6xmxnf3vg3r5m
-- eightballer/dcxt:0.1.0:bafybeig6akg6xw7o74lxz6qs5cbk3xh3kypb2elai4r2g4kyupenoew65u
+- eightballer/ccxt_wrapper:0.1.0:bafybeibm43y6kwb4kyd3h2cevc2g5d6rstrkf42x4bdqabjqkhnmegmm6u
+- eightballer/dcxt:0.1.0:bafybeidunaqh7o2nbni3umbw2bep3dnco5fxkm327byulhenumo3jftixq
 - eightballer/http_client:0.1.0:bafybeihli73baanti52hpp3gnsgvfsx5rkpfprnzazmi3pamwafvngvnu4
 - eightballer/http_server:0.1.0:bafybeicsx5ayj37c27a4ffsd4f6ydr5lsed53rn3tkdzxar22da5raaoqm
 - eightballer/prometheus:0.1.1:bafybeic452zt5tex4uxlrpax33spgj3dor26rulesszyex2orjz5dhllkq
@@ -23,17 +23,17 @@ contracts:
 - valory/service_registry:0.1.0:bafybeihcl5myw3oomyzzzgybeg23medskgi4nw5osatbnsoqnfy24sxoje
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
 protocols:
-- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
-- eightballer/default:0.1.0:bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a
+- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
+- eightballer/default:0.1.0:bafybeifzc7kwtlg6egf6qnfq4s2hunqlbul5tkq2334gcwdbsrgltaki5a
 - eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
-- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/ohlcv:0.1.0:bafybeicaxvy6itmm52gqofmm7yq5xgojyrge6uczgwcsxeykxjju5xk66a
-- eightballer/order_book:0.1.0:bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky
-- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
-- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
+- eightballer/ohlcv:0.1.0:bafybeihh3iqz2xsb76h56drzy6bqgezht35uggrz4gamj7o3mhumwkou5i
+- eightballer/order_book:0.1.0:bafybeifozyvz7b2qlbo55uarhjwyr4jbciksee2fjjpqmtu2msfq2aoxqu
+- eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
+- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
 - eightballer/prometheus:1.0.0:bafybeibvuazvki5pbeakpvcjm7icgf4wosacpcfnpyr4tk5dz3egoqny4a
-- eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
+- eightballer/spot_asset:0.1.0:bafybeigtq5pskru4f2i6keaycrwtbgiw32igzjoikc3neymgfytwsgkohe
+- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 - valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
 - valory/acn:1.1.0:bafybeic6h55ov5lrzbah6fate54c4u6spopcexxspw3abotbmffabfddeu
@@ -43,9 +43,9 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeicvxbehtyetv6e43bg3n3h6okmopb2sc6rvrjdbd7f4zon43oyyum
-- eightballer/dex_data_retrieval:0.1.0:bafybeig5lpgojgqsm6tnczazb3bmr46gt5iw6274y4xo4pddxyvv3lx6oa
-- eightballer/metrics:0.1.0:bafybeibw2tnqzo5sx3wuwv7g2erqzs3smrnwwjl6urvm6j6lzywhbxqx5y
+- eightballer/chained_dex_app:0.1.0:bafybeie57mvtp6rs6yjgorwcjcnzukwwdqw5tmhq73d7qiq4q5lvo6g2q4
+- eightballer/dex_data_retrieval:0.1.0:bafybeid75mqfonwrt7ks2uxdj2sgyondkw66k2usufcw4qec7ydrpax2di
+- eightballer/metrics:0.1.0:bafybeih6ezybqa2372pcvpu2obxun3vuurnpu7jrm5jcprfnrnnskd3aba
 - eightballer/prometheus:0.1.0:bafybeibhcoshmv7dz64rnhfablamxb6gpg6w4nyeuw44ilscjswt26dhhe
 - valory/abstract_abci:0.1.0:bafybeidnxfm5lbkvlhov53hhv3fmoo7slngre27t3mdihjp75tpd76lf3i
 - valory/abstract_round_abci:0.1.0:bafybeigyuls35k6rc2x5j5pcnrghfyojzqzjshhfoaco47ctfm3wjiapce
