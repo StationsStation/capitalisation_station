@@ -22,8 +22,8 @@
 import subprocess
 from pathlib import Path
 
-from aea.test_tools.test_cases import AEATestCaseMany
 import pytest
+from aea.test_tools.test_cases import AEATestCaseMany
 
 
 AGENT_NAME = "chained_dex_app"
@@ -52,8 +52,12 @@ class TestAgentLaunch(
         self.generate_private_key("cosmos")
         self.add_private_key("ethereum", "ethereum_private_key.txt")
         self.add_private_key("cosmos", "cosmos_private_key.txt")
-        self.invoke("issue-certificates",)
-        self.invoke("install",)
+        self.invoke(
+            "issue-certificates",
+        )
+        self.invoke(
+            "install",
+        )
 
     @pytest.mark.skip("Integration test")
     def test_run(self) -> None:

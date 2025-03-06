@@ -3,8 +3,8 @@
 import subprocess
 from pathlib import Path
 
-from aea.test_tools.test_cases import AEATestCaseMany
 import pytest
+from aea.test_tools.test_cases import AEATestCaseMany
 
 
 AGENT_NAME = "trader"
@@ -33,8 +33,9 @@ class TestAgentLaunch(AEATestCaseMany):
         self.invoke(
             "issue-certificates",
         )
-        self.invoke("install",)
-
+        self.invoke(
+            "install",
+        )
 
     @pytest.mark.skip("Integration test")
     def test_run(self) -> None:

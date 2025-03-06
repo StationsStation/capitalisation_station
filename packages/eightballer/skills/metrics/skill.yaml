@@ -9,7 +9,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
-  dialogues.py: bafybeibgxfjlgmi3m6vlg7gwaablwibdyavg76mtosyknmotzdh3523wxa
+  dialogues.py: bafybeigjgu4pxeaalu7ovuufmzobp56dppzp5nsttekynzujxzxvzqxwl4
   handlers.py: bafybeideqob2xhrj47o2opqtxcz3n3jibqsjohkey4rbcpczfmnpf5y2eu
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
@@ -19,7 +19,7 @@ connections: []
 contracts: []
 protocols:
 - eightballer/default:0.1.0:bafybeifzc7kwtlg6egf6qnfq4s2hunqlbul5tkq2334gcwdbsrgltaki5a
-- eightballer/http:0.1.0:bafybeieexnvev3uegukhfnackqq2ooceiqcnu7q7e4w73wyohvfjod6bqq
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 skills: []
 behaviours: {}
 handlers:
