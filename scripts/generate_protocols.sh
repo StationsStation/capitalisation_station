@@ -7,6 +7,9 @@ tmp_agent_name='tmp_agent'
 function generate_protocol {
     echo "Generating protocol $1"
     rm -rf packages/eightballer/protocols/$1
+    rm -rf packages/eightballer/agents/$tmp_agent_name
+    rm -rf $tmp_agent_name
+
     aea create $tmp_agent_name
     cd $tmp_agent_name
     adev scaffold protocol $(echo $SPEC_PATH/$1.yaml)
@@ -22,17 +25,13 @@ function generate_protocol {
 
 
 
+generate_protocol 'positions'
+generate_protocol 'orders'
+generate_protocol 'markets'
 generate_protocol 'tickers'
-# generate_protocol 'balances'
-# generate_protocol 'liquidity_provision'
-# generate_protocol 'default'
-# generate_protocol 'spot_asset'
-# generate_protocol 'ohlcv'
-# 
-# generate_protocol 'order_book'
-# generate_protocol 'markets'
-# 
-# generate_protocol 'orders'
-# generate_protocol 'positions'
-# 
-# generate_protocol 'orders'
+generate_protocol 'balances'
+generate_protocol 'liquidity_provision'
+generate_protocol 'default'
+generate_protocol 'spot_asset'
+generate_protocol 'ohlcv'
+generate_protocol 'order_book'
