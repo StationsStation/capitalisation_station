@@ -130,6 +130,7 @@ initiation:
 - cancel_order
 - get_order
 - get_orders
+- get_settlements
 reply:
   create_order: [ order_created, error ]
   cancel_order: [ order_cancelled, error ]

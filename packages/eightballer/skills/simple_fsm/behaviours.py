@@ -34,7 +34,6 @@ from collections.abc import Callable, Generator
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 
-from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
@@ -49,6 +48,7 @@ from packages.eightballer.connections.dcxt.dcxt.balancer import (
 )
 from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
 
@@ -122,6 +122,8 @@ class IdentifyOpportunityRound(State):
         existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text(encoding="utf-8"))
 
         orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
+        for opportunity in self.arbitrage_strategy.unaffordable:
+            self.context.logger.info(f"Opportunity unaffordable: {opportunity[1][0]}")
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
@@ -299,6 +301,9 @@ class ExecuteOrdersRound(BaseConnectionRound):
         orders = json.loads(orders)
         models = [Order.model_validate(o) for o in orders]
         new_orders = []
+
+        failed_orders = []
+
         for order in models:
             # We send the orders to the exchange.
             response = yield from self.get_response(
@@ -308,6 +313,11 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 ledger_id=order.ledger_id,
                 exchange_id=order.exchange_id,
             )
+            if response.performative == OrdersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error creating order: {response.error_code} {response.error_msg} {order}")
+                failed_orders.append(order)
+                continue
+
             self.context.logger.info(
                 dedent(f"""
             Id: {response.order.id}
@@ -688,7 +698,8 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             failed = self.current_task.exception()
             if failed:
-                self.context.logger.error(f"Error in state {self.current}: {failed}")
+                self.context.logger.error(f"Error in state {self.current}: {self.current_task.print_stack()}")
+                self.context.logger.info(f"Breaking on error. {self.current} -> errorround")
                 self.current_task = None
                 self.current = "errorround"
                 return

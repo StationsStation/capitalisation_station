@@ -8,16 +8,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeietsymwzilixsungxwi2ypv5242kwysg3fpesuj2nhnh6fujxwcdi
-  behaviours.py: bafybeihuhigfca3tpvoup756bw4j5vi54pdouphyptx4unrfngqjame7ru
+  behaviours.py: bafybeihncltwiey4c42ryeupeuq4rfzgx4nwd5rlyanfcsgkruw6haqdmm
   check_cex_balances.yaml: bafybeigz4ba5jfscg2y6yoxxsmwc63ictz5iqneaann3fptgc2t5qohcra
   dialogues.py: bafybeigrcbdpv36pydquczdp2a7mnqfk57t3glg2e2gsogzw66i74djvdm
   fsm_specification.yaml: bafybeidbypph3ghds673b3xl5paxsnax5enwjdrrx7lwqyavusd4dju7te
   handlers.py: bafybeigsbeckynnqri2b6qhy6wfefj4ozsa65a6taqvbcmamppdxn3qtwa
   models.py: bafybeigysi64hrxsm2jyuy3hwo5umulh4lq6i4m24s5m4wwb6jzb2psmee
   payloads.py: bafybeifvigkcuv6qs7r47myj5towpyri5wiur6ylxqo4w7y3eglcinjesa
-  rounds.py: bafybeia2vyjnbxaglepi5rgk4jp7l5lrdxrdrxkawzlgutxoyrahur26aq
+  rounds.py: bafybeienymb7r7gqz6ggkgbiqj3vdtumclnagjde5weq5wl26frh35c3cu
   tests/__init__.py: bafybeifiiu2gpv7v4mgwar33hcguxk7p6n27nh64viejxkuomf2uguj6em
-  tests/test_behaviours.py: bafybeibypy4xw3goat72nngqjowryy5p4smwmi6bv6cgbvdsh4reht7v5u
+  tests/test_behaviours.py: bafybeidshdurcvjkmcyvpl2ege7amtannbm5hhrfi3464os5wb4cxz4lmm
   tests/test_dialogues.py: bafybeihkk3xs6dxrco4yup2ao5rj23ijh7cwb4am5kamgghqpm44vmhfnu
   tests/test_handlers.py: bafybeicsslzmvse5wat2kwxtpao7inwwqymg2vrsqvtbjrqeffi2xq6vky
   tests/test_models.py: bafybeichjk466nga4norjbslh5y63knhypqtc74yl34xldnaiutoynr7ly
@@ -25,16 +25,16 @@ fingerprint:
   tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeiekkd7wyj6i6lntbofyvjc4qo62tvhxbrh6vihrc2cua3sdtrbuhu
+- eightballer/dcxt:0.1.0:bafybeidunaqh7o2nbni3umbw2bep3dnco5fxkm327byulhenumo3jftixq
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
-- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
-- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
-- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
+- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
+- eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
+- eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
+- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
+- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigyuls35k6rc2x5j5pcnrghfyojzqzjshhfoaco47ctfm3wjiapce
+- valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
 behaviours:
   main:
     args: {}

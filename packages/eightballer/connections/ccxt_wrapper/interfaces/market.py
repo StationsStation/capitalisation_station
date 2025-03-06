@@ -1,15 +1,26 @@
 """Implements the interface for market protocol."""
 
+import os
+import site
+import importlib
 from typing import cast
 
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue
 
-from ccxt import RequestTimeout
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
+
+
+site_packages_path = site.getsitepackages()[0]
+ccxt_path = os.path.join(site_packages_path, "ccxt")
+
+ccxt_spec = importlib.util.spec_from_file_location(
+    "ccxt", os.path.join(ccxt_path, "ccxt", "async_support", "__init__.py")
+)
+ccxt = importlib.util.module_from_spec(ccxt_spec)
 
 
 def all_markets_from_api_call(api_call):
@@ -63,7 +74,7 @@ class MarketInterface(BaseInterface):
                 ),
             )
             connection.logger.debug(f"Fetched {len(markets)} markets for {message.exchange_id}")
-        except RequestTimeout:
+        except ccxt.RequestTimeout:
             connection.logger.warning(f"Request timeout when fetching markets for {message.exchange_id}")
             response_message = cast(
                 Message | None,

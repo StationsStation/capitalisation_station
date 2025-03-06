@@ -128,34 +128,35 @@ class Market(BaseCustomEncoder):
     """This class represents an instance of Market."""
 
     id: str
-    lowercase_id: str
-    symbol: str
-    base: str
-    quote: str
-    settle: str
-    base_id: str
-    quote_id: str
-    settle_id: str
-    type: str
-    spot: bool
-    margin: bool
-    swap: bool
-    future: bool
-    option: bool
-    active: bool
-    contract: bool
-    linear: bool
-    inverse: bool
-    taker: float
-    maker: float
-    contract_size: float
-    expiry: float
-    expiry_datetime: str
-    strike: float
-    option_type: str
-    precision: float
-    limits: str
-    info: str
+    lowercase_id: str | None = None
+    exchange_id: str | None = None
+    symbol: str | None = None
+    base: str | None = None
+    quote: str | None = None
+    settle: str | None = None
+    base_id: str | None = None
+    quote_id: str | None = None
+    settle_id: str | None = None
+    type: str | None = None
+    spot: bool | None = None
+    margin: bool | None = None
+    swap: bool | None = None
+    future: bool | None = None
+    option: bool | None = None
+    active: bool | None = None
+    contract: bool | None = None
+    linear: bool | None = None
+    inverse: bool | None = None
+    taker: float | None = None
+    maker: float | None = None
+    contract_size: float | None = None
+    expiry: float | None = None
+    expiry_datetime: str | None = None
+    strike: float | None = None
+    option_type: str | None = None
+    precision: float | None = None
+    limits: str | None = None
+    info: str | None = None
 
 
 class Markets(BaseCustomEncoder):

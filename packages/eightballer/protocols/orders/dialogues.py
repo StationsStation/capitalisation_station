@@ -31,6 +31,7 @@ class OrdersDialogue(Dialogue):
             OrdersMessage.Performative.CANCEL_ORDER,
             OrdersMessage.Performative.GET_ORDER,
             OrdersMessage.Performative.GET_ORDERS,
+            OrdersMessage.Performative.GET_SETTLEMENTS,
         }
     )
     TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(

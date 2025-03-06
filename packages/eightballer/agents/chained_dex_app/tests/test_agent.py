@@ -22,6 +22,7 @@
 import subprocess
 from pathlib import Path
 
+import pytest
 from aea.test_tools.test_cases import AEATestCaseMany
 
 
@@ -42,7 +43,7 @@ class TestAgentLaunch(
     cli_log_options = ["-v", "DEBUG"]
     package_registry_src_rel = Path(__file__).parent.parent.parent.parent.parent
 
-    def test_run(self) -> None:
+    def test_install(self) -> None:
         """Run the ABCI skill."""
         agent_name = "base"
         self.fetch_agent(f"{AUTHOR}/{AGENT_NAME}:{VERSION}", agent_name, is_local=self.IS_LOCAL)
@@ -54,6 +55,14 @@ class TestAgentLaunch(
         self.invoke(
             "issue-certificates",
         )
+        self.invoke(
+            "install",
+        )
+
+    @pytest.mark.skip("Integration test")
+    def test_run(self) -> None:
+        """Run the ABCI skill."""
+        self.test_install()
         process = self.run_agent()
         is_running = self.is_running(process)
         assert is_running, "AEA not running within timeout!"

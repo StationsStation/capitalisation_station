@@ -16,7 +16,7 @@ fingerprint:
   ohlcv_pb2.py: bafybeigssqq4i3d6pfh2slcqbgorqze3ix7mq4pjmagq7schiisc7ykefu
   protocol_spec.yaml: bafybeiadohai3emoipafl5zfwckltw77hqtrt5u3mzmzvmkbhmveu4vhti
   serialization.py: bafybeiapne6vmy22bw6kdcaivev7kf4jklpu32k6xjx3iqjbywbrvf3nvy
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
   tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
   tests/test_ohlcv_dialogues.py: bafybeidnhsbh7omwuopanmd5pwdjtk33qezvhxwygojzv5gqqc4slle5ba
   tests/test_ohlcv_messages.py: bafybeiefjrxfxmycdcfgplducc6jhyxqjoal4z6klkj4w5apgverygou64

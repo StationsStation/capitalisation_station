@@ -3,13 +3,17 @@
 import asyncio
 from unittest.mock import MagicMock
 
+import ccxt
 import pytest
 from aea.mail.base import Envelope
 
-import ccxt
-from ccxt.tests.test_ccxt_connection import BaseCcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.markets.dialogues import MarketsDialogue, BaseMarketsDialogues
+from packages.eightballer.connections.ccxt_wrapper.tests.test_ccxt_connection import (
+    BaseCcxtConnectionTest,
+    with_timeout,
+    get_dialogues,
+)
 
 
 TEST_EXCHANGE = "deribit"
@@ -70,6 +74,7 @@ class TestMarkets(BaseCcxtConnectionTest):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="Requires Deribit Api Keys.")
 class TestConnectionHandlesExchangeErrors(BaseCcxtConnectionTest):
     """Test protocol messages are handled."""
 

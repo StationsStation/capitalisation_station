@@ -33,7 +33,7 @@ from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
-    HttpDialogues as BaseHttpDialogues,
+    BaseHttpDialogues,
 )
 from packages.eightballer.protocols.default.dialogues import (
     DefaultDialogue as BaseDefaultDialogue,
@@ -53,7 +53,6 @@ class HttpDialogues(Model, BaseHttpDialogues):
 
     def __init__(self, **kwargs: Any) -> None:
         """Initialize dialogues."""
-        Model.__init__(self, **kwargs)
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
@@ -62,8 +61,7 @@ class HttpDialogues(Model, BaseHttpDialogues):
             del message, receiver_address
             return BaseHttpDialogue.Role.SERVER
 
+        Model.__init__(self, keep_terminal_state_dialogues=False, **kwargs)
         BaseHttpDialogues.__init__(
-            self,
-            self_address=str(self.skill_id),
-            role_from_first_message=role_from_first_message,
+            self, self_address=str(self.context.skill_id), role_from_first_message=role_from_first_message
         )

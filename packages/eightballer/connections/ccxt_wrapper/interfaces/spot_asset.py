@@ -5,7 +5,7 @@ import asyncio
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, BaseSpotAssetDialogues
 from packages.eightballer.protocols.spot_asset.custom_types import Decimal
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 INTERVAL = 10

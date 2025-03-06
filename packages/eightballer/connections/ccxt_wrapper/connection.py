@@ -1,5 +1,8 @@
 """Connection for ccxt."""
 
+import os
+import sys
+import site
 import asyncio
 import logging
 import traceback
@@ -10,22 +13,35 @@ from collections import deque
 from aea.mail.base import Envelope
 from aea.protocols.base import Message
 from aea.connections.base import Connection, ConnectionStates
+from aea.configurations.base import PublicId
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-from packages.eightballer.connections.ccxt import PUBLIC_ID
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
-from packages.eightballer.connections.ccxt.interfaces.interface import ConnectionProtocolInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface import ConnectionProtocolInterface
+
+
+site_packages_path = site.getsitepackages()[0]
+ccxt_path = os.path.join(
+    site_packages_path,
+)
+
+sys.path.append(ccxt_path)
+
+
+# we have to perform the import after the path is inserted due to the naming conflict
+
+import ccxt.async_support as ccxt  # noqa
 
 
 if TYPE_CHECKING:
     from aea.protocols.dialogue.base import Dialogue
 
-    from packages.eightballer.connections.ccxt.interfaces.market import Market
+    from packages.eightballer.connections.ccxt_wrapper.interfaces.market import Market
 
 
 _default_logger = logging.getLogger("aea.packages.eightballer.connections.ccxt")
 
+PUBLIC_ID = PublicId.from_str("eightballer/ccxt_wrapper:0.1.0")
 
 POLL_INTERVAL_MS = 50
 RETRY_DELAY = POLL_INTERVAL_MS * 2
