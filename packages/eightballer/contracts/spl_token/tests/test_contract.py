@@ -22,8 +22,9 @@
 # type: ignore
 # pylint: skip-file
 
-from typing import cast
+from typing import NamedTuple, cast
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 from aea_ledger_solana import SolanaApi, SolanaCrypto
@@ -41,11 +42,23 @@ SOL_ADDDRESS = "So11111111111111111111111111111111111111112"
 OLAS_ADDRESS = "Ez3nzG9ofodYCvEmw73XhQ87LWNYVRM2s7diB5tBZPyM"
 
 
+class State(NamedTuple):
+    """State data."""
+
+    data: NamedTuple
+
+
+class Parsed(NamedTuple):
+    """Parsed data."""
+
+    parsed: dict[str, dict[str, int]] = {"info": {"decimals": 9}}
+
+
 class TestContractCommon:
     """Other tests for the contract."""
 
     @classmethod
-    def setup(cls) -> None:
+    def setup_method(cls) -> None:
         """Setup."""
 
         # Register smart contract used for testing
@@ -65,7 +78,9 @@ class TestContractCommon:
         config = {
             "address": DEFAULT_ADDRESS,
         }
-        cls.ledger_api = SolanaApi(**config)
+        with patch("aea_ledger_solana.SolanaApi._get_latest_hash") as mock_get_latest_hash:
+            mock_get_latest_hash.return_value = "latest_hash"
+            cls.ledger_api = SolanaApi(**config)
 
     @pytest.mark.parametrize(
         ("address", "symbol", "expected_decimals"),
@@ -77,7 +92,9 @@ class TestContractCommon:
     def test_get_token(self, address, symbol, expected_decimals):
         """Test the get_token method."""
 
-        token_data = self.contract.get_token(self.ledger_api, address, symbol)
+        with patch.object(self.ledger_api, "get_state") as mock_get_state:
+            mock_get_state.return_value = State(data=Parsed(parsed={"info": {"decimals": expected_decimals}}))
+            token_data = self.contract.get_token(self.ledger_api, address, symbol)
         spl_token = SplToken(**token_data)
         assert (
             spl_token.decimals == expected_decimals

@@ -9,7 +9,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
-- eightballer/ccxt_wrapper:0.1.0:bafybeibm43y6kwb4kyd3h2cevc2g5d6rstrkf42x4bdqabjqkhnmegmm6u
+- eightballer/ccxt_wrapper:0.1.0:bafybeifrrevzqtp6y4xopne3ookd5bbuxwlix4kdk4eu6tif6cwma4bpn4
 - eightballer/dcxt:0.1.0:bafybeidunaqh7o2nbni3umbw2bep3dnco5fxkm327byulhenumo3jftixq
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
@@ -21,8 +21,8 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
 contracts:
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
-- eightballer/spl_token:0.1.0:bafybeie4cecjpdec5a5xa4iala5a3qideapdex7iz2lmk5zhvzspgcxopi
-- vybe/jupitar_swap:0.1.0:bafybeia7pfzbz6ybamqnvwt52cdiggbwto6fxkh2pv2sd6mfnef7h4pxxq
+- eightballer/spl_token:0.1.0:bafybeigx3dmq5nfbzgxd3y3iw7b3unyip4boire3cvq3uynuop4iechnoa
+- vybe/jupitar_swap:0.1.0:bafybeibdyfb557alftpvxxhrehpptxsezddluoktmj3ph43pqolnbebyle
 - valory/service_registry:0.1.0:bafybeiabptpha4hnd7avieeqdzekwq6cx7bfshanrchfcqafq2kpa5bqwu
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -48,7 +48,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeictebc5elhjfkhnea36dodyijdy7tyezkol4eyb72ah7ai6fbifqa
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeiglfkq33rmamzzywwk6qnvrz5y26h5buf7wqhmul6pbyogzho5e2m
+- eightballer/simple_fsm:0.1.0:bafybeiacbjjfa5lj6oivawtwkvvo4qszo7uwu6rv5vm57czpv3j4inp6mq
 - valory/abstract_abci:0.1.0:bafybeia2egqettv7fd4yryya5ocrxdmpxibvt5ayjg2npvblz73rjpoxla
 - valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
 customs:
@@ -158,4 +158,4 @@ models:
         - mode
         - base
         - gnosis
-      cexs: ${list:[]}
+      cexs: ${list:["mexc"]}

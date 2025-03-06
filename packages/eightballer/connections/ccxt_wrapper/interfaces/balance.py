@@ -1,24 +1,12 @@
 """Base interface for balances protocol."""
 
-import os
-import site
-import importlib
-
+import ccxt
 import requests
 
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
-
-
-site_packages_path = site.getsitepackages()[0]
-ccxt_path = os.path.join(site_packages_path, "ccxt")
-
-ccxt_spec = importlib.util.spec_from_file_location(
-    "ccxt", os.path.join(ccxt_path, "ccxt", "async_support", "__init__.py")
-)
-ccxt = importlib.util.module_from_spec(ccxt_spec)
 
 
 def all_balances_from_api_call(api_call):
