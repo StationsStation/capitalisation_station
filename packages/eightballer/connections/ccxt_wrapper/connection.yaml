@@ -8,9 +8,9 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicxqnmnipke3vj2emp3iat7u4ynx4272thfrbpk4wginu2ou37eey
-  connection.py: bafybeiaymvhvxvpf54bqnplecs4xfo4djrlvlx23vmeqp342ib4mkhp3bm
+  connection.py: bafybeidvnktv6tcdfacphlfwacait76aoettxobpegdsngoj5ldunhhf7m
   interfaces/__init__.py: bafybeifdh6zocdvygxq64hr47ueajgsv67pvaaei5ffwu5c5a6nhssoz5y
-  interfaces/balance.py: bafybeifqs763mbh2pgouw56mrkra3mzqlwy2jawb2gppzoaj32qkgkhynu
+  interfaces/balance.py: bafybeie3kn2pgrfxl7dj4vxedekqearayvsljg7d62jp5katfps5uifjrm
   interfaces/interface.py: bafybeideydkoxnh7nrmphlb422exakcbdisojw2wfmnwpcxz3jo7kq4xwi
   interfaces/interface_base.py: bafybeidink672yk5wdpmwaqlrtugkmsfs4wlaagfzd6z67ti3ql4wefcm4
   interfaces/market.py: bafybeiei3iencmz2ct76qsnvdabkijzyq5emuovgp4xyul2lhy46mbeuba

@@ -43,6 +43,7 @@ class BalanceInterface(BaseInterface):
             if message.params is not None:
                 for key, value in message.params.items():
                     params[key] = value.decode()
+            connection.logger.info(f"Fetching balances for {message.exchange_id} with params: {params}")
             balances = await exchange.fetch_balance(params=params)
             balances = all_balances_from_api_call(balances)
             response_message = dialogue.reply(
@@ -50,8 +51,9 @@ class BalanceInterface(BaseInterface):
                 target_message=message,
                 balances=balances,
                 exchange_id=message.exchange_id,
+                ledger_id=message.ledger_id,
             )
-            connection.logger.debug(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
+            connection.logger.info(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
         except (
             ccxt.RequestTimeout,
             ccxt.ExchangeNotAvailable,

@@ -123,7 +123,7 @@ class IdentifyOpportunityRound(State):
 
         orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
         for opportunity in self.arbitrage_strategy.unaffordable:
-            self.context.logger.info(f"Opportunity unaffordable: {opportunity[1][0]}")
+            self.context.logger.info(f"Opportunity unaffordable: {opportunity[0]}")
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
@@ -304,15 +304,21 @@ class ExecuteOrdersRound(BaseConnectionRound):
 
         failed_orders = []
 
+        futures = []
         for order in models:
             # We send the orders to the exchange.
-            response = yield from self.get_response(
+            response = self.get_response(
                 OrdersMessage.Performative.CREATE_ORDER,
                 connection_id=CCXT_PUBLIC_ID if order.ledger_id == "cex" else DCXT_PUBLIC_ID,
                 order=order,
                 ledger_id=order.ledger_id,
                 exchange_id=order.exchange_id,
             )
+            futures.append(response)
+
+        for future in futures:
+            response = yield from future
+
             if response.performative == OrdersMessage.Performative.ERROR:
                 self.context.logger.error(f"Error creating order: {response.error_code} {response.error_msg} {order}")
                 failed_orders.append(order)
@@ -357,6 +363,7 @@ class CollectDataRound(BaseConnectionRound):
         existing_orders = {ledger_id: {}}
         portfolio[ledger_id] = {}
         for exchange_id in self.context.arbitrage_strategy.cexs:
+            self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
             balances = yield from self.get_response(
                 BalancesMessage.Performative.GET_ALL_BALANCES,
                 connection_id=str(CCXT_PUBLIC_ID),
@@ -368,6 +375,7 @@ class CollectDataRound(BaseConnectionRound):
                 self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
                 return self._handle_error()
 
+            self.context.logger.info(f"Got balances for {exchange_id} on {ledger_id}")
             tickers = yield from self.get_response(
                 TickersMessage.Performative.GET_ALL_TICKERS,
                 connection_id=str(CCXT_PUBLIC_ID),
@@ -379,6 +387,7 @@ class CollectDataRound(BaseConnectionRound):
                 self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
                 return self._handle_error()
 
+            self.context.logger.info(f"Got tickers for {exchange_id} on {ledger_id}")
             orders = yield from self.get_response(
                 OrdersMessage.Performative.GET_ORDERS,
                 connection_id=str(CCXT_PUBLIC_ID),
@@ -390,6 +399,7 @@ class CollectDataRound(BaseConnectionRound):
                 self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
                 return self._handle_error()
 
+            self.context.logger.info(f"Got orders for {exchange_id} on {ledger_id}")
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
             prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
             existing_orders[ledger_id][exchange_id] = [o.dict() for o in orders.orders.orders]
@@ -550,11 +560,11 @@ class PostTradeRound(State):
         delta = -(buy_order.price / sell_order.price * 100 - 100)
         value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
         report_msg_table = dedent(f"""
-        [Sell]({get_explorer_link(sell_order)}) {sell_order.exchange_id} {sell_order.ledger_id}
+        [Sell]({get_explorer_link(sell_order)}) {sell_order.exchange_id} {sell_order.ledger_id} {sell_order.symbol}
 
         {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.amount * sell_order.price:5f}
 
-        [Buy]({get_explorer_link(buy_order)}) {buy_order.exchange_id} {buy_order.ledger_id}
+        [Buy]({get_explorer_link(buy_order)}) {buy_order.exchange_id} {buy_order.ledger_id} {buy_order.symbol}
 
         {buy_order.amount}@{buy_order.price:5f}  total: {buy_order.amount * buy_order.price:5f}
 

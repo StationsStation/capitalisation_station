@@ -3,14 +3,14 @@ Simple script to prepare the runner folder for the first time.
 
 """
 import json
-
 from pathlib import Path
-from aea_ledger_ethereum import EthereumCrypto
-from aea_ledger_solana import SolanaCrypto
 
-from aea.cli.generate_key import _generate_multiple_keys
 from rich import print
 from rich.prompt import Prompt as prompt
+from aea_ledger_solana import SolanaCrypto
+from aea_ledger_ethereum import EthereumCrypto
+from aea.cli.generate_key import _generate_multiple_keys
+
 
 RUNNER_FOLDER_NAME = ".runner"
 DEFAULT_RUNNER_PATH = Path(__file__).parent.parent / RUNNER_FOLDER_NAME

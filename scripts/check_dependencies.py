@@ -26,21 +26,19 @@ In particular:
 It is assumed the script is run from the repository root.
 """
 
-import itertools
-import logging
 import re
 import sys
-from collections import OrderedDict
+import logging
+import itertools
+from typing import Any, Dict, List, Tuple, Iterator, Optional, OrderedDict as OrderedDictType, cast
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional
-from typing import OrderedDict as OrderedDictType
-from typing import Tuple, cast
+from collections import OrderedDict
 
-import click
 import toml
-from aea.configurations.data_types import Dependency
-from aea.package_manager.base import load_configuration
+import click
 from aea.package_manager.v1 import PackageManagerV1
+from aea.package_manager.base import load_configuration
+from aea.configurations.data_types import Dependency
 
 
 ANY_SPECIFIER = "*"

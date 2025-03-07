@@ -1,0 +1,99 @@
+{
+    "cex": {},
+    "mode": {
+        "balancer": [
+            {
+                "asset_id": "OLAS",
+                "free": 11142.508087777811,
+                "used": 0.0,
+                "total": 11142.508087777811,
+                "is_native": false,
+                "contract_address": "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9"
+            },
+            {
+                "asset_id": "WETH",
+                "free": 0.002,
+                "used": 0.0,
+                "total": 0.002,
+                "is_native": false,
+                "contract_address": "0x4200000000000000000000000000000000000006"
+            },
+            {
+                "asset_id": "USDC",
+                "free": 1344.729487,
+                "used": 0.0,
+                "total": 1344.729487,
+                "is_native": false,
+                "contract_address": "0xd988097fb8612cc24eec14542bc03424c656005f"
+            },
+            {
+                "asset_id": "msDAI",
+                "free": 0.0,
+                "used": 0.0,
+                "total": 0.0,
+                "is_native": false,
+                "contract_address": "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138"
+            },
+            {
+                "asset_id": "ETH",
+                "free": 0.008873211990658946,
+                "used": 0.0,
+                "total": 0.008873211990658946,
+                "is_native": true,
+                "contract_address": null
+            }
+        ]
+    },
+    "base": {
+        "balancer": [
+            {
+                "asset_id": "USDbC",
+                "free": 1.0,
+                "used": 0.0,
+                "total": 1.0,
+                "is_native": false,
+                "contract_address": "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca"
+            },
+            {
+                "asset_id": "OLAS",
+                "free": 40607.30414568166,
+                "used": 0.0,
+                "total": 40607.30414568166,
+                "is_native": false,
+                "contract_address": "0x54330d28ca3357f294334bdc454a032e7f353416"
+            },
+            {
+                "asset_id": "USDC",
+                "free": 544.174234,
+                "used": 0.0,
+                "total": 544.174234,
+                "is_native": false,
+                "contract_address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
+            },
+            {
+                "asset_id": "DAI",
+                "free": 713.3756994740673,
+                "used": 0.0,
+                "total": 713.3756994740673,
+                "is_native": false,
+                "contract_address": "0x50c5725949a6f0c72e6c4a641f24049a917db0cb"
+            },
+            {
+                "asset_id": "WETH",
+                "free": 0.0,
+                "used": 0.0,
+                "total": 0.0,
+                "is_native": false,
+                "contract_address": "0x4200000000000000000000000000000000000006"
+            },
+            {
+                "asset_id": "ETH",
+                "free": 0.032164051854737724,
+                "used": 0.0,
+                "total": 0.032164051854737724,
+                "is_native": true,
+                "contract_address": null
+            }
+        ]
+    }
+}
