@@ -26,9 +26,10 @@ def test_strategy_init():
 class TestEnhancedArbitrageStrategy(unittest.TestCase):
     """Test suite for the EnhancedArbitrageStrategy class."""
 
-    def setup_method(self):
+    def setup_method(self, method):
         """Set up test fixtures."""
         # Sample portfolio data
+        self.method = method
         portfolio_path = Path(__file__).parent / "data" / "case_0" / "portfolio.json"
         self.portfolio = read_test_json(portfolio_path)
         self.prices = read_test_json(Path(__file__).parent / "data" / "case_0" / "prices.json")

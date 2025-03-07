@@ -39,7 +39,7 @@ CEX_MARKET = "OLAS/USDT"
 LEDGER_TO_MARKET = {"base": "OLAS/USDC", "mode": "OLAS/USDC", "gnosis": "OLAS/WXDAI"}
 
 DEFAULT_AMOUNT = 10.0
-min_profit = 0.0  # 0%
+min_profit = 0.00  # 0%
 
 
 class ArbitrageOpportunity(NamedTuple):

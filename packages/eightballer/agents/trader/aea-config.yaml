@@ -52,7 +52,7 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeia2egqettv7fd4yryya5ocrxdmpxibvt5ayjg2npvblz73rjpoxla
 - valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
 customs:
-- eightballer/arbitrage_strategy:0.1.0:bafybeice2bihfyzqgr664zyiqkihies3tfakqyejgvm7kguhnxuukwvlnq
+- eightballer/arbitrage_strategy:0.1.0:bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py
 default_ledger: ethereum
 required_ledgers:
 - ethereum
