@@ -38,6 +38,7 @@ class BalanceInterface(BaseInterface):
             connection.logger.debug(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
         except (
             dcxt.exceptions.RequestTimeout,
+            dcxt.exceptions.ExchangeNotAvailable,
             requests.exceptions.Timeout,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout,

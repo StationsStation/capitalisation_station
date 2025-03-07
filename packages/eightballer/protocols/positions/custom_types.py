@@ -168,33 +168,33 @@ class Position(BaseCustomEncoder):
 
     id: str
     symbol: str
-    timestamp: int
-    datetime: str
-    last_update_timestamp: int
-    initial_margin: float
-    initial_margin_percentage: float
-    maintenance_margin: float
-    maintenance_margin_percentage: float
-    entry_price: float
-    notional: float
-    leverage: float
-    unrealized_pnl: float
-    contracts: float
-    contract_size: float
-    margin_ratio: float
-    liquidation_price: float
-    mark_price: float
-    last_price: float
-    collateral: float
-    margin_mode: str
-    side: PositionSide
-    percentage: float
-    info: str
-    size: float
-    exchange_id: str
-    hedged: str
-    stop_loss_price: float
-    take_profit_price: float
+    timestamp: int | None = None
+    datetime: str | None = None
+    last_update_timestamp: int | None = None
+    initial_margin: float | None = None
+    initial_margin_percentage: float | None = None
+    maintenance_margin: float | None = None
+    maintenance_margin_percentage: float | None = None
+    entry_price: float | None = None
+    notional: float | None = None
+    leverage: float | None = None
+    unrealized_pnl: float | None = None
+    contracts: float | None = None
+    contract_size: float | None = None
+    margin_ratio: float | None = None
+    liquidation_price: float | None = None
+    mark_price: float | None = None
+    last_price: float | None = None
+    collateral: float | None = None
+    margin_mode: str | None = None
+    side: PositionSide | None = None
+    percentage: float | None = None
+    info: str | None = None
+    size: float | None = None
+    exchange_id: str | None = None
+    hedged: str | None = None
+    stop_loss_price: float | None = None
+    take_profit_price: float | None = None
 
 
 class Positions(BaseCustomEncoder):

@@ -23,7 +23,6 @@ from typing import Any, cast
 
 from aea.skills.behaviours import TickerBehaviour
 
-from packages.eightballer.connections.ccxt import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.skills.reporting.slack import SlackUploader
 from packages.eightballer.protocols.orders.message import OrdersMessage
@@ -32,7 +31,8 @@ from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, Orde
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
 from packages.eightballer.protocols.positions.dialogues import PositionsDialogue
-from packages.eightballer.connections.ccxt.interfaces.order import (
+from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
+from packages.eightballer.connections.ccxt_wrapper.interfaces.order import (
     from_id_to_instrument_name as base_from_id_to_instrument_name,
 )
 
@@ -68,7 +68,10 @@ def from_instrument_name_to_id(instrument_name):
     month = date[2:4]
     day = date[4:]
     # we need to pad the day with a  if it's a single digit
-    date_obj = datetime.datetime.strptime(str(month), "%m", tz=SYSTEM_TZ)  # noqa
+    date_obj = datetime.datetime.strptime(  # noqa
+        str(month),
+        "%m",
+    )
     month = date_obj.strftime("%b").upper()
     if int(day) < 10:
         day = f"0{day}"
@@ -297,7 +300,8 @@ class ReconciliationBehaviour(TickerBehaviour):
         msg, _ = dialogues.create(
             counterparty=str(target_id),
             performative=OrdersMessage.Performative.GET_ORDER,
-            order=Order(id=order.id, exchange_id=order.exchange_id),
+            order=order,
+            exchange_id=order.exchange_id,
         )
         self.context.outbox.put_message(msg)
 
@@ -335,7 +339,7 @@ class ReconciliationBehaviour(TickerBehaviour):
         """Check the settlements for the exchange."""
 
         dialogues = cast(OrdersDialogues, self.context.orders_dialogues)
-        current_timestamp = float(datetime.datetime.now(tz=datetime.UTC).timestamp())
+        current_timestamp = float(datetime.datetime.now(tz=SYSTEM_TZ).timestamp())
         target_id = self.get_target_id(exchange_id)
 
         msg, _ = dialogues.create(

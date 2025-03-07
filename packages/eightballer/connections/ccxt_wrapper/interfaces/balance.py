@@ -1,10 +1,12 @@
 """Base interface for balances protocol."""
 
-from ccxt import RequestTimeout
+import ccxt
+import requests
+
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, BaseBalancesDialogues
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
 
 
 def all_balances_from_api_call(api_call):
@@ -50,7 +52,13 @@ class BalanceInterface(BaseInterface):
                 exchange_id=message.exchange_id,
             )
             connection.logger.debug(f"Fetched {len(balances.balances)} balances for {message.exchange_id}")
-        except RequestTimeout:
+        except (
+            ccxt.RequestTimeout,
+            ccxt.ExchangeNotAvailable,
+            requests.exceptions.Timeout,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ReadTimeout,
+        ):
             connection.logger.warning(f"Request timeout when fetching balances for {message.exchange_id}")
             response_message = dialogue.reply(
                 performative=BalancesMessage.Performative.ERROR,

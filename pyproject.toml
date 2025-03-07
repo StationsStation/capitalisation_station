@@ -31,7 +31,6 @@ autonomy-dev = {path = "../../upstream/auto_dev", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
 web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
-lyra-v2-client = {path = "third_party/upstream/lyra_client"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"

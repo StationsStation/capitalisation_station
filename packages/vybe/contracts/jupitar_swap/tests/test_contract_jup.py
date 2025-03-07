@@ -25,6 +25,7 @@ import json
 import time
 from typing import cast
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 from aea.common import JSONLike
@@ -35,12 +36,13 @@ from solders.transaction import VersionedTransaction
 from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 
 from packages.eightballer.contracts.spl_token.contract import SplToken, SolanaProgramLibraryToken
+from packages.eightballer.contracts.spl_token.tests.test_contract import State, Parsed
 
 
 PACKAGE_DIR = Path(__file__).parent.parent
 MAX_FLAKY_RERUNS = 3
 
-DEFAULT_ADDRESS = "https://belita-kndiva-fast-mainnet.helius-rpc.com/"
+DEFAULT_ADDRESS = "https://solana.drpc.org/"
 
 SOL_ADDDRESS = "So11111111111111111111111111111111111111112"
 OLAS_ADDRESS = "Ez3nzG9ofodYCvEmw73XhQ87LWNYVRM2s7diB5tBZPyM"
@@ -70,8 +72,10 @@ class TestContractCommon:
         config = {
             "address": DEFAULT_ADDRESS,
         }
-        cls.ledger_api = SolanaApi(**config)
-        cls.faucet = SolanaFaucetApi()
+        with patch("aea_ledger_solana.SolanaApi._get_latest_hash") as mock_get_latest_hash:
+            mock_get_latest_hash.return_value = "latest_hash"
+            cls.ledger_api = SolanaApi(**config)
+            cls.faucet = SolanaFaucetApi()
 
     @staticmethod
     def retry_airdrop_if_result_none(faucet, address, amount=None):
@@ -172,8 +176,15 @@ class TestContractCommon:
         """Test get swap transaction."""
 
         # we first need to retrieve the token info
-        input_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *input_mint))
-        output_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *output_mint))
+        with patch("aea_ledger_solana.SolanaApi.get_state") as mock_get_state:
+            mock_get_state.return_value = State(data=Parsed(parsed={"info": {"decimals": 9}}))
+            input_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *input_mint))
+            output_token = SplToken(**SolanaProgramLibraryToken.get_token(self.ledger_api, *output_mint))
+        with patch("requests.get") as mock_post:
+            mock_post.return_value.get.return_value = {
+                "outAmount": 100,
+                "inAmount": 1000,
+            }
         quote = self.contract.get_swap_quote(
             ledger_api=self.ledger_api,
             input_mint=input_token.address,

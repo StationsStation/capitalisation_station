@@ -2,9 +2,11 @@
 
 import asyncio
 import contextlib
+from pathlib import Path
 from dataclasses import asdict, dataclass
 from unittest.mock import MagicMock
 
+import yaml
 import pandas as pd
 import rich_click as click
 from rich import print
@@ -27,15 +29,23 @@ from packages.eightballer.connections.dcxt.dcxt.balancer import SupportedLedgers
 from packages.eightballer.connections.dcxt.interfaces.interface_base import get_dialogues
 
 
-RPC_MAPPING = {
-    SupportedLedgers.ETHEREUM: "https://ethereum.rpc.subquery.network/public",
-    SupportedLedgers.BASE: "https://rpc.ankr.com/base",
-    SupportedLedgers.OPTIMISM: "https://rpc.ankr.com/optimism",
-    SupportedLedgers.GNOSIS: "http://gnosis.chains.wtf:8545",
-    SupportedLedgers.POLYGON_POS: "https://rpc.ankr.com/polygon",
-    SupportedLedgers.ARBITRUM: "https://rpc.ankr.com/arbitrum",
-    SupportedLedgers.MODE: "https://mainnet.mode.network",
-}
+# We open the ledger connection file such that we can get the rpc url for the ledger
+
+CONNECTION_FILE = Path(__file__).parent / "connection.yaml"
+
+
+def generate_rpc_mapping():
+    """Generate the rpc mapping for the ledgers."""
+    data = yaml.safe_load(CONNECTION_FILE.read_text())
+    rpc_mapping = {}
+    for exchange in data["config"]["exchanges"]:
+        ledger_id = exchange["ledger_id"]
+        rpc_url = exchange["rpc_url"]
+        rpc_mapping[SupportedLedgers(ledger_id)] = rpc_url
+    return rpc_mapping
+
+
+RPC_MAPPING = generate_rpc_mapping()
 
 
 def rich_display_dataframe(data, title="Dataframe") -> None:
@@ -188,7 +198,9 @@ def get_data(ledgers, exchanges, account, connections):
 
 @click.command()
 @click.argument("account", type=click.STRING)
-@click.option("--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), default="all")
+@click.option(
+    "-l", "--ledger", type=click.Choice([f.value for f in SupportedLedgers] + ["all"]), multiple=True, default=["all"]
+)
 @click.option(
     "--supported-exchanges", type=click.Choice([f.value for f in SupportedExchanges] + ["all"]), default="all"
 )
@@ -209,7 +221,7 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
     print("Output:", output) if output else None
     print()
     connections = []
-    ledgers = [f.value for f in SupportedLedgers] if ledger == "all" else [ledger]
+    ledgers = [f.value for f in SupportedLedgers] if ledger == ["all"] else ledger
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]

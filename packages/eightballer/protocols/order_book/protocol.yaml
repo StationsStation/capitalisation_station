@@ -18,7 +18,7 @@ fingerprint:
   order_book_pb2.py: bafybeiclkswsezvjmupanhsti7egweixfwh2htp4j3kct5vdcebhj7yziy
   protocol_spec.yaml: bafybeigbaj7tgnt7xz62kh4taunz22ymnd6w6rtdggnfbidcqypum7esc4
   serialization.py: bafybeiarpafujerygrlxftopx7qfov7tlazehqak2tlex4ial575u23mou
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
+  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
   tests/dummy_data.yaml: bafybeifnryfgsysxior7xixnl23micbalu2ekh3rupvnfpsyphqxdisquq
   tests/test_order_book_dialogues.py: bafybeiewhikhbslqfdrxsmipl2xe3fb7vnrsnup6plheerq73ezo3cl7j4
   tests/test_order_book_messages.py: bafybeif4tkfsabbynv4ntjnszexb6dypxlvar34kumpsa4zrtyquwfzrpm

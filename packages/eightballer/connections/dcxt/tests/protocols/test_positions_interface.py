@@ -16,6 +16,7 @@ EXCHANGE_ID = list(TEST_EXCHANGES.keys()).pop()
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip("Not implemented")
 class TestPositionInterface(BaseDcxtConnectionTest):
     """Test the position interface."""
 

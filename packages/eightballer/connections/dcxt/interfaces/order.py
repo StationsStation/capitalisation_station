@@ -5,6 +5,7 @@ import traceback
 from typing import Any, cast
 from datetime import datetime
 
+import web3
 import requests
 
 from packages.eightballer.connections.dcxt import dcxt
@@ -152,6 +153,8 @@ class OrderInterface(BaseInterface):
         except (
             dcxt.exceptions.ExchangeNotAvailable,
             dcxt.exceptions.InvalidOrder,
+            web3.exceptions.TimeExhausted,
+            requests.exceptions.ReadTimeout,
             requests.exceptions.HTTPError,
         ) as base_error:
             return get_error(message, dialogue, str(base_error))

@@ -11,7 +11,7 @@ from packages.eightballer.skills.reporting.handlers import OrdersReportingHandle
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogues
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.skills.reporting.tests.test_strategy import DB_FILE
 from packages.eightballer.skills.reporting.tests.test_behaviour import ROOT_DIR
@@ -50,10 +50,10 @@ class TestOrderHandler(BaseSkillTestCase):
         cls.order_params = {
             "id": "123",
             "symbol": "BTC/USD",
-            "side": "buy",
-            "type": "limit",
-            "status": OrderStatus.OPEN,
+            "status": OrderStatus.OPEN.value,
             "exchange_id": DEFAULT_EXCHANGE_ID,
+            "side": OrderSide.BUY.value,
+            "type": OrderType.LIMIT.value,
         }
         cls.position_params = {
             "id": "123",

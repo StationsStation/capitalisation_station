@@ -4,12 +4,13 @@ version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
-fingerprint: {}
+fingerprint:
+  tests/test_trader_agent.py: bafybeibcg6glyfbifp7sagmxvwbqiomc276su526xdzrwjkxfdqunvjzna
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
-- eightballer/ccxt:0.1.0:bafybeiakskxkscwf22jvkfwyxwsxxyt2gnkbs7mefqcjzak3k7v3q4pmxm
-- eightballer/dcxt:0.1.0:bafybeidhr3zh5zknayps3fwxxammkz5vqvwfbzledd3gfalbgfisfarigq
+- eightballer/ccxt_wrapper:0.1.0:bafybeifrrevzqtp6y4xopne3ookd5bbuxwlix4kdk4eu6tif6cwma4bpn4
+- eightballer/dcxt:0.1.0:bafybeihgzzlkdbcdtzacorgpsm6rqde6scjssxo5pbnp3jn45eoh6uez5m
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
@@ -20,21 +21,21 @@ connections:
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
 contracts:
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
-- eightballer/spl_token:0.1.0:bafybeih475g6pgu23t6upqwqdmenucig7npaf5zha7atxidmbb36nh6no4
-- vybe/jupitar_swap:0.1.0:bafybeicz6k7y3ii3ltehlhm63dgowj3z7l2cami35ycrqf37bnvyr2jlca
+- eightballer/spl_token:0.1.0:bafybeigx3dmq5nfbzgxd3y3iw7b3unyip4boire3cvq3uynuop4iechnoa
+- vybe/jupitar_swap:0.1.0:bafybeibdyfb557alftpvxxhrehpptxsezddluoktmj3ph43pqolnbebyle
 - valory/service_registry:0.1.0:bafybeiabptpha4hnd7avieeqdzekwq6cx7bfshanrchfcqafq2kpa5bqwu
 protocols:
-- eightballer/balances:0.1.0:bafybeieusqlzcwbnzshadmt35hstiwdhrvbkd46oejcpwyq7tm66pb3ive
-- eightballer/default:0.1.0:bafybeigicpslawpiohf2gzhziv53jlvotfiknwpvbrt7sxsusriuq4su5a
+- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
+- eightballer/default:0.1.0:bafybeifzc7kwtlg6egf6qnfq4s2hunqlbul5tkq2334gcwdbsrgltaki5a
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
-- eightballer/markets:0.1.0:bafybeihwx4wombh5r7mtfpags466w2vcydy6ldl3c3awnwtgizpfllomse
-- eightballer/ohlcv:0.1.0:bafybeicaxvy6itmm52gqofmm7yq5xgojyrge6uczgwcsxeykxjju5xk66a
-- eightballer/order_book:0.1.0:bafybeig4e26oyh5qpcx26glqm3zvxzu5cks5guf7ejtw6edkse63epr6ky
-- eightballer/orders:0.1.0:bafybeihx74ubnyd2uyjc53wq4732b5v4umdbv4poofkjtsl5fsaj5rdyom
-- eightballer/positions:0.1.0:bafybeiaf2zettrz53zgegzzawukd7j4cvbi4jbpkppmfgk6dvyoz5e72ry
+- eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
+- eightballer/ohlcv:0.1.0:bafybeihh3iqz2xsb76h56drzy6bqgezht35uggrz4gamj7o3mhumwkou5i
+- eightballer/order_book:0.1.0:bafybeifozyvz7b2qlbo55uarhjwyr4jbciksee2fjjpqmtu2msfq2aoxqu
+- eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
+- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
-- eightballer/spot_asset:0.1.0:bafybeic4swpkiw3p6kmz5l53siitz6dk62fidqqdeak26g5bei7vkhrwwi
-- eightballer/tickers:0.1.0:bafybeic4ltzxy3wl2a43bwsoyohtcf5cuypdbtsgdrlhxwnaxklf564zgm
+- eightballer/spot_asset:0.1.0:bafybeigtq5pskru4f2i6keaycrwtbgiw32igzjoikc3neymgfytwsgkohe
+- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 - valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
@@ -45,13 +46,13 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/metrics:0.1.0:bafybeihnslabjycr6vw4e2ucgemebxskaryjunm5tbp3s4qycjixfohdwi
+- eightballer/metrics:0.1.0:bafybeictebc5elhjfkhnea36dodyijdy7tyezkol4eyb72ah7ai6fbifqa
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeid6dmpc47ecj6noadltpxgooz4ydwrjyjyjijindwahc4ynbk27eu
+- eightballer/simple_fsm:0.1.0:bafybeid22f43j6jghjnenxkc2fktmq5h6mmreb2j5jx7ljwagagbakgb4a
 - valory/abstract_abci:0.1.0:bafybeia2egqettv7fd4yryya5ocrxdmpxibvt5ayjg2npvblz73rjpoxla
 - valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
 customs:
-- eightballer/arbitrage_strategy:0.1.0:bafybeidkvzdi3nbf64m3dnj2h4zhf4m62slyu632hf7agleb4h2ba6nude
+- eightballer/arbitrage_strategy:0.1.0:bafybeibpl6zpfbgiwapybvey33azhfwcpxisjfizxurqbyk37iddkm4rn4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -105,7 +106,7 @@ config:
   use_tendermint: ${bool:false}
   target_skill_id: eightballer/chained_dex_app:0.1.0
 ---
-public_id: eightballer/ccxt:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
+public_id: eightballer/ccxt_wrapper:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
 type: connection
 config:
   exchanges:
@@ -131,7 +132,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: https://base-pokt.nodies.app
+    rpc_url: https://mainnet.base.org
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
@@ -157,5 +158,4 @@ models:
         - mode
         - base
         - gnosis
-      cexs:
-      - mexc
+      cexs: ${list:["mexc"]}

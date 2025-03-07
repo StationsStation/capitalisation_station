@@ -109,7 +109,6 @@ class BalancesReportingHandler(BaseHandler):
         if message.performative == BalancesMessage.Performative.ALL_BALANCES:
             for balance in message.balances.balances:
                 balance.id = f"{message.exchange_id}_{balance.asset_id}_{self.context.agent_address}"
-                balance.agent_address = self.context.agent_address
                 balance.exchange_id = message.exchange_id
                 instance = self.strategy.get_instance(balance, "id")
                 if not instance:
@@ -169,12 +168,11 @@ class OrdersReportingHandler(BaseHandler):
 
     def _parse_order(self, order: Order):
         """Parse the order."""
-        data = order.as_json()
+        data = order.dict()
         order = Order(**data)
         order.fee = None
         order.fees = None
         order.trades = None
-        order.agent_address = self.context.agent_address
         return order
 
 
@@ -190,7 +188,6 @@ class TickersReportingHandler(BaseHandler):
         existing_instances = []
         if message.performative == TickersMessage.Performative.ALL_TICKERS:
             for ticker in message.tickers.tickers:
-                ticker.agent_address = self.context.agent_address
                 ticker.info = json.dumps(ticker.info)
                 ticker.id = f"{message.exchange_id}_{ticker.symbol}_{self.context.agent_address}"
                 instance = self.strategy.get_instance(ticker, "id")
@@ -248,7 +245,6 @@ class PositionsReportingHandler(BaseHandler):
 
     def _handle_position(self, position: Position, message) -> None:
         """We refactor the position to be a dict."""
-        position.agent_address = self.context.agent_address
         position.info = json.dumps(position.info)
         position.id = f"{message.exchange_id}_{position.symbol}_{self.context.agent_address}"
         return self.strategy.get_instance(position, "id")

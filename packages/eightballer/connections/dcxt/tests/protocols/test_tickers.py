@@ -28,12 +28,14 @@ class TestFetchTickers(BaseDcxtConnectionTest):
     @with_timeout(TIMEOUT)
     async def test_handles_get_all_tickers(self, exchange_id=DEFAULT_EXCHANGE) -> None:
         """Can handle ohlcv messages."""
+        exchange_id, ledger_id = exchange_id
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
             exchange_id=exchange_id,
+            ledger_id=ledger_id,
         )
         envelope = Envelope(
             to=request.to,
@@ -55,14 +57,19 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    async def test_handles_exchange_timeout(self, exchange_id) -> None:
+    async def test_handles_exchange_timeout(
+        self,
+        exchange_id,
+    ) -> None:
         """Can handle ohlcv messages."""
+        exchange_id, ledger_id = exchange_id
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
             counterparty=str(self.connection.connection_id),
             performative=TickersMessage.Performative.GET_ALL_TICKERS,
             exchange_id=exchange_id,
+            ledger_id=ledger_id,
         )
         envelope = Envelope(
             to=request.to,
@@ -72,7 +79,7 @@ class TestConnectionHandlesExchangeErrors(BaseDcxtConnectionTest):
         # we create a mock object to simulate a timeout
         # simulate a raised exceptionS
         mocker = MagicMock(side_effect=dcxt.exceptions.RequestTimeout)
-        self.connection._exchanges[exchange_id].fetch_tickers = mocker  # noqa
+        self.connection._exchanges[ledger_id][exchange_id].fetch_tickers = mocker  # noqa
 
         response = await self.connection.protocol_interface.handle_envelope(envelope)
 

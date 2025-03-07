@@ -4,6 +4,7 @@ Market:
   base_id: base_id
   contract: false
   contract_size: 0.0
+  exchange_id: exchange_id
   expiry: 0.0
   expiry_datetime: expiry_datetime
   future: false

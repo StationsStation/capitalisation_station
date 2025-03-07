@@ -31,6 +31,7 @@ from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.skills.reporting.strategy import ReportingStrategy
 from packages.eightballer.skills.reporting.behaviours import from_id_to_instrument_name, from_instrument_name_to_id
+from packages.eightballer.protocols.orders.custom_types import OrderSide, OrderType
 
 
 # pylint: disable=protected-access,too-few-public-methods,consider-using-with
@@ -45,6 +46,8 @@ class TestOrder:
 
     id: str = "test_id"
     exchange_id: str = "lyra"
+    type: OrderType = OrderType.LIMIT
+    side: OrderSide = OrderSide.BUY
 
 
 class BaseReportingTestCase(BaseSkillTestCase, ABC):
@@ -97,7 +100,7 @@ class TestReconciliationSetup(BaseReportingTestCase):
         strategy.setup()
         # we need to patch in the result from the strategy get_orders
         mocker = MagicMock()
-        mocker.get_orders.return_value = [TestOrder()]
+        mocker.get_orders.return_value = [TestOrder]
         strategy.get_orders = mocker.get_orders
 
         behaviour.act()

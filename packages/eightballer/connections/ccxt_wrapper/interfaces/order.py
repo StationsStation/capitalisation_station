@@ -1,16 +1,26 @@
 """Order protocol handler."""
 
+import os
 import json
+import site
+import importlib
 import traceback
 from typing import Any, cast
 from datetime import datetime
 
-import ccxt.async_support as ccxt  # pylint: disable=E0401,E0611
-from ccxt.base.errors import NotSupported
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
-from packages.eightballer.connections.ccxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.connections.ccxt_wrapper.interfaces.interface_base import BaseInterface
+
+
+site_packages_path = site.getsitepackages()[0]
+ccxt_path = os.path.join(site_packages_path, "ccxt")
+
+ccxt_spec = importlib.util.spec_from_file_location(
+    "ccxt", os.path.join(ccxt_path, "ccxt", "async_support", "__init__.py")
+)
+ccxt = importlib.util.module_from_spec(ccxt_spec)
 
 
 INTERVAL = 10
@@ -146,7 +156,7 @@ def get_error(message: OrdersMessage, dialogue: OrdersDialogue, error_msg: str) 
             performative=OrdersMessage.Performative.ERROR,
             target_message=message,
             error_code=OrdersMessage.ErrorCode(1),
-            error_msg=str(error_msg),
+            error_msg=str(str(error_msg)),
             error_data={"msg": b"{error_msg}"},
         ),
     )
@@ -189,7 +199,11 @@ class OrderInterface(BaseInterface):
             order.status = OrderStatus.CANCELLED
             updated_order = order
             connection.logger.exception(f"FAILED TO CREATE ORDER -> insufficient funds! {base_error!s}")
-        except (ccxt.ExchangeNotAvailable, ccxt.InvalidOrder) as base_error:
+        except (
+            ccxt.ExchangeNotAvailable,
+            ccxt.InvalidOrder,
+            ccxt.ExchangeError,
+        ) as base_error:
             return get_error(message, dialogue, str(base_error))
         response_message = dialogue.reply(
             target_message=message,
@@ -221,8 +235,21 @@ class OrderInterface(BaseInterface):
                 params=_get_kwargs(),
                 symbol=message.symbol if hasattr(message, "symbol") else None,
             )
-        except NotSupported as error:  # noqa
-            orders = await exchange.fetch_open_orders()
+        except ccxt.ExchangeError as error:
+            connection.logger.warning(
+                f"Couldn't fetch open orders from {exchange_id}."
+                f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
+            )
+            return get_error(message, dialogue, str(error))
+        except ccxt.NotSupported as error:  # noqa
+            try:
+                orders = await exchange.fetch_open_orders()
+            except (ccxt.ExchangeError, ccxt.NotSupported) as error:
+                connection.logger.warning(
+                    f"Couldn't fetch open orders from {exchange_id}."
+                    f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
+                )
+                return get_error(message, dialogue, str(error))
         except Exception as error:  # noqa
             connection.logger.warning(
                 f"Couldn't fetch open orders from {exchange_id}."

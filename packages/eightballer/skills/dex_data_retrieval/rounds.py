@@ -59,6 +59,11 @@ class FetchDexBalancesRound(CollectSameUntilThresholdRound):
     payload_class = FetchDexBalancesPayload
     payload_attribute = "dex_balances"
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.FAILED
+    none_event = Event.FAILED
+    collection_key = "balances"
+    selection_key = "exchange"
 
     def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
@@ -78,6 +83,11 @@ class FetchDexMarketsRound(CollectSameUntilThresholdRound):
     payload_class = FetchDexMarketsPayload
     payload_attribute = "dex_markets"
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.FAILED
+    none_event = Event.FAILED
+    collection_key = "markets"
+    selection_key = "exchange"
 
     def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
@@ -97,6 +107,11 @@ class FetchDexOrdersRound(CollectSameUntilThresholdRound):
     payload_class = FetchDexOrdersPayload
     payload_attribute = "dex_orders"
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.FAILED
+    none_event = Event.FAILED
+    collection_key = "orders"
+    selection_key = "exchange"
 
     def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
@@ -115,6 +130,11 @@ class FetchDexPositionsRound(CollectSameUntilThresholdRound):
     payload_class = FetchDexPositionsPayload
     payload_attribute = "dex_positions"
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.FAILED
+    none_event = Event.FAILED
+    collection_key = "positions"
+    selection_key = "exchange"
 
     def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
@@ -132,6 +152,11 @@ class FetchDexTickersRound(CollectSameUntilThresholdRound):
     payload_class = FetchDexTickersPayload
     payload_attribute = "dex_tickers"
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.FAILED
+    none_event = Event.FAILED
+    collection_key = "tickers"
+    selection_key = "exchange"
 
     def end_block(self) -> tuple[BaseSynchronizedData, Enum] | None:
         """Process the end of the block."""
