@@ -1,6 +1,6 @@
 autonomy_dependencies:
 - name: open-autonomy
-  version: 0.19.3
+  version: 0.19.4
   location: remote
   url: https://api.github.com/repos/valory-xyz/open-autonomy
   plugins: &id001
@@ -17,14 +17,14 @@ autonomy_dependencies:
   - open-aea-cli-ipfs
   extras: null
 - name: stations_stations
-  version: 0.1.16
+  version: 0.1.19
   location: remote
   url: https://api.github.com/repos/StationsStation/stations_station
   plugins: null
   extras: null
 poetry_dependencies:
 - name: open-autonomy
-  version: 0.19.3
+  version: 0.19.4
   location: remote
   url: https://api.github.com/repos/valory-xyz/open-autonomy
   plugins: *id001
@@ -36,7 +36,7 @@ poetry_dependencies:
   plugins: *id002
   extras: null
 - name: autonomy-dev
-  version: 0.2.127
+  version: 0.2.142
   location: remote
   url: https://api.github.com/repos/8ball030/auto_dev
   plugins: null
