@@ -13,3 +13,6 @@
 [submodule "third_party/upstream/lyra_client"]
 	path = third_party/upstream/lyra_client
 	url = https://github.com/8ball030/lyra_client.git
+[submodule "third_party/upstream/v2-action-signing-python"]
+	path = third_party/upstream/v2-action-signing-python
+	url = https://github.com/8ball030/v2-action-signing-python.git
