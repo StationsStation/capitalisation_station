@@ -12,9 +12,9 @@ fingerprint:
   behaviours.py: bafybeib5juhiv7qmgmdoaelyyb37u2lieyuybgqvsmuo34cwfw2fusigzu
   dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
   handlers.py: bafybeicpkff5nwwkznh4u2ry4qm3w5hmniyvkgdxaf7hf5r5jshum2ypem
-  strategy.py: bafybeibfsdyj5u3vbik7qs2ilbnlfwgw7xbwl6qumdnfrzg5olcgxrzi6e
+  strategy.py: bafybeifzyxmkghux6b6wfejjagkvsozg5fx73a3y22llbwoi4v54rfx7aa
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_behaviours.py: bafybeidktpwnssyrlddas72kqw2a6wfckkvo5qno5mi64ycbhppr7lcmhu
+  tests/test_behaviours.py: bafybeiby3lxi2zjmljjxubuo7iksvzvskurdi4qrbnrjuha3lwv4jg57gy
   tests/test_metrics.py: bafybeihinskbohxozmjqailht6sfwfuwienifc7lcpeoynkuqk757n52lm
   tests/test_metrics_dialogues.py: bafybeidptlod3rj6znca6ha2uvygjt5zwyjxjuyeiphld6izrixdrx422m
 fingerprint_ignore_patterns: []

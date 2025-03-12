@@ -291,6 +291,10 @@ class BridgingStrategy(Model):
     @property
     def crypto(self):
         """Get the crypto object."""
+        key_path = Path("ethereum_private_key.txt")
+        if not key_path.exists():
+            self.context.logger.warning("No private key found, generating ephemeral key!")
+            return EthereumCrypto()
         return EthereumCrypto(
             private_key_path="ethereum_private_key.txt",
         )

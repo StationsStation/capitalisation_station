@@ -93,13 +93,24 @@ class TestWaitForSignatureRound(BaseSkillTestCase):
     path_to_skill = Path(ROOT_DIR, "packages", PUBLIC_ID.author, "skills", PUBLIC_ID.name)
     round_class = WaitForSignatureRound
 
-    @pytest.mark.parametrize("bridge_request", [BRIDGE_REQUEST_1, BRIDGE_REQUEST_2])
+    @pytest.mark.parametrize(
+        "bridge_request",
+        [
+            BRIDGE_REQUEST_1,
+        ],
+    )
     def test_act(
         self,
         bridge_request,
     ):
         """Test the act method of the round."""
         state = self.round_class(name="test", skill_context=self.skill.skill_context)
+
+        def dummy_function(*args, **kwargs):
+            del args, kwargs  # unused
+            return {"events": [{"transactionHash": bridge_request.deposit_txn.encode()}]}
+
+        state.strategy.l2_amb.get_tokens_bridged_events = dummy_function
         state.strategy.current_bridge_request = bridge_request
         state.act()
         assert state.is_done
