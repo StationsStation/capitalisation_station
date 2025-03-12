@@ -129,5 +129,5 @@ class DefaultSerializer(Serializer):
             dialogue_reference=dialogue_reference,
             target=target,
             performative=performative,
-            **performative_content,
+            **performative_content
         )

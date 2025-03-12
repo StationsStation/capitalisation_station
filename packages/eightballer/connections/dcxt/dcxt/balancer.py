@@ -494,6 +494,7 @@ class BalancerClient:
             is_buy=not is_sell,
         )
         # we query the smart router
+        sor_result = {}
         try:
             sor_result = self.bal.balSorQuery(params)
         except Exception as exc:  # pylint: disable=W0718

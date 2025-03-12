@@ -1,0 +1,18 @@
+name: amb_mainnet
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeih5ebis6bvbrrwchsquka5bio2ic5utfyaw32gs5eieahc7auf5dy
+  build/amb_mainnet.json: bafybeiacz4jmnkam3zl4nmiicnor7rzu3iemykqp6r7kjvztf2dgtrlqu4
+  contract.py: bafybeifbl7axzlozbulantittnyf3q6xkec4ve6dhampqqtwmbfrcpydda
+  tests/test_amb_mainnet_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: AmbMainnet
+contract_interface_paths:
+  ethereum: build/amb_mainnet.json
+dependencies: {}
+contracts: []

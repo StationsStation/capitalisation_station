@@ -22,7 +22,6 @@ speech_acts:
     error_msg: pt:str
     error_data: pt:dict[pt:str, pt:bytes]
   end: {}
-...
 ---
 ct:ErrorCode: |
   enum ErrorCodeEnum {
@@ -33,7 +32,6 @@ ct:ErrorCode: |
       INVALID_DIALOGUE = 4;
     }
   ErrorCodeEnum error_code = 1;
-...
 ---
 initiation: [bytes, error]
 reply:
@@ -44,4 +42,5 @@ termination: [end, error]
 roles: {agent}
 end_states: [successful, failed]
 keep_terminal_state_dialogues: true
+
 ```
