@@ -176,9 +176,10 @@ class CcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.executing_tasks.remove(task)
         response_message: Message | None = task.result()
         response_envelope = self.protocol_interface.build_envelope(request, response_message)
+        self.logger.info(f"Placing {response_message} in queue")
         if response_envelope is None:
             return
-        self.logger.debug(f"Placing {response_message} in queue")
+        self.logger.info(f"Placing {response_message} in queue")
         self.queue.put_nowait(response_envelope)
 
     def get_error_message(

@@ -21,7 +21,9 @@
 
 import json
 import operator
+from typing import NamedTuple
 from textwrap import dedent
+from functools import reduce
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 
@@ -37,7 +39,21 @@ CEX_MARKET = "OLAS/USDT"
 LEDGER_TO_MARKET = {"base": "OLAS/USDC", "mode": "OLAS/USDC", "gnosis": "OLAS/WXDAI"}
 
 DEFAULT_AMOUNT = 10.0
-min_profit = 0.0  # 0%
+min_profit = 0.00  # 0%
+
+
+class ArbitrageOpportunity(NamedTuple):
+    """An arbitrage opportunity."""
+
+    market: str
+    delta: float
+    percent: float
+    best_bid: float
+    best_ask: float
+    best_bid_exchange: str
+    best_ask_exchange: str
+    best_bid_ledger: str
+    best_ask_ledger: str
 
 
 class ArbitrageStrategy:
@@ -45,7 +61,7 @@ class ArbitrageStrategy:
 
     unaffordable = []
 
-    def get_orders(
+    def get_orders(  # noqa
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
         prices: dict[str, dict[str, dict[str, float]]],
@@ -66,6 +82,73 @@ class ArbitrageStrategy:
         """
         del kwargs
         order_set = []
+
+        # we check
+        all_ledger_exchanges = reduce(
+            lambda x, y: (x, y),
+            [(ledger, exchange) for ledger in portfolio for exchange in portfolio[ledger]],
+        )
+
+        intersections = {}
+        # we calculate where we have overlapping markets
+        for ledger, exchange in all_ledger_exchanges:
+            markets = {k.get("symbol"): k for k in prices[ledger][exchange]}
+            intersections[ledger] = set(markets.keys())
+
+        over_laps = reduce(lambda x, y: x.intersection(y), intersections.values())
+
+        opportunities = []
+        for market in over_laps:
+            # we calculate the best bids and asks
+            best_bid = None
+            best_ask = None
+            best_bid_exchange = None
+            best_bid_ledger = None
+            best_ask_exchange = None
+            best_ask_ledger = None
+            for ledger, exchange in all_ledger_exchanges:
+                price = [f for f in prices[ledger][exchange] if f["symbol"] == market].pop()
+                if best_bid is None or price["bid"] > best_bid:
+                    best_bid = price["bid"]
+                    best_bid_exchange = exchange
+                    best_bid_ledger = ledger
+                if best_ask is None or price["ask"] < best_ask:
+                    best_ask = price["ask"]
+                    best_ask_exchange = exchange
+                    best_ask_ledger = ledger
+            delta = best_bid - best_ask
+            percent = delta / best_ask
+            if percent > min_profit:
+                opportunities.append(
+                    ArbitrageOpportunity(
+                        market=market,
+                        delta=delta,
+                        percent=percent,
+                        best_bid=best_bid,
+                        best_ask=best_ask,
+                        best_bid_exchange=best_bid_exchange,
+                        best_bid_ledger=best_bid_ledger,
+                        best_ask_exchange=best_ask_exchange,
+                        best_ask_ledger=best_ask_ledger,
+                    )
+                )
+
+        self.unaffordable = []
+        for opp in opportunities:
+            if self.has_balance_for_opportunity(opp, portfolio):
+                orders = self.get_orders_for_opportunity(opp, portfolio, prices)
+                order_set.append((opp.delta, orders))
+            else:
+                self.unaffordable.append(opp)
+        if order_set:
+            optimal_orders = max(order_set, key=operator.itemgetter(0))
+            return optimal_orders[1]
+        return []
+
+    def cex_to_dex(self, portfolio, prices):
+        """Get orders for a cex to dex arbitrage."""
+        order_set = []
+
         for cex_exchange in portfolio[CEX_LEDGER]:
             cex_balances = {asset["asset_id"]: asset for asset in portfolio[CEX_LEDGER][cex_exchange]}
             cex_price = {price["symbol"]: price for price in prices["cex"][cex_exchange]}[CEX_MARKET]
@@ -92,6 +175,57 @@ class ArbitrageStrategy:
             optimal_orders = max(opportunities, key=operator.itemgetter(0))
             return optimal_orders[1]
         return []
+
+    def has_balance_for_opportunity(self, opportunity, portfolio):
+        """Check if we have the balance for an opportunity."""
+        buy_balance = portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]
+        sell_balance = portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
+        buy_asset, sell_asset = opportunity.market.split("/")
+        buy_balance = {asset["asset_id"]: asset for asset in buy_balance}
+        sell_balance = {asset["asset_id"]: asset for asset in sell_balance}
+        return not any(
+            [
+                buy_balance[buy_asset]["free"] < DEFAULT_AMOUNT * opportunity.best_ask,
+                sell_balance[sell_asset]["free"] < DEFAULT_AMOUNT,
+            ]
+        )
+
+    def get_orders_for_opportunity(self, opportunity, portfolio, prices):
+        """Get orders for an opportunity."""
+        buy_prices = {
+            price["symbol"]: price for price in prices[opportunity.best_ask_ledger][opportunity.best_ask_exchange]
+        }
+        sell_prices = {
+            price["symbol"]: price for price in prices[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
+        }
+        asset_a, asset_b = opportunity.market.split("/")
+        portfolio_a = {p["asset_id"]: p for p in portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]}
+        portfolio_b = {p["asset_id"]: p for p in portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]}
+        buy_order = Order(
+            price=buy_prices[opportunity.market]["ask"],
+            exchange_id=opportunity.best_ask_exchange,
+            ledger_id=opportunity.best_ask_ledger,
+            symbol=opportunity.market,
+            side=OrderSide.BUY,
+            status=OrderStatus.NEW,
+            amount=DEFAULT_AMOUNT,
+            type=OrderType.MARKET,
+            asset_a=portfolio_a[asset_a]["contract_address"],
+            asset_b=portfolio_a[asset_b]["contract_address"],
+        )
+        sell_order = Order(
+            price=sell_prices[opportunity.market]["bid"],
+            exchange_id=opportunity.best_bid_exchange,
+            ledger_id=opportunity.best_bid_ledger,
+            symbol=opportunity.market,
+            side=OrderSide.SELL,
+            status=OrderStatus.NEW,
+            amount=DEFAULT_AMOUNT,
+            type=OrderType.MARKET,
+            asset_a=portfolio_b[asset_a]["contract_address"],
+            asset_b=portfolio_b[asset_b]["contract_address"],
+        )
+        return [sell_order, buy_order]
 
     def get_orders_for_ledger(
         self,
