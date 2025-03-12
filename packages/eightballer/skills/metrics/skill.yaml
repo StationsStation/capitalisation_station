@@ -18,7 +18,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeifzc7kwtlg6egf6qnfq4s2hunqlbul5tkq2334gcwdbsrgltaki5a
+- eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 skills: []
 behaviours: {}

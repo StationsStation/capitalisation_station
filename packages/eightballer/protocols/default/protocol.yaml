@@ -7,16 +7,16 @@ description: A protocol for exchanging any bytes message.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeigblu34s2oqmv7es6jrbnziodhvmxq6eevy3w5guzzj3hzrvdacm4
+  README.md: bafybeib5s44aibo4dyovqodvbwhdqogfcglq6v2sanggkq62qfhelcufpm
   __init__.py: bafybeigl56bk6g36e2ohbn3lq55d6km6v5aojxd7eoddyjplsolkqq6oty
   custom_types.py: bafybeiebp4xamgafadxbbtewddnufrcq3et3xsbkl7ucovqzbxpvlorote
   default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq
   default_pb2.py: bafybeia7wihf7mjwcbbabi5x6qcfhjxkesg6svqfgb7u6fb2bggdgvteqq
   dialogues.py: bafybeiheiq447pflh66mygilwtp55ndiik5kzwz55atroj5bxb4cnjo36a
-  message.py: bafybeicix3s6tt74opxoxct6qsvz5s57ber7a65buiovxyyitefw3ypu4y
-  protocol_spec.yaml: bafybeiekmagbzy7be5rey4pdl6tmbqey7rili3o3dxr5gttttxea7hm6ja
-  serialization.py: bafybeiaj4565mqfghkmrokai2u2hocztf4ruwdws3ko3hrybhi6wuaczuu
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
+  message.py: bafybeih5fvepqwxnbtthy4uxwmewrwv4df4djl7dg4zm4aysi6r62s2lqa
+  protocol_spec.yaml: bafybeigli7i2xuikxnzjwaygjqcwltca36kli35uwjud6zh2avq5bwdatm
+  serialization.py: bafybeiaao6epwaf6qen26yri6nwe74nfhomjdtqswwrkknng2lfou7bsf4
+  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
   tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
   tests/test_default_dialogues.py: bafybeigyvy4g6mobywt4xw6wzgiwqkgq7tilrffuhwv5xty7hlt6pzu3nm
   tests/test_default_messages.py: bafybeidu6hvbrs5yskdxffhx4m464jsxitwxm53i6rki5wpdftozxtdomy

@@ -9,8 +9,8 @@ fingerprint:
   tests/test_agent.py: bafybeihwx6iifsqdd5mzggpmm2gjtucwcdgnnek6oktvucoc23xa4z2urm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt_wrapper:0.1.0:bafybeiab3xti2vqgxomeqsdskstsinsywteeefx5uwogkdoa4grjkei72i
-- eightballer/dcxt:0.1.0:bafybeidunaqh7o2nbni3umbw2bep3dnco5fxkm327byulhenumo3jftixq
+- eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
+- eightballer/dcxt:0.1.0:bafybeihdqwnpwsgt7spvfjvdon3nex4d5bed3gga7g6n5aub6b6f4uxunq
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
@@ -24,7 +24,7 @@ contracts:
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
-- eightballer/default:0.1.0:bafybeifzc7kwtlg6egf6qnfq4s2hunqlbul5tkq2334gcwdbsrgltaki5a
+- eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 - eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
 - eightballer/ohlcv:0.1.0:bafybeihh3iqz2xsb76h56drzy6bqgezht35uggrz4gamj7o3mhumwkou5i
@@ -43,9 +43,9 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeifbp75m5jfzhh6qapojcbfpnkbt2hatfil7mp274grdd4o2lqz76e
-- eightballer/dex_data_retrieval:0.1.0:bafybeifr42vhcirwnzo72m3awb3p5fhoafcrmjghynpi5g6qyztdejov2q
-- eightballer/metrics:0.1.0:bafybeictebc5elhjfkhnea36dodyijdy7tyezkol4eyb72ah7ai6fbifqa
+- eightballer/chained_dex_app:0.1.0:bafybeicaq6tt5d6gn7esqphtnhvtsojkoim7gv64qljhet7pnglpgferti
+- eightballer/dex_data_retrieval:0.1.0:bafybeiftimr6tw66hyyamjhiy5i3mirmssbshvnvqkmb3nwh4txsjmfnz4
+- eightballer/metrics:0.1.0:bafybeid6d6n36sqoh27xfsq5wba3a3sktg2dezbaymp3wraqck7khv6yxy
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
 - valory/abstract_abci:0.1.0:bafybeia2egqettv7fd4yryya5ocrxdmpxibvt5ayjg2npvblz73rjpoxla
 - valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai

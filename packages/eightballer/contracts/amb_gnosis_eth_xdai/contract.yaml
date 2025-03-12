@@ -1,0 +1,18 @@
+name: amb_gnosis_eth_xdai
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeibfqg4eqhc3say4btgckgorpvw4ewa7d26twukmnhqskxu3zxovxu
+  build/amb_gnosis_eth_xdai.json: bafybeicevdm7skgeuzbpe2phvbgsseyrq5xzfpwjesedlfnd742h3esaae
+  contract.py: bafybeih7se53vh2mhoehzwhlmunuynkvxw63mtpssj4o5tsjkgiwdhgzgm
+  tests/test_contract_amb_gnosis_eth_xdai.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: AmbGnosisEthXdai
+contract_interface_paths:
+  ethereum: build/amb_gnosis_eth_xdai.json
+dependencies: {}
+contracts: []

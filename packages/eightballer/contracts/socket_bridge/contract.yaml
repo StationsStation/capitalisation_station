@@ -1,0 +1,18 @@
+name: socket_bridge
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeidsz2owbtpav4dp6tzhhiaq6psnsjwpoy56rwpii3qz5skicct7tq
+  build/socket_bridge.json: bafybeie2t24nnup6hz65spo7dexzmecadxxqm5ee4n6x4n52gut2oyo5xm
+  contract.py: bafybeie7lzm5hpoe6ppujyrzdhd3vylcq453ze4eke6zpjv5woesgcgmlm
+  tests/test_socket_bridge_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: SocketBridge
+contract_interface_paths:
+  ethereum: build/socket_bridge.json
+dependencies: {}
+contracts: []

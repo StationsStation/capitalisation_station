@@ -32,7 +32,9 @@ from packages.eightballer.protocols.default.custom_types import (
 )
 
 
-_default_logger = logging.getLogger("aea.packages.eightballer.protocols.default.message")
+_default_logger = logging.getLogger(
+    "aea.packages.eightballer.protocols.default.message"
+)
 
 DEFAULT_BODY_SIZE = 4
 
@@ -172,11 +174,15 @@ class DefaultMessage(Message):
             )
             enforce(
                 type(self.message_id) is int,
-                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(type(self.message_id)),
+                "Invalid type for 'message_id'. Expected 'int'. Found '{}'.".format(
+                    type(self.message_id)
+                ),
             )
             enforce(
                 type(self.target) is int,
-                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(type(self.target)),
+                "Invalid type for 'target'. Expected 'int'. Found '{}'.".format(
+                    type(self.target)
+                ),
             )
 
             # Light Protocol Rule 2
@@ -195,7 +201,9 @@ class DefaultMessage(Message):
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.content, bytes),
-                    "Invalid type for content 'content'. Expected 'bytes'. Found '{}'.".format(type(self.content)),
+                    "Invalid type for content 'content'. Expected 'bytes'. Found '{}'.".format(
+                        type(self.content)
+                    ),
                 )
             elif self.performative == DefaultMessage.Performative.ERROR:
                 expected_nb_of_contents = 3
@@ -207,11 +215,15 @@ class DefaultMessage(Message):
                 )
                 enforce(
                     isinstance(self.error_msg, str),
-                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(type(self.error_msg)),
+                    "Invalid type for content 'error_msg'. Expected 'str'. Found '{}'.".format(
+                        type(self.error_msg)
+                    ),
                 )
                 enforce(
                     isinstance(self.error_data, dict),
-                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(type(self.error_data)),
+                    "Invalid type for content 'error_data'. Expected 'dict'. Found '{}'.".format(
+                        type(self.error_data)
+                    ),
                 )
                 for key_of_error_data, value_of_error_data in self.error_data.items():
                     enforce(
@@ -241,7 +253,9 @@ class DefaultMessage(Message):
             if self.message_id == 1:
                 enforce(
                     self.target == 0,
-                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(self.target),
+                    "Invalid 'target'. Expected 0 (because 'message_id' is 1). Found {}.".format(
+                        self.target
+                    ),
                 )
         except (AEAEnforceError, ValueError, KeyError) as e:
             _default_logger.error(str(e))
