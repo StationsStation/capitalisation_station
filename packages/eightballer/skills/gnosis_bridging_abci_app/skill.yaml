@@ -7,7 +7,7 @@ description: The http echo skill prints out the content of received http message
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
+  README.md: bafybeigpvbcqzjaa6pfyglg6anuykp3onj2q5xohowwregh7c4qroi5j4m
   __init__.py: bafybeifua5zk4h3t2nng3v6lwtmwavh2452ucrivlpbmbdc7x3jdtn76du
   behaviours.py: bafybeib5juhiv7qmgmdoaelyyb37u2lieyuybgqvsmuo34cwfw2fusigzu
   dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy

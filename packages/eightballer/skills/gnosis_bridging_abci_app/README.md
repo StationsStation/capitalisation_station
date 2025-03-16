@@ -1,15 +1,43 @@
-# HTTP Echo
+# Gnosis Bridging Skill
 
 ## Description
 
-This skill echoes the HTTP requests it receives as HTTP response.
+This bridging skill moves funds between different chains.
 
-This skill is part of the Fetch.ai "HTTP Connection and Skill" guide. Upon receiving an HTTP request, it sends back the same information in the request as an HTTP response.
 
-## Handlers
+```mermaid
+graph TD
+  StartRound
+  DepositRound
+  CheckAllowanceRound
+  StartRound
+  WaitForMessageRound
+  EndRound
+  ClaimRound
+  WaitForSignatureRound
+  IncreaseAllowanceRound
+  CheckAllowanceRound -->|INSUFFICIENT| IncreaseAllowanceRound
+  CheckAllowanceRound -->|DONE| DepositRound
+  CheckAllowanceRound -->|TIMEOUT| EndRound
+  DepositRound -->|DONE| WaitForMessageRound
+  DepositRound -->|ERROR| EndRound
+  DepositRound -->|TIMEOUT| EndRound
+  ClaimRound -->|DONE| EndRound
+  ClaimRound -->|ERROR| EndRound
+  ClaimRound -->|TIMEOUT| EndRound
+  IncreaseAllowanceRound -->|DONE| DepositRound
+  IncreaseAllowanceRound -->|ERROR| EndRound
+  IncreaseAllowanceRound -->|TIMEOUT| EndRound
+  StartRound -->|DONE| CheckAllowanceRound
+  WaitForMessageRound -->|DONE| WaitForSignatureRound
+  WaitForMessageRound -->|ERROR| EndRound
+  WaitForMessageRound -->|TIMEOUT| EndRound
+  WaitForSignatureRound -->|DONE| ClaimRound
+  WaitForSignatureRound -->|ERROR| EndRound
+  WaitForSignatureRound -->|TIMEOUT| EndRound
+```
 
-* `http_handler`: handles `http` messages for echoing back an HTTP request as an HTTP response.
+Bridging requests can be submitted and awaited back and forth between `l1` and `l2`.
 
-## Links
 
-* <a href="https://docs.fetch.ai/aea/http-connection-and-skill/" target="_blank">HTTP Connection and Skill</a>
+
