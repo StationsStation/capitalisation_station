@@ -49,44 +49,37 @@ TEST_KEY_PATH = os.path.join(ROOT_DIR, "data", "key")
 TEST_WALLET = "0x3A5c777edf22107d7FdFB3B02B0Cdfe8b75f3453"
 TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f89d4f4"
 
+TIMEOUT = 5
 
 TEST_EXCHANGE_DATA = """
-  - name: balancer
-    key_path: packages/eightballer/connections/dcxt/tests/data/key
-    wallet: null
-    ledger_id: base
-    rpc_url: https://base.llamarpc.com
-    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+- name: balancer
+  key_path: packages/eightballer/connections/dcxt/tests/data/key
+  wallet: null
+  ledger_id: base
+  rpc_url: https://base.drpc.org
+  etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+- name: derive
+  key_path: packages/eightballer/connections/dcxt/tests/data/key
+  wallet: null
+  ledger_id: derive
+  rpc_url: https://base.llamarpc.com
+  etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+- name: one_inch
+  key_path: packages/eightballer/connections/dcxt/tests/data/key
+  wallet: null
+  ledger_id: ethereum
+  rpc_url: https://eth.drpc.org
 """
 
 TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}
 
 
-def with_timeout(t, *args, **kwargs):
-    """Return the."""
-
-    del args, kwargs
-
-    def wrapper(corofunc):
-        async def run(*args, **kwargs):
-            with timeout(t):
-                return await corofunc(*args, **kwargs)
-
-        return run
-
-    return wrapper
-
-
-# We improve this with_timout function to be more generic, as presently it doesnt allow parameters
-
-
-def improved_with_timeout(t):
-    """Return the coroutine with a timeout. We specifcallly allow the function to take parameters."""
-
-    def wrapper(corofunc):
-        async def run(*args, **kwargs):
-            with timeout(t):
-                return await corofunc(*args, **kwargs)
+def with_timeout(t, *args, **kwargs):  # noqa
+    """Return a decorator that adds a timeout to a coroutine function."""
+    def wrapper(corofunc, *args, **kwargs):  # noqa
+        async def run(*func_args, **func_kwargs):
+            async with timeout(t):
+                return await corofunc(*func_args, **func_kwargs)
 
         return run
 
@@ -127,7 +120,7 @@ class BaseDcxtConnectionTest:
     client_skill_id: str
     agent_identity: Identity
 
-    def setup(self) -> None:
+    def setup_method(self) -> None:
         """Initialise the class."""
         self.client_skill_id = "some/skill:0.1.0"
         self.agent_identity = Identity("name", address="some string", public_key="some public_key")
@@ -162,10 +155,11 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 
 
 EXPECTED_FUNCTIONS = [
-    "get_all_markets",  # get all markets
-    "subscribe",  # order book      subscribe
-    "create_order",  # create order create_order
-    "get_order",  # get order:      tx hash
+    "create_order",
+    "fetch_tickers",
+    "fetch_positions",
+    "fetch_open_orders",
+    "fetch_balance",
 ]
 
 

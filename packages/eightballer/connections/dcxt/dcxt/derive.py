@@ -1,11 +1,16 @@
-"""An interface for the Lyra API."""
+"""An interface for the Derive API."""
 
 import datetime
 import traceback
 from typing import Any
 
-from lyra.enums import OrderType as LyraOrderType, OrderStatus as LyraOrderStatus, InstrumentType, UnderlyingCurrency
-from lyra.async_client import AsyncClient
+from derive.enums import (
+    OrderType as DeriveOrderType,
+    OrderStatus as DeriveOrderStatus,
+    InstrumentType,
+    UnderlyingCurrency,
+)
+from derive.async_client import AsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
@@ -220,20 +225,20 @@ def to_position(api_result):
         leverage=float(api_result["leverage"]),
         liquidation_price=float(api_result["liquidation_price"]),
         mark_price=float(api_result["mark_price"]),
-        exchange_id="lyra",
+        exchange_id="derive",
     )
 
 
-LYRA_ORDER_STATUS_MAP = {
-    LyraOrderStatus.OPEN: OrderStatus.OPEN.name,
-    LyraOrderStatus.FILLED: OrderStatus.FILLED.name,
-    LyraOrderStatus.CANCELLED: OrderStatus.CANCELLED.name,
-    LyraOrderStatus.REJECTED: OrderStatus.FAILED.name,
-    LyraOrderStatus.EXPIRED: OrderStatus.EXPIRED.name,
+DERIVE_ORDER_STATUS_MAP = {
+    DeriveOrderStatus.OPEN: OrderStatus.OPEN.name,
+    DeriveOrderStatus.FILLED: OrderStatus.FILLED.name,
+    DeriveOrderStatus.CANCELLED: OrderStatus.CANCELLED.name,
+    DeriveOrderStatus.REJECTED: OrderStatus.FAILED.name,
+    DeriveOrderStatus.EXPIRED: OrderStatus.EXPIRED.name,
 }
-LYRA_ORDER_TYPE_MAP = {
-    LyraOrderType.LIMIT: OrderType.LIMIT.name,
-    LyraOrderType.MARKET: OrderType.MARKET.name,
+DERIVE_ORDER_TYPE_MAP = {
+    DeriveOrderType.LIMIT: OrderType.LIMIT.name,
+    DeriveOrderType.MARKET: OrderType.MARKET.name,
 }
 
 
@@ -308,14 +313,14 @@ def to_order(api_result):
 
     return Order(
         id=api_result["order_id"],
-        exchange_id="lyra",
+        exchange_id="derive",
         client_order_id=api_result["order_id"],
         timestamp=api_result["creation_timestamp"],
         datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"], tz=TZ).isoformat(),
         last_trade_timestamp=api_result["creation_timestamp"],
-        status=LYRA_ORDER_STATUS_MAP[api_result["order_status"]],
+        status=DERIVE_ORDER_STATUS_MAP[api_result["order_status"]],
         symbol=api_result["instrument_name"],
-        type=LYRA_ORDER_TYPE_MAP[api_result["order_type"]],
+        type=DERIVE_ORDER_TYPE_MAP[api_result["order_type"]],
         time_in_force=api_result["time_in_force"],
     )
 
@@ -353,13 +358,13 @@ def map_order_type_to_enum(order_type: str) -> OrderType:
     return mapping[order_type]
 
 
-class LyraClient:
-    """A class for interacting with the Lyra API."""
+class DeriveClient:
+    """A class for interacting with the Derive API."""
 
-    exchange_id = "lyra"
+    exchange_id = "derive"
 
     def __init__(self, *args, **kwargs):
-        """Initialize the LyraClient."""
+        """Initialize the DeriveClient."""
         del args
         self.client = AsyncClient()
         self.logger = kwargs.get("logger")
@@ -450,7 +455,7 @@ class LyraClient:
         del args
         params = kwargs.get("params", {})
         try:
-            result = await self.client.get_open_orders(status=LyraOrderStatus.OPEN.value, **params)
+            result = await self.client.get_open_orders(status=DeriveOrderStatus.OPEN.value, **params)
         except Exception as error:  # noqa
             traceback.print_exc()
             result = []
@@ -476,3 +481,12 @@ class LyraClient:
     async def close(self):
         """Close the client."""
         return True
+
+    async def create_order(self, *args, **kwargs):
+        """Create an order."""
+        del args
+        try:
+            await self.client.create_order(**kwargs)
+        except Exception as error:
+            traceback.print_exc()
+            self.logger.exception(f"Failed to create order: {error}")

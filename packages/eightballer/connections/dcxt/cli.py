@@ -40,8 +40,9 @@ def generate_rpc_mapping():
     rpc_mapping = {}
     for exchange in data["config"]["exchanges"]:
         ledger_id = exchange["ledger_id"]
-        rpc_url = exchange["rpc_url"]
-        rpc_mapping[SupportedLedgers(ledger_id)] = rpc_url
+        rpc_url = exchange.get("rpc_url")
+        if rpc_url:
+            rpc_mapping[SupportedLedgers(ledger_id)] = rpc_url
     return rpc_mapping
 
 

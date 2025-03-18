@@ -40,7 +40,7 @@ from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
-from packages.eightballer.connections.dcxt.dcxt.balancer import (
+from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
     LEDGER_TO_OLAS,
     LEDGER_TO_WETH,
     LEDGER_TO_STABLECOINS,
@@ -410,7 +410,7 @@ class CollectDataRound(BaseConnectionRound):
                     portfolio[ledger_id] = {}
                 if ledger_id not in prices:
                     prices[ledger_id] = {}
-                self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
+                self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
                 balances = yield from self.get_response(
                     BalancesMessage.Performative.GET_ALL_BALANCES,
                     connection_id=str(DCXT_PUBLIC_ID),

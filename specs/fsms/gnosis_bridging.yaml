@@ -1,0 +1,40 @@
+alphabet_in:
+- DONE
+- TIMEOUT
+- ERROR
+- INSUFFICIENT
+default_start_state: StartRound
+final_states:
+- EndRound
+label: GnosisBridgingAbciApp
+start_states:
+- StartRound
+states:
+- DepositRound
+- CheckAllowanceRound
+- StartRound
+- WaitForMessageRound
+- EndRound
+- ClaimRound
+- WaitForSignatureRound
+- IncreaseAllowanceRound
+transition_func:
+  (CheckAllowanceRound, INSUFFICIENT): IncreaseAllowanceRound
+  (CheckAllowanceRound, DONE): DepositRound
+  (CheckAllowanceRound, TIMEOUT): EndRound
+  (DepositRound, DONE): WaitForMessageRound
+  (DepositRound, ERROR): EndRound
+  (DepositRound, TIMEOUT): EndRound
+  (ClaimRound, DONE): EndRound
+  (ClaimRound, ERROR): EndRound
+  (ClaimRound, TIMEOUT): EndRound
+  (IncreaseAllowanceRound, DONE): DepositRound
+  (IncreaseAllowanceRound, ERROR): EndRound
+  (IncreaseAllowanceRound, TIMEOUT): EndRound
+  (StartRound, DONE): CheckAllowanceRound
+  (WaitForMessageRound, DONE): WaitForSignatureRound
+  (WaitForMessageRound, ERROR): EndRound
+  (WaitForMessageRound, TIMEOUT): EndRound
+  (WaitForSignatureRound, DONE): ClaimRound
+  (WaitForSignatureRound, ERROR): EndRound
+  (WaitForSignatureRound, TIMEOUT): EndRound

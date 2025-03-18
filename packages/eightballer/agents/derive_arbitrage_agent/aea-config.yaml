@@ -1,11 +1,11 @@
-agent_name: trader
+agent_name: derive_arbitrage_agent
 author: eightballer
 version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
-  tests/test_trader_agent.py: bafybeibcg6glyfbifp7sagmxvwbqiomc276su526xdzrwjkxfdqunvjzna
+  tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
@@ -22,8 +22,8 @@ connections:
 contracts:
 - eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
 - eightballer/spl_token:0.1.0:bafybeigx3dmq5nfbzgxd3y3iw7b3unyip4boire3cvq3uynuop4iechnoa
-- vybe/jupitar_swap:0.1.0:bafybeibdyfb557alftpvxxhrehpptxsezddluoktmj3ph43pqolnbebyle
 - valory/service_registry:0.1.0:bafybeifqjyxuufyvqmgolut3bsovqvhihtt5qj7qlagdldpkqgurq7f2du
+- vybe/jupitar_swap:0.1.0:bafybeibdyfb557alftpvxxhrehpptxsezddluoktmj3ph43pqolnbebyle
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
 - eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
@@ -108,15 +108,7 @@ config:
 ---
 public_id: eightballer/ccxt_wrapper:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
 type: connection
-config:
-  exchanges:
-  - name: mexc
-    api_key: ${str:YOUR_KEY}
-    api_secret: ${str:YOUR_SECRET}
-  - name: poloniex
-    api_key: ${str:YOUR_KEY}
-    api_secret: ${str:YOUR_SECRET}
-  target_skill_id: eightballer/simple_fsm:0.1.0
+config: {}
 ---
 public_id: eightballer/apprise:0.1.0
 type: connection
@@ -128,24 +120,18 @@ public_id: eightballer/dcxt:0.1.0:bafybeid2knx2lkd5jz64a357vtcz35gfjtoqey4shmmjt
 type: connection
 config:
   exchanges:
-  - name: balancer
+  - name: one_inch
     key_path: ethereum_private_key.txt
     wallet: null
-    ledger_id: base
-    rpc_url: https://mainnet.base.org
+    ledger_id: etheruem
+    rpc_url:
+      str:https://rpc.ankr.com/eth: null
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-  - name: balancer
+  - name: derive
     key_path: ethereum_private_key.txt
     wallet: null
-    ledger_id: mode
-    rpc_url: https://mode.drpc.org
-    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-  - name: balancer
-    key_path: ethereum_private_key.txt
-    wallet: null
-    ledger_id: gnosis
-    rpc_url: http://gnosis.chains.wtf:8545
-    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+    ledger_id: derive
+    environment: production
 ---
 public_id: eightballer/simple_fsm:0.1.0:bafybeigkm75xwd7jw2onypx27bzokkcwwrvwlm4nd6zr7e6ujrn3tw76fa
 type: skill
@@ -154,7 +140,9 @@ models:
     args:
       order_size: 100.0
       dexs:
-        balancer:
-        - base
-        - gnosis
+        one_inch:
+        - etheruem
+        derive:
+        - derive
+        balancer: []
       cexs: ${list:[]}

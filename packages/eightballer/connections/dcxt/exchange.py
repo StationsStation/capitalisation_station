@@ -7,3 +7,4 @@ class SupportedExchanges(Enum):
     """Supported exchanges."""
 
     BALANCER = "balancer"
+    DERIVE = "derive"
