@@ -58,8 +58,6 @@ apt-get install make build-essential gcc \
 
 
 poetry self add poetry-plugin-shell
-
-poetry install
 ```
 
 ### Step 5: Install the Trader
@@ -67,6 +65,7 @@ poetry install
 ```bash
 cd capitalisation_station
 make install
+
 ```
 
 
