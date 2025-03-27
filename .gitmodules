@@ -18,4 +18,4 @@
 	url = https://github.com/Dassy23/aea_contracts_solana.git
 [submodule "third_party/upstream/lyra_client"]
 	path = third_party/upstream/lyra_client
-	url = https://github.com/8ball030/lyra_client.git
+	url = https://github.com/8ball030/derive.git
