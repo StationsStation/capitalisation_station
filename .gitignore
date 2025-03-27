@@ -1,7 +1,8 @@
 .certs
 .nix-venv
 **/__pycache__/**
-.env
+
+.env.*
 .hypothesis/
 .coverage
 .pytest_cache
