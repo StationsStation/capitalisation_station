@@ -15,6 +15,7 @@ class SupportedLedgers(Enum):
     OPTIMISM = "optimism"
     BASE = "base"
     MODE = "mode"
+    DERIVE = "derive"
 
 
 LEDGER_TO_STABLECOINS = {
@@ -50,6 +51,7 @@ LEDGER_TO_STABLECOINS = {
         "0xd988097fb8612cc24eec14542bc03424c656005f",  # USDC on Mode
         "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138",
     ],
+    SupportedLedgers.DERIVE: [],
 }
 
 LEDGER_TO_NATIVE_SYMBOL = {
@@ -82,6 +84,7 @@ LEDGER_TO_OLAS = {
 }
 
 LEDGER_TO_WETH = {
+    SupportedLedgers.ETHEREUM: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
     SupportedLedgers.BASE: "0x4200000000000000000000000000000000000006",
     SupportedLedgers.GNOSIS: "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1",
@@ -94,6 +97,8 @@ LEDGER_TO_TOKEN_LIST = {
             "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0",  # olas
             "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "0x8236a87084f8b84306f72007f36f2618a5634494",  # lbtc
+            "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee", # wrapped ethena eth
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ETHEREUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ETHEREUM]]
@@ -143,6 +148,7 @@ LEDGER_TO_TOKEN_LIST = {
         + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
     ),
+    SupportedLedgers.DERIVE: set(LEDGER_TO_STABLECOINS[SupportedLedgers.DERIVE]),
 }
 
 TOKEN_LIST_PATH = Path(__file__).parent / "token_list.json"

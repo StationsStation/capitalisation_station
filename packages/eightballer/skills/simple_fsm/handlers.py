@@ -27,7 +27,8 @@ from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
-from packages.valory.skills.abstract_round_abci.handlers import (
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.skills.abstract_round_abci.handlers import (
     HttpHandler as BaseHttpHandler,
     IpfsHandler as BaseIpfsHandler,
     SigningHandler as BaseSigningHandler,
@@ -37,7 +38,6 @@ from packages.valory.skills.abstract_round_abci.handlers import (
     ContractApiHandler as BaseContractApiHandler,
     AbstractResponseHandler,
 )
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 
 

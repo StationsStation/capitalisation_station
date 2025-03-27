@@ -21,8 +21,9 @@
 from typing import TYPE_CHECKING, Any
 
 from aea.skills.base import Model
+from aea.configurations.base import PublicId
 
-from packages.valory.skills.abstract_round_abci.models import FrozenMixin
+from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 
 
 if TYPE_CHECKING:
@@ -43,9 +44,9 @@ class ArbitrageStrategy(Model):
         self.cexs = kwargs.pop("cexs", [])
         self.dexs = kwargs.pop("dexs", [])
         self.ledgers = kwargs.pop("ledgers", [])
-        self.order_size = kwargs.pop("order_size")
+        self.strategy_init_kwargs = kwargs.pop("strategy_init_kwargs", {})
+        self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
-
         super().__init__(**kwargs)
 
 

@@ -76,6 +76,7 @@ TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EX
 
 def with_timeout(t, *args, **kwargs):  # noqa
     """Return a decorator that adds a timeout to a coroutine function."""
+
     def wrapper(corofunc, *args, **kwargs):  # noqa
         async def run(*func_args, **func_kwargs):
             async with timeout(t):
@@ -157,6 +158,7 @@ class TestDcxtConnection(BaseDcxtConnectionTest):
 EXPECTED_FUNCTIONS = [
     "create_order",
     "fetch_tickers",
+    "fetch_ticker",
     "fetch_positions",
     "fetch_open_orders",
     "fetch_balance",

@@ -21,6 +21,14 @@
     "tokens": [
         {
             "chainId": 1,
+            "address": "0x8236a87084f8b84306f72007f36f2618a5634494",
+            "name": "Lombard BTC",
+            "symbol": "LBTC",
+            "decimals": 8,
+            "logoURI": "https://etherscan.io/token/images/lombardfinance_32.png"
+        },
+        {
+            "chainId": 1,
             "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
             "name": "Wrapped Ether",
             "symbol": "WETH",

@@ -1,0 +1,30 @@
+name: lbtc_arbitrage
+author: eightballer
+version: 0.1.0
+type: custom
+description: A simple arbitrage strategy that buys on one exchange and sells on another.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiejn3ahy33huktlei2koe47mzoc5obnajkwhufpfcugbmnqqtj2bi
+  strategy.py: bafybeieftz3lyt67ravxbzgbrsh2qffl57c4dheamlw33omxi6tucpcn7u
+  tests/__init__.py: bafybeiajoajrn2ja2mzsvvhia4gm5wkz3gbraohwzpciwr6quhi2tdzzxy
+  tests/data/case_0/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
+  tests/data/case_0/portfolio.json: bafybeidqgumqzzamzj3xjzcsqi25glhkmpisyvxzlmzmcyhu2ts3q74knm
+  tests/data/case_0/prices.json: bafybeigyhohr2ahe6fpv5jhlk5jt46zqsh55qb7go5krj265gkmdiida6y
+  tests/data/case_1/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
+  tests/data/case_1/portfolio.json: bafybeiaibu6ynywrmksg7cpd5jtmsedzhbenirjx52afgz5la4jclokg7e
+  tests/data/case_1/prices.json: bafybeif2oek4hhr4tkyulnafm2fmmo4ozf6xj7cp2drwydwlzsxg6vkwau
+  tests/data/case_2/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
+  tests/data/case_2/portfolio.json: bafybeifgdvspi5zloju5klywzz5aqyxt7zs2rs3s2sra3c2sker2oezyqi
+  tests/data/case_2/prices.json: bafybeiga3focypcalednqmgmydra23odkpq3rlg4v6lzgapmru46jtb6e4
+  tests/test_strategy.py: bafybeih4mlqs5tyfl7jzsr6hpkaxbq3gg7xkjk63ub2etwbm7yls6kepwu
+fingerprint_ignore_patterns: []
+dependencies: {}
+strategy_init_kwargs:
+  base_asset: USDC
+  quote_asset: LBTC
+  min_profit: 0.01
+  order_size: 0.001
+strategy_run_kwargs: {}
+strategy_class: ArbitrageStrategy

@@ -55,10 +55,10 @@ class TickerInterface(BaseInterface):
         exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         try:
             ticker = await exchange.fetch_ticker(
-                message.symbol,
-                message.asset_a,
-                message.asset_b,
-                json.loads(message.params.decode("utf-8")) if message.params is not None else None,
+                symbol=message.symbol,
+                asset_a=message.asset_a,
+                asset_b=message.asset_b,
+                params=json.loads(message.params.decode("utf-8")) if message.params is not None else None,
             )
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.TICKER,

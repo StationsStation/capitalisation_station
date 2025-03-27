@@ -7,27 +7,27 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeigfsrzbo2v3ktsddx4mxu2reale6xxnyzozh5fwtnjz4jl5wkf6em
-  dialogues.py: bafybeigy7hi6tatp7xwtopidrddp57v26oigbc6ci7k5sqxcxj3eo2yxci
-  handlers.py: bafybeichnk7lzmxelk7kjcyd7dirgcvxhz4zti3qllmyijlmpsqffqhvsa
-  strategy.py: bafybeiet3jgxkx5fupogkughq3yeuzzizrgae6j6jyfigbdu35txx7xn2m
+  behaviours.py: bafybeidcw24alyrdp6uy32hq3q7j6nzkyhohnjvosc67nqlfeyd74wrmua
+  dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
+  handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
+  strategy.py: bafybeie27amzwxml2cyuvwo7vgr5nn2mstybikolzmf7qihnrnxve2uuai
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_handler.py: bafybeiasyl4m52ydrxgyyglq67v5ordi4fw2xe2j7x3w5agbnhbaqzybj4
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeibdjkmcoxwixbdccjfj2a2qlde7pr7sjbcnm6fiqs3v5sktv6ms54
-- eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
+- eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
+- eightballer/dcxt:0.1.0:bafybeic2hc3rf23byhjgsva4jfpfl5h6hxw3npbkgulsb3rw6yslouwh7u
 contracts: []
 protocols:
-- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
-- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
+- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
 - eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
 - eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
-- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
+- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
+- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihjuapb3ixamvjjl2evizvp7p7cj2utldqutugwrdd5p3zgz5xaxe
+- eightballer/abstract_round_abci:0.1.0:bafybeiabjwy7atff43m5n3zjunqg34kqcoikjpzovh5jwtq73lskqovuje
 behaviours:
   main:
     args: {}
@@ -36,37 +36,39 @@ handlers:
   dex_balances_handler:
     args: {}
     class_name: DexBalancesHandler
-  dex_tickers_handler:
-    args: {}
-    class_name: DexTickersHandler
   dex_orders_handler:
     args: {}
     class_name: DexOrdersHandler
+  dex_tickers_handler:
+    args: {}
+    class_name: DexTickersHandler
   user_interaction_handler:
     args: {}
     class_name: UserInteractionHandler
 models:
   arbitrage_strategy:
     args:
-      order_size: 0.1
+      cexs:
+      - mexc
       dexs:
         balancer:
         - base
-      cexs:
-      - mexc
+      fetch_all_tickers: false
+      strategy_init_kwargs: {}
+      strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
     class_name: ArbitrageStrategy
-  orders_dialogues:
-    args: {}
-    class_name: OrdersDialogues
   balances_dialogues:
     args: {}
     class_name: BalancesDialogues
-  tickers_dialogues:
+  orders_dialogues:
     args: {}
-    class_name: TickersDialogues
+    class_name: OrdersDialogues
   requests:
     args: {}
     class_name: Requests
+  tickers_dialogues:
+    args: {}
+    class_name: TickersDialogues
   user_interaction_dialogues:
     args: {}
     class_name: UserInteractionDialogues
