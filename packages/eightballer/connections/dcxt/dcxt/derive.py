@@ -3,9 +3,13 @@
 import datetime
 import traceback
 from typing import Any
+from decimal import Decimal
+from pathlib import Path
 
 from derive.enums import (
+    OrderSide as DeriveOrderSide,
     OrderType as DeriveOrderType,
+    Environment,
     OrderStatus as DeriveOrderStatus,
     InstrumentType,
     UnderlyingCurrency,
@@ -123,7 +127,7 @@ def to_ticker(api_result):
     return Ticker(
         symbol=api_result["instrument_name"],
         timestamp=api_result["timestamp"],
-        datetime=api_result["timestamp"],
+        datetime=datetime.datetime.fromtimestamp(api_result["timestamp"] / 1000, tz=TZ).isoformat(),
         high=float(api_result["stats"]["high"]),
         low=float(api_result["stats"]["low"]),
         bid=float(api_result["best_bid_price"]),
@@ -157,6 +161,7 @@ def to_balance(api_result):
         free=float(api_result["amount"]),
         used=0,
         total=float(api_result["amount"]),
+        is_native=False,
     )
 
 
@@ -365,8 +370,20 @@ class DeriveClient:
 
     def __init__(self, *args, **kwargs):
         """Initialize the DeriveClient."""
-        del args
-        self.client = AsyncClient()
+        key_path = kwargs.get("key_path")
+        keyfile = Path(key_path)
+        if not keyfile.exists():
+            msg = f"Key file not found: {key_path}"
+            raise FileNotFoundError(msg)
+        private_key = keyfile.read_text().strip()
+
+        self.client = AsyncClient(
+            private_key=private_key,
+            subaccount_id=kwargs["subaccount_id"],
+            wallet=kwargs["wallet"],
+            env=Environment(kwargs.get("environment")),
+            logger=kwargs.get("logger"),
+        )
         self.logger = kwargs.get("logger")
 
     def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
@@ -374,17 +391,26 @@ class DeriveClient:
         kwargs = {from_camelize(key): value for key, value in api_call.items()}
         if all(
             [
-                kwargs["status"] == "closed",
-                kwargs["remaining"] == 0,
-                kwargs["filled"] == kwargs["amount"],
+                kwargs["order_status"] == "filled",
+                Decimal(kwargs["filled_amount"])
+                >= Decimal(
+                    kwargs["amount"],
+                ),
             ]
         ):
             kwargs["status"] = "filled"
-        kwargs["status"] = map_status_to_enum(kwargs["status"])
-        kwargs["type"] = map_order_type_to_enum(kwargs["type"])
-        kwargs["side"] = OrderSide.BUY if kwargs["side"] == "buy" else OrderSide.SELL
-        kwargs["exchange_id"] = exchange_id
-        return Order(**kwargs)
+        return Order(
+            symbol=kwargs["instrument_name"],
+            status=map_status_to_enum(kwargs["status"]),
+            type=map_order_type_to_enum(kwargs["order_type"]),
+            side=OrderSide.BUY if kwargs["direction"] == "buy" else OrderSide.SELL,
+            price=float(kwargs["limit_price"]),
+            amount=float(kwargs["amount"]),
+            filled=float(kwargs["filled_amount"]),
+            average=float(kwargs["average_price"]),
+            timestamp=kwargs["creation_timestamp"],
+            exchange_id=exchange_id,
+        )
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
@@ -421,12 +447,22 @@ class DeriveClient:
             tickers=tickers,
         )
 
+    async def fetch_ticker(self, *args, symbol, asset_a, asset_b, **kwargs):
+        """Fetch all tickers."""
+        instrument_name = f"{asset_a}-{asset_b}".upper()
+        try:
+            result = await self.client.fetch_ticker(instrument_name=instrument_name)
+            return to_ticker(result)
+        except Exception as error:  # noqa
+            self.logger.exception(traceback.print_exc())
+            return None
+
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
         del args, kwargs
         try:
             result = await self.client.get_collaterals()
-            balances = [to_balance(balance) for balance in [result]]
+            balances = [to_balance(balance) for balance in result]
         except Exception as error:
             traceback.print_exc()
             self.logger.exception(f"Failed to fetch balances: {error}")
@@ -484,9 +520,25 @@ class DeriveClient:
 
     async def create_order(self, *args, **kwargs):
         """Create an order."""
-        del args
-        try:
-            await self.client.create_order(**kwargs)
-        except Exception as error:
-            traceback.print_exc()
-            self.logger.exception(f"Failed to create order: {error}")
+
+        def get_instrument_type(instrument_name):
+            if "-" in instrument_name:
+                return InstrumentType.ERC20
+            msg = f"Unknown instrument type: {instrument_name}"
+            raise ValueError(msg)
+
+        def get_underlying_currency(currency):
+            return UnderlyingCurrency(currency.lower())
+
+        asset_a, _asset_b = kwargs["symbol"].split("-")
+
+        params = {
+            "instrument_name": kwargs["symbol"],
+            "amount": kwargs["amount"],
+            "price": kwargs.get("price"),
+            "order_type": DeriveOrderType(kwargs["type"]),
+            "side": DeriveOrderSide(kwargs["side"]),
+            "instrument_type": get_instrument_type(kwargs["symbol"]),
+            "underlying_currency": get_underlying_currency(asset_a),
+        }
+        return await self.client.create_order(**params)

@@ -1,0 +1,59 @@
+{
+    "cex": {},
+    "ethereum": {
+        "one_inch": [
+            {
+                "symbol": "weETH/USDC",
+                "timestamp": 1743071765,
+                "datetime": "2025-03-27T10:36:05.093545+00:00",
+                "ask": 2197.2394164655557,
+                "bid": 2120.6591,
+                "asset_a": "weETH",
+                "asset_b": "USDC",
+                "bid_volume": null,
+                "ask_volume": null,
+                "high": 2197.2394164655557,
+                "low": 2120.6591,
+                "vwap": null,
+                "open": null,
+                "close": null,
+                "last": null,
+                "previous_close": null,
+                "change": null,
+                "percentage": null,
+                "average": null,
+                "base_volume": null,
+                "quote_volume": null,
+                "info": null
+            }
+        ]
+    },
+    "derive": {
+        "derive": [
+            {
+                "symbol": "WEETH-USDC",
+                "timestamp": 1743071766000,
+                "datetime": "2025-03-27T10:36:06+00:00",
+                "ask": 0.0,
+                "bid": 2235.0,
+                "asset_a": null,
+                "asset_b": null,
+                "bid_volume": null,
+                "ask_volume": null,
+                "high": 2220.0,
+                "low": 2200.0,
+                "vwap": null,
+                "open": null,
+                "close": 2158.4,
+                "last": 2158.4,
+                "previous_close": null,
+                "change": -40.1,
+                "percentage": -0.018244,
+                "average": null,
+                "base_volume": null,
+                "quote_volume": null,
+                "info": null
+            }
+        ]
+    }
+}

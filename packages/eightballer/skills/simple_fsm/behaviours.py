@@ -25,6 +25,7 @@ import json
 import asyncio
 import pathlib
 import datetime
+import importlib
 from enum import Enum
 from time import sleep
 from typing import Any, cast
@@ -33,6 +34,8 @@ from collections.abc import Callable, Generator
 
 from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
+from aea.configurations.base import ComponentType
+from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.protocols.orders.message import OrdersMessage
@@ -40,17 +43,11 @@ from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
-from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
-    LEDGER_TO_OLAS,
-    LEDGER_TO_WETH,
-    LEDGER_TO_STABLECOINS,
-    SupportedLedgers,
-)
 from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
-from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
+from packages.eightballer.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -121,9 +118,14 @@ class IdentifyOpportunityRound(State):
         prices = json.loads(pathlib.Path(PRICES_FILE).read_text(encoding="utf-8"))
         existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text(encoding="utf-8"))
 
-        orders = self.arbitrage_strategy.get_orders(portfolio=portfolio, prices=prices, existing_orders=existing_orders)
-        for opportunity in self.arbitrage_strategy.unaffordable:
-            self.context.logger.info(f"Opportunity unaffordable: {opportunity[0]}")
+        orders = self.strategy.trading_strategy.get_orders(
+            portfolio=portfolio,
+            prices=prices,
+            existing_orders=existing_orders,
+            **self.custom_config.kwargs["strategy_run_kwargs"],
+        )
+        for opportunity in self.strategy.trading_strategy.unaffordable:
+            self.context.logger.info(f"Opportunity unaffordable: {opportunity}")
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             orders = [json.loads(o.model_dump_json()) for o in orders]
@@ -145,9 +147,46 @@ class IdentifyOpportunityRound(State):
         self.started = False
         # We need to add to the PYTHONPATH=. to be able to import the strategy
         sys.path.append(".")
-        from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
+        # from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
 
-        self.arbitrage_strategy = ArbitrageStrategy()
+        strat_pub_id = self.context.arbitrage_strategy.strategy_public_id
+
+        dir = "vendor" if pathlib.Path("vendor").exists() else "packages"
+        component_dir = pathlib.Path(dir, strat_pub_id.author, "customs", strat_pub_id.name)
+        self.custom_config = load_component_configuration(component_type=ComponentType.CUSTOM, directory=component_dir)
+
+        def validate():
+            """Validate the custom configuration."""
+            expected_keys = {"strategy_class", "strategy_init_kwargs", "strategy_run_kwargs"}
+            missing_keys = expected_keys - set(self.custom_config.kwargs.keys())
+            if missing_keys:
+                msg = f"Missing keys in custom configuration: {missing_keys} Please check the configuration. in {self.custom_config.directory}"
+                raise ValueError(
+                    msg
+                )
+            expected_files = {"strategy.py"}
+            missing_files = expected_files - set(self.custom_config.fingerprint.keys())
+            if missing_files:
+                msg = f"Missing files in custom configuration: {missing_files} Please check the configuration. in {self.custom_config.directory}"
+                raise ValueError(
+                    msg
+                )
+
+        validate()
+        strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
+        strategy_path = str(component_dir / "strategy").replace("/", ".")
+        module = importlib.import_module(strategy_path)
+        strategy_class = getattr(module, strategy_class_name)
+        self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
+
+        self.context.logger.info("Strategy Kwargs:")
+        for k, v in self.strategy.strategy_init_kwargs.items():
+            self.context.logger.info(f"    {k}: {v}")
+
+    @property
+    def strategy(self):
+        """Return the strategy."""
+        return self.context.arbitrage_strategy
 
 
 class ErrorRound(State):
@@ -306,7 +345,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
 
         futures = []
         for order in models:
-            # We send the orders to the exchange.
+            self.context.logger.info(f"Creating order: {order}")
             response = self.get_response(
                 OrdersMessage.Performative.CREATE_ORDER,
                 connection_id=CCXT_PUBLIC_ID if order.ledger_id == "cex" else DCXT_PUBLIC_ID,
@@ -350,13 +389,17 @@ class CollectDataRound(BaseConnectionRound):
 
     matching_round = "collectdataround"
 
+    @property
+    def strategy(self):
+        """Return the strategy."""
+        return self.context.arbitrage_strategy
+
     def act(self) -> Generator:
         """Perform the action of the state."""
         if self.started:
             return
 
         self.started = True
-
         portfolio = {}
         ledger_id = "cex"
         prices = {ledger_id: {}}
@@ -464,32 +507,21 @@ class CollectDataRound(BaseConnectionRound):
 
         if performative == TickersMessage.Performative.GET_TICKER:
             # we want to get the wrapped base token
-            supported_ledger = SupportedLedgers[ledger_id.upper()]
-            asset_a = LEDGER_TO_OLAS[supported_ledger]
+            asset_a = self.strategy.trading_strategy.quote_asset
+            asset_b = self.strategy.trading_strategy.base_asset
             params = []
 
             def encode_dict(d: dict) -> bytes:
                 """Encode a dictionary."""
                 return json.dumps(d).encode(DEFAULT_ENCODING)
 
-            if use_weth:
-                asset_b = LEDGER_TO_WETH[supported_ledger]
-                params.append(
-                    {
-                        "asset_a": asset_a,
-                        "asset_b": asset_b,
-                        "params": encode_dict({"amount": self.context.arbitrage_strategy.order_size}),
-                    }
-                )
-            if use_stables:
-                for asset_b in LEDGER_TO_STABLECOINS[supported_ledger]:
-                    params.append(
-                        {
-                            "asset_a": asset_a,
-                            "asset_b": asset_b,
-                            "params": encode_dict({"amount": self.context.arbitrage_strategy.order_size}),
-                        }
-                    )
+            params.append(
+                {
+                    "asset_a": asset_a,
+                    "asset_b": asset_b,
+                    "params": encode_dict({"amount": self.context.arbitrage_strategy.trading_strategy.order_size}),
+                }
+            )
             tickers = Tickers(tickers=[])
             for param in params:
                 ticker = yield from self.get_response(

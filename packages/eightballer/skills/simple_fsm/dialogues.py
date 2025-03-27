@@ -38,7 +38,10 @@ from packages.eightballer.protocols.positions.dialogues import (
     PositionsDialogue as BasePositionsDialogue,
     PositionsDialogues as BasePositionsDialogues,
 )
-from packages.valory.skills.abstract_round_abci.dialogues import (
+from packages.eightballer.protocols.user_interaction.dialogues import (
+    UserInteractionDialogues as BaseUserInteractionDialogues,
+)
+from packages.eightballer.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
     HttpDialogue as BaseHttpDialogue,
     IpfsDialogue as BaseIpfsDialogue,
@@ -53,9 +56,6 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
     ContractApiDialogue as BaseContractApiDialogue,
     TendermintDialogues as BaseTendermintDialogues,
     ContractApiDialogues as BaseContractApiDialogues,
-)
-from packages.eightballer.protocols.user_interaction.dialogues import (
-    UserInteractionDialogues as BaseUserInteractionDialogues,
 )
 
 

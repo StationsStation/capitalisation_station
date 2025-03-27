@@ -1,17 +1,13 @@
 """Base exchange to be used to for erc20 exchanges."""
 
-from typing import cast
-from pathlib import Path
 from functools import cache
 
 from web3 import Web3
 from multicaller import multicaller
-from aea.contracts.base import Contract, contract_registry
 from aea_ledger_ethereum import EthereumApi, EthereumCrypto
 from aea.configurations.base import PublicId
-from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
-from aea.configurations.constants import CONTRACTS
 
+from packages.eightballer.connections.dcxt.utils import load_contract
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
@@ -29,23 +25,6 @@ class BaseErc20Exchange:
     """Base exchange to be used to for erc20 exchanges."""
 
     tokens: dict[str, Erc20Token] = {}
-
-    def load_contract(self, public_id: PublicId):
-        """Load the contract from the path."""
-        is_built = Path("vendor").exists()
-        contract_path = (
-            (Path("packages") / public_id.author / CONTRACTS / public_id.name)
-            if not is_built
-            else Path("vendor") / public_id.author
-        )
-        configuration = cast(
-            ContractConfig,
-            load_component_configuration(ComponentType.CONTRACT, contract_path),
-        )
-        configuration._directory = contract_path  # noqa
-        if str(configuration.public_id) not in contract_registry.specs:
-            Contract.from_config(configuration)
-        return contract_registry.make(str(configuration.public_id))
 
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         """Initialize the exchange."""
@@ -65,8 +44,9 @@ class BaseErc20Exchange:
         )
         self.logger = logger
 
-        self.erc20_contract = self.load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
+        self.erc20_contract = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
         self.raw_token_data = read_token_list(LEDGER_TO_CHAIN_ID[ledger_id])
+        self.names_to_addresses = {v["symbol"]: k for k, v in self.raw_token_data.items()}
         self.tokens = {}
 
     def _from_decimals_amt_to_token(self, address, balance):

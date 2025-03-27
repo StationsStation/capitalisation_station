@@ -6,28 +6,31 @@ from unittest.mock import MagicMock
 import pytest
 from aea.mail.base import Envelope
 
-from dcxt.tests.test_dcxt_connection import TIMEOUT, TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
+from dcxt.tests.test_dcxt_connection import TIMEOUT, TEST_EXCHANGES, BaseDcxtConnectionTest, get_dialogues
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
 
 
-TEST_MARKET = "BTC-PERP"
+TEST_MARKET = "ETH/USDC"
 
 
 DEFAULT_EXCHANGE = list(TEST_EXCHANGES.keys()).pop()
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("exchange", TEST_EXCHANGES)
 class TestFetchTickers(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    @with_timeout(TIMEOUT)
-    async def test_handles_get_all_tickers(self, exchange_id=DEFAULT_EXCHANGE) -> None:
+    async def test_handles_get_all_tickers(
+        self,
+        exchange: tuple[str, str],
+    ) -> None:
         """Can handle ohlcv messages."""
-        exchange_id, ledger_id = exchange_id
+        exchange_id, ledger_id = exchange
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
         request, _ = dialogues.create(
@@ -43,7 +46,44 @@ class TestFetchTickers(BaseDcxtConnectionTest):
         )
         await self.connection.send(envelope)
         await asyncio.sleep(1)
-        response = await self.connection.receive()
+        async with asyncio.timeout(TIMEOUT):
+            response = await self.connection.receive()
+        assert response is not None
+        assert isinstance(response.message, TickersMessage)
+        assert response.message.performative == TickersMessage.Performative.ALL_TICKERS, f"Error: {response}"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("exchange", TEST_EXCHANGES)
+class TestFetchTicker(BaseDcxtConnectionTest):
+    """Test protocol messages are handled."""
+
+    DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
+
+    async def test_handles_get_all_ticker(
+        self,
+        exchange: tuple[str, str],
+    ) -> None:
+        """Can handle ohlcv messages."""
+        exchange_id, ledger_id = exchange
+        await self.connection.connect()
+        dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
+        request, _ = dialogues.create(
+            counterparty=str(self.connection.connection_id),
+            performative=TickersMessage.Performative.GET_TICKER,
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+            symbol=TEST_MARKET,
+        )
+        envelope = Envelope(
+            to=request.to,
+            sender=request.sender,
+            message=request,
+        )
+        await self.connection.send(envelope)
+        await asyncio.sleep(1)
+        async with asyncio.timeout(TIMEOUT):
+            response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, TickersMessage)
         assert response.message.performative == TickersMessage.Performative.ALL_TICKERS, f"Error: {response}"

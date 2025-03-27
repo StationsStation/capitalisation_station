@@ -1,0 +1,91 @@
+{
+    "cex": {},
+    "ethereum": {
+        "one_inch": [
+            {
+                "asset_id": "weETH",
+                "free": 0.09270590696157831,
+                "used": 0.0,
+                "total": 0.09270590696157831,
+                "is_native": false,
+                "contract_address": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+            },
+            {
+                "asset_id": "LBTC",
+                "free": 0.01781084,
+                "used": 0.0,
+                "total": 0.01781084,
+                "is_native": false,
+                "contract_address": "0x8236a87084f8B84306f72007F36F2618A5634494"
+            },
+            {
+                "asset_id": "DAI",
+                "free": 8.0,
+                "used": 0.0,
+                "total": 8.0,
+                "is_native": false,
+                "contract_address": "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+            },
+            {
+                "asset_id": "WETH",
+                "free": 0.004265318726205618,
+                "used": 0.0,
+                "total": 0.004265318726205618,
+                "is_native": false,
+                "contract_address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+            },
+            {
+                "asset_id": "USDC",
+                "free": 2903.836152,
+                "used": 0.0,
+                "total": 2903.836152,
+                "is_native": false,
+                "contract_address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+            },
+            {
+                "asset_id": "OLAS",
+                "free": 0.5993717665112456,
+                "used": 0.0,
+                "total": 0.5993717665112456,
+                "is_native": false,
+                "contract_address": "0x0001A500A6B18995B03f44bb040A5fFc28E45CB0"
+            },
+            {
+                "asset_id": "ETH",
+                "free": 0.006732091491236152,
+                "used": 0.0,
+                "total": 0.006732091491236152,
+                "is_native": true,
+                "contract_address": null
+            }
+        ]
+    },
+    "derive": {
+        "derive": [
+            {
+                "asset_id": "LBTC",
+                "free": 0.00196,
+                "used": 0.0,
+                "total": 0.00196,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "WEETH",
+                "free": 10.0,
+                "used": 0.0,
+                "total": 0.0,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "USDC",
+                "free": 2068.966308504846,
+                "used": 0.0,
+                "total": 2068.966308504846,
+                "is_native": false,
+                "contract_address": null
+            }
+        ]
+    }
+}
