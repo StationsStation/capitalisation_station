@@ -40,8 +40,6 @@
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeihmcrt3whng65ig3wfwtxkwlqqlp4g5eebdp7biwucxct7dmncdw4"
     },
     "third_party": {
-        "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py",
-        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeifbi47bkx4bqv2tjuqfndxxmhnubdfmabowuczbxwlu7owy6zb2tu",
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",
         "protocol/valory/http/1.0.0": "bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa",
         "protocol/valory/ipfs/0.1.0": "bafybeifi2nri7sprmkez4rqzwb4lnu6peoy3bax5k6asf6k5ms7kmjpmkq",
