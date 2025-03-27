@@ -40,7 +40,7 @@ pyenv install 3.11
 ### Step 3: Checkout The Code
 
 ```bash
-git clone git@github.com:StationsStation/capitalisation_station.git --recurse-submodules
+git clone https://github.com/StationsStation/capitalisation_station.git --recurse-submodules
 ```
 
 ### Step 4: Install the Dependencies
