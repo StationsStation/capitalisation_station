@@ -57,6 +57,12 @@ apt-get install make build-essential gcc \
   libzstd-dev curl wget git -y
 
 
+```
+
+
+Ensure shell can be accessed.
+
+```bash
 poetry self add poetry-plugin-shell
 ```
 
@@ -90,7 +96,8 @@ You will need to create an API key for the trader to use.
 
 ```bash
 # create keys
-aea generate-key ethereum
+autonomy generate-key ethereum
+
 ```
 
 NOTE: Available agents are located in the packages/AUTHOR/agents directory.
