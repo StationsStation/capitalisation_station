@@ -23,9 +23,9 @@ Create a new machine on your cloud provider of choice. We recommend using a mach
 
 We assume that you have already created a new machine and have SSH access to it.
 
-### Step 2: Install Python 3.12 (Optional)
+### Step 2: Install Python 3.11 (Optional)
 
-We recommend using the `pyenv` tool to install Python 3.12.
+We recommend using the `pyenv` tool to install Python 3.11.
 
 ```bash
 curl https://pyenv.run | bash
@@ -34,7 +34,7 @@ curl https://pyenv.run | bash
 NOTE: Please follow the instructions on the [Pyenv Installer](https://github.com/pyenv/pyenv#b-set-up-your-shell-environment-for-pyenv)
 
 ```bash
-pyenv install 3.12.0
+pyenv install 3.11
 ```
 
 ### Step 3: Checkout The Code
@@ -114,7 +114,7 @@ poetry shell
 ```
 
 ```bash
-poetry run adev run dev $AGENT --no-use-tendermint --force 
+adev run dev $AGENT --no-use-tendermint --force 
 ```
 
 ### Step 7: Monitor the Trader
