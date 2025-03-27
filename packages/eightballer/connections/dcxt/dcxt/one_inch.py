@@ -214,7 +214,7 @@ class OneInchSwapApi:
             return False, txn_hash
         return True, txn_hash
 
-    async def get_quote(self, swap_params, retries=5, cooldown=1):
+    async def get_quote(self, swap_params, retries=10, cooldown=2):
         """Get a quote for the swap."""
         try:
             url = self.api_request_url("/quote", swap_params.to_json())
