@@ -13,7 +13,7 @@ The arbitrage trader is a tool to automatically execute arbitrage trades between
 Before you begin, you will need the following:
 
 - A machine running a recent version of Ubuntu or Debian.
-- Python 3.12 installed on the machine.
+- Python 3.11 installed on the machine.
 
 ## Steps 
 
