@@ -521,7 +521,7 @@ class P2PLibp2pClientConnection(Connection):
             self.logger.debug("Receive cancelled.")
             return None
         except Exception as e:  # pragma: no cover # pylint: disable=broad-except
-            self.logger.exception(e)
+            # self.logger.exception(e)
             return None
 
     async def send(self, envelope: Envelope) -> None:
