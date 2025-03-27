@@ -46,12 +46,31 @@ git clone git@github.com:StationsStation/capitalisation_station.git --recurse-su
 ### Step 4: Install the Dependencies
 
 ```bash
+## Linux Dependencies
+sudo apt install -y \
+apt-get install make build-essential gcc \
+  libssl-dev zlib1g-dev libbz2-dev \
+  libreadline-dev libsqlite3-dev libffi-dev \
+  liblzma-dev uuid-dev xz-utils tk-dev \
+  libncursesw5-dev libgdbm-dev libnss3-dev \
+  libxml2-dev libxmlsec1-dev \
+  libzstd-dev curl wget git -y
+
+
+poetry self add poetry-plugin-shell
+
+poetry install
+```
+
+### Step 5: Install the Trader
+
+```bash
 cd capitalisation_station
 make install
 ```
 
 
-### Step 5: Create acounts on Derive
+### Step 6: Create acounts on Derive
 You can create an account at [Derive](https://www.derive.xyz/invite/A0HQW)
 
 You will need to create a smart contract wallet on Derive.
@@ -84,10 +103,15 @@ There are a few necessarcy variables that need to be set in order to run the tra
 
 ```bash
 export AGENT=eightballer/derive_arbitrage_agent
-poetry run python generator.py $AGENT
+poetry run python scripts/generator.py $AGENT
 ```
 
 ### Step 6: Run the Trader
+
+```
+# enter the virtual environment
+poetry shell
+```
 
 ```bash
 poetry run adev run dev $AGENT --no-use-tendermint --force 
