@@ -88,6 +88,11 @@ You will need to create an API key for the trader to use.
 
 ### Step 5: Configure the Trader.
 
+```bash
+# create keys
+aea generate-key ethereum
+```
+
 NOTE: Available agents are located in the packages/AUTHOR/agents directory.
 
 There are a few necessarcy variables that need to be set in order to run the trader.
