@@ -6,7 +6,7 @@ from typing import Any
 from decimal import Decimal
 from pathlib import Path
 
-from derive.enums import (
+from derive_client.enums import (
     OrderSide as DeriveOrderSide,
     OrderType as DeriveOrderType,
     TimeInForce as DeriveTimeInForce,
@@ -15,7 +15,7 @@ from derive.enums import (
     InstrumentType,
     UnderlyingCurrency,
 )
-from derive.async_client import AsyncClient
+from derive_client.async_client import AsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets

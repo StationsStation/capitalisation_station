@@ -1,5 +1,6 @@
 """Class for interacting with the 1inch API."""
 
+import logging
 import os
 import sys
 import asyncio
@@ -91,7 +92,7 @@ class OneInchSwapParams:
     from_: str
     disable_estimate: bool
     allow_partial_fill: bool
-    fee: int = 1.5  # percentate fee ie. 0.001 = 0.001%
+    fee: int = 0.0  # percentate fee ie. 0.001 = 0.001%
     referrer_address: str = "0x1c83bb5a464277bDCa5d8fB9c354Aae642D18914"
 
     def to_json(self):
@@ -147,12 +148,11 @@ class OneInchSwapApi:
     api: EthereumApi
     crypto: EthereumCrypto
     chain_id: int
-    web3_rpc_url: str
     api_key: str
     logger: Any
 
     def __init__(
-        self, api: EthereumApi, account: EthereumCrypto, chain_id: int, web3_rpc_url: str, api_key: str, logger
+        self, api: EthereumApi, account: EthereumCrypto, chain_id: int, api_key: str, logger
     ):
         self.api = api
         self.account = account
@@ -361,7 +361,6 @@ class OneInchApiClient(BaseErc20Exchange):
             ),
             EthereumCrypto(key_path),
             LEDGER_TO_CHAIN_ID[SupportedLedgers(ledger_id)],
-            rpc_url,
             kwargs.get("api_key"),
             logger=logger,
         )
@@ -454,16 +453,27 @@ def perform_swap(
 ):
     """Perform the swap."""
 
-    price_quote = one_inch_api.get_quote(swap_params)
+
+    price_quote = asyncio.run(one_inch_api.get_quote(swap_params,retries=0),)
     in_amt_human = amount / 10**spent_erc_20_decimals
     out_amt_human = int(price_quote["dstAmount"]) / 10**bought_erc_20_decimals
 
     ratio = in_amt_human / out_amt_human
-    1 / ratio
+    inverse = 1 / ratio
+
+    print(f"Price quote: {price_quote}")
+    print(f"Price: {ratio:6f}")
+    print(f"Price Inverse: {inverse:6f}")
 
     if input("Proceed with swap? (y/n): ").lower() != "y":
         sys.exit(0)
-    one_inch_api.swap_tokens(swap_params)
+    
+    result, txn = asyncio.run(one_inch_api.swap_tokens(swap_params))
+
+    if result:
+        print(f"Swap successful: {txn}")
+    else:
+        print(f"Swap failed: {txn}")
 
 
 @click.command()
@@ -476,7 +486,7 @@ def perform_swap(
     "--dst", type=str, help="Destination token address: (lbtc)", default="0x8236a87084f8b84306f72007f36f2618a5634494"
 )
 @click.option("--amount", type=int, help="Amount of tokens to swap", default="10000000")
-def main(chain_id, src, dst, amount):
+def main(chain_id, src, dst, amount, api_key):
     """Swap tokens using the 1inch API.
 
     Args:
@@ -504,22 +514,30 @@ def main(chain_id, src, dst, amount):
         allow_partial_fill=False,
     )
 
-    erc_20 = load_contract(Path("packages/eightballer/contracts/erc_20"))
+    logger = logging.getLogger(__name__)
+
+    # We make sure to log to the console
+
+    logger.setLevel("INFO")
+    logger.addHandler(logging.StreamHandler())
+    print(swap_params.to_json())
+    erc_20 = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
     one_inch_api_key = os.getenv("ONE_INCH_API_KEY")
     if not one_inch_api_key:
         msg = "ONE_INCH_API_KEY environment variable not set"
         raise UserWarning(msg)
 
-    one_inch_api = OneInchSwapApi(api, crypto, chain_id,  one_inch_api_key)
+    one_inch_api = OneInchSwapApi(api, crypto, chain_id,  api_key=one_inch_api_key, logger=logger)
 
-    spent_erc_20_decimals, spent_erc_20_balance, _spent_erc_20_symbol = get_erc_details(erc_20, api, src, crypto)
-    bought_erc_20_decimals, _bought_erc_20_balance, _bought_erc_20_symbol = get_erc_details(erc_20, api, dst, crypto)
+    spent_erc_20_decimals, spent_erc_20_balance, spent_erc_20_symbol = get_erc_details(erc_20, api, src, crypto)
+    bought_erc_20_decimals, bought_erc_20_balance, bought_erc_20_symbol = get_erc_details(erc_20, api, dst, crypto)
 
     if spent_erc_20_balance < amount:
         msg = "Insufficient balance in source token"
         raise InsufficientBalance(msg)
 
-    allowance = get_allowance(erc_20, api, src, crypto.address, SPENDER[str(chain_id)])
+    ledger_id = {1: SupportedLedgers.ETHEREUM, 100: SupportedLedgers.GNOSIS, 8453: SupportedLedgers.BASE}[chain_id]
+    allowance = get_allowance(erc_20, api, src, crypto.address, SPENDER[ledger_id.value])
     if allowance < amount:
         result = increase_allowance(
             token_address=src, spender=SPENDER[str(chain_id)], amount=amount, ledger_api=api, crypto=crypto
@@ -527,6 +545,11 @@ def main(chain_id, src, dst, amount):
         if not result:
             msg = "Failed to increase allowance"
             raise InsufficientAllowance(msg)
+        
+    click.echo(f"Performing swap of {amount} {src} for {dst}")
+    click.echo(f"Spent:  {spent_erc_20_symbol}  : {amount / 10**spent_erc_20_decimals}")
+    click.echo(f"Bought: {bought_erc_20_symbol} : {amount / 10**bought_erc_20_decimals}")
+
     perform_swap(one_inch_api, swap_params, amount, spent_erc_20_decimals, bought_erc_20_decimals)
 
 
