@@ -34,7 +34,7 @@ In order to add a new exchange to the dcxt connection, you need to create a new 
 If you're looking to contribute or develop with `capitalisation_station`, get the source code and set up the environment:
 
 ```shell
-git clone git@github.com:StationsStation/capitalisation_station.git --recurse-submodules
+git clone https://github.com/StationsStation/capitalisation_station.git --recurse-submodules
 cd capitalisation_station
 make install
 ```
