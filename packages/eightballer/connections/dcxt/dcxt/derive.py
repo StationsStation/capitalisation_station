@@ -9,6 +9,7 @@ from pathlib import Path
 from derive.enums import (
     OrderSide as DeriveOrderSide,
     OrderType as DeriveOrderType,
+    TimeInForce as DeriveTimeInForce,
     Environment,
     OrderStatus as DeriveOrderStatus,
     InstrumentType,
@@ -342,8 +343,9 @@ def map_status_to_enum(status):
         "new": OrderStatus.OPEN,
         "Order queued for cancellation": OrderStatus.CANCELLED,
         "closed": OrderStatus.CLOSED,
-        "canceled": OrderStatus.CANCELLED,
+        "cancelled": OrderStatus.CANCELLED,
         "filled": OrderStatus.FILLED,
+        "partially_filled": OrderStatus.PARTIALLY_FILLED,
     }
     if status not in mapping:
         msg = f"Unknown status: {status}"
@@ -399,9 +401,13 @@ class DeriveClient:
             ]
         ):
             kwargs["status"] = "filled"
+
+
+        order_key = "order_status" if "order_status" in kwargs else "status"
+
         return Order(
             symbol=kwargs["instrument_name"],
-            status=map_status_to_enum(kwargs["status"]),
+            status=map_status_to_enum(kwargs[order_key]),
             type=map_order_type_to_enum(kwargs["order_type"]),
             side=OrderSide.BUY if kwargs["direction"] == "buy" else OrderSide.SELL,
             price=float(kwargs["limit_price"]),
@@ -540,5 +546,6 @@ class DeriveClient:
             "side": DeriveOrderSide(kwargs["side"]),
             "instrument_type": get_instrument_type(kwargs["symbol"]),
             "underlying_currency": get_underlying_currency(asset_a),
+            "time_in_force": DeriveTimeInForce.IOC,
         }
         return await self.client.create_order(**params)

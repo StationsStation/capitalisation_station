@@ -356,7 +356,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
             futures.append(response)
 
         for future in futures:
-            response = yield from future
+            response: OrdersMessage = yield from future
 
             if response.performative == OrdersMessage.Performative.ERROR:
                 self.context.logger.error(f"Error creating order: {response.error_code} {response.error_msg} {order}")
@@ -372,6 +372,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
             Side:     {response.order.side}
             Price:    {response.order.price}
             Amount:   {response.order.amount}
+            Filled Amount:   {response.order.filled}
             """)
             )
             new_orders.append(response.order)

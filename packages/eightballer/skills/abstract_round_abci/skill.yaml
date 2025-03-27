@@ -60,7 +60,7 @@ fingerprint:
   utils.py: bafybeiakoatsdzcsm5g6fz6brrnicd65c4kr2ix7fekolpfdupk7tdhxxi
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/p2p_libp2p_client:0.1.0:bafybeighynkls6dc7gbojheukzfctzgnt52p72ffdyi6vso4artbabny5a
+- eightballer/p2p_libp2p_client:0.1.0:bafybeiezpjdorztw4ibenaviicvlnp6s7lmugvn2ukpf676d72apbkrmna
 - valory/abci:0.1.0:bafybeiebsx4dvw2ibkdwejhfk6akhhfihpc3vvn656t4kuhbne4rmsqqkq
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 - valory/ipfs:0.1.0:bafybeiamz23olgtow4wqf7zpsfnfzf7pxiognrxl2mhn5kvqutlwhgukxa
