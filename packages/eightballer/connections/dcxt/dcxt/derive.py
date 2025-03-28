@@ -9,9 +9,9 @@ from pathlib import Path
 from derive_client.enums import (
     OrderSide as DeriveOrderSide,
     OrderType as DeriveOrderType,
-    TimeInForce as DeriveTimeInForce,
     Environment,
     OrderStatus as DeriveOrderStatus,
+    TimeInForce as DeriveTimeInForce,
     InstrumentType,
     UnderlyingCurrency,
 )
@@ -401,7 +401,6 @@ class DeriveClient:
             ]
         ):
             kwargs["status"] = "filled"
-
 
         order_key = "order_status" if "order_status" in kwargs else "status"
 

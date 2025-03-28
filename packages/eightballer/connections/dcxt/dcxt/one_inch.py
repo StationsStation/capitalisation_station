@@ -1,21 +1,20 @@
 """Class for interacting with the 1inch API."""
 
-import logging
 import os
 import sys
 import asyncio
+import logging
 import contextlib
 from typing import Any, cast
 from decimal import Decimal
-from pathlib import Path
 from datetime import datetime
 from functools import cache
 from dataclasses import dataclass
 
-from web3.exceptions import TimeExhausted
 import click
 import requests
 from web3 import Web3
+from web3.exceptions import TimeExhausted
 from aea_ledger_ethereum import (
     Address,
     HexBytes,
@@ -152,9 +151,7 @@ class OneInchSwapApi:
     api_key: str
     logger: Any
 
-    def __init__(
-        self, api: EthereumApi, account: EthereumCrypto, chain_id: int, api_key: str, logger
-    ):
+    def __init__(self, api: EthereumApi, account: EthereumCrypto, chain_id: int, api_key: str, logger):
         self.api = api
         self.account = account
         self.chain_id = chain_id
@@ -180,7 +177,9 @@ class OneInchSwapApi:
             swap_transaction = response.json()
         except requests.exceptions.JSONDecodeError:
             if "The limit of requests per second has been exceeded" in response.text:
-                self.logger.error(f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True)
+                self.logger.error(
+                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+                )
                 if retries == 0:
                     raise
                 await asyncio.sleep(cooldown)
@@ -192,7 +191,9 @@ class OneInchSwapApi:
                 if retries == 0:
                     raise
                 await asyncio.sleep(cooldown)
-                self.logger.error(f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True)
+                self.logger.error(
+                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+                )
                 return await self.build_tx_for_swap(swap_params, retries - 1, cooldown * 2)
             raise InvalidSwapParams(swap_transaction["description"])
         return swap_transaction["tx"]
@@ -207,10 +208,9 @@ class OneInchSwapApi:
         swap_transaction["gasPrice"] = int(swap_transaction["gasPrice"] * 1.05)
         swap_transaction["chainId"] = self.chain_id
         cur_nonce = self.api._try_get_transaction_count(self.account.address, raise_on_try=True)  # noqa
-        if nonce:
-            if nonce != cur_nonce:
-                self.logger.error(f"Nonce mismatch: {nonce} != {cur_nonce}")
-                return False, None
+        if nonce and nonce != cur_nonce:
+            self.logger.error(f"Nonce mismatch: {nonce} != {cur_nonce}")
+            return False, None
         swap_transaction["nonce"] = cur_nonce
         self.logger.info(f"Signing transaction: {swap_transaction}")
         signed_txn = self.sign_swap_txn(swap_transaction)
@@ -220,18 +220,15 @@ class OneInchSwapApi:
         result = False
 
         try:
-            result = self.api.api.eth.wait_for_transaction_receipt(
-                txn_hash, 
-                timeout=60,
-                poll_latency=1)
+            result = self.api.api.eth.wait_for_transaction_receipt(txn_hash, timeout=60, poll_latency=1)
         except TimeExhausted:
-            self.logger.error(f"Transaction timed out: {txn_hash}")
+            self.logger.exception(f"Transaction timed out: {txn_hash}")
             retries -= 1
             if retries == 0:
                 return False, txn_hash
             await asyncio.sleep(2)
             return await self.swap_tokens(swap_params, retries=retries, nonce=cur_nonce)
-                
+
         if not result:
             return False, txn_hash
         if result.get("status") == 0:
@@ -245,19 +242,22 @@ class OneInchSwapApi:
             response = requests.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)
             quote = response.json()
         except requests.exceptions.JSONDecodeError:
-            self.logger.error(f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True)
+            self.logger.error(
+                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+            )
             if retries == 0:
                 raise
             await asyncio.sleep(cooldown)
             return await self.get_quote(swap_params, retries - 1, cooldown * 2)
         if "error" in quote:
-            self.logger.error(f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True)
+            self.logger.error(
+                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+            )
             if retries == 0:
                 raise InvalidSwapParams(quote["description"])
             await asyncio.sleep(cooldown)
             return await self.get_quote(swap_params, retries - 1, cooldown * 2)
         return quote
-
 
     async def close(self):
         """Close the connection."""
@@ -483,27 +483,24 @@ def perform_swap(
 ):
     """Perform the swap."""
 
-
-    price_quote = asyncio.run(one_inch_api.get_quote(swap_params,retries=0),)
+    price_quote = asyncio.run(
+        one_inch_api.get_quote(swap_params, retries=0),
+    )
     in_amt_human = amount / 10**spent_erc_20_decimals
     out_amt_human = int(price_quote["dstAmount"]) / 10**bought_erc_20_decimals
 
     ratio = in_amt_human / out_amt_human
-    inverse = 1 / ratio
-
-    print(f"Price quote: {price_quote}")
-    print(f"Price: {ratio:6f}")
-    print(f"Price Inverse: {inverse:6f}")
+    1 / ratio
 
     if input("Proceed with swap? (y/n): ").lower() != "y":
         sys.exit(0)
-    
-    result, txn = asyncio.run(one_inch_api.swap_tokens(swap_params))
+
+    result, _txn = asyncio.run(one_inch_api.swap_tokens(swap_params))
 
     if result:
-        print(f"Swap successful: {txn}")
+        pass
     else:
-        print(f"Swap failed: {txn}")
+        pass
 
 
 @click.command()
@@ -550,17 +547,16 @@ def main(chain_id, src, dst, amount, api_key):
 
     logger.setLevel("INFO")
     logger.addHandler(logging.StreamHandler())
-    print(swap_params.to_json())
     erc_20 = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
     one_inch_api_key = os.getenv("ONE_INCH_API_KEY")
     if not one_inch_api_key:
         msg = "ONE_INCH_API_KEY environment variable not set"
         raise UserWarning(msg)
 
-    one_inch_api = OneInchSwapApi(api, crypto, chain_id,  api_key=one_inch_api_key, logger=logger)
+    one_inch_api = OneInchSwapApi(api, crypto, chain_id, api_key=one_inch_api_key, logger=logger)
 
     spent_erc_20_decimals, spent_erc_20_balance, spent_erc_20_symbol = get_erc_details(erc_20, api, src, crypto)
-    bought_erc_20_decimals, bought_erc_20_balance, bought_erc_20_symbol = get_erc_details(erc_20, api, dst, crypto)
+    bought_erc_20_decimals, _bought_erc_20_balance, bought_erc_20_symbol = get_erc_details(erc_20, api, dst, crypto)
 
     if spent_erc_20_balance < amount:
         msg = "Insufficient balance in source token"
@@ -575,7 +571,7 @@ def main(chain_id, src, dst, amount, api_key):
         if not result:
             msg = "Failed to increase allowance"
             raise InsufficientAllowance(msg)
-        
+
     click.echo(f"Performing swap of {amount} {src} for {dst}")
     click.echo(f"Spent:  {spent_erc_20_symbol}  : {amount / 10**spent_erc_20_decimals}")
     click.echo(f"Bought: {bought_erc_20_symbol} : {amount / 10**bought_erc_20_decimals}")

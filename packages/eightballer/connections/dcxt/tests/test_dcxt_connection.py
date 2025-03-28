@@ -63,7 +63,8 @@ TEST_EXCHANGE_DATA = """
   wallet: null
   ledger_id: derive
   rpc_url: https://base.llamarpc.com
-  etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  subaccount_id: 132849
+  environment: test
 - name: one_inch
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null

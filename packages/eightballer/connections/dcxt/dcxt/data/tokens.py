@@ -98,7 +98,7 @@ LEDGER_TO_TOKEN_LIST = {
             "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "0x8236a87084f8b84306f72007f36f2618a5634494",  # lbtc
-            "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee", # wrapped ethena eth
+            "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",  # wrapped ethena eth
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ETHEREUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ETHEREUM]]

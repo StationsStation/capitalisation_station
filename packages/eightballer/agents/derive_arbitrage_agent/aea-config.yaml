@@ -10,10 +10,10 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeie42n5sa2t6qplm6kw425mv4te3k6vd5t776rh7fgf3k6fxmqam34
+- eightballer/dcxt:0.1.0:bafybeiddm67zlowjs2kgawraxbnfwmib5o7idvzacb5smkfuadsskca6ue
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
-- eightballer/p2p_libp2p_client:0.1.0:bafybeiezpjdorztw4ibenaviicvlnp6s7lmugvn2ukpf676d72apbkrmna
+- eightballer/p2p_libp2p_client:0.1.0:bafybeihsmhctbceeldbqjvpjiqqypnsbuqvqnibb7ufbjbmuzmeblpopny
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
 - valory/abci:0.1.0:bafybeiebsx4dvw2ibkdwejhfk6akhhfihpc3vvn656t4kuhbne4rmsqqkq
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
@@ -46,13 +46,13 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeici63hmsloihrhnnam2zdntxecfr3aoezx4pfxnpud6b5tsl7p4mi
+- eightballer/abstract_round_abci:0.1.0:bafybeicnxsdpdv32c5ly4anzut7442vv4xgrx2t5kiysvqubucewjtdvpi
 - eightballer/metrics:0.1.0:bafybeid6d6n36sqoh27xfsq5wba3a3sktg2dezbaymp3wraqck7khv6yxy
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeicnx3g3fdqhothtcmmenztegxlmvrqyralqtedxfncjchkijx7aku
+- eightballer/simple_fsm:0.1.0:bafybeigd6kv24ilh5hmrmmegcjpohuvyf5jqqkzt2hl7ar7e6czvn4dd5i
 - valory/abstract_abci:0.1.0:bafybeibkdxhh7csurqqm5mqeaa35k4thxrhrf3sup62tmx4x4nsbgqmreu
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeig4je6px7k6fgkcqvndu2l6n65ayewvd3xt4irmvzqqhdydcmzvky
+- eightballer/lbtc_arbitrage:0.1.0:bafybeifsi37cdsxdeftwmd4dypycmqq5gel345agpxc6lgn6gz3jyrfolq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
