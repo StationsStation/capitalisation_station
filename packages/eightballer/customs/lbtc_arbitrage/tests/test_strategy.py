@@ -1,7 +1,6 @@
 """Simple tests for the arbitrage strategy."""
 
 import json
-import unittest
 from pathlib import Path
 
 import pytest
@@ -25,12 +24,11 @@ def read_test_json(file_path):
     with open(file_path, encoding="utf-8") as file:
         return json.load(file)
 
-def get_cases()->list:
-    """
-    check how many folders are in the data directory.
-    """
-    res = [x.stem for x in (Path(__file__).parent / "data").iterdir() if x.is_dir()]
-    return res
+
+def get_cases() -> list:
+    """Check how many folders are in the data directory."""
+    return [x.stem for x in (Path(__file__).parent / "data").iterdir() if x.is_dir()]
+
 
 def test_strategy_init():
     """Test the strategy init."""
@@ -38,7 +36,7 @@ def test_strategy_init():
     assert strategy is not None
 
 
-class TestEnhancedArbitrageStrategy():
+class TestEnhancedArbitrageStrategy:
     """Test suite for the EnhancedArbitrageStrategy class."""
 
     def _setup_method(self, method, case):
@@ -50,7 +48,6 @@ class TestEnhancedArbitrageStrategy():
         self.prices = read_test_json(Path(__file__).parent / "data" / case / "prices.json")
         self.strategy = ArbitrageStrategy(**TEST_INIT_KWARGS)
 
-    
     @pytest.mark.parametrize("case", get_cases())
     def test_strategy_init(self, case):
         """Test the strategy init."""

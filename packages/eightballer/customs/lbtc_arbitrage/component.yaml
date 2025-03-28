@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiejn3ahy33huktlei2koe47mzoc5obnajkwhufpfcugbmnqqtj2bi
-  strategy.py: bafybeieftz3lyt67ravxbzgbrsh2qffl57c4dheamlw33omxi6tucpcn7u
+  strategy.py: bafybeihjcgk4xdy55otgiqru3cxafss732riv4fpqgvr7ckjqiz4dq7w6y
   tests/__init__.py: bafybeiajoajrn2ja2mzsvvhia4gm5wkz3gbraohwzpciwr6quhi2tdzzxy
   tests/data/case_0/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
   tests/data/case_0/portfolio.json: bafybeidqgumqzzamzj3xjzcsqi25glhkmpisyvxzlmzmcyhu2ts3q74knm
@@ -18,7 +18,7 @@ fingerprint:
   tests/data/case_2/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
   tests/data/case_2/portfolio.json: bafybeifgdvspi5zloju5klywzz5aqyxt7zs2rs3s2sra3c2sker2oezyqi
   tests/data/case_2/prices.json: bafybeiga3focypcalednqmgmydra23odkpq3rlg4v6lzgapmru46jtb6e4
-  tests/test_strategy.py: bafybeih4mlqs5tyfl7jzsr6hpkaxbq3gg7xkjk63ub2etwbm7yls6kepwu
+  tests/test_strategy.py: bafybeief64wlvi7qdp3wwwcmgvqneqqtutqfdqdpu3fpmm6z4z5hkp6ofe
 fingerprint_ignore_patterns: []
 dependencies: {}
 strategy_init_kwargs:

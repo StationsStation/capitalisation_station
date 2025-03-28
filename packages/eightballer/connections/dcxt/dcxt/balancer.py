@@ -159,7 +159,15 @@ class BalancerClient(BaseErc20Exchange):
         self.logger = kwargs.get("logger")
         self.tickers = {}
         self.raw_token_data = read_token_list(self.bal.web3.eth.chain_id)
-        self.tokens = {}
+        self.tokens = {
+            address: Erc20Token(
+                address=token["address"],
+                symbol=token["symbol"],
+                name=token["name"],
+                decimals=token["decimals"],
+            )
+            for address, token in self.raw_token_data.items()
+        }
 
     async def fetch_markets(
         self,
@@ -370,13 +378,20 @@ class BalancerClient(BaseErc20Exchange):
     ):
         """Fetches a ticker."""
 
+        if not params:
+            params = {"amount": DEFAULT_AMOUNT_USD}
+
         if all([symbol is None, asset_a is None or asset_b is None]):
             msg = "Either symbol or asset_a and asset_b must be provided"
             raise ValueError(msg)
         if symbol:
-            asset_a, asset_b = symbol.split("/")
+            asset_a_symbol, asset_b_symbol = symbol.split("/")
+            # we need to look up the token addresses for the assets.
+            asset_a = self.get_token_address(asset_a_symbol)
+            asset_b = self.get_token_address(asset_b_symbol)
         if not asset_a or not asset_b:
-            msg = "Asset A and Asset B must be provided"
+            msg = f"Could not find token addresses for `{asset_a}` and `{asset_b}`"
+            msg += f" with symbols {asset_a_symbol} and {asset_b_symbol}"
             raise ValueError(msg)
 
         input_token = self.get_token(asset_a)
@@ -401,6 +416,13 @@ class BalancerClient(BaseErc20Exchange):
             timestamp=int(timestamp.timestamp()),
             datetime=timestamp.isoformat(),
         )
+
+    def get_token_address(self, symbol: str) -> str:
+        """Get the token address."""
+        for token_address, token in self.tokens.items():
+            if token.symbol == symbol:
+                return token_address
+        return None
 
     async def fetch_positions(self, **kwargs) -> list:
         """Fetches the positions, notice as this is a balancer exchange, we do not have positions.

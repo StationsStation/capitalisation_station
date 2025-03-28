@@ -20,7 +20,6 @@
 """This package contains a simple arbitrage strategy."""
 
 import operator
-from typing import NamedTuple
 from functools import reduce
 from dataclasses import dataclass
 
@@ -28,7 +27,7 @@ from packages.eightballer.protocols.orders.custom_types import Order, OrderSide,
 
 
 @dataclass
-class ArbitrageOpportunity():
+class ArbitrageOpportunity:
     """An arbitrage opportunity."""
 
     market: str
@@ -147,10 +146,6 @@ class ArbitrageStrategy:
         # asset_a required to buy asset_b
         opportunity.required_asset_a = amount
         opportunity.required_asset_b = amount * opportunity.best_ask
-        print("Required asset a: ", opportunity.required_asset_a)
-        print("Required asset b: ", opportunity.required_asset_b)
-        print("Buy balance: ", buy_balance)
-        print("Sell balance: ", sell_balance)
         if not all([buy_balance, sell_balance]):
             return False
         opportunity.balance_buy = buy_balance["free"]
@@ -173,8 +168,12 @@ class ArbitrageStrategy:
             for price in prices[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
         }
         asset_a, asset_b = opportunity.market.split("/")
-        portfolio_a = {p["asset_id"].upper(): p for p in portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]}
-        portfolio_b = {p["asset_id"].upper(): p for p in portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]}
+        portfolio_a = {
+            p["asset_id"].upper(): p for p in portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]
+        }
+        portfolio_b = {
+            p["asset_id"].upper(): p for p in portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
+        }
         buy_order = Order(
             price=buy_prices[opportunity.market]["ask"],
             exchange_id=opportunity.best_ask_exchange,

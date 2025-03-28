@@ -161,16 +161,12 @@ class IdentifyOpportunityRound(State):
             missing_keys = expected_keys - set(self.custom_config.kwargs.keys())
             if missing_keys:
                 msg = f"Missing keys in custom configuration: {missing_keys} Please check the configuration. in {self.custom_config.directory}"
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             expected_files = {"strategy.py"}
             missing_files = expected_files - set(self.custom_config.fingerprint.keys())
             if missing_files:
                 msg = f"Missing files in custom configuration: {missing_files} Please check the configuration. in {self.custom_config.directory}"
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
 
         validate()
         strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
