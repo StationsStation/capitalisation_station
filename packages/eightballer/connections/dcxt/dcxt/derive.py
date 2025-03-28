@@ -15,7 +15,7 @@ from derive_client.enums import (
     InstrumentType,
     UnderlyingCurrency,
 )
-from derive_client.async_client import AsyncClient
+from derive_client.async_client import DeriveAsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
@@ -379,7 +379,7 @@ class DeriveClient:
             raise FileNotFoundError(msg)
         private_key = keyfile.read_text().strip()
 
-        self.client = AsyncClient(
+        self.client = DeriveAsyncClient(
             private_key=private_key,
             subaccount_id=kwargs["subaccount_id"],
             wallet=kwargs["wallet"],
