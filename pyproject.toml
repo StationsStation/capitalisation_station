@@ -29,8 +29,7 @@ open-autonomy = "==0.19.5"
 autonomy-dev = {version = "==0.2.148", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
-web3-ethereum-defi = {path = "third_party/forks/web3-ethereum-defi"}
-lyra-v2-client = {path = "third_party/upstream/lyra_client"}
+derive-client = {path = "third_party/upstream/lyra_client"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"
@@ -46,6 +45,7 @@ open-aea-ledger-ethereum = {path = "third_party/forks/open-aea/plugins/aea-ledge
 eth-account = "^0.13.5"
 eth-typing = "<=5.2.0"
 web3 = "<7"
+derive-action-signing = "^0.0.9"
 
 [poetry.group.dev.dependencies]
 
