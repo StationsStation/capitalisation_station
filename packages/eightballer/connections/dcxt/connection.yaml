@@ -12,25 +12,26 @@ fingerprint:
   cli.py: bafybeia2wjci3hofh7c3k7cb7uessnwqdp66bmiopvhga5l4q2xwfqycwy
   connection.py: bafybeia37jnhg6rwm6mrbb7bfb25ydr3aojrkafy53vphksopkb6snkmum
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
-  dcxt/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
+  dcxt/__init__.py: bafybeibfmvwnlagh7xsncvphg3kbial7ab2wvjdyg3qls2zu5wvuhalali
   dcxt/balancer.py: bafybeihkgiz2ndokvjm5mbgr7xaabxpwru3tpzjbnumpj7424x4uoa3esm
+  dcxt/cowswap.py: bafybeiezhuptrfxiwl2wis5pndhddk3ievlcwe2rxqwl42sbx6zumc7c6u
   dcxt/data/__init__.py: bafybeiazzyf5llflmu6wrc2zzmwy6aabilr74g5gq2kkr5dxvtug55jy3a
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
-  dcxt/data/token_list.json: bafybeiakgfxknlnkhnz2ha4env3uwviiq34cjwyperucjr52irwu5bnv5y
-  dcxt/data/tokens.py: bafybeidlu2oo36ukq3b63milqstnqdnjoyoe7bjgj4n6nyg3egdow2hnzq
-  dcxt/defi_exchange.py: bafybeiczbble6tkziud46obtayjyvhzv64iuil6gppaghifdn3prrbnceu
-  dcxt/derive.py: bafybeidac44i6oyeljk7jptznev2xj4biaembyp4vepdyqad3qigyydriq
-  dcxt/exceptions.py: bafybeihjzhm7daxmaazx7iszmgyagjkggijnztq7c6t7zeftyfrdoae6jm
-  dcxt/one_inch.py: bafybeib5rnnext525e3uibptnc3wo246yqdqokj5iuczty4g65lujyp4p4
+  dcxt/data/token_list.json: bafybeifjiiteo4quslwdk2psdmnka2fof3abmikfe6ycnliace65yfd2cy
+  dcxt/data/tokens.py: bafybeie6avgmw2rucz3wgenjn4ooi4nmk25u4uzf22nlv7rjotg526ksu4
+  dcxt/defi_exchange.py: bafybeidhi2iddpp53fk3g3eamfln5wvn5zydqtlaay4vhdnxcqdza47mfq
+  dcxt/derive.py: bafybeibpf3tmqeuxcgxejbdosypwuj5ywylx5geluby6bz5vmdlywq2bnq
+  dcxt/exceptions.py: bafybeiep6fswgvtn5cxn4y5u2b24fbuu6bszs6tdfn6rxzrh2aeae73lri
+  dcxt/one_inch.py: bafybeihq7jszcnodnheho3tfn6x2aydvzqf5fhgtz5as6klre4phknijm4
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeid3edbnncnz2j4dts4n4gkri63mgb2rhwz5ezliz2ubydztjwhagy
   exchange.py: bafybeifqnzti3rxcxzrukgwnqtf4n54er5af2sgqr2fcx76vws2b46hlrq
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
-  interfaces/balance.py: bafybeiezxspw74twtwejpgxv6j4mrofgfy4rzsu3o5wbqlntgtkhus46ly
+  interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeighlngozm7kxgy5iwlq7idoxq5ws7jxsss7kvqe5h7qiqwdtfgdhi
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
   interfaces/market.py: bafybeia3jb74cyyj6nxobkyrvhzzi66eky5r2smtur6wnwalvzsmonm77y
@@ -39,7 +40,7 @@ fingerprint:
   interfaces/order_book.py: bafybeidfvpunblqq7buuww42wlhmjlgmcgp2scb2geng4shkb3hg2k3aqu
   interfaces/position.py: bafybeidptjspw3yu642sy224ix2qvtwiuslkizqpj5fhxtlq33durbo6m4
   interfaces/spot_asset.py: bafybeiapvhgxyfufnk5iuleoznzxcugc3g6wnjqrliokc4ikmsulekba6q
-  interfaces/ticker.py: bafybeigdzg5uuf5ji5urrlnswgblk3aumvtg2fz5yi5nztvu5qbmzgn5he
+  interfaces/ticker.py: bafybeih65xb6z54ywbzborssiawu4lovnpeu2di74znbrujmnfshkuy7oq
   tests/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
   tests/balancer/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
   tests/balancer/test_balancer.py: bafybeia2btocoexcjx4eqsk7ayliuoadzuu3ak7xpy4vfgeowcootn6jrq
@@ -52,7 +53,7 @@ fingerprint:
   tests/protocols/test_positions_interface.py: bafybeidtwlw4scoskt4lh7ewfkhvg6mrldobco7smoo5df7o252wm2fj7i
   tests/protocols/test_spot_asset_interface.py: bafybeihjr2mroxziwt75xraypil5bkkuftr7ahiso6qgxtpszeh3k66j5q
   tests/protocols/test_tickers.py: bafybeidbj76fwk4om5rsycy4prkfrtgiyyjcxf7iws72sotrw25hs3mx64
-  tests/test_dcxt_connection.py: bafybeie7rbn5eqtxecxn6hjs2pvot5tiyjyh6hpav4nzbck35hhg6duoee
+  tests/test_dcxt_connection.py: bafybeicycqsgnqjundhlww6wwc63i6ss35ikdfy6hejxcshnhettisaj5e
   utils.py: bafybeic7n4jpmcxeotiovy3mxvqq4upwqm3lmxxtcvofk3e322ruvb4e7a
 fingerprint_ignore_patterns: []
 connections: []
@@ -82,7 +83,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: ethereum
-    rpc_url: https://eth.public-rpc.com
+    rpc_url: https://eth.drpc.org
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
@@ -129,8 +130,13 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: ethereum
-    rpc_url: https://eth.public-rpc.com
+    rpc_url: https://eth.drpc.org
     api_key: YOUR_1INCH_API_KEY
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
   target_skill_id: null
 excluded_protocols: []
 dependencies:

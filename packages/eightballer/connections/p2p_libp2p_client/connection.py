@@ -257,10 +257,8 @@ class NodeClient:
         response = acn_msg.status  # pylint: disable=no-member
 
         if response.body.code != int(AcnMessage.StatusBody.StatusCode.SUCCESS):  # type: ignore # pylint: disable=no-member
-            msg = (
-                "Registration to peer failed: {}".format(
-                    AcnMessage.StatusBody.StatusCode(response.body.code)  # type: ignore # pylint: disable=no-member
-                )
+            msg = "Registration to peer failed: {}".format(
+                AcnMessage.StatusBody.StatusCode(response.body.code)  # type: ignore # pylint: disable=no-member
             )
             raise Exception(  # pragma: nocover
                 msg
@@ -520,7 +518,7 @@ class P2PLibp2pClientConnection(Connection):
         except CancelledError:  # pragma: no cover
             self.logger.debug("Receive cancelled.")
             return None
-        except Exception as e:  # pragma: no cover # pylint: disable=broad-except
+        except Exception:  # pragma: no cover # pylint: disable=broad-except
             # self.logger.exception(e)
             return None
 
@@ -548,9 +546,7 @@ class P2PLibp2pClientConnection(Connection):
         except ConnectionError as e:  # pragma: nocover
             self.logger.exception(f"Connection error: {e}. Try to reconnect and read again")
         except IncompleteReadError as e:  # pragma: no cover
-            self.logger.exception(
-                f"Connection disconnected while reading from node ({len(e.partial)}/{e.expected})"
-            )
+            self.logger.exception(f"Connection disconnected while reading from node ({len(e.partial)}/{e.expected})")
         except Exception as e:  # pylint: disable=broad-except  # pragma: nocover
             self.logger.exception(f"On envelope read: {e}")
 
@@ -631,9 +627,7 @@ class TCPSocketChannelClientTLS(TCPSocketChannelClient):
             signature = await asyncio.wait_for(sock.read(), timeout=self.verification_signature_wait_timeout)
         except TimeoutError:  # pragma: nocover
             msg = f"Failed to get peer verification record in timeout: {self.verification_signature_wait_timeout}"
-            raise ValueError(
-                msg
-            )
+            raise ValueError(msg)
 
         if not signature:  # pragma: nocover
             msg = "Unexpected socket read data!"

@@ -50,12 +50,8 @@ from packages.eightballer.skills.abstract_round_abci.test_tools.base import (
 # pylint: disable=protected-access,too-many-ancestors,unbalanced-tuple-unpacking,too-many-locals,consider-using-with,unspecified-encoding,too-many-arguments,unidiomatic-typecheck
 
 HandlersType = list[Handler | None]
-ExpectedContentType = list[
-    dict[str, Any] | None
-]
-ExpectedTypesType = list[
-    dict[str, Any] | None
-]
+ExpectedContentType = list[dict[str, Any] | None]
+ExpectedTypesType = list[dict[str, Any] | None]
 
 
 class IntegrationBaseCase(FSMBehaviourBaseCase, ABC):
@@ -191,7 +187,7 @@ class IntegrationBaseCase(FSMBehaviourBaseCase, ABC):
             if expected_types is not None:
                 assert all(  # nosec
                     type(incoming_message._body.get(key, None)) == value_type
-                        for key, value_type in expected_types.items()
+                    for key, value_type in expected_types.items()
                 ), "Content type mismatch"
             handler.handle(incoming_message)
             return incoming_message

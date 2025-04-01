@@ -5,14 +5,14 @@ import sys
 import asyncio
 import logging
 import contextlib
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 from decimal import Decimal
 from datetime import datetime
 from functools import cache
 from dataclasses import dataclass
 
 import click
-import requests
+import httpx
 from web3 import Web3
 from web3.exceptions import TimeExhausted
 from aea_ledger_ethereum import (
@@ -33,6 +33,10 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedg
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
+if TYPE_CHECKING:
+    from packages.eightballer.connections.dcxt.erc_20.contract import Erc20
+
+
 def signed_tx_to_dict(signed_transaction: Any) -> dict[str, str | int]:
     """Write SignedTransaction to dict."""
     signed_transaction_dict: dict[str, str | int] = {
@@ -47,13 +51,7 @@ def signed_tx_to_dict(signed_transaction: Any) -> dict[str, str | int]:
 
 @try_decorator("Unable to send transaction: {}", logger_method="warning")
 def try_send_signed_transaction(ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any) -> str | None:
-    """Try send a signed transaction.
-
-    :param tx_signed: the signed transaction
-    :param _kwargs: the keyword arguments. Possible kwargs are:
-        `raise_on_try`: bool flag specifying whether the method will raise or log on error (used by `try_decorator`)
-    :return: tx_digest, if present
-    """
+    """Try send a raw signed transaction."""
     signed_transaction = SignedTransactionTranslator.from_dict(tx_signed)
     hex_value = ethereum_api.api.eth.send_raw_transaction(  # pylint: disable=no-member
         signed_transaction.raw_transaction
@@ -158,7 +156,11 @@ class OneInchSwapApi:
         self.api_key = api_key
         self.logger = logger
 
-    def api_request_url(self, method_name, query_params, retries=5, cooldown=1):
+    def api_request_url(
+        self,
+        method_name,
+        query_params,
+    ):
         """Build the API request URL."""
         return (
             f"https://api.1inch.dev/swap/v6.0/{self.chain_id}{method_name}?"
@@ -173,12 +175,12 @@ class OneInchSwapApi:
         """Build the transaction for the swap."""
         url = self.api_request_url("/swap", swap_params.to_json())
         try:
-            response = requests.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)
+            response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
             swap_transaction = response.json()
-        except requests.exceptions.JSONDecodeError:
+        except httpx.DecodingError:
             if "The limit of requests per second has been exceeded" in response.text:
-                self.logger.error(
-                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+                self.logger.exception(
+                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
                 )
                 if retries == 0:
                     raise
@@ -189,10 +191,10 @@ class OneInchSwapApi:
                 raise InsufficientBalance(swap_transaction["description"])
             if "insufficient liquidity" in swap_transaction["description"]:
                 if retries == 0:
-                    raise
+                    raise InvalidSwapParams(swap_transaction["description"])
                 await asyncio.sleep(cooldown)
-                self.logger.error(
-                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+                self.logger.exception(
+                    f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
                 )
                 return await self.build_tx_for_swap(swap_params, retries - 1, cooldown * 2)
             raise InvalidSwapParams(swap_transaction["description"])
@@ -205,7 +207,7 @@ class OneInchSwapApi:
         swap_transaction["from"] = self.account.address
         swap_transaction["to"] = Web3.to_checksum_address(swap_transaction["to"])
         swap_transaction["value"] = int(swap_transaction["value"])
-        swap_transaction["gasPrice"] = int(swap_transaction["gasPrice"] * 1.05)
+        swap_transaction["gasPrice"] = int(int(swap_transaction["gasPrice"]) * 1.05)
         swap_transaction["chainId"] = self.chain_id
         cur_nonce = self.api._try_get_transaction_count(self.account.address, raise_on_try=True)  # noqa
         if nonce and nonce != cur_nonce:
@@ -239,19 +241,19 @@ class OneInchSwapApi:
         """Get a quote for the swap."""
         try:
             url = self.api_request_url("/quote", swap_params.to_json())
-            response = requests.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)
+            response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
             quote = response.json()
-        except requests.exceptions.JSONDecodeError:
-            self.logger.error(
-                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+        except httpx.DecodingError:
+            self.logger.exception(
+                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
             )
             if retries == 0:
                 raise
             await asyncio.sleep(cooldown)
             return await self.get_quote(swap_params, retries - 1, cooldown * 2)
         if "error" in quote:
-            self.logger.error(
-                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}", exc_info=True
+            self.logger.exception(
+                f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
             )
             if retries == 0:
                 raise InvalidSwapParams(quote["description"])
@@ -334,6 +336,7 @@ class OneInchApiClient(BaseErc20Exchange):
         self, side: OrderSide, asset_a: str, asset_b: str, amount: Decimal, *args, **kwargs
     ) -> dict[str, Any]:
         """Create an order."""
+        del args
         side = OrderSide.BUY if side == "buy" else OrderSide.SELL
         if side == OrderSide.BUY:
             src = asset_b
@@ -373,10 +376,10 @@ class OneInchApiClient(BaseErc20Exchange):
             price=kwargs.get("price"),
             status=OrderStatus.FILLED if res else OrderStatus.FAILED,
             type=OrderType.MARKET,
-            timestamp=datetime.now().timestamp(),
+            timestamp=datetime.now(tz=datetime.timetz().tzinfo).timestamp(),
         )
 
-    @cache
+    @cache  # noqa
     def get_token_by_name(self, name):
         """Get the token by name."""
         address = self.names_to_addresses.get(name)
@@ -396,7 +399,12 @@ class OneInchApiClient(BaseErc20Exchange):
         )
         super().__init__(ledger_id, rpc_url, key_path, logger, *args, **kwargs)
 
-    async def get_price(self, input_token, output_token, amount, **params):
+    async def get_price(
+        self,
+        input_token,
+        output_token,
+        amount,
+    ):
         """Get the price of the token."""
         amount = int(amount * 10**input_token.decimals)
         swap_params = OneInchSwapParams(
@@ -443,11 +451,11 @@ def increase_allowance(
     crypto: EthereumCrypto,
 ) -> None:
     """Increase the allowance."""
-    erc20_contract = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
+    erc20_contract: Erc20 = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
     func = erc20_contract.approve(
         ledger_api=ledger_api,
         contract_address=token_address,
-        spender=spender,
+        to=spender,
         value=int(amount * 1e6),  # infinite allowance
     )
     txn = func.build_transaction(
@@ -464,8 +472,13 @@ def increase_allowance(
 
 def sign_and_send_txn(txn, crypto, ledger_api):
     """Sign and send transaction."""
-    signed_txn = crypto.sign_transaction(txn)
-    txn_hash = ledger_api.send_signed_transaction(signed_txn)
+
+    def _sign_swap_txn(swap_transaction):
+        """Sign the swap transaction."""
+        return signed_tx_to_dict(crypto.entity.sign_transaction(swap_transaction))
+
+    signed_txn = _sign_swap_txn(txn)
+    txn_hash = try_send_signed_transaction(ledger_api, signed_txn)
     result = False
     with contextlib.suppress(Exception):
         result = ledger_api.api.eth.wait_for_transaction_receipt(txn_hash, timeout=600)
@@ -513,7 +526,7 @@ def perform_swap(
     "--dst", type=str, help="Destination token address: (lbtc)", default="0x8236a87084f8b84306f72007f36f2618a5634494"
 )
 @click.option("--amount", type=int, help="Amount of tokens to swap", default="10000000")
-def main(chain_id, src, dst, amount, api_key):
+def main(chain_id, src, dst, amount, api_key):  # noqa
     """Swap tokens using the 1inch API.
 
     Args:

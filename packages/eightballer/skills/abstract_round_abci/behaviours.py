@@ -109,9 +109,7 @@ class _MetaRoundBehaviour(ABCMeta):
                     for _behaviour_cls in behaviour_id_to_behaviour[behaviour_class.auto_behaviour_id()]
                 ]
                 msg = f"behaviours {behaviour_classes_names} have the same behaviour id '{behaviour_class.auto_behaviour_id()}'"
-                raise ABCIAppInternalError(
-                    msg
-                )
+                raise ABCIAppInternalError(msg)
 
     @classmethod
     def _check_matching_round_consistency(cls, behaviour_cls: "AbstractRoundBehaviour") -> None:
@@ -137,39 +135,33 @@ class _MetaRoundBehaviour(ABCMeta):
                     f"If {b.behaviour_id!r} is a background behaviour, please make sure that it is set correctly, "
                     f"by overriding the corresponding attribute of the chained skill's behaviour."
                 )
-                raise ABCIAppInternalError(
-                    msg
-                )
+                raise ABCIAppInternalError(msg)
             behaviours.append(b)
             if len(behaviours) > 1:
                 behaviour_cls_ids = [behaviour_cls_.auto_behaviour_id() for behaviour_cls_ in behaviours]
-                msg = f"behaviours {behaviour_cls_ids} have the same matching round '{b.matching_round.auto_round_id()}'"
-                raise ABCIAppInternalError(
-                    msg
+                msg = (
+                    f"behaviours {behaviour_cls_ids} have the same matching round '{b.matching_round.auto_round_id()}'"
                 )
+                raise ABCIAppInternalError(msg)
 
         # check covering
         for round_cls, behaviours in round_to_behaviour.items():
             if round_cls in behaviour_cls.abci_app_cls.final_states:
                 if len(behaviours) != 0:
-                    msg = f"round {round_cls.auto_round_id()} is a final round it shouldn't have any matching behaviours."
-                    raise ABCIAppInternalError(
-                        msg
+                    msg = (
+                        f"round {round_cls.auto_round_id()} is a final round it shouldn't have any matching behaviours."
                     )
+                    raise ABCIAppInternalError(msg)
             elif len(behaviours) == 0:
                 msg = f"round {round_cls.auto_round_id()} is not a matching round of any behaviour"
-                raise ABCIAppInternalError(
-                    msg
-                )
+                raise ABCIAppInternalError(msg)
 
     @classmethod
     def _check_initial_behaviour_in_set_of_behaviours(cls, behaviour_cls: "AbstractRoundBehaviour") -> None:
         """Check the initial behaviour is in the set of behaviours."""
         if behaviour_cls.initial_behaviour_cls not in behaviour_cls.behaviours:
             msg = f"initial behaviour {behaviour_cls.initial_behaviour_cls.auto_behaviour_id()} is not in the set of behaviours"
-            raise ABCIAppInternalError(
-                msg
-            )
+            raise ABCIAppInternalError(msg)
 
 
 class PendingOffencesBehaviour(BaseBehaviour):
@@ -262,9 +254,7 @@ class AbstractRoundBehaviour(  # pylint: disable=too-many-instance-attributes
             behaviour_id = behaviour_cls.auto_behaviour_id()
             if behaviour_id in result:
                 msg = f"cannot have two behaviours with the same id; got {behaviour_cls} and {result[behaviour_id]} both with id '{behaviour_id}'"
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             result[behaviour_id] = behaviour_cls
         return result
 
@@ -278,9 +268,7 @@ class AbstractRoundBehaviour(  # pylint: disable=too-many-instance-attributes
             round_cls = behaviour_cls.matching_round
             if round_cls in result:
                 msg = f"the behaviours '{behaviour_cls.auto_behaviour_id()}' and '{result[round_cls].auto_behaviour_id()}' point to the same matching round '{round_cls.auto_round_id()}'"
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             result[round_cls] = behaviour_cls
 
         # iterate over rounds and map final (i.e. degenerate) rounds
@@ -305,8 +293,7 @@ class AbstractRoundBehaviour(  # pylint: disable=too-many-instance-attributes
             if (
                 not params.use_termination and background_cls.auto_behaviour_id() == TERMINATION_BACKGROUND_BEHAVIOUR_ID
             ) or (
-                (not params.use_slashing
-                and background_cls.auto_behaviour_id() == SLASHING_BACKGROUND_BEHAVIOUR_ID)
+                (not params.use_slashing and background_cls.auto_behaviour_id() == SLASHING_BACKGROUND_BEHAVIOUR_ID)
                 or background_cls == PendingOffencesBehaviour
             ):
                 # comparing with the behaviour id is not entirely safe, as there is a potential for conflicts

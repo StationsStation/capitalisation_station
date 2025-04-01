@@ -12515,6 +12515,33 @@
             "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x4200000000000000000000000000000000000006.png"
         },
         {
+
+            "chainId": 8453,
+            "address": "0xecac9c5f704e954931349da37f60e39f515c11c1",
+            "name": "Lombard BTC",
+            "symbol": "LBTC",
+            "decimals": 8,
+            "logoURI": "https://etherscan.io/token/images/lombardfinance_32.png"
+        },
+        {
+
+            "chainId": 8453,
+            "address": "0x9d0e8f5b25384c7310cb8c6ae32c8fbeb645d083",
+            "name": "Derive",
+            "symbol": "DRV",
+            "decimals": 18,
+            "logoURI": ""
+        },
+        {
+
+            "chainId": 8453,
+            "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+            "name": "USDC",
+            "symbol": "USDC",
+            "decimals": 6,
+            "logoURI": "https://etherscan.io/token/images/lombardfinance_32.png"
+        },
+        {
             "chainId": 8453,
             "address": "0x4158734D47Fc9692176B5085E0F52ee0Da5d47F1",
             "name": "Balancer",

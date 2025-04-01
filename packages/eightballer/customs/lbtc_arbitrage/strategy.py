@@ -87,7 +87,7 @@ class ArbitrageStrategy:
             markets = {k.get("symbol").replace("-", "/").upper(): k for k in prices[ledger][exchange]}
             intersections[ledger] = set(markets.keys())
         overlaps = reduce(lambda x, y: x.intersection(y), intersections.values())
-        opportunities = self.get_opportunities(portfolio, prices, overlaps, all_ledger_exchanges)
+        opportunities = self.get_opportunities(prices, overlaps, all_ledger_exchanges)
         self.unaffordable = []
         for opp in opportunities:
             if self.has_balance_for_opportunity(opp, portfolio, self.order_size):
@@ -100,7 +100,7 @@ class ArbitrageStrategy:
             return optimal_orders[1]
         return []
 
-    def get_opportunities(self, portfolio, prices, overlaps, all_ledger_exchanges):
+    def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""
         opportunities = []
         best_bid, best_ask, best_ask_exchange, best_bid_exchange, best_ask_ledger, best_bid_ledger = [None] * 6
@@ -133,7 +133,19 @@ class ArbitrageStrategy:
                         best_ask_ledger=best_ask_ledger,
                     )
                 )
-        return opportunities
+        return [o for o in opportunities if self.valid_opportunity(o)]
+
+    def valid_opportunity(self, opportunity):
+        """Check if an opportunity is valid."""
+        # sense checks as we will get eaten by mev if we try to do on one exchange
+        # - we are not buying and selling on the same exchange
+        # - we are not buying and selling on the same ledger
+        return not any(
+            [
+                opportunity.best_ask_exchange == opportunity.best_bid_exchange,
+                opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+            ]
+        )
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""

@@ -1,5 +1,6 @@
 """An interface for the Derive API."""
 
+import asyncio
 import datetime
 import traceback
 from typing import Any
@@ -15,12 +16,14 @@ from derive_client.enums import (
     InstrumentType,
     UnderlyingCurrency,
 )
+from derive_client.base_client import ApiException
 from derive_client.async_client import DeriveAsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
+from packages.eightballer.connections.dcxt.dcxt.exceptions import ExchangeError
 from packages.eightballer.protocols.positions.custom_types import Position
 from packages.eightballer.protocols.order_book.custom_types import OrderBook
 
@@ -346,6 +349,8 @@ def map_status_to_enum(status):
         "cancelled": OrderStatus.CANCELLED,
         "filled": OrderStatus.FILLED,
         "partially_filled": OrderStatus.PARTIALLY_FILLED,
+        "failed": OrderStatus.FAILED,
+        "expired": OrderStatus.EXPIRED,
     }
     if status not in mapping:
         msg = f"Unknown status: {status}"
@@ -372,6 +377,7 @@ class DeriveClient:
 
     def __init__(self, *args, **kwargs):
         """Initialize the DeriveClient."""
+        del args
         key_path = kwargs.get("key_path")
         keyfile = Path(key_path)
         if not keyfile.exists():
@@ -387,35 +393,6 @@ class DeriveClient:
             logger=kwargs.get("logger"),
         )
         self.logger = kwargs.get("logger")
-
-    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
-        """Create an order from an api call."""
-        kwargs = {from_camelize(key): value for key, value in api_call.items()}
-        if all(
-            [
-                kwargs["order_status"] == "filled",
-                Decimal(kwargs["filled_amount"])
-                >= Decimal(
-                    kwargs["amount"],
-                ),
-            ]
-        ):
-            kwargs["status"] = "filled"
-
-        order_key = "order_status" if "order_status" in kwargs else "status"
-
-        return Order(
-            symbol=kwargs["instrument_name"],
-            status=map_status_to_enum(kwargs[order_key]),
-            type=map_order_type_to_enum(kwargs["order_type"]),
-            side=OrderSide.BUY if kwargs["direction"] == "buy" else OrderSide.SELL,
-            price=float(kwargs["limit_price"]),
-            amount=float(kwargs["amount"]),
-            filled=float(kwargs["filled_amount"]),
-            average=float(kwargs["average_price"]),
-            timestamp=kwargs["creation_timestamp"],
-            exchange_id=exchange_id,
-        )
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
@@ -454,13 +431,15 @@ class DeriveClient:
 
     async def fetch_ticker(self, *args, symbol, asset_a, asset_b, **kwargs):
         """Fetch all tickers."""
+        del args, kwargs, symbol  # should parse from name to instrument type?
         instrument_name = f"{asset_a}-{asset_b}".upper()
         try:
             result = await self.client.fetch_ticker(instrument_name=instrument_name)
             return to_ticker(result)
-        except Exception as error:  # noqa
+        except Exception as error:
             self.logger.exception(traceback.print_exc())
-            return None
+            msg = f"Failed to fetch ticker: {error}"
+            raise ExchangeError(msg) from error
 
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
@@ -523,7 +502,7 @@ class DeriveClient:
         """Close the client."""
         return True
 
-    async def create_order(self, *args, **kwargs):
+    async def create_order(self, *args, retries=0, **kwargs):
         """Create an order."""
 
         def get_instrument_type(instrument_name):
@@ -547,4 +526,56 @@ class DeriveClient:
             "underlying_currency": get_underlying_currency(asset_a),
             "time_in_force": DeriveTimeInForce.IOC,
         }
-        return await self.client.create_order(**params)
+        try:
+            return await self.client.create_order(**params)
+        except ApiException as error:
+            self.logger.exception(f"Failed to create order: {error} Retries: {retries}")
+
+            if "Zero liquidity for market or IOC/FOK order" in str(error):
+                if retries > 0:
+                    # we wait for the mm to replace the order
+                    await asyncio.sleep(1)
+                    return await self.create_order(*args, **kwargs, retries=retries - 1)
+                return {
+                    "order_status": "failed",
+                    "instrument_name": kwargs["symbol"],
+                    "order_type": kwargs["type"],
+                    "direction": kwargs["side"],
+                    "limit_price": kwargs.get("price"),
+                    "amount": kwargs["amount"],
+                    "filled_amount": 0,
+                    "average_price": 0,
+                    "creation_timestamp": datetime.datetime.now(tz=datetime.UTC).timestamp(),
+                }
+
+            msg = f"Failed to create order: {error} with unknown error"
+            raise NotImplementedError(msg) from error
+
+    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
+        """Create an order from an api call."""
+        kwargs = {from_camelize(key): value for key, value in api_call.items()}
+        if all(
+            [
+                kwargs["order_status"] == "filled",
+                Decimal(kwargs["filled_amount"])
+                >= Decimal(
+                    kwargs["amount"],
+                ),
+            ]
+        ):
+            kwargs["status"] = "filled"
+
+        order_key = "order_status" if "order_status" in kwargs else "status"
+
+        return Order(
+            symbol=kwargs["instrument_name"],
+            status=map_status_to_enum(kwargs[order_key]),
+            type=map_order_type_to_enum(kwargs["order_type"]),
+            side=OrderSide.BUY if kwargs["direction"] == "buy" else OrderSide.SELL,
+            price=float(kwargs["limit_price"]),
+            amount=float(kwargs["amount"]),
+            filled=float(kwargs["filled_amount"]),
+            average=float(kwargs["average_price"]),
+            timestamp=kwargs["creation_timestamp"],
+            exchange_id=exchange_id,
+        )

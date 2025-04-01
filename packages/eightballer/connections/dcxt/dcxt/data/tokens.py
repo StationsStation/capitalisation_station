@@ -114,6 +114,8 @@ LEDGER_TO_TOKEN_LIST = {
     SupportedLedgers.BASE: set(
         [
             "0x54330d28ca3357f294334bdc454a032e7f353416",  # OLAS
+            "0xecac9c5f704e954931349da37f60e39f515c11c1",  # LBTC
+            "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A",  # weETH
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]]
@@ -160,5 +162,9 @@ def read_token_list(chain_id: int):
     with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:
         token_list = json.loads(file.read())["tokens"]
 
-    tokens = filter(lambda t: t["chainId"] == chain_id, token_list)
-    return {t["address"]: t for t in tokens}
+    tokens = filter(lambda t: str(t["chainId"]) == str(chain_id), token_list)
+    token_map = {t["address"]: t for t in tokens}
+    if not token_map:
+        msg = f"No tokens found for chain {chain_id}"
+        raise ValueError(msg)
+    return token_map

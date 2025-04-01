@@ -854,9 +854,7 @@ class TestBaseBehaviour:
             self.behaviour.context.state.round_sequence.current_round_id
             != self.behaviour.matching_round.auto_round_id()
         )
-        assert (
-            self.behaviour.context.state.round_sequence.current_round_id == "test"
-        )
+        assert self.behaviour.context.state.round_sequence.current_round_id == "test"
         # assert that the stop condition now applies
         assert stop_condition()
 
@@ -1175,11 +1173,15 @@ class TestBaseBehaviour:
 
         :param input_bytes: fuzz input
         """
-        with mock.patch.object(
-            self.behaviour.context.signing_dialogues,
-            "create",
-            return_value=(MagicMock(), MagicMock()),
-        ), mock.patch.object(behaviour_utils, "RawMessage"), mock.patch.object(behaviour_utils, "Terms"):
+        with (
+            mock.patch.object(
+                self.behaviour.context.signing_dialogues,
+                "create",
+                return_value=(MagicMock(), MagicMock()),
+            ),
+            mock.patch.object(behaviour_utils, "RawMessage"),
+            mock.patch.object(behaviour_utils, "Terms"),
+        ):
             self.behaviour._send_signing_request(input_bytes)
 
     @mock.patch.object(BaseBehaviour, "_get_request_nonce_from_dialogue")
@@ -1802,11 +1804,18 @@ class TestBaseBehaviour:
                 None,
             ),  # an example in which no agent responds
             (
-                ({f"address{i}": None for i in range(3)}, {"address1": None, "address2": "test", "address3": None}, *tuple({"address1": None, "address2": "test", "address3": "malicious"} for _ in range(8))),
+                (
+                    {f"address{i}": None for i in range(3)},
+                    {"address1": None, "address2": "test", "address3": None},
+                    *tuple({"address1": None, "address2": "test", "address3": "malicious"} for _ in range(8)),
+                ),
                 None,
             ),  # an example in which no majority is reached
             (
-                (*tuple({f"address{i}": None for i in range(3)} for _ in range(3)), {"address1": "test", "address2": "test", "address3": None}),
+                (
+                    *tuple({f"address{i}": None for i in range(3)} for _ in range(3)),
+                    {"address1": "test", "address2": "test", "address3": None},
+                ),
                 "test",
             ),  # an example in which majority is reached during the 4th ACN attempt
         ],

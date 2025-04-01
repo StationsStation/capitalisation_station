@@ -631,9 +631,7 @@ class BaseBehaviour(AsyncBehaviour, IPFSBehaviour, CleanUpBehaviour, ABC, metacl
                 f"Should be in matching round ({round_id}) or last round ({self.round_sequence.last_round_id}), "
                 f"actual round {self.round_sequence.current_round_id}!"
             )
-            raise ValueError(
-                msg
-            )
+            raise ValueError(msg)
         yield from self.wait_for_condition(partial(self.check_round_height_has_changed, round_height), timeout=timeout)
 
     def wait_from_last_timestamp(self, seconds: float) -> Any:
