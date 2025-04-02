@@ -15,7 +15,7 @@ from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
 from cowdao_cowpy.order_book.api import OrderBookApi
-from cowdao_cowpy.common.constants import CowContractAddress
+from cowdao_cowpy.common.constants import ZERO_APP_DATA, CowContractAddress
 from cowdao_cowpy.common.api.errors import UnexpectedResponseError
 from cowdao_cowpy.order_book.config import OrderBookAPIConfigFactory
 from cowdao_cowpy.order_book.generated.model import (
@@ -44,7 +44,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Ex
 MAX_ORDER_ATTEMPTS = 3
 SLIPPAGE_TOLERANCE = 0.001
 # 1bps fee applied to all trades
-APP_DATA = "0xf48178e7c8f90594ab65f573fc67184aeab679c35e3c540bd1025ad3553e2a89"
+APP_DATA = ZERO_APP_DATA
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
@@ -404,7 +404,7 @@ def main(
             sell_token=sell_token.address,
             chain=LEDGER_TO_COW_CHAIN[ledger],
             account=crypto.entity,
-            app_data=APP_DATA,
+            app_data=ZERO_APP_DATA,
             slippage_tolerance=SLIPPAGE_TOLERANCE,
         )
     )
