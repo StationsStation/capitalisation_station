@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeib3mks7qburx6ara7vfs6xf4rrjzrefrdrjfe6ygqoc6qkibuowny
+  behaviours.py: bafybeigfw3njhi6f6jbrqmxigtwn7r6qg6f7uuvjxusx4z63og4olrmzpy
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
   strategy.py: bafybeie6ghag3tjh5jvlnporfd7zqwl3aq24fglnd7ro5cqhecpdqms2xi
@@ -17,7 +17,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeids2c63pkuypu44br4braoszjihvrr3ymhdrek7a6i7s3y3xyf62q
+- eightballer/dcxt:0.1.0:bafybeihstxdxh3nhp5yhpsupnkapx6mnnjcqbbhsjac5uljjnc5uylg3n4
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -27,7 +27,7 @@ protocols:
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeicnxsdpdv32c5ly4anzut7442vv4xgrx2t5kiysvqubucewjtdvpi
+- eightballer/abstract_round_abci:0.1.0:bafybeieaxkijnjevtvfczvjgzsj3diuzrzrirsrgujl5bvspo5co7usdgy
 behaviours:
   main:
     args: {}

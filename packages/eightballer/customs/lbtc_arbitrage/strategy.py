@@ -193,7 +193,7 @@ class ArbitrageStrategy:
             symbol=buy_prices[opportunity.market]["symbol"],
             side=OrderSide.BUY,
             status=OrderStatus.NEW,
-            amount=self.order_size,
+            amount=self.order_size * (1 + opportunity.percent),
             type=OrderType.LIMIT,
             asset_a=portfolio_a[asset_a]["contract_address"],
             asset_b=portfolio_a[asset_b]["contract_address"],

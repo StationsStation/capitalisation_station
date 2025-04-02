@@ -25,6 +25,7 @@ import asyncio
 import hashlib
 import logging
 import contextlib
+import struct
 from typing import Any, Optional
 from asyncio import CancelledError
 from pathlib import Path
@@ -37,7 +38,7 @@ from ecdsa.util import sigdecode_der  # type: ignore
 from ecdsa.curves import SECP256k1  # type: ignore
 from aea.mail.base import Envelope
 from aea.exceptions import enforce
-from aea.helpers.pipe import IPCChannelClient, TCPSocketProtocol, TCPSocketChannelClient
+from aea.helpers.pipe import IPCChannelClient, TCPSocketProtocol as BaseTCPSocketProtocol, TCPSocketChannelClient
 from aea.helpers.acn.uri import Uri
 from aea.connections.base import Connection, ConnectionStates
 from aea.crypto.registries import make_crypto
@@ -67,6 +68,39 @@ POR_DEFAULT_SERVICE_ID = "acn"
 
 ACN_CURRENT_VERSION = "0.1.0"
 
+
+class TCPSocketProtocol(BaseTCPSocketProtocol):
+    """TCP socket protocol with slighly cleaner debug messages."""
+
+    async def read(self) -> Optional[bytes]:
+        """
+        Read from socket.
+
+        :return: read bytes
+        """
+        try:
+            self.logger.debug("waiting for messages...")
+            buf = await self._reader.readexactly(4)
+            if not buf:  # pragma: no cover
+                return None
+            size = struct.unpack("!I", buf)[0]
+            data = await self._reader.readexactly(size)
+            if not data:  # pragma: no cover
+                return None
+            if len(data) != size:  # pragma: no cover
+                raise ValueError(
+                    f"Incomplete Read Error! Expected size={size}, got: {len(data)}"
+                )
+            return data
+        except asyncio.IncompleteReadError as e:  # pragma: no cover
+            self.logger.debug(
+                "Connection disconnected while reading from pipe ({}/{})".format(
+                    len(e.partial), e.expected
+                )
+            )
+            return None
+        except asyncio.CancelledError:  # pragma: no cover
+            return None
 
 class NodeClient:
     """Client to communicate with node using ipc channel(pipe)."""

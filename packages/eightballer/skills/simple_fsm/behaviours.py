@@ -252,6 +252,7 @@ class BaseConnectionRound(BaseBehaviour):
         self,
         protocol_performative: Message.Performative,
         connection_id: str,
+        timeout: float = 10.0,
         **kwargs,
     ) -> Generator[None, None, Any]:
         """Get a ccxt response."""
@@ -264,7 +265,7 @@ class BaseConnectionRound(BaseBehaviour):
             **kwargs,
         )
         msg._sender = str(self.context.skill_id)  # noqa
-        response = yield from self._do_request(msg, dialogue)
+        response = yield from self._do_request(msg, dialogue, timeout)
         self._message = None
         return response
 

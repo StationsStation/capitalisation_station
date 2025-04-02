@@ -10,10 +10,10 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeicbdkvd2ckmg77r5np7v55ipbaagdaksch2dpqhnqhqppu4saqcbi
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeids2c63pkuypu44br4braoszjihvrr3ymhdrek7a6i7s3y3xyf62q
+- eightballer/dcxt:0.1.0:bafybeihstxdxh3nhp5yhpsupnkapx6mnnjcqbbhsjac5uljjnc5uylg3n4
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
-- eightballer/p2p_libp2p_client:0.1.0:bafybeihsmhctbceeldbqjvpjiqqypnsbuqvqnibb7ufbjbmuzmeblpopny
+- eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
 - valory/abci:0.1.0:bafybeiebsx4dvw2ibkdwejhfk6akhhfihpc3vvn656t4kuhbne4rmsqqkq
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
@@ -46,13 +46,13 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeicnxsdpdv32c5ly4anzut7442vv4xgrx2t5kiysvqubucewjtdvpi
+- eightballer/abstract_round_abci:0.1.0:bafybeieaxkijnjevtvfczvjgzsj3diuzrzrirsrgujl5bvspo5co7usdgy
 - eightballer/metrics:0.1.0:bafybeid6d6n36sqoh27xfsq5wba3a3sktg2dezbaymp3wraqck7khv6yxy
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeib7udrvli7xv4acsc5fhp7z7pvpwxuwyduw6whitypjsb2s35mjba
+- eightballer/simple_fsm:0.1.0:bafybeidr3swcomr4tqvuleqhpglqjxmr3o2tnqnzqharyx7xks4zj3t76y
 - valory/abstract_abci:0.1.0:bafybeibkdxhh7csurqqm5mqeaa35k4thxrhrf3sup62tmx4x4nsbgqmreu
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeifcockqte6obzp2kq77m4ngvmzqhxue5j3cbjp5d3lxy4qdrmoiqy
+- eightballer/lbtc_arbitrage:0.1.0:bafybeiaawq3ej5rddoc3di7ub6lhmqhlh3iv4iitgwlcdkukwzwsoveyoa
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -125,7 +125,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${ETHEREUM_RPC:str:https://base.drpc.org}
+    rpc_url: ${ETHEREUM_RPC:str:https://base.llamarpc.com}
   - name: derive
     key_path: ethereum_private_key.txt
     wallet: ${DERIVE_WALLET:str:0x1234}

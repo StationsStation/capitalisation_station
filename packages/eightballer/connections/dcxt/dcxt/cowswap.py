@@ -42,9 +42,9 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Ex
 
 
 MAX_ORDER_ATTEMPTS = 3
-SLIPPAGE_TOLERANCE = 0.000
+SLIPPAGE_TOLERANCE = 0.001
 # 1bps fee applied to all trades
-APP_DATA = "0x8d5da2dda0ce64a09801c651e9856ae9315d1ec9610bc44b3f981606b31f2bb0"
+APP_DATA = "0xf48178e7c8f90594ab65f573fc67184aeab679c35e3c540bd1025ad3553e2a89"
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
@@ -240,6 +240,7 @@ class CowSwapClient(BaseErc20Exchange):
                 amount=amount_int,
                 chain=self.chain,
                 account=self.account.entity,
+                slippage_tolerance=SLIPPAGE_TOLERANCE,  # we need it to be exact!
             )
         except Exception as error:
             await asyncio.sleep(cooldown * attempts)
@@ -403,6 +404,8 @@ def main(
             sell_token=sell_token.address,
             chain=LEDGER_TO_COW_CHAIN[ledger],
             account=crypto.entity,
+            app_data=APP_DATA,
+            slippage_tolerance=SLIPPAGE_TOLERANCE,
         )
     )
 
