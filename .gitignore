@@ -47,7 +47,21 @@ packages/valory/skills/reset_pause_abci
 packages/eightballer/protocols/user_interaction
 packages/eightballer/connections/apprise
 
-/trader
+/derive_arbitrage_agent
 
 
 .runner_secrets
+
+eightballer/protocols/default
+eightballer/protocols/balances
+eightballer/protocols/markets
+eightballer/protocols/ohlcv
+eightballer/protocols/order_book
+eightballer/protocols/orders
+eightballer/protocols/positions
+eightballer/protocols/spot_asset
+eightballer/protocols/tickers
+eightballer/contracts/erc_20
+eightballer/contracts/spl_token
+vybe/contracts/jupitar_swap
+eightballer/skills/metrics

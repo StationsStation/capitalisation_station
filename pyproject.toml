@@ -46,6 +46,7 @@ eth-account = "^0.13.5"
 eth-typing = "<=5.2.0"
 web3 = "<7"
 derive-action-signing = "^0.0.9"
+cowdao-cowpy = {path = "third_party/forks/cow-py"}
 
 [poetry.group.dev.dependencies]
 
