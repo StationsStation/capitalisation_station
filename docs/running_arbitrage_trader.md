@@ -45,6 +45,8 @@ git clone https://github.com/StationsStation/capitalisation_station.git --recurs
 
 ### Step 4: Install the Dependencies
 
+
+#### LINUX ONLY!
 ```bash
 ## Linux Dependencies
 sudo apt install -y \
@@ -55,9 +57,16 @@ apt-get install make build-essential gcc \
   libncursesw5-dev libgdbm-dev libnss3-dev \
   libxml2-dev libxmlsec1-dev \
   libzstd-dev curl wget git -y
-
-
 ```
+
+
+#### MACOS ONLY!
+
+```bash
+## MacOS Dependencies
+brew :TODO
+```
+
 
 
 Ensure shell can be accessed.
@@ -86,25 +95,21 @@ Once you have an account with derive, you can deposit funds into your wallet and
 
 You will receive a sub account address that you can use to deposit funds into the wallet.
 
-### Step 6: Create an account on 1inch
-You can create an account at [1inch](https://portal.1inch.dev/login)
 
-You will need to create an API key for the trader to use.
-
-
-### Step 5: Configure the Trader.
+### Step 7: Configure the Trader.
 
 ```bash
-# create keys
+# create keys MAKE SURE TO SAVE THE GENERATED KEY!
 autonomy generate-key ethereum
-
 ```
+
+NOTE: You will need to save the generated key for the next step.
+
+The key has been generated and saved to the file `ethereum_private_key.txt` in the current directory.
 
 NOTE: Available agents are located in the packages/AUTHOR/agents directory.
 
 There are a few necessarcy variables that need to be set in order to run the trader.
-
-- ONE_INCH_API_KEY: This is the API key for the 1inch API. You can get one by signing up at [1inch](https://portal.1inch.dev/login)
 
 - DERIVE_WALLET: This is the smart contract wallet generated on Derive upon signing up. You can get one by signing up at [Derive](https://www.derive.xyz/invite/A0HQW)
 
@@ -117,7 +122,7 @@ export AGENT=eightballer/derive_arbitrage_agent
 poetry run python scripts/generator.py $AGENT
 ```
 
-### Step 6: Run the Trader
+### Step 8: Run the Trader
 
 ```
 # enter the virtual environment
@@ -128,7 +133,7 @@ poetry shell
 adev run dev $AGENT --no-use-tendermint --force 
 ```
 
-### Step 7: Monitor the Trader
+### Step 9: Monitor the Trader
 
 The agent exposes a HTTP API that you can use to monitor the trader is alive and well.
 
