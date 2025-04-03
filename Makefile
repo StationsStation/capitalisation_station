@@ -73,8 +73,20 @@ install:
 	poetry run autonomy packages sync
 	@echo "Packages synced."
 
- sync:
-	git pull
-	poetry run autonomy packages sync
 
 all: fmt lint test hashes
+
+
+sync:
+	@echo "Syncing to latest version..."
+	git pull
+	rm -rf packages
+	git checkout packages
+	poetry install
+	poetry run autonomy packages sync
+	@echo "Syncing to latest version done."
+	@echo "Ready to go 🚀"
+
+
+run-drv-arber:
+	poetry run adev run dev eightballer/derive_arbitrage_agent --force
