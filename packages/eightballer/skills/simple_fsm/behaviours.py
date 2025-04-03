@@ -356,29 +356,27 @@ class ExecuteOrdersRound(BaseConnectionRound):
             is_entry_order = len(submitted) == 0
             is_exit_order = len(submitted) == 1
 
-            result = yield from self.send_create_order(
+            response = yield from self.send_create_order(
                 order=order,
                 is_entry_order=is_entry_order,
                 is_exit_order=is_exit_order,
             )
-            if not result:
+            if not response:
                 self.context.logger.error(f"Error creating order: {order}")
                 failed_orders.append(order)
                 break
 
+            result_order = response.order
             result = self.handle_submitted_order_response(
-                order=order,
-                response=result,
-                is_entry_order=is_entry_order,
-                is_exit_order=is_exit_order,
+                order=result_order,
             )
             if result is None:
                 self.context.logger.error(f"Error creating order: {order}")
                 failed_orders.append(order)
                 continue
-
             submitted.append(order)
-        new_orders = [json.loads(o.model_dump_json()) for o in new_orders]
+        new_orders = [json.loads(o.model_dump_json()) for o in submitted]
+        failed_orders = [json.loads(o.model_dump_json()) for o in failed_orders]
         pathlib.Path(ORDERS_FILE).write_text(json.dumps(new_orders, indent=4), encoding="utf-8")
         pathlib.Path(FAILED_ORDERS_FILE).write_text(json.dumps(failed_orders, indent=4), encoding="utf-8")
         # We write the orders to disk
@@ -444,10 +442,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
         if order.status == OrderStatus.PARTIALLY_FILLED:
             msg = "Partially filled orders are not yet supported."
             raise UnexpectedStateException(msg)
+
         if order.status in (
             {
                 OrderStatus.FILLED,
                 OrderStatus.OPEN,
+                OrderStatus.NEW,
             }
         ):
             self.context.logger.info(f"Order created: {order}")
@@ -466,7 +466,10 @@ class ExecuteOrdersRound(BaseConnectionRound):
             if order.status == OrderStatus.FILLED:
                 self.context.logger.info("Order filled.")
                 return True
-            if order.status == OrderStatus.OPEN:
+            if order.status in {
+                OrderStatus.OPEN,
+                OrderStatus.NEW,
+            }:
                 self.context.logger.info("Order created.")
                 self.strategy.outstanding_orders.orders.append(order)
                 return True

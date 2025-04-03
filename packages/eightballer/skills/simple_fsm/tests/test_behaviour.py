@@ -28,7 +28,7 @@ HAPPY_ORDER_SUBMISSION_RESULTS = [
     {
         "symbol": "WEETH/USD",
         "type": OrderType.LIMIT,
-        "status": OrderStatus.OPEN,
+        "status": OrderStatus.NEW,
         "side": OrderSide.SELL,
     },
     {

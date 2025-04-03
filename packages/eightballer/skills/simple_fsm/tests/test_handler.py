@@ -18,7 +18,7 @@ class TestHandler(BaseSkillTestCase):
     path_to_skill = Path(__file__).parent.parent
 
     @classmethod
-    def setup(cls):  # pylint: disable=W0221
+    def method_setup(cls):  # pylint: disable=W0221
         """Setup the test class."""
         super().setup_class()
 

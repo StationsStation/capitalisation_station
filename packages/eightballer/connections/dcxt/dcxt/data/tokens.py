@@ -116,6 +116,7 @@ LEDGER_TO_TOKEN_LIST = {
             "0x54330d28ca3357f294334bdc454a032e7f353416",  # OLAS
             "0xecac9c5f704e954931349da37f60e39f515c11c1",  # LBTC
             "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A",  # weETH
+            "0x9d0e8f5b25384c7310cb8c6ae32c8fbeb645d083",  # DRV
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]]
