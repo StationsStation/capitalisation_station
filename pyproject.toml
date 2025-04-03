@@ -48,6 +48,9 @@ web3 = "<7"
 derive-action-signing = "^0.0.9"
 cowdao-cowpy = {path = "third_party/forks/cow-py"}
 
+[tool.poetry.group.dev.dependencies]
+tbump = "^6.11.0"
+
 [poetry.group.dev.dependencies]
 
 
