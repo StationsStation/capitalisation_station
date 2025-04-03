@@ -42,30 +42,34 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Ex
 
 
 MAX_ORDER_ATTEMPTS = 3
-SLIPPAGE_TOLERANCE = 0.001
+SLIPPAGE_TOLERANCE = 0.0005
 # 1bps fee applied to all trades
 APP_DATA = ZERO_APP_DATA
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.BASE: CowContractAddress.VAULT_RELAYER.value,
+    SupportedLedgers.ARBITRUM: CowContractAddress.VAULT_RELAYER.value,
 }
 LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET.value[0].value,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS.value[0].value,
     SupportedLedgers.BASE: CowChains.BASE.value[0].value,
+    SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE.value[0].value,
 }
 
 LEDGER_TO_COW_CHAIN = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS,
     SupportedLedgers.BASE: CowChains.BASE,
+    SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE,
 }
 
 LEDGER_TO_RPC = {
     SupportedLedgers.ETHEREUM: "https://eth.drpc.org",
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
     SupportedLedgers.BASE: "https://base.drpc.org",
+    SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
 }
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -110,19 +114,21 @@ class CowSwapClient(BaseErc20Exchange):
         **kwargs,
     ) -> Order:
         """Parse an order."""
-        self.logger.info(f"Order: {order}")
+        self.logger.debug(f"Raw Order: {order}")
         del kwargs
-        return Order(
+        order = Order(
             exchange_id=exchange_id,
             ledger_id=self.ledger_id,
             symbol=symbol,
             price=price,
-            amount=amount if side == OrderSide.SELL else amount * price,
+            amount=amount if side == OrderSide.SELL else amount / price,
             side=side,
             id=str(order.uid.root),
             type=OrderType.MARKET,
             status=OrderStatus.OPEN,
         )
+        self.logger.info(f"Parsed Order: {order}")
+        return order
 
     def parse_order(self, order: Order, *args, **kwargs) -> Order:
         """Parse an order."""
@@ -230,6 +236,8 @@ class CowSwapClient(BaseErc20Exchange):
         sell_token={sell_token.address},
         chain={LEDGER_TO_COW_CHAIN[self.supported_ledger]},
         account={self.account.entity.address},
+        price={price},
+        side={side},
         """)
         self.logger.info(f"Submitting {side} order for {amount} {sell_token.symbol} for {buy_token.symbol}")
 
@@ -378,8 +386,13 @@ def main(
     allowance = get_allowance(erc_20, api, sell_token.address, crypto.address, SPENDER[ledger])
     print(f"Current allowance: {allowance}")
     if allowance < amount:
+        print(f"Allowance is sufficient: {allowance} > {amount}")
         result = increase_allowance(
-            token_address=sell_token.address, spender=SPENDER[ledger], amount=amount, ledger_api=api, crypto=crypto
+            token_address=sell_token.address,
+            spender=SPENDER[ledger],
+            amount=amount * 1e18,
+            ledger_api=api,
+            crypto=crypto,
         )
         if not result:
             msg = "Failed to increase allowance"

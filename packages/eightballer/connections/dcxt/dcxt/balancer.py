@@ -300,6 +300,8 @@ class BalancerClient(BaseErc20Exchange):
         for token_address in LEDGER_TO_TOKEN_LIST[self.ledger_id]:
             token = self.get_token(token_address)
             symbol = f"{token.symbol}/USD"
+            if token.address.lower() not in prices:
+                continue
             usd_price = prices[token.address.lower()]
             timestamp = datetime.now(tz=datetime.now().astimezone().tzinfo)
             ticker = Ticker(

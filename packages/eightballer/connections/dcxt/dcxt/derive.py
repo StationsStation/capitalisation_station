@@ -387,7 +387,7 @@ class DeriveClient:
 
         self.client = DeriveAsyncClient(
             private_key=private_key,
-            subaccount_id=kwargs["subaccount_id"],
+            subaccount_id=kwargs.get("subaccount_id"),
             wallet=kwargs["wallet"],
             env=Environment(kwargs.get("environment")),
             logger=kwargs.get("logger"),
@@ -529,9 +529,8 @@ class DeriveClient:
         try:
             return await self.client.create_order(**params)
         except ApiException as error:
-            self.logger.exception(f"Failed to create order: {error} Retries: {retries}")
-
             if "Zero liquidity for market or IOC/FOK order" in str(error):
+                self.logger.exception(f"Failed to create order initially! retries: {retries}")
                 if retries > 0:
                     # we wait for the mm to replace the order
                     await asyncio.sleep(1)
@@ -548,6 +547,7 @@ class DeriveClient:
                     "creation_timestamp": datetime.datetime.now(tz=datetime.UTC).timestamp(),
                 }
 
+            self.logger.exception(f"Failed to create order: {error} Retries: {retries}")
             msg = f"Failed to create order: {error} with unknown error"
             raise NotImplementedError(msg) from error
 
@@ -566,8 +566,8 @@ class DeriveClient:
             kwargs["status"] = "filled"
 
         order_key = "order_status" if "order_status" in kwargs else "status"
-
         return Order(
+            id=api_call.get("order_id"),
             symbol=kwargs["instrument_name"],
             status=map_status_to_enum(kwargs[order_key]),
             type=map_order_type_to_enum(kwargs["order_type"]),
@@ -578,4 +578,5 @@ class DeriveClient:
             average=float(kwargs["average_price"]),
             timestamp=kwargs["creation_timestamp"],
             exchange_id=exchange_id,
+            ledger_id=exchange_id,
         )

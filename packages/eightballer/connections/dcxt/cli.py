@@ -226,6 +226,8 @@ def check_balances(account: str, ledger: str, output: str, portfolio_requires: s
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
+    else:
+        exchanges = supported_exchanges.split(",")
 
     all_balances, tickers = get_data(ledgers, exchanges, account, connections)
 
