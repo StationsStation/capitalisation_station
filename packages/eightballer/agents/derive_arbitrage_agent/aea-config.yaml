@@ -49,7 +49,7 @@ skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeieaxkijnjevtvfczvjgzsj3diuzrzrirsrgujl5bvspo5co7usdgy
 - eightballer/metrics:0.1.0:bafybeid6d6n36sqoh27xfsq5wba3a3sktg2dezbaymp3wraqck7khv6yxy
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeidhqizw56txtquduk4moibzlz6i3euey6butu5guxutehrty3chv4
+- eightballer/simple_fsm:0.1.0:bafybeif4b7q53ysqwnvby52b64fnzutpoewwwmtjyfxtftpk2435gbbe5q
 - valory/abstract_abci:0.1.0:bafybeibkdxhh7csurqqm5mqeaa35k4thxrhrf3sup62tmx4x4nsbgqmreu
 customs:
 - eightballer/lbtc_arbitrage:0.1.0:bafybeiaawq3ej5rddoc3di7ub6lhmqhlh3iv4iitgwlcdkukwzwsoveyoa
