@@ -89,4 +89,4 @@ sync:
 
 
 run-drv-arber:
-	poetry run adev run dev eightballer/derive_arbitrage_agent --force
+	poetry run adev run dev eightballer/derive_arbitrage_agent --force --no-use-tendermint
