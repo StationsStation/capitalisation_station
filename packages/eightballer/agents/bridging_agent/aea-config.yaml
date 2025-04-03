@@ -13,7 +13,7 @@ connections:
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
 contracts:
 - eightballer/olas:0.1.0:bafybeieyij2qwvudihfte4wm662nd6x4sanuuq3npigwidgxobptvt3uxe
-- eightballer/erc_20:0.1.0:bafybeic3l7dsgtui5apfqcoq2i5q2adorb7s24lf5ksgk545a7ttxswtqu
+- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
 - eightballer/amb_mainnet:0.1.0:bafybeiecfrsrysggmmosj5bhboqkcyrixxtjkdj4fjcjmyu3puwtzu2zmy
 - eightballer/amb_gnosis:0.1.0:bafybeifsswwirlf5lt2b5o4yv3u3iw5a2qtfcr7q2ibob7bweeux63itpe
 - eightballer/amb_gnosis_helper:0.1.0:bafybeig37p3q4se2it75kt4zvqvrvzk4fqc7eyspspt3txooxxljkurkey
@@ -24,7 +24,7 @@ protocols:
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 skills:
-- eightballer/gnosis_bridging_abci_app:0.1.0:bafybeif3frtddooalygd7a53nzzoph7qtjqijxcienn5qkfwgwi7lgzgdy
+- eightballer/gnosis_bridging_abci_app:0.1.0:bafybeihwbxlza3j3v2lruhuvbeqljf45ruwnntmrupxdbtj7kdcucf7kby
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
 customs: []
 default_ledger: ethereum

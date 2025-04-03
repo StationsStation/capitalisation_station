@@ -59,3 +59,7 @@ class OrderNotFound(Exception):
 
 class ApprovalError(Exception):
     """Raised when there is an error with the approvals."""
+
+
+class RpcError(Exception):
+    """Exception raised when an RPC error occurs."""

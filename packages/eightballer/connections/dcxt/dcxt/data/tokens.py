@@ -98,7 +98,7 @@ LEDGER_TO_TOKEN_LIST = {
             "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "0x8236a87084f8b84306f72007f36f2618a5634494",  # lbtc
-            "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee", # wrapped ethena eth
+            "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",  # wrapped ethena eth
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ETHEREUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ETHEREUM]]
@@ -114,6 +114,8 @@ LEDGER_TO_TOKEN_LIST = {
     SupportedLedgers.BASE: set(
         [
             "0x54330d28ca3357f294334bdc454a032e7f353416",  # OLAS
+            "0xecac9c5f704e954931349da37f60e39f515c11c1",  # LBTC
+            "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A",  # weETH
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]]
@@ -160,5 +162,9 @@ def read_token_list(chain_id: int):
     with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:
         token_list = json.loads(file.read())["tokens"]
 
-    tokens = filter(lambda t: t["chainId"] == chain_id, token_list)
-    return {t["address"]: t for t in tokens}
+    tokens = filter(lambda t: str(t["chainId"]) == str(chain_id), token_list)
+    token_map = {t["address"]: t for t in tokens}
+    if not token_map:
+        msg = f"No tokens found for chain {chain_id}"
+        raise ValueError(msg)
+    return token_map

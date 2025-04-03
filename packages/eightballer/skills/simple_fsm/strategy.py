@@ -23,11 +23,16 @@ from typing import TYPE_CHECKING, Any
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
+from packages.eightballer.protocols.orders.custom_types import Orders
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+
+DEFAULT_COOL_DOWN_PERIOD = 15
+DEFAULT_MAX_OPEN_ORDERS = 1
 
 
 class ArbitrageStrategy(Model):
@@ -38,6 +43,8 @@ class ArbitrageStrategy(Model):
     ledgers: list = []
     order_size: float = 0.0
     fetch_all_tickers = False
+    cool_down_period = 0
+    outstanding_orders: Orders = Orders(orders=[])
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -47,6 +54,7 @@ class ArbitrageStrategy(Model):
         self.strategy_init_kwargs = kwargs.pop("strategy_init_kwargs", {})
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
+        self.cool_down_period = kwargs.pop("cool_down_period", DEFAULT_COOL_DOWN_PERIOD)
         super().__init__(**kwargs)
 
 

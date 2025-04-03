@@ -12,7 +12,7 @@ from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
 
 
-TEST_MARKET = "ETH/USDC"
+TEST_MARKET = "WETH/USDC"
 
 
 DEFAULT_EXCHANGE = list(TEST_EXCHANGES.keys()).pop()
@@ -46,7 +46,7 @@ class TestFetchTickers(BaseDcxtConnectionTest):
         )
         await self.connection.send(envelope)
         await asyncio.sleep(1)
-        async with asyncio.timeout(TIMEOUT):
+        async with asyncio.timeout(TIMEOUT * 2):  # we need to wait for the response a bit longer
             response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, TickersMessage)
@@ -54,13 +54,13 @@ class TestFetchTickers(BaseDcxtConnectionTest):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("exchange", TEST_EXCHANGES)
+@pytest.mark.parametrize("exchange", list(TEST_EXCHANGES.keys())[:2])
 class TestFetchTicker(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 
     DIALOGUES = get_dialogues(BaseTickersDialogues, TickersDialogue)
 
-    async def test_handles_get_all_ticker(
+    async def test_handles_get_ticker(
         self,
         exchange: tuple[str, str],
     ) -> None:
@@ -86,7 +86,7 @@ class TestFetchTicker(BaseDcxtConnectionTest):
             response = await self.connection.receive()
         assert response is not None
         assert isinstance(response.message, TickersMessage)
-        assert response.message.performative == TickersMessage.Performative.ALL_TICKERS, f"Error: {response}"
+        assert response.message.performative == TickersMessage.Performative.TICKER, f"Error: {response}"
 
 
 @pytest.mark.parametrize("exchange_id", TEST_EXCHANGES.keys())

@@ -1,97 +1,57 @@
 {
     "cex": {},
-    "mode": {
-        "balancer": [
+    "base": {
+        "cowswap": [
             {
-                "asset_id": "OLAS",
-                "free": 11142.508087777811,
-                "used": 0.0,
-                "total": 11142.508087777811,
-                "is_native": false,
-                "contract_address": "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9"
-            },
-            {
-                "asset_id": "WETH",
-                "free": 0.002,
-                "used": 0.0,
-                "total": 0.002,
-                "is_native": false,
-                "contract_address": "0x4200000000000000000000000000000000000006"
-            },
-            {
-                "asset_id": "USDC",
-                "free": 1344.729487,
-                "used": 0.0,
-                "total": 1344.729487,
-                "is_native": false,
-                "contract_address": "0xd988097fb8612cc24eec14542bc03424c656005f"
-            },
-            {
-                "asset_id": "msDAI",
+                "asset_id": "weETH",
                 "free": 0.0,
                 "used": 0.0,
                 "total": 0.0,
                 "is_native": false,
-                "contract_address": "0x3f51c6c5927b88cdec4b61e2787f9bd0f5249138"
+                "contract_address": "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A"
             },
             {
-                "asset_id": "ETH",
-                "free": 0.008873211990658946,
+                "asset_id": "LBTC",
+                "free": 0.38446649,
                 "used": 0.0,
-                "total": 0.008873211990658946,
-                "is_native": true,
-                "contract_address": null
+                "total": 0.38446649,
+                "is_native": false,
+                "contract_address": "0xecAc9C5F704e954931349Da37F60E39f515c11c1"
+            },
+            {
+                "asset_id": "USDC",
+                "free": 40391.276181,
+                "used": 0.0,
+                "total": 40391.276181,
+                "is_native": false,
+                "contract_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
             }
         ]
     },
-    "base": {
-        "balancer": [
+    "derive": {
+        "derive": [
             {
-                "asset_id": "USDbC",
-                "free": 1.0,
+                "asset_id": "LBTC",
+                "free": 0.22359317,
                 "used": 0.0,
-                "total": 1.0,
+                "total": 0.22359317,
                 "is_native": false,
-                "contract_address": "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca"
-            },
-            {
-                "asset_id": "OLAS",
-                "free": 40607.30414568166,
-                "used": 0.0,
-                "total": 40607.30414568166,
-                "is_native": false,
-                "contract_address": "0x54330d28ca3357f294334bdc454a032e7f353416"
+                "contract_address": null
             },
             {
                 "asset_id": "USDC",
-                "free": 544.174234,
+                "free": 8971.33858822699,
                 "used": 0.0,
-                "total": 544.174234,
+                "total": 8971.33858822699,
                 "is_native": false,
-                "contract_address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
+                "contract_address": null
             },
             {
-                "asset_id": "DAI",
-                "free": 713.3756994740673,
+                "asset_id": "WEETH",
+                "free": 0.10004550377577615,
                 "used": 0.0,
-                "total": 713.3756994740673,
+                "total": 0.10004550377577615,
                 "is_native": false,
-                "contract_address": "0x50c5725949a6f0c72e6c4a641f24049a917db0cb"
-            },
-            {
-                "asset_id": "WETH",
-                "free": 0.0,
-                "used": 0.0,
-                "total": 0.0,
-                "is_native": false,
-                "contract_address": "0x4200000000000000000000000000000000000006"
-            },
-            {
-                "asset_id": "ETH",
-                "free": 0.032164051854737724,
-                "used": 0.0,
-                "total": 0.032164051854737724,
-                "is_native": true,
                 "contract_address": null
             }
         ]

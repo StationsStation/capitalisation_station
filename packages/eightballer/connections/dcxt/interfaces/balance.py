@@ -39,6 +39,7 @@ class BalanceInterface(BaseInterface):
         except (
             dcxt.exceptions.RequestTimeout,
             dcxt.exceptions.ExchangeNotAvailable,
+            dcxt.exceptions.RpcError,
             requests.exceptions.Timeout,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout,

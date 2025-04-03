@@ -174,17 +174,13 @@ def chain(  # pylint: disable=too-many-locals,too-many-statements
                 )
                 if len(diff) != 0:
                     msg = f"Pre conditions '{diff}' of app '{next_app}' not a post condition of app '{current_app}' or any preceding app in path {path}."
-                    raise ValueError(
-                        msg
-                    )
+                    raise ValueError(msg)
             else:
                 msg = (
                     f"No pre-conditions have been set for {next_initial_state}! "
                     f"You need to explicitly specify them as empty if there are no pre-conditions for this FSM."
                 )
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             current_app = next_app
             current_final_state = next_final_state
 
@@ -215,9 +211,7 @@ def chain(  # pylint: disable=too-many-locals,too-many-statements
         for e, t in app.event_to_timeout.items():
             if e in potential_events_to_timeout and potential_events_to_timeout[e] != t:
                 msg = f"Event {e} defined in app {app} is defined with timeout {t} but it is already defined in a prior app with timeout {potential_events_to_timeout[e]}."
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             potential_events_to_timeout[e] = t
 
     potential_transition_function: AbciAppTransitionFunction = {}

@@ -52,6 +52,11 @@ TEST_PRIVATE_KEY = "0xc14f53ee466dd3fc5fa356897ab276acbef4f020486ec253a23b0d1c3f
 TIMEOUT = 5
 
 TEST_EXCHANGE_DATA = """
+- name: cowswap
+  key_path: packages/eightballer/connections/dcxt/tests/data/key
+  wallet: null
+  ledger_id: base
+  rpc_url: https://base.drpc.org
 - name: balancer
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
@@ -63,7 +68,8 @@ TEST_EXCHANGE_DATA = """
   wallet: null
   ledger_id: derive
   rpc_url: https://base.llamarpc.com
-  etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  subaccount_id: 132849
+  environment: test
 - name: one_inch
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
@@ -162,6 +168,7 @@ EXPECTED_FUNCTIONS = [
     "fetch_positions",
     "fetch_open_orders",
     "fetch_balance",
+    "parse_order",
 ]
 
 

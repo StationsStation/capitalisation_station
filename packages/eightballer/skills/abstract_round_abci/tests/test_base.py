@@ -2113,7 +2113,16 @@ class TestOffenceStatus:
     @pytest.mark.parametrize("custom_amount", [0, 5])
     @pytest.mark.parametrize(("light_unit_amount", "serious_unit_amount"), [(1, 2)])
     @pytest.mark.parametrize(
-        ("validator_downtime", "invalid_payload", "blacklisted", "suspected", "num_unknown_offenses", "num_double_signed", "num_light_client_attack", "expected"),
+        (
+            "validator_downtime",
+            "invalid_payload",
+            "blacklisted",
+            "suspected",
+            "num_unknown_offenses",
+            "num_double_signed",
+            "num_light_client_attack",
+            "expected",
+        ),
         [
             (False, False, False, False, 0, 0, 0, 0),
             (True, False, False, False, 0, 0, 0, 1),
@@ -3086,7 +3095,15 @@ def test_get_name() -> None:
 
 
 @pytest.mark.parametrize(
-    ("sender", "accused_agent_address", "offense_round", "offense_type_value", "last_transition_timestamp", "time_to_live", "custom_amount"),
+    (
+        "sender",
+        "accused_agent_address",
+        "offense_round",
+        "offense_type_value",
+        "last_transition_timestamp",
+        "time_to_live",
+        "custom_amount",
+    ),
     [
         (
             "sender",

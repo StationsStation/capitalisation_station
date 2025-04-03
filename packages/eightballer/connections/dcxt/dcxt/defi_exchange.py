@@ -2,6 +2,7 @@
 
 from functools import cache
 
+import requests
 from web3 import Web3
 from multicaller import multicaller
 from aea_ledger_ethereum import EthereumApi, EthereumCrypto
@@ -9,6 +10,7 @@ from aea.configurations.base import PublicId
 
 from packages.eightballer.connections.dcxt.utils import load_contract
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
+from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
     LEDGER_TO_TOKEN_LIST,
@@ -38,7 +40,7 @@ class BaseErc20Exchange:
         self.mc = multicaller.multicaller(
             _chainId=LEDGER_TO_CHAIN_ID[ledger_id],
             _web3=self.web3.api,
-            _maxRetries=5,
+            _maxRetries=10,
             _verbose=False,
             _allowFailure=True,
         )
@@ -122,8 +124,14 @@ class BaseErc20Exchange:
                 "balanceOf",
                 args=[address_to_check],
             )
-        balance_data = self.mc.execute()
-        native = self.web3.api.eth.get_balance(address_to_check)
+
+        try:
+            balance_data = self.mc.execute()
+            native = self.web3.api.eth.get_balance(address_to_check)
+        except requests.exceptions.HTTPError as err:
+            self.logger.exception(f"Error fetching balance: {err}")
+            msg = "Error fetching balance"
+            raise RpcError(msg) from err
 
         return Balances(
             balances=[

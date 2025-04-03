@@ -70,9 +70,7 @@ class AbstractStorer(ABC):
                     f"Cannot store multiple files of type {type(obj)}!"
                     f"Should be a dictionary of filenames mapped to their objects."
                 )
-                raise ValueError(
-                    msg
-                )
+                raise ValueError(msg)
             for filename, single_obj in obj.items():
                 filename = os.path.join(self._path, filename)
                 serialized_file = self.serialize_object(filename, single_obj, **kwargs)

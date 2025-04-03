@@ -67,6 +67,8 @@ class TickerInterface(BaseInterface):
             )
         except (
             dcxt.exceptions.RequestTimeout,
+            dcxt.exceptions.RpcError,
+            dcxt.exceptions.ExchangeError,
             requests.exceptions.Timeout,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout,

@@ -20,7 +20,6 @@
 """This package contains a simple arbitrage strategy."""
 
 import operator
-from typing import NamedTuple
 from functools import reduce
 from dataclasses import dataclass
 
@@ -28,7 +27,7 @@ from packages.eightballer.protocols.orders.custom_types import Order, OrderSide,
 
 
 @dataclass
-class ArbitrageOpportunity():
+class ArbitrageOpportunity:
     """An arbitrage opportunity."""
 
     market: str
@@ -88,7 +87,7 @@ class ArbitrageStrategy:
             markets = {k.get("symbol").replace("-", "/").upper(): k for k in prices[ledger][exchange]}
             intersections[ledger] = set(markets.keys())
         overlaps = reduce(lambda x, y: x.intersection(y), intersections.values())
-        opportunities = self.get_opportunities(portfolio, prices, overlaps, all_ledger_exchanges)
+        opportunities = self.get_opportunities(prices, overlaps, all_ledger_exchanges)
         self.unaffordable = []
         for opp in opportunities:
             if self.has_balance_for_opportunity(opp, portfolio, self.order_size):
@@ -101,7 +100,7 @@ class ArbitrageStrategy:
             return optimal_orders[1]
         return []
 
-    def get_opportunities(self, portfolio, prices, overlaps, all_ledger_exchanges):
+    def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""
         opportunities = []
         best_bid, best_ask, best_ask_exchange, best_bid_exchange, best_ask_ledger, best_bid_ledger = [None] * 6
@@ -134,7 +133,19 @@ class ArbitrageStrategy:
                         best_ask_ledger=best_ask_ledger,
                     )
                 )
-        return opportunities
+        return [o for o in opportunities if self.valid_opportunity(o)]
+
+    def valid_opportunity(self, opportunity):
+        """Check if an opportunity is valid."""
+        # sense checks as we will get eaten by mev if we try to do on one exchange
+        # - we are not buying and selling on the same exchange
+        # - we are not buying and selling on the same ledger
+        return not any(
+            [
+                opportunity.best_ask_exchange == opportunity.best_bid_exchange,
+                opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+            ]
+        )
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""
@@ -147,10 +158,6 @@ class ArbitrageStrategy:
         # asset_a required to buy asset_b
         opportunity.required_asset_a = amount
         opportunity.required_asset_b = amount * opportunity.best_ask
-        print("Required asset a: ", opportunity.required_asset_a)
-        print("Required asset b: ", opportunity.required_asset_b)
-        print("Buy balance: ", buy_balance)
-        print("Sell balance: ", sell_balance)
         if not all([buy_balance, sell_balance]):
             return False
         opportunity.balance_buy = buy_balance["free"]
@@ -173,8 +180,12 @@ class ArbitrageStrategy:
             for price in prices[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
         }
         asset_a, asset_b = opportunity.market.split("/")
-        portfolio_a = {p["asset_id"].upper(): p for p in portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]}
-        portfolio_b = {p["asset_id"].upper(): p for p in portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]}
+        portfolio_a = {
+            p["asset_id"].upper(): p for p in portfolio[opportunity.best_ask_ledger][opportunity.best_ask_exchange]
+        }
+        portfolio_b = {
+            p["asset_id"].upper(): p for p in portfolio[opportunity.best_bid_ledger][opportunity.best_bid_exchange]
+        }
         buy_order = Order(
             price=buy_prices[opportunity.market]["ask"],
             exchange_id=opportunity.best_ask_exchange,
@@ -182,7 +193,7 @@ class ArbitrageStrategy:
             symbol=buy_prices[opportunity.market]["symbol"],
             side=OrderSide.BUY,
             status=OrderStatus.NEW,
-            amount=self.order_size,
+            amount=self.order_size * (1 + opportunity.percent),
             type=OrderType.LIMIT,
             asset_a=portfolio_a[asset_a]["contract_address"],
             asset_b=portfolio_a[asset_b]["contract_address"],

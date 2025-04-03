@@ -409,9 +409,7 @@ class SharedState(Model, ABC, metaclass=_MetaSharedState):  # type: ignore
                 "agents and/or does not contain validators for some configured agents. "
                 f"The agents which have been configured via ACN are `{configured_agents}` and the diff was for {diff}."
             )
-            raise ValueError(
-                msg
-            )
+            raise ValueError(msg)
         self.round_sequence.validator_to_agent = validator_to_agent
         self.round_sequence.offence_status = {agent: OffenceStatus() for agent in agents_mapped}
 
@@ -432,9 +430,7 @@ class SharedState(Model, ABC, metaclass=_MetaSharedState):  # type: ignore
                 f"ACN registration has not been successfully performed for agent `{agent_address}`. "
                 "Have you set the `share_tm_config_on_startup` flag to `true` in the configuration?"
             )
-            raise ValueError(
-                msg
-            )
+            raise ValueError(msg)
 
         validator_address = agent_config.get("address", None)
         if validator_address is None:
