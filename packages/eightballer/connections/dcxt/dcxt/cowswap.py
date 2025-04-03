@@ -42,7 +42,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Ex
 
 
 MAX_ORDER_ATTEMPTS = 3
-SLIPPAGE_TOLERANCE = 0.001
+SLIPPAGE_TOLERANCE = 0.0005
 # 1bps fee applied to all trades
 APP_DATA = ZERO_APP_DATA
 SPENDER = {
@@ -110,19 +110,21 @@ class CowSwapClient(BaseErc20Exchange):
         **kwargs,
     ) -> Order:
         """Parse an order."""
-        self.logger.info(f"Order: {order}")
+        self.logger.debug(f"Raw Order: {order}")
         del kwargs
-        return Order(
+        order = Order(
             exchange_id=exchange_id,
             ledger_id=self.ledger_id,
             symbol=symbol,
             price=price,
-            amount=amount if side == OrderSide.SELL else amount * price,
+            amount=amount if side == OrderSide.SELL else amount / price,
             side=side,
             id=str(order.uid.root),
             type=OrderType.MARKET,
             status=OrderStatus.OPEN,
         )
+        self.logger.info(f"Parsed Order: {order}")
+        return order
 
     def parse_order(self, order: Order, *args, **kwargs) -> Order:
         """Parse an order."""
@@ -230,6 +232,8 @@ class CowSwapClient(BaseErc20Exchange):
         sell_token={sell_token.address},
         chain={LEDGER_TO_COW_CHAIN[self.supported_ledger]},
         account={self.account.entity.address},
+        price={price},
+        side={side},
         """)
         self.logger.info(f"Submitting {side} order for {amount} {sell_token.symbol} for {buy_token.symbol}")
 

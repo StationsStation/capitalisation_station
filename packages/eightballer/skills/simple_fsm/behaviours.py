@@ -61,7 +61,8 @@ FAILED_ORDERS_FILE = "failed_orders.json"
 ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
-TIMEOUT_SECONDS = 10
+ORDER_PLACEMENT_TIMEOUT_SECONDS = 10
+DATA_COLLECTION_TIMEOUT_SECONDS = 1
 
 TZ = datetime.datetime.now().astimezone().tzinfo
 
@@ -146,10 +147,7 @@ class IdentifyOpportunityRound(State):
     def setup(self) -> None:
         """Setup the state."""
         self.started = False
-        # We need to add to the PYTHONPATH=. to be able to import the strategy
         sys.path.append(".")
-        # from vendor.eightballer.customs.arbitrage_strategy import strategy as ArbitrageStrategy  # noqa
-
         strat_pub_id = self.context.arbitrage_strategy.strategy_public_id
 
         _dir = "vendor" if pathlib.Path("vendor").exists() else "packages"
@@ -359,6 +357,18 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 ledger_id=order.ledger_id,
                 exchange_id=order.exchange_id,
             )
+
+            if response is None:
+                self.context.logger.error(f"Timeout creating order: {order}")
+                if not submitted:
+                    self.context.logger.error("Timeout creating order, exit early.")
+                    self._is_done = True
+                    self._event = ArbitrageabciappEvents.ENTRY_EXIT_ERROR
+                    return
+                else:
+                    self.context.logger.error("Timeout creating order, Hard exiting as manual adjustment needed!")
+                    raise NotImplementedError("Recovery orders are not yet supported.")
+
             submitted.append(order)
 
             if response.performative == OrdersMessage.Performative.ERROR:
@@ -436,11 +446,47 @@ class CollectDataRound(BaseConnectionRound):
     """This class implements the CollectDataRound state."""
 
     matching_round = "collectdataround"
+    attempts = 0
 
     @property
     def strategy(self):
         """Return the strategy."""
         return self.context.arbitrage_strategy
+    
+
+    async def get_futures(self, exchange_id: str, ledger_id: str) -> Generator:
+        balances_future = self.get_response(
+            BalancesMessage.Performative.GET_ALL_BALANCES,
+            connection_id=str(CCXT_PUBLIC_ID),
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
+        )
+
+        tickers_future = self.get_response(
+            TickersMessage.Performative.GET_ALL_TICKERS,
+            connection_id=str(CCXT_PUBLIC_ID),
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
+        )
+        order_future = self.get_response(
+            OrdersMessage.Performative.GET_ORDERS,
+            connection_id=str(CCXT_PUBLIC_ID),
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+            symbol="OLAS/USDT",
+            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
+        )
+        return balances_future, tickers_future, order_future
+    
+
+    def parse_futures(self, futures: list) -> Generator:
+        """We efficiently parse the futures."""
+        while not all(f.done() for f in futures):
+            yield
+        return [f.result() for f in futures]
+
 
     def act(self) -> Generator:
         """Perform the action of the state."""
@@ -455,40 +501,30 @@ class CollectDataRound(BaseConnectionRound):
         portfolio[ledger_id] = {}
         for exchange_id in self.context.arbitrage_strategy.cexs:
             self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
-            balances = yield from self.get_response(
-                BalancesMessage.Performative.GET_ALL_BALANCES,
-                connection_id=str(CCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
-            )
+
+
+            futures = yield from self.get_futures(exchange_id, ledger_id)
+            balances, tickers, orders = yield from self.parse_futures(futures)
+
+            if any(f is None for f in (balances, tickers, orders)):
+                self.context.logger.error(f"Error getting data for {exchange_id} on {ledger_id}")
+                return self._handle_error()
+
+
+            if orders.performative == OrdersMessage.Performative.ERROR:
+                self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
+                return self._handle_error()
+
 
             if balances.performative == BalancesMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
                 return self._handle_error()
-
-            self.context.logger.debug(f"Got balances for {exchange_id} on {ledger_id}")
-            tickers = yield from self.get_response(
-                TickersMessage.Performative.GET_ALL_TICKERS,
-                connection_id=str(CCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
-            )
 
             if tickers.performative == TickersMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
                 return self._handle_error()
 
             self.context.logger.debug(f"Got tickers for {exchange_id} on {ledger_id}")
-            orders = yield from self.get_response(
-                OrdersMessage.Performative.GET_ORDERS,
-                connection_id=str(CCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
-                symbol="OLAS/USDT",
-            )
-            if orders.performative == OrdersMessage.Performative.ERROR:
-                self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
-                return self._handle_error()
 
             self.context.logger.debug(f"Got orders for {exchange_id} on {ledger_id}")
             portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
@@ -535,13 +571,15 @@ class CollectDataRound(BaseConnectionRound):
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
+        self.attempts = 0
 
     def _handle_error(
         self,
     ) -> None:
         """In the case that data is not retrieved, handled the necessary error."""
         self.started = False
-        sleep(TIMEOUT_SECONDS)
+        self.attempts += 1
+        sleep(DATA_COLLECTION_TIMEOUT_SECONDS * self.attempts)
 
     def get_tickers(
         self,
@@ -584,7 +622,7 @@ class CollectDataRound(BaseConnectionRound):
                 if ticker.performative == TickersMessage.Performative.ERROR:
                     self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
                     self.started = False
-                    sleep(TIMEOUT_SECONDS)
+                    sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
                     return
                 tickers.tickers.append(ticker.ticker)
 
@@ -598,9 +636,18 @@ class CollectDataRound(BaseConnectionRound):
             if tickers.performative == TickersMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
                 self.started = False
-                sleep(TIMEOUT_SECONDS)
+                sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
                 return
         return tickers
+
+
+    def setup(self) -> None:
+        """Setup the state."""
+        self.started = False
+        self._is_done = False
+        self.attempts = 0
+        super().setup()
+
 
 
 class PostTradeRound(State):
@@ -627,7 +674,6 @@ class PostTradeRound(State):
         self.started = True
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(self.strategy.cool_down_period)
         order_file = pathlib.Path("orders.json")
         orders = order_file.read_text()
         orders = json.loads(orders)
@@ -637,13 +683,14 @@ class PostTradeRound(State):
             """Get the explorer link."""
 
             exchange_to_explorer = {
-                "cowswap": f"https://explorer.cowswap.fi/{order.ledger_id}/orders/{order.id}",
+                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/{order.id}",
             }
             explorers = {
                 "mode": "https://modescan.io/tx/",
-                "base": "https://basescan.org/tx/",
                 "gnosis": "https://gnosisscan.io/tx/",
+                "derive": "https://explorer.derive.xyz/tx/",
                 "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
+                "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/")
             }
             if order.ledger_id not in explorers:
                 return ""
@@ -652,21 +699,20 @@ class PostTradeRound(State):
         delta = -(buy_order.price / sell_order.price * 100 - 100)
         value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
         report_msg_table = dedent(f"""
-        [Sell]({get_explorer_link(sell_order)}) {sell_order.exchange_id} {sell_order.ledger_id} {sell_order.symbol}
-
+        [Sell]({get_explorer_link(sell_order)}) {sell_order.symbol} on {sell_order.exchange_id} chain: {sell_order.ledger_id}
         {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.amount * sell_order.price:5f}
-
         [Buy]({get_explorer_link(buy_order)}) {buy_order.exchange_id} {buy_order.ledger_id} {buy_order.symbol}
-
         {buy_order.amount}@{buy_order.price:5f}  total: {buy_order.amount * buy_order.price:5f}
-
-        Delta: {-delta:5f}%
+        --------------------------
+        Delta:          {-delta:5f}%
         Value captured: {value_captured_gross:6f}
         """)
         self.send_notification_to_user(
             title="Post Successful Arbitrage Execution!",
             msg=report_msg_table,
         )
+        self.context.logger.info(f"Sleeping for {self.strategy.cool_down_period} seconds.")
+        await asyncio.sleep(self.strategy.cool_down_period)
 
     def is_done(self) -> bool:
         """Return True if the state is done."""
