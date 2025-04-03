@@ -387,7 +387,7 @@ class DeriveClient:
 
         self.client = DeriveAsyncClient(
             private_key=private_key,
-            subaccount_id=kwargs["subaccount_id"],
+            subaccount_id=kwargs.get("subaccount_id"),
             wallet=kwargs["wallet"],
             env=Environment(kwargs.get("environment")),
             logger=kwargs.get("logger"),
