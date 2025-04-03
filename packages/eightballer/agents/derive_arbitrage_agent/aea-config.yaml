@@ -8,9 +8,9 @@ fingerprint:
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeighkxw5d4exm5um3vmgvyfl7v27vm6nwcucqxnaav3y4w2mmvsyii
+- eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeiau5c7hlih36zors52qi2gm446j4v44b7gtfdgnbywo6nt64pvl2q
+- eightballer/dcxt:0.1.0:bafybeih7bv3hbqq6ff2pe3ifrekps7rd7g5x6hdgylvds3oxll6v2olfke
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -49,7 +49,7 @@ skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeieaxkijnjevtvfczvjgzsj3diuzrzrirsrgujl5bvspo5co7usdgy
 - eightballer/metrics:0.1.0:bafybeid6d6n36sqoh27xfsq5wba3a3sktg2dezbaymp3wraqck7khv6yxy
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeiflhveikkfovkbfvzn3b5vyuwd3y56dityxtbu2hivxuor4n6rhxa
+- eightballer/simple_fsm:0.1.0:bafybeichb7ttd7ik7jjzssrg56slc2isvg44gtz52wqgejbw36jphwalvm
 - valory/abstract_abci:0.1.0:bafybeibkdxhh7csurqqm5mqeaa35k4thxrhrf3sup62tmx4x4nsbgqmreu
 customs:
 - eightballer/lbtc_arbitrage:0.1.0:bafybeiaawq3ej5rddoc3di7ub6lhmqhlh3iv4iitgwlcdkukwzwsoveyoa
@@ -124,8 +124,18 @@ config:
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
+    ledger_id: ethereum
+    rpc_url: ${ETHEREUM_RPC:str:https://eth.drpc.org}
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
     ledger_id: base
-    rpc_url: ${ETHEREUM_RPC:str:https://base.llamarpc.com}
+    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: arbitrum
+    rpc_url: ${ARBITRUM_RPC:str:https://arbitrum.drpc.org}
   - name: derive
     key_path: ethereum_private_key.txt
     wallet: ${DERIVE_WALLET:str:0x1234}

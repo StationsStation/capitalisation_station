@@ -47,7 +47,7 @@ packages/valory/skills/reset_pause_abci
 packages/eightballer/protocols/user_interaction
 packages/eightballer/connections/apprise
 
-/derive_arbitrage_agent
+/derive_arbitrage_agent*
 
 
 .runner_secrets

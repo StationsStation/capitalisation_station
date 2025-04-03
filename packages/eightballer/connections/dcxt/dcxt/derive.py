@@ -529,7 +529,6 @@ class DeriveClient:
         try:
             return await self.client.create_order(**params)
         except ApiException as error:
-
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
                 if retries > 0:

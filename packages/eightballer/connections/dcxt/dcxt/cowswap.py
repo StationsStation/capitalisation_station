@@ -49,23 +49,27 @@ SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.BASE: CowContractAddress.VAULT_RELAYER.value,
+    SupportedLedgers.ARBITRUM: CowContractAddress.VAULT_RELAYER.value,
 }
 LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET.value[0].value,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS.value[0].value,
     SupportedLedgers.BASE: CowChains.BASE.value[0].value,
+    SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE.value[0].value,
 }
 
 LEDGER_TO_COW_CHAIN = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS,
     SupportedLedgers.BASE: CowChains.BASE,
+    SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE,
 }
 
 LEDGER_TO_RPC = {
     SupportedLedgers.ETHEREUM: "https://eth.drpc.org",
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
     SupportedLedgers.BASE: "https://base.drpc.org",
+    SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
 }
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -382,8 +386,13 @@ def main(
     allowance = get_allowance(erc_20, api, sell_token.address, crypto.address, SPENDER[ledger])
     print(f"Current allowance: {allowance}")
     if allowance < amount:
+        print(f"Allowance is sufficient: {allowance} > {amount}")
         result = increase_allowance(
-            token_address=sell_token.address, spender=SPENDER[ledger], amount=amount, ledger_api=api, crypto=crypto
+            token_address=sell_token.address,
+            spender=SPENDER[ledger],
+            amount=amount * 1e18,
+            ledger_api=api,
+            crypto=crypto,
         )
         if not result:
             msg = "Failed to increase allowance"

@@ -367,7 +367,8 @@ class ExecuteOrdersRound(BaseConnectionRound):
                     return
                 else:
                     self.context.logger.error("Timeout creating order, Hard exiting as manual adjustment needed!")
-                    raise NotImplementedError("Recovery orders are not yet supported.")
+                    msg = "Recovery orders are not yet supported."
+                    raise NotImplementedError(msg)
 
             submitted.append(order)
 
@@ -452,7 +453,6 @@ class CollectDataRound(BaseConnectionRound):
     def strategy(self):
         """Return the strategy."""
         return self.context.arbitrage_strategy
-    
 
     async def get_futures(self, exchange_id: str, ledger_id: str) -> Generator:
         balances_future = self.get_response(
@@ -479,14 +479,12 @@ class CollectDataRound(BaseConnectionRound):
             timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
         )
         return balances_future, tickers_future, order_future
-    
 
     def parse_futures(self, futures: list) -> Generator:
         """We efficiently parse the futures."""
         while not all(f.done() for f in futures):
             yield
         return [f.result() for f in futures]
-
 
     def act(self) -> Generator:
         """Perform the action of the state."""
@@ -502,7 +500,6 @@ class CollectDataRound(BaseConnectionRound):
         for exchange_id in self.context.arbitrage_strategy.cexs:
             self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
 
-
             futures = yield from self.get_futures(exchange_id, ledger_id)
             balances, tickers, orders = yield from self.parse_futures(futures)
 
@@ -510,11 +507,9 @@ class CollectDataRound(BaseConnectionRound):
                 self.context.logger.error(f"Error getting data for {exchange_id} on {ledger_id}")
                 return self._handle_error()
 
-
             if orders.performative == OrdersMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
                 return self._handle_error()
-
 
             if balances.performative == BalancesMessage.Performative.ERROR:
                 self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
@@ -640,14 +635,12 @@ class CollectDataRound(BaseConnectionRound):
                 return
         return tickers
 
-
     def setup(self) -> None:
         """Setup the state."""
         self.started = False
         self._is_done = False
         self.attempts = 0
         super().setup()
-
 
 
 class PostTradeRound(State):
@@ -683,14 +676,14 @@ class PostTradeRound(State):
             """Get the explorer link."""
 
             exchange_to_explorer = {
-                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/{order.id}",
+                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/",
             }
             explorers = {
                 "mode": "https://modescan.io/tx/",
                 "gnosis": "https://gnosisscan.io/tx/",
                 "derive": "https://explorer.derive.xyz/tx/",
                 "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
-                "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/")
+                "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
             }
             if order.ledger_id not in explorers:
                 return ""

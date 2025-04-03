@@ -20,7 +20,7 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
 )
 
 
-LEDGER_TO_CHAIN_ID = {"ethereum": 1, "gnosis": 100, "base": 8453}
+LEDGER_TO_CHAIN_ID = {"ethereum": 1, "gnosis": 100, "base": 8453, "arbitrum": 42161}
 
 
 class BaseErc20Exchange:
