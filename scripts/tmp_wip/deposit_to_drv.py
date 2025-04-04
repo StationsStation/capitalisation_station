@@ -22,7 +22,7 @@ import requests
 import json
 
 chain_id = "8453"
-token_to_deposit = "DRV"
+token_to_deposit = "weETH"
 AMOUNT = int(1 * 1e18)
 msg_gas_limit = 100000
 
