@@ -96,3 +96,23 @@ class TestExecuteOrdersRound(BaseSkillTestCase):
             state.handle_submitted_order_response(
                 order,
             )
+
+    @pytest.mark.parametrize("order_data", HAPPY_ORDER_SUBMISSION_RESULTS)
+    def test_send_failed_entry_create_order(self, order_data):
+        """Test that the send_create_order method works correctly."""
+        state: ExecuteOrdersRound = self.round_class(name="test", skill_context=self.skill.skill_context)
+
+        def dummy_get_response(*args, **kwargs):
+            del args, kwargs
+            yield None
+
+        order = Order(**order_data)
+        with patch.object(state, "get_response", side_effect=dummy_get_response):
+            res = state.send_create_order(
+                order,
+                is_entry_order=True,
+                is_exit_order=False,
+            )
+            res = list(res).pop()
+            assert res is None
+        assert state._event == ArbitrageabciappEvents.ENTRY_EXIT_ERROR, "Event should be ENTRY_EXIT_ERROR"  # noqa
