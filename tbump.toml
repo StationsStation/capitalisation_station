@@ -1,7 +1,7 @@
 github_url = "https://github.com/StationsStation/capitalisation_station/"
 
 [version]
-current = "0.1.1"
+current = "0.1.2"
 
 # Example of a semver regexp.
 # Make sure this matches current_version before
