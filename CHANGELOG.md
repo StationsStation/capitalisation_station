@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.2](https://github.com/StationsStation/capitalisation_station/tree/v0.1.2) (2025-04-04)
+
+**Merged pull requests:**
+
+- feat:handled-non-response-with [\#70](https://github.com/StationsStation/capitalisation_station/pull/70)
+
 ## [v0.1.1](https://github.com/StationsStation/capitalisation_station/tree/v0.1.1) (2025-04-03)
 
 **Merged pull requests:**
