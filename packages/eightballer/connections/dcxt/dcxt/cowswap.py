@@ -42,7 +42,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Ex
 
 
 MAX_ORDER_ATTEMPTS = 3
-SLIPPAGE_TOLERANCE = 0.0005
+SLIPPAGE_TOLERANCE = 0.0001
 # 1bps fee applied to all trades
 APP_DATA = ZERO_APP_DATA
 SPENDER = {

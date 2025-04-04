@@ -377,11 +377,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
             submitted.append(order)
         new_orders = [json.loads(o.model_dump_json()) for o in submitted]
         failed_orders = [json.loads(o.model_dump_json()) for o in failed_orders]
+
         pathlib.Path(ORDERS_FILE).write_text(json.dumps(new_orders, indent=4), encoding="utf-8")
         pathlib.Path(FAILED_ORDERS_FILE).write_text(json.dumps(failed_orders, indent=4), encoding="utf-8")
-        # We write the orders to disk
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.DONE
+        if not failed_orders:
+            self._event = ArbitrageabciappEvents.DONE
+            self._is_done = True
 
     def _handle_failed_entry_order(
         self,
@@ -425,11 +426,11 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 )
                 return self._handle_failed_exit_order(msg)
         if response.performative is OrdersMessage.Performative.ERROR or response.order.status is OrderStatus.FAILED:
-            self.context.logger.error(f"Error creating order: {response.error_code} {response.error_msg} {order}")
+            self.context.logger.error(f"Error creating order: {order} response: {response}")
             if is_entry_order:
                 return self._handle_failed_entry_order(order)
             if is_exit_order:
-                msg = f"Error creating order: {response.error_code} {response.error_msg} {order}"
+                msg = f"Error creating order: {response} {order}"
                 return self._handle_failed_exit_order(msg)
         return response
 

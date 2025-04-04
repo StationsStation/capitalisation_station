@@ -210,4 +210,7 @@ class ArbitrageStrategy:
             asset_a=portfolio_b[asset_a]["contract_address"],
             asset_b=portfolio_b[asset_b]["contract_address"],
         )
-        return [sell_order, buy_order]
+        # we set the dervive order to be the first order
+        if sell_order.exchange_id == "derive":
+            return [sell_order, buy_order]
+        return [buy_order, sell_order]
