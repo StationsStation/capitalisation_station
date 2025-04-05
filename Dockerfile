@@ -36,5 +36,6 @@ COPY --from=builder /app/.venv /app/.venv
 COPY packages /app/packages
 
 WORKDIR /app
+RUN autonomy packages sync
 
 CMD ["adev",  "run",  "dev",  "--no-use-tendermint", "--force", "eightballer/derive_arbitrage_agent"]
