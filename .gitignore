@@ -51,6 +51,7 @@ packages/eightballer/connections/apprise
 
 
 .runner_secrets
+envs
 
 eightballer/protocols/default
 eightballer/protocols/balances
