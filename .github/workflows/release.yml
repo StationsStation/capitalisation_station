@@ -91,7 +91,7 @@ jobs:
     # Docker
     env:
       DOCKER_BUILDKIT: 1
-      RELEASE_VERSION: 0.1.5
+      RELEASE_VERSION: 0.1.6
       IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
 
     # Needed
