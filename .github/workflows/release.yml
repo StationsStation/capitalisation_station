@@ -91,7 +91,7 @@ jobs:
     # Docker
     env:
       IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
-      RELEASE_VERSION: 0.1.11
+      RELEASE_VERSION: 0.1.12
     strategy:
       matrix:
         include:
