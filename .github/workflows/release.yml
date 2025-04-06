@@ -135,7 +135,7 @@ jobs:
           docker buildx build \
             --platform=${{ matrix.docker_platform }} \
             --tag $IMAGE_NAME:${RELEASE_VERSION}-${{ matrix.tag_suffix }} \
-            --tag $IMAGE_NAME:latest \
+            --tag $IMAGE_NAME:latest-${{ matrix.tag_suffix }} \
             --push \
             .
         shell: bash
