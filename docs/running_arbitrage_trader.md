@@ -100,7 +100,7 @@ You will receive a sub account address that you can use to deposit funds into th
 
 ```bash
 # create keys MAKE SURE TO SAVE THE GENERATED KEY!
-poetry run autonomy generate-key ethereum
+docker run --workdir /app/tmp -v $(pwd):/app/tmp  -it --entrypoint /app/.venv/bin/autonomy 8ball030/capitalisation_station:latest generate-key ethereum
 ```
 
 NOTE: You will need to save the generated key for the next step.
