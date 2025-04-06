@@ -119,7 +119,7 @@ There are a few necessarcy variables that need to be set in order to run the tra
 
 ```bash
 export AGENT=eightballer/derive_arbitrage_agent
-poetry run python scripts/generator.py $AGENT
+docker run --workdir /app/tmp -v $(pwd):/app/tmp -it --entrypoint /app/.venv/bin/python 8ball030/capitalisation_station:latest scripts/generator.py $AGENT
 ```
 
 ### Step 8: Run the Trader
