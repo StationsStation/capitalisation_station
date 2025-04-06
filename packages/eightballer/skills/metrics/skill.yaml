@@ -9,11 +9,11 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
-  dialogues.py: bafybeigjgu4pxeaalu7ovuufmzobp56dppzp5nsttekynzujxzxvzqxwl4
-  handlers.py: bafybeideqob2xhrj47o2opqtxcz3n3jibqsjohkey4rbcpczfmnpf5y2eu
+  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  handlers.py: bafybeicuoeprwmuagb4g65gycntsla7cxg4ebtk6qjvgsrdtkd5ax3y2da
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeifcvrhrlnhnjwbjzedwoegkzfocptui5jkdycf7ydqed2ck76zes4
-  tests/test_metrics_dialogues.py: bafybeihsp4hbar4rxwi2dm5dq72tks4itbtcbs7avgzgz7kkrzzgtt3blq
+  tests/test_metrics.py: bafybeighag4i7m3jzzx2kzgncmq7tct2ljuvjqhyiezwswhncnpksun3eu
+  tests/test_metrics_dialogues.py: bafybeifcdtcx5lawrap6l2c75vc2yigqtp6hzijgf5n24m4aozkg3466lq
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

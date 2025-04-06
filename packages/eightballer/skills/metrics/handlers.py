@@ -27,7 +27,11 @@ from aea.protocols.base import Message
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
-from packages.eightballer.skills.metrics.dialogues import HttpDialogue, HttpDialogues, DefaultDialogues
+from packages.eightballer.skills.metrics.dialogues import (
+    HttpDialogue,
+    HttpDialogues,
+    DefaultDialogues,
+)
 
 
 class HttpHandler(Handler):
@@ -116,11 +120,13 @@ class HttpHandler(Handler):
 
     def _handle_invalid(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """Handle an invalid http message."""
-        msg = (
-            f"cannot handle http message of performative={http_msg.performative} "
-            + f"in dialogue={http_dialogue.dialogue_label}."
+        self.context.logger.warning(
+            f"""
+            Cannot handle http message of
+            performative={http_msg.performative}
+            dialogue={http_dialogue.dialogue_label}.
+            """
         )
-        self.context.logger.warning(msg)
 
     def teardown(self) -> None:
         """Implement the handler teardown."""

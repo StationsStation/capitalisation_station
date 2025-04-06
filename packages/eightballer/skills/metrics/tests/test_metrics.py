@@ -9,6 +9,7 @@ from unittest.mock import patch
 from aea.test_tools.test_skill import BaseSkillTestCase
 from aea.protocols.dialogue.base import DialogueMessage
 
+from packages.eightballer.skills.metrics import PUBLIC_ID
 from packages.eightballer.protocols.http.message import HttpMessage
 from packages.eightballer.skills.metrics.handlers import HttpHandler
 from packages.eightballer.skills.metrics.dialogues import HttpDialogues
@@ -20,7 +21,7 @@ ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
 class TestHttpHandler(BaseSkillTestCase):
     """Test HttpHandler of http_echo."""
 
-    path_to_skill = Path(ROOT_DIR, "packages", "eightballer", "skills", "metrics")
+    path_to_skill = Path(ROOT_DIR, "packages", PUBLIC_ID.author, "skills", PUBLIC_ID.name)
 
     @classmethod
     def setup(cls):  # pylint: disable=W0221
