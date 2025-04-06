@@ -100,7 +100,7 @@ You will receive a sub account address that you can use to deposit funds into th
 
 ```bash
 # create keys MAKE SURE TO SAVE THE GENERATED KEY!
-autonomy generate-key ethereum
+poetry run autonomy generate-key ethereum
 ```
 
 NOTE: You will need to save the generated key for the next step.
