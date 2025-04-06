@@ -11,7 +11,6 @@ autonomy_dependencies:
   location: remote
   url: https://api.github.com/repos/valory-xyz/open-aea
   plugins: &id002
-  - open-aea-ledger-ethereum
   - open-aea-ledger-solana
   - open-aea-ledger-cosmos
   - open-aea-cli-ipfs
@@ -23,6 +22,12 @@ autonomy_dependencies:
   plugins: null
   extras: null
 poetry_dependencies:
+- name: open-aea-ledger-ethereum
+  version: 1.65.0
+  location: local
+  url: third_party/forks/open-aea/plugins/aea-ledger-ethereum
+  plugins: []
+  extras: null
 - name: open-autonomy
   version: 0.19.7
   location: remote
