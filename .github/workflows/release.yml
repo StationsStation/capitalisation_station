@@ -15,10 +15,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "release"
-  env:
-    IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
-    RELEASE_VERSION: 0.1.10
-  release:
+  9lease:
     name: Create Release
     runs-on: ubuntu-20.04
 
@@ -92,6 +89,9 @@ jobs:
 
   build-docker:
     # Docker
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
+      RELEASE_VERSION: 0.1.9
     strategy:
       matrix:
         include:
