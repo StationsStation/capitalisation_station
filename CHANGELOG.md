@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.1.13](https://github.com/StationsStation/capitalisation_station/tree/v0.1.13) (2025-04-06)
+
+## [v0.1.12](https://github.com/StationsStation/capitalisation_station/tree/v0.1.12) (2025-04-06)
+
+## [v0.1.11](https://github.com/StationsStation/capitalisation_station/tree/v0.1.11) (2025-04-06)
+
+## [v0.1.10](https://github.com/StationsStation/capitalisation_station/tree/v0.1.10) (2025-04-06)
+
+## [v0.1.9](https://github.com/StationsStation/capitalisation_station/tree/v0.1.9) (2025-04-06)
+
+## [v0.1.8](https://github.com/StationsStation/capitalisation_station/tree/v0.1.8) (2025-04-06)
+
+## [v0.1.7](https://github.com/StationsStation/capitalisation_station/tree/v0.1.7) (2025-04-06)
+
 ## [v0.1.6](https://github.com/StationsStation/capitalisation_station/tree/v0.1.6) (2025-04-06)
 
 ## [v0.1.4](https://github.com/StationsStation/capitalisation_station/tree/v0.1.4) (2025-04-06)
