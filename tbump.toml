@@ -23,6 +23,7 @@ tag_template = "v{new_version}"
 # tbump.toml location.
 [[file]]
 src = "pyproject.toml"
+[[file]]
 src = ".github/workflows/release.yaml"
 
 # You can specify a list of commands to
