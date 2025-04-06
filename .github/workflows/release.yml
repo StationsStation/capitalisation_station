@@ -17,7 +17,7 @@ jobs:
   # This workflow contains a single job called "release"
   env:
     IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
-    RELEASE_VERSION: 0.1.9
+    RELEASE_VERSION: 0.1.10
   release:
     name: Create Release
     runs-on: ubuntu-20.04
