@@ -121,7 +121,7 @@ jobs:
             --push \
             .
   create-manifest:
-    needs: build
+    needs: build-docker
     runs-on: ubuntu-22.04
     steps:
       - uses: docker/setup-buildx-action@v3
