@@ -24,7 +24,7 @@ tag_template = "v{new_version}"
 [[file]]
 src = "pyproject.toml"
 [[file]]
-src = ".github/workflows/release.yaml"
+src = ".github/workflows/publish.yaml"
 
 # You can specify a list of commands to
 # run after the files have been patched
