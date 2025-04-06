@@ -29,13 +29,13 @@
         "skill/eightballer/reporting/0.1.0": "bafybeicv4l4rvxeyumbd77l44id2afe4jpu7ftdsc4meqsf5vge6w5djv4",
         "skill/eightballer/metrics/0.1.0": "bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeid7yhvl7fx73oetgpsib2eyq3p6ssoucjcqlpqlhxfw5cgvy5e2we",
-        "skill/eightballer/simple_fsm/0.1.0": "bafybeibrwb2p6ccm2wnrkhlopzyqeo2qrvfd26rpkbikwy7m6ketlindxu",
+        "skill/eightballer/simple_fsm/0.1.0": "bafybeiehqhtcg3ihw6mnbwwgqd3qcfghs5dbr7yct42zloudocserj7krm",
         "skill/eightballer/gnosis_bridging_abci_app/0.1.0": "bafybeihwbxlza3j3v2lruhuvbeqljf45ruwnntmrupxdbtj7kdcucf7kby",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeiclipacenwuddkv4ox2pwh27ykowfvziy3qy2wxy5hvbjy75aihxq",
-        "agent/eightballer/trader/0.1.0": "bafybeicxmdgm7fihuc2lg2y6p3aiu26s2zcphhimwglaoexq4q747d2xnm",
+        "agent/eightballer/trader/0.1.0": "bafybeiemu4vr6kaaw4h7errxqbgr6vfprmgjotpurr2cdj53jjipjgd42m",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeigpqa4xeloejkhpwulxjgabqwdpcle2esbutkvgxnktsdwxcvpk4e",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeiai4of2skn3cbs5igcpvvhmhkoq5uqjljasverrchckxgm66dp56e",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeifji2ckxmjn7upcyxxkfd2oypuzadzlyhhc3yccylcxyyye5a4eie"
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeiakluwfe55tq7zynktuinkc33dlsjiarcynt2dbtpi4t5yrnsz3ru",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeic3xfo4jubcfufxfwtfeq7c2ebx6dh3j5gztyadndm2xvltbku5gi"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",
@@ -61,7 +61,7 @@
         "connection/valory/http_client/0.23.0": "bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y",
         "connection/valory/p2p_libp2p_client/0.1.0": "bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q",
         "connection/eightballer/prometheus/0.1.1": "bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi",
-        "skill/eightballer/abstract_round_abci/0.1.0": "bafybeifadvpqgstm63kmych7suzykj6nnhyhofq4xzla62lsyxqbko4wy4",
+        "skill/eightballer/abstract_round_abci/0.1.0": "bafybeidrcpiulmenkes3fj23pytpqzulmozp77yhkorovjz3xdxqnnfcn4",
         "skill/eightballer/prometheus/0.1.0": "bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu",
         "skill/valory/abstract_abci/0.1.0": "bafybeigyae3cvcfts547w56w6oqoq4z5nq4ypmftoftf4jgtlbndzu45lu",
         "skill/valory/abstract_round_abci/0.1.0": "bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba",

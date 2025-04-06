@@ -48,9 +48,9 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeibrwb2p6ccm2wnrkhlopzyqeo2qrvfd26rpkbikwy7m6ketlindxu
+- eightballer/simple_fsm:0.1.0:bafybeiehqhtcg3ihw6mnbwwgqd3qcfghs5dbr7yct42zloudocserj7krm
 - valory/abstract_abci:0.1.0:bafybeigyae3cvcfts547w56w6oqoq4z5nq4ypmftoftf4jgtlbndzu45lu
-- eightballer/abstract_round_abci:0.1.0:bafybeifadvpqgstm63kmych7suzykj6nnhyhofq4xzla62lsyxqbko4wy4
+- eightballer/abstract_round_abci:0.1.0:bafybeidrcpiulmenkes3fj23pytpqzulmozp77yhkorovjz3xdxqnnfcn4
 customs:
 - eightballer/arbitrage_strategy:0.1.0:bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py
 default_ledger: ethereum
