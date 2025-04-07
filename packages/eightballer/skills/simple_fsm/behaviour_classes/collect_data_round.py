@@ -24,6 +24,7 @@ class CollectDataRound(BaseConnectionRound):
 
     matching_round = "collectdataround"
     attempts = 0
+    started = False
 
     @property
     def strategy(self) -> ArbitrageStrategy:
@@ -105,7 +106,6 @@ class CollectDataRound(BaseConnectionRound):
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
-
                 if balances is None or balances.performative == BalancesMessage.Performative.ERROR:
                     self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
                     return self._handle_error()
@@ -173,7 +173,12 @@ class CollectDataRound(BaseConnectionRound):
                     ledger_id=ledger_id,
                     **param,
                 )
-                if ticker is None or ticker.performative == TickersMessage.Performative.ERROR:
+
+                if (
+                    ticker is None
+                    or not isinstance(ticker, TickersMessage)
+                    or ticker.performative == TickersMessage.Performative.ERROR
+                ):
                     self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
                     self.started = False
                     sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
@@ -187,7 +192,11 @@ class CollectDataRound(BaseConnectionRound):
                 exchange_id=exchange_id,
                 ledger_id=ledger_id,
             )
-            if ticker is None or tickers.performative == TickersMessage.Performative.ERROR:
+            if (
+                ticker is None
+                or not isinstance(ticker, TickersMessage)
+                or tickers.performative == TickersMessage.Performative.ERROR
+            ):
                 self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
                 self.started = False
                 sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
@@ -198,5 +207,6 @@ class CollectDataRound(BaseConnectionRound):
         """Setup the state."""
         self.started = False
         self._is_done = False
+        self._event = ArbitrageabciappEvents.TIMEOUT
         self.attempts = 0
         super().setup()

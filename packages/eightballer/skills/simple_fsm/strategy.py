@@ -23,7 +23,7 @@ import pathlib
 import datetime
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
@@ -53,6 +53,25 @@ PRICES_FILE = "prices.json"
 
 
 @dataclass
+class ArbitrageOpportunity:
+    """An arbitrage opportunity."""
+
+    market: str
+    delta: float
+    percent: float
+    best_bid: float
+    best_ask: float
+    best_bid_exchange: str
+    best_ask_exchange: str
+    best_bid_ledger: str
+    best_ask_ledger: str
+    required_asset_a: float = None
+    required_asset_b: float = None
+    balance_a: float = None
+    balance_b: float = None
+
+
+@dataclass
 class AgentState:
     """The agent state."""
 
@@ -62,6 +81,7 @@ class AgentState:
     new_orders: list[Order]
     failed_orders: list[Order]
     submitted_orders: list[Order]
+    unaffordable_opportunity: list[ArbitrageOpportunity]
 
     def write_to_file(self):
         """Write the state to files."""
@@ -79,6 +99,7 @@ class AgentState:
                 "new_orders": [json.loads(order.model_dump_json()) for order in self.new_orders],
                 "failed_orders": [json.loads(order.model_dump_json()) for order in self.failed_orders],
                 "submitted_orders": [json.loads(order.model_dump_json()) for order in self.submitted_orders],
+                "unaffordable_opportunity": [asdict(op) for op in self.unaffordable_opportunity],
             }
         )
 
@@ -124,6 +145,7 @@ class ArbitrageStrategy(Model):
             new_orders=[],
             failed_orders=[],
             submitted_orders=[],
+            unaffordable_opportunity=[],
         )
 
 

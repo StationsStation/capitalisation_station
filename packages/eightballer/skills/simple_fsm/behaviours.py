@@ -99,8 +99,9 @@ class IdentifyOpportunityRound(BaseBehaviour):
             existing_orders=self.strategy.state.existing_orders,
             **self.custom_config.kwargs["strategy_run_kwargs"],
         )
-        for opportunity in self.strategy.trading_strategy.unaffordable:
-            self.context.logger.info(f"Opportunity unaffordable: {opportunity}")
+        self.strategy.state.unaffordable_opportunity = self.strategy.trading_strategy.unaffordable
+        if self.strategy.state.unaffordable_opportunity:
+            self.context.logger.info(f"Opportunity unaffordable: {self.strategy.state.unaffordable_opportunity}")
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             self.strategy.state.new_orders = orders

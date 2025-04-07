@@ -1,7 +1,7 @@
 {
     "dev": {
         "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py",
-        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeiccizllovyraplo54x77jehfr2idok4b4osdoupbvkrykttaroaju",
+        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeidvkaiewegh33cn7s7vyzvmbnh36gpa65ovao2tfg5ia3ltxnocku",
         "protocol/eightballer/default/0.1.0": "bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy",
         "protocol/eightballer/orders/0.1.0": "bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq",
         "protocol/eightballer/order_book/0.1.0": "bafybeifozyvz7b2qlbo55uarhjwyr4jbciksee2fjjpqmtu2msfq2aoxqu",
@@ -29,14 +29,14 @@
         "skill/eightballer/reporting/0.1.0": "bafybeigpxpli27fwx2rjob22uwvmsowtzgzqxotnm77oyulhziik3k4zna",
         "skill/eightballer/metrics/0.1.0": "bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeigrgbmnxeja5wxgrbovo7vlx6spy6t2p74n4cf4hxi5lw5qm5zpny",
-        "skill/eightballer/simple_fsm/0.1.0": "bafybeifkfv4acj4wbfntw4bwlnzlwiqbo27rz5op2eciozvog5cqistccy",
+        "skill/eightballer/simple_fsm/0.1.0": "bafybeieywznwl2scjuu4b7jftkk6qyh2i256o6k64czkvtbzl2mkisavau",
         "skill/eightballer/gnosis_bridging_abci_app/0.1.0": "bafybeihwbxlza3j3v2lruhuvbeqljf45ruwnntmrupxdbtj7kdcucf7kby",
         "skill/eightballer/trading_state/0.1.0": "bafybeiga7bwbk3em3autuqhmo726buniyyrywiiskzh43si4zy57srkroy",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeibcbqywrv2huayhnum3sxg6n33dohptwy7yjabsnijk7loeglbizi",
-        "agent/eightballer/trader/0.1.0": "bafybeigrt7bawzuk676cqzgfpdzvddzvew657eojagw4ycvlizvfwt4aee",
+        "agent/eightballer/trader/0.1.0": "bafybeiem3oytw4mrd2hsujyabyi4pi72rc6ri7jw7ufmlmhqhqxfwoj72a",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeigpqa4xeloejkhpwulxjgabqwdpcle2esbutkvgxnktsdwxcvpk4e",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeif7bifokslzyemtshzngoa6ei5jzcmaz6o4pnpzqlyrkrsdwpmbi4",
-        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeicj6iqx7l7rmbnc6tlklnn6mugb6az5qy7a3t4knxxzygo5ww6lju"
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeie5me47qhmnvyh3we4ggp2ydjew6csmdheax6tc4gckqrvbip4yta",
+        "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeihlujma7dctk4cyglx3qfgaq43tupov3hocjuytqwwr7aswsod47a"
     },
     "third_party": {
         "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeiccizllovyraplo54x77jehfr2idok4b4osdoupbvkrykttaroaju",

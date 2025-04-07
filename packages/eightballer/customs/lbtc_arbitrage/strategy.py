@@ -53,7 +53,7 @@ class ArbitrageStrategy:
     quote_asset: str
     min_profit: float
     order_size: float
-    _unaffordable = []
+    unaffordable: list[ArbitrageOpportunity] = None
 
     def get_orders(
         self,
