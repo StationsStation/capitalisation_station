@@ -195,8 +195,8 @@ class ArbitrageStrategy:
             status=OrderStatus.NEW,
             amount=self.order_size * (1 + opportunity.percent),
             type=OrderType.LIMIT,
-            asset_a=portfolio_a[asset_a]["contract_address"],
-            asset_b=portfolio_a[asset_b]["contract_address"],
+            asset_a=portfolio_a[asset_a]["contract_address"] if opportunity.best_ask_exchange != "derive" else None,
+            asset_b=portfolio_a[asset_b]["contract_address"] if opportunity.best_ask_exchange != "derive" else None,
         )
         sell_order = Order(
             price=sell_prices[opportunity.market]["bid"],
@@ -207,8 +207,8 @@ class ArbitrageStrategy:
             status=OrderStatus.NEW,
             amount=self.order_size,
             type=OrderType.LIMIT,
-            asset_a=portfolio_b[asset_a]["contract_address"],
-            asset_b=portfolio_b[asset_b]["contract_address"],
+            asset_a=portfolio_b[asset_a]["contract_address"] if opportunity.best_bid_exchange != "derive" else None,
+            asset_b=portfolio_b[asset_b]["contract_address"] if opportunity.best_bid_exchange != "derive" else None,
         )
         # we set the dervive order to be the first order
         if sell_order.exchange_id == "derive":

@@ -9,7 +9,7 @@ fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
   behaviour_classes/base.py: bafybeicjyretwyf6e4kjgsio7m4puureeeylegrkq73na7oezuakdt5sne
-  behaviour_classes/collect_data_round.py: bafybeifgcnbllv63h42lzpn7ekosd56wakjf5a6mvvst7warllne7p3mje
+  behaviour_classes/collect_data_round.py: bafybeig3s46chnekxy5ekuqgpav2vn7o7vtjpoglwexm5jvzikbx3moqvu
   behaviour_classes/post_trade_round.py: bafybeifm2ekxthevbim4ouph2ahdljz5bztfy4ze4f7d2vkbz6gcx7sgae
   behaviours.py: bafybeiaplcrfluw5m2du2hlpygdjkt3gamx66e5duzymxggxqlvyktangu
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
@@ -17,7 +17,7 @@ fingerprint:
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
   strategy.py: bafybeigff2ubkhxnmghprjgng3mrppwffdvk3geug3ibzdsogtr3zzgpky
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
-  tests/test_behaviour.py: bafybeiclitsulxzfe4nvwjd3fkg5ripz5qweo2daad2bseqx54i3wfnmau
+  tests/test_behaviour.py: bafybeif5tcqfcqtfwsy76pzyx5ydox2g2sjj42znc363plmwvxi7vrejhq
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:

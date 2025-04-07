@@ -148,10 +148,7 @@ class TestCollectDataRound(BaseSkillTestCase):
         with patch.object(state, "get_response", mock_get_response):
             # Run the function under test
             list(state.act())
-
-            # Assert the mock was called
             mock_get_response.assert_called_once()
-        assert state.attempts == 1
 
     def test_unhappy_path_collect_data(
         self,
@@ -171,4 +168,3 @@ class TestCollectDataRound(BaseSkillTestCase):
             list(state.act())
 
         assert not state.is_done()
-        assert state.attempts == 1

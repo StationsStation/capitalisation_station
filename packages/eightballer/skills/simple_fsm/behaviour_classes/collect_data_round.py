@@ -1,7 +1,7 @@
 """Collect data round behaviour class."""
 
 import json
-from time import sleep
+from time import time, sleep
 from collections.abc import Generator
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -77,7 +77,8 @@ class CollectDataRound(BaseConnectionRound):
             balances, tickers, orders = yield from self.parse_futures(futures)
             if any(f is None for f in (balances, tickers, orders)):
                 self.context.logger.error(f"Error getting data for {exchange_id} on {CEX_LEDGER_ID}")
-                return self._handle_error()
+                yield from self._handle_error()
+                return
 
             if any(
                 [
@@ -87,7 +88,8 @@ class CollectDataRound(BaseConnectionRound):
                 ]
             ):
                 self.context.logger.error(f"Error getting data for {exchange_id} on {CEX_LEDGER_ID}")
-                return self._handle_error()
+                yield from self._handle_error()
+                return
             self.strategy.agent_state.portfolio[CEX_LEDGER_ID][exchange_id] = [
                 b.dict() for b in balances.balances.balances
             ]
@@ -106,9 +108,14 @@ class CollectDataRound(BaseConnectionRound):
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
-                if balances is None or balances.performative == BalancesMessage.Performative.ERROR:
+                if (
+                    balances is None
+                    or not isinstance(balances, BalancesMessage)
+                    or balances.performative == BalancesMessage.Performative.ERROR
+                ):
                     self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
-                    return self._handle_error()
+                    yield from self._handle_error()
+                    return
 
                 tickers = yield from self.get_tickers(
                     exchange_id=exchange_id,
@@ -116,7 +123,8 @@ class CollectDataRound(BaseConnectionRound):
                 )
                 if not tickers:
                     self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
-                    return self._handle_error()
+                    yield from self._handle_error()
+                    return
 
                 self.strategy.state.portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
                 self.strategy.state.prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers]
@@ -131,9 +139,14 @@ class CollectDataRound(BaseConnectionRound):
         self,
     ) -> None:
         """In the case that data is not retrieved, handled the necessary error."""
-        self.started = False
-        self.attempts += 1
-        sleep(DATA_COLLECTION_TIMEOUT_SECONDS * self.attempts)
+
+        def non_blocking_sleep(duration):
+            end_time = time() + duration
+            while time() < end_time:
+                yield  # yield control back to the framework
+
+        time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS * self.attempts
+        yield from non_blocking_sleep(time_to_wait)
 
     def get_tickers(
         self,

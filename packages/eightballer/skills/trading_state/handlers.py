@@ -73,7 +73,7 @@ class HttpHandler(Handler):
 
     def _handle_request(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """Handle a Http request."""
-        self.context.logger.info(
+        self.context.logger.debug(
             f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body}"
         )
         if http_msg.method == "get" and http_msg.url.find("/metrics"):
@@ -100,7 +100,7 @@ class HttpHandler(Handler):
             headers=headers,
             body=self.context.shared_state.get("state").to_json().encode("utf-8"),
         )
-        self.context.logger.info(f"responding with: {http_response}")
+        self.context.logger.debug(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
 
     def _handle_post(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
