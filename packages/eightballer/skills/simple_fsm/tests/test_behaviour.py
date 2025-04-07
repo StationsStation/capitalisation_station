@@ -13,6 +13,7 @@ from packages.eightballer.skills.simple_fsm.behaviours import (
     UnexpectedStateException,
 )
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
@@ -116,3 +117,38 @@ class TestExecuteOrdersRound(BaseSkillTestCase):
             res = list(res).pop()
             assert res is None
         assert state._event == ArbitrageabciappEvents.ENTRY_EXIT_ERROR, "Event should be ENTRY_EXIT_ERROR"  # noqa
+
+
+class TestCollectDataRound(BaseSkillTestCase):
+    """Test HttpHandler of http_echo."""
+
+    path_to_skill = Path(ROOT_DIR, "packages", PUBLIC_ID.author, "skills", PUBLIC_ID.name)
+    round_class = CollectDataRound
+
+    def test_happy_path_collect_data(
+        self,
+    ):
+        """Test that the send_create_order method works correctly."""
+        self.round_class(name="test", skill_context=self.skill.skill_context)
+        state = self.round_class(name="test", skill_context=self.skill.skill_context)
+        with (
+            patch.object(state.strategy, "get_response", return_value="response"),
+            patch.object(state.strategy, "get_tickers", return_value="response"),
+        ):
+            state.act()
+        assert state.is_done
+        assert state.event == ArbitrageabciappEvents.DONE
+
+    def test_unhappy_path_collect_data(
+        self,
+    ):
+        """Test that the send_create_order method works correctly."""
+        self.round_class(name="test", skill_context=self.skill.skill_context)
+        state = self.round_class(name="test", skill_context=self.skill.skill_context)
+        with (
+            patch.object(state.strategy, "get_response", return_value=None),
+            patch.object(state.strategy, "get_tickers", return_value=None),
+        ):
+            state.act()
+        assert state.is_done
+        assert state.attempts == 1

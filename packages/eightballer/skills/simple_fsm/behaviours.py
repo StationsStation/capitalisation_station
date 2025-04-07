@@ -21,33 +21,26 @@
 
 import os
 import sys
-import json
 import asyncio
 import pathlib
-import datetime
 import importlib
-from enum import Enum
-from time import sleep
-from typing import Any, cast
+from typing import Any
 from textwrap import dedent
-from collections.abc import Callable, Generator
+from collections.abc import Generator
 
-from aea.mail.base import Message
 from aea.skills.behaviours import State, FSMBehaviour
 from aea.configurations.base import ComponentType
 from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
+from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.protocols.tickers.message import TickersMessage
-from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
 from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
-from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
-from packages.eightballer.protocols.tickers.custom_types import Tickers
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
-from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
-from packages.eightballer.skills.abstract_round_abci.behaviour_utils import BaseBehaviour, TimeoutException
+from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -62,24 +55,16 @@ ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
 ORDER_PLACEMENT_TIMEOUT_SECONDS = 10
-DATA_COLLECTION_TIMEOUT_SECONDS = 1
-
-TZ = datetime.datetime.now().astimezone().tzinfo
 
 
 class UnexpectedStateException(Exception):
     """Exception raised when an unexpected state is reached."""
 
 
-class SetupRound(State):
+class SetupRound(BaseBehaviour):
     """This class implements the SetupRound state."""
 
     clear_data = False
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
 
     async def act(self) -> None:
         """Perform the action of the state."""
@@ -94,24 +79,11 @@ class SetupRound(State):
         self.context.behaviours.main.setup()
         self._is_done = True
 
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
 
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
-
-
-class IdentifyOpportunityRound(State):
+class IdentifyOpportunityRound(BaseBehaviour):
     """This class implements the IdentifyOpportunityRound state."""
 
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-
-        # we have to import the strategy due to the loading sequence of the agent dependencies.
+    # we have to import the strategy due to the loading sequence of the agent dependencies.
 
     async def act(self) -> None:
         """Perform the action of the state."""
@@ -120,33 +92,20 @@ class IdentifyOpportunityRound(State):
         self.started = True
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        portfolio = json.loads(pathlib.Path(PORTFOLIO_FILE).read_text(encoding="utf-8"))
-        prices = json.loads(pathlib.Path(PRICES_FILE).read_text(encoding="utf-8"))
-        existing_orders = json.loads(pathlib.Path(EXISTING_ORDERS_FILE).read_text(encoding="utf-8"))
 
         orders = self.strategy.trading_strategy.get_orders(
-            portfolio=portfolio,
-            prices=prices,
-            existing_orders=existing_orders,
+            portfolio=self.strategy.state.portfolio,
+            prices=self.strategy.state.prices,
+            existing_orders=self.strategy.state.existing_orders,
             **self.custom_config.kwargs["strategy_run_kwargs"],
         )
         for opportunity in self.strategy.trading_strategy.unaffordable:
             self.context.logger.info(f"Opportunity unaffordable: {opportunity}")
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
-            orders = [json.loads(o.model_dump_json()) for o in orders]
-            pathlib.Path(ORDERS_FILE).write_text(json.dumps(orders, indent=4), encoding="utf-8")
+            self.strategy.state.new_orders = orders
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
         await asyncio.sleep(0)
-
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
-
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
 
     def setup(self) -> None:
         """Setup the state."""
@@ -189,139 +148,19 @@ class IdentifyOpportunityRound(State):
             self.context.logger.debug(f"    {k}: {v}")
 
     @property
-    def strategy(self):
+    def strategy(self) -> ArbitrageStrategy:
         """Return the strategy."""
         return self.context.arbitrage_strategy
 
 
-class ErrorRound(State):
+class ErrorRound(BaseBehaviour):
     """This class implements the ErrorRound state."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
 
     async def act(self) -> None:
         """Perform the action of the state."""
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         await asyncio.sleep(1)
-
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
-
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
-
-
-class BaseConnectionRound(BaseBehaviour):
-    """This class implements the BaseConnectionRound state."""
-
-    matching_round = "baseconnectionround"
-
-    def setup(self) -> None:
-        """Setup the state."""
-        self._performative_to_dialogue_class = {
-            OrdersMessage.Performative.GET_ORDERS: self.context.orders_dialogues,
-            OrdersMessage.Performative.CREATE_ORDER: self.context.orders_dialogues,
-            BalancesMessage.Performative.GET_ALL_BALANCES: self.context.balances_dialogues,
-            TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
-            TickersMessage.Performative.GET_TICKER: self.context.tickers_dialogues,
-        }
-        self.started = False
-        self._is_done = False
-        self._message = None
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-        self._message = None
-
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
-
-    @property
-    def current_message(self) -> None:
-        """Return the current message."""
-        return self._message
-
-    def get_response(
-        self,
-        protocol_performative: Message.Performative,
-        connection_id: str,
-        timeout: float = 10.0,
-        **kwargs,
-    ) -> Generator[None, None, Any]:
-        """Get a ccxt response."""
-
-        dialogue_class = self._performative_to_dialogue_class[protocol_performative]
-
-        msg, dialogue = dialogue_class.create(
-            counterparty=str(connection_id),
-            performative=protocol_performative,
-            **kwargs,
-        )
-        msg._sender = str(self.context.skill_id)  # noqa
-        response = yield from self._do_request(msg, dialogue, timeout)
-        self._message = None
-        return response
-
-    def get_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
-        """Wrapper for callback request which depends on whether the message has not been handled on time."""
-
-        def callback_request(message: Message, current_behaviour: BaseBehaviour) -> None:
-            """The callback request."""
-            self.context.logger.debug(f"Callback request: {message}")
-            current_behaviour._message = message  # noqa
-
-        return callback_request
-
-    def wait_for_message(
-        self,
-        condition: Callable = lambda message: True,  # noqa
-        timeout: float | None = None,
-    ) -> Any:
-        """Wait for message.
-
-        Care must be taken. This method does not handle concurrent requests.
-        Use directly after a request is being sent.
-        This is a local method that does not depend on the global clock,
-        so the usage of datetime.now() is acceptable here.
-
-        """
-        if timeout is not None:
-            deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
-        else:
-            deadline = datetime.datetime.max
-
-        try:
-            while self.current_message is None:
-                yield
-                if timeout is not None and datetime.datetime.now(tz=TZ) > deadline:
-                    raise TimeoutException
-            self.context.logger.debug(f"Received message: {self._message}")
-            return self.current_message
-        except TimeoutException:
-            self.context.logger.info("Timeout!")
-            return None  # noqa
-
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
-
-    async def async_act_wrapper(self) -> Generator[Any, None, None]:
-        """Wrapper for the async act method."""
-        return await self.async_act()
-
-    async def async_act(self) -> None:
-        """Perform the action of the state."""
-        self.act()
 
 
 class ExecuteOrdersRound(BaseConnectionRound):
@@ -341,17 +180,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
             return
         self.started = True
 
-        order_file = pathlib.Path("orders.json")
-        orders = order_file.read_text()
-        orders = json.loads(orders)
-        models = [Order.model_validate(o) for o in orders]
-        new_orders = []
-
+        submitted = []
         failed_orders = []
 
-        submitted = []
-
-        for order in models:
+        self.context.logger.info(f"Executing Total of {len(self.strategy.state.new_orders)} orders")
+        while self.strategy.state.new_orders:
+            order = self.strategy.state.new_orders.pop(0)
             self.context.logger.info(f"Creating order: {order}")
             is_entry_order = len(submitted) == 0
             is_exit_order = len(submitted) == 1
@@ -374,12 +208,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 self.context.logger.error(f"Error creating order: {order}")
                 failed_orders.append(order)
                 continue
-            submitted.append(order)
-        new_orders = [json.loads(o.model_dump_json()) for o in submitted]
-        failed_orders = [json.loads(o.model_dump_json()) for o in failed_orders]
+            submitted.append(result_order)
+            self.context.logger.info(f"Order created: {result_order}")
 
-        pathlib.Path(ORDERS_FILE).write_text(json.dumps(new_orders, indent=4), encoding="utf-8")
-        pathlib.Path(FAILED_ORDERS_FILE).write_text(json.dumps(failed_orders, indent=4), encoding="utf-8")
+        self.strategy.state.submitted_orders = submitted
+        self.strategy.state.failed_orders = failed_orders
+
         if not failed_orders:
             self._event = ArbitrageabciappEvents.DONE
             self._is_done = True
@@ -472,7 +306,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 OrderStatus.NEW,
             }:
                 self.context.logger.info("Order created.")
-                self.strategy.outstanding_orders.orders.append(order)
+                self.strategy.state.submitted_orders.append(order)
                 return True
             msg = f"This is a completely unexpected error. Order {order}"
             raise UnexpectedStateException(msg)
@@ -480,291 +314,12 @@ class ExecuteOrdersRound(BaseConnectionRound):
         raise UnexpectedStateException(msg)
 
     @property
-    def strategy(self):
+    def strategy(self) -> ArbitrageStrategy:
         """Return the strategy."""
         return self.context.arbitrage_strategy
 
     def handle_order(self, order: Order) -> None:
         """Handle the order."""
-
-
-class CollectDataRound(BaseConnectionRound):
-    """This class implements the CollectDataRound state."""
-
-    matching_round = "collectdataround"
-    attempts = 0
-
-    @property
-    def strategy(self):
-        """Return the strategy."""
-        return self.context.arbitrage_strategy
-
-    async def get_futures(self, exchange_id: str, ledger_id: str) -> Generator:
-        """Get the futures for the given exchange and ledger id."""
-        balances_future = self.get_response(
-            BalancesMessage.Performative.GET_ALL_BALANCES,
-            connection_id=str(CCXT_PUBLIC_ID),
-            exchange_id=exchange_id,
-            ledger_id=ledger_id,
-            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
-        )
-
-        tickers_future = self.get_response(
-            TickersMessage.Performative.GET_ALL_TICKERS,
-            connection_id=str(CCXT_PUBLIC_ID),
-            exchange_id=exchange_id,
-            ledger_id=ledger_id,
-            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
-        )
-        order_future = self.get_response(
-            OrdersMessage.Performative.GET_ORDERS,
-            connection_id=str(CCXT_PUBLIC_ID),
-            exchange_id=exchange_id,
-            ledger_id=ledger_id,
-            symbol="OLAS/USDT",
-            timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
-        )
-        return balances_future, tickers_future, order_future
-
-    def parse_futures(self, futures: list) -> Generator:
-        """We efficiently parse the futures."""
-        while not all(f.done() for f in futures):
-            yield
-        yield [f.result() for f in futures]
-
-    def act(self) -> Generator:
-        """Perform the action of the state."""
-        if self.started:
-            return
-
-        self.started = True
-        portfolio = {}
-        ledger_id = "cex"
-        prices = {ledger_id: {}}
-        existing_orders = {ledger_id: {}}
-        portfolio[ledger_id] = {}
-        for exchange_id in self.context.arbitrage_strategy.cexs:
-            self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
-            futures = yield from self.get_futures(exchange_id, ledger_id)
-            balances, tickers, orders = yield from self.parse_futures(futures)
-            if any(f is None for f in (balances, tickers, orders)):
-                self.context.logger.error(f"Error getting data for {exchange_id} on {ledger_id}")
-                return self._handle_error()
-
-            if any(
-                [
-                    balances.performative == BalancesMessage.Performative.ERROR,
-                    tickers.performative == TickersMessage.Performative.ERROR,
-                    orders.performative == OrdersMessage.Performative.ERROR,
-                ]
-            ):
-                self.context.logger.error(f"Error getting data for {exchange_id} on {ledger_id}")
-                return self._handle_error()
-            portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
-            prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers.tickers]
-            existing_orders[ledger_id][exchange_id] = [o.dict() for o in orders.orders.orders]
-
-        for exchange_id, ledger_ids in self.context.arbitrage_strategy.dexs.items():
-            for ledger_id in ledger_ids:
-                if ledger_id not in portfolio:
-                    portfolio[ledger_id] = {}
-                if ledger_id not in prices:
-                    prices[ledger_id] = {}
-                self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
-                balances = yield from self.get_response(
-                    BalancesMessage.Performative.GET_ALL_BALANCES,
-                    connection_id=str(DCXT_PUBLIC_ID),
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                )
-                if balances.performative == BalancesMessage.Performative.ERROR:
-                    self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
-                    return self._handle_error()
-
-                tickers = yield from self.get_tickers(
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                )
-                if not tickers:
-                    self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
-                    return self._handle_error()
-
-                self.context.logger.debug(f"Got balances for {exchange_id} on {ledger_id}")
-                self.context.logger.debug(f"Got tickers for {exchange_id} on {ledger_id}")
-                self.context.logger.debug(f"Balances: {balances}")
-                self.context.logger.debug(f"Tickers: {tickers}")
-                portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
-                prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers]
-
-        # We write the portfolio to disk
-        self.context.logger.debug(f"Portfolio: {portfolio}")
-        pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(portfolio, indent=4), encoding="utf-8")
-        pathlib.Path(PRICES_FILE).write_text(json.dumps(prices, indent=4), encoding="utf-8")
-        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps([], indent=4), encoding="utf-8")
-
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.DONE
-        self.attempts = 0
-
-    def _handle_error(
-        self,
-    ) -> None:
-        """In the case that data is not retrieved, handled the necessary error."""
-        self.started = False
-        self.attempts += 1
-        sleep(DATA_COLLECTION_TIMEOUT_SECONDS * self.attempts)
-
-    def get_tickers(
-        self,
-        exchange_id: str,
-        ledger_id: str,
-    ) -> Generator:
-        """Get the tickers from a specific exchange."""
-        performative = (
-            TickersMessage.Performative.GET_ALL_TICKERS
-            if self.context.arbitrage_strategy.fetch_all_tickers
-            else TickersMessage.Performative.GET_TICKER
-        )
-
-        if performative == TickersMessage.Performative.GET_TICKER:
-            # we want to get the wrapped base token
-            asset_a = self.strategy.trading_strategy.quote_asset
-            asset_b = self.strategy.trading_strategy.base_asset
-            params = []
-
-            def encode_dict(d: dict) -> bytes:
-                """Encode a dictionary."""
-                return json.dumps(d).encode(DEFAULT_ENCODING)
-
-            params.append(
-                {
-                    "asset_a": asset_a,
-                    "asset_b": asset_b,
-                    "params": encode_dict({"amount": self.context.arbitrage_strategy.trading_strategy.order_size}),
-                }
-            )
-            tickers = Tickers(tickers=[])
-            for param in params:
-                ticker = yield from self.get_response(
-                    performative,
-                    connection_id=str(DCXT_PUBLIC_ID),
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                    **param,
-                )
-                if ticker.performative == TickersMessage.Performative.ERROR:
-                    self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
-                    self.started = False
-                    sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
-                    return
-                tickers.tickers.append(ticker.ticker)
-
-        else:
-            tickers = yield from self.get_response(
-                performative,
-                connection_id=str(DCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
-            )
-            if tickers.performative == TickersMessage.Performative.ERROR:
-                self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
-                self.started = False
-                sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
-                return
-        return tickers
-
-    def setup(self) -> None:
-        """Setup the state."""
-        self.started = False
-        self._is_done = False
-        self.attempts = 0
-        super().setup()
-
-
-class PostTradeRound(State):
-    """This class implements the PostTradeRound state."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self.setup()
-
-    def setup(self) -> None:
-        """Setup the state."""
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
-
-    @property
-    def strategy(self):
-        """Return the strategy."""
-        return self.context.arbitrage_strategy
-
-    async def act(self) -> None:
-        """Perform the action of the state."""
-        if self.started:
-            return
-        self.started = True
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.DONE
-        order_file = pathlib.Path("orders.json")
-        orders = order_file.read_text()
-        orders = json.loads(orders)
-        sell_order, buy_order = (Order.model_validate(o) for o in orders)
-
-        def get_explorer_link(order: Order) -> str:
-            """Get the explorer link."""
-
-            exchange_to_explorer = {
-                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/",
-            }
-            explorers = {
-                "mode": "https://modescan.io/tx/",
-                "gnosis": "https://gnosisscan.io/tx/",
-                "derive": "https://explorer.derive.xyz/tx/",
-                "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
-                "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
-            }
-            if order.ledger_id not in explorers:
-                return ""
-            return f"{explorers[order.ledger_id]}{order.id}"
-
-        delta = -(buy_order.price / sell_order.price * 100 - 100)
-        value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
-        report_msg_table = dedent(f"""
-        [Sell]({get_explorer_link(sell_order)}) {sell_order.symbol} on {sell_order.ledger_id}:{sell_order.exchange_id}
-        {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.amount * sell_order.price:5f}
-        [Buy]({get_explorer_link(buy_order)}) {buy_order.symbol} on {buy_order.ledger_id}:{buy_order.exchange_id}
-        {buy_order.amount}@{buy_order.price:5f}  total: {buy_order.amount * buy_order.price:5f}
-        --------------------------
-        Delta:          {-delta:5f}%
-        Value captured: {value_captured_gross:6f}
-        """)
-        self.send_notification_to_user(
-            title="Post Successful Arbitrage Execution!",
-            msg=report_msg_table,
-        )
-        self.context.logger.info(f"Sleeping for {self.strategy.cool_down_period} seconds.")
-        await asyncio.sleep(self.strategy.cool_down_period)
-
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
-
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
-
-    def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
-        """Send notification to user."""
-        dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
-        msg, _ = dialogues.create(
-            counterparty=str(APPRISE_PUBLIC_ID),
-            performative=UserInteractionMessage.Performative.NOTIFICATION,
-            title=title,
-            body=msg,
-            attach=attach,
-        )
-        self.context.outbox.put_message(message=msg)
 
 
 class NoOpportunityRound(State):
@@ -797,15 +352,6 @@ class NoOpportunityRound(State):
     def event(self) -> str | None:
         """Return the event."""
         return self._event
-
-
-class ArbitrageabciappEvents(Enum):
-    """This class defines the events for the Arbitrageabciapp FSM."""
-
-    DONE = "DONE"
-    TIMEOUT = "TIMEOUT"
-    OPPORTUNITY_FOUND = "OPPORTUNITY_FOUND"
-    ENTRY_EXIT_ERROR = "ENTRY_EXIT_ERROR"
 
 
 class ArbitrageabciappFsmBehaviour(FSMBehaviour):
