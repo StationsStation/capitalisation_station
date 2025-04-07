@@ -12,7 +12,7 @@ fingerprint:
   dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
   handlers.py: bafybeieuimljynzcur3bvknryrczetl3wvibcsxhzkkqzsasn7mh74pnaa
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeigc2kdghfgcevsuzj7ztt57ielx6cqi7gwfnhp3cn3dcejnsxepgq
+  tests/test_metrics.py: bafybeic3rvq7au3fwop22iplxxaglfmmmu5fshcggl5mlo52fdepi77t64
   tests/test_metrics_dialogues.py: bafybeihqylysl3qhcsjhc5bo2pyraxcbx2zuutwe5nawzryochm4ikukwi
 fingerprint_ignore_patterns: []
 connections: []

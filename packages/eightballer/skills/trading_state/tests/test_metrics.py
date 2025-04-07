@@ -1,4 +1,4 @@
-"""Test the metrics skill."""
+"""Test the state skill."""
 
 import json
 import logging
