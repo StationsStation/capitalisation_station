@@ -81,7 +81,6 @@
         "skill/valory/abstract_round_abci/0.1.0": "bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba",
         "skill/valory/registration_abci/0.1.0": "bafybeigt7bmrfhet7fyafqojl2i5uhzvpaz5wfv6kuk5ojwhhnhmg3qihu",
         "skill/valory/reset_pause_abci/0.1.0": "bafybeicskv7u3mtfhi7nnoyw3bppwjof63izs4jgqdddtxicoea26t2n7i",
-        "skill/eightballer/metrics/0.1.0": "bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e",
-        "skill/eightballer/simple_fsm/0.1.0": "bafybeiawig7ai3m5kc5nyw4rakgqs6tjq73s463htwmbwk4f2nyzc6w45a"
+        "skill/eightballer/metrics/0.1.0": "bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e"
     }
 }
