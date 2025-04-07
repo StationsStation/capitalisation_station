@@ -93,7 +93,7 @@ class TestHttpHandler(BaseSkillTestCase):
         self.assert_quantity_in_outbox(1)
 
         mock_logger.assert_any_call(
-            logging.INFO,
+            logging.DEBUG,
             f"received http request with method={incoming_message.method}, "
             + f"url={incoming_message.url} and body={incoming_message.body}",
         )
@@ -114,7 +114,7 @@ class TestHttpHandler(BaseSkillTestCase):
         assert has_attributes, error_str
 
         mock_logger.assert_any_call(
-            logging.INFO,
+            logging.DEBUG,
             f"responding with: {message}",
         )
 

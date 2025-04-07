@@ -91,6 +91,12 @@ class HttpHandler(Handler):
         else:
             headers = http_msg.headers
 
+        response = self.context.shared_state.get("state")
+        if response:
+            data = response.to_json().encode("utf-8")
+        else:
+            data = b"{}"
+
         http_response = http_dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
             target_message=http_msg,
@@ -98,7 +104,7 @@ class HttpHandler(Handler):
             status_code=200,
             status_text="Success",
             headers=headers,
-            body=self.context.shared_state.get("state").to_json().encode("utf-8"),
+            body=data
         )
         self.context.logger.debug(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
