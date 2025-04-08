@@ -34,7 +34,7 @@
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeibcbqywrv2huayhnum3sxg6n33dohptwy7yjabsnijk7loeglbizi",
         "agent/eightballer/trader/0.1.0": "bafybeihp4bspwvlgddrfy77v2zzzijqve226gqzz6nnnuyv4itdz6ocvua",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeigpqa4xeloejkhpwulxjgabqwdpcle2esbutkvgxnktsdwxcvpk4e",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeiehs6kzitz7hwlkm4zsya7vwvekdpstlcm6pg3aj3ig2ozk7lbuie",
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeihbh3czc3nc3t6nspdjypvdxl57klyyclxq5skjk67vyz34aznayu",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeidak5iwgynfadsupf5yzrctqgh6qyql5iuy7obi6fi5a7eyyv6uze"
     },
     "third_party": {
