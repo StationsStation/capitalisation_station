@@ -20,8 +20,8 @@ connections:
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
 contracts:
-- valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
 - eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
 - eightballer/default:0.1.0:bafybeicsdb3bue2xoopc6lue7njtyt22nehrnkevmkuk2i6ac65w722vwy
@@ -43,14 +43,14 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/chained_dex_app:0.1.0:bafybeidwbpzoczmr27x35tq4pyyyfycnsfmyi6nmt75itj4vo4at2jfxqe
-- eightballer/dex_data_retrieval:0.1.0:bafybeie3whq46ajnz7q4xwuhstgbykjzqnxrnf6tlfllvuuxnv6pkud24u
+- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 - eightballer/metrics:0.1.0:bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
+- eightballer/registration_abci:0.1.0:bafybeidraoenvl2vqrtl56m6aygu3ajav4rzfww7jjrup6qmeaofarsggy
+- eightballer/reset_pause_abci:0.1.0:bafybeidq5qt4mgldmg43a2ijltofw2rfw6db3jerkffnvkgijdt5otaasu
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
-- valory/abstract_round_abci:0.1.0:bafybeicmpzqjqdjrekvzmklirjrr6b7r6f2kdsnlc45eo7564igljfdbza
-- valory/registration_abci:0.1.0:bafybeieblcsd55lb4k47rmzo5dv6w7jmb3wikv24y4hmm76uqdm7tnau2q
-- valory/reset_pause_abci:0.1.0:bafybeidzbnt3wv7jxccpshqr3q2msco4ykj2nriejuatsvfj63ntyfn6i4
+- eightballer/chained_dex_app:0.1.0:bafybeieoq42nxe6vnimpknivq53va3rg6lrwm36yapdrce4xfv3l3fgpj4
+- eightballer/dex_data_retrieval:0.1.0:bafybeifzu2y3pxb6jrwii36oek2bjxmfvukwyhh5i2z4fbwzbhxd2yw5vi
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -99,37 +99,6 @@ config:
   use_tendermint: ${bool:false}
   target_skill_id: eightballer/chained_dex_app:0.1.0
 ---
-public_id: eightballer/chained_dex_app:0.1.0:bafybeicmuthcay6doky6sgy235n52chsk5fkzswpvyg5s4yeptvmzmxoqy
-type: skill
-models:
-  params:
-    args:
-      dex_data_retrieval_config:
-        enabled: true
-        reporting_enabled: true
-        exchange_ids:
-        - balancer_optimism
-        - balancer_ethereum
-        - balancer_base
-        extra_kwargs: {}
-        backoff: 1.0
-        retries: 3
-      max_healthcheck: 1200
-      on_chain_service_id: null
-      reset_pause_duration: 10
-      reset_tendermint_after: 10
-      round_timeout_seconds: 35.0
-      service_registry_address: null
-      setup:
-        all_participants: ${list:["0x92d9610BC04aa4F0162e45B031b7fa6d76d4B4b3"]}
-        consensus_threshold: 1
-        safe_contract_address: '0x0000000000000000000000000000000000000000'
-      share_tm_config_on_startup: false
-      tendermint_com_url: ${str:http://localhost:8080}
-      tendermint_p2p_url: ${str:localhost:26656}
-      tendermint_url: ${str:http://localhost:26657}
-      validate_timeout: 1205
----
 public_id: eightballer/prometheus:0.1.1:bafybeiemx6sryvqdjied7xqqxge5vyplyyzyiro4a4pubqpjrps4sxm7xe
 type: connection
 config:
@@ -163,3 +132,34 @@ config:
     ledger_id: base
     rpc_url: https://base.llamarpc.com
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+---
+public_id: eightballer/chained_dex_app:0.1.0
+type: skill
+models:
+  params:
+    args:
+      dex_data_retrieval_config:
+        enabled: true
+        reporting_enabled: true
+        exchange_ids:
+        - balancer_optimism
+        - balancer_ethereum
+        - balancer_base
+        extra_kwargs: {}
+        backoff: 1.0
+        retries: 3
+      max_healthcheck: 1200
+      on_chain_service_id: null
+      reset_pause_duration: 10
+      reset_tendermint_after: 10
+      round_timeout_seconds: 35.0
+      service_registry_address: null
+      setup:
+        all_participants: ${list:["0x92d9610BC04aa4F0162e45B031b7fa6d76d4B4b3"]}
+        consensus_threshold: 1
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+      share_tm_config_on_startup: false
+      tendermint_com_url: ${str:http://localhost:8080}
+      tendermint_p2p_url: ${str:localhost:26656}
+      tendermint_url: ${str:http://localhost:26657}
+      validate_timeout: 1205
