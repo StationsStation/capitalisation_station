@@ -1,12 +1,12 @@
 """Musi."""
 
-from packages.valory.skills.reset_pause_abci.rounds import (
+from packages.eightballer.skills.reset_pause_abci.rounds import (
     ResetPauseAbciApp,
     ResetAndPauseRound,
     FinishedResetAndPauseRound,
     FinishedResetAndPauseErrorRound,
 )
-from packages.valory.skills.registration_abci.rounds import (
+from packages.eightballer.skills.registration_abci.rounds import (
     AgentRegistrationAbciApp,
     RegistrationStartupRound,
     FinishedRegistrationRound,
@@ -17,7 +17,7 @@ from packages.eightballer.skills.dex_data_retrieval.rounds import (
     RetrievedDexDataRound,
     DexDataRetrievalAbciApp,
 )
-from packages.valory.skills.abstract_round_abci.abci_app_chain import AbciAppTransitionMapping, chain
+from packages.eightballer.skills.abstract_round_abci.abci_app_chain import AbciAppTransitionMapping, chain
 
 
 abci_app_transition_mapping: AbciAppTransitionMapping = {

@@ -18,7 +18,14 @@
 
 """This module contains the handler for the 'price_estimation_abci' skill."""
 
-from packages.valory.skills.abstract_round_abci.handlers import (
+from packages.eightballer.skills.dex_data_retrieval.handlers import (
+    DexOrdersHandler as BaseDexOrdersHandler,
+    DexMarketsHandler as BaseDexMarketsHandler,
+    DexTickersHandler as BaseDexTickersHandler,
+    DexBalancesHandler as BaseDexBalancesHandler,
+    DexPositionsHandler as BaseDexPositionsHandler,
+)
+from packages.eightballer.skills.abstract_round_abci.handlers import (
     HttpHandler as BaseHttpHandler,
     IpfsHandler as BaseIpfsHandler,
     SigningHandler as BaseSigningHandler,
@@ -26,13 +33,6 @@ from packages.valory.skills.abstract_round_abci.handlers import (
     LedgerApiHandler as BaseLedgerApiHandler,
     TendermintHandler as BaseTendermintHandler,
     ContractApiHandler as BaseContractApiHandler,
-)
-from packages.eightballer.skills.dex_data_retrieval.handlers import (
-    DexOrdersHandler as BaseDexOrdersHandler,
-    DexMarketsHandler as BaseDexMarketsHandler,
-    DexTickersHandler as BaseDexTickersHandler,
-    DexBalancesHandler as BaseDexBalancesHandler,
-    DexPositionsHandler as BaseDexPositionsHandler,
 )
 
 

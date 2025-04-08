@@ -18,14 +18,14 @@
 
 """This module contains the behaviours for the 'abci' skill."""
 
-from packages.valory.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
-from packages.valory.skills.registration_abci.behaviours import (
+from packages.eightballer.skills.chained_dex_app.composition import ChaineddexAbciApp
+from packages.eightballer.skills.reset_pause_abci.behaviours import ResetPauseABCIConsensusBehaviour
+from packages.eightballer.skills.registration_abci.behaviours import (
     RegistrationStartupBehaviour,
     AgentRegistrationRoundBehaviour,
 )
-from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour, AbstractRoundBehaviour
-from packages.eightballer.skills.chained_dex_app.composition import ChaineddexAbciApp
 from packages.eightballer.skills.dex_data_retrieval.behaviours import DexDataRetrievalRoundBehaviour
+from packages.eightballer.skills.abstract_round_abci.behaviours import BaseBehaviour, AbstractRoundBehaviour
 
 
 class DexDataAbciAppConsensusBehaviour(AbstractRoundBehaviour):

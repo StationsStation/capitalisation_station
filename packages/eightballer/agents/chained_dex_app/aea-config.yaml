@@ -49,7 +49,7 @@ skills:
 - eightballer/registration_abci:0.1.0:bafybeidraoenvl2vqrtl56m6aygu3ajav4rzfww7jjrup6qmeaofarsggy
 - eightballer/reset_pause_abci:0.1.0:bafybeidq5qt4mgldmg43a2ijltofw2rfw6db3jerkffnvkgijdt5otaasu
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
-- eightballer/chained_dex_app:0.1.0:bafybeieoq42nxe6vnimpknivq53va3rg6lrwm36yapdrce4xfv3l3fgpj4
+- eightballer/chained_dex_app:0.1.0:bafybeidhety2ybtect6gh7tyonm375ol2rec22buf3r5iwysbvzjfczrti
 - eightballer/dex_data_retrieval:0.1.0:bafybeifzu2y3pxb6jrwii36oek2bjxmfvukwyhh5i2z4fbwzbhxd2yw5vi
 default_ledger: ethereum
 required_ledgers:
