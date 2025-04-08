@@ -24,10 +24,10 @@ protocols:
 - eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeidv3by6rv55bgejfjbtmjjxjk74mhb3aspeqigh36g3rqqjwoh3ja
-- valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/registration_abci:0.1.0:bafybeigt7bmrfhet7fyafqojl2i5uhzvpaz5wfv6kuk5ojwhhnhmg3qihu
-- valory/reset_pause_abci:0.1.0:bafybeicskv7u3mtfhi7nnoyw3bppwjof63izs4jgqdddtxicoea26t2n7i
+- eightballer/dex_data_retrieval:0.1.0:bafybeie3whq46ajnz7q4xwuhstgbykjzqnxrnf6tlfllvuuxnv6pkud24u
+- valory/abstract_round_abci:0.1.0:bafybeicmpzqjqdjrekvzmklirjrr6b7r6f2kdsnlc45eo7564igljfdbza
+- valory/registration_abci:0.1.0:bafybeieblcsd55lb4k47rmzo5dv6w7jmb3wikv24y4hmm76uqdm7tnau2q
+- valory/reset_pause_abci:0.1.0:bafybeidzbnt3wv7jxccpshqr3q2msco4ykj2nriejuatsvfj63ntyfn6i4
 behaviours:
   main:
     args: {}

@@ -23,7 +23,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeiaggy526o66x5gvbzt2ugrqz3offzvnt33fydndcb2se3nyvxdrky
+- eightballer/dcxt:0.1.0:bafybeifug2x6fmdyy2jhofhssblqh2r2l6ypgel5gem44xqdo4jqnlpkgq
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -33,7 +33,7 @@ protocols:
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeidrcpiulmenkes3fj23pytpqzulmozp77yhkorovjz3xdxqnnfcn4
+- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 behaviours:
   main:
     args: {}

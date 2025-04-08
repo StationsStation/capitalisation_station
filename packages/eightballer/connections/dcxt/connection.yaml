@@ -142,7 +142,7 @@ excluded_protocols: []
 dependencies:
   dateparser:
     version: '>=1.1.1'
-  lyra-v2-client:
+  derive_client:
     version: '>=0.2.9'
   web3:
     version: '>=5.0.0'

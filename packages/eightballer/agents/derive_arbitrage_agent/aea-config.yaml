@@ -10,12 +10,12 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeiaggy526o66x5gvbzt2ugrqz3offzvnt33fydndcb2se3nyvxdrky
+- eightballer/dcxt:0.1.0:bafybeifug2x6fmdyy2jhofhssblqh2r2l6ypgel5gem44xqdo4jqnlpkgq
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
-- valory/abci:0.1.0:bafybeic6gfe4lw2pxfwt56tadzhtbdioghpawlrsdfykakam4okhvlxqmu
+- valory/abci:0.1.0:bafybeibkpnqv5dilyhu5durj6k3q3tuw7t62zw5vjtbk4qvtfvbchasjaq
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 - valory/ipfs:0.1.0:bafybeiamz23olgtow4wqf7zpsfnfzf7pxiognrxl2mhn5kvqutlwhgukxa
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
@@ -46,10 +46,10 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeidrcpiulmenkes3fj23pytpqzulmozp77yhkorovjz3xdxqnnfcn4
+- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeihip7sssjj6t6265o2r6asnl3mwclcfekaewguhpoxxamlcavx6xa
-- valory/abstract_abci:0.1.0:bafybeigyae3cvcfts547w56w6oqoq4z5nq4ypmftoftf4jgtlbndzu45lu
+- eightballer/simple_fsm:0.1.0:bafybeiaof4shrwsenjvy26f6et237i4jokpb2cycwliwawpcub7kapt6nu
+- valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 customs:
 - eightballer/lbtc_arbitrage:0.1.0:bafybeieqjip4m66s2c4qjw6liltp533bw64rf2ucq6itlr24ye7qtwvrqe
 default_ledger: ethereum
