@@ -18,14 +18,24 @@
 
 """This package contains a scaffold of a model."""
 
+import json
+import pathlib
+import datetime
+from copy import deepcopy
 from typing import TYPE_CHECKING, Any
+from dataclasses import asdict, dataclass
 
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
-from packages.eightballer.protocols.orders.custom_types import Orders
+from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 
+
+TZ = datetime.datetime.now().astimezone().tzinfo
+
+
+CEX_LEDGER_ID = "cex"
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -33,6 +43,65 @@ if TYPE_CHECKING:
 
 DEFAULT_COOL_DOWN_PERIOD = 15
 DEFAULT_MAX_OPEN_ORDERS = 1
+
+
+PORTFOLIO_FILE = "portfolio.json"
+EXISTING_ORDERS_FILE = "existing_orders.json"
+FAILED_ORDERS_FILE = "failed_orders.json"
+ORDERS_FILE = "orders.json"
+PRICES_FILE = "prices.json"
+
+
+@dataclass
+class ArbitrageOpportunity:
+    """An arbitrage opportunity."""
+
+    market: str
+    delta: float
+    percent: float
+    best_bid: float
+    best_ask: float
+    best_bid_exchange: str
+    best_ask_exchange: str
+    best_bid_ledger: str
+    best_ask_ledger: str
+    required_asset_a: float = None
+    required_asset_b: float = None
+    balance_a: float = None
+    balance_b: float = None
+
+
+@dataclass
+class AgentState:
+    """The agent state."""
+
+    portfolio: dict[str : dict[str, list[dict]]]
+    prices: dict[str : dict[str, float]]
+    existing_orders: dict[str : dict[str, list[dict]]]
+    new_orders: list[Order]
+    failed_orders: list[Order]
+    submitted_orders: list[Order]
+    unaffordable_opportunity: list[ArbitrageOpportunity]
+
+    def write_to_file(self):
+        """Write the state to files."""
+        pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(self.portfolio, indent=4), encoding="utf-8")
+        pathlib.Path(PRICES_FILE).write_text(json.dumps(self.prices, indent=4), encoding="utf-8")
+        pathlib.Path(EXISTING_ORDERS_FILE).write_text(json.dumps(self.existing_orders, indent=4), encoding="utf-8")
+
+    def to_json(self) -> dict:
+        """Convert the state to JSON."""
+        return json.dumps(
+            {
+                "portfolio": self.portfolio,
+                "prices": self.prices,
+                "existing_orders": self.existing_orders,
+                "new_orders": [json.loads(order.model_dump_json()) for order in self.new_orders],
+                "failed_orders": [json.loads(order.model_dump_json()) for order in self.failed_orders],
+                "submitted_orders": [json.loads(order.model_dump_json()) for order in self.submitted_orders],
+                "unaffordable_opportunity": [asdict(op) for op in self.unaffordable_opportunity],
+            }
+        )
 
 
 class ArbitrageStrategy(Model):
@@ -44,7 +113,7 @@ class ArbitrageStrategy(Model):
     order_size: float = 0.0
     fetch_all_tickers = False
     cool_down_period = 0
-    outstanding_orders: Orders = Orders(orders=[])
+    state: AgentState = None
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -55,7 +124,29 @@ class ArbitrageStrategy(Model):
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cool_down_period = kwargs.pop("cool_down_period", DEFAULT_COOL_DOWN_PERIOD)
+        self.state = self.build_initial_state()
         super().__init__(**kwargs)
+        self.context.shared_state["state"] = self.state
+
+    def build_initial_state(self) -> dict:
+        """Build the portfolio."""
+        data = {CEX_LEDGER_ID: {cex: {} for cex in self.cexs}}
+        for exchange_id, ledgers in self.dexs.items():
+            for ledger_id in ledgers:
+                if ledger_id not in data:
+                    data[ledger_id] = {}
+                if exchange_id not in data[ledger_id]:
+                    data[ledger_id][exchange_id] = {}
+
+        return AgentState(
+            portfolio=deepcopy(data),
+            prices=deepcopy(data),
+            existing_orders=deepcopy(data),
+            new_orders=[],
+            failed_orders=[],
+            submitted_orders=[],
+            unaffordable_opportunity=[],
+        )
 
 
 class Requests(Model, FrozenMixin):

@@ -26,7 +26,7 @@ from cowdao_cowpy.order_book.generated.model import (
 )
 
 from packages.eightballer.connections.dcxt.utils import load_contract
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.connections.dcxt.dcxt.one_inch import (
     InvalidSwapParams,
     InsufficientBalance,
@@ -274,7 +274,8 @@ class CowSwapClient(BaseErc20Exchange):
 
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
-        raise NotImplementedError
+        del kwargs
+        return Orders(orders=[])
 
     async def fetch_positions(self, **kwargs):
         """Fetch positions."""

@@ -16,7 +16,7 @@ class_name: SolanaProgramLibraryToken
 contract_interface_paths: {}
 dependencies:
   solana:
-    version: ==0.30.2
+    version: '>=0.30.2'
   open-aea-ledger-solana:
-    version: ==1.55.0
+    version: '>=1.55.0'
 contracts: []

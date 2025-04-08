@@ -1,18 +1,21 @@
 """Some tests for the HttpHandler of the simple_fsm skill."""
 
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from aea.test_tools.test_skill import BaseSkillTestCase
 
 from packages.eightballer.skills.simple_fsm import PUBLIC_ID
+from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.skills.simple_fsm.behaviours import (
     ExecuteOrdersRound,
     ArbitrageabciappEvents,
     UnexpectedStateException,
 )
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.balances.custom_types import Balances
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 
 
 ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent.parent
@@ -116,3 +119,52 @@ class TestExecuteOrdersRound(BaseSkillTestCase):
             res = list(res).pop()
             assert res is None
         assert state._event == ArbitrageabciappEvents.ENTRY_EXIT_ERROR, "Event should be ENTRY_EXIT_ERROR"  # noqa
+
+
+class TestCollectDataRound(BaseSkillTestCase):
+    """Test HttpHandler of http_echo."""
+
+    path_to_skill = Path(ROOT_DIR, "packages", PUBLIC_ID.author, "skills", PUBLIC_ID.name)
+    round_class = CollectDataRound
+
+    def test_happy_path_collect_data(
+        self,
+    ):
+        """Test that the send_create_order method works correctly."""
+        self.round_class(name="test", skill_context=self.skill.skill_context)
+        state = self.round_class(name="test", skill_context=self.skill.skill_context)
+        state.setup()
+
+        msg = BalancesMessage(performative=BalancesMessage.Performative.ALL_BALANCES, balances=Balances(balances=[]))
+
+        def mock_generator():
+            yield msg
+
+        # Create the mock for get_response
+        mock_get_response = MagicMock()
+        mock_get_response.return_value = mock_generator()
+
+        # Patch the get_response method
+        with patch.object(state, "get_response", mock_get_response):
+            # Run the function under test
+            list(state.act())
+            mock_get_response.assert_called_once()
+
+    def test_unhappy_path_collect_data(
+        self,
+    ):
+        """Test that the send_create_order method works correctly."""
+        self.round_class(name="test", skill_context=self.skill.skill_context)
+        state = self.round_class(name="test", skill_context=self.skill.skill_context)
+
+        def dummy_get_response(*args, **kwargs):
+            del args, kwargs
+            yield None
+
+        with (
+            patch.object(state, "get_response", new=dummy_get_response),
+            patch.object(state, "get_tickers", side_effect=dummy_get_response),
+        ):
+            list(state.act())
+
+        assert not state.is_done()

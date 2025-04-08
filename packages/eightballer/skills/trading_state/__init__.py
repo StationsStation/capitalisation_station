@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 eightballer
+#   Copyright 2022 Valory AG
+#   Copyright 2018-2021 Fetch.AI Limited
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,26 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains a scaffold of a model."""
+"""This module contains the implementation of the http echo skill."""
 
-from packages.eightballer.skills.dex_data_retrieval.models import Params as dexBaseParams
-from packages.eightballer.skills.abstract_round_abci.models import (
-    Requests as BaseRequests,
-    SharedState as BaseSharedState,
-    BenchmarkTool as BaseBenchmarkTool,
-)
-from packages.eightballer.skills.chained_dex_app.composition import ChaineddexAbciApp
+from aea.configurations.base import PublicId
 
 
-class SharedState(BaseSharedState):
-    """Keep the current shared state of the skill."""
-
-    abci_app_cls = ChaineddexAbciApp
-
-
-class Params(dexBaseParams):
-    """Params."""
-
-
-Requests = BaseRequests
-BenchmarkTool = BaseBenchmarkTool
+PUBLIC_ID = PublicId.from_str("eightballer/trading_state:0.1.0")

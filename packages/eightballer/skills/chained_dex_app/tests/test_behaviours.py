@@ -7,12 +7,12 @@ from collections.abc import Hashable
 
 import pytest
 
-from packages.valory.skills.abstract_round_abci.base import AbciAppDB
+from packages.eightballer.skills.abstract_round_abci.base import AbciAppDB
 from packages.eightballer.skills.dex_data_retrieval.rounds import Event, SynchronizedData
-from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.eightballer.skills.chained_dex_app.behaviours import DexDataAbciAppConsensusBehaviour
 from packages.eightballer.skills.dex_data_retrieval.behaviours import FetchDexPositionsBehaviour
-from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
+from packages.eightballer.skills.abstract_round_abci.behaviours import BaseBehaviour
+from packages.eightballer.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
 
 
 TEST_EXCHANGE = "lyra"

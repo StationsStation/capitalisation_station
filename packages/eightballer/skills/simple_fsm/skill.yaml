@@ -7,18 +7,23 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
-  behaviours.py: bafybeif5ao2sewfeyqbybq5lxz7vqvh73xfroh7ak3xzmrpd3tbfjclo74
+  behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
+  behaviour_classes/base.py: bafybeicjyretwyf6e4kjgsio7m4puureeeylegrkq73na7oezuakdt5sne
+  behaviour_classes/collect_data_round.py: bafybeig3s46chnekxy5ekuqgpav2vn7o7vtjpoglwexm5jvzikbx3moqvu
+  behaviour_classes/post_trade_round.py: bafybeifm2ekxthevbim4ouph2ahdljz5bztfy4ze4f7d2vkbz6gcx7sgae
+  behaviours.py: bafybeiaplcrfluw5m2du2hlpygdjkt3gamx66e5duzymxggxqlvyktangu
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
+  enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
-  strategy.py: bafybeie6ghag3tjh5jvlnporfd7zqwl3aq24fglnd7ro5cqhecpdqms2xi
+  strategy.py: bafybeigff2ubkhxnmghprjgng3mrppwffdvk3geug3ibzdsogtr3zzgpky
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
-  tests/test_behaviour.py: bafybeibgwrua4im4yflnrbwp4nq34zfatqgd7leqdtcix7ruhxp27txagq
+  tests/test_behaviour.py: bafybeif5tcqfcqtfwsy76pzyx5ydox2g2sjj42znc363plmwvxi7vrejhq
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeiedjafxscrjvnpq5intstmaqo4eojxmfazat5fkn5mdg373xy343i
+- eightballer/dcxt:0.1.0:bafybeifug2x6fmdyy2jhofhssblqh2r2l6ypgel5gem44xqdo4jqnlpkgq
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -28,7 +33,7 @@ protocols:
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeidrcpiulmenkes3fj23pytpqzulmozp77yhkorovjz3xdxqnnfcn4
+- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 behaviours:
   main:
     args: {}
@@ -49,8 +54,7 @@ handlers:
 models:
   arbitrage_strategy:
     args:
-      cexs:
-      - mexc
+      cexs: []
       dexs:
         balancer:
         - base
