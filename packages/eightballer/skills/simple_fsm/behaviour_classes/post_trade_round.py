@@ -6,28 +6,11 @@ from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.protocols.orders.custom_types import Order
-from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
-from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
 
 
 class PostTradeRound(BaseBehaviour):
     """This class implements the PostTradeRound state."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self.setup()
-
-    def setup(self) -> None:
-        """Setup the state."""
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
-
-    @property
-    def strategy(self):
-        """Return the strategy."""
-        return self.context.arbitrage_strategy
 
     async def act(self) -> None:
         """Perform the action of the state."""
@@ -38,7 +21,7 @@ class PostTradeRound(BaseBehaviour):
         self._event = ArbitrageabciappEvents.DONE
         sell_order, buy_order = self.strategy.state.submitted_orders
 
-        def get_explorer_link(order: Order) -> str:
+        def get_explorer_link(order: Order) -> None:
             """Get the explorer link."""
 
             exchange_to_explorer = {
@@ -66,21 +49,9 @@ class PostTradeRound(BaseBehaviour):
         Delta:          {-delta:5f}%
         Value captured: {value_captured_gross:6f}
         """)
-        self.send_notification_to_user(
+        self.strategy.send_notification_to_user(
             title="Post Successful Arbitrage Execution!",
             msg=report_msg_table,
         )
         self.context.logger.info(f"Sleeping for {self.strategy.cool_down_period} seconds.")
         await asyncio.sleep(self.strategy.cool_down_period)
-
-    def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
-        """Send notification to user."""
-        dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
-        msg, _ = dialogues.create(
-            counterparty=str(APPRISE_PUBLIC_ID),
-            performative=UserInteractionMessage.Performative.NOTIFICATION,
-            title=title,
-            body=msg,
-            attach=attach,
-        )
-        self.context.outbox.put_message(message=msg)

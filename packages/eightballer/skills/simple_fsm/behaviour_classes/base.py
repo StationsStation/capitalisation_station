@@ -10,7 +10,7 @@ from aea.skills.behaviours import State
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.skills.simple_fsm.strategy import TZ
+from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
 from packages.eightballer.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour as BaseBehaviourUtils,
     TimeoutException,
@@ -42,6 +42,10 @@ class BaseBehaviour(State):
         msg = "The act method should be implemented in the derived class."
         raise NotImplementedError(msg)
 
+    @property
+    def strategy(self) -> ArbitrageStrategy:
+        """Return the strategy."""
+        return self.context.arbitrage_strategy
 
 class BaseConnectionRound(BaseBehaviourUtils):
     """This class implements the BaseConnectionRound state."""

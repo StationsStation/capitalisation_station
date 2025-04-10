@@ -22,13 +22,16 @@ import json
 import pathlib
 import datetime
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 from dataclasses import asdict, dataclass
 
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
+from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.protocols.orders.custom_types import Order
+from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 
 
@@ -148,6 +151,18 @@ class ArbitrageStrategy(Model):
             unaffordable_opportunity=[],
         )
 
+
+    def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
+        """Send notification to user."""
+        dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
+        msg, _ = dialogues.create(
+            counterparty=str(APPRISE_PUBLIC_ID),
+            performative=UserInteractionMessage.Performative.NOTIFICATION,
+            title=title,
+            body=msg,
+            attach=attach,
+        )
+        self.context.outbox.put_message(message=msg)
 
 class Requests(Model, FrozenMixin):
     """Keep the current pending requests."""

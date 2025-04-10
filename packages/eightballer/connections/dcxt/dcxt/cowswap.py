@@ -6,6 +6,8 @@ import datetime
 import warnings
 from functools import lru_cache
 
+import httpcore
+import httpx
 import rich_click as click
 from rich import print
 from web3 import Account
@@ -41,8 +43,9 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedg
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange, read_token_list
 
 
-MAX_ORDER_ATTEMPTS = 3
-SLIPPAGE_TOLERANCE = 0.0001
+MAX_ORDER_ATTEMPTS = 5
+MAX_QUOTE_ATTEMPTS = 5
+SLIPPAGE_TOLERANCE = 0.0002
 # 1bps fee applied to all trades
 APP_DATA = ZERO_APP_DATA
 SPENDER = {
@@ -66,9 +69,9 @@ LEDGER_TO_COW_CHAIN = {
 }
 
 LEDGER_TO_RPC = {
-    SupportedLedgers.ETHEREUM: "https://eth.drpc.org",
+    SupportedLedgers.ETHEREUM: "https://eth.llamarpc.com",
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
-    SupportedLedgers.BASE: "https://base.drpc.org",
+    SupportedLedgers.BASE: "https://base.llamarpc.com",
     SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
 }
 
@@ -82,6 +85,7 @@ async def get_quote(
     chain: CowChains,
     account: Account,
     order_book_api: OrderBookApi,
+    retries: int = MAX_QUOTE_ATTEMPTS,
 ):
     """Get a quote for a token swap."""
     chain_id = SupportedChainId(chain.value[0])
@@ -97,7 +101,21 @@ async def get_quote(
         sellAmountBeforeFee=TokenAmount(str(sell_amount_int)),
     )
 
-    return await get_order_quote(order_quote_request, order_side, order_book_api)
+    try:
+        return await get_order_quote(order_quote_request, order_side, order_book_api)
+    except (httpcore.ReadTimeout, httpx.ReadTimeout,  UnexpectedResponseError) as error:
+        if retries > 0:
+            await asyncio.sleep(0.1 * (MAX_ORDER_ATTEMPTS - retries))
+            return await get_quote(
+                buy_token=buy_token,
+                sell_token=sell_token,
+                sell_amount_int=sell_amount_int,
+                chain=chain,
+                account=account,
+                order_book_api=order_book_api,
+                retries=retries - 1,
+            )
+        raise error
 
 
 class CowSwapClient(BaseErc20Exchange):
