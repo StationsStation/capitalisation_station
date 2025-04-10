@@ -6,8 +6,8 @@ import datetime
 import warnings
 from functools import lru_cache
 
-import httpcore
 import httpx
+import httpcore
 import rich_click as click
 from rich import print
 from web3 import Account
@@ -103,7 +103,7 @@ async def get_quote(
 
     try:
         return await get_order_quote(order_quote_request, order_side, order_book_api)
-    except (httpcore.ReadTimeout, httpx.ReadTimeout,  UnexpectedResponseError) as error:
+    except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError):
         if retries > 0:
             await asyncio.sleep(0.1 * (MAX_ORDER_ATTEMPTS - retries))
             return await get_quote(
@@ -115,7 +115,7 @@ async def get_quote(
                 order_book_api=order_book_api,
                 retries=retries - 1,
             )
-        raise error
+        raise
 
 
 class CowSwapClient(BaseErc20Exchange):

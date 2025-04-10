@@ -8,14 +8,14 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
-  behaviour_classes/base.py: bafybeibeir3xhfg3juoqb4i4s23xdv7q3ssck6bjxuc7i66qqtajtntfh4
+  behaviour_classes/base.py: bafybeia54cdyu4dexsi23rncqjgm6eg7ntrcy2mxqbnk7uveb2onbwixue
   behaviour_classes/collect_data_round.py: bafybeig3s46chnekxy5ekuqgpav2vn7o7vtjpoglwexm5jvzikbx3moqvu
-  behaviour_classes/post_trade_round.py: bafybeidtzr6syjg7uw6s2khslnpv4mygcxaoeqyj2lpl57mymyezo3z3ny
+  behaviour_classes/post_trade_round.py: bafybeias65gjksdferwo2y2vx3bump5scbdbjxhi4i5dlbtf6pkiqcopny
   behaviours.py: bafybeiaplcrfluw5m2du2hlpygdjkt3gamx66e5duzymxggxqlvyktangu
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
   enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
-  strategy.py: bafybeibngohjpw3l7yhu5jd6drdhdp7rjcvfu5m52gzadqprjbohkaprt4
+  strategy.py: bafybeigjd66ur4efntrsrwvgnok66nhgy2lkkk7y7v7enqwwqyu6yv7eca
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeif5tcqfcqtfwsy76pzyx5ydox2g2sjj42znc363plmwvxi7vrejhq
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
@@ -23,7 +23,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeifpjs5z622bx4koilk6x66oo4x5wvwfe34h3evhktddwb6wccqovy
+- eightballer/dcxt:0.1.0:bafybeiftmnijtvacolsbnga6gvag3oerb45n5esqdu4dtyx2uv4yg5snve
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba

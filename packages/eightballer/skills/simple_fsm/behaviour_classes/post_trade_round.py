@@ -1,7 +1,6 @@
 """Post trade round behaviour."""
 
 import asyncio
-from typing import Any, cast
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents

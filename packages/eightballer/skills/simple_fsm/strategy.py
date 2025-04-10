@@ -28,11 +28,11 @@ from dataclasses import asdict, dataclass
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
-from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.protocols.orders.custom_types import Order
-from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
+from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
+from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 
 
 TZ = datetime.datetime.now().astimezone().tzinfo
@@ -151,7 +151,6 @@ class ArbitrageStrategy(Model):
             unaffordable_opportunity=[],
         )
 
-
     def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
         """Send notification to user."""
         dialogues = cast(UserInteractionDialogues, self.context.user_interaction_dialogues)
@@ -163,6 +162,7 @@ class ArbitrageStrategy(Model):
             attach=attach,
         )
         self.context.outbox.put_message(message=msg)
+
 
 class Requests(Model, FrozenMixin):
     """Keep the current pending requests."""

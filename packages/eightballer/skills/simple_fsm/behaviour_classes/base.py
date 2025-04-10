@@ -47,6 +47,7 @@ class BaseBehaviour(State):
         """Return the strategy."""
         return self.context.arbitrage_strategy
 
+
 class BaseConnectionRound(BaseBehaviourUtils):
     """This class implements the BaseConnectionRound state."""
 
