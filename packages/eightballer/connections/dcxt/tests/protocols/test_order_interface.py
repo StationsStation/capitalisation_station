@@ -8,6 +8,7 @@ from aea.mail.base import Envelope
 
 from dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.connections.dcxt import dcxt
+from packages.eightballer.protocols.orders.custom_types import Orders
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 
@@ -112,3 +113,69 @@ class TestOrdersExecution(BaseDcxtConnectionTest):
             assert response is not None
             assert isinstance(response.message, OrdersMessage)
             assert response.message.performative == OrdersMessage.Performative.ORDERS, f"Error: {response}"
+
+    @pytest.mark.parametrize(
+        "exchange",
+        TEST_EXCHANGES,
+    )
+    async def test_get_open_orders_mock(self, exchange: tuple[str, str]) -> None:
+        """Test get open orders."""
+        exchange_id, ledger_id = exchange
+        await self.connection.connect()
+        dialogues = self.DIALOGUES(self.client_skill_id)
+        request, _ = dialogues.create(
+            counterparty=str(self.connection.connection_id),
+            performative=OrdersMessage.Performative.GET_ORDERS,
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+        )
+
+        envelope = Envelope(
+            to=request.to,
+            sender=request.sender,
+            message=request,
+        )
+
+        # we create a mock object to simulate the response.
+        async def mock_fetch_open_orders(*args, **kwargs):
+            del args, kwargs
+            await asyncio.sleep(0.0)
+            return Orders(orders=[])
+
+        self.connection._exchanges[ledger_id][exchange_id].fetch_open_orders = mock_fetch_open_orders  # noqa
+        await self.connection.send(envelope)
+        await asyncio.sleep(1)
+        response = await self.connection.receive()
+        assert response is not None
+        assert isinstance(response.message, OrdersMessage)
+        assert response.message.performative == OrdersMessage.Performative.ORDERS, f"Error: {response}"
+
+    @pytest.mark.parametrize(
+        "exchange",
+        {k: v for k, v in list(TEST_EXCHANGES.items())[:1]},  # noqa
+    )
+    async def test_get_open_orders_integration(self, exchange: tuple[str, str]) -> None:
+        """Test get open orders."""
+        exchange_id, ledger_id = exchange
+        await self.connection.connect()
+        dialogues = self.DIALOGUES(self.client_skill_id)
+        request, _ = dialogues.create(
+            counterparty=str(self.connection.connection_id),
+            performative=OrdersMessage.Performative.GET_ORDERS,
+            exchange_id=exchange_id,
+            ledger_id=ledger_id,
+        )
+
+        envelope = Envelope(
+            to=request.to,
+            sender=request.sender,
+            message=request,
+        )
+        # we create a mock object to simulate the response.
+        # self.connection._exchanges[ledger_id][exchange_id].fetch_open_orders = mock_fetch_open_orders  # noqa
+        await self.connection.send(envelope)
+        await asyncio.sleep(1)
+        response = await self.connection.receive()
+        assert response is not None
+        assert isinstance(response.message, OrdersMessage)
+        assert response.message.performative == OrdersMessage.Performative.ORDERS, f"Error: {response}"

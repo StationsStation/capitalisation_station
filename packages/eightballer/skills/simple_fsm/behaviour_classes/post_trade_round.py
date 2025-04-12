@@ -53,4 +53,5 @@ class PostTradeRound(BaseBehaviour):
             msg=report_msg_table,
         )
         self.context.logger.info(f"Sleeping for {self.strategy.cool_down_period} seconds.")
+        self.strategy.state.current_period += 1
         await asyncio.sleep(self.strategy.cool_down_period)

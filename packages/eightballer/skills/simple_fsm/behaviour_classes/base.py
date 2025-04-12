@@ -1,6 +1,7 @@
 """base Behaviour."""
 
 import datetime
+from time import time
 from typing import Any
 from collections.abc import Callable, Generator
 
@@ -152,3 +153,9 @@ class BaseConnectionRound(BaseBehaviourUtils):
     async def async_act(self) -> None:
         """Perform the action of the state."""
         self.act()
+
+    def non_blocking_sleep(self, duration):
+        """Sleep for a given duration without blocking the event loop."""
+        end_time = time() + duration
+        while time() < end_time:
+            yield  # yield control back to the framework

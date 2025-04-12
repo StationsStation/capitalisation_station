@@ -4,23 +4,38 @@ import asyncio
 import logging
 import datetime
 import warnings
+from enum import Enum
+from typing import get_args
 from functools import lru_cache
 
 import httpx
 import httpcore
 import rich_click as click
 from rich import print
-from web3 import Account
 from aea_ledger_ethereum import Address, EthereumApi, EthereumCrypto
-from cowdao_cowpy.cow.swap import Order as CowOrder, swap_tokens, get_order_quote
+from cowdao_cowpy.cow.swap import (
+    CHAIN_TO_EXPLORER,
+    Wei,
+    Envs,
+    Order as CowOrder,
+    LocalAccount,
+    SigningScheme,
+    CompletedOrder,
+    ChecksumAddress,
+    PreSignSignature,
+    post_order,
+    sign_order,
+)
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
 from cowdao_cowpy.order_book.api import OrderBookApi
+from cowdao_cowpy.contracts.order import OrderKind
 from cowdao_cowpy.common.constants import ZERO_APP_DATA, CowContractAddress
 from cowdao_cowpy.common.api.errors import UnexpectedResponseError
 from cowdao_cowpy.order_book.config import OrderBookAPIConfigFactory
 from cowdao_cowpy.order_book.generated.model import (
+    OrderStatus as CowOrderStatus,
     TokenAmount,
     OrderQuoteSide1,
     OrderQuoteRequest,
@@ -40,12 +55,12 @@ from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
-from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange, read_token_list
+from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.0002
+SLIPPAGE_TOLERANCE = 0.00025
 # 1bps fee applied to all trades
 APP_DATA = ZERO_APP_DATA
 SPENDER = {
@@ -78,23 +93,26 @@ LEDGER_TO_RPC = {
 warnings.filterwarnings("ignore", category=UserWarning)
 
 
+class CowAsset(Enum):
+    """Enum for CoW assets."""
+
+    ERC20 = "erc20"
+
+
 async def get_quote(
     buy_token: Erc20Token,
     sell_token: Erc20Token,
     sell_amount_int: int,
     chain: CowChains,
-    account: Account,
+    address: Address,
     order_book_api: OrderBookApi,
     retries: int = MAX_QUOTE_ATTEMPTS,
 ):
     """Get a quote for a token swap."""
-    chain_id = SupportedChainId(chain.value[0])
-    order_book_api = OrderBookApi(OrderBookAPIConfigFactory.get_config(env="prod", chain_id=chain_id))
-
     order_quote_request = OrderQuoteRequest(
         sellToken=sell_token.address,
         buyToken=buy_token.address,
-        from_=account.address,  # type: ignore # pyright doesn't recognize `populate_by_name=True`.
+        from_=address,  # type: ignore # pyright doesn't recognize `populate_by_name=True`.
     )
     order_side = OrderQuoteSide1(
         kind=OrderQuoteSideKindSell.sell,
@@ -102,7 +120,7 @@ async def get_quote(
     )
 
     try:
-        return await get_order_quote(order_quote_request, order_side, order_book_api)
+        return await order_book_api.post_quote(order_quote_request, order_side)
     except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError):
         if retries > 0:
             await asyncio.sleep(0.1 * (MAX_ORDER_ATTEMPTS - retries))
@@ -111,11 +129,69 @@ async def get_quote(
                 sell_token=sell_token,
                 sell_amount_int=sell_amount_int,
                 chain=chain,
-                account=account,
+                address=address,
                 order_book_api=order_book_api,
                 retries=retries - 1,
             )
         raise
+
+
+async def swap_tokens(
+    amount: Wei,
+    account: LocalAccount,
+    chain: CowChains,
+    order_book_api: OrderBookApi,
+    sell_token: ChecksumAddress,
+    buy_token: ChecksumAddress,
+    safe_address: ChecksumAddress | None = None,
+    app_data: str = ZERO_APP_DATA,
+    slippage_tolerance: float = 0.005,
+) -> CompletedOrder:
+    """Swap tokens using the CoW Protocol.
+    `CowContractAddress.VAULT_RELAYER` needs to be approved to spend the sell token before calling this function.
+    """
+    chain_id = SupportedChainId(chain.value[0])
+
+    order_quote_request = OrderQuoteRequest(
+        sellToken=sell_token,
+        buyToken=buy_token,
+        from_=safe_address if safe_address is not None else account._address,  # noqa
+        appData=app_data,
+    )
+    order_side = OrderQuoteSide1(
+        kind=OrderQuoteSideKindSell.sell,
+        sellAmountBeforeFee=TokenAmount(str(amount)),
+    )
+
+    order_quote = await order_book_api.post_quote(order_quote_request, order_side)
+
+    order = CowOrder(
+        sell_token=sell_token,
+        buy_token=buy_token,
+        receiver=safe_address if safe_address is not None else account.address,
+        valid_to=order_quote.quote.validTo,
+        app_data=app_data,
+        sell_amount=str(amount),  # Since it is a sell order, the sellAmountBeforeFee is the same as the sellAmount.
+        buy_amount=str(int(int(order_quote.quote.buyAmount.root) * (1.0 - slippage_tolerance))),
+        fee_amount="0",  # CoW Swap does not charge fees.
+        kind=OrderQuoteSideKindSell.sell.value,
+        sell_token_balance=CowAsset.ERC20.value,
+        buy_token_balance=CowAsset.ERC20.value,
+    )
+
+    base_url = CHAIN_TO_EXPLORER.get(chain_id, "https://explorer.cow.fi")
+    signature = (
+        PreSignSignature(
+            scheme=SigningScheme.PRESIGN,
+            data=safe_address,
+        )
+        if safe_address is not None
+        else sign_order(chain, account, order)
+    )
+    order_uid = await post_order(account, safe_address, order, signature, order_book_api)
+    order_link = f"{base_url}/orders/{order_uid.root!s}".lower()
+    order_link = order_book_api.get_order_link(order_uid)
+    return CompletedOrder(uid=order_uid, url=order_link)
 
 
 class CowSwapClient(BaseErc20Exchange):
@@ -129,6 +205,7 @@ class CowSwapClient(BaseErc20Exchange):
         price: float,
         amount: float,
         side: OrderSide,
+        status=OrderStatus.OPEN,
         **kwargs,
     ) -> Order:
         """Parse an order."""
@@ -143,9 +220,9 @@ class CowSwapClient(BaseErc20Exchange):
             side=side,
             id=str(order.uid.root),
             type=OrderType.MARKET,
-            status=OrderStatus.OPEN,
+            status=status,
         )
-        self.logger.info(f"Parsed Order: {order}")
+        self.logger.debug(f"Parsed Order: {order}")
         return order
 
     def parse_order(self, order: Order, *args, **kwargs) -> Order:
@@ -203,7 +280,7 @@ class CowSwapClient(BaseErc20Exchange):
                 sell_token=asset_a,
                 sell_amount_int=sell_amount_int,
                 chain=self.chain,
-                account=self.account.entity,
+                address=self.account.entity.address,
                 order_book_api=self.order_book_api,
             )
         except UnexpectedResponseError as error:
@@ -261,6 +338,7 @@ class CowSwapClient(BaseErc20Exchange):
 
         try:
             raw_order = await swap_tokens(
+                order_book_api=self.order_book_api,
                 buy_token=buy_token.address,
                 sell_token=sell_token.address,
                 amount=amount_int,
@@ -290,10 +368,95 @@ class CowSwapClient(BaseErc20Exchange):
         asset_b = self.look_up_by_symbol(symbol_b, ledger=SupportedLedgers(self.ledger_id))
         return asset_a, asset_b
 
+    def _process_submitted_orders(self, orders: list[CowOrder]):  # noqa
+        """Process submitted orders."""
+
+        def lookup_symbol(address_a: Address, address_b: Address, order):
+            is_sell = OrderKind(order.kind.value) == OrderKind.SELL
+            symbol_a = self.get_token(str(address_a.root))
+            symbol_b = self.get_token(str(address_b.root))
+            if is_sell:
+                return f"{symbol_b.symbol}/{symbol_a.symbol}"
+            return f"{symbol_a.symbol}/{symbol_b.symbol}"
+
+        def get_order_side(order: CowOrder):
+            if order.kind == OrderQuoteSideKindSell.sell:
+                return OrderSide.SELL
+            return OrderSide.BUY
+
+        def get_order_status(order: CowOrder):
+            if order.status is CowOrderStatus.open:
+                return OrderStatus.OPEN
+            if order.status is CowOrderStatus.cancelled:
+                return OrderStatus.CANCELLED
+            if order.status is CowOrderStatus.fulfilled:
+                return OrderStatus.FILLED
+            if order.status is CowOrderStatus.expired:
+                return OrderStatus.EXPIRED
+            msg = f"Unknown order status: {order.status}"
+            raise ValueError(msg)
+
+        def from_order_to_rates(
+            order: CowOrder,
+        ):
+            """Similar to from_quote_to_rates but for orders."""
+            is_sell = OrderKind(order.kind.value) == OrderKind.SELL
+            if order.status is CowOrderStatus.fulfilled:
+                # Order is already fulfilled, no need to parse it.
+                amount = int(order.executedBuyAmount.root)
+                output_human = self.get_token(order.buyToken.root).to_human(int(amount))
+            else:
+                output_human = self.get_token(order.buyToken.root).to_human(int(order.buyAmount.root))
+            input_less_fees_human = self.get_token(order.sellToken.root).to_human(int(order.sellAmount.root))
+            calculated_rate = input_less_fees_human / output_human
+            inverted_rate = 1 / calculated_rate
+            return inverted_rate if not is_sell else calculated_rate
+
+        def from_order_to_amount(order: CowOrder):
+            """Convert order to amount."""
+            is_sell = OrderKind(order.kind.value) == OrderKind.SELL
+            token_a = self.get_token(order.sellToken.root)
+            token_b = self.get_token(order.buyToken.root)
+            if order.status is CowOrderStatus.fulfilled:
+                # Order is already fulfilled, no need to parse it.
+                amount = int(order.executedSellAmountBeforeFees.root) if is_sell else int(order.executedBuyAmount.root)
+            else:
+                amount = int(order.sellAmount.root) if is_sell else int(order.buyAmount.root)
+            return token_a.to_human(amount) if is_sell else token_b.to_human(amount)
+
+        return [
+            {
+                "order": order,
+                "symbol": lookup_symbol(order.sellToken, order.buyToken, order),
+                "amount": from_order_to_amount(order),
+                "side": get_order_side(order),
+                "status": get_order_status(order),
+                "price": from_order_to_rates(
+                    order,
+                ),
+            }
+            for order in orders
+        ]
+
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
-        del kwargs
-        return Orders(orders=[])
+        account = kwargs.get("params", {}).get("account", self.account.entity.address)
+        orders: list[CowOrder] = await self.order_book_api.get_orders_by_owner(
+            owner=account,
+        )
+
+        pre_orders = self._process_submitted_orders(orders)
+
+        parsed_orders = [
+            self._parse_order(
+                **order,
+                exchange_id=self.exchange_id,
+            )
+            for order in pre_orders
+        ]
+        return Orders(
+            orders=parsed_orders,
+        )
 
     async def fetch_positions(self, **kwargs):
         """Fetch positions."""
@@ -305,23 +468,13 @@ class CowSwapClient(BaseErc20Exchange):
         self.supported_ledger = SupportedLedgers(ledger_id)
         self.chain = CowChains(LEDGER_TO_COW_CHAIN[self.supported_ledger])
         self.exchange_id = "cowswap"
-
-    @classmethod
-    @lru_cache(
-        maxsize=128,
-    )
-    def look_up_by_symbol(cls, symbol: str, ledger: SupportedLedgers) -> Erc20Token:
-        """Look up a token by symbol."""
-        token_list = read_token_list(LEDGER_TO_CHAIN_ID[ledger])
-        for token, data in token_list.items():
-            if data["symbol"] == symbol:
-                return Erc20Token(
-                    address=token,
-                    symbol=data["symbol"],
-                    decimals=data["decimals"],
-                    name=data["name"],
-                )
-        return None
+        env = kwargs.get("env", "prod")
+        if env not in get_args(Envs):
+            msg = f"Invalid env: {env}. Supported envs: {Envs}"
+            raise ValueError(msg)
+        self.order_book_api = OrderBookApi(
+            OrderBookAPIConfigFactory.get_config(env=env, chain_id=SupportedChainId(self.chain.value[0]))
+        )
 
 
 def check_balance(
@@ -385,8 +538,8 @@ def main(
 
     OrderBookApi()
 
-    buy_token = CowSwapClient.look_up_by_symbol(dst, ledger)
-    sell_token = CowSwapClient.look_up_by_symbol(src, ledger)
+    buy_token = CowSwapClient.look_up_by_symbol(dst, ledger.value)
+    sell_token = CowSwapClient.look_up_by_symbol(src, ledger.value)
 
     amount_to_sell_int = sell_token.to_machine(amount)
     if not buy_token or not sell_token:
@@ -429,13 +582,31 @@ def main(
     account={crypto.entity},
     """)
 
+    order_book_api = OrderBookApi(
+        OrderBookAPIConfigFactory.get_config(
+            env="prod",
+            chain_id=SupportedChainId(LEDGER_TO_COW_CHAIN[ledger].value[0]),
+        )
+    )
+
+    open_orders = asyncio.run(
+        order_book_api.get_orders_by_owner(
+            owner=crypto.entity.address,
+        )
+    )
+    print(f"Open orders: {open_orders}")
+    if open_orders:
+        print("You have open orders. Please cancel them before proceeding.")
+        return
+
     order = asyncio.run(
         swap_tokens(
+            order_book_api=order_book_api,
             amount=amount_to_sell_int,
             buy_token=buy_token.address,
             sell_token=sell_token.address,
             chain=LEDGER_TO_COW_CHAIN[ledger],
-            account=crypto.entity,
+            account=crypto.entity.address,
             app_data=ZERO_APP_DATA,
             slippage_tolerance=SLIPPAGE_TOLERANCE,
         )

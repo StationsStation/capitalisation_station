@@ -304,6 +304,11 @@ def fetch_trades(
 
     if supported_exchanges == "all":
         exchanges = [f.value for f in SupportedExchanges]
+    else:
+        exchanges = supported_exchanges.split(",")
+    print(f"Fetching trades for account {account} on ledger `{ledger}`.")
+    print(f"Exchanges: {exchanges}")
+    print()
 
     trades = {}
 

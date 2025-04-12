@@ -44,7 +44,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-DEFAULT_COOL_DOWN_PERIOD = 15
+DEFAULT_COOL_DOWN_PERIOD = 1
 DEFAULT_MAX_OPEN_ORDERS = 1
 
 
@@ -85,6 +85,8 @@ class AgentState:
     failed_orders: list[Order]
     submitted_orders: list[Order]
     unaffordable_opportunity: list[ArbitrageOpportunity]
+    current_round: str = None
+    current_period: int = 0
 
     def write_to_file(self):
         """Write the state to files."""
@@ -94,17 +96,31 @@ class AgentState:
 
     def to_json(self) -> dict:
         """Convert the state to JSON."""
+
         return json.dumps(
             {
                 "portfolio": self.portfolio,
                 "prices": self.prices,
-                "existing_orders": self.existing_orders,
                 "new_orders": [json.loads(order.model_dump_json()) for order in self.new_orders],
+                "open_orders": [json.loads(order.model_dump_json()) for order in self.all_order_list],
                 "failed_orders": [json.loads(order.model_dump_json()) for order in self.failed_orders],
                 "submitted_orders": [json.loads(order.model_dump_json()) for order in self.submitted_orders],
                 "unaffordable_opportunity": [asdict(op) for op in self.unaffordable_opportunity],
+                "total_open_orders": len(self.all_order_list),
+                "time_since_last_update": datetime.datetime.now(tz=TZ).isoformat(),
+                "current_state": self.current_round,
+                "current_period": self.current_period,
             }
         )
+
+    @property
+    def all_order_list(self) -> list[Order]:
+        """Get all orders."""
+        all_order_list: list[Order] = []
+        for exchanges in self.existing_orders.values():
+            for orders in exchanges.values():
+                all_order_list += orders
+        return all_order_list
 
 
 class ArbitrageStrategy(Model):
