@@ -168,4 +168,4 @@ class TestCollectDataRound(BaseSkillTestCase):
             list(state.act())
 
         assert state.is_done()
-        assert state._event == ArbitrageabciappEvents.TIMEOUT, "Event should be TIMEOUT"
+        assert state._event == ArbitrageabciappEvents.TIMEOUT, "Event should be TIMEOUT"  # noqa
