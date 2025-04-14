@@ -16,6 +16,7 @@ TEST_INIT_KWARGS = {
     "quote_asset": "USDC",
     "min_profit": 0.00,
     "order_size": 0.01,
+    "max_open_orders": 1,
 }
 
 
@@ -46,6 +47,7 @@ class TestEnhancedArbitrageStrategy:
         portfolio_path = Path(__file__).parent / "data" / case / "portfolio.json"
         self.portfolio = read_test_json(portfolio_path)
         self.prices = read_test_json(Path(__file__).parent / "data" / case / "prices.json")
+        self.orders = {}
         self.strategy = ArbitrageStrategy(**TEST_INIT_KWARGS)
 
     @pytest.mark.parametrize("case", get_cases())
@@ -58,7 +60,7 @@ class TestEnhancedArbitrageStrategy:
     def test_get_orders(self, case):
         """Test the get_orders method."""
         self._setup_method("test_get_orders", case)
-        orders = self.strategy.get_orders(self.portfolio, self.prices)
+        orders = self.strategy.get_orders(self.portfolio, self.prices, self.orders)
         assert orders is not None
         assert len(orders) > 0
         assert all(isinstance(order, Order) for order in orders)

@@ -8,3 +8,4 @@ class SupportedExchanges(Enum):
 
     BALANCER = "balancer"
     DERIVE = "derive"
+    COWSWAP = "cowswap"

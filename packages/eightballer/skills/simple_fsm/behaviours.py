@@ -25,22 +25,24 @@ import asyncio
 import pathlib
 import importlib
 from typing import Any
+from datetime import datetime
 from textwrap import dedent
 from collections.abc import Generator
 
-from aea.skills.behaviours import State, FSMBehaviour
+from aea.skills.behaviours import FSMBehaviour
 from aea.configurations.base import ComponentType
 from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
+from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
 from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import NoOpportunityRound
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -65,6 +67,7 @@ class SetupRound(BaseBehaviour):
     """This class implements the SetupRound state."""
 
     clear_data = False
+    is_first_run = True
 
     async def act(self) -> None:
         """Perform the action of the state."""
@@ -75,7 +78,9 @@ class SetupRound(BaseBehaviour):
             for f in ["orders.json", "portfolio.json", "prices.json"]:
                 if pathlib.Path(f).exists():
                     pathlib.Path(f).unlink()
+            self.context.shared_state = {}
         # We also ensure all behaviours are setup
+
         self.context.behaviours.main.setup()
         self._is_done = True
 
@@ -96,7 +101,7 @@ class IdentifyOpportunityRound(BaseBehaviour):
         orders = self.strategy.trading_strategy.get_orders(
             portfolio=self.strategy.state.portfolio,
             prices=self.strategy.state.prices,
-            existing_orders=self.strategy.state.existing_orders,
+            orders=self.strategy.state.existing_orders,
             **self.custom_config.kwargs["strategy_run_kwargs"],
         )
         self.strategy.state.unaffordable_opportunity = self.strategy.trading_strategy.unaffordable
@@ -161,7 +166,22 @@ class ErrorRound(BaseBehaviour):
         """Perform the action of the state."""
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(1)
+        await asyncio.sleep(0)
+
+
+class CoolDownRound(BaseBehaviour):
+    """This class implements the ErrorRound state."""
+
+    async def act(self) -> None:
+        """Perform the action of the state."""
+        self._is_done = True
+        self._event = ArbitrageabciappEvents.DONE
+        self.strategy.error_count += 1
+        sleep_time = self.strategy.cool_down_period * (2**self.strategy.error_count)
+        self.context.logger.info(
+            f"In cool down sleeping for {sleep_time} seconds on error attempt {self.strategy.error_count}"
+        )
+        await asyncio.sleep(sleep_time)
 
 
 class ExecuteOrdersRound(BaseConnectionRound):
@@ -323,38 +343,6 @@ class ExecuteOrdersRound(BaseConnectionRound):
         """Handle the order."""
 
 
-class NoOpportunityRound(State):
-    """This class implements the NoOpportunityRound state."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
-
-    async def act(self) -> None:
-        """Perform the action of the state."""
-        if self.started:
-            return
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(0)
-
-    def setup(self) -> None:
-        """Setup the state."""
-        self.started = False
-        self._is_done = False
-        super().setup()
-
-    def is_done(self) -> bool:
-        """Return True if the state is done."""
-        return self._is_done
-
-    @property
-    def event(self) -> str | None:
-        """Return the event."""
-        return self._event
-
-
 class ArbitrageabciappFsmBehaviour(FSMBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
@@ -365,6 +353,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("errorround", ErrorRound(**kwargs))
         self.register_state("posttraderound", PostTradeRound(**kwargs), False)
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
+        self.register_state("cooldownround", CoolDownRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -379,6 +368,12 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(source="setupround", event=ArbitrageabciappEvents.DONE, destination="collectdataround")
         self.register_transition(
             source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="identifyopportunityround"
+        )
+        self.register_transition(
+            source="collectdataround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
+        )
+        self.register_transition(
+            source="cooldownround", event=ArbitrageabciappEvents.DONE, destination="collectdataround"
         )
         self.register_transition(
             source="identifyopportunityround",
@@ -445,6 +440,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             loop = asyncio.get_event_loop()
             self.current_task = loop.create_task(current_state.act())
             self.current_behaviour = current_state
+            self.strategy.state.current_round = str(self.current)
 
         if current_state.is_done():
             self.context.logger.debug(f"State {self.current} is done.")
@@ -459,7 +455,13 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 f"Transitioning from state {self.current} with event {event}. Next state: {next_state}"
             )
             self.current = next_state
+            self.strategy.state.last_transition_time = datetime.now(tz=TZ)
 
     def terminate(self) -> None:
         """Implement the termination."""
         os._exit(0)
+
+    @property
+    def strategy(self) -> ArbitrageStrategy:
+        """Return the strategy."""
+        return self.context.arbitrage_strategy

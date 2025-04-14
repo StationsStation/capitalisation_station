@@ -1,6 +1,6 @@
 """Base exchange to be used to for erc20 exchanges."""
 
-from functools import cache
+from functools import cache, lru_cache
 
 import requests
 from web3 import Web3
@@ -20,7 +20,12 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
 )
 
 
-LEDGER_TO_CHAIN_ID = {"ethereum": 1, "gnosis": 100, "base": 8453, "arbitrum": 42161}
+LEDGER_TO_CHAIN_ID = {
+    SupportedLedgers.ETHEREUM: 1,
+    SupportedLedgers.GNOSIS: 100,
+    SupportedLedgers.BASE: 8453,
+    SupportedLedgers.ARBITRUM: 42161,
+}
 
 
 class BaseErc20Exchange:
@@ -38,7 +43,7 @@ class BaseErc20Exchange:
         self.ledger_id = SupportedLedgers(ledger_id)
 
         self.mc = multicaller.multicaller(
-            _chainId=LEDGER_TO_CHAIN_ID[ledger_id],
+            _chainId=LEDGER_TO_CHAIN_ID[self.ledger_id],
             _web3=self.web3.api,
             _maxRetries=10,
             _verbose=False,
@@ -47,7 +52,7 @@ class BaseErc20Exchange:
         self.logger = logger
 
         self.erc20_contract = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
-        self.raw_token_data = read_token_list(LEDGER_TO_CHAIN_ID[ledger_id])
+        self.raw_token_data = read_token_list(LEDGER_TO_CHAIN_ID[self.ledger_id])
         self.names_to_addresses = {v["symbol"]: k for k, v in self.raw_token_data.items()}
         self.tokens = {}
 
@@ -148,3 +153,20 @@ class BaseErc20Exchange:
                 )
             ]
         )
+
+    @classmethod
+    @lru_cache(
+        maxsize=128,
+    )
+    def look_up_by_symbol(cls, symbol: str, ledger: SupportedLedgers) -> Erc20Token:
+        """Look up a token by symbol."""
+        token_list = read_token_list(LEDGER_TO_CHAIN_ID[ledger])
+        for token, data in token_list.items():
+            if data["symbol"] == symbol:
+                return Erc20Token(
+                    address=token,
+                    symbol=data["symbol"],
+                    decimals=data["decimals"],
+                    name=data["name"],
+                )
+        return None

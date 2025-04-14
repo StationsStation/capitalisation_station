@@ -10,9 +10,9 @@ fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeifjqnh2dvtbyzro524aqd6vxiwp6jfkm3477gmtccnnokcfkahasm
   dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
-  handlers.py: bafybeib5midpscywxb5za6mlpke4gswgwrvokgswjtzheoie2lc4f7ukxu
+  handlers.py: bafybeigpti3s2yv6zoanzbe6veykqftb7u5c3cn7utwsunw6ufzjq6ghpm
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
-  tests/test_metrics.py: bafybeic3rvq7au3fwop22iplxxaglfmmmu5fshcggl5mlo52fdepi77t64
+  tests/test_metrics.py: bafybeicdjelcc73c4g2wnycx3f2l6xwwqwie4tqkbdcncy23qc4vh3fyrm
   tests/test_metrics_dialogues.py: bafybeihqylysl3qhcsjhc5bo2pyraxcbx2zuutwe5nawzryochm4ikukwi
 fingerprint_ignore_patterns: []
 connections: []
@@ -25,7 +25,7 @@ behaviours: {}
 handlers:
   metrics_handler:
     args:
-      enable_cors: false
+      enable_cors: true
     class_name: HttpHandler
 models:
   default_dialogues:

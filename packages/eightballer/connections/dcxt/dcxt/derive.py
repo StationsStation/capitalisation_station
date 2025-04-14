@@ -325,12 +325,13 @@ def to_order(api_result):
         exchange_id="derive",
         client_order_id=api_result["order_id"],
         timestamp=api_result["creation_timestamp"],
-        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"], tz=TZ).isoformat(),
+        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"] / 1000, tz=TZ).isoformat(),
         last_trade_timestamp=api_result["creation_timestamp"],
-        status=DERIVE_ORDER_STATUS_MAP[api_result["order_status"]],
+        status=map_status_to_enum(api_result["order_status"]),
         symbol=api_result["instrument_name"],
-        type=DERIVE_ORDER_TYPE_MAP[api_result["order_type"]],
+        type=map_order_type_to_enum(api_result["order_type"]),
         time_in_force=api_result["time_in_force"],
+        side=OrderSide.BUY if api_result["direction"] == "buy" else OrderSide.SELL,
     )
 
 

@@ -1,7 +1,6 @@
 """Collect data round behaviour class."""
 
 import json
-from time import time, sleep
 from collections.abc import Generator
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -15,7 +14,7 @@ from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID a
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
 
 
-DATA_COLLECTION_TIMEOUT_SECONDS = 1
+DATA_COLLECTION_TIMEOUT_SECONDS = 2
 DEFAULT_ENCODING = "utf-8"
 
 
@@ -67,10 +66,7 @@ class CollectDataRound(BaseConnectionRound):
 
     def act(self) -> Generator:
         """Perform the action of the state."""
-        if self.started:
-            return
 
-        self.started = True
         for exchange_id in self.context.arbitrage_strategy.cexs:
             self.context.logger.debug(f"Getting balances for {exchange_id} on {CEX_LEDGER_ID}")
             futures = yield from self.get_futures(exchange_id, CEX_LEDGER_ID)
@@ -100,13 +96,14 @@ class CollectDataRound(BaseConnectionRound):
 
         for exchange_id, ledger_ids in self.strategy.dexs.items():
             for ledger_id in ledger_ids:
-                self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
+                self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
 
                 balances = yield from self.get_response(
                     BalancesMessage.Performative.GET_ALL_BALANCES,
                     connection_id=str(DCXT_PUBLIC_ID),
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
+                    timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
                 )
                 if (
                     balances is None
@@ -114,39 +111,61 @@ class CollectDataRound(BaseConnectionRound):
                     or balances.performative == BalancesMessage.Performative.ERROR
                 ):
                     self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
-                    yield from self._handle_error()
-                    return
+                    should_retry = yield from self._handle_error()
+                    if should_retry:
+                        return  # Retry on the next act() tick
+                    else:
+                        self._is_done = True
+                        self._event = ArbitrageabciappEvents.TIMEOUT
+                        return
 
+                self.context.logger.info(f"Getting tickers for {exchange_id} on {ledger_id}")
                 tickers = yield from self.get_tickers(
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
                 )
                 if not tickers:
                     self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
+                    return
+
+                self.context.logger.info(f"Getting orders for {exchange_id} on {ledger_id}")
+                orders = yield from self.get_response(
+                    OrdersMessage.Performative.GET_ORDERS,
+                    connection_id=str(DCXT_PUBLIC_ID),
+                    exchange_id=exchange_id,
+                    ledger_id=ledger_id,
+                )
+                if (
+                    orders is None
+                    or not isinstance(orders, OrdersMessage)
+                    or orders.performative == OrdersMessage.Performative.ERROR
+                ):
+                    self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
                     yield from self._handle_error()
                     return
 
                 self.strategy.state.portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
                 self.strategy.state.prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers]
+                self.strategy.state.existing_orders[ledger_id][exchange_id] = list(orders.orders.orders)
                 self.context.logger.debug(f"Got balances + tickers for {exchange_id} on {ledger_id}")
 
-        self.context.logger.debug("Data collection complete.")
+        self.context.logger.info("Data collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
 
-    def _handle_error(
-        self,
-    ) -> None:
-        """In the case that data is not retrieved, handled the necessary error."""
+    def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
+        self.attempts += 1
+        if self.attempts >= attempts:
+            self.context.logger.error("Max attempts reached. Giving up.")
+            self._event = ArbitrageabciappEvents.TIMEOUT
+            self._is_done = True
+            return False
 
-        def non_blocking_sleep(duration):
-            end_time = time() + duration
-            while time() < end_time:
-                yield  # yield control back to the framework
-
-        time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS * self.attempts
-        yield from non_blocking_sleep(time_to_wait)
+        time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS**self.attempts
+        self.context.logger.info(f"Sleeping for {time_to_wait} seconds")
+        yield from self.non_blocking_sleep(time_to_wait)
+        return True  # noqa:B901
 
     def get_tickers(
         self,
@@ -194,7 +213,7 @@ class CollectDataRound(BaseConnectionRound):
                 ):
                     self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
                     self.started = False
-                    sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
+                    yield from self._handle_error()
                     return
                 tickers.tickers.append(ticker.ticker)
 
@@ -212,9 +231,9 @@ class CollectDataRound(BaseConnectionRound):
             ):
                 self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
                 self.started = False
-                sleep(DATA_COLLECTION_TIMEOUT_SECONDS)
+                yield from self._handle_error()
                 return
-        return tickers
+        return tickers  # noqa:B901
 
     def setup(self) -> None:
         """Setup the state."""

@@ -60,6 +60,7 @@ dependencies:
   open-aea-ledger-ethereum: {}
   rich: {}
 default_connection: null
+build_entrypoint: setup_broker.sh
 ---
 public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
 type: connection

@@ -8,9 +8,9 @@ fingerprint:
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
+- eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeifug2x6fmdyy2jhofhssblqh2r2l6ypgel5gem44xqdo4jqnlpkgq
+- eightballer/dcxt:0.1.0:bafybeih7gmf2u7y7qvpuwzxo72mkhmm62q4ee6yt7xrkaniigu5v4na6a4
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -48,10 +48,11 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeiaof4shrwsenjvy26f6et237i4jokpb2cycwliwawpcub7kapt6nu
+- eightballer/simple_fsm:0.1.0:bafybeidk5zpjm2fdlwusvz23w3ucngiglxd2cifxw2ked47octjap2bmfq
+- eightballer/trading_state:0.1.0:bafybeif7k2vzte7oopana6i2twchxf53qv3knvcsgomdzuubt5ya24fwry
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeieqjip4m66s2c4qjw6liltp533bw64rf2ucq6itlr24ye7qtwvrqe
+- eightballer/lbtc_arbitrage:0.1.0:bafybeidtnj4mnfqflgmnw3u72d7oc23j2rob45tq32jtxbsljoy7fxrc2m
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -124,7 +125,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: ethereum
-    rpc_url: ${ETHEREUM_RPC:str:https://eth.drpc.org}
+    rpc_url: ${ETHEREUM_RPC:str:https://eth.llamarpc.com}
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
@@ -159,4 +160,5 @@ models:
         quote_asset: ${QUOTE_ASSET:str:LBTC}
         order_size: ${ORDER_SIZE:float:0.001}
         min_profit: ${MIN_PROFIT:float:0.01}
+        max_open_orders: ${MAX_OPEN_ORDERS:int:10}
       cexs: ${list:[]}

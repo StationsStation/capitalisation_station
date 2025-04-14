@@ -53,12 +53,14 @@ class ArbitrageStrategy:
     quote_asset: str
     min_profit: float
     order_size: float
+    max_open_orders: int
     unaffordable: list[ArbitrageOpportunity] = None
 
     def get_orders(
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
         prices: dict[str, dict[str, dict[str, float]]],
+        orders: dict[str, dict[str, dict[str, float]]],
         **kwargs,  # noqa
     ) -> list[Order]:
         """Get orders give a set of prices and balances.
@@ -74,6 +76,13 @@ class ArbitrageStrategy:
         [Order]: the orders
 
         """
+
+        all_order_list: list[Order] = []
+        for exchanges in orders.values():
+            for exchange_orders in exchanges.values():
+                all_order_list += exchange_orders
+
+        # we check if we have any open orders
         order_set = []
 
         # we check
@@ -95,6 +104,8 @@ class ArbitrageStrategy:
                 order_set.append((opp.delta, orders))
             else:
                 self.unaffordable.append(opp)
+        if len(all_order_list) >= self.max_open_orders:
+            return []
         if order_set:
             optimal_orders = max(order_set, key=operator.itemgetter(0))
             return optimal_orders[1]

@@ -91,6 +91,11 @@ class HttpHandler(Handler):
         else:
             headers = http_msg.headers
 
+        # we ensure that it is application/jsonS
+        if not headers.startswith("Content-Type: application/json"):
+            headers = "Content-Type: application/json\n" + headers
+        # we ensure that it is application/jsonS
+
         response = self.context.shared_state.get("state")
         data = response.to_json().encode("utf-8") if response else b"{}"
 
@@ -135,5 +140,5 @@ class HttpHandler(Handler):
 
     def __init__(self, **kwargs):
         """Initialise the handler."""
-        self.enable_cors = kwargs.pop("enable_cors", False)
+        self.enable_cors = kwargs.pop("enable_cors", True)
         super().__init__(**kwargs)

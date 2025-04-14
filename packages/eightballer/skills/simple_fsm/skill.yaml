@@ -8,22 +8,23 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
-  behaviour_classes/base.py: bafybeicjyretwyf6e4kjgsio7m4puureeeylegrkq73na7oezuakdt5sne
-  behaviour_classes/collect_data_round.py: bafybeig3s46chnekxy5ekuqgpav2vn7o7vtjpoglwexm5jvzikbx3moqvu
-  behaviour_classes/post_trade_round.py: bafybeifm2ekxthevbim4ouph2ahdljz5bztfy4ze4f7d2vkbz6gcx7sgae
-  behaviours.py: bafybeiaplcrfluw5m2du2hlpygdjkt3gamx66e5duzymxggxqlvyktangu
+  behaviour_classes/base.py: bafybeidmo6kseivk777ctgkpeymm4x2e43ybewhtacfprvbscjeas2luw4
+  behaviour_classes/collect_data_round.py: bafybeibgmzr6hypjoveb4zpn2eqxgm2luidxuovpzofnojqesz6g2xneh4
+  behaviour_classes/no_opportunity_round.py: bafybeihcnedimneaew25oxi5xkb6nqy4quolfvpks2ybsw2ibzfnb4mwsq
+  behaviour_classes/post_trade_round.py: bafybeia74fqkxdrlwyj6yhuqzs4pm6oeyn7ftblzymkm6pj2zcovgjnexu
+  behaviours.py: bafybeiaoeimtsufiayaognvgatpymegpmnlkgryw7lziyaopybe756cmc4
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
   enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
-  strategy.py: bafybeigff2ubkhxnmghprjgng3mrppwffdvk3geug3ibzdsogtr3zzgpky
+  strategy.py: bafybeidzpvhmdpq33tdi5arln7xquyb3ls2qxogpok3jqklr7le6zzxaeu
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
-  tests/test_behaviour.py: bafybeif5tcqfcqtfwsy76pzyx5ydox2g2sjj42znc363plmwvxi7vrejhq
+  tests/test_behaviour.py: bafybeiaxmpdqsewme4ho7u7ojmbgvvbpi7n7b3clb7p3vebuzeoctwwlq4
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeiezobw2tvvjl7dpbwm3uagb63pwo4ctv6cb2bvn2txqqtflqua3lm
+- eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeifug2x6fmdyy2jhofhssblqh2r2l6ypgel5gem44xqdo4jqnlpkgq
+- eightballer/dcxt:0.1.0:bafybeih7gmf2u7y7qvpuwzxo72mkhmm62q4ee6yt7xrkaniigu5v4na6a4
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba

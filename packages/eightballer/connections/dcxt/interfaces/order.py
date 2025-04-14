@@ -184,12 +184,17 @@ class OrderInterface(BaseInterface):
         exchange = connection.exchanges[message.ledger_id][message.exchange_id]
         exchange_id = message.exchange_id
         try:
-            open_orders = await exchange.fetch_open_orders(params=_get_kwargs())
-            self.open_orders[exchange_id] = open_orders
+            all_orders = await exchange.fetch_open_orders(params=_get_kwargs())
+            open_orders = list(
+                filter(
+                    lambda order: order.status in {OrderStatus.OPEN, OrderStatus.PARTIALLY_FILLED}, all_orders.orders
+                )
+            )
+            self.open_orders[exchange_id] = {order.id: order for order in open_orders}
             response_message = dialogue.reply(
                 target_message=message,
                 performative=OrdersMessage.Performative.ORDERS,
-                orders=open_orders,
+                orders=Orders(orders=open_orders),
             )
             response_envelope = connection.build_envelope(request=message, response_message=response_message)
             connection.queue.put_nowait(response_envelope)
