@@ -25,6 +25,7 @@ import asyncio
 import pathlib
 import importlib
 from typing import Any
+from datetime import datetime
 from textwrap import dedent
 from collections.abc import Generator
 
@@ -35,7 +36,7 @@ from aea.configurations.loader import load_component_configuration
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.protocols.orders.message import OrdersMessage
-from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
+from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
 from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
@@ -165,7 +166,22 @@ class ErrorRound(BaseBehaviour):
         """Perform the action of the state."""
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(1)
+        await asyncio.sleep(0)
+
+
+class CoolDownRound(BaseBehaviour):
+    """This class implements the ErrorRound state."""
+
+    async def act(self) -> None:
+        """Perform the action of the state."""
+        self._is_done = True
+        self._event = ArbitrageabciappEvents.DONE
+        self.strategy.error_count += 1
+        sleep_time = self.strategy.cool_down_period * (2**self.strategy.error_count)
+        self.context.logger.info(
+            f"In cool down sleeping for {sleep_time} seconds on error attempt {self.strategy.error_count}"
+        )
+        await asyncio.sleep(sleep_time)
 
 
 class ExecuteOrdersRound(BaseConnectionRound):
@@ -337,6 +353,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("errorround", ErrorRound(**kwargs))
         self.register_state("posttraderound", PostTradeRound(**kwargs), False)
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
+        self.register_state("cooldownround", CoolDownRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -351,6 +368,12 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(source="setupround", event=ArbitrageabciappEvents.DONE, destination="collectdataround")
         self.register_transition(
             source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="identifyopportunityround"
+        )
+        self.register_transition(
+            source="collectdataround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
+        )
+        self.register_transition(
+            source="cooldownround", event=ArbitrageabciappEvents.DONE, destination="collectdataround"
         )
         self.register_transition(
             source="identifyopportunityround",
@@ -432,6 +455,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 f"Transitioning from state {self.current} with event {event}. Next state: {next_state}"
             )
             self.current = next_state
+            self.strategy.state.last_transition_time = datetime.now(tz=TZ)
 
     def terminate(self) -> None:
         """Implement the termination."""

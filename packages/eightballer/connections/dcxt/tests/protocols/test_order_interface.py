@@ -8,9 +8,9 @@ from aea.mail.base import Envelope
 
 from dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 from packages.eightballer.connections.dcxt import dcxt
-from packages.eightballer.protocols.orders.custom_types import Orders
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
+from packages.eightballer.protocols.orders.custom_types import Orders
 
 
 TEST_SETTLEMENTS = [

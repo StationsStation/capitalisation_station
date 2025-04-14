@@ -19,6 +19,7 @@ class NoOpportunityRound(BaseBehaviour):
         """Perform the action of the state."""
         if self.started:
             return
+        self.strategy.error_count = 0
         await asyncio.sleep(self.strategy.cool_down_period)
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

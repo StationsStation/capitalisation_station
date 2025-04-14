@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from packages.eightballer.protocols.orders.custom_types import Order, Orders
+from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.customs.lbtc_arbitrage.strategy import (
     ArbitrageStrategy,
 )

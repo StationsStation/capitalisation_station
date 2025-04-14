@@ -54,6 +54,8 @@ FAILED_ORDERS_FILE = "failed_orders.json"
 ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
+UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
+
 
 @dataclass
 class ArbitrageOpportunity:
@@ -87,6 +89,7 @@ class AgentState:
     unaffordable_opportunity: list[ArbitrageOpportunity]
     current_round: str = None
     current_period: int = 0
+    last_transition_time: datetime.datetime = None
 
     def write_to_file(self):
         """Write the state to files."""
@@ -110,7 +113,28 @@ class AgentState:
                 "time_since_last_update": datetime.datetime.now(tz=TZ).isoformat(),
                 "current_state": self.current_round,
                 "current_period": self.current_period,
+                "is_healthy": self.is_healthy,
             }
+        )
+
+    @property
+    def is_healthy(self) -> bool:
+        """Check if the agent is healthy."""
+
+        if self.last_transition_time is None:
+            return False
+
+        current_time = datetime.datetime.now(tz=TZ)
+        time_since_last_transition = (current_time - self.last_transition_time).total_seconds()
+
+        return all(
+            [
+                self.current_round is not None,
+                self.current_period > 0,
+                self.portfolio,
+                self.prices,
+                time_since_last_transition < UNHEALTHY_TRANSITION_THRESHOLD,
+            ]
         )
 
     @property
@@ -146,6 +170,7 @@ class ArbitrageStrategy(Model):
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
+        self.error_count = 0
 
     def build_initial_state(self) -> dict:
         """Build the portfolio."""
@@ -155,7 +180,7 @@ class ArbitrageStrategy(Model):
                 if ledger_id not in data:
                     data[ledger_id] = {}
                 if exchange_id not in data[ledger_id]:
-                    data[ledger_id][exchange_id] = {}
+                    data[ledger_id][exchange_id] = []
 
         return AgentState(
             portfolio=deepcopy(data),

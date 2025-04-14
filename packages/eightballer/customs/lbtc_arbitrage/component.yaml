@@ -18,7 +18,7 @@ fingerprint:
   tests/data/case_2/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
   tests/data/case_2/portfolio.json: bafybeifswf74ft3thvp4lw5jmdl5nznncckbsvydhn7ud6nxit6fbw5w5e
   tests/data/case_2/prices.json: bafybeiga3focypcalednqmgmydra23odkpq3rlg4v6lzgapmru46jtb6e4
-  tests/test_strategy.py: bafybeienepfqt52mixaxtc237nkmtiskgys4uqyqtu5clvexiyvrclyhii
+  tests/test_strategy.py: bafybeicaxew4kqzquvprpjbxhltuxyyfen6xbnuw4hdet7ww66wwt4e2tu
 fingerprint_ignore_patterns: []
 dependencies: {}
 strategy_init_kwargs:

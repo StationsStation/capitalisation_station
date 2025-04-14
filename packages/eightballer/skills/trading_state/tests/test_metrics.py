@@ -108,7 +108,6 @@ class TestHttpHandler(BaseSkillTestCase):
             version=incoming_message.version,
             status_code=200,
             status_text="Success",
-            headers=incoming_message.headers,
             body=json.dumps({}).encode("utf-8"),
         )
         assert has_attributes, error_str
