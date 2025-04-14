@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.1.18](https://github.com/StationsStation/capitalisation_station/tree/v0.1.18) (2025-04-14)
+
+**Merged pull requests:**
+
+- Feat/timeout improvements [\#73](https://github.com/StationsStation/capitalisation_station/pull/73)
+- feat:improved-log-output [\#72](https://github.com/StationsStation/capitalisation_station/pull/72)
+
+## [v0.1.17](https://github.com/StationsStation/capitalisation_station/tree/v0.1.17) (2025-04-08)
+
+**Merged pull requests:**
+
+- feat/additional orders [\#71](https://github.com/StationsStation/capitalisation_station/pull/71)
+
 ## [v0.1.16](https://github.com/StationsStation/capitalisation_station/tree/v0.1.16) (2025-04-06)
 
 ## [v0.1.15](https://github.com/StationsStation/capitalisation_station/tree/v0.1.15) (2025-04-06)
