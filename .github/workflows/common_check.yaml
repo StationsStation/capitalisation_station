@@ -22,7 +22,7 @@ jobs:
         # - "3.9"
         - "3.11"
         poetry-version: ["1.8.3"]
-        os: [ubuntu-20.04,]
+        os: [ubuntu-22.04,]
     runs-on: ${{ matrix.os }}
     env:
       PYTHONPATH: .
