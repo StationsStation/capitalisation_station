@@ -39,6 +39,7 @@ from cowdao_cowpy.order_book.generated.model import (
     TokenAmount,
     OrderQuoteSide1,
     OrderQuoteRequest,
+    OrderQuoteResponse,
     OrderQuoteSideKindSell,
 )
 
@@ -163,13 +164,15 @@ async def swap_tokens(
         sellAmountBeforeFee=TokenAmount(str(amount)),
     )
 
-    order_quote = await order_book_api.post_quote(order_quote_request, order_side)
-
+    order_quote: OrderQuoteResponse = await order_book_api.post_quote(order_quote_request, order_side)
+    valid_to = order_quote.quote.validTo
+    # we set the expiration to be 1 years from now
+    valid_to += 365 * 24 * 60 * 60
     order = CowOrder(
         sell_token=sell_token,
         buy_token=buy_token,
         receiver=safe_address if safe_address is not None else account.address,
-        valid_to=order_quote.quote.validTo,
+        valid_to=valid_to,
         app_data=app_data,
         sell_amount=str(amount),  # Since it is a sell order, the sellAmountBeforeFee is the same as the sellAmount.
         buy_amount=str(int(int(order_quote.quote.buyAmount.root) * (1.0 - slippage_tolerance))),
@@ -219,7 +222,7 @@ class CowSwapClient(BaseErc20Exchange):
             amount=amount if side == OrderSide.SELL else amount / price,
             side=side,
             id=str(order.uid.root),
-            type=OrderType.MARKET,
+            type=OrderType.LIMIT,
             status=status,
         )
         self.logger.debug(f"Parsed Order: {order}")
@@ -538,8 +541,8 @@ def main(
 
     OrderBookApi()
 
-    buy_token = CowSwapClient.look_up_by_symbol(dst, ledger.value)
-    sell_token = CowSwapClient.look_up_by_symbol(src, ledger.value)
+    buy_token = CowSwapClient.look_up_by_symbol(dst, ledger)
+    sell_token = CowSwapClient.look_up_by_symbol(src, ledger)
 
     amount_to_sell_int = sell_token.to_machine(amount)
     if not buy_token or not sell_token:
@@ -595,9 +598,6 @@ def main(
         )
     )
     print(f"Open orders: {open_orders}")
-    if open_orders:
-        print("You have open orders. Please cancel them before proceeding.")
-        return
 
     order = asyncio.run(
         swap_tokens(
@@ -606,7 +606,7 @@ def main(
             buy_token=buy_token.address,
             sell_token=sell_token.address,
             chain=LEDGER_TO_COW_CHAIN[ledger],
-            account=crypto.entity.address,
+            account=crypto.entity,
             app_data=ZERO_APP_DATA,
             slippage_tolerance=SLIPPAGE_TOLERANCE,
         )
