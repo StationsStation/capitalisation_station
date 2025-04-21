@@ -14,7 +14,7 @@ from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID a
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
 
 
-DATA_COLLECTION_TIMEOUT_SECONDS = 2
+DATA_COLLECTION_TIMEOUT_SECONDS = 4
 DEFAULT_ENCODING = "utf-8"
 
 

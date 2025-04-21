@@ -48,7 +48,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeiek5ev4krfnzl4ee27bdtuylazmkbkrpsob65uu3orwdiv5lwajk4
+- eightballer/simple_fsm:0.1.0:bafybeifcyw6sls7633zk7ilontxzyd3jroae2luaqjeuwnaqthtv3rhi3m
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
 customs:
