@@ -23,68 +23,19 @@ Create a new machine on your cloud provider of choice. We recommend using a mach
 
 We assume that you have already created a new machine and have SSH access to it.
 
-### Step 2: Install Python 3.11 (Optional)
+### Step 2: Make Sure Docker is Installed.
 
-We recommend using the `pyenv` tool to install Python 3.11.
-
-```bash
-curl https://pyenv.run | bash
-```
-
-NOTE: Please follow the instructions on the [Pyenv Installer](https://github.com/pyenv/pyenv#b-set-up-your-shell-environment-for-pyenv)
+Please visit the [Docker installation guide](https://docs.docker.com/engine/install/) for your operating system.
+Make sure to install the latest version of Docker.
+You can check if Docker is installed by running the following command:
 
 ```bash
-pyenv install 3.11
+docker --version
 ```
-
-### Step 3: Checkout The Code
-
-```bash
-git clone https://github.com/StationsStation/capitalisation_station.git --recurse-submodules
-```
-
-### Step 4: Install the Dependencies
+### Step 3: Install Install the Agent runner from [autodev.sh]
 
 
-#### LINUX ONLY!
-```bash
-## Linux Dependencies
-sudo apt install -y \
-apt-get install make build-essential gcc \
-  libssl-dev zlib1g-dev libbz2-dev \
-  libreadline-dev libsqlite3-dev libffi-dev \
-  liblzma-dev uuid-dev xz-utils tk-dev \
-  libncursesw5-dev libgdbm-dev libnss3-dev \
-  libxml2-dev libxmlsec1-dev \
-  libzstd-dev curl wget git -y
-```
-
-
-#### MACOS ONLY!
-
-```bash
-## MacOS Dependencies
-brew :TODO
-```
-
-
-
-Ensure shell can be accessed.
-
-```bash
-poetry self add poetry-plugin-shell
-```
-
-### Step 5: Install the Trader
-
-```bash
-cd capitalisation_station
-make install
-
-```
-
-
-### Step 6: Create acounts on Derive
+### Step 4: Create acounts on Derive
 You can create an account at [Derive](https://www.derive.xyz/invite/A0HQW)
 
 You will need to create a smart contract wallet on Derive.
