@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.22](https://github.com/StationsStation/capitalisation_station/tree/v0.1.22) (2025-04-21)
+
+**Merged pull requests:**
+
+- feat:cow-py-order-improvements [\#74](https://github.com/StationsStation/capitalisation_station/pull/74)
+
 ## [v0.1.21](https://github.com/StationsStation/capitalisation_station/tree/v0.1.21) (2025-04-15)
 
 ## [v0.1.20](https://github.com/StationsStation/capitalisation_station/tree/v0.1.20) (2025-04-15)
