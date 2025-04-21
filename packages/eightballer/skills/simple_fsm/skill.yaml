@@ -22,9 +22,9 @@ fingerprint:
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
+- eightballer/apprise:0.1.0:bafybeigvll4pya5ltcps3delq4ha2z45ff3y3ig577htkyr5uqps2el3ai
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeih7gmf2u7y7qvpuwzxo72mkhmm62q4ee6yt7xrkaniigu5v4na6a4
+- eightballer/dcxt:0.1.0:bafybeigbuoy7ri4ijcjvopr5rbqbvwzxc7nxokqvohvupk7rogoastq4qq
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
