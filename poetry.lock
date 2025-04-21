@@ -1459,29 +1459,27 @@ web3 = ">=6.4.0,<7.0.0"
 
 [[package]]
 name = "derive-client"
-version = "0.2.15"
+version = "0.2.16"
 description = ""
 optional = false
-python-versions = ">=3.9,<3.12"
+python-versions = "<3.12,>=3.9"
 groups = ["main"]
-files = []
-develop = true
+files = [
+    {file = "derive_client-0.2.16-py3-none-any.whl", hash = "sha256:c49285fa4c3f65ddf4d08683c1a05c04a1f14fcf948db14badc478946d87f974"},
+    {file = "derive_client-0.2.16.tar.gz", hash = "sha256:7e9bb323b0b7dd3134cb862d07b5550c19b0d44597862210ad9fd4b998e433d7"},
+]
 
 [package.dependencies]
-derive-action-signing = "^0.0.11"
+derive-action-signing = ">=0.0.11,<0.0.12"
 eth-account = ">=0.13"
 pandas = ">=1,<=3"
-pydantic = "^2.11.3"
+pydantic = ">=2.11.3,<3.0.0"
 python-dotenv = ">=0.14.0,<0.18.0"
-requests = "^2"
-rich-click = "^1.7.1"
+requests = ">=2,<3"
+rich-click = ">=1.7.1,<2.0.0"
 setuptools = ">=68.2.2,<80"
 web3 = ">=6,<8"
 websocket-client = ">=0.32.0,<1"
-
-[package.source]
-type = "directory"
-url = "../../derive_client"
 
 [[package]]
 name = "dictpath"
@@ -5696,4 +5694,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "85507ba6f6ae3e490d9ede6c1f8ceec8c70382f54785bb98f7d9a4ee266a4b90"
+content-hash = "8fc4f39d3efaaead57e28ba7f925db0839cebe39b6a2936e734545c5a4fc95f2"
