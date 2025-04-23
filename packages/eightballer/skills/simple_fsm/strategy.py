@@ -44,7 +44,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-DEFAULT_COOL_DOWN_PERIOD = 3
+DEFAULT_COOL_DOWN_PERIOD = 10
 DEFAULT_MAX_OPEN_ORDERS = 1
 
 

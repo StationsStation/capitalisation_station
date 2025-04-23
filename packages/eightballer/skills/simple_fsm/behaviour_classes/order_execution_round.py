@@ -285,6 +285,20 @@ class ExecuteOrdersRound(BaseConnectionRound):
             self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
             return False
 
+        if order.status == OrderStatus.CANCELLED:
+            # If we have a cancelled order, and we have Some of it filled we need to handle it.
+            filled_amt = order.filled
+            if filled_amt > 0:
+                self.context.logger.info(f"Order cancelled: {order} with filled amount: {filled_amt}")
+                # we get te other order and modify the amount
+                if len(self.strategy.state.new_orders) == 1:
+                    self.strategy.state.submitted_orders.pop()
+                    self.strategy.state.new_orders[0].amount = filled_amt
+                    self.context.logger.info(
+                        f"Is entry order, so modifying amount: {self.strategy.state.new_orders[0].amount}"
+                    )
+                    return True
+
         msg = "This is a placeholder for currently unhandled methods within recieved orders."
         self.context.logger.error(msg)
         raise UnexpectedStateException(msg)
