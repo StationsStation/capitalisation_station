@@ -102,7 +102,7 @@ class CollectTickerRound(BaseConnectionRound):
         for aggregate_ticker in self.pending_tickers:
             tickers = Tickers(tickers=[])
             for ticker in aggregate_ticker.ticker_request_dialogues:
-                tickers.tickers.append(ticker.last_message.ticker)
+                tickers.tickers.append(ticker.last_incoming_message.ticker)
 
             self.strategy.state.prices[ticker.ledger_id][ticker.exchange_id] = [t.dict() for t in tickers.tickers]
 
@@ -119,11 +119,7 @@ class CollectTickerRound(BaseConnectionRound):
             self._event = ArbitrageabciappEvents.TIMEOUT
             self._is_done = True
             return False
-
-        time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS**self.attempts
-        self.context.logger.info(f"Sleeping for {time_to_wait} seconds")
-        yield from self.non_blocking_sleep(time_to_wait)
-        return True  # noqa:B901
+        return True
 
     def get_tickers(
         self,
@@ -180,11 +176,13 @@ class CollectTickerRound(BaseConnectionRound):
 
     def _validate_ticker_msg(self, ticker: TickersMessage) -> bool:
         """Validate the ticker message."""
-        return not (
-            ticker is None
-            or not isinstance(ticker, TickersMessage)
-            or ticker.performative == TickersMessage.Performative.ERROR
-        )
+        if ticker is None:
+            return False
+        if not isinstance(ticker, TickersMessage):
+            return False
+        if ticker.performative == TickersMessage.Performative.ERROR:
+            return False
+        return ticker.performative == TickersMessage.Performative.ALL_TICKERS
 
     def setup(self) -> None:
         """Setup the state."""

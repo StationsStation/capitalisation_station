@@ -1,7 +1,6 @@
 """Collect data round behaviour class."""
 
 import json
-import asyncio
 from datetime import datetime, timedelta
 from collections.abc import Generator
 
@@ -150,6 +149,9 @@ class CollectDataRound(BaseConnectionRound):
             )
             if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
                 self.context.logger.error("Timeout waiting for messages.")
+                self._event = ArbitrageabciappEvents.TIMEOUT
+                self._is_done = True
+                self.context.logger.error("Error getting data for all exchanges")
                 self.started = False
                 return
             return
@@ -179,17 +181,27 @@ class CollectDataRound(BaseConnectionRound):
 
     def _validate_orders_msg(self, orders: OrdersMessage) -> bool:
         """Validate the orders message."""
+        if orders is None:
+            self.context.logger.error("Orders message is None")
+            return False
         if orders.performative is OrdersMessage.Performative.ERROR:
             self.context.logger.error(f"Error getting orders: {orders}")
             return False
-        return all(
-            [
-                orders is not None,
-                isinstance(orders, OrdersMessage),
-                orders.performative != OrdersMessage.Performative.ERROR,
-                orders.orders is not None,
-            ]
-        )
+        if orders.performative is not OrdersMessage.Performative.ORDERS:
+            self.context.logger.error(f"Invalid performative: {orders.performative}")
+            return False
+        try:
+            return all(
+                [
+                    orders is not None,
+                    isinstance(orders, OrdersMessage),
+                    orders.orders is not None,
+                ]
+            )
+        except Exception as err:
+            self.context.logger.exception("Orders message is None")
+            msg = f"Error validating orders message: {err}"
+            raise ValueError(msg) from err
 
     def _validate_balance_msg(self, balances: BalancesMessage) -> bool:
         """Validate the balance message."""
@@ -208,10 +220,6 @@ class CollectDataRound(BaseConnectionRound):
             self._event = ArbitrageabciappEvents.TIMEOUT
             self._is_done = True
             return False
-
-        time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS**self.attempts
-        self.context.logger.info(f"Sleeping for {time_to_wait} seconds")
-        asyncio.run(self.non_blocking_sleep(time_to_wait))
         return True
 
     def get_tickers(

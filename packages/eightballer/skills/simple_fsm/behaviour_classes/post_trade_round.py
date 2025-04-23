@@ -15,14 +15,17 @@ class PostTradeRound(BaseBehaviour):
 
     def act(self) -> None:
         """Perform the action of the state."""
+        if self.started:
+            return
+        self.started = True
         self.strategy.state.current_period += 1
         self.strategy.error_count = 0
         self._event = ArbitrageabciappEvents.DONE
-        self._is_done = True
         for hook in [
             self._post_trade_report,
         ]:
             hook()
+        self._is_done = True
 
     def _post_trade_report(self) -> None:
         """Post trade report."""
