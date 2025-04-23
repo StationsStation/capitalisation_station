@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.1.24](https://github.com/StationsStation/capitalisation_station/tree/v0.1.24) (2025-04-23)
+
+**Merged pull requests:**
+
+- feat:complete-queue-based-migration [\#78](https://github.com/StationsStation/capitalisation_station/pull/78)
+
+## [v0.1.23](https://github.com/StationsStation/capitalisation_station/tree/v0.1.23) (2025-04-23)
+
+**Merged pull requests:**
+
+- feat/queue based architecture [\#77](https://github.com/StationsStation/capitalisation_station/pull/77)
+
 ## [v0.1.22](https://github.com/StationsStation/capitalisation_station/tree/v0.1.22) (2025-04-21)
 
 **Merged pull requests:**
