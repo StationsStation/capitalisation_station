@@ -1,10 +1,9 @@
 """Post trade round behaviour."""
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
-from packages.eightballer.skills.simple_fsm.strategy import TZ
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
 
@@ -16,17 +15,11 @@ class PostTradeRound(BaseBehaviour):
 
     def act(self) -> None:
         """Perform the action of the state."""
-        if self.started:
-            if timedelta(seconds=self.strategy.cool_down_period) > datetime.now(tz=TZ) - self.started_at:
-                return
-            self._is_done = True
-            self._event = ArbitrageabciappEvents.DONE
-        elif self.started_at is None:
-            self.started = True
-            self.started_at = datetime.now(tz=TZ)
-            self.hooks = [self._post_trade_report]
-            self.strategy.state.current_period += 1
-            self.strategy.error_count = 0
+        self.hooks = [self._post_trade_report]
+        self.strategy.state.current_period += 1
+        self.strategy.error_count = 0
+        self._event = ArbitrageabciappEvents.DONE
+        self._is_done = True
 
         if self.hooks:
             hook = self.hooks.pop(0)

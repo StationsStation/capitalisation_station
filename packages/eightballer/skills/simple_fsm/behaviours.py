@@ -245,7 +245,9 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source="executeordersround", event=ArbitrageabciappEvents.DONE, destination="posttraderound"
         )
-        self.register_transition(source="posttraderound", event=ArbitrageabciappEvents.DONE, destination="setupround")
+        self.register_transition(
+            source="posttraderound", event=ArbitrageabciappEvents.DONE, destination="cooldownround"
+        )
         # register a transation from noopportunityround to setupround
         self.register_transition(
             source="noopportunityround", event=ArbitrageabciappEvents.DONE, destination="setupround"
