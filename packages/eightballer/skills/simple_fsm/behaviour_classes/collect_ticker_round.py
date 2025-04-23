@@ -56,7 +56,7 @@ class CollectTickerRound(BaseConnectionRound):
 
         for exchange_id, ledger_ids in self.strategy.dexs.items():
             for ledger_id in ledger_ids:
-                self.context.logger.info(f"Getting tickers for {exchange_id} on {ledger_id}")
+                self.context.logger.debug(f"Getting tickers for {exchange_id} on {ledger_id}")
                 tickers_request = self.get_tickers(
                     exchange_id=exchange_id,
                     ledger_id=ledger_id,
@@ -68,7 +68,7 @@ class CollectTickerRound(BaseConnectionRound):
 
         if not self.started:
             self._handle_startup()
-            return
+            return None
 
         total_expected_responses = sum(len(i.ticker_request_dialogues) for i in self.pending_tickers)
         if any(
@@ -85,8 +85,8 @@ class CollectTickerRound(BaseConnectionRound):
             if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
                 self.context.logger.error("Timeout waiting for messages.")
                 self.started = False
-                return
-            return
+                return self._handle_error()
+            return None
 
         errors = []
         for aggregate_request in self.pending_tickers:
@@ -97,7 +97,7 @@ class CollectTickerRound(BaseConnectionRound):
         if errors:
             self.context.logger.error("Error getting tickers for all exchanges")
             self._handle_error()
-            return
+            return None
 
         for aggregate_ticker in self.pending_tickers:
             tickers = Tickers(tickers=[])
@@ -111,6 +111,7 @@ class CollectTickerRound(BaseConnectionRound):
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
         self.context.logger.info("Parsing Tickers complete.")
+        return None
 
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1

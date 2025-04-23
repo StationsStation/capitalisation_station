@@ -4,7 +4,7 @@ from datetime import datetime
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
-from packages.eightballer.protocols.orders.custom_types import Order
+from packages.eightballer.protocols.orders.custom_types import Order, OrderSide
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
 
 
@@ -29,7 +29,14 @@ class PostTradeRound(BaseBehaviour):
 
     def _post_trade_report(self) -> None:
         """Post trade report."""
-        sell_order, buy_order = self.strategy.entry_order, self.strategy.exit_order
+        entry_order, exit_order = self.strategy.entry_order, self.strategy.exit_order
+        if entry_order is None or exit_order is None:
+            self.strategy.logger.error("No entry or exit order found.")
+            return
+        if entry_order.side is OrderSide.SELL:
+            buy_order, sell_order = exit_order, entry_order
+        else:
+            buy_order, sell_order = entry_order, exit_order
 
         def get_explorer_link(order: Order) -> None:
             """Get the explorer link."""

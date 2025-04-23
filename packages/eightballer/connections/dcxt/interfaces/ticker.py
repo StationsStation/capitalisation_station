@@ -7,7 +7,7 @@ import requests
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
-from packages.eightballer.connections.dcxt.dcxt.exceptions import SorRetrievalException
+from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError, ExchangeNotAvailable, SorRetrievalException
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
@@ -39,6 +39,9 @@ class TickerInterface(BaseInterface):
             )
         except (
             dcxt.exceptions.RequestTimeout,
+            dcxt.exceptions.ExchangeError,
+            ExchangeNotAvailable,
+            RpcError,
             SorRetrievalException,
         ):
             response_message = dialogue.reply(
@@ -69,6 +72,7 @@ class TickerInterface(BaseInterface):
             dcxt.exceptions.RequestTimeout,
             dcxt.exceptions.RpcError,
             dcxt.exceptions.ExchangeError,
+            ExchangeNotAvailable,
             requests.exceptions.Timeout,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout,

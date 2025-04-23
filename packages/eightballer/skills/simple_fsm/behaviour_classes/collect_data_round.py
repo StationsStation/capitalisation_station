@@ -106,7 +106,7 @@ class CollectDataRound(BaseConnectionRound):
         if not self.started:
             self.started = True
             self.started_at = datetime.now(tz=TZ)
-            self.context.logger.info(f"Starting data collection. at {self.started_at!s}")
+            self.context.logger.debug(f"Starting data collection. at {self.started_at!s}")
             self.pending_bals = []
             self.pending_tickers = []
             self.pending_orders = []
@@ -114,7 +114,7 @@ class CollectDataRound(BaseConnectionRound):
                 self.supported_protocols[k] = []
             for exchange_id, ledger_ids in self.strategy.dexs.items():
                 for ledger_id in ledger_ids:
-                    self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
+                    self.context.logger.debug(f"Getting balances for {exchange_id} on {ledger_id}")
                     balances = self.submit_msg(
                         BalancesMessage.Performative.GET_ALL_BALANCES,
                         connection_id=str(DCXT_PUBLIC_ID),
@@ -174,7 +174,7 @@ class CollectDataRound(BaseConnectionRound):
                 b.dict() for b in bal.last_message.balances.balances
             ]
 
-        self.context.logger.info("Data collection complete.")
+        self.context.logger.debug("Data collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
