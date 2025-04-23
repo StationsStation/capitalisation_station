@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.25](https://github.com/StationsStation/capitalisation_station/tree/v0.1.25) (2025-04-23)
+
+**Merged pull requests:**
+
+- feat:hook-fixes [\#79](https://github.com/StationsStation/capitalisation_station/pull/79)
+
 ## [v0.1.24](https://github.com/StationsStation/capitalisation_station/tree/v0.1.24) (2025-04-23)
 
 **Merged pull requests:**
