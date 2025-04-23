@@ -176,10 +176,15 @@ class CoolDownRound(BaseBehaviour):
             self.started = True
             self.started_at = datetime.now(tz=TZ)
             self.strategy.error_count += 1
-            # self.sleep_until = datetime.now(tz=TZ) + self.strategy.cool_down_period * (2**self.strategy.error_count)
-            self.sleep_until = datetime.now(tz=TZ) + timedelta(seconds=self.strategy.cool_down_period * (2**self.strategy.error_count))
-            self.context.logger.info(f"Starting cool down. at {self.started_at} until {self.sleep_until} with error count {self.strategy.error_count}")
-            breakpoint()
+            self.sleep_until = datetime.now(tz=TZ) + timedelta(
+                seconds=self.strategy.cool_down_period * (2**self.strategy.error_count)
+            )
+            msg = (
+                f"Starting cool down. at {self.started_at.isoformat()} "
+                + f"until {self.sleep_until} with error count "
+                + f"{self.strategy.error_count}"
+            )
+            self.context.logger.info(msg)
             return
 
         if datetime.now(tz=TZ) < self.sleep_until:
@@ -228,9 +233,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source="collectdataround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
         )
-        self.register_transition(
-            source="cooldownround", event=ArbitrageabciappEvents.DONE, destination="collectdataround"
-        )
+        self.register_transition(source="cooldownround", event=ArbitrageabciappEvents.DONE, destination="setupround")
         self.register_transition(
             source="identifyopportunityround",
             event=ArbitrageabciappEvents.OPPORTUNITY_FOUND,
@@ -280,7 +283,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
 
         # We check if we need to run the state.
         if not current_state.started:
-            self.context.logger.debug(f"Starting state {self.current}")
+            self.context.logger.info(f"Starting state {self.current}")
             self.current_task = current_state
             self.current_behaviour = current_state
             self.strategy.state.current_round = str(self.current)
@@ -299,7 +302,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             )
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
-        current_state.act()
+        self.current_behaviour.act()
 
     def terminate(self) -> None:
         """Implement the termination."""
