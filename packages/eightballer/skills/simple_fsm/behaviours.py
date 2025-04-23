@@ -25,7 +25,7 @@ import asyncio
 import pathlib
 import importlib
 from typing import Any
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from aea.skills.behaviours import FSMBehaviour
 from aea.configurations.base import ComponentType
@@ -172,25 +172,23 @@ class CoolDownRound(BaseBehaviour):
         """Perform the action of the state."""
 
         if not self.started:
+            self._is_done = False
             self.started = True
             self.started_at = datetime.now(tz=TZ)
             self.strategy.error_count += 1
-            self.sleep_until = datetime.now(tz=TZ) + self.strategy.cool_down_period * (2**self.strategy.error_count)
-            self.context.logger.info(f"Starting cool down. at {self.started_at} until {self.sleep_until}")
+            # self.sleep_until = datetime.now(tz=TZ) + self.strategy.cool_down_period * (2**self.strategy.error_count)
+            self.sleep_until = datetime.now(tz=TZ) + timedelta(seconds=self.strategy.cool_down_period * (2**self.strategy.error_count))
+            self.context.logger.info(f"Starting cool down. at {self.started_at} until {self.sleep_until} with error count {self.strategy.error_count}")
+            breakpoint()
             return
 
         if datetime.now(tz=TZ) < self.sleep_until:
             self.context.logger.debug(f"Sleeping until {self.sleep_until}")
             return
-
+        self.context.logger.info(f"Cool down finished. at {datetime.now(tz=TZ)}")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        self.strategy.error_count += 1
-        sleep_time = self.strategy.cool_down_period * (2**self.strategy.error_count)
-        self.context.logger.info(
-            f"In cool down sleeping for {sleep_time} seconds on error attempt {self.strategy.error_count}"
-        )
-        asyncio.sleep(sleep_time)
+        self.started = False
 
 
 class ArbitrageabciappFsmBehaviour(FSMBehaviour):
