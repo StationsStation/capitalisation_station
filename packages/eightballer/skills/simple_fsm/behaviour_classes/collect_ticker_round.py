@@ -182,7 +182,10 @@ class CollectTickerRound(BaseConnectionRound):
             return False
         if ticker.performative == TickersMessage.Performative.ERROR:
             return False
-        return ticker.performative == TickersMessage.Performative.ALL_TICKERS
+        return (
+            ticker.performative in {TickersMessage.Performative.TICKER, TickersMessage.Performative.ALL_TICKERS}
+            and ticker.ticker is not None
+        )
 
     def setup(self) -> None:
         """Setup the state."""
