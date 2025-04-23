@@ -157,6 +157,10 @@ class ArbitrageStrategy(Model):
     fetch_all_tickers = False
     cool_down_period = 0
     state: AgentState = None
+    error_count = 0
+
+    entry_order: Order = None
+    exit_order: Order = None
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -170,7 +174,6 @@ class ArbitrageStrategy(Model):
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
-        self.error_count = 0
 
     def build_initial_state(self) -> dict:
         """Build the portfolio."""

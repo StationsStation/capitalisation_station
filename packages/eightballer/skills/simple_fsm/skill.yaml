@@ -8,23 +8,25 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
-  behaviour_classes/base.py: bafybeidmo6kseivk777ctgkpeymm4x2e43ybewhtacfprvbscjeas2luw4
-  behaviour_classes/collect_data_round.py: bafybeicc24ncttfkezdncqp5hqkdsyisrmcrfr567yme6jadrt6kwrjacm
-  behaviour_classes/no_opportunity_round.py: bafybeihcnedimneaew25oxi5xkb6nqy4quolfvpks2ybsw2ibzfnb4mwsq
-  behaviour_classes/post_trade_round.py: bafybeia74fqkxdrlwyj6yhuqzs4pm6oeyn7ftblzymkm6pj2zcovgjnexu
-  behaviours.py: bafybeiaoeimtsufiayaognvgatpymegpmnlkgryw7lziyaopybe756cmc4
+  behaviour_classes/base.py: bafybeibapmlqsmrs4kh566ujkf3sbh43geesq2n7gdjon5n7n7ghop4c3y
+  behaviour_classes/collect_data_round.py: bafybeie3a2ibj2paqf4plmioulyhtf5yr4l7chjrgzjmxlytx56c2bwcju
+  behaviour_classes/collect_ticker_round.py: bafybeibhbhfcr4hucwxqdzofeea2ypoths5a3xcpikos6g3mpdkugkwioy
+  behaviour_classes/no_opportunity_round.py: bafybeielecy24lm6qrl66l56uespqkasdovr2zdqdoqbd4ik4fs4gxxg2q
+  behaviour_classes/order_execution_round.py: bafybeieu6rgvysohkgtn2gfvbljblu7egd2ifquhcsprt2sr56fvifriye
+  behaviour_classes/post_trade_round.py: bafybeihk7moowqnurs5qfx7x7t2a2bpd7x4lzjs5uinclr2smupvclx7ky
+  behaviours.py: bafybeigipptvzzigoyi3fwyp3m77mhfzitcvbrt376j4opfab6xnlhsamu
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
   enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
-  strategy.py: bafybeiejzhi34ifn27cjhxyzqsoekhry24l5tie6glgjnlmdlmr6hl3jm4
+  strategy.py: bafybeih7vds5g225x64riuvuky3mywxgx2agrmokxojyo7pvl4qhwhpzvu
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
-  tests/test_behaviour.py: bafybeiaxmpdqsewme4ho7u7ojmbgvvbpi7n7b3clb7p3vebuzeoctwwlq4
+  tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeibakiryzmej4w3y6rmty7r4j4dd4lxnjkxy6cf3qpw73j7pn7h42u
+- eightballer/dcxt:0.1.0:bafybeicv4uqgsdgkg66qdb5s2ghlzedkdprvj6zxorgheru5bztbyksnma
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -34,7 +36,7 @@ protocols:
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
+- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 behaviours:
   main:
     args: {}

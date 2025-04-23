@@ -1,9 +1,10 @@
 """Post trade round behaviour."""
 
-import asyncio
+from datetime import datetime, timedelta
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
+from packages.eightballer.skills.simple_fsm.strategy import TZ
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
 
@@ -11,14 +12,29 @@ from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBe
 class PostTradeRound(BaseBehaviour):
     """This class implements the PostTradeRound state."""
 
-    async def act(self) -> None:
+    started_at: datetime | None = None
+
+    def act(self) -> None:
         """Perform the action of the state."""
         if self.started:
-            return
-        self.started = True
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.DONE
-        sell_order, buy_order = self.strategy.state.submitted_orders
+            if timedelta(seconds=self.strategy.cool_down_period) > datetime.now(tz=TZ) - self.started_at:
+                return
+            self._is_done = True
+            self._event = ArbitrageabciappEvents.DONE
+        elif self.started_at is None:
+            self.started = True
+            self.started_at = datetime.now(tz=TZ)
+            self.hooks = [self._post_trade_report]
+            self.strategy.state.current_period += 1
+            self.strategy.error_count = 0
+
+        if self.hooks:
+            hook = self.hooks.pop(0)
+            hook()
+
+    def _post_trade_report(self) -> None:
+        """Post trade report."""
+        sell_order, buy_order = self.strategy.entry_order, self.strategy.exit_order
 
         def get_explorer_link(order: Order) -> None:
             """Get the explorer link."""
@@ -52,6 +68,3 @@ class PostTradeRound(BaseBehaviour):
             title="Post Successful Arbitrage Execution!",
             msg=report_msg_table,
         )
-        self.context.logger.info(f"Sleeping for {self.strategy.cool_down_period} seconds.")
-        self.strategy.state.current_period += 1
-        await asyncio.sleep(self.strategy.cool_down_period)

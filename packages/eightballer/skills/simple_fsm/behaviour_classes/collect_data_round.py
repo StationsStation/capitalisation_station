@@ -1,6 +1,8 @@
 """Collect data round behaviour class."""
 
 import json
+import asyncio
+from datetime import datetime, timedelta
 from collections.abc import Generator
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -8,13 +10,13 @@ from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
-from packages.eightballer.skills.simple_fsm.strategy import CEX_LEDGER_ID, ArbitrageStrategy
+from packages.eightballer.skills.simple_fsm.strategy import TZ, CEX_LEDGER_ID, ArbitrageStrategy
 from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
 
 
-DATA_COLLECTION_TIMEOUT_SECONDS = 4
+DATA_COLLECTION_TIMEOUT_SECONDS = 10
 DEFAULT_ENCODING = "utf-8"
 
 
@@ -24,6 +26,12 @@ class CollectDataRound(BaseConnectionRound):
     matching_round = "collectdataround"
     attempts = 0
     started = False
+
+    supported_protocols = {
+        OrdersMessage.protocol_id: [],
+        TickersMessage.protocol_id: [],
+        BalancesMessage.protocol_id: [],
+    }
 
     @property
     def strategy(self) -> ArbitrageStrategy:
@@ -64,9 +72,8 @@ class CollectDataRound(BaseConnectionRound):
             yield
         yield [f.result() for f in futures]
 
-    def act(self) -> Generator:
-        """Perform the action of the state."""
-
+    def handle_cexs(self):
+        """Handle the CEXs."""
         for exchange_id in self.context.arbitrage_strategy.cexs:
             self.context.logger.debug(f"Getting balances for {exchange_id} on {CEX_LEDGER_ID}")
             futures = yield from self.get_futures(exchange_id, CEX_LEDGER_ID)
@@ -94,65 +101,105 @@ class CollectDataRound(BaseConnectionRound):
                 o.dict() for o in orders.orders.orders
             ]
 
-        for exchange_id, ledger_ids in self.strategy.dexs.items():
-            for ledger_id in ledger_ids:
-                self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
+    def act(self) -> Generator:
+        """Perform the action of the state."""
 
-                balances = yield from self.get_response(
-                    BalancesMessage.Performative.GET_ALL_BALANCES,
-                    connection_id=str(DCXT_PUBLIC_ID),
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                    timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
-                )
-                if (
-                    balances is None
-                    or not isinstance(balances, BalancesMessage)
-                    or balances.performative == BalancesMessage.Performative.ERROR
-                ):
-                    self.context.logger.error(f"Error getting balances for {exchange_id} on {ledger_id}")
-                    should_retry = yield from self._handle_error()
-                    if should_retry:
-                        return  # Retry on the next act() tick
-                    else:
-                        self._is_done = True
-                        self._event = ArbitrageabciappEvents.TIMEOUT
-                        return
+        if not self.started:
+            self.started = True
+            self.started_at = datetime.now(tz=TZ)
+            self.context.logger.info(f"Starting data collection. at {self.started_at!s}")
+            self.pending_bals = []
+            self.pending_tickers = []
+            self.pending_orders = []
+            for k in self.supported_protocols:
+                self.supported_protocols[k] = []
+            for exchange_id, ledger_ids in self.strategy.dexs.items():
+                for ledger_id in ledger_ids:
+                    self.context.logger.info(f"Getting balances for {exchange_id} on {ledger_id}")
+                    balances = self.submit_msg(
+                        BalancesMessage.Performative.GET_ALL_BALANCES,
+                        connection_id=str(DCXT_PUBLIC_ID),
+                        exchange_id=exchange_id,
+                        ledger_id=ledger_id,
+                        timeout=DATA_COLLECTION_TIMEOUT_SECONDS,
+                    )
+                    balances.validation_func = self._validate_balance_msg
+                    balances.exchange_id = exchange_id
+                    balances.ledger_id = ledger_id
+                    self.pending_bals.append(balances)
 
-                self.context.logger.info(f"Getting tickers for {exchange_id} on {ledger_id}")
-                tickers = yield from self.get_tickers(
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                )
-                if not tickers:
-                    self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
-                    return
+                    orders = self.submit_msg(
+                        OrdersMessage.Performative.GET_ORDERS,
+                        connection_id=str(DCXT_PUBLIC_ID),
+                        exchange_id=exchange_id,
+                        ledger_id=ledger_id,
+                    )
+                    orders.validation_func = self._validate_orders_msg
+                    orders.exchange_id = exchange_id
+                    orders.ledger_id = ledger_id
+                    self.pending_orders.append(orders)
+            return
+        if any(
+            [
+                len(self.pending_bals) != len(self.supported_protocols.get(BalancesMessage.protocol_id)),
+                len(self.pending_orders) != len(self.supported_protocols.get(OrdersMessage.protocol_id)),
+            ]
+        ):
+            self.context.logger.debug(
+                f"Waiting for all messages to be received. {self.pending_bals} {self.pending_orders}"
+            )
+            if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
+                self.context.logger.error("Timeout waiting for messages.")
+                self.started = False
+                return
+            return
 
-                self.context.logger.info(f"Getting orders for {exchange_id} on {ledger_id}")
-                orders = yield from self.get_response(
-                    OrdersMessage.Performative.GET_ORDERS,
-                    connection_id=str(DCXT_PUBLIC_ID),
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                )
-                if (
-                    orders is None
-                    or not isinstance(orders, OrdersMessage)
-                    or orders.performative == OrdersMessage.Performative.ERROR
-                ):
-                    self.context.logger.error(f"Error getting orders for {exchange_id} on {ledger_id}")
-                    yield from self._handle_error()
-                    return
+        # we validate all the responses
+        are_all_valid = all(f.validation_func(f.last_message) for f in self.pending_bals + self.pending_orders)
 
-                self.strategy.state.portfolio[ledger_id][exchange_id] = [b.dict() for b in balances.balances.balances]
-                self.strategy.state.prices[ledger_id][exchange_id] = [t.dict() for t in tickers.tickers]
-                self.strategy.state.existing_orders[ledger_id][exchange_id] = list(orders.orders.orders)
-                self.context.logger.debug(f"Got balances + tickers for {exchange_id} on {ledger_id}")
+        if not are_all_valid:
+            self.context.logger.error("Error getting data for all exchanges")
+            self._handle_error()
+            return
+
+        for order in self.pending_orders:
+            self.strategy.state.existing_orders[order.ledger_id][order.exchange_id] = list(
+                order.last_message.orders.orders
+            )
+
+        for bal in self.pending_bals:
+            self.strategy.state.portfolio[bal.ledger_id][bal.exchange_id] = [
+                b.dict() for b in bal.last_message.balances.balances
+            ]
 
         self.context.logger.info("Data collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
+
+    def _validate_orders_msg(self, orders: OrdersMessage) -> bool:
+        """Validate the orders message."""
+        if orders.performative is OrdersMessage.Performative.ERROR:
+            self.context.logger.error(f"Error getting orders: {orders}")
+            return False
+        return all(
+            [
+                orders is not None,
+                isinstance(orders, OrdersMessage),
+                orders.performative != OrdersMessage.Performative.ERROR,
+                orders.orders is not None,
+            ]
+        )
+
+    def _validate_balance_msg(self, balances: BalancesMessage) -> bool:
+        """Validate the balance message."""
+        return all(
+            [
+                balances is not None,
+                isinstance(balances, BalancesMessage),
+                balances.performative != BalancesMessage.Performative.ERROR,
+            ]
+        )
 
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1
@@ -164,8 +211,8 @@ class CollectDataRound(BaseConnectionRound):
 
         time_to_wait = DATA_COLLECTION_TIMEOUT_SECONDS**self.attempts
         self.context.logger.info(f"Sleeping for {time_to_wait} seconds")
-        yield from self.non_blocking_sleep(time_to_wait)
-        return True  # noqa:B901
+        asyncio.run(self.non_blocking_sleep(time_to_wait))
+        return True
 
     def get_tickers(
         self,

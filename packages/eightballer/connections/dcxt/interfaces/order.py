@@ -203,7 +203,9 @@ class OrderInterface(BaseInterface):
                 f"Couldn't fetch open orders from {exchange_id}."
                 f"The following error was encountered, {type(error).__name__}: {traceback.format_exc()}."
             )
-            return get_error(message, dialogue, str(error))
+            error_msg = get_error(message, dialogue, str(error))
+            response_envelope = connection.build_envelope(request=message, response_message=error_msg)
+            connection.queue.put_nowait(response_envelope)
 
     async def get_order(self, message: OrdersMessage, dialogue: OrdersDialogue, connection):
         """Retrieve an order from the exchange."""
