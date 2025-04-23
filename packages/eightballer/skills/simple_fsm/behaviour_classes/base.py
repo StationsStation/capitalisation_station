@@ -7,6 +7,8 @@ from collections.abc import Callable, Generator
 
 from aea.mail.base import Message
 from aea.skills.behaviours import State
+from aea.configurations.base import PublicId
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
@@ -20,6 +22,8 @@ from packages.eightballer.skills.abstract_round_abci.behaviour_utils import (
 
 class BaseBehaviour(State):
     """This class implements the PostTradeRound state."""
+
+    supported_protocols: dict[PublicId, list] = {}
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -38,7 +42,12 @@ class BaseBehaviour(State):
         """Return the event."""
         return self._event
 
-    async def act(self) -> None:
+    async def async_act(self) -> None:
+        """Perform the action of the state."""
+        msg = "The act method should be implemented in the derived class."
+        raise NotImplementedError(msg)
+
+    def act(self) -> None:
         """Perform the action of the state."""
         msg = "The act method should be implemented in the derived class."
         raise NotImplementedError(msg)
@@ -49,7 +58,7 @@ class BaseBehaviour(State):
         return self.context.arbitrage_strategy
 
 
-class BaseConnectionRound(BaseBehaviourUtils):
+class BaseConnectionRound(BaseBehaviourUtils, State):
     """This class implements the BaseConnectionRound state."""
 
     matching_round = "baseconnectionround"
@@ -98,17 +107,26 @@ class BaseConnectionRound(BaseBehaviourUtils):
             **kwargs,
         )
         msg._sender = str(self.context.skill_id)  # noqa
+        self._dialogue_to_response_msgs = {dialogue.dialogue_label.dialogue_starter_reference: None}
         response = yield from self._do_request(msg, dialogue, timeout)
-        self._message = None
         return response
 
     def get_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
         """Wrapper for callback request which depends on whether the message has not been handled on time."""
 
-        def callback_request(message: Message, current_behaviour: BaseBehaviour) -> None:
+        def callback_request(
+            message: Message,
+        ) -> None:
             """The callback request."""
-            self.context.logger.debug(f"Callback request: {message}")
-            current_behaviour._message = message  # noqa
+            self.context.logger.info(f"Callback request: {message}")
+            if message.protocol_id in self.supported_protocols:
+                self.context.logger.info(f"Message: {message}")
+                self._message = message
+                self.supported_protocols.get(message.protocol_id).append(message)
+                return
+            self.context.logger.info(
+                f"Message not supported: {message.protocol_id}. Supported protocols: {self.supported_protocols}"
+            )
 
         return callback_request
 
@@ -159,3 +177,43 @@ class BaseConnectionRound(BaseBehaviourUtils):
         end_time = time() + duration
         while time() < end_time:
             yield  # yield control back to the framework
+
+    def submit_msg(
+        self,
+        protocol_performative: Message.Performative,
+        connection_id: str,
+        timeout: float = 10.0,
+        **kwargs,
+    ) -> BaseDialogue:
+        """Get a ccxt response."""
+
+        dialogue_class: BaseDialogue = self._performative_to_dialogue_class[protocol_performative]
+
+        msg, dialogue = dialogue_class.create(
+            counterparty=str(connection_id),
+            performative=protocol_performative,
+            **kwargs,
+        )
+        dialogue.deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
+        msg._sender = str(self.context.skill_id)  # noqa
+
+        request_nonce = self._get_request_nonce_from_dialogue(dialogue)
+        self.context.requests.request_id_to_callback[request_nonce] = self.get_dialogue_callback_request()
+        self.context.outbox.put_message(message=msg)
+        return dialogue
+
+    def get_dialogue_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
+        """Wrapper for callback request which depends on whether the message has not been handled on time."""
+
+        def callback_request(message: Message, dialogue: BaseDialogue, behaviour: BaseBehaviour) -> None:
+            """The callback request."""
+            if message.protocol_id in self.supported_protocols:
+                self.context.logger.debug(f"Message: {message} {dialogue}: {behaviour}")
+                self._message = message
+                self.supported_protocols.get(message.protocol_id).append(message)
+                return
+            self.context.logger.info(
+                f"Message not supported: {message.protocol_id}. Supported protocols: {self.supported_protocols}"
+            )
+
+        return callback_request

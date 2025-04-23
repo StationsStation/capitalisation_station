@@ -10,7 +10,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise:0.1.0:bafybeiheaonuu3mcx2g7fi36lzlviqou4pxpryougjhznpck2o4wprjely
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeibakiryzmej4w3y6rmty7r4j4dd4lxnjkxy6cf3qpw73j7pn7h42u
+- eightballer/dcxt:0.1.0:bafybeicv4uqgsdgkg66qdb5s2ghlzedkdprvj6zxorgheru5bztbyksnma
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -46,9 +46,9 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeic4xsyerxszntq73gevrn6jpvmymhfjocd7yrtqbvnizsvqwayhom
+- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeifcyw6sls7633zk7ilontxzyd3jroae2luaqjeuwnaqthtv3rhi3m
+- eightballer/simple_fsm:0.1.0:bafybeifmv3l3nbxaoznlrminyy4atxhtvy56xeoxqacogqieaxxojekuyq
 - eightballer/trading_state:0.1.0:bafybeif7k2vzte7oopana6i2twchxf53qv3knvcsgomdzuubt5ya24fwry
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 customs:
@@ -60,7 +60,7 @@ default_routing: {}
 connection_private_key_paths: {}
 private_key_paths: {}
 logging_config:
-  disable_existing_loggers: true
+  disable_existing_loggers: false
   formatters:
     standard:
       format: '%(asctime)s [%(levelname)s]: %(message)s'
@@ -130,7 +130,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
+    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null

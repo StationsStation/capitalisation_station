@@ -26,23 +26,19 @@ import pathlib
 import importlib
 from typing import Any
 from datetime import datetime
-from textwrap import dedent
-from collections.abc import Generator
 
 from aea.skills.behaviours import FSMBehaviour
 from aea.configurations.base import ComponentType
 from aea.configurations.loader import load_component_configuration
 
-from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
-from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
-from packages.eightballer.protocols.orders.custom_types import Order, OrderStatus
-from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
-from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import NoOpportunityRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_round import ExecuteOrdersRound
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -69,11 +65,10 @@ class SetupRound(BaseBehaviour):
     clear_data = False
     is_first_run = True
 
-    async def act(self) -> None:
+    def act(self) -> None:
         """Perform the action of the state."""
         self.context.logger.debug("SetupRound: Performing action")
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(0)
         if self.clear_data:
             for f in ["orders.json", "portfolio.json", "prices.json"]:
                 if pathlib.Path(f).exists():
@@ -90,7 +85,7 @@ class IdentifyOpportunityRound(BaseBehaviour):
 
     # we have to import the strategy due to the loading sequence of the agent dependencies.
 
-    async def act(self) -> None:
+    def act(self) -> None:
         """Perform the action of the state."""
         if self.started:
             return
@@ -111,7 +106,6 @@ class IdentifyOpportunityRound(BaseBehaviour):
             self.context.logger.info(f"Opportunity found: {orders}")
             self.strategy.state.new_orders = orders
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
-        await asyncio.sleep(0)
 
     def setup(self) -> None:
         """Setup the state."""
@@ -184,165 +178,6 @@ class CoolDownRound(BaseBehaviour):
         await asyncio.sleep(sleep_time)
 
 
-class ExecuteOrdersRound(BaseConnectionRound):
-    """This class implements the ExecuteOrdersRound state."""
-
-    matching_round = "executeordersround"
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._is_done = False  # Initially, the state is not done
-        self.started = False
-        self._message = None
-
-    def act(self) -> None:
-        """Perform the action of the state."""
-        if self.started:
-            return
-        self.started = True
-
-        submitted = []
-        failed_orders = []
-
-        self.context.logger.info(f"Executing Total of {len(self.strategy.state.new_orders)} orders")
-        while self.strategy.state.new_orders:
-            order = self.strategy.state.new_orders.pop(0)
-            self.context.logger.info(f"Creating order: {order}")
-            is_entry_order = len(submitted) == 0
-            is_exit_order = len(submitted) == 1
-
-            response = yield from self.send_create_order(
-                order=order,
-                is_entry_order=is_entry_order,
-                is_exit_order=is_exit_order,
-            )
-            if not response:
-                self.context.logger.error(f"Error creating order: {order}")
-                failed_orders.append(order)
-                break
-
-            result_order = response.order
-            result = self.handle_submitted_order_response(
-                order=result_order,
-            )
-            if result is None:
-                self.context.logger.error(f"Error creating order: {order}")
-                failed_orders.append(order)
-                continue
-            submitted.append(result_order)
-            self.context.logger.info(f"Order created: {result_order}")
-
-        self.strategy.state.submitted_orders = submitted
-        self.strategy.state.failed_orders = failed_orders
-
-        if not failed_orders:
-            self._event = ArbitrageabciappEvents.DONE
-            self._is_done = True
-
-    def _handle_failed_entry_order(
-        self,
-        order: Order,
-        msg: str = "Error creating order",
-    ) -> None:
-        self.context.logger.error(msg)
-        self.context.logger.error(f"Error creating order: {order}")
-        self._is_done = True
-        self._event = ArbitrageabciappEvents.ENTRY_EXIT_ERROR
-
-    def _handle_failed_exit_order(
-        self,
-        msg: str,
-    ) -> None:
-        self.context.logger.error(msg)
-        raise UnexpectedStateException(msg)
-
-    def send_create_order(
-        self,
-        order: Order,
-        is_entry_order: bool,
-        is_exit_order: bool,
-    ) -> Generator:
-        """Send the create order message."""
-        response = yield from self.get_response(
-            OrdersMessage.Performative.CREATE_ORDER,
-            connection_id=CCXT_PUBLIC_ID if order.ledger_id == "cex" else DCXT_PUBLIC_ID,
-            order=order,
-            ledger_id=order.ledger_id,
-            exchange_id=order.exchange_id,
-        )
-        if response is None:
-            self.context.logger.error(f"Timeout creating order: {order}")
-            if is_entry_order:
-                return self._handle_failed_entry_order(order)
-            if is_exit_order:
-                msg = (
-                    "Recovery orders are not yet supported."
-                    + "Timeout creating order, Hard exiting as manual adjustment needed!"
-                )
-                return self._handle_failed_exit_order(msg)
-        if response.performative is OrdersMessage.Performative.ERROR or response.order.status is OrderStatus.FAILED:
-            self.context.logger.error(f"Error creating order: {order} response: {response}")
-            if is_entry_order:
-                return self._handle_failed_entry_order(order)
-            if is_exit_order:
-                msg = f"Error creating order: {response} {order}"
-                return self._handle_failed_exit_order(msg)
-        return response
-
-    def handle_submitted_order_response(
-        self,
-        order: Order,
-    ) -> bool:
-        """Handle the order submission response."""
-
-        if order.status == OrderStatus.PARTIALLY_FILLED:
-            msg = "Partially filled orders are not yet supported."
-            raise UnexpectedStateException(msg)
-
-        if order.status in (
-            {
-                OrderStatus.FILLED,
-                OrderStatus.OPEN,
-                OrderStatus.NEW,
-            }
-        ):
-            self.context.logger.info(f"Order created: {order}")
-            self.context.logger.info(
-                dedent(f"""
-            Id: {order.id}
-            Exchange: {order.exchange_id}
-            Market:   {order.symbol}
-            Status:   {order.status}
-            Side:     {order.side}
-            Price:    {order.price}
-            Amount:   {order.amount}
-            Filled Amount:   {order.filled}
-            """)
-            )
-            if order.status == OrderStatus.FILLED:
-                self.context.logger.info("Order filled.")
-                return True
-            if order.status in {
-                OrderStatus.OPEN,
-                OrderStatus.NEW,
-            }:
-                self.context.logger.info("Order created.")
-                self.strategy.state.submitted_orders.append(order)
-                return True
-            msg = f"This is a completely unexpected error. Order {order}"
-            raise UnexpectedStateException(msg)
-        msg = "This is a placeholder for currently unhandled methods."
-        raise UnexpectedStateException(msg)
-
-    @property
-    def strategy(self) -> ArbitrageStrategy:
-        """Return the strategy."""
-        return self.context.arbitrage_strategy
-
-    def handle_order(self, order: Order) -> None:
-        """Handle the order."""
-
-
 class ArbitrageabciappFsmBehaviour(FSMBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
@@ -354,6 +189,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("posttraderound", PostTradeRound(**kwargs), False)
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
         self.register_state("cooldownround", CoolDownRound(**kwargs))
+        self.register_state("collecttickerround", CollectTickerRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -367,7 +203,14 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
 
         self.register_transition(source="setupround", event=ArbitrageabciappEvents.DONE, destination="collectdataround")
         self.register_transition(
-            source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="identifyopportunityround"
+            source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="collecttickerround"
+        )
+
+        self.register_transition(
+            source="collecttickerround", event=ArbitrageabciappEvents.DONE, destination="identifyopportunityround"
+        )
+        self.register_transition(
+            source="collecttickerround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
         )
         self.register_transition(
             source="collectdataround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
@@ -418,18 +261,6 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.terminate()
             return
 
-        if self.current_task:
-            if not self.current_task.done():
-                return
-            failed = self.current_task.exception()
-            if failed:
-                self.context.logger.error(f"Error in state {self.current}: {self.current_task.print_stack()}")
-                self.context.logger.info(f"Breaking on error. {self.current} -> errorround")
-                self.current_task = None
-                self.current = "errorround"
-                return
-            self.current_task = None
-
         current_state = self.get_state(self.current)
         if current_state is None:
             return
@@ -437,13 +268,12 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         # We check if we need to run the state.
         if not current_state.started:
             self.context.logger.debug(f"Starting state {self.current}")
-            loop = asyncio.get_event_loop()
-            self.current_task = loop.create_task(current_state.act())
+            self.current_task = current_state
             self.current_behaviour = current_state
             self.strategy.state.current_round = str(self.current)
 
         if current_state.is_done():
-            self.context.logger.debug(f"State {self.current} is done.")
+            self.context.logger.info(f"State {self.current} is done.")
             if current_state in self._final_states:
                 # we reached a final state - return.
                 self.logger.info("Reached a final state.")
@@ -451,11 +281,12 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             event = current_state.event
             next_state = self.transitions.get(self.current, {}).get(event, None)
-            self.context.logger.debug(
+            self.context.logger.info(
                 f"Transitioning from state {self.current} with event {event}. Next state: {next_state}"
             )
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
+        current_state.act()
 
     def terminate(self) -> None:
         """Implement the termination."""

@@ -4,6 +4,7 @@ import asyncio
 import logging
 import datetime
 import warnings
+from ssl import SSLWantReadError
 from enum import Enum
 from typing import get_args
 from functools import lru_cache
@@ -53,7 +54,7 @@ from packages.eightballer.connections.dcxt.dcxt.one_inch import (
     increase_allowance,
 )
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
-from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError
+from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError, ExchangeNotAvailable
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
@@ -122,7 +123,7 @@ async def get_quote(
 
     try:
         return await order_book_api.post_quote(order_quote_request, order_side)
-    except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError):
+    except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError, SSLWantReadError, asyncio.CancelledError):
         if retries > 0:
             await asyncio.sleep(0.1 * (MAX_ORDER_ATTEMPTS - retries))
             return await get_quote(
@@ -199,6 +200,9 @@ async def swap_tokens(
 
 class CowSwapClient(BaseErc20Exchange):
     """Class for interacting with the 1inch API."""
+
+    async def close(self):
+        """Close the client."""
 
     def _parse_order(
         self,
@@ -444,9 +448,14 @@ class CowSwapClient(BaseErc20Exchange):
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
         account = kwargs.get("params", {}).get("account", self.account.entity.address)
-        orders: list[CowOrder] = await self.order_book_api.get_orders_by_owner(
-            owner=account,
-        )
+
+        try:
+            orders: list[CowOrder] = await self.order_book_api.get_orders_by_owner(
+                owner=account,
+            )
+        except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError, SSLWantReadError) as error:
+            msg = "CoW Swap API is not available"
+            raise ExchangeNotAvailable(msg) from error
 
         pre_orders = self._process_submitted_orders(orders)
 

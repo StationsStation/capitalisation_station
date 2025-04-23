@@ -398,7 +398,7 @@ class AbstractResponseHandler(Handler, ABC):
 
         self._log_message_handling(message)
         current_behaviour = cast(AbstractRoundBehaviour, self.context.behaviours.main).current_behaviour
-        callback(message, current_behaviour)
+        callback(message, protocol_dialogue, current_behaviour)
 
     def _get_dialogues_attribute_name(self) -> str:
         """Get dialogues attribute name.

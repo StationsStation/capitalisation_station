@@ -532,24 +532,37 @@ class DeriveClient:
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
                 if retries > 0:
-                    # we wait for the mm to replace the order
                     await asyncio.sleep(1)
                     return await self.create_order(*args, **kwargs, retries=retries - 1)
-                return {
-                    "order_status": "failed",
-                    "instrument_name": kwargs["symbol"],
-                    "order_type": kwargs["type"],
-                    "direction": kwargs["side"],
-                    "limit_price": kwargs.get("price"),
-                    "amount": kwargs["amount"],
-                    "filled_amount": 0,
-                    "average_price": 0,
-                    "creation_timestamp": datetime.datetime.now(tz=datetime.UTC).timestamp(),
-                }
+
+                return self.get_failed_order_json(
+                    error,
+                    kwargs,
+                )
+            if "Self-crossing disallowed" in str(error):
+                return self.get_failed_order_json(
+                    error,
+                    kwargs,
+                )
 
             self.logger.exception(f"Failed to create order: {error} Retries: {retries}")
             msg = f"Failed to create order: {error} with unknown error"
             raise NotImplementedError(msg) from error
+
+    def get_failed_order_json(self, error, kwargs):
+        """Get a failed order json."""
+        del error
+        return {
+            "order_status": "failed",
+            "instrument_name": kwargs["symbol"],
+            "order_type": kwargs["type"],
+            "direction": kwargs["side"],
+            "limit_price": kwargs.get("price"),
+            "amount": kwargs["amount"],
+            "filled_amount": 0,
+            "average_price": 0,
+            "creation_timestamp": datetime.datetime.now(tz=datetime.UTC).timestamp(),
+        }
 
     def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
         """Create an order from an api call."""
