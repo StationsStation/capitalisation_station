@@ -123,7 +123,13 @@ async def get_quote(
 
     try:
         return await order_book_api.post_quote(order_quote_request, order_side)
-    except (httpcore.ReadTimeout, httpx.ReadTimeout, UnexpectedResponseError, SSLWantReadError, asyncio.CancelledError):
+    except (
+        httpcore.ReadTimeout,
+        httpx.ReadTimeout,
+        UnexpectedResponseError,
+        SSLWantReadError,
+        asyncio.CancelledError,
+    ) as err:
         if retries > 0:
             await asyncio.sleep(0.1 * (MAX_ORDER_ATTEMPTS - retries))
             return await get_quote(
@@ -135,7 +141,8 @@ async def get_quote(
                 order_book_api=order_book_api,
                 retries=retries - 1,
             )
-        raise
+        msg = "CoW Swap API is not available"
+        raise ExchangeNotAvailable(msg) from err
 
 
 async def swap_tokens(
@@ -200,6 +207,9 @@ async def swap_tokens(
 
 class CowSwapClient(BaseErc20Exchange):
     """Class for interacting with the 1inch API."""
+
+    last_buy_quote: OrderQuoteResponse | None = None
+    last_sell_quote: OrderQuoteResponse | None = None
 
     async def close(self):
         """Close the client."""
@@ -266,6 +276,9 @@ class CowSwapClient(BaseErc20Exchange):
 
         sell_quote = await self._get_quote(asset_b, asset_a, int(buy_quote.quote.buyAmount.root))
         ask_price = self.from_quote_to_rates(sell_quote, asset_b, asset_a, is_buying=False)
+
+        self.last_buy_quote = buy_quote
+        self.last_sell_quote = sell_quote
 
         timestamp = datetime.datetime.now(tz=datetime.UTC)
         return Ticker(

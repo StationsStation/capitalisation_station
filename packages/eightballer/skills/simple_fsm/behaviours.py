@@ -250,7 +250,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         )
         # register a transation from noopportunityround to setupround
         self.register_transition(
-            source="noopportunityround", event=ArbitrageabciappEvents.DONE, destination="setupround"
+            source="noopportunityround", event=ArbitrageabciappEvents.DONE, destination="cooldownround"
         )
         # register a transation from executeordersround to errorround
         self.register_transition(
@@ -285,7 +285,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
 
         # We check if we need to run the state.
         if not current_state.started:
-            self.context.logger.info(f"Starting state {self.current}")
+            self.context.logger.debug(f"Starting state {self.current}")
             self.current_task = current_state
             self.current_behaviour = current_state
             self.strategy.state.current_round = str(self.current)
