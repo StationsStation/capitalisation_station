@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package aea.zarathustra.asset_bridging.v0_0_1;
+
+message AssetBridgingMessage{
+
+  // Custom Types
+  message BridgeStatus{
+    enum BridgeStatusEnum {
+      BRIDGE_STATUS_ENUM_IN_PROGRESS = 0;
+      BRIDGE_STATUS_ENUM_PENDING_CLAIM = 1;
+      BRIDGE_STATUS_ENUM_COMPLETED = 2;
+      BRIDGE_STATUS_ENUM_FAILED = 3;
+    }
+    BridgeStatusEnum status = 1;
+  }
+
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNKNOWN_ROUTE = 0;
+      ERROR_CODE_ENUM_OTHER_EXCEPTION = 1;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+
+  // Performatives and contents
+  message Request_Bridge_Performative{
+    string source_chain = 1;
+    string target_chain = 2;
+    string source_token = 3;
+    string target_token = 4;
+    bool target_token_is_set = 5;
+    string bridge = 6;
+    map<string, string> kwargs = 7;
+    bool kwargs_is_set = 8;
+  }
+
+  message Bridge_Status_Performative{
+    BridgeStatus status = 1;
+    bytes tx_hash = 2;
+  }
+
+  message Request_Status_Performative{
+    bytes tx_hash = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode code = 1;
+    string message = 2;
+  }
+
+
+  oneof performative{
+    Bridge_Status_Performative bridge_status = 5;
+    Error_Performative error = 6;
+    Request_Bridge_Performative request_bridge = 7;
+    Request_Status_Performative request_status = 8;
+  }
+}
