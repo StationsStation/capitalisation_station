@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.1.26](https://github.com/StationsStation/capitalisation_station/tree/v0.1.26) (2025-05-02)
+
+**Merged pull requests:**
+
+- feat:added-in-monthly-packages [\#83](https://github.com/StationsStation/capitalisation_station/pull/83)
+- feat:added-docs [\#76](https://github.com/StationsStation/capitalisation_station/pull/76)
+
 ## [v0.1.25](https://github.com/StationsStation/capitalisation_station/tree/v0.1.25) (2025-04-23)
 
 **Merged pull requests:**
