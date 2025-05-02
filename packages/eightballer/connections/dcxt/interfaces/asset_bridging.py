@@ -1,6 +1,6 @@
 import requests
 
-from derive_client.data_types import ChainID, Currency
+from derive_client.data_types import ChainID, Currency, TxStatus
 from derive_client.clients.async_client import AsyncClient
 
 from packages.eightballer.connections.dcxt import dcxt
@@ -29,16 +29,25 @@ class AssetBridgingInterface(BaseInterface):
         target_chain: str = message.target_chain
         source_token: str = message.source_token
         target_token: str | None = message.target_token
+        amount: int = message.amount
+        receiver: str | None = message.receiver
         bridge: str = message.bridge
         kwargs: dict[str, str] | None = message.kwargs
 
         if not bridge == "derive":
-            raise NotImplementedError()
+            raise NotImplementedError(f"Bridge '{bridge}' not supported")
         if not (source_chain == "derive" or target_chain == "derive"):
-            raise NotImplementedError()
+            raise NotImplementedError("Can only bridge FROM or TO derive at this time")
         if target_token and target_token != source_token:
-            raise NotImplementedError()
-        
+            raise NotImplementedError(f"Socket superbridge requires source_token == target_token, got {source_token}->{target_token}")
+        if receiver is not None:
+            raise NotImplementedError(
+                "Providing a custom receiver isn’t supported for the Derive superbridge.\n"
+                "We automatically use:\n"
+                f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
+                f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
+            )
+
         ledger_id = exchange_id = bridge
         exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
         client: AsyncClient = exchange.client
@@ -47,11 +56,9 @@ class AssetBridgingInterface(BaseInterface):
         source_chain_id = ChainID[source_chain.upper()]
         target_chain_id = ChainID[target_chain.upper()]
 
-        amount = 1  # TODO: update protocol performative
-
         if source_chain == "derive":
             receiver = client.signer.address
-            client.withdraw_from_derive(
+            bridge_result = client.withdraw_from_derive(
                 chain_id=target_chain_id,
                 currency=currency,
                 amount=amount,
@@ -59,19 +66,30 @@ class AssetBridgingInterface(BaseInterface):
             )
         else:
             receiver = client.wallet
-            client.deposit_to_derive(
+            bridge_result = client.deposit_to_derive(
                 chain_id=source_chain_id,
                 currency=currency,
                 amount=amount,
                 receiver=receiver,
             )
 
-        # TODO: 
-        # - obtain tx_hash (not currently returned by client)
-        # - obtain / determine status
-        tx_hash = b""
-        status = BridgeStatus(status=BridgeStatus.BridgeStatusEnum.BRIDGE_STATUS_ENUM_COMPLETED)
+        match bridge_result.tx_result.status:
+            case TxStatus.FAILED:
+                status = BridgeStatus.BridgeStatusEnum.BRIDGE_STATUS_ENUM_FAILED
+            case TxStatus.SUCCESS:
+                status = BridgeStatus.BridgeStatusEnum.BRIDGE_STATUS_ENUM_COMPLETED
+            case TxStatus.PENDING:
+                status = BridgeStatus.BridgeStatusEnum.BRIDGE_STATUS_ENUM_PENDING
+            case TxStatus.ERROR:
+                response_message = dialogue.reply(
+                    performative=AssetBridgingMessage.Performative.ERROR,
+                    target_message=message,
+                    message=f"{bridge_result}",
+                    code=AssetBridgingMessage.ErrorCode.ERROR_CODE_ENUM_OTHER_EXCEPTION,
+                )
+                return response_message
 
+        tx_hash = bridge_result.tx_result.tx_hash
         response_message = dialogue.reply(
             performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
             target_message=message,
