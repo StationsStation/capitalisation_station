@@ -29,10 +29,10 @@ from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
 from packages.eightballer.protocols.orders.custom_types import Order
-from packages.eightballer.connections.apprise.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.eightballer.connections.apprise_wrapper.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 
 
 TZ = datetime.datetime.now().astimezone().tzinfo
@@ -170,10 +170,15 @@ class ArbitrageStrategy(Model):
         self.strategy_init_kwargs = kwargs.pop("strategy_init_kwargs", {})
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
-        self.cool_down_period = kwargs.pop("cool_down_period", DEFAULT_COOL_DOWN_PERIOD)
+        self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
+        self.context.logger.info("ArbitrageStrategy initialized. with cooldown period: %s", self.cooldown_period)
+        self.context.logger.info("ArbitrageStrategy initialized. with strategy public id: %s", self.strategy_public_id)
+        self.context.logger.info(
+            "ArbitrageStrategy initialized. with strategy init kwargs: %s", self.strategy_init_kwargs
+        )
 
     def build_initial_state(self) -> dict:
         """Build the portfolio."""
