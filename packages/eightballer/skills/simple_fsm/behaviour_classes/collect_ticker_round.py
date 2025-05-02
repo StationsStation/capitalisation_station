@@ -143,8 +143,8 @@ class CollectTickerRound(BaseConnectionRound):
 
         if performative == TickersMessage.Performative.GET_TICKER:
             # we want to get the wrapped base token
-            asset_a = self.strategy.trading_strategy.quote_asset
-            asset_b = self.strategy.trading_strategy.base_asset
+            asset_a = self.strategy.trading_strategy.base_asset
+            asset_b = self.strategy.trading_strategy.quote_asset
             params = []
 
             def encode_dict(d: dict) -> bytes:
