@@ -385,7 +385,7 @@ class DeriveClient:
             raise FileNotFoundError(msg)
         private_key = keyfile.read_text().strip()
 
-        self.client = DeriveAsyncClient(
+        self.client: DeriveAsyncClient = DeriveAsyncClient(
             private_key=private_key,
             subaccount_id=kwargs.get("subaccount_id"),
             wallet=kwargs["wallet"],
@@ -504,6 +504,10 @@ class DeriveClient:
 
     async def create_order(self, *args, retries=0, **kwargs):
         """Create an order."""
+
+        # we make sure to re-login the client.
+        await self.client.connect_ws()
+        await self.client.login_client()
 
         def get_instrument_type(instrument_name):
             if "-" in instrument_name:
