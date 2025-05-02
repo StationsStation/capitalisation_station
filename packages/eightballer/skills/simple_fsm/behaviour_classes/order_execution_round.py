@@ -72,6 +72,8 @@ class ExecuteOrdersRound(BaseConnectionRound):
         super().setup()
         self.failed = None
         self.started_at: datetime | None = None
+        for k in self.supported_protocols:
+            self.supported_protocols[k] = []
 
     def has_timed_out(self) -> bool:
         """Check if the state has timed out."""
