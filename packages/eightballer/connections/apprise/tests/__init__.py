@@ -15,3 +15,5 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Test the apprise connection."""

@@ -176,7 +176,9 @@ class ArbitrageStrategy(Model):
         self.context.shared_state["state"] = self.state
         self.context.logger.info("ArbitrageStrategy initialized. with cooldown period: %s", self.cooldown_period)
         self.context.logger.info("ArbitrageStrategy initialized. with strategy public id: %s", self.strategy_public_id)
-        self.context.logger.info("ArbitrageStrategy initialized. with strategy init kwargs: %s", self.strategy_init_kwargs)
+        self.context.logger.info(
+            "ArbitrageStrategy initialized. with strategy init kwargs: %s", self.strategy_init_kwargs
+        )
 
     def build_initial_state(self) -> dict:
         """Build the portfolio."""
