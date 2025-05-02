@@ -30,14 +30,14 @@ from aea.identity.base import Identity
 from aea.configurations.base import ConnectionConfig
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
-from packages.eightballer.connections.apprise.connection import (
-    CONNECTION_ID as CONNECTION_PUBLIC_ID,
-    AppriseConnection,
-)
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogue,
     BaseUserInteractionDialogues,
+)
+from packages.eightballer.connections.apprise_wrapper.connection import (
+    CONNECTION_ID as CONNECTION_PUBLIC_ID,
+    AppriseConnection,
 )
 
 
@@ -86,7 +86,9 @@ class TestAppriseConnection:
         self.target_skill_id = "dummy_author/dummy_skill:0.1.0"
 
         kwargs = {
-            "endpoints": ["ntfy://ntfy.sh/1234567890", None],
+            "endpoints": [
+                "ntfy://ntfy.sh/1234567890",
+            ],
         }
 
         self.configuration = ConnectionConfig(

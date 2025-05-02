@@ -20,7 +20,7 @@ In order to use other endpoints, all that is necessary is to change the URL in t
 To Send notifications, the agent simply needs to send a notification message to the connection.
 
 ```python
-from packages.eightballer.connections.apprise.connection import (
+from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
 from packages.eightballer.protocols.user_interaction.dialogues import (

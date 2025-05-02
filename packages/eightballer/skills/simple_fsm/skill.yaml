@@ -18,13 +18,13 @@ fingerprint:
   dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
   enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
   handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
-  strategy.py: bafybeifmt5ucpttjz4ll73of7o4h3b6pdcpayq5jywi45igsnl5ydxmfli
+  strategy.py: bafybeihkjssr73ryf5vnmjm5lquefqaxrvkbmpqeic4fsgbzxke743i5s4
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeibirjy3vqzv6grif54ub3tnyn2nreybmcgeorbkiu4ho35jg5cy2u
+- eightballer/apprise_wrapper:0.1.0:bafybeifx733pvk25u62jfanpmcrbw4mktziclvrlwsjtoqhhnk5jmhpzmq
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
 - eightballer/dcxt:0.1.0:bafybeicw52cswrbi256okgd43rekm7ens2nuuojcrpelbuappma2v3srpa
 contracts: []
