@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.1.28](https://github.com/StationsStation/capitalisation_station/tree/v0.1.28) (2025-05-02)
+
+**Merged pull requests:**
+
+- Base quote reversal [\#85](https://github.com/StationsStation/capitalisation_station/pull/85)
+
+## [v0.1.27](https://github.com/StationsStation/capitalisation_station/tree/v0.1.27) (2025-05-02)
+
+**Merged pull requests:**
+
+- feat:ensured-that-packages-runs [\#84](https://github.com/StationsStation/capitalisation_station/pull/84)
+
 ## [v0.1.26](https://github.com/StationsStation/capitalisation_station/tree/v0.1.26) (2025-05-02)
 
 **Merged pull requests:**
