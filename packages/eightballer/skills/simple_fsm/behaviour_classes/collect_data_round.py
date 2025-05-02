@@ -297,3 +297,5 @@ class CollectDataRound(BaseConnectionRound):
         self._event = ArbitrageabciappEvents.TIMEOUT
         self.attempts = 0
         super().setup()
+        for k in self.supported_protocols:
+            self.supported_protocols[k] = []
