@@ -39,8 +39,13 @@ from packages.eightballer.protocols.user_interaction.dialogues import (
 )
 from packages.eightballer.protocols.user_interaction.custom_types import ErrorCode
 
+
 def clean_env_var(val: str) -> str:
-    return val.strip(val[0]) if val[:1] == val[-1:] and val[:1] in "'\"" else val
+    """Clean the environment variable."""
+    res = val.strip(val[0]) if val[:1] == val[-1:] and val[:1] in "'\"" else val
+    if res in {"None", "null"}:
+        return None
+    return res
 
 
 CONNECTION_ID = PublicId.from_str("eightballer/apprise:0.1.0")
@@ -53,24 +58,16 @@ class UserInteractionDialogues(BaseUserInteractionDialogues):
     """The dialogues class keeps track of all apprise dialogues."""
 
     def __init__(self, self_address: Address, **kwargs) -> None:
-        """Initialize dialogues.
-
-        :param self_address: self address
-        :param kwargs: keyword arguments
-        """
+        """Initialize dialogues."""
 
         def role_from_first_message(  # pylint: disable=unused-argument
             message: Message, receiver_address: Address
         ) -> Dialogue.Role:
-            """Infer the role of the agent from an incoming/outgoing first message.
-
-            :param message: an incoming/outgoing first message
-            :param receiver_address: the address of the receiving agent
-            :return: The role of the agent
-            """
+            """Infer the role of the agent from an incoming/outgoing first message."""
             assert message, receiver_address
-            return UserInteractionDialogue.Role.USER  # TODO: check
+            return UserInteractionDialogue.Role.USER
 
+        del kwargs
         BaseUserInteractionDialogues.__init__(
             self,
             self_address=self_address,
@@ -87,12 +84,7 @@ class BaseAsyncChannel:
         connection_id: PublicId,
         message_type: Message,
     ):
-        """Initialize the BaseAsyncChannel channel.
-
-        :param agent_address: the address of the agent.
-        :param connection_id: the id of the connection.
-        :param message_type: the associated message type.
-        """
+        """Initialize the BaseAsyncChannel channel."""
 
         self.agent_address = agent_address
         self.connection_id = connection_id
@@ -125,7 +117,6 @@ class BaseAsyncChannel:
         The result is translated into a response envelope.
         Finally, the response envelope is sent to the in-queue.
 
-        :param query_envelope: The envelope containing a protocol message.
         """
 
         if self._loop is None or self._connection is None:
@@ -183,9 +174,9 @@ class BaseAsyncChannel:
         for task in list(self._tasks):
             try:
                 await task
-            except KeyboardInterrupt:  # pragma: nocover
+            except KeyboardInterrupt:
                 raise
-            except BaseException:  # pragma: nocover # pylint: disable=broad-except
+            except BaseException:  # noqa
                 pass  # nosec
 
 
@@ -196,17 +187,11 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
         self,
         agent_address: Address,
         connection_id: PublicId,
-        **kwargs,  # TODO: pass the neccesary arguments for your channel explicitly
+        **kwargs,
     ):
-        """Initialize the Apprise channel.
-
-        :param agent_address: the address of the agent.
-        :param connection_id: the id of the connection.
-        """
+        """Initialize the Apprise channel."""
 
         super().__init__(agent_address, connection_id, message_type=UserInteractionMessage)
-
-        # TODO: assign attributes from custom connection configuration explicitly
         for key, value in kwargs.items():
             setattr(self, key, value)
 
@@ -214,10 +199,7 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
         self.logger.debug("Initialised the Apprise channel")
 
     async def connect(self, loop: AbstractEventLoop) -> None:
-        """Connect channel using loop.
-
-        :param loop: asyncio event loop to use
-        """
+        """Connect channel using loop."""
 
         if self.is_stopped:
             self._loop = loop
@@ -226,15 +208,16 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
             try:
                 self._connection = apprise.Apprise()
                 for endpoint in self.endpoints:
-                    if endpoint is None:
+                    cleaned_endpoint = clean_env_var(endpoint)
+                    if cleaned_endpoint is None:
                         continue
-                    self._connection.add(clean_env_var(endpoint))
+                    self._connection.add(cleaned_endpoint)
                 self.logger.info("Apprise has connected.")
             except Exception as e:  # pragma: nocover # pylint: disable=broad-except
                 self.is_stopped = True
                 self._in_queue = None
                 msg = f"Failed to start Apprise: {e}"
-                raise ConnectionError(msg)
+                raise ConnectionError(msg) from e
 
     async def disconnect(self) -> None:
         """Disconnect channel."""
@@ -254,6 +237,7 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
         UserInteractionMessage.Performative,
         Callable[[UserInteractionMessage, UserInteractionDialogue], UserInteractionMessage],
     ]:
+        """Return the mapping of performative to handler."""
         return {
             UserInteractionMessage.Performative.NOTIFICATION: self.notification,
         }
@@ -286,10 +270,7 @@ class AppriseConnection(Connection):
     connection_id = CONNECTION_ID
 
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize a Apprise connection.
-
-        :param kwargs: keyword arguments
-        """
+        """Initialize a Apprise connection."""
 
         keys = ["endpoints"]
         config = kwargs["configuration"].config
@@ -322,25 +303,18 @@ class AppriseConnection(Connection):
         self.state = ConnectionStates.disconnected
 
     async def send(self, envelope: Envelope) -> None:
-        """Send an envelope.
-
-        :param envelope: the envelope to send.
-        """
+        """Send an envelope."""
 
         self._ensure_connected()
         return await self.channel.send(envelope)
 
     async def receive(self, *args: Any, **kwargs: Any) -> Envelope | None:
-        """Receive an envelope. Blocking.
-
-        :param args: arguments to receive
-        :param kwargs: keyword arguments to receive
-        :return: the envelope received, if present.  # noqa: DAR202
-        """
+        """Receive an envelope. Blocking."""
+        del args, kwargs
 
         self._ensure_connected()
         try:
             return await self.channel.get_message()
-        except Exception as e:
+        except Exception as e:  # noqa
             self.logger.info(f"Exception on receive {e}")
             return None
