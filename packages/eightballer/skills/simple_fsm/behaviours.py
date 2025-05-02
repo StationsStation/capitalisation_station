@@ -175,9 +175,8 @@ class CoolDownRound(BaseBehaviour):
             self._is_done = False
             self.started = True
             self.started_at = datetime.now(tz=TZ)
-            self.strategy.error_count += 1
             self.sleep_until = datetime.now(tz=TZ) + timedelta(
-                seconds=self.strategy.cooldown_period * (2**self.strategy.error_count)
+                seconds=self.strategy.cooldown_period * max((2**self.strategy.error_count), 1)
             )
             msg = (
                 f"Starting cool down. at {self.started_at.isoformat()} "

@@ -1,6 +1,5 @@
 """Collect data round behaviour class."""
 
-import json
 from datetime import datetime, timedelta
 from collections.abc import Generator
 
@@ -10,7 +9,6 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.skills.simple_fsm.strategy import TZ, CEX_LEDGER_ID, ArbitrageStrategy
-from packages.eightballer.protocols.tickers.custom_types import Tickers
 from packages.eightballer.connections.ccxt_wrapper.connection import PUBLIC_ID as CCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
 
@@ -145,7 +143,7 @@ class CollectDataRound(BaseConnectionRound):
             ]
         ):
             self.context.logger.debug(
-                f"Waiting for all messages to be received. {self.pending_bals} {self.pending_orders}"
+                f"Waiting for all messages to be received. {len(self.pending_bals)} {len(self.pending_orders)}"
             )
             if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
                 self.context.logger.error("Timeout waiting for messages.")
@@ -221,74 +219,6 @@ class CollectDataRound(BaseConnectionRound):
             self._is_done = True
             return False
         return True
-
-    def get_tickers(
-        self,
-        exchange_id: str,
-        ledger_id: str,
-    ) -> Generator:
-        """Get the tickers from a specific exchange."""
-        performative = (
-            TickersMessage.Performative.GET_ALL_TICKERS
-            if self.context.arbitrage_strategy.fetch_all_tickers
-            else TickersMessage.Performative.GET_TICKER
-        )
-
-        if performative == TickersMessage.Performative.GET_TICKER:
-            # we want to get the wrapped base token
-            asset_a = self.strategy.trading_strategy.base_asset
-            asset_b = self.strategy.trading_strategy.quote_asset
-            params = []
-
-            def encode_dict(d: dict) -> bytes:
-                """Encode a dictionary."""
-                return json.dumps(d).encode(DEFAULT_ENCODING)
-
-            params.append(
-                {
-                    "asset_a": asset_a,
-                    "asset_b": asset_b,
-                    "params": encode_dict({"amount": self.context.arbitrage_strategy.trading_strategy.order_size}),
-                }
-            )
-            tickers = Tickers(tickers=[])
-            for param in params:
-                ticker = yield from self.get_response(
-                    performative,
-                    connection_id=str(DCXT_PUBLIC_ID),
-                    exchange_id=exchange_id,
-                    ledger_id=ledger_id,
-                    **param,
-                )
-
-                if (
-                    ticker is None
-                    or not isinstance(ticker, TickersMessage)
-                    or ticker.performative == TickersMessage.Performative.ERROR
-                ):
-                    self.context.logger.error(f"Error getting ticker for {exchange_id} on {ledger_id}")
-                    self.started = False
-                    yield from self._handle_error()
-                    return
-                tickers.tickers.append(ticker.ticker)
-
-        else:
-            tickers = yield from self.get_response(
-                performative,
-                connection_id=str(DCXT_PUBLIC_ID),
-                exchange_id=exchange_id,
-                ledger_id=ledger_id,
-            )
-            if (
-                ticker is None
-                or not isinstance(ticker, TickersMessage)
-                or tickers.performative == TickersMessage.Performative.ERROR
-            ):
-                self.context.logger.error(f"Error getting tickers for {exchange_id} on {ledger_id}")
-                self.started = False
-                yield from self._handle_error()
-                return
-        return tickers  # noqa:B901
 
     def setup(self) -> None:
         """Setup the state."""
