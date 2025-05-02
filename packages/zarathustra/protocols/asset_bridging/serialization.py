@@ -74,8 +74,14 @@ class AssetBridgingSerializer(Serializer):
                 performative.target_token_is_set = True
                 target_token = msg.target_token
                 performative.target_token = target_token
+            amount = msg.amount
+            performative.amount = amount
             bridge = msg.bridge
             performative.bridge = bridge
+            if msg.is_set("receiver"):
+                performative.receiver_is_set = True
+                receiver = msg.receiver
+                performative.receiver = receiver
             if msg.is_set("kwargs"):
                 performative.kwargs_is_set = True
                 kwargs = msg.kwargs
@@ -141,8 +147,13 @@ class AssetBridgingSerializer(Serializer):
             if asset_bridging_pb.request_bridge.target_token_is_set:
                 target_token = asset_bridging_pb.request_bridge.target_token
                 performative_content["target_token"] = target_token
+            amount = asset_bridging_pb.request_bridge.amount
+            performative_content["amount"] = amount
             bridge = asset_bridging_pb.request_bridge.bridge
             performative_content["bridge"] = bridge
+            if asset_bridging_pb.request_bridge.receiver_is_set:
+                receiver = asset_bridging_pb.request_bridge.receiver
+                performative_content["receiver"] = receiver
             if asset_bridging_pb.request_bridge.kwargs_is_set:
                 kwargs = asset_bridging_pb.request_bridge.kwargs
                 kwargs_dict = dict(kwargs)

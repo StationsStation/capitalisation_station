@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x14\x61sset_bridging.proto\x12%aea.zarathustra.asset_bridging.v0_0_1\"\xf3\x0b\n\x14\x41ssetBridgingMessage\x12o\n\rbridge_status\x18\x05 \x01(\x0b\x32V.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Bridge_Status_PerformativeH\x00\x12_\n\x05\x65rror\x18\x06 \x01(\x0b\x32N.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Error_PerformativeH\x00\x12q\n\x0erequest_bridge\x18\x07 \x01(\x0b\x32W.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Bridge_PerformativeH\x00\x12q\n\x0erequest_status\x18\x08 \x01(\x0b\x32W.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Status_PerformativeH\x00\x1a\xcc\x01\n\x0c\x42ridgeStatus\x12i\n\x06status\x18\x01 \x01(\x0e\x32Y.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.BridgeStatus.BridgeStatusEnum\"Q\n\x10\x42ridgeStatusEnum\x12\x0f\n\x0bIN_PROGRESS\x10\x00\x12\x11\n\rPENDING_CLAIM\x10\x01\x12\r\n\tCOMPLETED\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x1a\xad\x01\n\tErrorCode\x12g\n\nerror_code\x18\x01 \x01(\x0e\x32S.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.ErrorCode.ErrorCodeEnum\"7\n\rErrorCodeEnum\x12\x11\n\rUNKNOWN_ROUTE\x10\x00\x12\x13\n\x0fOTHER_EXCEPTION\x10\x01\x1a\xdd\x02\n\x1bRequest_Bridge_Performative\x12\x14\n\x0csource_chain\x18\x01 \x01(\t\x12\x14\n\x0ctarget_chain\x18\x02 \x01(\t\x12\x14\n\x0csource_token\x18\x03 \x01(\t\x12\x14\n\x0ctarget_token\x18\x04 \x01(\t\x12\x1b\n\x13target_token_is_set\x18\x05 \x01(\x08\x12\x0e\n\x06\x62ridge\x18\x06 \x01(\t\x12s\n\x06kwargs\x18\x07 \x03(\x0b\x32\x63.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Bridge_Performative.KwargsEntry\x12\x15\n\rkwargs_is_set\x18\x08 \x01(\x08\x1a-\n\x0bKwargsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x87\x01\n\x1a\x42ridge_Status_Performative\x12X\n\x06status\x18\x01 \x01(\x0b\x32H.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.BridgeStatus\x12\x0f\n\x07tx_hash\x18\x02 \x01(\x0c\x1a.\n\x1bRequest_Status_Performative\x12\x0f\n\x07tx_hash\x18\x01 \x01(\x0c\x1az\n\x12\x45rror_Performative\x12S\n\x04\x63ode\x18\x01 \x01(\x0b\x32\x45.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.ErrorCode\x12\x0f\n\x07message\x18\x02 \x01(\tB\x0e\n\x0cperformativeb\x06proto3'
+    b'\n\x14\x61sset_bridging.proto\x12%aea.zarathustra.asset_bridging.v0_0_1\"\xa6\x0c\n\x14\x41ssetBridgingMessage\x12o\n\rbridge_status\x18\x05 \x01(\x0b\x32V.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Bridge_Status_PerformativeH\x00\x12_\n\x05\x65rror\x18\x06 \x01(\x0b\x32N.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Error_PerformativeH\x00\x12q\n\x0erequest_bridge\x18\x07 \x01(\x0b\x32W.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Bridge_PerformativeH\x00\x12q\n\x0erequest_status\x18\x08 \x01(\x0b\x32W.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Status_PerformativeH\x00\x1a\xc4\x01\n\x0c\x42ridgeStatus\x12i\n\x06status\x18\x01 \x01(\x0e\x32Y.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.BridgeStatus.BridgeStatusEnum\"I\n\x10\x42ridgeStatusEnum\x12\n\n\x06\x46\x41ILED\x10\x00\x12\r\n\tCOMPLETED\x10\x01\x12\x0b\n\x07PENDING\x10\x02\x12\r\n\tCLAIMABLE\x10\x03\x1a\xad\x01\n\tErrorCode\x12g\n\nerror_code\x18\x01 \x01(\x0e\x32S.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.ErrorCode.ErrorCodeEnum\"7\n\rErrorCodeEnum\x12\x11\n\rUNKNOWN_ROUTE\x10\x00\x12\x13\n\x0fOTHER_EXCEPTION\x10\x01\x1a\x98\x03\n\x1bRequest_Bridge_Performative\x12\x14\n\x0csource_chain\x18\x01 \x01(\t\x12\x14\n\x0ctarget_chain\x18\x02 \x01(\t\x12\x14\n\x0csource_token\x18\x03 \x01(\t\x12\x14\n\x0ctarget_token\x18\x04 \x01(\t\x12\x1b\n\x13target_token_is_set\x18\x05 \x01(\x08\x12\x0e\n\x06\x61mount\x18\x06 \x01(\x05\x12\x0e\n\x06\x62ridge\x18\x07 \x01(\t\x12\x10\n\x08receiver\x18\x08 \x01(\t\x12\x17\n\x0freceiver_is_set\x18\t \x01(\x08\x12s\n\x06kwargs\x18\n \x03(\x0b\x32\x63.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.Request_Bridge_Performative.KwargsEntry\x12\x15\n\rkwargs_is_set\x18\x0b \x01(\x08\x1a-\n\x0bKwargsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x87\x01\n\x1a\x42ridge_Status_Performative\x12X\n\x06status\x18\x01 \x01(\x0b\x32H.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.BridgeStatus\x12\x0f\n\x07tx_hash\x18\x02 \x01(\t\x1a.\n\x1bRequest_Status_Performative\x12\x0f\n\x07tx_hash\x18\x01 \x01(\t\x1az\n\x12\x45rror_Performative\x12S\n\x04\x63ode\x18\x01 \x01(\x0b\x32\x45.aea.zarathustra.asset_bridging.v0_0_1.AssetBridgingMessage.ErrorCode\x12\x0f\n\x07message\x18\x02 \x01(\tB\x0e\n\x0cperformativeb\x06proto3'
 )
 
 _globals = globals()
@@ -26,23 +26,23 @@ if not _descriptor._USE_C_DESCRIPTORS:
     _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._loaded_options = None
     _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._serialized_options = b'8\001'
     _globals['_ASSETBRIDGINGMESSAGE']._serialized_start = 64
-    _globals['_ASSETBRIDGINGMESSAGE']._serialized_end = 1587
+    _globals['_ASSETBRIDGINGMESSAGE']._serialized_end = 1638
     _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS']._serialized_start = 529
-    _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS']._serialized_end = 733
+    _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS']._serialized_end = 725
     _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS_BRIDGESTATUSENUM']._serialized_start = 652
-    _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS_BRIDGESTATUSENUM']._serialized_end = 733
-    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE']._serialized_start = 736
-    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE']._serialized_end = 909
-    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_start = 854
-    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_end = 909
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE']._serialized_start = 912
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE']._serialized_end = 1261
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._serialized_start = 1216
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._serialized_end = 1261
-    _globals['_ASSETBRIDGINGMESSAGE_BRIDGE_STATUS_PERFORMATIVE']._serialized_start = 1264
-    _globals['_ASSETBRIDGINGMESSAGE_BRIDGE_STATUS_PERFORMATIVE']._serialized_end = 1399
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_STATUS_PERFORMATIVE']._serialized_start = 1401
-    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_STATUS_PERFORMATIVE']._serialized_end = 1447
-    _globals['_ASSETBRIDGINGMESSAGE_ERROR_PERFORMATIVE']._serialized_start = 1449
-    _globals['_ASSETBRIDGINGMESSAGE_ERROR_PERFORMATIVE']._serialized_end = 1571
+    _globals['_ASSETBRIDGINGMESSAGE_BRIDGESTATUS_BRIDGESTATUSENUM']._serialized_end = 725
+    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE']._serialized_start = 728
+    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE']._serialized_end = 901
+    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_start = 846
+    _globals['_ASSETBRIDGINGMESSAGE_ERRORCODE_ERRORCODEENUM']._serialized_end = 901
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE']._serialized_start = 904
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE']._serialized_end = 1312
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._serialized_start = 1267
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_BRIDGE_PERFORMATIVE_KWARGSENTRY']._serialized_end = 1312
+    _globals['_ASSETBRIDGINGMESSAGE_BRIDGE_STATUS_PERFORMATIVE']._serialized_start = 1315
+    _globals['_ASSETBRIDGINGMESSAGE_BRIDGE_STATUS_PERFORMATIVE']._serialized_end = 1450
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_STATUS_PERFORMATIVE']._serialized_start = 1452
+    _globals['_ASSETBRIDGINGMESSAGE_REQUEST_STATUS_PERFORMATIVE']._serialized_end = 1498
+    _globals['_ASSETBRIDGINGMESSAGE_ERROR_PERFORMATIVE']._serialized_start = 1500
+    _globals['_ASSETBRIDGINGMESSAGE_ERROR_PERFORMATIVE']._serialized_end = 1622
 # @@protoc_insertion_point(module_scope)

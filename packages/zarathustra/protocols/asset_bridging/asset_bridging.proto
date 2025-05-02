@@ -7,10 +7,10 @@ message AssetBridgingMessage{
   // Custom Types
   message BridgeStatus{
     enum BridgeStatusEnum {
-      BRIDGE_STATUS_ENUM_IN_PROGRESS = 0;
-      BRIDGE_STATUS_ENUM_PENDING_CLAIM = 1;
-      BRIDGE_STATUS_ENUM_COMPLETED = 2;
-      BRIDGE_STATUS_ENUM_FAILED = 3;
+      BRIDGE_STATUS_ENUM_FAILED = 0;
+      BRIDGE_STATUS_ENUM_COMPLETED = 1;
+      BRIDGE_STATUS_ENUM_PENDING = 2;
+      BRIDGE_STATUS_ENUM_CLAIMABLE = 3;
     }
     BridgeStatusEnum status = 1;
   }
@@ -31,18 +31,21 @@ message AssetBridgingMessage{
     string source_token = 3;
     string target_token = 4;
     bool target_token_is_set = 5;
-    string bridge = 6;
-    map<string, string> kwargs = 7;
-    bool kwargs_is_set = 8;
+    int32 amount = 6;
+    string bridge = 7;
+    string receiver = 8;
+    bool receiver_is_set = 9;
+    map<string, string> kwargs = 10;
+    bool kwargs_is_set = 11;
   }
 
   message Bridge_Status_Performative{
     BridgeStatus status = 1;
-    bytes tx_hash = 2;
+    string tx_hash = 2;
   }
 
   message Request_Status_Performative{
-    bytes tx_hash = 1;
+    string tx_hash = 1;
   }
 
   message Error_Performative{
