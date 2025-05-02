@@ -42,6 +42,10 @@ from packages.eightballer.protocols.user_interaction.custom_types import ErrorCo
 
 def clean_env_var(val: str) -> str:
     """Clean the environment variable."""
+    if val is None:
+        return None
+    if val == "":
+        return None
     res = val.strip(val[0]) if val[:1] == val[-1:] and val[:1] in "'\"" else val
     if res in {"None", "null"}:
         return None
