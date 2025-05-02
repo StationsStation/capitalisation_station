@@ -9,7 +9,7 @@ fingerprint:
   .env.example: bafybeihzd3yocyrtad63nzjthcqpxnktjgdumhacil72khllev3kmte56m
   tests/test_service.py: bafybeicslmnjnf43pbzmwlqr7p7xw2iktcrnuq6l7klkrc5r4yberg66u4
 fingerprint_ignore_patterns: []
-agent: eightballer/trader:0.1.0:bafybeigjzoizlze2kueq4muqpmfzkvdtrmiayim374vrg5j5rwti7ioagy
+agent: eightballer/trader:0.1.0:bafybeihozffm2ss2c663uzzklzisnvzvdlpj7qqlqxqctqybbjpmudcfim
 number_of_agents: 1
 deployment:
   agent:
@@ -34,7 +34,7 @@ config:
     api_secret: ${MEXC_API_SECRET:str}
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
-public_id: eightballer/apprise:0.1.0
+public_id: eightballer/apprise_wrapper:0.1.0
 type: connection
 config:
   endpoints:

@@ -25,13 +25,13 @@ from typing import Any, cast
 from asyncio.events import AbstractEventLoop
 from collections.abc import Callable
 
+import apprise
 from aea.common import Address
 from aea.mail.base import Message, Envelope
 from aea.connections.base import Connection, ConnectionStates
 from aea.configurations.base import PublicId
 from aea.protocols.dialogue.base import Dialogue
 
-import apprise
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogue,
@@ -48,7 +48,7 @@ def clean_env_var(val: str) -> str:
     return res
 
 
-CONNECTION_ID = PublicId.from_str("eightballer/apprise:0.1.0")
+CONNECTION_ID = PublicId.from_str("eightballer/apprise_wrapper:0.1.0")
 
 
 _default_logger = logging.getLogger("aea.packages.eightballer.connections.apprise")

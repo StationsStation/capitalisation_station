@@ -8,7 +8,7 @@ fingerprint:
   tests/test_trader_agent.py: bafybeibcg6glyfbifp7sagmxvwbqiomc276su526xdzrwjkxfdqunvjzna
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise:0.1.0:bafybeibirjy3vqzv6grif54ub3tnyn2nreybmcgeorbkiu4ho35jg5cy2u
+- eightballer/apprise_wrapper:0.1.0:bafybeifx733pvk25u62jfanpmcrbw4mktziclvrlwsjtoqhhnk5jmhpzmq
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
 - eightballer/dcxt:0.1.0:bafybeicw52cswrbi256okgd43rekm7ens2nuuojcrpelbuappma2v3srpa
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
@@ -48,7 +48,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeiams7g4pynaklci2zatx2ick62smkkcli4p3zuimrtv334plbhi7e
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeibyb4yljnyfkq7xxeczil4lvubezwzhg3xwqdo6k2i6g4m4mbq2qq
+- eightballer/simple_fsm:0.1.0:bafybeidumg7dffo3ftsstj5acg6cbsenziglyqaznsfzslaxj4tg7crbna
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 customs:
@@ -118,7 +118,7 @@ config:
     api_secret: ${str:YOUR_SECRET}
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
-public_id: eightballer/apprise:0.1.0
+public_id: eightballer/apprise_wrapper:0.1.0
 type: connection
 config:
   endpoints:
