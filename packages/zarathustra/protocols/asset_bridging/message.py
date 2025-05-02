@@ -67,6 +67,7 @@ class AssetBridgingMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
+            "amount",
             "bridge",
             "code",
             "dialogue_reference",
@@ -74,6 +75,7 @@ class AssetBridgingMessage(Message):
             "message",
             "message_id",
             "performative",
+            "receiver",
             "source_chain",
             "source_token",
             "status",
@@ -138,6 +140,12 @@ class AssetBridgingMessage(Message):
         return cast(int, self.get("target"))
 
     @property
+    def amount(self) -> int:
+        """Get the 'amount' content from the message."""
+        enforce(self.is_set("amount"), "'amount' content is not set.")
+        return cast(int, self.get("amount"))
+
+    @property
     def bridge(self) -> str:
         """Get the 'bridge' content from the message."""
         enforce(self.is_set("bridge"), "'bridge' content is not set.")
@@ -159,6 +167,11 @@ class AssetBridgingMessage(Message):
         """Get the 'message' content from the message."""
         enforce(self.is_set("message"), "'message' content is not set.")
         return cast(str, self.get("message"))
+
+    @property
+    def receiver(self) -> Optional[str]:
+        """Get the 'receiver' content from the message."""
+        return cast(Optional[str], self.get("receiver"))
 
     @property
     def source_chain(self) -> str:
@@ -190,10 +203,10 @@ class AssetBridgingMessage(Message):
         return cast(Optional[str], self.get("target_token"))
 
     @property
-    def tx_hash(self) -> bytes:
+    def tx_hash(self) -> str:
         """Get the 'tx_hash' content from the message."""
         enforce(self.is_set("tx_hash"), "'tx_hash' content is not set.")
-        return cast(bytes, self.get("tx_hash"))
+        return cast(str, self.get("tx_hash"))
 
     def _is_consistent(self) -> bool:
         """Check that the message follows the asset_bridging protocol."""
@@ -238,7 +251,7 @@ class AssetBridgingMessage(Message):
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
             if self.performative == AssetBridgingMessage.Performative.REQUEST_BRIDGE:
-                expected_nb_of_contents = 4
+                expected_nb_of_contents = 5
                 enforce(
                     isinstance(self.source_chain, str),
                     "Invalid type for content 'source_chain'. Expected 'str'. Found '{}'.".format(
@@ -267,9 +280,20 @@ class AssetBridgingMessage(Message):
                         ),
                     )
                 enforce(
+                    type(self.amount) is int,
+                    "Invalid type for content 'amount'. Expected 'int'. Found '{}'.".format(type(self.amount)),
+                )
+                enforce(
                     isinstance(self.bridge, str),
                     "Invalid type for content 'bridge'. Expected 'str'. Found '{}'.".format(type(self.bridge)),
                 )
+                if self.is_set("receiver"):
+                    expected_nb_of_contents += 1
+                    receiver = cast(str, self.receiver)
+                    enforce(
+                        isinstance(receiver, str),
+                        "Invalid type for content 'receiver'. Expected 'str'. Found '{}'.".format(type(receiver)),
+                    )
                 if self.is_set("kwargs"):
                     expected_nb_of_contents += 1
                     kwargs = cast(Dict[str, str], self.kwargs)
@@ -297,14 +321,14 @@ class AssetBridgingMessage(Message):
                     "Invalid type for content 'status'. Expected 'BridgeStatus'. Found '{}'.".format(type(self.status)),
                 )
                 enforce(
-                    isinstance(self.tx_hash, bytes),
-                    "Invalid type for content 'tx_hash'. Expected 'bytes'. Found '{}'.".format(type(self.tx_hash)),
+                    isinstance(self.tx_hash, str),
+                    "Invalid type for content 'tx_hash'. Expected 'str'. Found '{}'.".format(type(self.tx_hash)),
                 )
             elif self.performative == AssetBridgingMessage.Performative.REQUEST_STATUS:
                 expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.tx_hash, bytes),
-                    "Invalid type for content 'tx_hash'. Expected 'bytes'. Found '{}'.".format(type(self.tx_hash)),
+                    isinstance(self.tx_hash, str),
+                    "Invalid type for content 'tx_hash'. Expected 'str'. Found '{}'.".format(type(self.tx_hash)),
                 )
             elif self.performative == AssetBridgingMessage.Performative.ERROR:
                 expected_nb_of_contents = 2

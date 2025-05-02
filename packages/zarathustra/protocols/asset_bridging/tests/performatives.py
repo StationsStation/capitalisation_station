@@ -2,10 +2,13 @@
 
 """Models for the asset_bridging protocol performatives to facilitate hypothesis strategy generation."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorCode,
     BridgeStatus,
+)
+from packages.zarathustra.protocols.asset_bridging.tests.primitive_strategies import (
+    Int32,
 )
 
 
@@ -16,7 +19,9 @@ class RequestBridge(BaseModel):
     target_chain: str
     source_token: str
     target_token: str | None
+    amount: conint(ge=Int32.min(), le=Int32.max())
     bridge: str
+    receiver: str | None
     kwargs: dict[str, str] | None
 
 
@@ -24,13 +29,13 @@ class BridgeStatus(BaseModel):
     """Model for the `BRIDGE_STATUS` initial speech act performative."""
 
     status: BridgeStatus
-    tx_hash: bytes
+    tx_hash: str
 
 
 class RequestStatus(BaseModel):
     """Model for the `REQUEST_STATUS` initial speech act performative."""
 
-    tx_hash: bytes
+    tx_hash: str
 
 
 class Error(BaseModel):

@@ -19,13 +19,15 @@ speech_acts:
     target_chain: pt:str
     source_token: pt:str
     target_token: pt:optional[pt:str]
+    amount: pt:int
     bridge: pt:str
+    receiver: pt:optional[pt:str]
     kwargs: pt:optional[pt:dict[pt:str, pt:str]]
   bridge_status:
     status: ct:BridgeStatus
-    tx_hash: pt:bytes
+    tx_hash: pt:str
   request_status:
-    tx_hash: pt:bytes
+    tx_hash: pt:str
   error:
     code: ct:ErrorCode
     message: pt:str
@@ -33,10 +35,10 @@ speech_acts:
 ---
 ct:BridgeStatus: |
   enum BridgeStatusEnum {
-      IN_PROGRESS = 0;
-      PENDING_CLAIM = 1;
-      COMPLETED = 2;
-      FAILED = 3;
+      FAILED = 0;
+      COMPLETED = 1;
+      PENDING = 2;
+      CLAIMABLE = 3;
     }
   BridgeStatusEnum status = 1;
 ct:ErrorCode: |

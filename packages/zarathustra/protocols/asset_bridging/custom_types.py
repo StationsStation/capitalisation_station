@@ -24,10 +24,10 @@ class BridgeStatus(BaseModel):
     class BridgeStatusEnum(IntEnum):
         """BridgeStatusEnum."""
 
-        BRIDGE_STATUS_ENUM_IN_PROGRESS = 0
-        BRIDGE_STATUS_ENUM_PENDING_CLAIM = 1
-        BRIDGE_STATUS_ENUM_COMPLETED = 2
-        BRIDGE_STATUS_ENUM_FAILED = 3
+        BRIDGE_STATUS_ENUM_FAILED = 0
+        BRIDGE_STATUS_ENUM_COMPLETED = 1
+        BRIDGE_STATUS_ENUM_PENDING = 2
+        BRIDGE_STATUS_ENUM_CLAIMABLE = 3
 
     status: BridgeStatus.BridgeStatusEnum
 
