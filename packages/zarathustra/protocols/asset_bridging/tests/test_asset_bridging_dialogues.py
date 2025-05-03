@@ -20,7 +20,7 @@ from packages.zarathustra.protocols.asset_bridging.tests.performatives import (
 def shallow_dump(model: BaseModel) -> dict:
     """Shallow dump pydantic model."""
 
-    return {name: getattr(model, name) for name in model.__fields__}
+    return {name: getattr(model, name) for name in model.__class__.model_fields}
 
 
 def validate_dialogue(performative, model):

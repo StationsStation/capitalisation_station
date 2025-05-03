@@ -13,8 +13,7 @@ speech_acts:
   request_status:
     result: ct:BridgeResult
   error:
-    code: ct:ErrorCode
-    message: pt:str
+    info: ct:ErrorInfo
 ...
 ---
 ct:BridgeRequest: |
@@ -36,12 +35,17 @@ ct:BridgeResult: |
   string tx_hash = 1;
   BridgeStatus status = 2;
   BridgeRequest request = 3;
-ct:ErrorCode: |
-  enum ErrorCodeEnum {
-      UNKNOWN_ROUTE = 0;
-      OTHER_EXCEPTION = 1;
+ct:ErrorInfo: |
+  enum Code {
+      INVALID_PERFORMATIVE = 0;
+      CONNECTION_ERROR = 1;
+      INVALID_ROUTE = 2;
+      INVALID_PARAMETERS = 3;
+      ALREADY_FINALIZED = 4;
+      OTHER_EXCEPTION = 5;
     }
-  ErrorCodeEnum error_code = 1;
+  Code code = 1;
+  string message = 2;
 ...
 ---
 initiation:

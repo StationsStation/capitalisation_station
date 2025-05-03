@@ -2,7 +2,7 @@
 
 from hypothesis import given, strategies as st
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
-    ErrorCode,
+    ErrorInfo,
     BridgeResult,
     BridgeRequest,
 )
@@ -13,7 +13,7 @@ from packages.zarathustra.protocols.asset_bridging.asset_bridging_pb2 import (
 
 bridgerequest_strategy = st.from_type(BridgeRequest)
 bridgeresult_strategy = st.from_type(BridgeResult)
-errorcode_strategy = st.from_type(ErrorCode)
+errorinfo_strategy = st.from_type(ErrorInfo)
 
 
 @given(bridgerequest_strategy)
@@ -38,12 +38,12 @@ def test_bridgeresult(bridgeresult: BridgeResult):
     assert bridgeresult == result
 
 
-@given(errorcode_strategy)
-def test_errorcode(errorcode: ErrorCode):
-    """Test ErrorCode."""
-    assert isinstance(errorcode, ErrorCode)
-    proto_obj = asset_bridging_pb2.ErrorCode()
-    errorcode.encode(proto_obj, errorcode)
-    result = ErrorCode.decode(proto_obj)
-    assert id(errorcode) != id(result)
-    assert errorcode == result
+@given(errorinfo_strategy)
+def test_errorinfo(errorinfo: ErrorInfo):
+    """Test ErrorInfo."""
+    assert isinstance(errorinfo, ErrorInfo)
+    proto_obj = asset_bridging_pb2.ErrorInfo()
+    errorinfo.encode(proto_obj, errorinfo)
+    result = ErrorInfo.decode(proto_obj)
+    assert id(errorinfo) != id(result)
+    assert errorinfo == result
