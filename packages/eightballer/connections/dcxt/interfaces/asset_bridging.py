@@ -1,6 +1,7 @@
 import requests
 
-from derive_client.data_types import ChainID, Currency, TxResult, Address
+from derive_client.utils import get_w3_connection, wait_for_tx_receipt
+from derive_client.data_types import ChainID, Currency, TxResult, TxStatus
 from derive_client.clients.async_client import AsyncClient
 
 from packages.eightballer.connections.dcxt import dcxt
@@ -33,6 +34,11 @@ class AssetBridgingInterface(BaseInterface):
             raise NotImplementedError("Can only bridge FROM or TO derive at this time")
         if request.target_token and request.target_token != request.source_token:
             raise NotImplementedError(f"Socket superbridge requires source_token == target_token, got {request}")
+
+        ledger_id = exchange_id = request.bridge
+        exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
+        client: AsyncClient = exchange.client
+
         if request.receiver is not None:
             raise NotImplementedError(
                 "Providing a custom receiver isn’t supported for the Derive superbridge.\n"
@@ -40,10 +46,6 @@ class AssetBridgingInterface(BaseInterface):
                 f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
                 f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
             )
-
-        ledger_id = exchange_id = request.bridge
-        exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
-        client: AsyncClient = exchange.client
 
         currency = Currency[request.source_token]
         source_chain_id = ChainID[request.source_chain.upper()]
@@ -55,7 +57,7 @@ class AssetBridgingInterface(BaseInterface):
                 chain_id=target_chain_id,
                 currency=currency,
                 amount=request.amount,
-                receiver=request.receiver,
+                receiver=receiver,
             )
         else:
             receiver = client.wallet
@@ -63,7 +65,7 @@ class AssetBridgingInterface(BaseInterface):
                 chain_id=source_chain_id,
                 currency=currency,
                 amount=request.amount,
-                receiver=request.receiver,
+                receiver=receiver,
             )
 
         match tx_result.status:
@@ -105,9 +107,37 @@ class AssetBridgingInterface(BaseInterface):
         if not request.bridge == "derive":
             raise NotImplementedError(f"Bridge '{request.bridge}' not supported")
         if not result.status == BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT:
-            # TODO: log: All other status values are final
+            print(f"BridgeResult.status is final: {result.status}") # TODO: log
             return
 
-        # TODO: poll for receipt or check logs for TokensBridged event
-        # Protocol is atomic; we currently don't have context of original bridge request
-        # This orignal bridge request provide the context necessary to check for status
+        source_chain_id = ChainID[request.source_chain.upper()]
+
+        try:
+            w3 = get_w3_connection(chain_id=source_chain_id)
+            tx_receipt = wait_for_tx_receipt(w3=w3, tx_hash=result.tx_hash)
+        except ConnectionError:
+            return dialogue.reply(
+                    performative=AssetBridgingMessage.Performative.ERROR,
+                    target_message=message,
+                    message=f"Failed to connect to {source_chain_id}",
+                    code=AssetBridgingMessage.ErrorCode.ERROR_CODE_ENUM_OTHER_EXCEPTION,
+                )
+        except TimeoutError:
+            return dialogue.reply(
+                performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
+                target_message=message,
+                result=result,
+            )
+
+        match tx_receipt.status:  # ∈ {0, 1} (EIP-658)
+            case TxStatus.SUCCESS:
+                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+            case _:
+                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
+
+        result.status = status
+        return dialogue.reply(
+            performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
+            target_message=message,
+            result=result,
+        )
