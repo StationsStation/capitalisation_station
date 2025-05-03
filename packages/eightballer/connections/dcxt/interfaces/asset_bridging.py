@@ -1,4 +1,4 @@
-import requests
+from functools import partial
 
 from derive_client.utils import get_w3_connection, wait_for_tx_receipt
 from derive_client.data_types import ChainID, Currency, TxResult, TxStatus
@@ -12,6 +12,9 @@ from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgin
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
+ErrorCode = AssetBridgingMessage.ErrorInfo.Code
+
+
 class AssetBridgingInterface(BaseInterface):
     """Interface for the asset bridging protocol."""
 
@@ -23,28 +26,45 @@ class AssetBridgingInterface(BaseInterface):
             self, message: AssetBridgingMessage, dialogue: AssetBridgingDialogue, connection
         ) -> AssetBridgingMessage | None:
 
+        reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
         if not message.performative == AssetBridgingMessage.Performative.REQUEST_BRIDGE:
-            raise RuntimeError()
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
+                err_msg="Expecting REQUEST_BRIDGE performative",
+            )
 
         request: BridgeRequest = message.request
 
         if not request.bridge == "derive":
-            raise NotImplementedError(f"Bridge '{request.bridge}' not supported")
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                err_msg=f"Bridge '{request.bridge}' not supported",
+            )
         if not (request.source_chain == "derive" or request.target_chain == "derive"):
-            raise NotImplementedError("Can only bridge FROM or TO derive at this time")
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                err_msg="Can only bridge FROM or TO derive at this time",
+            )
         if request.target_token and request.target_token != request.source_token:
-            raise NotImplementedError(f"Socket superbridge requires source_token == target_token, got {request}")
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
+            )
 
         ledger_id = exchange_id = request.bridge
         exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
         client: AsyncClient = exchange.client
 
         if request.receiver is not None:
-            raise NotImplementedError(
-                "Providing a custom receiver isn’t supported for the Derive superbridge.\n"
+            err_msg = (
+                "Providing a custom receiver isn't supported for the Derive superbridge.\n"
                 "We automatically use:\n"
                 f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
                 f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
+            )
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                err_msg=err_msg,
             )
 
         currency = Currency[request.source_token]
@@ -76,13 +96,10 @@ class AssetBridgingInterface(BaseInterface):
             case TxStatus.PENDING:
                 status = BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT
             case TxStatus.ERROR:
-                response_message = dialogue.reply(
-                    performative=AssetBridgingMessage.Performative.ERROR,
-                    target_message=message,
-                    message=f"{tx_result}",
-                    code=AssetBridgingMessage.ErrorCode.ERROR_CODE_ENUM_OTHER_EXCEPTION,
+                return reply_err(
+                    code=ErrorCode.CODE_OTHER_EXCEPTION,
+                    err_msg=f"{tx_result}",
                 )
-                return response_message
 
         result = BridgeResult(
             tx_hash=tx_result.tx_hash,
@@ -99,16 +116,27 @@ class AssetBridgingInterface(BaseInterface):
     async def request_status(
             self, message: AssetBridgingMessage, dialogue: AssetBridgingDialogue, connection
         ) -> AssetBridgingMessage | None:
+
+        reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
         if not message.performative == AssetBridgingMessage.Performative.REQUEST_STATUS:
-            raise RuntimeError()
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
+                err_msg="Expecting REQUEST_STATUS performative",
+            )
 
         result: BridgeResult = message.result
         request: BridgeRequest = result.request
+
         if not request.bridge == "derive":
-            raise NotImplementedError(f"Bridge '{request.bridge}' not supported")
+            return reply_err(
+                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                err_msg=f"Bridge '{request.bridge}' not supported",
+            )
         if not result.status == BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT:
-            print(f"BridgeResult.status is final: {result.status}") # TODO: log
-            return
+            return reply_err(
+                code=ErrorCode.CODE_ALREADY_FINALIZED,
+                err_msg=f"BridgeResult.status is already final",
+            )
 
         source_chain_id = ChainID[request.source_chain.upper()]
 
@@ -116,12 +144,10 @@ class AssetBridgingInterface(BaseInterface):
             w3 = get_w3_connection(chain_id=source_chain_id)
             tx_receipt = wait_for_tx_receipt(w3=w3, tx_hash=result.tx_hash)
         except ConnectionError:
-            return dialogue.reply(
-                    performative=AssetBridgingMessage.Performative.ERROR,
-                    target_message=message,
-                    message=f"Failed to connect to {source_chain_id}",
-                    code=AssetBridgingMessage.ErrorCode.ERROR_CODE_ENUM_OTHER_EXCEPTION,
-                )
+            return reply_err(
+                code=ErrorCode.CODE_CONNECTION_ERROR,
+                err_msg=f"Failed to connect to {source_chain_id}",
+            )
         except TimeoutError:
             return dialogue.reply(
                 performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
@@ -140,4 +166,20 @@ class AssetBridgingInterface(BaseInterface):
             performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
             target_message=message,
             result=result,
+        )
+
+    def _error_reply(
+        self,
+        dialogue: AssetBridgingDialogue,
+        target_message: AssetBridgingMessage,
+        code: ErrorCode,
+        err_msg: str,
+    ) -> AssetBridgingMessage:
+        return dialogue.reply(
+            performative=AssetBridgingMessage.Performative.ERROR,
+            target_message=target_message,
+            info=AssetBridgingMessage.ErrorInfo(
+                code=code,
+                message=err_msg,
+            )
         )
