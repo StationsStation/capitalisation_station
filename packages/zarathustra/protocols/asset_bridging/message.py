@@ -21,14 +21,17 @@
 
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,too-many-branches,not-an-iterable,unidiomatic-typecheck,unsubscriptable-object
 import logging
-from typing import Any, Dict, Optional, Set, Tuple, cast
+from typing import Any, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
 from aea.protocols.base import Message  # type: ignore
 
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
-    BridgeStatus as CustomBridgeStatus,
+    BridgeRequest as CustomBridgeRequest,
+)
+from packages.zarathustra.protocols.asset_bridging.custom_types import (
+    BridgeResult as CustomBridgeResult,
 )
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorCode as CustomErrorCode,
@@ -46,7 +49,9 @@ class AssetBridgingMessage(Message):
     protocol_id = PublicId.from_str("zarathustra/asset_bridging:0.0.1")
     protocol_specification_id = PublicId.from_str("zarathustra/asset_bridging:0.0.1")
 
-    BridgeStatus = CustomBridgeStatus
+    BridgeRequest = CustomBridgeRequest
+
+    BridgeResult = CustomBridgeResult
 
     ErrorCode = CustomErrorCode
 
@@ -67,22 +72,14 @@ class AssetBridgingMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
-            "amount",
-            "bridge",
             "code",
             "dialogue_reference",
-            "kwargs",
             "message",
             "message_id",
             "performative",
-            "receiver",
-            "source_chain",
-            "source_token",
-            "status",
+            "request",
+            "result",
             "target",
-            "target_chain",
-            "target_token",
-            "tx_hash",
         )
 
     def __init__(
@@ -140,27 +137,10 @@ class AssetBridgingMessage(Message):
         return cast(int, self.get("target"))
 
     @property
-    def amount(self) -> int:
-        """Get the 'amount' content from the message."""
-        enforce(self.is_set("amount"), "'amount' content is not set.")
-        return cast(int, self.get("amount"))
-
-    @property
-    def bridge(self) -> str:
-        """Get the 'bridge' content from the message."""
-        enforce(self.is_set("bridge"), "'bridge' content is not set.")
-        return cast(str, self.get("bridge"))
-
-    @property
     def code(self) -> CustomErrorCode:
         """Get the 'code' content from the message."""
         enforce(self.is_set("code"), "'code' content is not set.")
         return cast(CustomErrorCode, self.get("code"))
-
-    @property
-    def kwargs(self) -> Optional[Dict[str, str]]:
-        """Get the 'kwargs' content from the message."""
-        return cast(Optional[Dict[str, str]], self.get("kwargs"))
 
     @property
     def message(self) -> str:
@@ -169,44 +149,16 @@ class AssetBridgingMessage(Message):
         return cast(str, self.get("message"))
 
     @property
-    def receiver(self) -> Optional[str]:
-        """Get the 'receiver' content from the message."""
-        return cast(Optional[str], self.get("receiver"))
+    def request(self) -> CustomBridgeRequest:
+        """Get the 'request' content from the message."""
+        enforce(self.is_set("request"), "'request' content is not set.")
+        return cast(CustomBridgeRequest, self.get("request"))
 
     @property
-    def source_chain(self) -> str:
-        """Get the 'source_chain' content from the message."""
-        enforce(self.is_set("source_chain"), "'source_chain' content is not set.")
-        return cast(str, self.get("source_chain"))
-
-    @property
-    def source_token(self) -> str:
-        """Get the 'source_token' content from the message."""
-        enforce(self.is_set("source_token"), "'source_token' content is not set.")
-        return cast(str, self.get("source_token"))
-
-    @property
-    def status(self) -> CustomBridgeStatus:
-        """Get the 'status' content from the message."""
-        enforce(self.is_set("status"), "'status' content is not set.")
-        return cast(CustomBridgeStatus, self.get("status"))
-
-    @property
-    def target_chain(self) -> str:
-        """Get the 'target_chain' content from the message."""
-        enforce(self.is_set("target_chain"), "'target_chain' content is not set.")
-        return cast(str, self.get("target_chain"))
-
-    @property
-    def target_token(self) -> Optional[str]:
-        """Get the 'target_token' content from the message."""
-        return cast(Optional[str], self.get("target_token"))
-
-    @property
-    def tx_hash(self) -> str:
-        """Get the 'tx_hash' content from the message."""
-        enforce(self.is_set("tx_hash"), "'tx_hash' content is not set.")
-        return cast(str, self.get("tx_hash"))
+    def result(self) -> CustomBridgeResult:
+        """Get the 'result' content from the message."""
+        enforce(self.is_set("result"), "'result' content is not set.")
+        return cast(CustomBridgeResult, self.get("result"))
 
     def _is_consistent(self) -> bool:
         """Check that the message follows the asset_bridging protocol."""
@@ -251,84 +203,24 @@ class AssetBridgingMessage(Message):
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
             if self.performative == AssetBridgingMessage.Performative.REQUEST_BRIDGE:
-                expected_nb_of_contents = 5
+                expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.source_chain, str),
-                    "Invalid type for content 'source_chain'. Expected 'str'. Found '{}'.".format(
-                        type(self.source_chain)
+                    isinstance(self.request, CustomBridgeRequest),
+                    "Invalid type for content 'request'. Expected 'BridgeRequest'. Found '{}'.".format(
+                        type(self.request)
                     ),
                 )
-                enforce(
-                    isinstance(self.target_chain, str),
-                    "Invalid type for content 'target_chain'. Expected 'str'. Found '{}'.".format(
-                        type(self.target_chain)
-                    ),
-                )
-                enforce(
-                    isinstance(self.source_token, str),
-                    "Invalid type for content 'source_token'. Expected 'str'. Found '{}'.".format(
-                        type(self.source_token)
-                    ),
-                )
-                if self.is_set("target_token"):
-                    expected_nb_of_contents += 1
-                    target_token = cast(str, self.target_token)
-                    enforce(
-                        isinstance(target_token, str),
-                        "Invalid type for content 'target_token'. Expected 'str'. Found '{}'.".format(
-                            type(target_token)
-                        ),
-                    )
-                enforce(
-                    type(self.amount) is int,
-                    "Invalid type for content 'amount'. Expected 'int'. Found '{}'.".format(type(self.amount)),
-                )
-                enforce(
-                    isinstance(self.bridge, str),
-                    "Invalid type for content 'bridge'. Expected 'str'. Found '{}'.".format(type(self.bridge)),
-                )
-                if self.is_set("receiver"):
-                    expected_nb_of_contents += 1
-                    receiver = cast(str, self.receiver)
-                    enforce(
-                        isinstance(receiver, str),
-                        "Invalid type for content 'receiver'. Expected 'str'. Found '{}'.".format(type(receiver)),
-                    )
-                if self.is_set("kwargs"):
-                    expected_nb_of_contents += 1
-                    kwargs = cast(Dict[str, str], self.kwargs)
-                    enforce(
-                        isinstance(kwargs, dict),
-                        "Invalid type for content 'kwargs'. Expected 'dict'. Found '{}'.".format(type(kwargs)),
-                    )
-                    for key_of_kwargs, value_of_kwargs in kwargs.items():
-                        enforce(
-                            isinstance(key_of_kwargs, str),
-                            "Invalid type for dictionary keys in content 'kwargs'. Expected 'str'. Found '{}'.".format(
-                                type(key_of_kwargs)
-                            ),
-                        )
-                        enforce(
-                            isinstance(value_of_kwargs, str),
-                            "Invalid type for dictionary values in content 'kwargs'. Expected 'str'. Found '{}'.".format(
-                                type(value_of_kwargs)
-                            ),
-                        )
             elif self.performative == AssetBridgingMessage.Performative.BRIDGE_STATUS:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.status, CustomBridgeStatus),
-                    "Invalid type for content 'status'. Expected 'BridgeStatus'. Found '{}'.".format(type(self.status)),
-                )
-                enforce(
-                    isinstance(self.tx_hash, str),
-                    "Invalid type for content 'tx_hash'. Expected 'str'. Found '{}'.".format(type(self.tx_hash)),
+                    isinstance(self.result, CustomBridgeResult),
+                    "Invalid type for content 'result'. Expected 'BridgeResult'. Found '{}'.".format(type(self.result)),
                 )
             elif self.performative == AssetBridgingMessage.Performative.REQUEST_STATUS:
                 expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.tx_hash, str),
-                    "Invalid type for content 'tx_hash'. Expected 'str'. Found '{}'.".format(type(self.tx_hash)),
+                    isinstance(self.result, CustomBridgeResult),
+                    "Invalid type for content 'result'. Expected 'BridgeResult'. Found '{}'.".format(type(self.result)),
                 )
             elif self.performative == AssetBridgingMessage.Performative.ERROR:
                 expected_nb_of_contents = 2
