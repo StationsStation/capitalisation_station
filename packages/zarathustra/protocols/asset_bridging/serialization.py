@@ -33,7 +33,7 @@ from packages.zarathustra.protocols.asset_bridging import (  # type: ignore
 from packages.zarathustra.protocols.asset_bridging.custom_types import (  # type: ignore
     BridgeRequest,
     BridgeResult,
-    ErrorCode,
+    ErrorInfo,
 )
 from packages.zarathustra.protocols.asset_bridging.message import (  # type: ignore
     AssetBridgingMessage,
@@ -80,10 +80,8 @@ class AssetBridgingSerializer(Serializer):
             asset_bridging_msg.request_status.CopyFrom(performative)
         elif performative_id == AssetBridgingMessage.Performative.ERROR:
             performative = asset_bridging_pb2.AssetBridgingMessage.Error_Performative()  # type: ignore
-            code = msg.code
-            ErrorCode.encode(performative.code, code)
-            message = msg.message
-            performative.message = message
+            info = msg.info
+            ErrorInfo.encode(performative.info, info)
             asset_bridging_msg.error.CopyFrom(performative)
         else:
             raise ValueError("Performative not valid: {}".format(performative_id))
@@ -129,11 +127,9 @@ class AssetBridgingSerializer(Serializer):
             result = BridgeResult.decode(pb2_result)
             performative_content["result"] = result
         elif performative_id == AssetBridgingMessage.Performative.ERROR:
-            pb2_code = asset_bridging_pb.error.code
-            code = ErrorCode.decode(pb2_code)
-            performative_content["code"] = code
-            message = asset_bridging_pb.error.message
-            performative_content["message"] = message
+            pb2_info = asset_bridging_pb.error.info
+            info = ErrorInfo.decode(pb2_info)
+            performative_content["info"] = info
         else:
             raise ValueError("Performative not valid: {}.".format(performative_id))
 

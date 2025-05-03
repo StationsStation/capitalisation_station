@@ -28,12 +28,17 @@ message AssetBridgingMessage{
     BridgeRequest request = 3;
   }
 
-  message ErrorCode{
-    enum ErrorCodeEnum {
-      ERROR_CODE_ENUM_UNKNOWN_ROUTE = 0;
-      ERROR_CODE_ENUM_OTHER_EXCEPTION = 1;
+  message ErrorInfo{
+    enum Code {
+      CODE_INVALID_PERFORMATIVE = 0;
+      CODE_CONNECTION_ERROR = 1;
+      CODE_INVALID_ROUTE = 2;
+      CODE_INVALID_PARAMETERS = 3;
+      CODE_ALREADY_FINALIZED = 4;
+      CODE_OTHER_EXCEPTION = 5;
     }
-    ErrorCodeEnum error_code = 1;
+    Code code = 1;
+    string message = 2;
   }
 
 
@@ -51,8 +56,7 @@ message AssetBridgingMessage{
   }
 
   message Error_Performative{
-    ErrorCode code = 1;
-    string message = 2;
+    ErrorInfo info = 1;
   }
 
 

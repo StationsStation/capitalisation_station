@@ -9,14 +9,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeieybhszcx7zmbu5gqhdfjp4wi3q7qzgdvtobpmm36warsgxr5soca
-  asset_bridging.proto: bafybeihzhylf4inpzmyhwwpxalv6633uz24zanqtx7lhqjvpevih2z377y
-  asset_bridging_pb2.py: bafybeihupk4uu4lvhicncvls67wxqavr32emn2ao4f264npwqtrplad5jm
-  custom_types.py: bafybeidspiurtqm5buhriu2goc5i3vl72deqikt3wuu254x7yyw6xsqjje
+  asset_bridging.proto: bafybeifnp6xndq6mfx2m4x2ljqtievun7hzscsbz33un2eaqz6uocvzux4
+  asset_bridging_pb2.py: bafybeibvyibfytz5ihkoeqo33c2ylkm74hgdzdaazxiioycshdyxp2ilna
+  custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
   dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
-  message.py: bafybeifjjoq6vh2w4veq7erfjs6jouh4uxbaqk5aakx6u6y64cp6nnefzm
-  serialization.py: bafybeibhskx3m4hekcmivr6cmwy6x7qix3sqh73t5yoodfoakoxuy4mt5q
+  message.py: bafybeid2ixvjhpni6otgnygaywwrbliciy3mh5aon7t2eb2hsijrmelovm
+  serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
   tests/test_asset_bridging_dialogues.py: bafybeif43wj2hdxs5ssdw2nebduiefs7ernbkiwhpz5fhirrr66vmc2pxu
-  tests/test_asset_bridging_messages.py: bafybeidm4qi7itsqx4gfrfcclhuhxdpvq2tmamkfrd6cowj7dogpgic4qq
+  tests/test_asset_bridging_messages.py: bafybeih5r2wjyxbyukf2ynnrqjks3e3kqfmg7wiczzhhk6xinbmzgjgp6m
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

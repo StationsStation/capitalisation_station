@@ -108,30 +108,37 @@ class BridgeResult(BaseModel):
         return cls(tx_hash=tx_hash, status=status, request=request)
 
 
-class ErrorCode(BaseModel):
-    """ErrorCode."""
+class ErrorInfo(BaseModel):
+    """ErrorInfo."""
 
-    class ErrorCodeEnum(IntEnum):
-        """ErrorCodeEnum."""
+    class Code(IntEnum):
+        """Code."""
 
-        ERROR_CODE_ENUM_UNKNOWN_ROUTE = 0
-        ERROR_CODE_ENUM_OTHER_EXCEPTION = 1
+        CODE_INVALID_PERFORMATIVE = 0
+        CODE_CONNECTION_ERROR = 1
+        CODE_INVALID_ROUTE = 2
+        CODE_INVALID_PARAMETERS = 3
+        CODE_ALREADY_FINALIZED = 4
+        CODE_OTHER_EXCEPTION = 5
 
-    error_code: ErrorCode.ErrorCodeEnum
+    code: ErrorInfo.Code
+    message: str
 
     @staticmethod
-    def encode(proto_obj, errorcode: ErrorCode) -> None:
-        """Encode ErrorCode to protobuf."""
+    def encode(proto_obj, errorinfo: ErrorInfo) -> None:
+        """Encode ErrorInfo to protobuf."""
 
-        proto_obj.error_code = errorcode.error_code
+        proto_obj.code = errorinfo.code
+        proto_obj.message = errorinfo.message
 
     @classmethod
-    def decode(cls, proto_obj) -> ErrorCode:
-        """Decode proto_obj to ErrorCode."""
+    def decode(cls, proto_obj) -> ErrorInfo:
+        """Decode proto_obj to ErrorInfo."""
 
-        error_code = proto_obj.error_code
+        code = proto_obj.code
+        message = proto_obj.message
 
-        return cls(error_code=error_code)
+        return cls(code=code, message=message)
 
 
 for cls in BaseModel.__subclasses__():

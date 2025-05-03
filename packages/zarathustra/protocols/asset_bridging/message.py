@@ -34,7 +34,7 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import (
     BridgeResult as CustomBridgeResult,
 )
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
-    ErrorCode as CustomErrorCode,
+    ErrorInfo as CustomErrorInfo,
 )
 
 
@@ -53,7 +53,7 @@ class AssetBridgingMessage(Message):
 
     BridgeResult = CustomBridgeResult
 
-    ErrorCode = CustomErrorCode
+    ErrorInfo = CustomErrorInfo
 
     class Performative(Message.Performative):
         """Performatives for the asset_bridging protocol."""
@@ -72,9 +72,8 @@ class AssetBridgingMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
-            "code",
             "dialogue_reference",
-            "message",
+            "info",
             "message_id",
             "performative",
             "request",
@@ -137,16 +136,10 @@ class AssetBridgingMessage(Message):
         return cast(int, self.get("target"))
 
     @property
-    def code(self) -> CustomErrorCode:
-        """Get the 'code' content from the message."""
-        enforce(self.is_set("code"), "'code' content is not set.")
-        return cast(CustomErrorCode, self.get("code"))
-
-    @property
-    def message(self) -> str:
-        """Get the 'message' content from the message."""
-        enforce(self.is_set("message"), "'message' content is not set.")
-        return cast(str, self.get("message"))
+    def info(self) -> CustomErrorInfo:
+        """Get the 'info' content from the message."""
+        enforce(self.is_set("info"), "'info' content is not set.")
+        return cast(CustomErrorInfo, self.get("info"))
 
     @property
     def request(self) -> CustomBridgeRequest:
@@ -223,14 +216,10 @@ class AssetBridgingMessage(Message):
                     "Invalid type for content 'result'. Expected 'BridgeResult'. Found '{}'.".format(type(self.result)),
                 )
             elif self.performative == AssetBridgingMessage.Performative.ERROR:
-                expected_nb_of_contents = 2
+                expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.code, CustomErrorCode),
-                    "Invalid type for content 'code'. Expected 'ErrorCode'. Found '{}'.".format(type(self.code)),
-                )
-                enforce(
-                    isinstance(self.message, str),
-                    "Invalid type for content 'message'. Expected 'str'. Found '{}'.".format(type(self.message)),
+                    isinstance(self.info, CustomErrorInfo),
+                    "Invalid type for content 'info'. Expected 'ErrorInfo'. Found '{}'.".format(type(self.info)),
                 )
 
             # Check correct content count

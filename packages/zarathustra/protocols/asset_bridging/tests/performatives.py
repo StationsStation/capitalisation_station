@@ -4,7 +4,7 @@
 
 from pydantic import BaseModel
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
-    ErrorCode,
+    ErrorInfo,
     BridgeResult,
     BridgeRequest,
 )
@@ -31,8 +31,7 @@ class RequestStatus(BaseModel):
 class Error(BaseModel):
     """Model for the `ERROR` initial speech act performative."""
 
-    code: ErrorCode
-    message: str
+    info: ErrorInfo
 
 
 for cls in BaseModel.__subclasses__():
