@@ -5,14 +5,27 @@ package aea.zarathustra.asset_bridging.v0_0_1;
 message AssetBridgingMessage{
 
   // Custom Types
-  message BridgeStatus{
-    enum BridgeStatusEnum {
-      BRIDGE_STATUS_ENUM_FAILED = 0;
-      BRIDGE_STATUS_ENUM_COMPLETED = 1;
-      BRIDGE_STATUS_ENUM_PENDING = 2;
-      BRIDGE_STATUS_ENUM_CLAIMABLE = 3;
+  message BridgeRequest{
+    string source_chain = 1;
+    string target_chain = 2;
+    string source_token = 3;
+    optional string target_token = 4;
+    int64 amount = 5;
+    string bridge = 6;
+    optional string receiver = 7;
+  }
+
+  message BridgeResult{
+    enum BridgeStatus {
+      BRIDGE_STATUS_FAILED = 0;
+      BRIDGE_STATUS_COMPLETED = 1;
+      BRIDGE_STATUS_PENDING_TX_RECEIPT = 2;
+      BRIDGE_STATUS_AWAITING_TARGET_FINALITY = 3;
+      BRIDGE_STATUS_CLAIMABLE = 4;
     }
-    BridgeStatusEnum status = 1;
+    string tx_hash = 1;
+    BridgeStatus status = 2;
+    BridgeRequest request = 3;
   }
 
   message ErrorCode{
@@ -26,26 +39,15 @@ message AssetBridgingMessage{
 
   // Performatives and contents
   message Request_Bridge_Performative{
-    string source_chain = 1;
-    string target_chain = 2;
-    string source_token = 3;
-    string target_token = 4;
-    bool target_token_is_set = 5;
-    int32 amount = 6;
-    string bridge = 7;
-    string receiver = 8;
-    bool receiver_is_set = 9;
-    map<string, string> kwargs = 10;
-    bool kwargs_is_set = 11;
+    BridgeRequest request = 1;
   }
 
   message Bridge_Status_Performative{
-    BridgeStatus status = 1;
-    string tx_hash = 2;
+    BridgeResult result = 1;
   }
 
   message Request_Status_Performative{
-    string tx_hash = 1;
+    BridgeResult result = 1;
   }
 
   message Error_Performative{

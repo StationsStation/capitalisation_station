@@ -31,7 +31,8 @@ from packages.zarathustra.protocols.asset_bridging import (  # type: ignore
     asset_bridging_pb2,
 )
 from packages.zarathustra.protocols.asset_bridging.custom_types import (  # type: ignore
-    BridgeStatus,
+    BridgeRequest,
+    BridgeResult,
     ErrorCode,
 )
 from packages.zarathustra.protocols.asset_bridging.message import (  # type: ignore
@@ -64,40 +65,18 @@ class AssetBridgingSerializer(Serializer):
         performative_id = msg.performative
         if performative_id == AssetBridgingMessage.Performative.REQUEST_BRIDGE:
             performative = asset_bridging_pb2.AssetBridgingMessage.Request_Bridge_Performative()  # type: ignore
-            source_chain = msg.source_chain
-            performative.source_chain = source_chain
-            target_chain = msg.target_chain
-            performative.target_chain = target_chain
-            source_token = msg.source_token
-            performative.source_token = source_token
-            if msg.is_set("target_token"):
-                performative.target_token_is_set = True
-                target_token = msg.target_token
-                performative.target_token = target_token
-            amount = msg.amount
-            performative.amount = amount
-            bridge = msg.bridge
-            performative.bridge = bridge
-            if msg.is_set("receiver"):
-                performative.receiver_is_set = True
-                receiver = msg.receiver
-                performative.receiver = receiver
-            if msg.is_set("kwargs"):
-                performative.kwargs_is_set = True
-                kwargs = msg.kwargs
-                performative.kwargs.update(kwargs)
+            request = msg.request
+            BridgeRequest.encode(performative.request, request)
             asset_bridging_msg.request_bridge.CopyFrom(performative)
         elif performative_id == AssetBridgingMessage.Performative.BRIDGE_STATUS:
             performative = asset_bridging_pb2.AssetBridgingMessage.Bridge_Status_Performative()  # type: ignore
-            status = msg.status
-            BridgeStatus.encode(performative.status, status)
-            tx_hash = msg.tx_hash
-            performative.tx_hash = tx_hash
+            result = msg.result
+            BridgeResult.encode(performative.result, result)
             asset_bridging_msg.bridge_status.CopyFrom(performative)
         elif performative_id == AssetBridgingMessage.Performative.REQUEST_STATUS:
             performative = asset_bridging_pb2.AssetBridgingMessage.Request_Status_Performative()  # type: ignore
-            tx_hash = msg.tx_hash
-            performative.tx_hash = tx_hash
+            result = msg.result
+            BridgeResult.encode(performative.result, result)
             asset_bridging_msg.request_status.CopyFrom(performative)
         elif performative_id == AssetBridgingMessage.Performative.ERROR:
             performative = asset_bridging_pb2.AssetBridgingMessage.Error_Performative()  # type: ignore
@@ -138,35 +117,17 @@ class AssetBridgingSerializer(Serializer):
         performative_id = AssetBridgingMessage.Performative(str(performative))
         performative_content = dict()  # type: Dict[str, Any]
         if performative_id == AssetBridgingMessage.Performative.REQUEST_BRIDGE:
-            source_chain = asset_bridging_pb.request_bridge.source_chain
-            performative_content["source_chain"] = source_chain
-            target_chain = asset_bridging_pb.request_bridge.target_chain
-            performative_content["target_chain"] = target_chain
-            source_token = asset_bridging_pb.request_bridge.source_token
-            performative_content["source_token"] = source_token
-            if asset_bridging_pb.request_bridge.target_token_is_set:
-                target_token = asset_bridging_pb.request_bridge.target_token
-                performative_content["target_token"] = target_token
-            amount = asset_bridging_pb.request_bridge.amount
-            performative_content["amount"] = amount
-            bridge = asset_bridging_pb.request_bridge.bridge
-            performative_content["bridge"] = bridge
-            if asset_bridging_pb.request_bridge.receiver_is_set:
-                receiver = asset_bridging_pb.request_bridge.receiver
-                performative_content["receiver"] = receiver
-            if asset_bridging_pb.request_bridge.kwargs_is_set:
-                kwargs = asset_bridging_pb.request_bridge.kwargs
-                kwargs_dict = dict(kwargs)
-                performative_content["kwargs"] = kwargs_dict
+            pb2_request = asset_bridging_pb.request_bridge.request
+            request = BridgeRequest.decode(pb2_request)
+            performative_content["request"] = request
         elif performative_id == AssetBridgingMessage.Performative.BRIDGE_STATUS:
-            pb2_status = asset_bridging_pb.bridge_status.status
-            status = BridgeStatus.decode(pb2_status)
-            performative_content["status"] = status
-            tx_hash = asset_bridging_pb.bridge_status.tx_hash
-            performative_content["tx_hash"] = tx_hash
+            pb2_result = asset_bridging_pb.bridge_status.result
+            result = BridgeResult.decode(pb2_result)
+            performative_content["result"] = result
         elif performative_id == AssetBridgingMessage.Performative.REQUEST_STATUS:
-            tx_hash = asset_bridging_pb.request_status.tx_hash
-            performative_content["tx_hash"] = tx_hash
+            pb2_result = asset_bridging_pb.request_status.result
+            result = BridgeResult.decode(pb2_result)
+            performative_content["result"] = result
         elif performative_id == AssetBridgingMessage.Performative.ERROR:
             pb2_code = asset_bridging_pb.error.code
             code = ErrorCode.decode(pb2_code)

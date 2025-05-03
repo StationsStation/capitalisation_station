@@ -3,26 +3,39 @@
 from hypothesis import given, strategies as st
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorCode,
-    BridgeStatus,
+    BridgeResult,
+    BridgeRequest,
 )
 from packages.zarathustra.protocols.asset_bridging.asset_bridging_pb2 import (
     AssetBridgingMessage as asset_bridging_pb2,  # noqa: N813
 )
 
 
-bridgestatus_strategy = st.from_type(BridgeStatus)
+bridgerequest_strategy = st.from_type(BridgeRequest)
+bridgeresult_strategy = st.from_type(BridgeResult)
 errorcode_strategy = st.from_type(ErrorCode)
 
 
-@given(bridgestatus_strategy)
-def test_bridgestatus(bridgestatus: BridgeStatus):
-    """Test BridgeStatus."""
-    assert isinstance(bridgestatus, BridgeStatus)
-    proto_obj = asset_bridging_pb2.BridgeStatus()
-    bridgestatus.encode(proto_obj, bridgestatus)
-    result = BridgeStatus.decode(proto_obj)
-    assert id(bridgestatus) != id(result)
-    assert bridgestatus == result
+@given(bridgerequest_strategy)
+def test_bridgerequest(bridgerequest: BridgeRequest):
+    """Test BridgeRequest."""
+    assert isinstance(bridgerequest, BridgeRequest)
+    proto_obj = asset_bridging_pb2.BridgeRequest()
+    bridgerequest.encode(proto_obj, bridgerequest)
+    result = BridgeRequest.decode(proto_obj)
+    assert id(bridgerequest) != id(result)
+    assert bridgerequest == result
+
+
+@given(bridgeresult_strategy)
+def test_bridgeresult(bridgeresult: BridgeResult):
+    """Test BridgeResult."""
+    assert isinstance(bridgeresult, BridgeResult)
+    proto_obj = asset_bridging_pb2.BridgeResult()
+    bridgeresult.encode(proto_obj, bridgeresult)
+    result = BridgeResult.decode(proto_obj)
+    assert id(bridgeresult) != id(result)
+    assert bridgeresult == result
 
 
 @given(errorcode_strategy)

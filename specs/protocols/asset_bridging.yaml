@@ -7,32 +7,35 @@ aea_version: '>=1.0.0, <2.0.0'
 protocol_specification_id: zarathustra/asset_bridging:0.0.1
 speech_acts:
   request_bridge:
-    source_chain: pt:str
-    target_chain: pt:str
-    source_token: pt:str
-    target_token: pt:optional[pt:str]
-    amount: pt:int
-    bridge: pt:str
-    receiver: pt:optional[pt:str]
-    kwargs: pt:optional[pt:dict[pt:str, pt:str]]
+    request: ct:BridgeRequest
   bridge_status:
-    status: ct:BridgeStatus
-    tx_hash: pt:str
+    result: ct:BridgeResult
   request_status:
-    tx_hash: pt:str
+    result: ct:BridgeResult
   error:
     code: ct:ErrorCode
     message: pt:str
 ...
 ---
-ct:BridgeStatus: |
-  enum BridgeStatusEnum {
+ct:BridgeRequest: |
+  string source_chain = 1;
+  string target_chain = 2;
+  string source_token = 3;
+  optional string target_token = 4;
+  int64 amount = 5;
+  string bridge = 6;
+  optional string receiver = 7;
+ct:BridgeResult: |
+  enum BridgeStatus {
       FAILED = 0;
       COMPLETED = 1;
-      PENDING = 2;
-      CLAIMABLE = 3;
+      PENDING_TX_RECEIPT = 2;
+      AWAITING_TARGET_FINALITY = 3;
+      CLAIMABLE = 4;
     }
-  BridgeStatusEnum status = 1;
+  string tx_hash = 1;
+  BridgeStatus status = 2;
+  BridgeRequest request = 3;
 ct:ErrorCode: |
   enum ErrorCodeEnum {
       UNKNOWN_ROUTE = 0;
