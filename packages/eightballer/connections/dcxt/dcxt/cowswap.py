@@ -56,7 +56,7 @@ from packages.eightballer.connections.dcxt.dcxt.one_inch import (
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError, ExchangeNotAvailable
 from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
-from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
+from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, LEDGER_TO_WRAPPER, SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
@@ -254,7 +254,6 @@ class CowSwapClient(BaseErc20Exchange):
 
     async def fetch_ticker(self, **kwargs):
         """Fetch a ticker."""
-
         if kwargs.get("symbol") is None:
             symbol_a = kwargs.get("asset_a")
             symbol_b = kwargs.get("asset_b")
@@ -270,7 +269,6 @@ class CowSwapClient(BaseErc20Exchange):
         params = kwargs.get("params", {})
         amount = amoun if params and (amoun := params.get("amount")) else 0.5
         sell_amount_int = int(asset_a.to_machine(amount))
-
         buy_quote = await self._get_quote(asset_a, asset_b, sell_amount_int)
         bid_price = self.from_quote_to_rates(buy_quote, asset_a, asset_b, is_buying=True)
 
@@ -391,10 +389,10 @@ class CowSwapClient(BaseErc20Exchange):
     def _process_submitted_orders(self, orders: list[CowOrder]):  # noqa
         """Process submitted orders."""
 
-        def lookup_symbol(address_a: Address, address_b: Address, order):
+        def lookup_symbol(order: CowOrder):
             is_sell = OrderKind(order.kind.value) == OrderKind.SELL
-            symbol_a = self.get_token(str(address_a.root))
-            symbol_b = self.get_token(str(address_b.root))
+            symbol_a = self.get_token(str(order.sellToken.root))
+            symbol_b = self.get_token(str(order.buyToken.root))
             if is_sell:
                 return f"{symbol_b.symbol}/{symbol_a.symbol}"
             return f"{symbol_a.symbol}/{symbol_b.symbol}"
@@ -444,10 +442,23 @@ class CowSwapClient(BaseErc20Exchange):
                 amount = int(order.sellAmount.root) if is_sell else int(order.buyAmount.root)
             return token_a.to_human(amount) if is_sell else token_b.to_human(amount)
 
+        wETH = LEDGER_TO_WRAPPER[self.ledger_id]  # noqa: N806
+
+        def weth_address_patcher(order: CowOrder):
+            """Temporary monkey patch 🙈."""
+            if order.sellToken.root == NATIVE_ETH:
+                order.sellToken.root = wETH
+                self.logger.warning(f"🐵 Monkey patched CowSwap order sellToken ETH -> wETH: {order}")
+            if order.buyToken.root == NATIVE_ETH:
+                order.buyToken.root = wETH
+                self.logger.warning(f"🐵 Monkey patched CowSwap order buyToken  ETH -> wETH: {order}")
+
+        any(map(weth_address_patcher, orders))  # pay peanuts get monkeys
+
         return [
             {
                 "order": order,
-                "symbol": lookup_symbol(order.sellToken, order.buyToken, order),
+                "symbol": lookup_symbol(order),
                 "amount": from_order_to_amount(order),
                 "side": get_order_side(order),
                 "status": get_order_status(order),
