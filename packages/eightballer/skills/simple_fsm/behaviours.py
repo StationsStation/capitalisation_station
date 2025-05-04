@@ -33,7 +33,7 @@ from aea.configurations.loader import load_component_configuration
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovals
+from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovalsRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
@@ -206,7 +206,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
         self.register_state("cooldownround", CoolDownRound(**kwargs))
         self.register_state("collecttickerround", CollectTickerRound(**kwargs))
-        self.register_state("setapprovals", SetApprovals(**kwargs))
+        self.register_state("setapprovals", SetApprovalsRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
