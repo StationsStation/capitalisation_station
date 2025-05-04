@@ -1,0 +1,26 @@
+name: approvals
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/approvals:0.1.0
+type: protocol
+description: A protocol for setting approvals for assets on ledgers.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeicdbatft6iidjgl6cxeuhytwvjpcxbftq64xjha6jkuh6kcsjz63m
+  __init__.py: bafybeigusmfh56cp2suy3yae776ouccxoz4nmsjaf5ukhvpllhetxf22di
+  approvals.proto: bafybeici3zxugtatfjqehour5r3qo7gmf2muwpi5ivq7rzx7rtyf2fjw2m
+  approvals_pb2.py: bafybeifzo27tloabnd3xgwvft5hj6g3hgirjhbozykdeefgeymtkwcrrsy
+  custom_types.py: bafybeieo2ogll556c2hs642t3ufsl7cvuqejdds6wq33ghnwwnkz5gjdgu
+  dialogues.py: bafybeiebo2wfvm5d7zjqno27errsj6yuyq6y4rumwpr6a2spz65dk2lu3a
+  message.py: bafybeicvodc2qrfq77xqzupwrtt6sylompc32ltoalzyv62oytai4uot7y
+  protocol_spec.yaml: bafybeigyoejlez6r6d7q2blpyhfxu5yp42ixkuax7fqbnsk2a6liqfqnue
+  serialization.py: bafybeidogrzfuyixho3dr2samzq6dcwzbq6j75orrvqwpt3irnd4d7i6w4
+  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
+  tests/dummy_data.yaml: bafybeiewyhpf554vmnxcfrz2oapnl36n3b2hn4o4qow2gttwylgh3t4ke4
+  tests/test_approvals_dialogues.py: bafybeiedruhoziap5l2cbh3ayong4tucwgj5pu4j44grls6gj6xmtghlaq
+  tests/test_approvals_messages.py: bafybeibnejxms6k7mjvvyzpykvo34ku7sil74ryei5xajl6ipcn7qg2a5y
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}

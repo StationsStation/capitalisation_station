@@ -14,6 +14,7 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
+from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.eightballer.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour as BaseBehaviourUtils,
     TimeoutException,
@@ -71,6 +72,7 @@ class BaseConnectionRound(BaseBehaviourUtils, State):
             BalancesMessage.Performative.GET_ALL_BALANCES: self.context.balances_dialogues,
             TickersMessage.Performative.GET_ALL_TICKERS: self.context.tickers_dialogues,
             TickersMessage.Performative.GET_TICKER: self.context.tickers_dialogues,
+            ApprovalsMessage.Performative.SET_APPROVAL: self.context.approvals_dialogues,
         }
         self.started = False
         self._is_done = False

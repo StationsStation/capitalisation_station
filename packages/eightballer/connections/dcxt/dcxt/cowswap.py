@@ -501,6 +501,15 @@ class CowSwapClient(BaseErc20Exchange):
             OrderBookAPIConfigFactory.get_config(env=env, chain_id=SupportedChainId(self.chain.value[0]))
         )
 
+    @property
+    def spender_address(self):
+        """Get the spender address."""
+        return SPENDER[self.supported_ledger]
+
+
+class UnsupportedAssetException(Exception):
+    """Exception for unsupported asset."""
+
 
 def check_balance(
     token_address: Address,
