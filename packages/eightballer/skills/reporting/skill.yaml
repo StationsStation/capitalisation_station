@@ -20,7 +20,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeicgtaonlqoxa5tfpjtoytjvncc3i6imzfa4fdopb2e6g6zihkx2qu
+- eightballer/dcxt:0.1.0:bafybeig7xlwo7g7oishkrjxuyeuhl6g5iji7tnpxuz4ouyn2o67xycjble
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 contracts: []
 protocols:

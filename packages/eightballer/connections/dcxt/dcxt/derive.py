@@ -597,3 +597,8 @@ class DeriveClient:
             exchange_id=exchange_id,
             ledger_id=exchange_id,
         )
+
+    def set_approval(self, *args, **kwargs):
+        """Set approval for an asset."""
+        del args, kwargs
+        self.logger.info("Dummy method for derive")

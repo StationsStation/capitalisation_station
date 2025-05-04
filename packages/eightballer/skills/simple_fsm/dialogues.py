@@ -34,6 +34,10 @@ from packages.eightballer.protocols.balances.dialogues import (
     BalancesDialogue as BaseBalancesDialogue,
     BalancesDialogues as BaseBalancesDialogues,
 )
+from packages.eightballer.protocols.approvals.dialogues import (
+    ApprovalsDialogue as BaseApprovalsDialogue,
+    ApprovalsDialogues as BaseApprovalsDialogues,
+)
 from packages.eightballer.protocols.positions.dialogues import (
     PositionsDialogue as BasePositionsDialogue,
     PositionsDialogues as BasePositionsDialogues,
@@ -104,3 +108,7 @@ PositionsDialogues = BasePositionsDialogues
 
 TickersDialogue = BaseTickersDialogue
 TickersDialogues = BaseTickersDialogues
+
+
+ApprovalsDialogue = BaseApprovalsDialogue
+ApprovalsDialogues = BaseApprovalsDialogues

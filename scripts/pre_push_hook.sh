@@ -1,4 +1,4 @@
-#! /usr/env bash
+#! /usr/bin/env bash
 set -e 
 
 # Run lock command and store potential changes

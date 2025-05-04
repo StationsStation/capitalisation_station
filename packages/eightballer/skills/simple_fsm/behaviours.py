@@ -21,7 +21,6 @@
 
 import os
 import sys
-import asyncio
 import pathlib
 import importlib
 from typing import Any
@@ -33,7 +32,8 @@ from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
-from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour
+from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovals
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
@@ -57,27 +57,6 @@ ORDER_PLACEMENT_TIMEOUT_SECONDS = 10
 
 class UnexpectedStateException(Exception):
     """Exception raised when an unexpected state is reached."""
-
-
-class SetupRound(BaseBehaviour):
-    """This class implements the SetupRound state."""
-
-    clear_data = False
-    is_first_run = True
-
-    def act(self) -> None:
-        """Perform the action of the state."""
-        self.context.logger.debug("SetupRound: Performing action")
-        self._event = ArbitrageabciappEvents.DONE
-        if self.clear_data:
-            for f in ["orders.json", "portfolio.json", "prices.json"]:
-                if pathlib.Path(f).exists():
-                    pathlib.Path(f).unlink()
-            self.context.shared_state = {}
-        # We also ensure all behaviours are setup
-
-        self.context.behaviours.main.setup()
-        self._is_done = True
 
 
 class IdentifyOpportunityRound(BaseBehaviour):
@@ -156,11 +135,12 @@ class IdentifyOpportunityRound(BaseBehaviour):
 class ErrorRound(BaseBehaviour):
     """This class implements the ErrorRound state."""
 
-    async def act(self) -> None:
+    def act(self) -> None:
         """Perform the action of the state."""
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        await asyncio.sleep(0)
+        self.context.logger.info("ErrorRound: Performing action")
+        sys.exit(1)
 
 
 class CoolDownRound(BaseBehaviour):
@@ -195,6 +175,31 @@ class CoolDownRound(BaseBehaviour):
         self.started = False
 
 
+class SetupRound(BaseConnectionRound):
+    """This class implements the SetupRound state."""
+
+    clear_data = False
+    is_first_run = True
+
+    def act(self) -> None:
+        """Perform the action of the state."""
+        self.context.logger.debug("SetupRound: Performing action")
+        self._event = ArbitrageabciappEvents.DONE
+        if self.clear_data:
+            for f in ["orders.json", "portfolio.json", "prices.json"]:
+                if pathlib.Path(f).exists():
+                    pathlib.Path(f).unlink()
+            self.context.shared_state = {}
+        # We also ensure all behaviours are setup
+
+        if self.is_first_run:
+            self.context.logger.info("SetupRound: First run")
+            self._event = ArbitrageabciappEvents.SET_APPROVALS
+
+        self.context.behaviours.main.setup()
+        self._is_done = True
+
+
 class ArbitrageabciappFsmBehaviour(FSMBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
@@ -207,6 +212,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("noopportunityround", NoOpportunityRound(**kwargs))
         self.register_state("cooldownround", CoolDownRound(**kwargs))
         self.register_state("collecttickerround", CollectTickerRound(**kwargs))
+        self.register_state("setapprovals", SetApprovals(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -219,6 +225,15 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("collectdataround", CollectDataRound(**kwargs))
 
         self.register_transition(source="setupround", event=ArbitrageabciappEvents.DONE, destination="collectdataround")
+
+        self.register_transition(
+            source="setupround", event=ArbitrageabciappEvents.SET_APPROVALS, destination="setapprovals"
+        )
+        self.register_transition(
+            source="setapprovals", event=ArbitrageabciappEvents.DONE, destination="collectdataround"
+        )
+        self.register_transition(source="setapprovals", event=ArbitrageabciappEvents.TIMEOUT, destination="errorround")
+
         self.register_transition(
             source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="collecttickerround"
         )

@@ -131,3 +131,9 @@ class Erc20(Contract):
         symbol = cls.symbol(ledger_api, contract_address)["str"]
         token = Erc20Token(address=contract_address, symbol=symbol, decimals=decimals)
         return token.__dict__
+
+    @classmethod
+    def approve(cls, ledger_api: LedgerApi, contract_address: str, to: Address, value: int) -> JSONLike:
+        """Handler method for the 'approve' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        return instance.functions.approve(to, value)

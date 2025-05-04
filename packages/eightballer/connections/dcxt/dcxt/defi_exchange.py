@@ -1,17 +1,26 @@
 """Base exchange to be used to for erc20 exchanges."""
 
+import contextlib
+from typing import Any, cast
 from functools import cache, lru_cache
 
 import requests
 from web3 import Web3
 from multicaller import multicaller
-from aea_ledger_ethereum import EthereumApi, EthereumCrypto
+from aea_ledger_ethereum import (
+    HexBytes,
+    JSONLike,
+    EthereumApi,
+    EthereumCrypto,
+    SignedTransaction,
+    try_decorator,
+)
 from aea.configurations.base import PublicId
 
 from packages.eightballer.connections.dcxt.utils import load_contract
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
-from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError
-from packages.eightballer.connections.dcxt.erc_20.contract import Erc20Token
+from packages.eightballer.connections.dcxt.dcxt.exceptions import RpcError, BadSymbol
+from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20Token
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
     LEDGER_TO_TOKEN_LIST,
     LEDGER_TO_NATIVE_SYMBOL,
@@ -26,6 +35,80 @@ LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.BASE: 8453,
     SupportedLedgers.ARBITRUM: 42161,
 }
+
+
+class SignedTransactionTranslator:
+    """Translator for SignedTransaction."""
+
+    @staticmethod
+    def to_dict(signed_transaction: SignedTransaction) -> dict[str, str | int]:
+        """Write SignedTransaction to dict."""
+        signed_transaction_dict: dict[str, str | int] = {
+            "raw_transaction": cast(str, signed_transaction.raw_transaction.hex()),
+            "hash": cast(str, signed_transaction.hash.hex()),
+            "r": cast(int, signed_transaction.r),
+            "s": cast(int, signed_transaction.s),
+            "v": cast(int, signed_transaction.v),
+        }
+        return signed_transaction_dict
+
+    @staticmethod
+    def from_dict(signed_transaction_dict: JSONLike) -> SignedTransaction:
+        """Get SignedTransaction from dict."""
+        if not isinstance(signed_transaction_dict, dict) and len(signed_transaction_dict) == 5:
+            msg = f"Invalid for conversion. Found object: {signed_transaction_dict}."
+            raise ValueError(  # pragma: nocover
+                msg
+            )
+        return SignedTransaction(
+            raw_transaction=HexBytes(cast(str, signed_transaction_dict["raw_transaction"])),
+            hash=HexBytes(cast(str, signed_transaction_dict["hash"])),
+            r=cast(int, signed_transaction_dict["r"]),
+            s=cast(int, signed_transaction_dict["s"]),
+            v=cast(int, signed_transaction_dict["v"]),
+        )
+
+
+def signed_tx_to_dict(signed_transaction: Any) -> dict[str, str | int]:
+    """Write SignedTransaction to dict."""
+    signed_transaction_dict: dict[str, str | int] = {
+        "raw_transaction": cast(str, signed_transaction.raw_transaction.hex()),
+        "hash": cast(str, signed_transaction.hash.hex()),
+        "r": cast(int, signed_transaction.r),
+        "s": cast(int, signed_transaction.s),
+        "v": cast(int, signed_transaction.v),
+    }
+    return signed_transaction_dict
+
+
+@try_decorator("Unable to send transaction: {}", logger_method="warning")
+def try_send_signed_transaction(ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any) -> str | None:
+    """Try send a raw signed transaction."""
+    signed_transaction = SignedTransactionTranslator.from_dict(tx_signed)
+    hex_value = ethereum_api.api.eth.send_raw_transaction(  # pylint: disable=no-member
+        signed_transaction.raw_transaction
+    )
+    tx_digest = hex_value.hex()
+    if not tx_digest.startswith("0x"):
+        tx_digest = "0x" + tx_digest
+    return tx_digest
+
+
+def sign_and_send_txn(txn, crypto, ledger_api):
+    """Sign and send transaction."""
+
+    def _sign_swap_txn(swap_transaction):
+        """Sign the swap transaction."""
+        return signed_tx_to_dict(crypto.entity.sign_transaction(swap_transaction))
+
+    signed_txn = _sign_swap_txn(txn)
+    txn_hash = try_send_signed_transaction(ledger_api, signed_txn)
+    result = False
+    with contextlib.suppress(Exception):
+        result = ledger_api.api.eth.wait_for_transaction_receipt(txn_hash, timeout=600)
+    if result.get("status") == 0:
+        return False, txn_hash
+    return True, txn_hash
 
 
 class BaseErc20Exchange:
@@ -51,7 +134,7 @@ class BaseErc20Exchange:
         )
         self.logger = logger
 
-        self.erc20_contract = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
+        self.erc20_contract: Erc20 = load_contract(PublicId.from_str("eightballer/erc_20:0.1.0"))
         self.raw_token_data = read_token_list(LEDGER_TO_CHAIN_ID[self.ledger_id])
         self.names_to_addresses = {v["symbol"]: k for k, v in self.raw_token_data.items()}
         self.tokens = {}
@@ -170,3 +253,56 @@ class BaseErc20Exchange:
                     name=data["name"],
                 )
         return None
+
+    def set_approval(self, asset_id, amount, is_eoa):
+        """Set approval for an asset."""
+        self.logger.info(f"Setting approval for {asset_id} on {self.exchange_id}")
+        token = self.look_up_by_symbol(asset_id, ledger=self.supported_ledger)
+        if not token:
+            msg = f"Token {asset_id} not found"
+            raise BadSymbol(msg)
+
+        if is_eoa:
+            current_approval = self.erc20_contract.allowance(
+                self.web3,
+                token.address,
+                self.account.address,
+                self.spender_address,
+            )["int"]
+            if current_approval >= amount:
+                self.logger.info(f"Approval already set for {token.symbol} on {self.exchange_id}")
+                return
+            self.logger.info(f"Setting approval for {token.symbol} on {self.exchange_id}")
+            func = self.erc20_contract.approve(
+                ledger_api=self.web3,
+                contract_address=token.address,
+                to=self.spender_address,
+                value=amount,
+            )
+            # we call it to verify it will succeed
+            func.call(
+                {"from": self.account.address},
+            )
+            txn_data = func.build_transaction(
+                {
+                    "from": self.account.address,
+                    "gas": 1000000,
+                    "gasPrice": self.web3.api.eth.gas_price * 5,
+                    "nonce": self.web3.api.eth.get_transaction_count(self.account.address),
+                }
+            )
+            result, txn_hash = sign_and_send_txn(
+                txn_data,
+                self.account,
+                self.web3,
+            )
+            if not result:
+                msg = f"Transaction failed: {txn_hash}"
+                raise RpcError(msg)
+            self.logger.info(f"Transaction sent: {txn_hash} with result: {result}")
+
+    @property
+    def spender_address(self):
+        """Get the spender address."""
+        msg = "Spender address not implemented"
+        raise NotImplementedError(msg)  # pragma: no cover
