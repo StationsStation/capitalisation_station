@@ -20,7 +20,7 @@ APPROVALS_TIMEOUT_SECONDS = 120
 DEFAULT_ENCODING = "utf-8"
 
 
-class SetApprovals(BaseConnectionRound):
+class SetApprovalsRound(BaseConnectionRound):
     """This class implements the CollectDataRound state."""
 
     matching_round = "setapprovals"
