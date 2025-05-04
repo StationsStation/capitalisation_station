@@ -178,23 +178,17 @@ class CoolDownRound(BaseBehaviour):
 class SetupRound(BaseConnectionRound):
     """This class implements the SetupRound state."""
 
-    clear_data = False
     is_first_run = True
 
     def act(self) -> None:
         """Perform the action of the state."""
         self.context.logger.debug("SetupRound: Performing action")
         self._event = ArbitrageabciappEvents.DONE
-        if self.clear_data:
-            for f in ["orders.json", "portfolio.json", "prices.json"]:
-                if pathlib.Path(f).exists():
-                    pathlib.Path(f).unlink()
-            self.context.shared_state = {}
-        # We also ensure all behaviours are setup
 
         if self.is_first_run:
             self.context.logger.info("SetupRound: First run")
             self._event = ArbitrageabciappEvents.SET_APPROVALS
+            self.is_first_run = False
 
         self.context.behaviours.main.setup()
         self._is_done = True
