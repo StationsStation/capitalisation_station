@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.1.29](https://github.com/StationsStation/capitalisation_station/tree/v0.1.29) (2025-05-05)
+
+**Merged pull requests:**
+
+- fix:referenced-cowpy-fixed-branch [\#87](https://github.com/StationsStation/capitalisation_station/pull/87)
+- feat:fix:pre-commit-hooks [\#86](https://github.com/StationsStation/capitalisation_station/pull/86)
+
 ## [v0.1.28](https://github.com/StationsStation/capitalisation_station/tree/v0.1.28) (2025-05-02)
 
 **Merged pull requests:**
