@@ -18,6 +18,8 @@ class SupportedLedgers(Enum):
     DERIVE = "derive"
 
 
+NATIVE_ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+
 LEDGER_TO_STABLECOINS = {
     SupportedLedgers.ETHEREUM: [
         "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI,
