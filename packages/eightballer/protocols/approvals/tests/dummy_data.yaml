@@ -1,0 +1,7 @@
+Approval:
+  amount: 0
+  asset_id: asset_id
+  data: !!binary ""
+  exchange_id: exchange_id
+  is_eoa: false
+  ledger_id: ledger_id

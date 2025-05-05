@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package aea.eightballer.approvals.v0_1_0;
+
+message ApprovalsMessage{
+
+  // Custom Types
+  message Approval{
+    string asset_id = 1;
+    string ledger_id = 2;
+    string exchange_id = 3;
+    bool is_eoa = 4;
+    optional int64 amount = 5;
+    optional bytes data = 6;
+  }
+
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNKNOWN_ASSET = 0;
+      ERROR_CODE_ENUM_UNKNOWN_LEDGER = 1;
+      ERROR_CODE_ENUM_UNKNOWN_EXCHANGE = 2;
+      ERROR_CODE_ENUM_FAILED_TO_SET_APPROVAL = 3;
+      ERROR_CODE_ENUM_FAILED_TO_GET_APPROVAL = 4;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+
+  // Performatives and contents
+  message Set_Approval_Performative{
+    Approval approval = 1;
+  }
+
+  message Get_Approval_Performative{
+    Approval approval = 1;
+  }
+
+  message Approval_Response_Performative{
+    Approval approval = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    Approval_Response_Performative approval_response = 5;
+    Error_Performative error = 6;
+    Get_Approval_Performative get_approval = 7;
+    Set_Approval_Performative set_approval = 8;
+  }
+}

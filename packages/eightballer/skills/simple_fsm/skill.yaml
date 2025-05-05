@@ -8,16 +8,17 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
-  behaviour_classes/base.py: bafybeibapmlqsmrs4kh566ujkf3sbh43geesq2n7gdjon5n7n7ghop4c3y
+  behaviour_classes/base.py: bafybeigw6c465gydlht55u5hgaf2w7btc7st7ggbl5xrvlcul77jux3hmi
   behaviour_classes/collect_data_round.py: bafybeidzp32ivgsgzoite6zig6weur3vfil5o6n2y2oieg7nx2o6z2lgka
   behaviour_classes/collect_ticker_round.py: bafybeifzpeyzwjl5zc73zll3m5gz5fvehjg4n4v622kuxapwfspeqjhsq4
   behaviour_classes/no_opportunity_round.py: bafybeie6dl4bg6bnd7zllg3vydcc6br6k2u2jxcj7w2fgcbrdkpsb36aii
   behaviour_classes/order_execution_round.py: bafybeihaboxsyfxyzd6iv6o5pffnjj4pd6zxvbejf3iaxipfej5hjisawy
   behaviour_classes/post_trade_round.py: bafybeidgpuxstte6muw4cbxmd6w3dokphpxsdvnlfi37mpsq4guogezjvy
-  behaviours.py: bafybeigctucxowigjpr6jgvju6wsfqsaxjakwasbubhglxhza4oe2pz4nm
-  dialogues.py: bafybeifcvuaclqz4yoim7oqoeggftdbhhb47q4itto2eh7txujwsnojmum
-  enums.py: bafybeig5hdhorzlq55ebvrnrqxqxbh5ch7zgi2oyertvqbzuogm55h5rii
-  handlers.py: bafybeidvaaz7jkovsmfdngwalucwa6vuxlozjeas66cdvn3ha2l6tsecfq
+  behaviour_classes/set_approvals.py: bafybeiftb34mrh2rte5uvqtvg25wn5dwsidup4uvtuhw2g3om32jfnz2um
+  behaviours.py: bafybeidrft4u2cojvibuvhjp6q5wvylrjg5ckeciacirrwyo72ynpz4cwa
+  dialogues.py: bafybeigkxdoevltxvjflxxt6zj3ugtlnhzi5w5cevnvjbdm6m4t2fbwb2e
+  enums.py: bafybeigmseogtduonpwybgbupaweoozr23bfwa6u6dodof7na76zhdmfai
+  handlers.py: bafybeick55bbyr4aisvkbbwgaluwakbv2kqlwyolh6oysn5b6gnn2gzolu
   strategy.py: bafybeihkjssr73ryf5vnmjm5lquefqaxrvkbmpqeic4fsgbzxke743i5s4
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
@@ -26,7 +27,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
 - eightballer/ccxt_wrapper:0.1.0:bafybeiej6kthjdnrzbz4do5gcbnfdibhxed6ekgx2ywhypo254lzj4nwlu
-- eightballer/dcxt:0.1.0:bafybeicgtaonlqoxa5tfpjtoytjvncc3i6imzfa4fdopb2e6g6zihkx2qu
+- eightballer/dcxt:0.1.0:bafybeiclykcwgwu5hdz5op2yu4gl7d3gkysuyn63gh4gjgrynyzeh7ji34
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
@@ -34,6 +35,7 @@ protocols:
 - eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
 - eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
 - eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
+- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
@@ -51,6 +53,9 @@ handlers:
   dex_tickers_handler:
     args: {}
     class_name: DexTickersHandler
+  dex_approvals_handler:
+    args: {}
+    class_name: DexApprovalsHandler
   user_interaction_handler:
     args: {}
     class_name: UserInteractionHandler
@@ -81,6 +86,9 @@ models:
   user_interaction_dialogues:
     args: {}
     class_name: UserInteractionDialogues
+  approvals_dialogues:
+    args: {}
+    class_name: ApprovalsDialogues
 dependencies: {}
 is_abstract: false
 customs: []

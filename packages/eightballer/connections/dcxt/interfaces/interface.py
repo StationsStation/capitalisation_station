@@ -12,6 +12,7 @@ from packages.eightballer.connections.dcxt.interfaces.market import MarketInterf
 from packages.eightballer.connections.dcxt.interfaces.ticker import TickerInterface
 from packages.eightballer.connections.dcxt.interfaces.balance import BalanceInterface
 from packages.eightballer.connections.dcxt.interfaces.position import PositionInterface
+from packages.eightballer.connections.dcxt.interfaces.approvals import ApprovalsInterface
 from packages.eightballer.connections.dcxt.interfaces.order_book import OrderBookInterface
 from packages.eightballer.connections.dcxt.interfaces.spot_asset import SpotAssetInterface
 
@@ -33,6 +34,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         self.exchanges: dict[str, Any] = kwargs.get("exchanges")
         self.supported_protocols = {
             SpotAssetInterface.protocol_id: SpotAssetInterface(),
+            ApprovalsInterface.protocol_id: ApprovalsInterface(),
             OhlcvInterface.protocol_id: OhlcvInterface(),
             OrderInterface.protocol_id: OrderInterface(),
             MarketInterface.protocol_id: MarketInterface(),

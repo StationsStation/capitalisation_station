@@ -26,6 +26,7 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.skills.abstract_round_abci.handlers import (
@@ -74,6 +75,18 @@ class DexOrdersHandler(AbstractResponseHandler):
             OrdersMessage.Performative.ORDER_CREATED,
             OrdersMessage.Performative.ORDER_CANCELLED,
             OrdersMessage.Performative.ERROR,
+        }
+    )
+
+
+class DexApprovalsHandler(AbstractResponseHandler):
+    """This class implements a handler for DexApprovalsHandler messages."""
+
+    SUPPORTED_PROTOCOL = ApprovalsMessage.protocol_id
+    allowed_response_performatives = frozenset(
+        {
+            ApprovalsMessage.Performative.APPROVAL_RESPONSE,
+            ApprovalsMessage.Performative.ERROR,
         }
     )
 
