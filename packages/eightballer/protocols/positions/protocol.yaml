@@ -7,15 +7,21 @@ description: A protocol for passing position data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeicgyj4cbphu4rmaep6c5bqyd5uhyga3i4gs3da3e6osfs4fxev6oe
-  custom_types.py: bafybeibbkvi7ba7cppze3esxjwlchjxbusqh7haivtdm6suba67yr7pf5m
-  dialogues.py: bafybeifheyan2ndcxbmjt6oankjjwtxmrwpg63gjvgxyi7nb6ygmq6y2bi
+  README.md: bafybeicg7piqc4kjur7neyf4hiwcnryu5wbeoopkgt5dicad3tjnxghgkq
+  __init__.py: bafybeicxrgn3ljr33y2gfoaj4fgjvswfx4ohpprlde5zl36oqpawngimra
+  custom_types.py: bafybeidzt5oiwkry6sazygnr7t2rp7o3rumerydjm4bpmc3gqpwfhzuwza
+  dialogues.py: bafybeigofqfco2plgjph7yowfq2xudycf744lbymmo33ucabpbb5shet3a
   message.py: bafybeid2thph5premj3daoggm6e6ewpeqkj2x7yft4uawpehcsq4yz2lie
   positions.proto: bafybeiah7hzd664isluds2wzq4ahxive3bcykwrx33mpgchmh5sdce7w6y
-  positions_pb2.py: bafybeicwub7fpr7w2qevv5j46zagavmshm6mpzqcp4yp3mf7dshzrjxye4
+  positions_pb2.py: bafybeic3l6ekcfhf4hs4fi6mv6uaa7dfdt5tlpjeu7duzqaj5rpg7hyige
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeihyycffimwykv77ukeummi6cchqy6xn2xton56wyr3g5uegjqjn5e
-  tests/test_positions_dialogues.py: bafybeidgb53m334rxlrzkcql7lnj4z5sozyuqqbqxvazgmfcjjxmtpttu4
-  tests/test_positions_messages.py: bafybeifjbgvnmqr4dm42h2fz3nvgtitdromfcsdvtmwm6rrm3rfr3kfa44
+  tests/__init__.py: bafybeiduk2fjlgyi4hlb6ygswcginf33noe5twanpucdl3jvjz66qttqxq
+  tests/performatives.py: bafybeiglemuh3xsvd6ai6ygmsk3mmlgc5ulq3eswb4juhvsbe6dx7obemy
+  tests/primitive_strategies.py: bafybeihmy36guklhbyxdgxwiw4u4dvr55uwxavevod7czuv5gydd46vi7y
+  tests/test_custom_types.py: bafybeiclbnthu4iezduyk34o4ujhu3h6nyn2iswrlvnqtj3hm4c2bfblxy
+  tests/test_positions_dialogues.py: bafybeicjnroh3aazhwjbhapqqkxtceqyy74pb7oknydpvxpfojqccsbmqy
+  tests/test_positions_messages.py: bafybeifxsx2e2scoiqsqw5pqhvpcorpebqlbrfv46vyvjb7cs4ljhurjbq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
