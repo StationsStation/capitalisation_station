@@ -7,20 +7,17 @@ description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeifczvdlkaamq6rqxm67mq5qqknemsczv2clb76cqtosggzfrivvxq
-  __init__.py: bafybeiebsp7ev33vclpyjzi7gqnofv24dqnhucp3i6hhnn5zf7uaii3xrq
-  custom_types.py: bafybeiegy2ropcsikjfpa7wntxvxymuymjbxltmeqtnmpordzxuqxnsz7u
-  dialogues.py: bafybeiefmknwzz2eeus3pubdjus47sx4kfajwdl4zk745dlo6uq2pil4bq
+  __init__.py: bafybeiefrxb7ly2n7qe6hqfisnleeztvouohuopezsppp7vto43wzoqku4
+  custom_types.py: bafybeihf5p7e26eiqvwjzmfx4v6y3s6owdnhpu3y4kixsvywcif73ktruy
+  dialogues.py: bafybeic27ip2m2hy3in4c7pqgr4nptflatalctewjoulgqvyr2kqvck7xe
   markets.proto: bafybeid4xijcamqmv4rqzwvvjpik4z334ayz3kiojkjtcmuj25vzt5hlji
-  markets_pb2.py: bafybeiadsbi3tlhi3fs5hbieptt23kru2ed3dixtyxjbhaf7dmdbkrnwr4
+  markets_pb2.py: bafybeibt5nzjuupvo4fmfyj72iggu6osuxd52joycyqzrbkiyltei3c4vu
   message.py: bafybeidwqtcnwkmj4y4n2bh3ej5zop2k4u7kbtyv6suc2dxwxpqgl3mmti
-  protocol_spec.yaml: bafybeiaow7a4gv7iphserfamiz4wcd4ondjswcei2zypinc2tut2r2i344
   serialization.py: bafybeiffhev2fhdf2nk3qtvjjyx4ozsmqstnzz5lrvrucdlnbyfgxmvfwi
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeihlxaahp474f7wejdacsnivrebxdxvxtdukjzz3rp4pxlp4c2ju44
-  tests/test_markets_dialogues.py: bafybeigqc5duwl2atcggqijwmngjo2nnm5k4czlsgevbvac76yu3sgbi5q
-  tests/test_markets_messages.py: bafybeiditilrt3crcxrj6w6pg6um7ldob5sru4uz5pci76jrgj2j6zls4q
+  tests/test_markets_dialogues.py: bafybeiaq6ss73ckcrffldy2fei5wpcxso4goohkf5gp7mow6tsmphxe3cu
+  tests/test_markets_messages.py: bafybeifl3ofwlq5ook43txhswsubnq46ycppkk7jjnhj7ybcv3e3sctcnm
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

@@ -1,8 +1,7 @@
 # Orders Protocol
 
 ## Description
-
-...
+A protocol for representing orders.
 
 ## Specification
 
@@ -147,5 +146,4 @@ roles: { agent }
 end_states: [ error]
 keep_terminal_state_dialogues: false
 ...
-
 ```

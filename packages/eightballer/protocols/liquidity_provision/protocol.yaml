@@ -8,20 +8,17 @@ description: This protocol specifies interactions for managing liquidity in DeFi
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeia4hbxdvujtbvyqof53iv3wo5inkngea36k7av2ep5divfk2zo2a4
-  __init__.py: bafybeiafnqi4ietcvrubqlpsakve35wacyjraajwtln6xdgunovsflkhla
-  custom_types.py: bafybeie35ww755a6d7ls24kcjolw7qpbnjlhtvmmhozc36ewmu7vsnqcy4
-  dialogues.py: bafybeibp2qhkm6tfjdn6g7qrrr3czfs35xgxwzlqqumocygeio3gda7cly
+  __init__.py: bafybeifaqk4nlga4cxbtb7bimp5x7hvrgjbstq64i6hq7jqezdd7ug33xu
+  custom_types.py: bafybeiczwclee644fgknqya4wjzworeync6e65yxx7qenccgvekiwjb2ty
+  dialogues.py: bafybeicc7omhcas52briohvlhikljlhfib3rxotnnsvpwrigpelz6exgxm
   liquidity_provision.proto: bafybeighpquyeg65xpjuj66bhld53bv5yjbh55ss2nswmcpdjljcdr7dse
-  liquidity_provision_pb2.py: bafybeichapgavdoyb67n22v2w27ei7vcljaq2tki7s66r5ujxtjefuc64u
+  liquidity_provision_pb2.py: bafybeia746pcs3vcwb2rqcnaf37fb5yxqzirpxt5sbwteyrpawbc5qayd4
   message.py: bafybeigceu7zg2bjnczsxb445o25xjoirbuvtzfj5jbhu2x3jf6aoahm5q
-  protocol_spec.yaml: bafybeifiwohgclxy5iwajjq6mrfnlujtzsohewc2t7rx2leayi6ot3sxme
   serialization.py: bafybeig57ardkbxau5icufm5hl6sqdkyoawym3yyuewgrnb6rgs6jkhezi
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
-  tests/test_liquidity_provision_dialogues.py: bafybeigd2j4uq24eogjksf6mg7jgcprwvyeib7hukyznw6fqti6hif5dmu
-  tests/test_liquidity_provision_messages.py: bafybeifmzvqib7elbdckzcwd7iwmmedmhmm3u5n2rsnfjoyicpbxqhk2iu
+  tests/test_liquidity_provision_dialogues.py: bafybeidlv54s54q4bllv6ewuijkivoxqaikximvmpovvcvesu5mb7q2rea
+  tests/test_liquidity_provision_messages.py: bafybeic53zt4ud5mj4rvkqsbwxvdqoaynruar6aszy4zoi5q3irrztnsjq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

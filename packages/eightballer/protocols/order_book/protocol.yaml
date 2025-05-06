@@ -1,7 +1,7 @@
 name: order_book
 author: eightballer
 version: 0.1.0
-protocol_specification_id: eightballer/order_book_subscription:0.1.0
+protocol_specification_id: eightballer/order_book:0.1.0
 type: protocol
 description: A protocol to enable agents to subscribe to order books and receive updates
   in real-time. This protocol facilitates monitoring changes in bid and ask prices
@@ -9,20 +9,17 @@ description: A protocol to enable agents to subscribe to order books and receive
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeidw4mczu5tnbc7qmxhdccdvukemv2tqjnzewlfijatb7his4ll3v4
-  __init__.py: bafybeiepdjuc776ctv74a4ukfjt6kdr75f3t45or7rugya46bisq56doli
-  custom_types.py: bafybeie62hxfxfvg5wjuhnuhptw3zvajto7ume2epllq575b2t4jehpv4u
-  dialogues.py: bafybeiaiexmbyok22bvmubbx5fvt6ilpm4sjv4vivkbmrlk4fkzwm6yvru
-  message.py: bafybeidigkcqyti6ssoi3j7wvtejawpj53nqunxopcxuk3r4ew5qhijnxa
-  order_book.proto: bafybeih6v6przoxyjtgqgbhc6ffxmflny524tl7slryprpfcygljnssqma
-  order_book_pb2.py: bafybeiclkswsezvjmupanhsti7egweixfwh2htp4j3kct5vdcebhj7yziy
-  protocol_spec.yaml: bafybeigbaj7tgnt7xz62kh4taunz22ymnd6w6rtdggnfbidcqypum7esc4
+  __init__.py: bafybeias5zxufqftfmhamh3cnlna4ul36gpc5du6c3meqdpynjuj4ybgri
+  custom_types.py: bafybeiekeulobdypawt57j4e3w24xvoat7yufbew2kler6ikzyym2qvila
+  dialogues.py: bafybeieexfixqt2q7yoy4wfskl6cdqpfukkm54g526vpmlntwicwmzu2za
+  message.py: bafybeia3kd7j4cpuwrjojicsdh75zbep4gapfz6xshxbschatmmbv6q6ly
+  order_book.proto: bafybeidt2amtydxm7fbti4jflfkfq4aiq5hwv3ndelwwp3sysy4mfhsske
+  order_book_pb2.py: bafybeiczgezjiul73jkjxvwl2ldoqgzceaa7qspiixozytzamuzly3xglq
   serialization.py: bafybeiarpafujerygrlxftopx7qfov7tlazehqak2tlex4ial575u23mou
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeifnryfgsysxior7xixnl23micbalu2ekh3rupvnfpsyphqxdisquq
-  tests/test_order_book_dialogues.py: bafybeiewhikhbslqfdrxsmipl2xe3fb7vnrsnup6plheerq73ezo3cl7j4
-  tests/test_order_book_messages.py: bafybeif4tkfsabbynv4ntjnszexb6dypxlvar34kumpsa4zrtyquwfzrpm
+  tests/test_order_book_dialogues.py: bafybeigvp32ozdu6uc2ayxhpggjejskiuwntzz3gyyuxwx5p7nfkt5zslq
+  tests/test_order_book_messages.py: bafybeicsxcdlgqwdca5cspr7firhqsexe5f2ytkobesqzftuja7f3lyzqq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

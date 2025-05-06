@@ -7,20 +7,17 @@ description: A protocol for passing position data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiexke73xjtim4jglkdw4nzoxnd2zlx2jjy5rrbymsqjn775jn4jqi
-  __init__.py: bafybeiebv2f5kwmbqcggcjrs5ce3g2gpuacvi2rjwr432o6634e2nvajr4
-  custom_types.py: bafybeihmlmvthjmftt2ec2gzk66d52syogwt4ky6msqwzd2vi54yrzmjii
-  dialogues.py: bafybeiepzo4veugplminz6cdlcxgnefv3eqxt4qmrbshwpvs7rercmh4qu
+  __init__.py: bafybeicgyj4cbphu4rmaep6c5bqyd5uhyga3i4gs3da3e6osfs4fxev6oe
+  custom_types.py: bafybeibbkvi7ba7cppze3esxjwlchjxbusqh7haivtdm6suba67yr7pf5m
+  dialogues.py: bafybeifheyan2ndcxbmjt6oankjjwtxmrwpg63gjvgxyi7nb6ygmq6y2bi
   message.py: bafybeid2thph5premj3daoggm6e6ewpeqkj2x7yft4uawpehcsq4yz2lie
   positions.proto: bafybeiah7hzd664isluds2wzq4ahxive3bcykwrx33mpgchmh5sdce7w6y
-  positions_pb2.py: bafybeiej5xkifoy5uoltili5zs3aryt5cojzjf7lejvb23nadujh3jpppu
-  protocol_spec.yaml: bafybeifuuz7iwnuxrp5haeepcrmihifjxtnsywbsrerxrf6odzivzpu4z4
+  positions_pb2.py: bafybeicwub7fpr7w2qevv5j46zagavmshm6mpzqcp4yp3mf7dshzrjxye4
   serialization.py: bafybeihyycffimwykv77ukeummi6cchqy6xn2xton56wyr3g5uegjqjn5e
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeifkukihssmlls5jhgynykuoskca4rvm2w3j3bzrrzuxr2ctucyxei
-  tests/test_positions_dialogues.py: bafybeifgult6yzn54vhyszspntsvrnf4aji3lqgdv3vhcqtzvqo2bmqq2m
-  tests/test_positions_messages.py: bafybeigvhyuvuwxosqe2ylazqzznwhvdglbs3hcjksf3kpcu2tzxmfrjte
+  tests/test_positions_dialogues.py: bafybeidgb53m334rxlrzkcql7lnj4z5sozyuqqbqxvazgmfcjjxmtpttu4
+  tests/test_positions_messages.py: bafybeifjbgvnmqr4dm42h2fz3nvgtitdromfcsdvtmwm6rrm3rfr3kfa44
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

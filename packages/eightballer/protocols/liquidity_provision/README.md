@@ -1,8 +1,7 @@
 # Liquidity Provision Protocol
 
 ## Description
-
-...
+This protocol specifies interactions for managing liquidity in DeFi platforms, including adding and removing liquidity, and querying liquidity conditions.
 
 ## Specification
 
