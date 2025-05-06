@@ -1,8 +1,7 @@
 # Spot Asset Protocol
 
 ## Description
-
-...
+A protocol for representing spot_assets.
 
 ## Specification
 
@@ -62,5 +61,4 @@ roles: { agent }
 end_states: [ end, error, spot_asset]
 keep_terminal_state_dialogues: true
 ...
-
 ```

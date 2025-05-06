@@ -1,8 +1,7 @@
 # Markets Protocol
 
 ## Description
-
-...
+A protocol for passing ohlcv data between compoents.
 
 ## Specification
 
@@ -88,6 +87,4 @@ termination: [all_markets, market, error]
 roles: { agent }
 end_states: [ market, all_markets, error ]
 keep_terminal_state_dialogues: false
-
-
 ```

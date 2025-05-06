@@ -7,20 +7,17 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiazzpoumsj4ccdjcoxx23xc22rahgdlrhbyh4jg4gtzgunng5laiu
-  __init__.py: bafybeigavdklcqngyu5mgifu3xs5h5mpmlphfpbrbrnonylqvgd3ujpt6q
-  custom_types.py: bafybeicisqamskgpqo2i3as5p57o4gpwra7xiyg2qqeoliozsvbfxsylby
-  dialogues.py: bafybeigjn3qe5p6hbwcd6txfyhkikpv7egqtu6nyyskrzl3776k6s5ptsq
+  __init__.py: bafybeidiw6yksog44y4vxckm7qsuc3snhszmp7uiuhdln2g7rumz2yepsu
+  custom_types.py: bafybeidk3oqmplb3b7gverb7gbvv6kefcybbwhgsc7vxsj4tvmkdadqf5u
+  dialogues.py: bafybeiadvo3dmjfxt4m3nlsfrwdww5vent6bjs5cj27v7g4n4irjdljane
   message.py: bafybeicqd3eyxt6wehsq5v3q3dyirmeq72ml3vfdsk3rhf5j4js7upjplu
   orders.proto: bafybeibhrsbinibdzvirjz6csqkfeukszjtso5bps4pzcuxgntubwfzkd4
-  orders_pb2.py: bafybeic7aawav3ym6xytr27fj37vcqqan7jemdvkepvlubtubkduqatptm
-  protocol_spec.yaml: bafybeiceiichnuqwex4yts6d6aaxpafqowuvvqnmuggojl5t7t3zifu7sm
+  orders_pb2.py: bafybeial52ewjnqo543wfwhq5rbqjegxfslpqymnru4ubn5wr45zvsm46e
   serialization.py: bafybeifgv73fxg4d2efivp7jg4hsmmwtjrrwqr2hmxhwdgfcelxzrrcacm
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeidpep422lgwzc6hedcmsnay5ojbzv7ow3adlgcsxde5yv3dxmile4
-  tests/test_orders_dialogues.py: bafybeiffwqazrrndawcfnwiaptoseqk7qlqlv7uqdmmdmcfxwaql5duzyq
-  tests/test_orders_messages.py: bafybeidn7vk23fwc5rpknej3n5qyv5sre7bfkytgivj4lzconxuc2eglve
+  tests/test_orders_dialogues.py: bafybeidk6mpabnimhytq7eowbytkjniqls7p63im6liybrszajqvg5z7uy
+  tests/test_orders_messages.py: bafybeihhndobgphwl5pog2ro7wibuuteze75kfebmzh623zk2xx7infiqa
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}
