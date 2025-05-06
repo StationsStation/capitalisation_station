@@ -7,15 +7,21 @@ description: A protocol for passing balance data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeieao66yeumkexrpahatu2vh3jr6a2b5i52e7glkfvbajpyoya5uf4
+  README.md: bafybeigtrrocwghnjivvyz43bso2boz7bfa3puuimddri7cn2aber457zm
+  __init__.py: bafybeiei3vrdigqcxbyzf3mnszs4caut7wllmr6lrd6bcsrh6sprratyge
   balances.proto: bafybeihtghazozjiqsoojzw4fozycfgtxanlpj3lrxlo5ybaxvoqxaikme
-  balances_pb2.py: bafybeicppawwxafd7r3n2rmfggfhbuxueze4g4lpnewyljwg5gcwet4sui
-  custom_types.py: bafybeie2374xsozqzhbxpbyibjfwctgegs4vkpup6y4zn6hmydzxgd3hi4
-  dialogues.py: bafybeifizlau5i7rsch2kdllanizj4b76yvn6pq6lrbjnaptufojjgvbfy
+  balances_pb2.py: bafybeieujwshhlqgel6chgxrysnponnatgcmfenf2ji46ibcivykdlujqy
+  custom_types.py: bafybeicjgvrllscap6hauc5tbho7mkyf4sjjhnm2dbpu7s5edapfbrjirm
+  dialogues.py: bafybeib4nyuu3qtzoyxdgvrkbgnnmnzbergh477stnm4qq6rr6avvx7vf4
   message.py: bafybeiaifpxfdnol3hyl2j5q2tuywbttkdoqlxargtprpr22k3oetzshay
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeiakzxq6vliqdu37i64lma4absjymtqexut4sztq2xt6xi4i53njnu
-  tests/test_balances_dialogues.py: bafybeihpvuvlldhnwsedaqzax553ssmeznyt5ruq7fyombsp725n6riv7e
-  tests/test_balances_messages.py: bafybeifd3lclwtbah2oib4pe4pyi24sga76v477fhaycs3mb46tbkn5nse
+  tests/__init__.py: bafybeidiiqh2tpyihp634ildi5hsdgujqmwxvdhnmfmzo5qndn3creurki
+  tests/performatives.py: bafybeia5zkz3rle5fyzigu5rfpaudeh23jkeizm4g3o34qstmabjyap5hq
+  tests/primitive_strategies.py: bafybeictzjrd57xoxvdgprc346vdx2666s5qezzgtscyrhx3yl2ynjjahi
+  tests/test_balances_dialogues.py: bafybeihnor5o44ic2mpkctaeahymt4cm5b4b22dfk2syb65ll35msiur54
+  tests/test_balances_messages.py: bafybeiazdjdhugpbrfc7xcduwu6eqgpzrcewfs6ssdtjz5mkerlzpnwn54
+  tests/test_custom_types.py: bafybeifg44ysy7q3eaurbubcsfijq44exutovegey464e6flm3igleeari
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

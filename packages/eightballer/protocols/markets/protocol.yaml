@@ -7,15 +7,21 @@ description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiefrxb7ly2n7qe6hqfisnleeztvouohuopezsppp7vto43wzoqku4
-  custom_types.py: bafybeihf5p7e26eiqvwjzmfx4v6y3s6owdnhpu3y4kixsvywcif73ktruy
-  dialogues.py: bafybeic27ip2m2hy3in4c7pqgr4nptflatalctewjoulgqvyr2kqvck7xe
+  README.md: bafybeifknqpsknwfwwgwsaymmebdc6yhfzda6ewqdan67uedpogrpypivm
+  __init__.py: bafybeia4ep7a4izfayrkhkmdfkzvluvge53gayqklcohdbmk7sjrbieesu
+  custom_types.py: bafybeidfqowkwvpd4zgtx7ulkmagzakw2npirlcfgw52ugootufz6sdc2u
+  dialogues.py: bafybeibfl663h7pfdrci4fyxaznjzntsl422kfn5afl4pblxuzvskmxmhm
   markets.proto: bafybeid4xijcamqmv4rqzwvvjpik4z334ayz3kiojkjtcmuj25vzt5hlji
-  markets_pb2.py: bafybeibt5nzjuupvo4fmfyj72iggu6osuxd52joycyqzrbkiyltei3c4vu
+  markets_pb2.py: bafybeievuoskwl57o6teclgbhzzr7xszdnhuvd5lzjcdqywk3aprmpmxci
   message.py: bafybeidwqtcnwkmj4y4n2bh3ej5zop2k4u7kbtyv6suc2dxwxpqgl3mmti
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeiffhev2fhdf2nk3qtvjjyx4ozsmqstnzz5lrvrucdlnbyfgxmvfwi
-  tests/test_markets_dialogues.py: bafybeiaq6ss73ckcrffldy2fei5wpcxso4goohkf5gp7mow6tsmphxe3cu
-  tests/test_markets_messages.py: bafybeifl3ofwlq5ook43txhswsubnq46ycppkk7jjnhj7ybcv3e3sctcnm
+  tests/__init__.py: bafybeicmrwwpbalkxx7zofz2ybev25dnnowzx2gptq7ebitnllii5dfpua
+  tests/performatives.py: bafybeibyntifxrmohyeqw35fkusbo2ejzkrq36whhsm7b6mw5vqpvqpsky
+  tests/primitive_strategies.py: bafybeieb7wzw735sk2a5nzutyoohvbgzndthqy6nezqo3ige5g6bwklary
+  tests/test_custom_types.py: bafybeidy322b3achl2aws7pfnfxzfdw4kdk6xnbk4nfp7s345gernpxaky
+  tests/test_markets_dialogues.py: bafybeibmn4g6ws2vizlc3vldwawtmaw45ra7gscut2kvbtq7etyydchb3q
+  tests/test_markets_messages.py: bafybeib44xymttxnzylt7ajqmkkzr5zsku2du2mxauclbqtwzbtn2bziii
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

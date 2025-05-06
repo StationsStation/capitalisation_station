@@ -7,15 +7,21 @@ description: A protocol for representing spot_assets.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeih54rv6nwablqw3isq4wyqunafmkr2qxfdzjlzybmzokhlysyh624
-  custom_types.py: bafybeiafi7e5ite7dyu3qohcwkbwhgrzuwzg3nyjy2fwrvrr43fdupu4tm
-  dialogues.py: bafybeifcrglexypag6ayfh3ljsj7pfww5o2o2t353qfm23nsz7l3wcbv4q
+  README.md: bafybeiffato5wgv2e4podsvw27ehh3ivpmwvamn3yu7rnznbxh6d7ps5wm
+  __init__.py: bafybeie42rmn335h236cc4rjxl26ktxoxoov3v2jrps76zhntlkqd52jxm
+  custom_types.py: bafybeigbywbj364ks4hflktchhx4j4qiaccp4lsnl3lfj3oeoiem2jnwvu
+  dialogues.py: bafybeic33fbxzb6fsdknajoww62z4ghvg35ohpfsrhumttaou6tvypf64m
   message.py: bafybeicplldtbbhawq2dzdusyn457737okpsijl7d4yiv35xnuyk2f6q6e
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeihyt7lklrdxy4jzqetx7zsixug2rk23opzkzhu7i3j7u3g3tvny4q
   spot_asset.proto: bafybeieqolmjhlldlvax7fk6s73huz72yk2udvagx4asectfimzsqyd4n4
-  spot_asset_pb2.py: bafybeieb43tduqixszyxcsmjoj35hhu6zdeo3wbhtt6iyllm2bc5kccfoa
-  tests/test_spot_asset_dialogues.py: bafybeigdczqk3acqp4xznwqkc37ws3i2phphpvbevyqk7x76zgvoldmydy
-  tests/test_spot_asset_messages.py: bafybeiab2gzf3h7beihakty3fgtt3zd2sa74jthvxm5poksjnuip7jrhki
+  spot_asset_pb2.py: bafybeiartgymhbjuhhwpn7zkaszlyvw2nvugoxuskd3x5fjqnixwixiwhy
+  tests/__init__.py: bafybeihm7bjzvvug76uavnkacy7mne74fgxkg2xznsqks2l2giibqhadhu
+  tests/performatives.py: bafybeieljr6dw57x234r2iwwgkrxvt7igbtzg2lrbogkqi3yvpqdlqibgu
+  tests/primitive_strategies.py: bafybeie2a6lnsnmyckrtybyszmbnmsj2psqkr7omalyozwzogq7qth42ka
+  tests/test_custom_types.py: bafybeibgtrtbd4yc35vrok3t5ifuvrbnvauwhfa2fulcrnmyqtwitn27ti
+  tests/test_spot_asset_dialogues.py: bafybeign64pmttb6dvnp73uq33ceqrhz6prqyr5p7btn6vilhrjbcukdq4
+  tests/test_spot_asset_messages.py: bafybeifzjgui43sucpqxhkvmfrot26iyttic55l72z7udfsx2wagtd2lgm
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
