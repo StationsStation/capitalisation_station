@@ -11,16 +11,16 @@ fingerprint:
   dialogues.py: bafybeib5rxgfedhq2l5q33cr7al5rvcdszxggiujrk4nwz7cgonxzxerpu
   handlers.py: bafybeibjgfeofu2cw7gm6tdrjp3z275hvpa3fcmerbzhbrxtb74pss665m
   slack.py: bafybeifu4yup7pbw4gvgo7yxzkm62f25msu53kmmi5wmofwllt7d73mlfa
-  strategy.py: bafybeiacak4zkvppiqudkc46453uqmqzh5huud5bw53jizs5abj6ajqvbi
+  strategy.py: bafybeie4s5v5epojxkgjr5keme57hza2twdgaf4yeud4uw5lxtd6ekwmni
   tests/__init__.py: bafybeidqvfmjxcrhqif6hzu3zejykhgzgeyuxarega3th7gz7bccpr76om
   tests/cases.py: bafybeifvkeajwg67hrryev6ajj2tsj376ge5sxrg4qevoyjxuwly3n6twu
-  tests/test_behaviour.py: bafybeibqopuyiqkzhzbievx7ermwohkm7moy7wktwvq4v2vf4kkxvlpibe
-  tests/test_handlers.py: bafybeiaoiozbmcsbuagdonfwb6n53ritzb25udvyeolfemn3paoxd22btu
-  tests/test_strategy.py: bafybeiahxldt52hhih22tkqlpfgtoetltasmenbzmnqvkrhqh5nkdnsbry
+  tests/test_behaviour.py: bafybeigzbxo2o5nezssknolhymwcfccufm4vdws4lyh43qnvpg6fwergti
+  tests/test_handlers.py: bafybeiebrpcgko7aizgjv4777mbdoitrytete7f6mkmsosw42fds4n7pbm
+  tests/test_strategy.py: bafybeih7fatlnolimx5buvqltuwgdocenwuj5pc3a5v2bratrbppy6o2tm
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt_wrapper:0.1.0:bafybeigkx4iwof7mqkrmt6tglzqzsgedtx2icevvg3hf6pxpy2a5khgru4
-- eightballer/dcxt:0.1.0:bafybeicqlrildfochak72hkgdwavel7moj76vagv47qbo7h3zusub4kagq
+- eightballer/dcxt:0.1.0:bafybeigdkxkw64uumnzc6zf3rmz4un3onbnjynteodneijrrklmwvnlkwi
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 contracts: []
 protocols:
