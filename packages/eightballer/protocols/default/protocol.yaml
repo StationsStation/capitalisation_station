@@ -7,20 +7,23 @@ description: A protocol for exchanging any bytes message.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeib5s44aibo4dyovqodvbwhdqogfcglq6v2sanggkq62qfhelcufpm
-  __init__.py: bafybeigl56bk6g36e2ohbn3lq55d6km6v5aojxd7eoddyjplsolkqq6oty
-  custom_types.py: bafybeiebp4xamgafadxbbtewddnufrcq3et3xsbkl7ucovqzbxpvlorote
+  README.md: bafybeiaak3h3o3rajjzfr5pslpfe4rj7negd45pb7eora7fwaevgne3wiu
+  __init__.py: bafybeig44i4ue6zdluwkuj32qyl5v7f6pp7bzwpj5ammatowhsep2rzahu
+  custom_types.py: bafybeiejon23nd2lovj2ug3vkyqccc25vps3zl4t3qt7ctgq5csya5h2g4
   default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq
-  default_pb2.py: bafybeia7wihf7mjwcbbabi5x6qcfhjxkesg6svqfgb7u6fb2bggdgvteqq
-  dialogues.py: bafybeiheiq447pflh66mygilwtp55ndiik5kzwz55atroj5bxb4cnjo36a
-  message.py: bafybeih5fvepqwxnbtthy4uxwmewrwv4df4djl7dg4zm4aysi6r62s2lqa
-  protocol_spec.yaml: bafybeigli7i2xuikxnzjwaygjqcwltca36kli35uwjud6zh2avq5bwdatm
-  serialization.py: bafybeiaao6epwaf6qen26yri6nwe74nfhomjdtqswwrkknng2lfou7bsf4
-  tests/__init__.py: bafybeici3ejsu5uzovuodlc2h5alessjouni7e7mihvwkqemjnqa5kwsky
-  tests/dummy_data.yaml: bafybeih6fc3n2tryigv6qszptvbgyk6rfloeovllaqy4xwba6slwmcmgsu
-  tests/test_default_dialogues.py: bafybeigyvy4g6mobywt4xw6wzgiwqkgq7tilrffuhwv5xty7hlt6pzu3nm
-  tests/test_default_messages.py: bafybeidu6hvbrs5yskdxffhx4m464jsxitwxm53i6rki5wpdftozxtdomy
+  default_pb2.py: bafybeidd7stdf7ny4cylsnuquxz7yf6nfath3h7arguze4x3chicpcvhki
+  dialogues.py: bafybeidetv7ktcnfb6no6m7v33xe3z5knc6rr32jmffaow4r6purutabse
+  message.py: bafybeicix3s6tt74opxoxct6qsvz5s57ber7a65buiovxyyitefw3ypu4y
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiaj4565mqfghkmrokai2u2hocztf4ruwdws3ko3hrybhi6wuaczuu
+  tests/__init__.py: bafybeiehpir7bshrwlmzbvupcrd52c4whyfe4m3how6kd6irsumsllkg6y
+  tests/performatives.py: bafybeifddhximnpd4pznzq5tcftfg5abpk6fnazz5po7jlo4hkpdblz2ie
+  tests/primitive_strategies.py: bafybeibwgozigij2pvii55hw4uhgtcns26w6royebcyb6zro4e2asv57su
+  tests/test_custom_types.py: bafybeiejfslmmekqom7xcqhjvvay6sh7gb6zqmeegimmmzmsfnhpttr6cq
+  tests/test_default_dialogues.py: bafybeigc6yvsrxx4uddlcs5vn76awculwiotynwxcjs6ti5xmq6xyxep4m
+  tests/test_default_messages.py: bafybeih5jieuyrsytgxejssypnzqp64tuky3tfawf5tv25ikdfiscyciu4
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

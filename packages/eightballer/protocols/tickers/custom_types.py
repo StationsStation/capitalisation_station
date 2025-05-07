@@ -1,158 +1,202 @@
-"""Custom types for the protocol."""
+"""Module containing the pydantic models generated from the .proto file."""
 
-from enum import Enum
-from typing import Any
+from __future__ import annotations
+
+from enum import IntEnum
+from typing import Optional
 
 from pydantic import BaseModel
 
+from packages.eightballer.protocols.tickers.primitives import (
+    Float,
+    Int64,
+)
 
-class ErrorCode(Enum):
-    """This class represents an instance of ErrorCode."""
+
+# ruff: noqa: N806, C901, PLR0912, PLR0914, PLR0915, A001, UP007
+# N806     - variable should be lowercase
+# C901     - function is too complex
+# PLR0912  - too many branches
+# PLR0914  - too many local variables
+# PLR0915  - too many statements
+# A001     - shadowing builtin names like `id` and `type`
+# UP007    - Use X | Y for type annotations  # NOTE: important edge case pydantic-hypothesis interaction!
+
+MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
+
+
+class ErrorCode(IntEnum):
+    """ErrorCode."""
 
     UNKNOWN_EXCHANGE = 0
     UNKNOWN_TICKER = 1
     API_ERROR = 2
 
     @staticmethod
-    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
-        """Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
-        in the 'error_code_object' argument.
-
-
-
-        Args:
-        ----
-               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               error_code_object:  an instance of this class to be encoded in the protocol buffer object.
-
-        """
-        error_code_protobuf_object.error_code = error_code_object.value
+    def encode(pb_obj, error_code: ErrorCode) -> None:
+        """Encode ErrorCode to protobuf."""
+        pb_obj.error_code = error_code
 
     @classmethod
-    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'error_code_protobuf_object' argument.
-
-        'error_code_protobuf_object' argument.
+    def decode(cls, pb_obj) -> ErrorCode:
+        """Decode protobuf to ErrorCode."""
+        return cls(pb_obj.error_code)
 
 
-        Args:
-        ----
-               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-
-        """
-        return ErrorCode(error_code_protobuf_object.error_code)
-
-
-class BaseCustomEncoder(BaseModel):
-    """This class is a base class for encoding and decoding protocol buffer objects."""
-
-    @staticmethod
-    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
-        """Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
-        class in the 'ps_response_object' argument.
-
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
-
-        """
-        for key, value in ps_response_object.__dict__.items():
-            current_attr = getattr(ps_response_protobuf_object, key)
-            if isinstance(value, Enum):
-                type(value).encode(current_attr, value)
-                continue
-            if isinstance(value, dict):
-                current_attr.update(value)
-                continue
-            if isinstance(value, list):
-                current_attr.extend(value)
-                continue
-            setattr(ps_response_protobuf_object, key, value)
-
-    @classmethod
-    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'ps_response_protobuf_object' argument.
-
-        'ps_response_protobuf_object' argument.
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-
-        """
-        keywords = list(cls.__annotations__.keys())
-        kwargs = {}
-        for keyword in keywords:
-            proto_attr = getattr(ps_response_protobuf_object, keyword)
-            if isinstance(proto_attr, Enum):
-                kwargs[keyword] = type(proto_attr).decode(proto_attr)
-                continue
-            if isinstance(proto_attr, list):
-                kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
-                continue
-            if isinstance(proto_attr, dict):
-                kwargs[keyword] = dict(proto_attr.items())
-                continue
-            if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
-                kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
-                continue
-            kwargs[keyword] = proto_attr
-        return cls(**kwargs)
-
-    def __eq__(self, other):
-        """Check if two instances of this class are equal."""
-        return self.dict() == other.dict()
-
-    def __hash__(self):
-        """Return the hash value of this instance."""
-        return hash(self.dict())
-
-
-class Ticker(BaseCustomEncoder):
-    """This class represents an instance of Ticker."""
+class Ticker(BaseModel):
+    """Ticker."""
 
     symbol: str
-    timestamp: int
+    timestamp: Int64
     datetime: str
-    ask: float
-    bid: float
-    asset_a: str | None = None
-    asset_b: str | None = None
-    bid_volume: float | None = None
-    ask_volume: float | None = None
-    high: float | None = None
-    low: float | None = None
-    vwap: float | None = None
-    open: float | None = None
-    close: float | None = None
-    last: float | None = None
-    previous_close: float | None = None
-    change: float | None = None
-    percentage: float | None = None
-    average: float | None = None
-    base_volume: float | None = None
-    quote_volume: float | None = None
-    info: str | None = None
+    ask: Float
+    bid: Float
+    asset_a: Optional[str] = None
+    asset_b: Optional[str] = None
+    bid_volume: Optional[Float] = None
+    ask_volume: Optional[Float] = None
+    high: Optional[Float] = None
+    low: Optional[Float] = None
+    vwap: Optional[Float] = None
+    open: Optional[Float] = None
+    close: Optional[Float] = None
+    last: Optional[Float] = None
+    previous_close: Optional[Float] = None
+    change: Optional[Float] = None
+    percentage: Optional[Float] = None
+    average: Optional[Float] = None
+    base_volume: Optional[Float] = None
+    quote_volume: Optional[Float] = None
+    info: Optional[str] = None
+
+    @staticmethod
+    def encode(proto_obj, ticker: Ticker) -> None:
+        """Encode Ticker to protobuf."""
+        proto_obj.symbol = ticker.symbol
+        proto_obj.timestamp = ticker.timestamp
+        proto_obj.datetime = ticker.datetime
+        proto_obj.ask = ticker.ask
+        proto_obj.bid = ticker.bid
+        if ticker.asset_a is not None:
+            proto_obj.asset_a = ticker.asset_a
+        if ticker.asset_b is not None:
+            proto_obj.asset_b = ticker.asset_b
+        if ticker.bid_volume is not None:
+            proto_obj.bid_volume = ticker.bid_volume
+        if ticker.ask_volume is not None:
+            proto_obj.ask_volume = ticker.ask_volume
+        if ticker.high is not None:
+            proto_obj.high = ticker.high
+        if ticker.low is not None:
+            proto_obj.low = ticker.low
+        if ticker.vwap is not None:
+            proto_obj.vwap = ticker.vwap
+        if ticker.open is not None:
+            proto_obj.open = ticker.open
+        if ticker.close is not None:
+            proto_obj.close = ticker.close
+        if ticker.last is not None:
+            proto_obj.last = ticker.last
+        if ticker.previous_close is not None:
+            proto_obj.previous_close = ticker.previous_close
+        if ticker.change is not None:
+            proto_obj.change = ticker.change
+        if ticker.percentage is not None:
+            proto_obj.percentage = ticker.percentage
+        if ticker.average is not None:
+            proto_obj.average = ticker.average
+        if ticker.base_volume is not None:
+            proto_obj.base_volume = ticker.base_volume
+        if ticker.quote_volume is not None:
+            proto_obj.quote_volume = ticker.quote_volume
+        if ticker.info is not None:
+            proto_obj.info = ticker.info
+
+    @classmethod
+    def decode(cls, proto_obj) -> Ticker:
+        """Decode proto_obj to Ticker."""
+        symbol = proto_obj.symbol
+        timestamp = proto_obj.timestamp
+        datetime = proto_obj.datetime
+        ask = proto_obj.ask
+        bid = proto_obj.bid
+        asset_a = proto_obj.asset_a if proto_obj.asset_a is not None and proto_obj.HasField("asset_a") else None
+        asset_b = proto_obj.asset_b if proto_obj.asset_b is not None and proto_obj.HasField("asset_b") else None
+        bid_volume = (
+            proto_obj.bid_volume if proto_obj.bid_volume is not None and proto_obj.HasField("bid_volume") else None
+        )
+        ask_volume = (
+            proto_obj.ask_volume if proto_obj.ask_volume is not None and proto_obj.HasField("ask_volume") else None
+        )
+        high = proto_obj.high if proto_obj.high is not None and proto_obj.HasField("high") else None
+        low = proto_obj.low if proto_obj.low is not None and proto_obj.HasField("low") else None
+        vwap = proto_obj.vwap if proto_obj.vwap is not None and proto_obj.HasField("vwap") else None
+        open = proto_obj.open if proto_obj.open is not None and proto_obj.HasField("open") else None
+        close = proto_obj.close if proto_obj.close is not None and proto_obj.HasField("close") else None
+        last = proto_obj.last if proto_obj.last is not None and proto_obj.HasField("last") else None
+        previous_close = (
+            proto_obj.previous_close
+            if proto_obj.previous_close is not None and proto_obj.HasField("previous_close")
+            else None
+        )
+        change = proto_obj.change if proto_obj.change is not None and proto_obj.HasField("change") else None
+        percentage = (
+            proto_obj.percentage if proto_obj.percentage is not None and proto_obj.HasField("percentage") else None
+        )
+        average = proto_obj.average if proto_obj.average is not None and proto_obj.HasField("average") else None
+        base_volume = (
+            proto_obj.base_volume if proto_obj.base_volume is not None and proto_obj.HasField("base_volume") else None
+        )
+        quote_volume = (
+            proto_obj.quote_volume
+            if proto_obj.quote_volume is not None and proto_obj.HasField("quote_volume")
+            else None
+        )
+        info = proto_obj.info if proto_obj.info is not None and proto_obj.HasField("info") else None
+        return cls(
+            symbol=symbol,
+            timestamp=timestamp,
+            datetime=datetime,
+            ask=ask,
+            bid=bid,
+            asset_a=asset_a,
+            asset_b=asset_b,
+            bid_volume=bid_volume,
+            ask_volume=ask_volume,
+            high=high,
+            low=low,
+            vwap=vwap,
+            open=open,
+            close=close,
+            last=last,
+            previous_close=previous_close,
+            change=change,
+            percentage=percentage,
+            average=average,
+            base_volume=base_volume,
+            quote_volume=quote_volume,
+            info=info,
+        )
 
 
-class Tickers(BaseCustomEncoder):
-    """This class represents an instance of Tickers."""
+class Tickers(BaseModel):
+    """Tickers."""
 
-    tickers: list[Ticker] = []
+    tickers: list[Ticker]
+
+    @staticmethod
+    def encode(proto_obj, tickers: Tickers) -> None:
+        """Encode Tickers to protobuf."""
+        for item in tickers.tickers:
+            Ticker.encode(proto_obj.tickers.add(), item)
+
+    @classmethod
+    def decode(cls, proto_obj) -> Tickers:
+        """Decode proto_obj to Tickers."""
+        tickers = [Ticker.decode(item) for item in proto_obj.tickers]
+        return cls(tickers=tickers)
 
 
-CUSTOM_ENUM_MAP = {"<class 'tickers_pb2.ErrorCode'>": ErrorCode}
+for cls in BaseModel.__subclasses__():
+    if cls.__module__ == __name__:
+        cls.model_rebuild()

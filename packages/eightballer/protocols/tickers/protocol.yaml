@@ -7,20 +7,23 @@ description: A protocol for passing ticker data between agent components.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeif2vzokk54vcgp7ttykotekkdjmoxhcay4rdsguhk6ngvlzoib4se
-  __init__.py: bafybeigk3gue6mjjzimfq3oy2s4x4ct4oy3ynzrglpc6ihwnhqdeia7o2m
-  custom_types.py: bafybeihd6oc5ksilr2or5uqqt55upueynr4phztpjtagyk4z7klxo6bdou
-  dialogues.py: bafybeifjhgzgvujdrwtuua6do2wlayf44ojfzgk24wlv43t3oahymuokwi
+  README.md: bafybeifjvh3mppa5vyb5cz6wgpu5u4ypd3fi5saaw42x4xy5qfh2ixv2ji
+  __init__.py: bafybeibe73nm2gsxde6a63pjytfsxczws2nxdyy662j7xazls7xjp6mqoy
+  custom_types.py: bafybeiawbtj5uugc7jirox5lf6ctgmzzuthhglynviilx2bfdmcniqi4py
+  dialogues.py: bafybeieatbpa62hycaf5jocp7pywde5ahzpiucwkeg3t7yqb4csm4gh3kq
   message.py: bafybeifxjq4qwybobnzx2b6vtau2zv5kvkj5vvgriegkh6pjpkhev43oyu
-  protocol_spec.yaml: bafybeifwq62broqkil6pnr4eudowhjjfrqheev444t62aozjjqmrk3ck64
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeieq37pzp6tq2wtj53yl4ngpkvqvscrd4t4b77rbupjatbw2twzbti
-  tests/__init__.py: bafybeiemoqcak3jqqtyohqsgh32gq42pg4erbc5pbv7j42ftxwular5ume
-  tests/dummy_data.yaml: bafybeigerubouoelct6ylcqtb6kiuti7rbea6pvmtv3qmyshkljtje327u
-  tests/test_tickers_dialogues.py: bafybeiex4hshfmphfmfzgv5baywako6djr3tgm3l3kuagidbrmlxtz6r7q
-  tests/test_tickers_messages.py: bafybeib5lvuusawpbqszfjmc322yb3p7d5s52sexa3mzcjpjdtdvzgacz4
+  tests/__init__.py: bafybeie6ybzpzaekqxp5rlv3mmapxaqt4f3b3eqeklys7t4vsuhrxqiwlm
+  tests/performatives.py: bafybeica26evelwerblr4y3maygzhnlp44z53ftwcf5jqsim5aacpl57ja
+  tests/primitive_strategies.py: bafybeigzliqgovxxzqayp4rxxi6f3q2h7zu7d4wltpxgurinilgeo4orhq
+  tests/test_custom_types.py: bafybeihzosttv3q7ylncj32ssmy5mtqq7ypbfjovbavvo3ndhkzlmcfbqi
+  tests/test_tickers_dialogues.py: bafybeifurmw3d7d2vug4e3flhpgkyrmrd46ydujyomzwkuevbg44ja5zvy
+  tests/test_tickers_messages.py: bafybeifbyafzbd2wl4jqifunwvwmyaguuaxmqvprzczjhhdfrjndyxpmv4
   tickers.proto: bafybeihd4makmplvv7owemgj2xavdktrvrmbob3wpkrlgtn3bfhoxs6h6e
-  tickers_pb2.py: bafybeihknaqjd3e3iptgcpreyrrah4nfbu4h73smswywpxzrpjy5qxsjwe
+  tickers_pb2.py: bafybeigpguujrn3hbpnoaegams3mxsl2uf6dxffylripchjcxig54irfra
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

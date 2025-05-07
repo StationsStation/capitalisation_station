@@ -1,8 +1,7 @@
 # Tickers Protocol
 
 ## Description
-
-...
+A protocol for passing ticker data between agent components.
 
 ## Specification
 
@@ -86,7 +85,4 @@ termination: [ticker, all_tickers, error]
 roles: { agent }
 end_states: [ ticker, all_tickers, error ]
 keep_terminal_state_dialogues: false
-
-
-
 ```

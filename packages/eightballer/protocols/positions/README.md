@@ -1,8 +1,7 @@
 # Positions Protocol
 
 ## Description
-
-...
+A protocol for passing position data between agent components.
 
 ## Specification
 
@@ -94,6 +93,4 @@ termination: [position, all_positions, error]
 roles: { agent }
 end_states: [ position, all_positions, error ]
 keep_terminal_state_dialogues: false
-
-
 ```

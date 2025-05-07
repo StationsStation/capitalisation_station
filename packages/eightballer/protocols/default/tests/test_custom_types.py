@@ -1,0 +1,18 @@
+"""Module containing tests for the pydantic models generated from the .proto file."""
+
+from hypothesis import given, strategies as st
+
+from packages.eightballer.protocols.default.default_pb2 import DefaultMessage as default_pb2  # noqa: N813
+from packages.eightballer.protocols.default.custom_types import (
+    ErrorCode,
+)
+
+
+@given(st.from_type(ErrorCode))
+def test_errorcode(errorcode: ErrorCode):
+    """Test ErrorCode."""
+    assert isinstance(errorcode, ErrorCode)
+    proto_obj = default_pb2.ErrorCode()
+    errorcode.encode(proto_obj, errorcode)
+    result = ErrorCode.decode(proto_obj)
+    assert errorcode == result

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package aea.eightballer.order_book_subscription.v0_1_0;
+package aea.eightballer.order_book.v0_1_0;
 
 message OrderBookMessage{
 

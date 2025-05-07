@@ -212,7 +212,7 @@ class ReportingStrategy(Model):
                 setattr(Model, field, Column(String))
             elif data_class in self.custom_type_mapping:
                 if _type not in self.custom_type_mapping[data_class]:
-                    msg = f"Type {_type} not supported!"
+                    msg = f"Type {_type} not supported for {class_name}.{field}!"
                     raise ValueError(msg)
                 # we need to create a relationship here to the custom type...
                 setattr(Model, field, Column(String))

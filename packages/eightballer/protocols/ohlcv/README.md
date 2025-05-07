@@ -1,8 +1,7 @@
 # Ohlcv Protocol
 
 ## Description
-
-...
+A protocol for passing ohlcv data between compoents.
 
 ## Specification
 
@@ -65,5 +64,4 @@ termination: [error, end]
 roles: { agent }
 end_states: [ end, error ]
 keep_terminal_state_dialogues: true
-
 ```
