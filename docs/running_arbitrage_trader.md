@@ -67,6 +67,7 @@ There are a few necessarcy variables that need to be set in order to run the tra
 - DERIVE_SUB_ACCOUNT: This is the sub account generated on Derive upon signing up. You can get one by signing up at [Derive](https://www.derive.xyz/invite/A0HQW)
 
 
+#### Cli Interactions only
 
 ```bash
 export AGENT=eightballer/derive_arbitrage_agent
