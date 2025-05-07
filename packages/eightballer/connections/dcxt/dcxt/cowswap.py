@@ -448,10 +448,10 @@ class CowSwapClient(BaseErc20Exchange):
             """Temporary monkey patch 🙈."""
             if order.sellToken.root == NATIVE_ETH:
                 order.sellToken.root = wETH
-                self.logger.warning(f"🐵 Monkey patched CowSwap order sellToken ETH -> wETH: {order}")
+                self.logger.debug(f"🐵 Monkey patched CowSwap order sellToken ETH -> wETH: {order}")
             if order.buyToken.root == NATIVE_ETH:
                 order.buyToken.root = wETH
-                self.logger.warning(f"🐵 Monkey patched CowSwap order buyToken  ETH -> wETH: {order}")
+                self.logger.debug(f"🐵 Monkey patched CowSwap order buyToken  ETH -> wETH: {order}")
 
         any(map(weth_address_patcher, orders))  # pay peanuts get monkeys
 
