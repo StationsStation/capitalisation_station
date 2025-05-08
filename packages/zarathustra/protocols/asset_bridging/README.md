@@ -29,7 +29,7 @@ ct:BridgeRequest: |
   string target_chain = 2;
   string source_token = 3;
   optional string target_token = 4;
-  int64 amount = 5;
+  double amount = 5;
   string bridge = 6;
   optional string receiver = 7;
 ct:BridgeResult: |

@@ -1,1 +1,1 @@
-"""Test module for the asset_bridging."""
+"""Test module for the asset_bridging protocol."""

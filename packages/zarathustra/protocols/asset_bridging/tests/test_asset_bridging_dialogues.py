@@ -7,6 +7,7 @@ from unittest.mock import MagicMock
 from pydantic import BaseModel
 from hypothesis import given, strategies as st
 from aea.configurations.data_types import PublicId
+
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.dialogues import (
     AssetBridgingDialogues,
