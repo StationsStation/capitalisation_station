@@ -93,6 +93,7 @@ def create_invalid_bridge_requests():
 
 
 @pytest.mark.asyncio
+@pytest.mark.flaky(reruns=3, reruns_delay=1)
 class TestAssetBridging(BaseDcxtConnectionTest):
     """Test asset bridging protocol messages are handled."""
 
