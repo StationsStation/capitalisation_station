@@ -3,22 +3,25 @@
 from __future__ import annotations
 
 from enum import IntEnum
+from typing import Optional
 
 from pydantic import BaseModel
+
 from packages.zarathustra.protocols.asset_bridging.primitives import (
-    Int64,
+    Double,
 )
 
 
-# ruff: noqa: N806, C901, PLR0912, PLR0914, PLR0915, A001
+# ruff: noqa: N806, C901, PLR0912, PLR0914, PLR0915, A001, UP007
 # N806     - variable should be lowercase
 # C901     - function is too complex
 # PLR0912  - too many branches
 # PLR0914  - too many local variables
 # PLR0915  - too many statements
 # A001     - shadowing builtin names like `id` and `type`
+# UP007    - Use X | Y for type annotations  # NOTE: important edge case pydantic-hypothesis interaction!
 
-MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024  # 2 GiB in bytes
+MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
 
 
 class BridgeRequest(BaseModel):
@@ -27,15 +30,14 @@ class BridgeRequest(BaseModel):
     source_chain: str
     target_chain: str
     source_token: str
-    target_token: str | None
-    amount: Int64
+    target_token: Optional[str] = None
+    amount: Double
     bridge: str
-    receiver: str | None
+    receiver: Optional[str] = None
 
     @staticmethod
     def encode(proto_obj, bridgerequest: BridgeRequest) -> None:
         """Encode BridgeRequest to protobuf."""
-
         proto_obj.source_chain = bridgerequest.source_chain
         proto_obj.target_chain = bridgerequest.target_chain
         proto_obj.source_token = bridgerequest.source_token
@@ -49,7 +51,6 @@ class BridgeRequest(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeRequest:
         """Decode proto_obj to BridgeRequest."""
-
         source_chain = proto_obj.source_chain
         target_chain = proto_obj.target_chain
         source_token = proto_obj.source_token
@@ -61,7 +62,6 @@ class BridgeRequest(BaseModel):
         amount = proto_obj.amount
         bridge = proto_obj.bridge
         receiver = proto_obj.receiver if proto_obj.receiver is not None and proto_obj.HasField("receiver") else None
-
         return cls(
             source_chain=source_chain,
             target_chain=target_chain,
@@ -92,7 +92,6 @@ class BridgeResult(BaseModel):
     @staticmethod
     def encode(proto_obj, bridgeresult: BridgeResult) -> None:
         """Encode BridgeResult to protobuf."""
-
         proto_obj.tx_hash = bridgeresult.tx_hash
         proto_obj.status = bridgeresult.status
         BridgeRequest.encode(proto_obj.request, bridgeresult.request)
@@ -100,11 +99,9 @@ class BridgeResult(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeResult:
         """Decode proto_obj to BridgeResult."""
-
         tx_hash = proto_obj.tx_hash
         status = proto_obj.status
         request = BridgeRequest.decode(proto_obj.request)
-
         return cls(tx_hash=tx_hash, status=status, request=request)
 
 
@@ -127,19 +124,17 @@ class ErrorInfo(BaseModel):
     @staticmethod
     def encode(proto_obj, errorinfo: ErrorInfo) -> None:
         """Encode ErrorInfo to protobuf."""
-
         proto_obj.code = errorinfo.code
         proto_obj.message = errorinfo.message
 
     @classmethod
     def decode(cls, proto_obj) -> ErrorInfo:
         """Decode proto_obj to ErrorInfo."""
-
         code = proto_obj.code
         message = proto_obj.message
-
         return cls(code=code, message=message)
 
 
 for cls in BaseModel.__subclasses__():
-    cls.model_rebuild()
+    if cls.__module__ == __name__:
+        cls.model_rebuild()

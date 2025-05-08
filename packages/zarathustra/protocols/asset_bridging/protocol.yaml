@@ -9,8 +9,8 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeieybhszcx7zmbu5gqhdfjp4wi3q7qzgdvtobpmm36warsgxr5soca
-  asset_bridging.proto: bafybeifnp6xndq6mfx2m4x2ljqtievun7hzscsbz33un2eaqz6uocvzux4
-  asset_bridging_pb2.py: bafybeibvyibfytz5ihkoeqo33c2ylkm74hgdzdaazxiioycshdyxp2ilna
+  asset_bridging.proto: bafybeiepu2n6u7fgb2zptplcricrydhqanqhhyybymdnuhuhe4b7jgm5gi
+  asset_bridging_pb2.py: bafybeiccqdjnhthpncqno6n3cgqd3bgpkqfxprnrxdpstrljnnsko4n7b4
   custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
   dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
   message.py: bafybeid2ixvjhpni6otgnygaywwrbliciy3mh5aon7t2eb2hsijrmelovm

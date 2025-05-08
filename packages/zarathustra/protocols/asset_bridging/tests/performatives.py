@@ -3,11 +3,16 @@
 """Models for the asset_bridging protocol performatives to facilitate hypothesis strategy generation."""
 
 from pydantic import BaseModel
+
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorInfo,
     BridgeResult,
     BridgeRequest,
 )
+
+
+# ruff: noqa: UP007
+# UP007    - Use X | Y for type annotations  # NOTE: important edge case pydantic-hypothesis interaction!
 
 
 class RequestBridge(BaseModel):
@@ -34,5 +39,7 @@ class Error(BaseModel):
     info: ErrorInfo
 
 
-for cls in BaseModel.__subclasses__():
-    cls.model_rebuild()
+RequestBridge.model_rebuild()
+BridgeStatus.model_rebuild()
+RequestStatus.model_rebuild()
+Error.model_rebuild()
