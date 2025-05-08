@@ -1,3 +1,5 @@
+"""Test the asset_bridging protocol."""
+
 import asyncio
 from typing import TYPE_CHECKING
 from contextlib import ExitStack
@@ -8,7 +10,7 @@ import pytest
 from aea.mail.base import Envelope
 from web3.datastructures import AttributeDict
 from derive_client.data_types import ChainID, Currency, TxResult, Environment
-from derive_client._bridge.client import BridgeClient
+from derive_client._bridge.client import BridgeClient  # noqa: PLC2701
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
@@ -17,12 +19,16 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRes
 from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIMEOUT
 
 
-ErrorCode = AssetBridgingMessage.ErrorInfo.Code
-
 if TYPE_CHECKING:
     from derive_client.clients import AsyncClient
 
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
+
+
+# ruff: noqa: D101, D103
+
+
+ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
 
 @dataclass
