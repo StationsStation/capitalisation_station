@@ -1,6 +1,7 @@
 import asyncio
 from typing import TYPE_CHECKING
 from contextlib import ExitStack
+from dataclasses import dataclass
 from unittest.mock import patch
 
 import pytest
@@ -16,28 +17,79 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRes
 from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIMEOUT
 
 
+ErrorCode = AssetBridgingMessage.ErrorInfo.Code
+
 if TYPE_CHECKING:
     from derive_client.clients import AsyncClient
 
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
 
 
+@dataclass
+class ValidTestCase:
+    name: str
+    request: BridgeRequest
+
+
+@dataclass
+class InvalidTestCase(ValidTestCase):
+    name: str
+    request: BridgeRequest
+    error_code: ErrorCode
+    expected_error_msg: str
+
+
 VALID_BRIDGE_REQUESTS = (
-    BridgeRequest(
-        source_chain=ChainID.DERIVE.name,
-        target_chain=ChainID.BASE.name,
-        source_token=Currency.weETH.name,
-        amount=0.1,
-        bridge="derive",
+    ValidTestCase(
+        name="DeriveClient.withdraw_from_derive",
+        request=BridgeRequest(
+            source_chain=ChainID.DERIVE.name,
+            target_chain=ChainID.BASE.name,
+            source_token=Currency.weETH.name,
+            target_token=None,
+            receiver=None,
+            amount=0.1,
+            bridge="derive",
+        ),
     ),
-    BridgeRequest(
-        source_chain=ChainID.BASE.name,
-        target_chain=ChainID.DERIVE.name,
-        source_token=Currency.USDC.name,
-        amount=100,
-        bridge="derive",
+    ValidTestCase(
+        name="DeriveClient.deposit_to_derive",
+        request=BridgeRequest(
+            source_chain=ChainID.BASE.name,
+            target_chain=ChainID.DERIVE.name,
+            source_token=Currency.USDC.name,
+            target_token=Currency.USDC.name,
+            receiver=None,
+            amount=100,
+            bridge="derive",
+        ),
     ),
 )
+
+
+def create_invalid_bridge_requests():
+    valid_case = VALID_BRIDGE_REQUESTS[0]
+    base = valid_case.request
+    return (
+        InvalidTestCase(
+            name=f"{valid_case.name}: unsupported source and target chain combination",
+            request=base.copy(update={"source_chain": ChainID.OPTIMISM.name}),
+            error_code=ErrorCode.CODE_INVALID_PARAMETERS,
+            expected_error_msg="Can only bridge FROM or TO Derive at this time",
+        ),
+        InvalidTestCase(
+            name=f"{valid_case.name}: source token not equal to target token",
+            request=base.copy(update={"target_token": Currency.LBTC.name}),
+            error_code=ErrorCode.CODE_INVALID_PARAMETERS,
+            expected_error_msg="Socket superbridge requires source_token == target_token",
+        ),
+        InvalidTestCase(
+            name=f"{valid_case.name}: custom receiver provided",
+            request=base.copy(update={"receiver": "0xdeadbeef"}),
+            error_code=ErrorCode.CODE_INVALID_PARAMETERS,
+            expected_error_msg="Providing a custom receiver isn't supported for the Derive",
+        ),
+    )
 
 
 @pytest.mark.asyncio
@@ -46,11 +98,11 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
     DIALOGUES = get_dialogues(BaseAssetBridgingDialogues, AssetBridgingDialogue)
 
-    @pytest.mark.parametrize("bridge_request", VALID_BRIDGE_REQUESTS)
-    async def test_handles_valid_bridge_request(self, bridge_request: BridgeRequest) -> None:
+    @pytest.mark.parametrize("case", VALID_BRIDGE_REQUESTS)
+    async def test_handles_valid_bridge_request(self, case: ValidTestCase) -> None:
         """Test handle valid bridge request messages."""
 
-        request = bridge_request
+        request = case.request
 
         await self.connection.connect()
         dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
@@ -86,3 +138,36 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         assert isinstance(response.message, AssetBridgingMessage)
         assert response.message.performative == AssetBridgingMessage.Performative.BRIDGE_STATUS, f"Error: {response}"
         assert response.message.result.status == BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+
+    @pytest.mark.parametrize("case", create_invalid_bridge_requests())
+    async def test_handles_invalid_bridge_request(self, case: InvalidTestCase) -> None:
+        """Test handle invalid bridge request messages."""
+
+        request = case.request
+
+        await self.connection.connect()
+        dialogues = self.DIALOGUES(self.client_skill_id)  # pylint: disable=E1120
+
+        message, _ = dialogues.create(
+            counterparty=str(self.connection.connection_id),
+            performative=AssetBridgingMessage.Performative.REQUEST_BRIDGE,
+            request=request,
+        )
+        envelope = Envelope(
+            to=message.to,
+            sender=message.sender,
+            message=message,
+        )
+
+        exchanges = self.connection.protocol_interface.exchanges
+        exchanges[request.bridge][request.bridge]
+
+        await self.connection.send(envelope)
+        async with asyncio.timeout(TIMEOUT):
+            response = await self.connection.receive()
+
+        assert response is not None
+        assert isinstance(response.message, AssetBridgingMessage)
+        assert response.message.performative == AssetBridgingMessage.Performative.ERROR, f"Error: {response}"
+        assert response.message.info.code == case.error_code
+        assert case.expected_error_msg in response.message.info.message
