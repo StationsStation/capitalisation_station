@@ -8,7 +8,7 @@ from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest, BridgeResult
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
-from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogue
+from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
 
 
@@ -40,10 +40,10 @@ class AssetBridgingInterface(BaseInterface):
                 code=ErrorCode.CODE_INVALID_PARAMETERS,
                 err_msg=f"Bridge '{request.bridge}' not supported",
             )
-        if not (request.source_chain == "derive" or request.target_chain == "derive"):
+        if not (request.source_chain == ChainID.DERIVE.name or request.target_chain == ChainID.DERIVE.name):
             return reply_err(
                 code=ErrorCode.CODE_INVALID_PARAMETERS,
-                err_msg="Can only bridge FROM or TO derive at this time",
+                err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
             )
         if request.target_token and request.target_token != request.source_token:
             return reply_err(
@@ -67,16 +67,17 @@ class AssetBridgingInterface(BaseInterface):
                 err_msg=err_msg,
             )
 
+        amount = request.amount
         currency = Currency[request.source_token]
         source_chain_id = ChainID[request.source_chain.upper()]
         target_chain_id = ChainID[request.target_chain.upper()]
 
-        if request.source_chain == "derive":
+        if request.source_chain == ChainID.DERIVE.name:
             receiver = client.signer.address
             tx_result = client.withdraw_from_derive(
                 chain_id=target_chain_id,
                 currency=currency,
-                amount=request.amount,
+                amount=amount,
                 receiver=receiver,
             )
         else:
@@ -84,7 +85,7 @@ class AssetBridgingInterface(BaseInterface):
             tx_result = client.deposit_to_derive(
                 chain_id=source_chain_id,
                 currency=currency,
-                amount=request.amount,
+                amount=amount,
                 receiver=receiver,
             )
 
