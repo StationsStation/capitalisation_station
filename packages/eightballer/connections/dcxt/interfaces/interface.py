@@ -15,6 +15,7 @@ from packages.eightballer.connections.dcxt.interfaces.position import PositionIn
 from packages.eightballer.connections.dcxt.interfaces.approvals import ApprovalsInterface
 from packages.eightballer.connections.dcxt.interfaces.order_book import OrderBookInterface
 from packages.eightballer.connections.dcxt.interfaces.spot_asset import SpotAssetInterface
+from packages.eightballer.connections.dcxt.interfaces.asset_bridging import AssetBridgingInterface
 
 
 if TYPE_CHECKING:
@@ -42,6 +43,7 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
             PositionInterface.protocol_id: PositionInterface(),
             TickerInterface.protocol_id: TickerInterface(),
             OrderBookInterface.protocol_id: OrderBookInterface(),
+            AssetBridgingInterface.protocol_id: AssetBridgingInterface(),
         }
         self.handle_task_done = kwargs.get("done_callback")
 
