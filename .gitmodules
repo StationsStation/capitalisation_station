@@ -22,3 +22,7 @@
 [submodule "third_party/upstream/derive_client"]
 	path = third_party/upstream/derive_client
 	url = https://github.com/8ball030/derive_client.git
+
+[submodule "third_party/upstream/tokenlists"]
+	path = third_party/upstream/tokenlists
+	url = https://github.com/8ball030/tokenlists.git
