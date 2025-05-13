@@ -29,7 +29,7 @@ open-autonomy = "==0.19.7"
 autonomy-dev = {version = "==0.2.153", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=1.26.0,<2"
-derive-client = {path = "third_party/upstream/lyra_client"}
+derive-client = {path = "third_party/upstream/derive_client"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"
@@ -40,7 +40,6 @@ open-balpy = "<1"
 open-multicaller = "^0.2.0"
 tomli = "^2.2.1"
 apprise = ">=1.7.5,<2.0.0"
-lyra-v2-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
 open-aea-ledger-ethereum = {path = "third_party/forks/open-aea/plugins/aea-ledger-ethereum"}
 eth-account = "^0.13.5"
 eth-typing = "<=5.2.0"
@@ -68,6 +67,7 @@ py-ecc = "^7.0.1"
 pytest = ">=7.2.1"
 pytz = "2022.2.1"
 typing-extensions = ">=3.10.0.2"
+derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
 
 [tool.poetry.group.dev.dependencies]
 tbump = "^6.11.0"
