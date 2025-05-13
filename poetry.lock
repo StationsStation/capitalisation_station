@@ -1486,25 +1486,27 @@ name = "derive-action-signing"
 version = "0.0.11"
 description = "Python package to sign on-chain self-custodial requests for orders, transfers, deposits, withdrawals and RFQs."
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = ">=3.9,<4.0"
 groups = ["main"]
 markers = "python_version <= \"3.11\""
-files = [
-    {file = "derive_action_signing-0.0.11-py3-none-any.whl", hash = "sha256:3b8c3ee7b3928ef874a9ac57cae6f7e376eeda56312c8ae0b043d47f35213c84"},
-    {file = "derive_action_signing-0.0.11.tar.gz", hash = "sha256:96e49a4a27e0357b0803843a9c9a42e19c9c582c3db5ac0a23621d7df93784c9"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 eth-abi = ">=4.2.1"
 eth-account = ">=0.13.4"
 eth-typing = "4.0.0"
 hexbytes = ">=0.3.1"
-setuptools = ">=75.8.0,<76.0.0"
+setuptools = "^75.8.0"
 web3 = ">=6.4.0,<7.0.0"
+
+[package.source]
+type = "directory"
+url = "third_party/upstream/v2-action-signing-python"
 
 [[package]]
 name = "derive-client"
-version = "0.2.16"
+version = "0.2.17"
 description = ""
 optional = false
 python-versions = ">=3.9,<3.12"
@@ -1527,7 +1529,7 @@ websocket-client = ">=0.32.0,<1"
 
 [package.source]
 type = "directory"
-url = "third_party/upstream/lyra_client"
+url = "third_party/upstream/derive_client"
 
 [[package]]
 name = "dictpath"
@@ -2668,26 +2670,6 @@ files = [
 
 [package.extras]
 test = ["pytest"]
-
-[[package]]
-name = "lyra-v2-action-signing"
-version = "0.0.7"
-description = "Python package to sign on-chain self-custodial requests for orders, transfers, deposits, withdrawals and RFQs."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = []
-develop = false
-
-[package.dependencies]
-eth-abi = ">=4.2.1"
-hexbytes = ">=0.3.1"
-web3 = ">=6.4.0"
-
-[package.source]
-type = "directory"
-url = "third_party/upstream/v2-action-signing-python"
 
 [[package]]
 name = "markdown"
@@ -5920,4 +5902,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "971e5340f9f336f46cd21d89e771332956ed71ca1bb9919d30572501c02543f7"
+content-hash = "99330f9ab210657f79d0694c4d05b3576ef823663ceb50c7a8e726dfa501b481"

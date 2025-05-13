@@ -19,6 +19,6 @@
 [submodule "third_party/upstream/aea_contracts_solana"]
 	path = third_party/upstream/aea_contracts_solana
 	url = https://github.com/Dassy23/aea_contracts_solana.git
-[submodule "third_party/upstream/lyra_client"]
-	path = third_party/upstream/lyra_client
+[submodule "third_party/upstream/derive_client"]
+	path = third_party/upstream/derive_client
 	url = https://github.com/8ball030/derive_client.git
