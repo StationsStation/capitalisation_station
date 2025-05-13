@@ -18,13 +18,13 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeiavch65ji46f74pttqrdfv4bht6meuea4aotrs2r2e45lxr7qfgba
-- eightballer/markets:0.1.0:bafybeig7iwsy5ptlyjjtql2tx6veghxjfg7fn5trc7677qhtkonq7ifcqi
-- eightballer/orders:0.1.0:bafybeiddf5e5ln743qmfa2f6bbqnij36vwkmde3dh7i4fnnm3jx6sw67tq
-- eightballer/positions:0.1.0:bafybeiefgztpn53dxutijia3cwj3r2db2kw5ok4563btl254h6yyoleq4u
-- eightballer/tickers:0.1.0:bafybeid5lun6hym4obdowppabie4vjwszxt36vezt76zzq3fvor7m2sa2e
+- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
+- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
+- eightballer/orders:0.1.0:bafybeiaultxkflx4q24hkyn4rddcs7siswwdeh6j6gxgofrv6uglqevo5i
+- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
+- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeicaas7vrx7j2qle6ywdcejhp5yj7fjn22l5mngdajtwo6endggsfu
+- eightballer/dex_data_retrieval:0.1.0:bafybeicodat7redbbhnzhhutc6nhjizeykqv3gcjz27xemdskexhelk5sm
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/registration_abci:0.1.0:bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y
 - eightballer/reset_pause_abci:0.1.0:bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu

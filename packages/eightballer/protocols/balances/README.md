@@ -1,13 +1,11 @@
 # Balances Protocol
 
 ## Description
-
-...
+A protocol for passing balance data between agent components.
 
 ## Specification
 
 ```yaml
-
 name: balances
 author: eightballer
 version: 0.1.0
@@ -67,5 +65,4 @@ termination: [balance, all_balances, error]
 roles: { agent }
 end_states: [ balance, all_balances, error ]
 keep_terminal_state_dialogues: false
-
 ```

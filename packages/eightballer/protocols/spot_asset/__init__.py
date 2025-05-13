@@ -18,7 +18,7 @@
 
 """This module contains the support resources for the spot_asset protocol.
 
-It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
+It was created with protocol buffer compiler version `libprotoc 30.1` and aea protocol generator version `1.0.0`.
 """
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage

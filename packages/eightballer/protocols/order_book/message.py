@@ -41,7 +41,7 @@ class OrderBookMessage(Message):
     """A protocol to enable agents to subscribe to order books and receive updates in real-time. This protocol facilitates monitoring changes in bid and ask prices along with their volumes for given trading pairs on specified exchanges."""
 
     protocol_id = PublicId.from_str("eightballer/order_book:0.1.0")
-    protocol_specification_id = PublicId.from_str("eightballer/order_book_subscription:0.1.0")
+    protocol_specification_id = PublicId.from_str("eightballer/order_book:0.1.0")
 
     OrderBook = CustomOrderBook
 

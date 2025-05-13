@@ -1,28 +1,32 @@
 # Simple script to generate all the protocol files.
 set -euo pipefail
 
-SPEC_PATH='../specs/protocols/'
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SPEC_PATH="${REPO_ROOT}/specs/protocols"
 
-tmp_agent_name='tmp_agent'
+tmp_agent_name='_tmp_agent'
 function generate_protocol {
-    echo "Generating protocol $1"
-    rm -rf packages/eightballer/protocols/$1
-    rm -rf packages/eightballer/agents/$tmp_agent_name
-    rm -rf $tmp_agent_name
+    proto=$1
+    spec_file="${SPEC_PATH}/${proto}.yaml"
+    author=$(awk -F': +' '/^author:/ { print $2; exit }' "$spec_file")
 
-    aea create $tmp_agent_name
-    cd $tmp_agent_name
-    adev scaffold protocol $(echo $SPEC_PATH/$1.yaml)
-    aea publish --local --push-missing
+    echo "🔧 Generating protocol ${proto} by ${author}"
+    rm -rf "packages/${author}/protocols/${proto}"
+
+    aea create "$tmp_agent_name"
+    cd "$tmp_agent_name"
+      adev scaffold protocol "$spec_file"
+      aea publish --local --push-missing
     cd ..
-    rm -rf $tmp_agent_name
-    rm -rf packages/author/agents/$tmp_agent_name
-    adev -v fmt -p  packages/eightballer/protocols/$1
-    adev -v lint -p packages/eightballer/protocols/$1
-    pytest packages/eightballer/protocols/$1
+
+    rm -rf "$tmp_agent_name"
+    adev -v fmt -p  "packages/${author}/protocols/${proto}"
+    adev -v lint -p "packages/${author}/protocols/${proto}"
+    pytest "packages/${author}/protocols/${proto}"
+
+    rm -rf packages/*/agents/"${tmp_agent_name}"
+    rm -rf "${tmp_agent_name}"
 }
-
-
 
 
 generate_protocol 'positions'
