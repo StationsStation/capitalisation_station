@@ -1,0 +1,42 @@
+name: derolas_automator_abci_app
+author: zarathustra
+version: 0.1.0
+type: skill
+description: The Derolas Automator for donating to the Derolas staking contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
+  __init__.py: bafybeiatotyalxcrk4pgqy5lnx3bbl2i7mwkgtpb6auzzyyythhw2gqk4q
+  behaviours.py: bafybeicdnzbgzwrfgipqvhktd5tqm2bsqaimftzkkzsaqpvtzaikuzrfgq
+  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  handlers.py: bafybeiaqpjuunxirubojqpfkokzg2uyj3gxqxmrkgijlwvqsaq632yhslm
+  tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
+  tests/test_metrics.py: bafybeibbvivbs5yje5f35q2mda3io7jouqwr25tkt3emo42ui2gqa2c2xe
+  tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols:
+- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+skills: []
+behaviours:
+  main:
+    args: {}
+    class_name: DerolasautomatorabciappFsmBehaviour
+handlers:
+  metrics_handler:
+    args:
+      enable_cors: false
+    class_name: HttpHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+dependencies: {}
+is_abstract: false
+customs: []
