@@ -87,6 +87,16 @@ class BaseState(State, ABC):
         """Current event."""
         return self._event
 
+    @property
+    def ledger_api_dialogues(self):
+        """Ledger API Dialogues."""
+        return self.context.ledger_api_dialogues
+
+    @property
+    def contract_api_dialogues(self):
+        """Contract API Dialogues."""
+        return self.context.contract_api_dialogues
+
 
 class AwaitTriggerRound(BaseState):
     """This class implements the behaviour of the state AwaitTriggerRound."""
@@ -403,7 +413,6 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             self.terminate()
         self.context.logger.info(f"Entering {self.current}")
         super().act()
-
 
     def terminate(self) -> None:
         """Implement the termination."""

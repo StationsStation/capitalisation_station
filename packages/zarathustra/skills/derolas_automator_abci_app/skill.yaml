@@ -8,18 +8,22 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeiatotyalxcrk4pgqy5lnx3bbl2i7mwkgtpb6auzzyyythhw2gqk4q
-  behaviours.py: bafybeicdnzbgzwrfgipqvhktd5tqm2bsqaimftzkkzsaqpvtzaikuzrfgq
-  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  behaviours.py: bafybeici7ucfsx6f3kwucsmahlel3a24o7totmvijykjltirfi64uby3ja
+  dialogues.py: bafybeig7e5wgc2gskehy5vsahqewhf7w3fgcrqmovkkttjxpp4lc5wsikm
   handlers.py: bafybeiaqpjuunxirubojqpfkokzg2uyj3gxqxmrkgijlwvqsaq632yhslm
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeibbvivbs5yje5f35q2mda3io7jouqwr25tkt3emo42ui2gqa2c2xe
   tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
 fingerprint_ignore_patterns: []
-connections: []
-contracts: []
+connections:
+- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+contracts:
+- zarathustra/derolas_staking:0.1.0:bafybeigcb56ne55qmuzsn3lrchlcds6ytkuswr4kjmc5x6g6cxah4mbrea
 protocols:
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 skills: []
 behaviours:
   main:
@@ -37,6 +41,12 @@ models:
   http_dialogues:
     args: {}
     class_name: HttpDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
 dependencies: {}
 is_abstract: false
 customs: []

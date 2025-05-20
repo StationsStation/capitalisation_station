@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiec3flie665tfkp6za2lhl7rkgy2ax7zqbd6d5p3vkqqjbqlfocuy
   build/derolas_staking.json: bafybeiefvg2x7rdh47ltvmnn4chzmmwlppz5mzwsf25hoxt7xjm3m7bmp4
-  contract.py: bafybeib6ggj2rc5tpbnx3ezsgdtlo4zjd6mmvftikdtmaat23vyubrln4a
+  contract.py: bafybeic5jff52ezfe5uyns2v3p7w2cou2h4epsh5eeuba7q7slgcwd44cm
 fingerprint_ignore_patterns: []
 class_name: DerolasStaking
 contract_interface_paths:

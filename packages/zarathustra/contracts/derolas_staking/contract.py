@@ -4,7 +4,8 @@
 from aea.common import JSONLike
 from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
-from aea.configurations.base import PublicId
+
+from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID
 
 
 ADDRESS_BASE = "0x27B863F382791e0E4950497B4bbda5b69CbB10b9"
@@ -13,7 +14,7 @@ ADDRESS_BASE = "0x27B863F382791e0E4950497B4bbda5b69CbB10b9"
 class DerolasStaking(Contract):
     """The scaffold contract class for a smart contract."""
 
-    contract_id = PublicId.from_str("open_aea/scaffold:0.1.0")
+    contract_id = DEROLAS_STAKING_PUBLIC_ID
 
     @classmethod
     def assets_in_pool(

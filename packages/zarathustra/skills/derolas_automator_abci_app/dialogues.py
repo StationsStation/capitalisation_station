@@ -25,13 +25,27 @@
 - HttpDialogues: The dialogues class keeps track of all dialogues of type http.
 """
 
+from typing import Any
+
+from aea.skills.base import Model
+from aea.protocols.base import Address, Message
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue
+
 from packages.eightballer.protocols.http.dialogues import (
     HttpDialogue as BaseHttpDialogue,
     HttpDialogues as BaseHttpDialogues,
 )
+from packages.valory.protocols.ledger_api.dialogues import (
+    LedgerApiDialogue as BaseLedgerApiDialogue,
+    LedgerApiDialogues as BaseLedgerApiDialogues,
+)
 from packages.eightballer.protocols.default.dialogues import (
     DefaultDialogue as BaseDefaultDialogue,
     DefaultDialogues as BaseDefaultDialogues,
+)
+from packages.valory.protocols.contract_api.dialogues import (
+    ContractApiDialogue as BaseContractApiDialogue,
+    ContractApiDialogues as BaseContractApiDialogues,
 )
 
 
@@ -41,3 +55,50 @@ DefaultDialogues = BaseDefaultDialogues
 
 HttpDialogue = BaseHttpDialogue
 HttpDialogues = BaseHttpDialogues
+
+LedgerApiDialogue = BaseLedgerApiDialogue
+
+
+class LedgerApiDialogues(Model, BaseLedgerApiDialogues):
+    """This class keeps track of all ledger api dialogues."""
+
+    def __init__(self, **kwargs: Any) -> None:
+        """Initialize dialogues."""
+        Model.__init__(self, **kwargs)
+
+        def role_from_first_message(  # pylint: disable=unused-argument
+            message: Message, receiver_address: Address
+        ) -> BaseDialogue.Role:
+            """Infer the role of the agent from an incoming/outgoing first message."""
+            del receiver_address, message
+            return BaseLedgerApiDialogue.Role.AGENT
+
+        BaseLedgerApiDialogues.__init__(
+            self,
+            self_address=str(self.skill_id),
+            role_from_first_message=role_from_first_message,
+        )
+
+
+ContractApiDialogue = BaseContractApiDialogue
+
+
+class ContractApiDialogues(Model, BaseContractApiDialogues):
+    """This class keeps track of all contact api dialogues."""
+
+    def __init__(self, **kwargs: Any) -> None:
+        """Initialize dialogues."""
+        Model.__init__(self, **kwargs)
+
+        def role_from_first_message(  # pylint: disable=unused-argument
+            message: Message, receiver_address: Address
+        ) -> BaseDialogue.Role:
+            """Infer the role of the agent from an incoming/outgoing first message."""
+            del receiver_address, message
+            return BaseContractApiDialogue.Role.AGENT
+
+        BaseContractApiDialogues.__init__(
+            self,
+            self_address=str(self.skill_id),
+            role_from_first_message=role_from_first_message,
+        )
