@@ -7,10 +7,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
-  __init__.py: bafybeiatotyalxcrk4pgqy5lnx3bbl2i7mwkgtpb6auzzyyythhw2gqk4q
-  behaviours.py: bafybeici7ucfsx6f3kwucsmahlel3a24o7totmvijykjltirfi64uby3ja
-  dialogues.py: bafybeig7e5wgc2gskehy5vsahqewhf7w3fgcrqmovkkttjxpp4lc5wsikm
-  handlers.py: bafybeiaqpjuunxirubojqpfkokzg2uyj3gxqxmrkgijlwvqsaq632yhslm
+  __init__.py: bafybeihqgalcx4nc3zmhypemwg2lo4gq42ugkt7b3qlfqnh545sw34jq44
+  behaviours.py: bafybeih5icw7jtoj4ebm22qixit3qppmm4ik6wsvhevcru4z2kjljsr3ia
+  dialogues.py: bafybeidvkg2ztaxkchnaml747jln5xva7egcqo7mz5zhyfbpp5qixumoqy
+  handlers.py: bafybeig62xdj6tkysnlylaxsjomqox5yg5wmgaebcp5gijk3yn5aevokx4
+  models.py: bafybeiflxy7s7mdknxquytlstap67rtzyra4sxtyydqjcvfqyagyt5rvn4
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeibbvivbs5yje5f35q2mda3io7jouqwr25tkt3emo42ui2gqa2c2xe
   tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
@@ -47,6 +48,9 @@ models:
   contract_api_dialogues:
     args: {}
     class_name: ContractApiDialogues
+  derolas_state:
+    args: {}
+    class_name: DerolasState
 dependencies: {}
 is_abstract: false
 customs: []
