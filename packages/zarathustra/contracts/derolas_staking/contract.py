@@ -1,9 +1,10 @@
-"""This module contains the scaffold contract definition."""
+"""This module contains the Derolas contract interface."""
 
 # ruff: noqa: PLR0904
 from aea.common import JSONLike
 from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
+from aea.configurations.base import PublicId
 
 from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID
 
@@ -14,7 +15,7 @@ ADDRESS_BASE = "0x27B863F382791e0E4950497B4bbda5b69CbB10b9"
 class DerolasStaking(Contract):
     """The scaffold contract class for a smart contract."""
 
-    contract_id = DEROLAS_STAKING_PUBLIC_ID
+    contract_id: PublicId = DEROLAS_STAKING_PUBLIC_ID
 
     @classmethod
     def assets_in_pool(
@@ -75,6 +76,13 @@ class DerolasStaking(Contract):
         return {"int": result}
 
     @classmethod
+    def epoch_donated(cls, ledger_api: LedgerApi, contract_address: str, var_0: int) -> JSONLike:
+        """Handler method for the 'epoch_donated' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.epochDonated(var_0).call()
+        return {"bool": result}
+
+    @classmethod
     def epoch_length(
         cls,
         ledger_api: LedgerApi,
@@ -97,13 +105,6 @@ class DerolasStaking(Contract):
         return {"int": result}
 
     @classmethod
-    def epoch_to_claimable(cls, ledger_api: LedgerApi, contract_address: str, var_0: int, var_1: Address) -> JSONLike:
-        """Handler method for the 'epoch_to_claimable' requests."""
-        instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.epochToClaimable(var_0, var_1).call()
-        return {"int": result}
-
-    @classmethod
     def epoch_to_claimed(cls, ledger_api: LedgerApi, contract_address: str, var_0: int, var_1: Address) -> JSONLike:
         """Handler method for the 'epoch_to_claimed' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
@@ -118,10 +119,10 @@ class DerolasStaking(Contract):
         return {"int": result}
 
     @classmethod
-    def epoch_to_total_claimed(cls, ledger_api: LedgerApi, contract_address: str, var_0: int) -> JSONLike:
-        """Handler method for the 'epoch_to_total_claimed' requests."""
+    def epoch_to_end_block(cls, ledger_api: LedgerApi, contract_address: str, var_0: int) -> JSONLike:
+        """Handler method for the 'epoch_to_end_block' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.epochToTotalClaimed(var_0).call()
+        result = instance.functions.epochToEndBlock(var_0).call()
         return {"int": result}
 
     @classmethod
@@ -132,17 +133,32 @@ class DerolasStaking(Contract):
         return {"int": result}
 
     @classmethod
-    def epoch_to_total_unclaimed(cls, ledger_api: LedgerApi, contract_address: str, var_0: int) -> JSONLike:
-        """Handler method for the 'epoch_to_total_unclaimed' requests."""
-        instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.epochToTotalUnclaimed(var_0).call()
-        return {"int": result}
-
-    @classmethod
     def estimate_ticket_percentage(cls, ledger_api: LedgerApi, contract_address: str, donation: int) -> JSONLike:
         """Handler method for the 'estimate_ticket_percentage' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.estimateTicketPercentage(donation=donation).call()
+        return {"int": result}
+
+    @classmethod
+    def get_blocks_remaining(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_blocks_remaining' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getBlocksRemaining().call()
+        return {"int": result}
+
+    @classmethod
+    def get_current_epoch(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_current_epoch' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getCurrentEpoch().call()
         return {"int": result}
 
     @classmethod
@@ -153,14 +169,80 @@ class DerolasStaking(Contract):
         return {"int": result}
 
     @classmethod
-    def get_epoch_progress(
+    def get_epoch_length(
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
     ) -> JSONLike:
-        """Handler method for the 'get_epoch_progress' requests."""
+        """Handler method for the 'get_epoch_length' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.getEpochProgress().call()
+        result = instance.functions.getEpochLength().call()
+        return {"int": result}
+
+    @classmethod
+    def get_epoch_rewards(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_epoch_rewards' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getEpochRewards().call()
+        return {"int": result}
+
+    @classmethod
+    def get_game_state(cls, ledger_api: LedgerApi, contract_address: str, user: Address) -> JSONLike:
+        """Handler method for the 'get_game_state' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getGameState(user=user).call()
+        return {
+            "_currentEpoch": result,
+            "_epochLength": result,
+            "_epochEndBlock": result,
+            "_minimumDonation": result,
+            "_blocksRemaining": result,
+            "_epochRewards": result,
+            "_totalDonated": result,
+            "_totalClaimed": result,
+            "_incentiveBalance": result,
+            "_userCurrentDonation": result,
+            "_userCurrentShare": result,
+            "_userClaimable": result,
+            "_hasClaimed": result,
+            "_canPlayGame": result,
+        }
+
+    @classmethod
+    def get_total_claimed(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_total_claimed' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getTotalClaimed().call()
+        return {"int": result}
+
+    @classmethod
+    def get_total_donated(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_total_donated' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getTotalDonated().call()
+        return {"int": result}
+
+    @classmethod
+    def get_total_unclaimed(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'get_total_unclaimed' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.getTotalUnclaimed().call()
         return {"int": result}
 
     @classmethod
@@ -184,17 +266,6 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.incentiveTokenAddress().call()
         return {"address": result}
-
-    @classmethod
-    def last_auction_block(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-    ) -> JSONLike:
-        """Handler method for the 'last_auction_block' requests."""
-        instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.lastAuctionBlock().call()
-        return {"int": result}
 
     @classmethod
     def max_donators_per_epoch(
@@ -241,6 +312,17 @@ class DerolasStaking(Contract):
         return {"address": result}
 
     @classmethod
+    def permit2(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'permit2' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        result = instance.functions.permit2().call()
+        return {"address": result}
+
+    @classmethod
     def pool_id(
         cls,
         ledger_api: LedgerApi,
@@ -271,17 +353,6 @@ class DerolasStaking(Contract):
         """Handler method for the 'total_donated' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.totalDonated().call()
-        return {"int": result}
-
-    @classmethod
-    def total_unclaimed(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-    ) -> JSONLike:
-        """Handler method for the 'total_unclaimed' requests."""
-        instance = cls.get_instance(ledger_api, contract_address)
-        result = instance.functions.totalUnclaimed().call()
         return {"int": result}
 
     @classmethod
@@ -326,6 +397,16 @@ class DerolasStaking(Contract):
         return instance.functions.endEpoch()
 
     @classmethod
+    def force_advance_epoch(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> JSONLike:
+        """Handler method for the 'force_advance_epoch' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        return instance.functions.forceAdvanceEpoch()
+
+    @classmethod
     def renounce_ownership(
         cls,
         ledger_api: LedgerApi,
@@ -336,40 +417,16 @@ class DerolasStaking(Contract):
         return instance.functions.renounceOwnership()
 
     @classmethod
+    def top_up_incentive_balance(cls, ledger_api: LedgerApi, contract_address: str, amount: int) -> JSONLike:
+        """Handler method for the 'top_up_incentive_balance' requests."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        return instance.functions.topUpIncentiveBalance(amount=amount)
+
+    @classmethod
     def transfer_ownership(cls, ledger_api: LedgerApi, contract_address: str, new_owner: Address) -> JSONLike:
         """Handler method for the 'transfer_ownership' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         return instance.functions.transferOwnership(newOwner=new_owner)
-
-    @classmethod
-    def get_agent_registered_events(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-        agent_address: Address = None,
-        agent_id: int | None = None,
-        look_back: int = 1000,
-        to_block: str = "latest",
-        from_block: int | None = None,
-    ) -> JSONLike:
-        """Handler method for the 'AgentRegistered' events ."""
-
-        instance = cls.get_instance(ledger_api, contract_address)
-        arg_filters = {
-            key: value for key, value in (("agentAddress", agent_address), ("agentId", agent_id)) if value is not None
-        }
-        to_block = to_block or "latest"
-        if to_block == "latest":
-            to_block = ledger_api.api.eth.block_number
-        from_block = from_block or (to_block - look_back)
-        result = instance.events.AgentRegistered().get_logs(
-            fromBlock=from_block, toBlock=to_block, argument_filters=arg_filters
-        )
-        return {
-            "events": result,
-            "from_block": from_block,
-            "to_block": to_block,
-        }
 
     @classmethod
     def get_auction_ended_events(
@@ -429,6 +486,33 @@ class DerolasStaking(Contract):
         }
 
     @classmethod
+    def get_eth_donated_to_balancer_events(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        amount: int | None = None,
+        look_back: int = 1000,
+        to_block: str = "latest",
+        from_block: int | None = None,
+    ) -> JSONLike:
+        """Handler method for the 'EthDonatedToBalancer' events ."""
+
+        instance = cls.get_instance(ledger_api, contract_address)
+        arg_filters = {key: value for key, value in (("amount", amount)) if value is not None}
+        to_block = to_block or "latest"
+        if to_block == "latest":
+            to_block = ledger_api.api.eth.block_number
+        from_block = from_block or (to_block - look_back)
+        result = instance.events.EthDonatedToBalancer().get_logs(
+            fromBlock=from_block, toBlock=to_block, argument_filters=arg_filters
+        )
+        return {
+            "events": result,
+            "from_block": from_block,
+            "to_block": to_block,
+        }
+
+    @classmethod
     def get_ownership_transferred_events(
         cls,
         ledger_api: LedgerApi,
@@ -465,7 +549,7 @@ class DerolasStaking(Contract):
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
-        agent_address: Address = None,
+        donator_address: Address = None,
         amount: int | None = None,
         look_back: int = 1000,
         to_block: str = "latest",
@@ -475,7 +559,7 @@ class DerolasStaking(Contract):
 
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
-            key: value for key, value in (("agentAddress", agent_address), ("amount", amount)) if value is not None
+            key: value for key, value in (("donatorAddress", donator_address), ("amount", amount)) if value is not None
         }
         to_block = to_block or "latest"
         if to_block == "latest":
