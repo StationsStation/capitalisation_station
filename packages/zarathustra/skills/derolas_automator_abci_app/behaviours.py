@@ -91,6 +91,10 @@ class BaseState(State, ABC):
         return self._event
 
     @property
+    def name(self) -> str:
+        return self.__class__.__name__
+
+    @property
     def ledger_api_dialogues(self):
         """Ledger API Dialogues."""
         return self.context.ledger_api_dialogues
@@ -115,6 +119,24 @@ class BaseState(State, ABC):
         """Base Ledger API."""
         return self.context.derolas_state.base_ledger_api
 
+    @property
+    def can_play_game(self) -> bool:
+        """Call "can_play_game" on Derolas contract."""
+
+        return self.derolas_staking_contract.can_play_game(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["bool"]
+
+    @property
+    def current_epoch(self) -> int:
+        """Call "current_epoch" on Derolas contract."""
+
+        return self.derolas_staking_contract.current_epoch(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
 
 class AwaitTriggerRound(BaseState):
     """This class implements the behaviour of the state AwaitTriggerRound."""
@@ -133,20 +155,12 @@ class AwaitTriggerRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
+            self.context.logger.info(f"{self.name}: event {self._event}")
         except Exception as e:
-            self.logger.info(f"Exception in {self.__class__.__name__}: {e}")
+            self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
-
-    @property
-    def can_play_game(self):
-        """Call "can_play_game" on Derolas contract."""
-
-        return self.derolas_staking_contract.can_play_game(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-        )["bool"]
 
 
 class CheckEpochRound(BaseState):
@@ -159,12 +173,32 @@ class CheckEpochRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.ERROR
-        self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-        self._event = DerolasautomatorabciappEvents.EPOCH_END_NEAR
-        self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-        self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
+        margin = 10
+
+        try:
+            blocks_remaining = self.get_blocks_remaining()
+            if not self.can_play_game:
+                self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
+            elif blocks_remaining == 0:
+                self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
+            elif blocks_remaining < margin:
+                self._event = DerolasautomatorabciappEvents.EPOCH_END_NEAR
+            else:
+                self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
+            self.context.logger.info(f"{self.name}: event {self._event}")
+        except Exception as e:
+            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self._event = DerolasautomatorabciappEvents.ERROR
+
         self._is_done = True
+
+    def get_blocks_remaining(self) -> int:
+        """Call "get_blocks_remaining" on Derolas contract."""
+
+        return self.derolas_staking_contract.get_blocks_remaining(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
 
 
 class EndEpochRound(BaseState):
