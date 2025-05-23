@@ -26,6 +26,7 @@ from typing import Any
 from aea.skills.behaviours import State, FSMBehaviour
 
 
+GAS_PREMIUM = 1.1
 TX_MINING_TIMEOUT = 120  # seconds
 
 # ruff: noqa: BLE001
@@ -126,6 +127,20 @@ class BaseState(State, ABC):
     def crypto(self):
         """Ethereum crypto."""
         return self.context.derolas_state.crypto
+
+    def build_transaction(self, func, value: int = 0):
+        """Build the transaction."""
+
+        nonce = self.base_ledger_api.api.eth.get_transaction_count(self.crypto.address)
+        return func.build_transaction(
+            {
+                "from": self.crypto.address,
+                "nonce": nonce,
+                "gas": 500_000,
+                "gasPrice": int(self.base_ledger_api.api.eth.gas_price * GAS_PREMIUM),
+                "value": value,
+            }
+        )
 
     @property
     def can_play_game(self) -> bool:
@@ -244,7 +259,8 @@ class EndEpochRound(BaseState):
         """Perfom the act."""
 
         try:
-            raw_tx = self.end_epoch()
+            w3_function = self.end_epoch()
+            raw_tx = self.build_transaction(w3_function)
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
@@ -328,7 +344,9 @@ class DonateRound(BaseState):
         """Perfom the act."""
 
         try:
-            raw_tx = self.donate()  # TODO: amount
+            value = self.minimum_donation
+            w3_function = self.donate()
+            raw_tx = self.build_transaction(w3_function, value=value)
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
@@ -344,6 +362,15 @@ class DonateRound(BaseState):
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
+
+    @property
+    def minimum_donation(self):
+        """Call "minimum_donation" on Derolas contract."""
+
+        return self.derolas_staking_contract.minimum_donation(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
 
     def donate(self):
         """Call "donate" on Derolas contract."""
@@ -418,7 +445,8 @@ class MakeClaimRound(BaseState):
         """Perfom the act."""
 
         try:
-            raw_tx = self.claim()
+            w3_function = self.claim()
+            raw_tx = self.build_transaction(w3_function)
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
