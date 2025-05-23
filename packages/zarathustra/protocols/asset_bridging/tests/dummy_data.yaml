@@ -1,0 +1,8 @@
+BridgeRequest:
+  amount: 0.0
+  bridge: bridge
+  receiver: receiver
+  source_chain: source_chain
+  source_token: source_token
+  target_chain: target_chain
+  target_token: target_token

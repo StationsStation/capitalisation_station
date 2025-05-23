@@ -1,0 +1,8 @@
+OrderBook:
+  asks: []
+  bids: []
+  datetime: datetime
+  exchange_id: exchange_id
+  nonce: 0
+  symbol: symbol
+  timestamp: 0

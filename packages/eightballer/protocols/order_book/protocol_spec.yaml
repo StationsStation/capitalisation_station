@@ -1,12 +1,3 @@
-# Order Book Protocol
-
-## Description
-
-...
-
-## Specification
-
-```yaml
 name: order_book
 author: eightballer
 version: 0.1.0
@@ -49,4 +40,3 @@ termination: [unsubscribe, error]
 roles: {subscriber, publisher}
 end_states: [unsubscribe, error]
 keep_terminal_state_dialogues: false
-```

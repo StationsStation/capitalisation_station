@@ -9,23 +9,20 @@ description: A protocol to enable agents to subscribe to order books and receive
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiazv5vxvh3l2545ngmy4rxj7doqpdalr55nh3gl2dcpyuvaxctou4
-  __init__.py: bafybeicacfogubccvqr7xfopw4jkkfmujjyul2xxhp4uwggsl5whnqugna
-  custom_types.py: bafybeihp72on3goivit25rlmlrlbkbny6n3ksgmfo7wl5yvpm46ldmx73i
-  dialogues.py: bafybeiedl3nsugvmoytbbwy2u5vhkxipqjpnfbateth57f7vphs6zylsrm
+  README.md: bafybeib3c3ucw3tyokkvqco6kaiagjbtayihxheunfw4fjnulxl4ekykuq
+  __init__.py: bafybeicbwhh6xk6mbabarwu2jzv3kymehgcj237y2zcl2vmp26tyhxved4
+  custom_types.py: bafybeico5r7w4gas2dv4akmehwoq4d4y7d3wjn5gbpgx3fc6twrarx3xum
+  dialogues.py: bafybeibxrcjwn3zhhs4bgalq5p4zkogxn2asv4p4hw62j4zyh5cnybhgkq
   message.py: bafybeia3kd7j4cpuwrjojicsdh75zbep4gapfz6xshxbschatmmbv6q6ly
   order_book.proto: bafybeidt2amtydxm7fbti4jflfkfq4aiq5hwv3ndelwwp3sysy4mfhsske
-  order_book_pb2.py: bafybeicc6yer7t7gh2y2rnicbemvqi2kfkrfu5wodurz6qkudozxejjiau
-  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  order_book_pb2.py: bafybeibwcpyt52qrrxtzptpulaotigzvzxnrooaicd66ls56uya3kqzms4
+  protocol_spec.yaml: bafybeie2u4p5qxgxrtdr2wge5sxagwettywk3brq7xne7akv3vgmo2cw4m
   serialization.py: bafybeiarpafujerygrlxftopx7qfov7tlazehqak2tlex4ial575u23mou
-  tests/__init__.py: bafybeidybbhsi7ehv4dzlyigfttwbzbptt5z5p7ow7uf6ozkojn76sugzm
-  tests/performatives.py: bafybeihmuovbpcfcrh6f2nrvsnzybphvayyaqqijwy4pvbnyneevvu3d2i
-  tests/primitive_strategies.py: bafybeiai5in6ymin4f7nxnkcwstuedqphzoojzivyjbvarg4ecwapnjmmq
-  tests/test_custom_types.py: bafybeib2nrjqywvb6swlmkiwagcbgo5skozavlsvdbuhfqfcelghw74upu
-  tests/test_order_book_dialogues.py: bafybeiavrql4ifkui6lmvgfute6j2umf6eativwpa5n7z4hndhuzauszby
-  tests/test_order_book_messages.py: bafybeig4wwloqaydfevytthezslxl3jsyxb6zqth6s2hvzwhu7yo4jdnsa
+  tests/__init__.py: bafybeibo3lsvh4oyfy3l73qy3g2i4zto34vqw66iybnmzohag5domsx7am
+  tests/dummy_data.yaml: bafybeifnryfgsysxior7xixnl23micbalu2ekh3rupvnfpsyphqxdisquq
+  tests/test_order_book_dialogues.py: bafybeiexmhtfh3oj2rve55zowx55ermlhh5zh6m24ehgnkza5iceikulbu
+  tests/test_order_book_messages.py: bafybeid4ozbm2is4wlpoxksxtytuuzizcvpgxrigzutwi34aqsdgeqfwmq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
-  hypothesis: {}

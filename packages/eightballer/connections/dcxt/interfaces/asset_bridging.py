@@ -6,7 +6,7 @@ from functools import partial
 from derive_client.utils import get_w3_connection, wait_for_tx_receipt
 from derive_client.data_types import ChainID, Currency, TxStatus
 
-from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
+from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage, CustomErrorInfo
 from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
 
 
-ErrorCode = AssetBridgingMessage.ErrorInfo.Code
+ErrorCode = CustomErrorInfo
 
 
 class AssetBridgingInterface(BaseInterface):
@@ -36,7 +36,7 @@ class AssetBridgingInterface(BaseInterface):
         reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
         if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
+                code=ErrorCode.INVALID_PERFORMATIVE,
                 err_msg="Expecting REQUEST_BRIDGE performative",
             )
 
@@ -44,17 +44,17 @@ class AssetBridgingInterface(BaseInterface):
 
         if request.bridge != "derive":
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                code=ErrorCode.INVALID_PARAMETERS,
                 err_msg=f"Bridge '{request.bridge}' not supported",
             )
         if ChainID.DERIVE.name not in {request.source_chain, request.target_chain}:
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                code=ErrorCode.INVALID_PARAMETERS,
                 err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
             )
         if request.target_token and request.target_token != request.source_token:
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                code=ErrorCode.INVALID_PARAMETERS,
                 err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
             )
 
@@ -70,7 +70,7 @@ class AssetBridgingInterface(BaseInterface):
                 f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
             )
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                code=ErrorCode.INVALID_PARAMETERS,
                 err_msg=err_msg,
             )
 
@@ -98,14 +98,14 @@ class AssetBridgingInterface(BaseInterface):
 
         match tx_result.status:
             case TxStatus.FAILED:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
+                status = BridgeResult.FAILED
             case TxStatus.SUCCESS:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+                status = BridgeResult.COMPLETED
             case TxStatus.PENDING:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT
+                status = BridgeResult.PENDING_TX_RECEIPT
             case TxStatus.ERROR:
                 return reply_err(
-                    code=ErrorCode.CODE_OTHER_EXCEPTION,
+                    code=ErrorCode.OTHER_EXCEPTION,
                     err_msg=f"{tx_result}",
                 )
 
@@ -130,7 +130,7 @@ class AssetBridgingInterface(BaseInterface):
         reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
         if message.performative != AssetBridgingMessage.Performative.REQUEST_STATUS:
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
+                code=ErrorCode.INVALID_PERFORMATIVE,
                 err_msg="Expecting REQUEST_STATUS performative",
             )
 
@@ -139,12 +139,12 @@ class AssetBridgingInterface(BaseInterface):
 
         if request.bridge != "derive":
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
+                code=ErrorCode.INVALID_PARAMETERS,
                 err_msg=f"Bridge '{request.bridge}' not supported",
             )
-        if result.status != BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT:
+        if result.status != BridgeResult.PENDING_TX_RECEIPT:
             return reply_err(
-                code=ErrorCode.CODE_ALREADY_FINALIZED,
+                code=ErrorCode.ALREADY_FINALIZED,
                 err_msg="BridgeResult.status is already final",
             )
 
@@ -155,7 +155,7 @@ class AssetBridgingInterface(BaseInterface):
             tx_receipt = wait_for_tx_receipt(w3=w3, tx_hash=result.tx_hash)
         except ConnectionError:
             return reply_err(
-                code=ErrorCode.CODE_CONNECTION_ERROR,
+                code=ErrorCode.CONNECTION_ERROR,
                 err_msg=f"Failed to connect to {source_chain_id}",
             )
         except TimeoutError:
@@ -167,9 +167,9 @@ class AssetBridgingInterface(BaseInterface):
 
         match tx_receipt.status:  # ∈ {0, 1} (EIP-658)
             case TxStatus.SUCCESS:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+                status = BridgeResult.COMPLETED
             case _:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
+                status = BridgeResult.FAILED
 
         result.status = status
         return dialogue.reply(

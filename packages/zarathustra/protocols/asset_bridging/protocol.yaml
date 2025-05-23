@@ -1,30 +1,27 @@
 name: asset_bridging
 author: zarathustra
-version: 0.0.1
-protocol_specification_id: zarathustra/asset_bridging:0.0.1
+version: 0.1.0
+protocol_specification_id: zarathustra/asset_bridging:0.1.0
 type: protocol
 description: "A minimal, atomic request-response protocol for cross\u2011chain asset\
   \ bridging."
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeif36vpiaiqb7feqliuj4tbugxhf4w5izgov55jkod4kndieyuknma
-  __init__.py: bafybeie3umracixamvjvexrjvcujsa6dqyd3gf576iredozrlib22pltj4
-  asset_bridging.proto: bafybeiepu2n6u7fgb2zptplcricrydhqanqhhyybymdnuhuhe4b7jgm5gi
-  asset_bridging_pb2.py: bafybeibluvjys4e2rwchgwl4raildlbk5htf5m5qvpoxksqc4yovsyiinm
-  custom_types.py: bafybeigxyjbqyuycab6icn2onhihxmrgvz6wybmgiywmg6a75mmq5zx4h4
-  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
-  message.py: bafybeid2ixvjhpni6otgnygaywwrbliciy3mh5aon7t2eb2hsijrmelovm
-  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  README.md: bafybeiglpnqrrrysqxqdfags5etnpanlawv25qrr4spbrshqwkmq3j6aoq
+  __init__.py: bafybeihi6bsoo5padjnnxtaqq7hjpsyn27bjlgmsvl6ictqlx5wboxob2y
+  asset_bridging.proto: bafybeianijefv56ojynzsef6acwqzow7bhqjccvnk52amvl7kikeytvr7q
+  asset_bridging_pb2.py: bafybeicpiqaxjowzlua5d5xmscgjmfnwa367vplod7c3fkoem6j74gnkoy
+  custom_types.py: bafybeieddy32j2he2ch5bjifrmamiytnwy54r7ynskujuzeqzj66strd6i
+  dialogues.py: bafybeidnvjm5ylj2njroafipxlcvn72iwiwp5cctzmz4o22qu5wreyujci
+  message.py: bafybeie7xdpakh3p2tpdr5wndyqz6vgaecaw3nhb7p7ufeab7m6p4bn5fi
+  protocol_spec.yaml: bafybeib2r24r7auyqnhtmaw5gkqfdwpqqlqofyddagoybd3v3mwxhhcoyy
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
-  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
-  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
-  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
-  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
-  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
+  tests/__init__.py: bafybeifmeheihwkb6jzzq7mt545qxb6g4h3mrgacxpp3k6sdobmrx2t5ai
+  tests/dummy_data.yaml: bafybeif5pxyaqeeobre46wdf65s7vzsaowvivuq2cxyzbtuubw3llsx3we
+  tests/test_asset_bridging_dialogues.py: bafybeibvuearotqfac5erqmivcmfiaeoukw6oielpyoq3zsmexrgmop5uq
+  tests/test_asset_bridging_messages.py: bafybeie6vlfhf7hemi5zhwqhqfjziak2554x64rmmdaudc2yad5ffakdta
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
-  hypothesis: {}
