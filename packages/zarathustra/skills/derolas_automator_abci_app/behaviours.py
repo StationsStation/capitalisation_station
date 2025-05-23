@@ -312,11 +312,29 @@ class DonateRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.ERROR
-        self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
-        self._event = DerolasautomatorabciappEvents.TX_FAILED
-        self._event = DerolasautomatorabciappEvents.DONATED
+        try:
+            raw_tx = self.donate()  # TODO: amount
+            signed_tx = self.crypto.sign_transaction(raw_tx)
+            tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
+            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            tx_receipt = ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
+            if tx_receipt is None:
+                self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
+            elif tx_receipt.status == 0:
+                self._event = DerolasautomatorabciappEvents.TX_FAILED
+            else:
+                self._event = DerolasautomatorabciappEvents.DONATED
+        except Exception as e:
+            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self._event = DerolasautomatorabciappEvents.ERROR
+
         self._is_done = True
+
+    def donate(self):
+        return self.derolas_staking_contract.donate(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )
 
 
 class CheckClaimRound(BaseState):
