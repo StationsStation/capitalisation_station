@@ -26,6 +26,8 @@ from typing import Any
 from aea.skills.behaviours import State, FSMBehaviour
 
 
+TX_MINING_TIMEOUT = 120  # seconds
+
 # ruff: noqa: BLE001
 # - BLE001: Do not catch blind exception: `Exception`
 
@@ -120,6 +122,11 @@ class BaseState(State, ABC):
         return self.context.derolas_state.base_ledger_api
 
     @property
+    def crypto(self):
+        """Ethereum crypto."""
+        return self.context.derolas_state.crypto
+
+    @property
     def can_play_game(self) -> bool:
         """Call "can_play_game" on Derolas contract."""
 
@@ -211,11 +218,30 @@ class EndEpochRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.ERROR
-        self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
-        self._event = DerolasautomatorabciappEvents.TX_FAILED
-        self._event = DerolasautomatorabciappEvents.EPOCH_ENDED
+        try:
+            raw_tx = self.end_epoch()
+            signed_tx = self.crypto.sign_transaction(raw_tx)
+            tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
+            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            tx_receipt = ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
+            if tx_receipt is None:
+                self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
+            elif tx_receipt.status == 0:
+                self._event = DerolasautomatorabciappEvents.TX_FAILED
+            else:  # tx_receipt.status == 1
+                self._event = DerolasautomatorabciappEvents.EPOCH_ENDED
+            self.context.logger.info(f"{self.name}: event {self._event}")
+        except Exception as e:
+            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self._event = DerolasautomatorabciappEvents.ERROR
+
         self._is_done = True
+
+        def end_epoch(self):
+            return self.derolas_staking_contract.end_epoch(
+                ledger_api=self.base_ledger_api,
+                contract_address=self.derolas_contract_address,
+            )
 
 
 class CheckReadyToDonateRound(BaseState):
@@ -228,12 +254,52 @@ class CheckReadyToDonateRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.ERROR
-        self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-        self._event = DerolasautomatorabciappEvents.ALREADY_DONATED
-        self._event = DerolasautomatorabciappEvents.MAX_DONATORS_REACHED
-        self._event = DerolasautomatorabciappEvents.ELIGIBLE_TO_DONATE
+        try:
+            epoch_to_donations = self.epoch_to_donations
+            current_epoch = self.current_epoch
+            donations = epoch_to_donations[current_epoch][self.crypto.address]
+            epoch_to_total_donated = self.epoch_to_total_donated
+            max_donators_per_epoch = self.max_donators_per_epoch
+            if not self.can_play_game:
+                self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
+            elif not donations == 0:
+                self._event = DerolasautomatorabciappEvents.ALREADY_DONATED
+            elif epoch_to_total_donated[current_epoch] >= max_donators_per_epoch:
+                self._event = DerolasautomatorabciappEvents.MAX_DONATORS_REACHED
+            else:
+                self._event = DerolasautomatorabciappEvents.ELIGIBLE_TO_DONATE
+        except Exception as e:
+            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self._event = DerolasautomatorabciappEvents.ERROR
+
         self._is_done = True
+
+    @property
+    def epoch_to_donations(self) -> int:
+        """Call "epoch_to_donations" on Derolas contract."""
+
+        return self.derolas_staking_contract.epoch_to_donations(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def max_donators_per_epoch(self) -> int:
+        """Call "max_donators_per_epoch" on Derolas contract."""
+
+        return self.derolas_staking_contract.max_donators_per_epoch(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def epoch_to_total_donated(self) -> int:
+        """Call "epoch_to_total_donated" on Derolas contract."""
+
+        return self.derolas_staking_contract.epoch_to_total_donated(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
 
 
 class DonateRound(BaseState):
