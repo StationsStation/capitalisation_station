@@ -29,6 +29,8 @@ function generate_protocol {
 }
 
 
+generate_protocol 'asset_bridging'
+generate_protocol 'order_book'
 generate_protocol 'positions'
 generate_protocol 'orders'
 generate_protocol 'markets'
@@ -38,4 +40,3 @@ generate_protocol 'liquidity_provision'
 generate_protocol 'default'
 generate_protocol 'spot_asset'
 generate_protocol 'ohlcv'
-generate_protocol 'order_book'
