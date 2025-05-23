@@ -23,7 +23,7 @@ from pathlib import Path
 
 from aea.skills.base import Model
 from aea.contracts.base import Contract, contract_registry
-from aea_ledger_ethereum import EthereumApi
+from aea_ledger_ethereum import EthereumApi, EthereumCrypto
 from aea.configurations.loader import ComponentType, load_component_configuration
 
 from packages.valory.connections.ledger.connection import PUBLIC_ID as LEDGER_PUBLIC_ID
@@ -58,6 +58,11 @@ class DerolasState(Model):
         super().__init__(**kwargs)
 
     @property
-    def base_ledger_api(self):
+    def base_ledger_api(self) -> EthereumApi:
         """Get the Base ledger api."""
         return EthereumApi(address="https://base.drpc.org", chain_id=str(8453))
+
+
+    @property
+    def crypto(self) -> EthereumCrypto:
+        return EthereumCrypto(private_key_path="ethereum_private_key.txt")
