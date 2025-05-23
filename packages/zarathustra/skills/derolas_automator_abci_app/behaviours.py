@@ -144,6 +144,37 @@ class BaseState(State, ABC):
             contract_address=self.derolas_contract_address,
         )["int"]
 
+    def get_blocks_remaining(self) -> int:
+        """Call "get_blocks_remaining" on Derolas contract."""
+
+        return self.derolas_staking_contract.get_blocks_remaining(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def epoch_to_donations(self) -> int:
+        """Call "epoch_to_donations" on Derolas contract."""
+
+        return self.derolas_staking_contract.epoch_to_donations(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def epoch_length(self) -> int:
+        """Call "get_epoch_length" on Derolas contract."""
+
+        return self.derolas_staking_contract.get_epoch_length(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def current_block(self) -> int:
+        """Get current block number."""
+        return self.base_ledger_api.get_state("get_block_number")
+
 
 class AwaitTriggerRound(BaseState):
     """This class implements the behaviour of the state AwaitTriggerRound."""
@@ -198,14 +229,6 @@ class CheckEpochRound(BaseState):
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
-
-    def get_blocks_remaining(self) -> int:
-        """Call "get_blocks_remaining" on Derolas contract."""
-
-        return self.derolas_staking_contract.get_blocks_remaining(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-        )["int"]
 
 
 class EndEpochRound(BaseState):
@@ -275,15 +298,6 @@ class CheckReadyToDonateRound(BaseState):
         self._is_done = True
 
     @property
-    def epoch_to_donations(self) -> int:
-        """Call "epoch_to_donations" on Derolas contract."""
-
-        return self.derolas_staking_contract.epoch_to_donations(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-        )["int"]
-
-    @property
     def max_donators_per_epoch(self) -> int:
         """Call "max_donators_per_epoch" on Derolas contract."""
 
@@ -347,13 +361,48 @@ class CheckClaimRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.ERROR
-        self._event = DerolasautomatorabciappEvents.NOT_DONATED
-        self._event = DerolasautomatorabciappEvents.ALREADY_CLAIMED
-        self._event = DerolasautomatorabciappEvents.WINDOW_CLOSED
-        self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
-        self._event = DerolasautomatorabciappEvents.CLAIMABLE
+        try:
+            current_epoch = self.current_epoch
+            claim_epoch = current_epoch - 1
+            claim_epoch_blocks_remaining = self.epoch_to_end_block(claim_epoch)
+            epoch_to_donations = self.epoch_to_donations
+            donations = epoch_to_donations[current_epoch][self.crypto.address]
+            already_claimed = self.epoch_to_claimed(current_epoch, self.crypto.address) == 0
+            window_closed = self.current_block <= claim_epoch_blocks_remaining + (2 * self.epoch_length)
+            if donations == 0:
+                self._event = DerolasautomatorabciappEvents.NOT_DONATED
+            elif claim_epoch_blocks_remaining > 0:
+                self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
+            elif already_claimed:
+                self._event = DerolasautomatorabciappEvents.ALREADY_CLAIMED
+            elif window_closed:
+                self._event = DerolasautomatorabciappEvents.WINDOW_CLOSED
+            else:
+                self._event = DerolasautomatorabciappEvents.CLAIMABLE
+        except Exception as e:
+            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self._event = DerolasautomatorabciappEvents.ERROR
+
         self._is_done = True
+
+    def epoch_to_end_block(self, claim_block: int) -> int:
+        """Call "epoch_to_end_block" on Derolas contract."""
+
+        return self.derolas_staking_contract.epoch_to_end_block(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+            var_0=claim_block,
+        )["int"]
+
+    def epoch_to_claimed(self, claim_block: int, address: str) -> int:
+        """Call "epoch_to_claimed" on Derolas contract."""
+
+        return self.derolas_staking_contract.epoch_to_claimed(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+            var_0=claim_block,
+            var_1=address,
+        )["int"]
 
 
 class MakeClaimRound(BaseState):
