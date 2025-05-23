@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 zarathustra
@@ -24,17 +23,18 @@ import os
 
 import yaml
 from aea.test_tools.test_protocol import BaseProtocolDialoguesTestCase
+
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.dialogues import (
     AssetBridgingDialogue,
     BaseAssetBridgingDialogues,
 )
-from packages.zarathustra.protocols.asset_bridging.custom_types import ErrorInfo, BridgeResult, BridgeRequest
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 
 
 def load_data(custom_type):
     """Load test data."""
-    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", "r", encoding="utf-8") as f:
+    with open(f"{os.path.dirname(__file__)}/dummy_data.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)[custom_type]
 
 
@@ -51,7 +51,7 @@ class TestDialoguesAssetBridging(BaseProtocolDialoguesTestCase):
 
     def make_message_content(self) -> dict:
         """Make a dict with message contruction content for dialogues.create."""
-        return dict(
-            performative=AssetBridgingMessage.Performative.REQUEST_BRIDGE,
-            request=BridgeRequest(**load_data("BridgeRequest")),  # check it please!
-        )
+        return {
+            "performative": AssetBridgingMessage.Performative.REQUEST_BRIDGE,
+            "request": BridgeRequest(**load_data("BridgeRequest")),  # check it please!
+        }

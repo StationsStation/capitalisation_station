@@ -1,22 +1,23 @@
-"""
-This module contains the classes required for asset_bridging dialogue management.
+"""This module contains the classes required for asset_bridging dialogue management.
 
 - AssetBridgingDialogue: The dialogue class maintains state of a dialogue and manages it.
 - AssetBridgingDialogues: The dialogues class keeps track of all dialogues.
 """
 
 from abc import ABC
-from typing import Dict, Type, Callable, FrozenSet, cast
+from typing import cast
+from collections.abc import Callable
 
 from aea.common import Address
 from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
+
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 
 
 def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role:
-    """Infer the role of the agent from an incoming/outgoing first message"""
+    """Infer the role of the agent from an incoming/outgoing first message."""
     del sender, message
     return AssetBridgingDialogue.Role.AGENT
 
@@ -24,13 +25,13 @@ def _role_from_first_message(message: Message, sender: Address) -> Dialogue.Role
 class AssetBridgingDialogue(Dialogue):
     """The asset_bridging dialogue class maintains state of a dialogue and manages it."""
 
-    INITIAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    INITIAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {AssetBridgingMessage.Performative.REQUEST_BRIDGE, AssetBridgingMessage.Performative.REQUEST_STATUS}
     )
-    TERMINAL_PERFORMATIVES: FrozenSet[Message.Performative] = frozenset(
+    TERMINAL_PERFORMATIVES: frozenset[Message.Performative] = frozenset(
         {AssetBridgingMessage.Performative.BRIDGE_STATUS, AssetBridgingMessage.Performative.ERROR}
     )
-    VALID_REPLIES: Dict[Message.Performative, FrozenSet[Message.Performative]] = {
+    VALID_REPLIES: dict[Message.Performative, frozenset[Message.Performative]] = {
         AssetBridgingMessage.Performative.BRIDGE_STATUS: frozenset(),
         AssetBridgingMessage.Performative.ERROR: frozenset(),
         AssetBridgingMessage.Performative.REQUEST_BRIDGE: frozenset(
@@ -58,14 +59,14 @@ class AssetBridgingDialogue(Dialogue):
         dialogue_label: DialogueLabel,
         self_address: Address,
         role: Dialogue.Role,
-        message_class: Type[AssetBridgingMessage] = AssetBridgingMessage,
+        message_class: type[AssetBridgingMessage] = AssetBridgingMessage,
     ) -> None:
-        """
-        Initialize a dialogue.
+        """Initialize a dialogue.
 
 
 
         Args:
+        ----
                dialogue_label:  the identifier of the dialogue
                self_address:  the address of the entity for whom this dialogue is maintained
                role:  the role of the agent this dialogue is maintained for
@@ -87,14 +88,14 @@ class BaseAssetBridgingDialogues(Dialogues, ABC):
         self,
         self_address: Address,
         role_from_first_message: Callable[[Message, Address], Dialogue.Role] = _role_from_first_message,
-        dialogue_class: Type[AssetBridgingDialogue] = AssetBridgingDialogue,
+        dialogue_class: type[AssetBridgingDialogue] = AssetBridgingDialogue,
     ) -> None:
-        """
-        Initialize dialogues.
+        """Initialize dialogues.
 
 
 
         Args:
+        ----
                self_address:  the address of the entity for whom dialogues are maintained
                dialogue_class:  the dialogue class used
                role_from_first_message:  the callable determining role from first message
@@ -103,7 +104,7 @@ class BaseAssetBridgingDialogues(Dialogues, ABC):
         Dialogues.__init__(
             self,
             self_address=self_address,
-            end_states=cast(FrozenSet[Dialogue.EndState], self.END_STATES),
+            end_states=cast(frozenset[Dialogue.EndState], self.END_STATES),
             message_class=AssetBridgingMessage,
             dialogue_class=dialogue_class,
             role_from_first_message=role_from_first_message,

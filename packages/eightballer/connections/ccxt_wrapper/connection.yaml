@@ -44,7 +44,7 @@ protocols:
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
 - eightballer/ohlcv:0.1.0:bafybeigwyeqxnrh3jtfds7y476msgdyalnmlwovyz2g3fuvbepdepquo2i
-- eightballer/order_book:0.1.0:bafybeigc2vwm6odlqjsaj2qeotdimg7tcmylermygbwsoee67wvxtzmica
+- eightballer/order_book:0.1.0:bafybeiffebyryitykzu7sikddqwmlhrfau2tdohbuuelhojheodoficcqa
 - eightballer/orders:0.1.0:bafybeiaultxkflx4q24hkyn4rddcs7siswwdeh6j6gxgofrv6uglqevo5i
 - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
 - eightballer/spot_asset:0.1.0:bafybeiawis7yf4yvno4vz6yxpommordi7vqesisn4rcloiq6c4ro25wtdq

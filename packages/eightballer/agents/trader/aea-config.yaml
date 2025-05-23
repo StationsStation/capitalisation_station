@@ -9,8 +9,8 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
-- eightballer/ccxt_wrapper:0.1.0:bafybeigkx4iwof7mqkrmt6tglzqzsgedtx2icevvg3hf6pxpy2a5khgru4
-- eightballer/dcxt:0.1.0:bafybeiamzh6glwgeb7gbfhbiu2la5be3g4wla5obmmetbv4g3hl6t456ki
+- eightballer/ccxt_wrapper:0.1.0:bafybeihpx3zqdwu5bz4mpoctyacd2jfug5ccj3yt2mwekzelesrzu7hgcm
+- eightballer/dcxt:0.1.0:bafybeiftfxcqdqtebwomx5b32njxb23gonr3cajlsnaaaqalhpkh57ksqy
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
@@ -30,7 +30,7 @@ protocols:
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
 - eightballer/ohlcv:0.1.0:bafybeigwyeqxnrh3jtfds7y476msgdyalnmlwovyz2g3fuvbepdepquo2i
-- eightballer/order_book:0.1.0:bafybeigc2vwm6odlqjsaj2qeotdimg7tcmylermygbwsoee67wvxtzmica
+- eightballer/order_book:0.1.0:bafybeiffebyryitykzu7sikddqwmlhrfau2tdohbuuelhojheodoficcqa
 - eightballer/orders:0.1.0:bafybeiaultxkflx4q24hkyn4rddcs7siswwdeh6j6gxgofrv6uglqevo5i
 - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
@@ -48,7 +48,7 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeihn52tzmq3aypxb34mri57dusarmvccioes6nyxqiidwcalzl7jcq
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeibb3clyj5x4spozqnsqpcqfyao5tvx4do5apildev5i5kksuhwqte
+- eightballer/simple_fsm:0.1.0:bafybeic7bt6bczp5mhnoul625iynt44zwzzmwuxglvl5jwzszcypw4hc6e
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 customs:

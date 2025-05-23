@@ -6,7 +6,7 @@ from functools import partial
 from derive_client.utils import get_w3_connection, wait_for_tx_receipt
 from derive_client.data_types import ChainID, Currency, TxStatus
 
-from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage, CustomErrorInfo
+from packages.zarathustra.protocols.asset_bridging.message import CustomErrorInfo, AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
 from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface

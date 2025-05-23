@@ -1,5 +1,3 @@
-
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2025 zarathustra
@@ -17,4 +15,4 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-""" Module for scaffolded component. """
+"""Module for scaffolded component."""
