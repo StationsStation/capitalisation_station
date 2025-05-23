@@ -94,6 +94,7 @@ class BaseState(State, ABC):
 
     @property
     def name(self) -> str:
+        """Name of the class."""
         return self.__class__.__name__
 
     @property
@@ -152,13 +153,14 @@ class BaseState(State, ABC):
             contract_address=self.derolas_contract_address,
         )["int"]
 
-    @property
-    def epoch_to_donations(self) -> int:
+    def epoch_to_donations(self, epoch: int, sender: str) -> int:
         """Call "epoch_to_donations" on Derolas contract."""
 
         return self.derolas_staking_contract.epoch_to_donations(
             ledger_api=self.base_ledger_api,
             contract_address=self.derolas_contract_address,
+            var_0=epoch,
+            var_1=sender,
         )["int"]
 
     @property
@@ -246,7 +248,7 @@ class EndEpochRound(BaseState):
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -278,14 +280,13 @@ class CheckReadyToDonateRound(BaseState):
         """Perfom the act."""
 
         try:
-            epoch_to_donations = self.epoch_to_donations
             current_epoch = self.current_epoch
-            donations = epoch_to_donations[current_epoch][self.crypto.address]
-            epoch_to_total_donated = self.epoch_to_total_donated
+            donations = self.epoch_to_donations(current_epoch, self.crypto.address)
+            epoch_to_total_donated = self.epoch_to_total_donated(current_epoch)
             max_donators_per_epoch = self.max_donators_per_epoch
             if not self.can_play_game:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            elif not donations == 0:
+            elif donations != 0:
                 self._event = DerolasautomatorabciappEvents.ALREADY_DONATED
             elif epoch_to_total_donated[current_epoch] >= max_donators_per_epoch:
                 self._event = DerolasautomatorabciappEvents.MAX_DONATORS_REACHED
@@ -306,13 +307,13 @@ class CheckReadyToDonateRound(BaseState):
             contract_address=self.derolas_contract_address,
         )["int"]
 
-    @property
-    def epoch_to_total_donated(self) -> int:
+    def epoch_to_total_donated(self, epoch: int) -> int:
         """Call "epoch_to_total_donated" on Derolas contract."""
 
         return self.derolas_staking_contract.epoch_to_total_donated(
             ledger_api=self.base_ledger_api,
             contract_address=self.derolas_contract_address,
+            var_0=epoch,
         )["int"]
 
 
@@ -331,7 +332,7 @@ class DonateRound(BaseState):
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -345,7 +346,7 @@ class DonateRound(BaseState):
         self._is_done = True
 
     def donate(self):
-        """Call "deonate" on Derolas contract."""
+        """Call "donate" on Derolas contract."""
 
         return self.derolas_staking_contract.donate(
             ledger_api=self.base_ledger_api,
@@ -367,8 +368,7 @@ class CheckClaimRound(BaseState):
             current_epoch = self.current_epoch
             claim_epoch = current_epoch - 1
             claim_epoch_blocks_remaining = self.epoch_to_end_block(claim_epoch)
-            epoch_to_donations = self.epoch_to_donations
-            donations = epoch_to_donations[current_epoch][self.crypto.address]
+            donations = self.epoch_to_donations(current_epoch, self.crypto.address)
             already_claimed = self.epoch_to_claimed(current_epoch, self.crypto.address) == 0
             window_closed = self.current_block <= claim_epoch_blocks_remaining + (2 * self.epoch_length)
             if donations == 0:
@@ -422,7 +422,7 @@ class MakeClaimRound(BaseState):
             signed_tx = self.crypto.sign_transaction(raw_tx)
             tx_hash = self.base_ledger_api.send_signed_transaction(signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -442,7 +442,6 @@ class MakeClaimRound(BaseState):
             ledger_api=self.base_ledger_api,
             contract_address=self.derolas_contract_address,
         )
-
 
 
 class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):

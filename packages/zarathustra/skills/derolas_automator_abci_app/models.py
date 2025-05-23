@@ -62,7 +62,7 @@ class DerolasState(Model):
         """Get the Base ledger api."""
         return EthereumApi(address="https://base.drpc.org", chain_id=str(8453))
 
-
     @property
     def crypto(self) -> EthereumCrypto:
+        """Get EthereumCrypto."""
         return EthereumCrypto(private_key_path="ethereum_private_key.txt")
