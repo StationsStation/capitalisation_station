@@ -33,7 +33,11 @@ from aea.configurations.loader import load_component_configuration
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
+<<<<<<< HEAD
 from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovalsRound
+=======
+from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovals
+>>>>>>> 42c4fd6 (feat:fix:pre-commit-hooks)
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound

@@ -8,15 +8,21 @@ description: "A minimal, atomic request-response protocol for cross\u2011chain a
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeieybhszcx7zmbu5gqhdfjp4wi3q7qzgdvtobpmm36warsgxr5soca
+  README.md: bafybeif36vpiaiqb7feqliuj4tbugxhf4w5izgov55jkod4kndieyuknma
+  __init__.py: bafybeie3umracixamvjvexrjvcujsa6dqyd3gf576iredozrlib22pltj4
   asset_bridging.proto: bafybeiepu2n6u7fgb2zptplcricrydhqanqhhyybymdnuhuhe4b7jgm5gi
-  asset_bridging_pb2.py: bafybeiccqdjnhthpncqno6n3cgqd3bgpkqfxprnrxdpstrljnnsko4n7b4
-  custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
-  dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
+  asset_bridging_pb2.py: bafybeibluvjys4e2rwchgwl4raildlbk5htf5m5qvpoxksqc4yovsyiinm
+  custom_types.py: bafybeigxyjbqyuycab6icn2onhihxmrgvz6wybmgiywmg6a75mmq5zx4h4
+  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
   message.py: bafybeid2ixvjhpni6otgnygaywwrbliciy3mh5aon7t2eb2hsijrmelovm
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/test_asset_bridging_dialogues.py: bafybeif43wj2hdxs5ssdw2nebduiefs7ernbkiwhpz5fhirrr66vmc2pxu
-  tests/test_asset_bridging_messages.py: bafybeih5r2wjyxbyukf2ynnrqjks3e3kqfmg7wiczzhhk6xinbmzgjgp6m
+  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
+  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
+  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
+  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
+  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
+  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
