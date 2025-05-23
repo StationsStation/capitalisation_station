@@ -27,7 +27,12 @@ from aea_ledger_ethereum import (
 from aea.configurations.base import PublicId
 
 from packages.eightballer.connections.dcxt.utils import load_contract
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import (
+    Order,
+    OrderSide,
+    OrderType,
+    OrderStatus,
+)
 from packages.eightballer.protocols.tickers.custom_types import Ticker
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
@@ -50,7 +55,9 @@ def signed_tx_to_dict(signed_transaction: Any) -> dict[str, str | int]:
 
 
 @try_decorator("Unable to send transaction: {}", logger_method="warning")
-def try_send_signed_transaction(ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any) -> str | None:
+def try_send_signed_transaction(
+    ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any
+) -> str | None:
     """Try send a raw signed transaction."""
     signed_transaction = SignedTransactionTranslator.from_dict(tx_signed)
     hex_value = ethereum_api.api.eth.send_raw_transaction(  # pylint: disable=no-member
@@ -76,7 +83,11 @@ class InsufficientAllowance(Exception):
 
 SPENDER = {"ethereum": "0x111111125421cA6dc452d289314280a0f8842A65"}
 
-LEDGER_TO_CHAIN_ID = {SupportedLedgers.ETHEREUM: 1, SupportedLedgers.GNOSIS: 100, SupportedLedgers.BASE: 8453}
+LEDGER_TO_CHAIN_ID = {
+    SupportedLedgers.ETHEREUM: 1,
+    SupportedLedgers.GNOSIS: 100,
+    SupportedLedgers.BASE: 8453,
+}
 
 
 @dataclass
@@ -126,13 +137,18 @@ class SignedTransactionTranslator:
     @staticmethod
     def from_dict(signed_transaction_dict: JSONLike) -> SignedTransaction:
         """Get SignedTransaction from dict."""
-        if not isinstance(signed_transaction_dict, dict) and len(signed_transaction_dict) == 5:
+        if (
+            not isinstance(signed_transaction_dict, dict)
+            and len(signed_transaction_dict) == 5
+        ):
             msg = f"Invalid for conversion. Found object: {signed_transaction_dict}."
             raise ValueError(  # pragma: nocover
                 msg
             )
         return SignedTransaction(
-            raw_transaction=HexBytes(cast(str, signed_transaction_dict["raw_transaction"])),
+            raw_transaction=HexBytes(
+                cast(str, signed_transaction_dict["raw_transaction"])
+            ),
             hash=HexBytes(cast(str, signed_transaction_dict["hash"])),
             r=cast(int, signed_transaction_dict["r"]),
             s=cast(int, signed_transaction_dict["s"]),
@@ -149,7 +165,14 @@ class OneInchSwapApi:
     api_key: str
     logger: Any
 
-    def __init__(self, api: EthereumApi, account: EthereumCrypto, chain_id: int, api_key: str, logger):
+    def __init__(
+        self,
+        api: EthereumApi,
+        account: EthereumCrypto,
+        chain_id: int,
+        api_key: str,
+        logger,
+    ):
         self.api = api
         self.account = account
         self.chain_id = chain_id
@@ -175,7 +198,9 @@ class OneInchSwapApi:
         """Build the transaction for the swap."""
         url = self.api_request_url("/swap", swap_params.to_json())
         try:
-            response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
+            response = await httpx.get(
+                url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5
+            )  # noqa
             swap_transaction = response.json()
         except httpx.DecodingError:
             if "The limit of requests per second has been exceeded" in response.text:
@@ -185,7 +210,9 @@ class OneInchSwapApi:
                 if retries == 0:
                     raise
                 await asyncio.sleep(cooldown)
-                return await self.build_tx_for_swap(swap_params, retries - 1, cooldown * 2)
+                return await self.build_tx_for_swap(
+                    swap_params, retries - 1, cooldown * 2
+                )
         if "error" in swap_transaction:
             if "Not enough" in swap_transaction["description"]:
                 raise InsufficientBalance(swap_transaction["description"])
@@ -196,7 +223,9 @@ class OneInchSwapApi:
                 self.logger.exception(
                     f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
                 )
-                return await self.build_tx_for_swap(swap_params, retries - 1, cooldown * 2)
+                return await self.build_tx_for_swap(
+                    swap_params, retries - 1, cooldown * 2
+                )
             raise InvalidSwapParams(swap_transaction["description"])
         return swap_transaction["tx"]
 
@@ -209,7 +238,9 @@ class OneInchSwapApi:
         swap_transaction["value"] = int(swap_transaction["value"])
         swap_transaction["gasPrice"] = int(int(swap_transaction["gasPrice"]) * 1.05)
         swap_transaction["chainId"] = self.chain_id
-        cur_nonce = self.api._try_get_transaction_count(self.account.address, raise_on_try=True)  # noqa
+        cur_nonce = self.api._try_get_transaction_count(
+            self.account.address, raise_on_try=True
+        )  # noqa
         if nonce and nonce != cur_nonce:
             self.logger.error(f"Nonce mismatch: {nonce} != {cur_nonce}")
             return False, None
@@ -222,7 +253,9 @@ class OneInchSwapApi:
         result = False
 
         try:
-            result = self.api.api.eth.wait_for_transaction_receipt(txn_hash, timeout=60, poll_latency=1)
+            result = self.api.api.eth.wait_for_transaction_receipt(
+                txn_hash, timeout=60, poll_latency=1
+            )
         except TimeExhausted:
             self.logger.exception(f"Transaction timed out: {txn_hash}")
             retries -= 1
@@ -241,7 +274,9 @@ class OneInchSwapApi:
         """Get a quote for the swap."""
         try:
             url = self.api_request_url("/quote", swap_params.to_json())
-            response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
+            response = await httpx.get(
+                url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5
+            )  # noqa
             quote = response.json()
         except httpx.DecodingError:
             self.logger.exception(
@@ -314,12 +349,16 @@ class OneInchApiClient(BaseErc20Exchange):
         params["is_sell"] = True
         bid_price, amount = await self.get_price(input_token, output_token, **params)
         params["amount"] = amount
-        inverse_ask_p, amount = await self.get_price(output_token, input_token, **params)
+        inverse_ask_p, amount = await self.get_price(
+            output_token, input_token, **params
+        )
 
         ask_price = 1 / inverse_ask_p
 
         timestamp = datetime.now(tz=datetime.now().astimezone().tzinfo)
-        self.logger.debug(f"Got ticker for {symbol} with ask: {ask_price} and bid: {bid_price}")
+        self.logger.debug(
+            f"Got ticker for {symbol} with ask: {ask_price} and bid: {bid_price}"
+        )
         return Ticker(
             symbol=symbol,
             asset_a=asset_a,
@@ -333,7 +372,13 @@ class OneInchApiClient(BaseErc20Exchange):
         )
 
     async def create_order(
-        self, side: OrderSide, asset_a: str, asset_b: str, amount: Decimal, *args, **kwargs
+        self,
+        side: OrderSide,
+        asset_a: str,
+        asset_b: str,
+        amount: Decimal,
+        *args,
+        **kwargs,
     ) -> dict[str, Any]:
         """Create an order."""
         del args
@@ -520,10 +565,16 @@ def perform_swap(
 @click.option("--chain_id", type=int, help="Chain ID for chain to swap on", default=1)
 @click.option("--api_key", type=str, help="API key for 1inch API", default=None)
 @click.option(
-    "--src", type=str, help="Source token address: (usdc)", default="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    "--src",
+    type=str,
+    help="Source token address: (usdc)",
+    default="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
 )
 @click.option(
-    "--dst", type=str, help="Destination token address: (lbtc)", default="0x8236a87084f8b84306f72007f36f2618a5634494"
+    "--dst",
+    type=str,
+    help="Destination token address: (lbtc)",
+    default="0x8236a87084f8b84306f72007f36f2618a5634494",
 )
 @click.option("--amount", type=int, help="Amount of tokens to swap", default="10000000")
 def main(chain_id, src, dst, amount, api_key):  # noqa
@@ -566,20 +617,36 @@ def main(chain_id, src, dst, amount, api_key):  # noqa
         msg = "ONE_INCH_API_KEY environment variable not set"
         raise UserWarning(msg)
 
-    one_inch_api = OneInchSwapApi(api, crypto, chain_id, api_key=one_inch_api_key, logger=logger)
+    one_inch_api = OneInchSwapApi(
+        api, crypto, chain_id, api_key=one_inch_api_key, logger=logger
+    )
 
-    spent_erc_20_decimals, spent_erc_20_balance, spent_erc_20_symbol = get_erc_details(erc_20, api, src, crypto)
-    bought_erc_20_decimals, _bought_erc_20_balance, bought_erc_20_symbol = get_erc_details(erc_20, api, dst, crypto)
+    spent_erc_20_decimals, spent_erc_20_balance, spent_erc_20_symbol = get_erc_details(
+        erc_20, api, src, crypto
+    )
+    bought_erc_20_decimals, _bought_erc_20_balance, bought_erc_20_symbol = (
+        get_erc_details(erc_20, api, dst, crypto)
+    )
 
     if spent_erc_20_balance < amount:
         msg = "Insufficient balance in source token"
         raise InsufficientBalance(msg)
 
-    ledger_id = {1: SupportedLedgers.ETHEREUM, 100: SupportedLedgers.GNOSIS, 8453: SupportedLedgers.BASE}[chain_id]
-    allowance = get_allowance(erc_20, api, src, crypto.address, SPENDER[ledger_id.value])
+    ledger_id = {
+        1: SupportedLedgers.ETHEREUM,
+        100: SupportedLedgers.GNOSIS,
+        8453: SupportedLedgers.BASE,
+    }[chain_id]
+    allowance = get_allowance(
+        erc_20, api, src, crypto.address, SPENDER[ledger_id.value]
+    )
     if allowance < amount:
         result = increase_allowance(
-            token_address=src, spender=SPENDER[str(chain_id)], amount=amount, ledger_api=api, crypto=crypto
+            token_address=src,
+            spender=SPENDER[str(chain_id)],
+            amount=amount,
+            ledger_api=api,
+            crypto=crypto,
         )
         if not result:
             msg = "Failed to increase allowance"
@@ -587,9 +654,13 @@ def main(chain_id, src, dst, amount, api_key):  # noqa
 
     click.echo(f"Performing swap of {amount} {src} for {dst}")
     click.echo(f"Spent:  {spent_erc_20_symbol}  : {amount / 10**spent_erc_20_decimals}")
-    click.echo(f"Bought: {bought_erc_20_symbol} : {amount / 10**bought_erc_20_decimals}")
+    click.echo(
+        f"Bought: {bought_erc_20_symbol} : {amount / 10**bought_erc_20_decimals}"
+    )
 
-    perform_swap(one_inch_api, swap_params, amount, spent_erc_20_decimals, bought_erc_20_decimals)
+    perform_swap(
+        one_inch_api, swap_params, amount, spent_erc_20_decimals, bought_erc_20_decimals
+    )
 
 
 if __name__ == "__main__":
