@@ -255,10 +255,10 @@ class ArbitrageStrategy:
                 asset_to_min_balance_exchange[asset] = (ledger, exchange, balance["free"])
 
         for asset in [asset_a, asset_b]:
-            for ledger, exchange in portfolio.items():
-                balances = portfolio[ledger][exchange]
-                for balance in balances:
-                    if balance["asset_id"].upper() == asset:
+            for ledger, exchanges in portfolio.items():
+                for exchange in exchanges:
+                    balances = portfolio[ledger][exchange]
+                    for balance in [b for b in balances if b["asset_id"].upper() == asset]:
                         _process_balance(ledger, exchange, balance)
 
         totals = {

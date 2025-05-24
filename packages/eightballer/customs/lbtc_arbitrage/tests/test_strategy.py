@@ -72,7 +72,6 @@ class TestEnhancedArbitrageStrategy:
         self._setup_method("test_get_bridge_requests", case)
         requests = self.strategy.get_bridge_requests(
             self.portfolio,
-            self.prices,
         )
         assert requests is not None
         assert all(isinstance(request, BridgeRequest) for request in requests)
