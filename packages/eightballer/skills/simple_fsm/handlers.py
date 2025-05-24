@@ -166,7 +166,9 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
     def handle(self, message):
         """We log the message and pass it to the dialogue manager."""
         self.context.logger.info(f"Handling message: {message}")
-        self.strategy.state.bridge_requests.pop()
+        if self.strategy.state.bridge_requests:
+            self.context.logger.info(f"Bridge requests before handling: {self.strategy.state.bridge_requests}")
+            self.strategy.state.bridge_requests.pop()
         return super().handle(message)
 
     @property
