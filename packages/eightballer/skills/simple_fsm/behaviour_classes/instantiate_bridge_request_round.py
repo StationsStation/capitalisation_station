@@ -30,7 +30,7 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
         """Return the strategy."""
         return self.context.arbitrage_strategy
 
-    def act(self) -> Generator:
+    def act(self) -> None:
         """Perform the action of the state."""
 
         for request in self.strategy.state.bridge_requests:
@@ -44,7 +44,6 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
-        return None
 
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1

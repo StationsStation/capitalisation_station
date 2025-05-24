@@ -84,7 +84,6 @@ class IdentifyOpportunityRound(BaseBehaviour):
         if bridging_requests and not self.strategy.state.bridge_requests:
             self.context.logger.info(f"Bridging requests found: {bridging_requests}")
             self.strategy.state.bridge_requests = bridging_requests
-            self.strategy.state.bridge_requests = bridging_requests
             self.strategy.send_notification_to_user(
                 title="Bridging requests found",
                 msg=f"Bridging requests found: {bridging_requests}",

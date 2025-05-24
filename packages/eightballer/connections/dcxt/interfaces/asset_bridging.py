@@ -43,7 +43,7 @@ class AssetBridgingInterface(BaseInterface):
 
         request: BridgeRequest = message.request
 
-        if request.bridge != "derive":
+        if request.bridge != ChainID.DERIVE.name.lower():
             return reply_err(
                 code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
                 err_msg=f"Bridge '{request.bridge}' not supported",
@@ -104,12 +104,6 @@ class AssetBridgingInterface(BaseInterface):
                 amount=amount,
                 receiver=receiver,
             )
-            if tx_result is None:
-                return reply_err(
-                    code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
-                    err_msg="Transaction failed to be submitted.",
-                )
-            await asyncio.sleep(60)
             # we move the funds from the funding account to the subaccount.
             connection.logger.info("Transferring funds from funding account to subaccount.")
             client.transfer_from_funding_to_subaccount(

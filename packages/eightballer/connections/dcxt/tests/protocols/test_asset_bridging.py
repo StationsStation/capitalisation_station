@@ -49,11 +49,9 @@ VALID_BRIDGE_REQUESTS = (
     ValidTestCase(
         name="DeriveClient.withdraw_from_derive",
         request=BridgeRequest(
-            source_chain=ChainID.DERIVE.name,
-            target_chain=ChainID.BASE.name,
-            source_token=Currency.weETH.name,
-            target_token=None,
-            receiver=None,
+            source_ledger_id=ChainID.BASE.name.lower(),
+            target_ledger_id=ChainID.DERIVE.name.lower(),
+            source_token=Currency.USDC.name,
             amount=0.1,
             bridge="derive",
         ),
@@ -61,11 +59,10 @@ VALID_BRIDGE_REQUESTS = (
     ValidTestCase(
         name="DeriveClient.deposit_to_derive",
         request=BridgeRequest(
-            source_chain=ChainID.BASE.name,
-            target_chain=ChainID.DERIVE.name,
+            source_ledger_id=ChainID.BASE.name.lower(),
+            target_ledger_id=ChainID.DERIVE.name.lower(),
             source_token=Currency.USDC.name,
             target_token=Currency.USDC.name,
-            receiver=None,
             amount=100,
             bridge="derive",
         ),
