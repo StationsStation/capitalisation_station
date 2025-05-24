@@ -23,7 +23,7 @@ import pathlib
 import datetime
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, cast
-from dataclasses import asdict, dataclass
+from dataclasses import field, asdict, dataclass
 
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
@@ -32,6 +32,7 @@ from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 from packages.eightballer.connections.apprise_wrapper.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
 
 
@@ -90,6 +91,7 @@ class AgentState:
     current_round: str = None
     current_period: int = 0
     last_transition_time: datetime.datetime = None
+    bridge_requests: list[BridgeRequest] = field(default_factory=list)
 
     def write_to_file(self):
         """Write the state to files."""

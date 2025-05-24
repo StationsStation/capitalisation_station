@@ -6,8 +6,8 @@ message AssetBridgingMessage{
 
   // Custom Types
   message BridgeRequest{
-    string source_chain = 1;
-    string target_chain = 2;
+    string source_ledger_id = 1;
+    string target_ledger_id = 2;
     string source_token = 3;
     optional string target_token = 4;
     float amount = 5;

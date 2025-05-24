@@ -1,187 +1,140 @@
-"""Custom types for the protocol."""
+"""Module containing the pydantic models generated from the .proto file."""
 
-from enum import Enum
-from typing import Any
+from __future__ import annotations
+
+from enum import IntEnum
+from typing import Optional
 
 from pydantic import BaseModel
 
-
-class BridgeResult(Enum):
-    """This class represents an instance of BridgeResult."""
-
-    FAILED = 0
-    COMPLETED = 1
-    PENDING_TX_RECEIPT = 2
-    AWAITING_TARGET_FINALITY = 3
-    CLAIMABLE = 4
-
-    @staticmethod
-    def encode(bridge_result_protobuf_object, bridge_result_object: "BridgeResult") -> None:
-        """Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the bridge_result_protobuf_object argument is matched with the instance of this
-        class in the 'bridge_result_object' argument.
+from packages.zarathustra.protocols.asset_bridging.primitives import (
+    Float,
+)
 
 
+# ruff: noqa: N806, C901, PLR0912, PLR0914, PLR0915, A001, UP007
+# N806     - variable should be lowercase
+# C901     - function is too complex
+# PLR0912  - too many branches
+# PLR0914  - too many local variables
+# PLR0915  - too many statements
+# A001     - shadowing builtin names like `id` and `type`
+# UP007    - Use X | Y for type annotations  # NOTE: important edge case pydantic-hypothesis interaction!
 
-        Args:
-        ----
-               bridge_result_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               bridge_result_object:  an instance of this class to be encoded in the protocol buffer object.
-
-        """
-        bridge_result_protobuf_object.bridge_result = bridge_result_object.value
-
-    @classmethod
-    def decode(cls, bridge_result_protobuf_object) -> "BridgeResult":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'bridge_result_protobuf_object' argument.
-
-        'bridge_result_protobuf_object' argument.
+MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
 
 
-        Args:
-        ----
-               bridge_result_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+class BridgeRequest(BaseModel):
+    """BridgeRequest."""
 
-        """
-        return BridgeResult(bridge_result_protobuf_object.bridge_result)
-
-
-class ErrorInfo(Enum):
-    """This class represents an instance of ErrorInfo."""
-
-    INVALID_PERFORMATIVE = 0
-    CONNECTION_ERROR = 1
-    INVALID_ROUTE = 2
-    INVALID_PARAMETERS = 3
-    ALREADY_FINALIZED = 4
-    OTHER_EXCEPTION = 5
-
-    @staticmethod
-    def encode(error_info_protobuf_object, error_info_object: "ErrorInfo") -> None:
-        """Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the error_info_protobuf_object argument is matched with the instance of this class
-        in the 'error_info_object' argument.
-
-
-
-        Args:
-        ----
-               error_info_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               error_info_object:  an instance of this class to be encoded in the protocol buffer object.
-
-        """
-        error_info_protobuf_object.error_info = error_info_object.value
-
-    @classmethod
-    def decode(cls, error_info_protobuf_object) -> "ErrorInfo":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'error_info_protobuf_object' argument.
-
-        'error_info_protobuf_object' argument.
-
-
-        Args:
-        ----
-               error_info_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-
-        """
-        return ErrorInfo(error_info_protobuf_object.error_info)
-
-
-class BaseCustomEncoder(BaseModel):
-    """This class is a base class for encoding and decoding protocol buffer objects."""
-
-    @staticmethod
-    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
-        """Encode an instance of this class into the protocol buffer object.
-
-        The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
-        class in the 'ps_response_object' argument.
-
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
-
-        """
-        for key, value in ps_response_object.__dict__.items():
-            current_attr = getattr(ps_response_protobuf_object, key)
-            if isinstance(value, Enum):
-                type(value).encode(current_attr, value)
-                continue
-            if isinstance(value, dict):
-                current_attr.update(value)
-                continue
-            if isinstance(value, list):
-                current_attr.extend(value)
-                continue
-            setattr(ps_response_protobuf_object, key, value)
-
-    @classmethod
-    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
-        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
-
-        A new instance of this class is created that matches the protocol buffer object in the
-        'ps_response_protobuf_object' argument.
-
-        'ps_response_protobuf_object' argument.
-
-
-        Args:
-        ----
-               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
-
-        """
-        keywords = list(cls.__annotations__.keys())
-        kwargs = {}
-        for keyword in keywords:
-            proto_attr = getattr(ps_response_protobuf_object, keyword)
-            if isinstance(proto_attr, Enum):
-                kwargs[keyword] = type(proto_attr).decode(proto_attr)
-                continue
-            if isinstance(proto_attr, list):
-                kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
-                continue
-            if isinstance(proto_attr, dict):
-                kwargs[keyword] = dict(proto_attr.items())
-                continue
-            if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
-                kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
-                continue
-            kwargs[keyword] = proto_attr
-        return cls(**kwargs)
-
-    def __eq__(self, other):
-        """Check if two instances of this class are equal."""
-        return self.dict() == other.dict()
-
-    def __hash__(self):
-        """Return the hash value of this instance."""
-        return hash(self.dict())
-
-
-class BridgeRequest(BaseCustomEncoder):
-    """This class represents an instance of BridgeRequest."""
-
-    source_chain: str
-    target_chain: str
+    source_ledger_id: str
+    target_ledger_id: str
     source_token: str
-    target_token: str | None = None
-    amount: float
+    target_token: Optional[str] = None
+    amount: Float
     bridge: str
-    receiver: str | None = None
+    receiver: Optional[str] = None
+
+    @staticmethod
+    def encode(proto_obj, bridgerequest: BridgeRequest) -> None:
+        """Encode BridgeRequest to protobuf."""
+        proto_obj.source_ledger_id = bridgerequest.source_ledger_id
+        proto_obj.target_ledger_id = bridgerequest.target_ledger_id
+        proto_obj.source_token = bridgerequest.source_token
+        if bridgerequest.target_token is not None:
+            proto_obj.target_token = bridgerequest.target_token
+        proto_obj.amount = bridgerequest.amount
+        proto_obj.bridge = bridgerequest.bridge
+        if bridgerequest.receiver is not None:
+            proto_obj.receiver = bridgerequest.receiver
+
+    @classmethod
+    def decode(cls, proto_obj) -> BridgeRequest:
+        """Decode proto_obj to BridgeRequest."""
+        source_ledger_id = proto_obj.source_ledger_id
+        target_ledger_id = proto_obj.target_ledger_id
+        source_token = proto_obj.source_token
+        target_token = (
+            proto_obj.target_token
+            if proto_obj.target_token is not None and proto_obj.HasField("target_token")
+            else None
+        )
+        amount = proto_obj.amount
+        bridge = proto_obj.bridge
+        receiver = proto_obj.receiver if proto_obj.receiver is not None and proto_obj.HasField("receiver") else None
+        return cls(
+            source_ledger_id=source_ledger_id,
+            target_ledger_id=target_ledger_id,
+            source_token=source_token,
+            target_token=target_token,
+            amount=amount,
+            bridge=bridge,
+            receiver=receiver,
+        )
 
 
-CUSTOM_ENUM_MAP = {
-    "<class 'asset_bridging_pb2.BridgeResult'>": BridgeResult,
-    "<class 'asset_bridging_pb2.ErrorInfo'>": ErrorInfo,
-}
+class BridgeResult(BaseModel):
+    """BridgeResult."""
+
+    class BridgeStatus(IntEnum):
+        """BridgeStatus."""
+
+        BRIDGE_STATUS_FAILED = 0
+        BRIDGE_STATUS_COMPLETED = 1
+        BRIDGE_STATUS_PENDING_TX_RECEIPT = 2
+        BRIDGE_STATUS_AWAITING_TARGET_FINALITY = 3
+        BRIDGE_STATUS_CLAIMABLE = 4
+
+    tx_hash: str
+    status: BridgeResult.BridgeStatus
+    request: BridgeRequest
+
+    @staticmethod
+    def encode(proto_obj, bridgeresult: BridgeResult) -> None:
+        """Encode BridgeResult to protobuf."""
+        proto_obj.tx_hash = bridgeresult.tx_hash
+        proto_obj.status = bridgeresult.status
+        BridgeRequest.encode(proto_obj.request, bridgeresult.request)
+
+    @classmethod
+    def decode(cls, proto_obj) -> BridgeResult:
+        """Decode proto_obj to BridgeResult."""
+        tx_hash = proto_obj.tx_hash
+        status = proto_obj.status
+        request = BridgeRequest.decode(proto_obj.request)
+        return cls(tx_hash=tx_hash, status=status, request=request)
+
+
+class ErrorInfo(BaseModel):
+    """ErrorInfo."""
+
+    class Code(IntEnum):
+        """Code."""
+
+        CODE_INVALID_PERFORMATIVE = 0
+        CODE_CONNECTION_ERROR = 1
+        CODE_INVALID_ROUTE = 2
+        CODE_INVALID_PARAMETERS = 3
+        CODE_ALREADY_FINALIZED = 4
+        CODE_OTHER_EXCEPTION = 5
+
+    code: ErrorInfo.Code
+    message: str
+
+    @staticmethod
+    def encode(proto_obj, errorinfo: ErrorInfo) -> None:
+        """Encode ErrorInfo to protobuf."""
+        proto_obj.code = errorinfo.code
+        proto_obj.message = errorinfo.message
+
+    @classmethod
+    def decode(cls, proto_obj) -> ErrorInfo:
+        """Decode proto_obj to ErrorInfo."""
+        code = proto_obj.code
+        message = proto_obj.message
+        return cls(code=code, message=message)
+
+
+for cls in BaseModel.__subclasses__():
+    if cls.__module__ == __name__:
+        cls.model_rebuild()

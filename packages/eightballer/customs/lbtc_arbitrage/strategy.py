@@ -24,6 +24,11 @@ from functools import reduce
 from dataclasses import dataclass
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
+
+
+BRIDGE_TRIGGER = 0.1
+BRIDGE_RATIO = 0.5
 
 
 @dataclass
@@ -225,3 +230,67 @@ class ArbitrageStrategy:
         if sell_order.exchange_id == "derive":
             return [sell_order, buy_order]
         return [buy_order, sell_order]
+
+    def get_bridge_requests(  # noqa: C901
+        self,
+        portfolio: dict[str, dict[str, dict[str, float]]],
+        **kwargs,  # noqa
+    ) -> list[Order]:
+        """Get bridge requests based on basic portfolio management strategy."""
+
+        asset_a, asset_b = self.base_asset.upper(), self.quote_asset.upper()
+
+        asset_to_max_balance_exchange, asset_to_min_balance_exchange = {}, {}
+
+        def _process_balance(ledger, exchange, balance):
+            """Process a single balance."""
+            if asset not in asset_to_max_balance_exchange:
+                asset_to_max_balance_exchange[asset] = (ledger, exchange, balance["free"])
+            if balance["free"] > asset_to_max_balance_exchange[asset][2]:
+                asset_to_max_balance_exchange[asset] = (ledger, exchange, balance["free"])
+
+            if asset not in asset_to_min_balance_exchange:
+                asset_to_min_balance_exchange[asset] = (ledger, exchange, balance["free"])
+            if balance["free"] < asset_to_min_balance_exchange[asset][2]:
+                asset_to_min_balance_exchange[asset] = (ledger, exchange, balance["free"])
+
+        for asset in [asset_a, asset_b]:
+            for ledger, exchange in portfolio.items():
+                balances = portfolio[ledger][exchange]
+                for balance in balances:
+                    if balance["asset_id"].upper() == asset:
+                        _process_balance(ledger, exchange, balance)
+
+        totals = {
+            asset: sum(
+                balance["free"]
+                for ledger in portfolio
+                for exchange in portfolio[ledger]
+                for balance in portfolio[ledger][exchange]
+                if balance["asset_id"].upper() == asset
+            )
+            for asset in [asset_a, asset_b]
+        }
+        min_ratios = {asset: asset_to_min_balance_exchange[asset][2] / totals[asset] for asset in [asset_a, asset_b]}
+
+        bridge_requests = []
+        for asset in [asset_a, asset_b]:
+            if min_ratios[asset] < BRIDGE_TRIGGER:
+                # we need to bridge the asset
+                from_ledger, from_exchange, from_balance = asset_to_max_balance_exchange[asset]
+                to_ledger, to_exchange, _ = asset_to_min_balance_exchange[asset]
+                if from_ledger == to_ledger and from_exchange == to_exchange:
+                    continue
+                amount_to_bridge = from_balance - (totals[asset] * BRIDGE_RATIO)
+                if amount_to_bridge <= 0:
+                    continue
+                bridge_requests.append(
+                    BridgeRequest(
+                        source_ledger_id=from_ledger,
+                        target_ledger_id=to_ledger,
+                        amount=amount_to_bridge,
+                        source_token=asset,
+                        bridge="derive",
+                    )
+                )
+        return bridge_requests

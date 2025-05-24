@@ -8,20 +8,23 @@ description: "A minimal, atomic request-response protocol for cross\u2011chain a
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeiglpnqrrrysqxqdfags5etnpanlawv25qrr4spbrshqwkmq3j6aoq
+  README.md: bafybeif5bjqo4xtshsrlizzmvlocrizdhm4ph32nhbey5k2prbfaxawo6q
   __init__.py: bafybeibsxfx24txngiu5zzy2okmkwfszpaolslsgoyg6pmecvpjf7iq42y
-  asset_bridging.proto: bafybeianijefv56ojynzsef6acwqzow7bhqjccvnk52amvl7kikeytvr7q
-  asset_bridging_pb2.py: bafybeicpiqaxjowzlua5d5xmscgjmfnwa367vplod7c3fkoem6j74gnkoy
-  custom_types.py: bafybeihpt5rpfowpxd3uwtng4bujmxx5jwmrsvs6hfhks3hrfvb25n6xpa
-  dialogues.py: bafybeihmzqb66bhhccledy6mcep7dminqijmk42js5jcagarcsvfhe5wte
+  asset_bridging.proto: bafybeibc25wl6d35jpad4yhq4qk5cnh3qjmrznfxvme4hohlw7ie4vkzgm
+  asset_bridging_pb2.py: bafybeig4dg2a5dvcwgury45hxhnucno7ya3gjbn6zzjjllmgdda24tyghi
+  custom_types.py: bafybeielnhf4j25stypr4cxrwdvujbdthwn6l6cg3dozzcmrkwyxfviyli
+  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
   message.py: bafybeie7xdpakh3p2tpdr5wndyqz6vgaecaw3nhb7p7ufeab7m6p4bn5fi
-  protocol_spec.yaml: bafybeib2r24r7auyqnhtmaw5gkqfdwpqqlqofyddagoybd3v3mwxhhcoyy
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/__init__.py: bafybeico3suqrflaq6i3nhlqwigrnixigwljk5op3qwbvvkspt2eoa5zti
-  tests/dummy_data.yaml: bafybeif5pxyaqeeobre46wdf65s7vzsaowvivuq2cxyzbtuubw3llsx3we
-  tests/test_asset_bridging_dialogues.py: bafybeia7dnmbmxfdgt6w6j66nnfo5rpfk4dndecovd5sw3mc6jegiul2bm
-  tests/test_asset_bridging_messages.py: bafybeiemcex2brodzzmvu3im6srppipkya3qszudwxe53k3aopvom27gr4
+  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
+  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
+  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
+  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
+  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
+  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
+  hypothesis: {}

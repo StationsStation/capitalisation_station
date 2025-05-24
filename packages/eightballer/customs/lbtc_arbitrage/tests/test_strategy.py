@@ -9,6 +9,7 @@ from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.customs.lbtc_arbitrage.strategy import (
     ArbitrageStrategy,
 )
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 
 
 TEST_INIT_KWARGS = {
@@ -64,3 +65,14 @@ class TestEnhancedArbitrageStrategy:
         assert orders is not None
         assert len(orders) > 0
         assert all(isinstance(order, Order) for order in orders)
+
+    @pytest.mark.parametrize("case", get_cases())
+    def test_get_bridge_requests(self, case):
+        """Test the get_bridge_requests method."""
+        self._setup_method("test_get_bridge_requests", case)
+        requests = self.strategy.get_bridge_requests(
+            self.portfolio,
+            self.prices,
+        )
+        assert requests is not None
+        assert all(isinstance(request, BridgeRequest) for request in requests)

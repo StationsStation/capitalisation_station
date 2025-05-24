@@ -1,5 +1,6 @@
 """Interface for asset_bridging protocol."""
 
+import asyncio
 from typing import TYPE_CHECKING
 from functools import partial
 
@@ -36,7 +37,7 @@ class AssetBridgingInterface(BaseInterface):
         reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
         if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
             return reply_err(
-                code=ErrorCode.INVALID_PERFORMATIVE,
+                code=ErrorCode.Code.CODE_INVALID_PERFORMATIVE,
                 err_msg="Expecting REQUEST_BRIDGE performative",
             )
 
@@ -44,17 +45,17 @@ class AssetBridgingInterface(BaseInterface):
 
         if request.bridge != "derive":
             return reply_err(
-                code=ErrorCode.INVALID_PARAMETERS,
+                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
                 err_msg=f"Bridge '{request.bridge}' not supported",
             )
-        if ChainID.DERIVE.name not in {request.source_chain, request.target_chain}:
+        if "derive" not in {request.source_ledger_id, request.target_ledger_id}:
             return reply_err(
-                code=ErrorCode.INVALID_PARAMETERS,
+                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
                 err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
             )
         if request.target_token and request.target_token != request.source_token:
             return reply_err(
-                code=ErrorCode.INVALID_PARAMETERS,
+                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
                 err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
             )
 
@@ -70,17 +71,25 @@ class AssetBridgingInterface(BaseInterface):
                 f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
             )
             return reply_err(
-                code=ErrorCode.INVALID_PARAMETERS,
+                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
                 err_msg=err_msg,
             )
 
         amount = request.amount
         currency = Currency[request.source_token]
-        source_chain_id = ChainID[request.source_chain.upper()]
-        target_chain_id = ChainID[request.target_chain.upper()]
+        source_chain_id = ChainID[request.source_ledger_id.upper()]
+        target_chain_id = ChainID[request.target_ledger_id.upper()]
 
-        if request.source_chain == ChainID.DERIVE.name:
+        if request.source_ledger_id == "derive":
             receiver = client.signer.address
+            # we first move to the funding account.
+            connection.logger.info(f"Transferring {amount} {request.source_token} from subaccount to funding account.")
+            client.transfer_from_subaccount_to_funding(
+                amount=amount, asset_name=request.source_token, subaccount_id=client.subaccount_id
+            )
+            await asyncio.sleep(10)
+            # then we withdraw to the receiver address.
+            connection.logger.info(f"Withdrawing {amount} {request.source_token} to {receiver} on {target_chain_id}.")
             tx_result = client.withdraw_from_derive(
                 chain_id=target_chain_id,
                 currency=currency,
@@ -95,17 +104,30 @@ class AssetBridgingInterface(BaseInterface):
                 amount=amount,
                 receiver=receiver,
             )
+            if tx_result is None:
+                return reply_err(
+                    code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
+                    err_msg="Transaction failed to be submitted.",
+                )
+            await asyncio.sleep(60)
+            # we move the funds from the funding account to the subaccount.
+            connection.logger.info("Transferring funds from funding account to subaccount.")
+            client.transfer_from_funding_to_subaccount(
+                amount=amount,
+                asset_name=request.source_token,
+                subaccount_id=client.subaccount_id,
+            )
 
         match tx_result.status:
             case TxStatus.FAILED:
-                status = BridgeResult.FAILED
+                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
             case TxStatus.SUCCESS:
-                status = BridgeResult.COMPLETED
+                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
             case TxStatus.PENDING:
-                status = BridgeResult.PENDING_TX_RECEIPT
+                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT
             case TxStatus.ERROR:
                 return reply_err(
-                    code=ErrorCode.OTHER_EXCEPTION,
+                    code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
                     err_msg=f"{tx_result}",
                 )
 

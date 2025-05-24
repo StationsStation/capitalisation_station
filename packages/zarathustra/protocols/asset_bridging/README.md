@@ -1,8 +1,7 @@
 # Asset Bridging Protocol
 
 ## Description
-
-...
+A minimal, atomic request-response protocol for cross‑chain asset bridging.
 
 ## Specification
 
@@ -26,8 +25,8 @@ speech_acts:
 ...
 ---
 ct:BridgeRequest: |
-  string source_chain = 1;
-  string target_chain = 2;
+  string source_ledger_id = 1;
+  string target_ledger_id = 2;
   string source_token = 3;
   optional string target_token = 4;
   float amount = 5;
@@ -69,5 +68,4 @@ termination: [bridge_status, error]
 roles: {agent, ledger}
 end_states: [successful, failed]
 keep_terminal_state_dialogues: false
-
 ```
