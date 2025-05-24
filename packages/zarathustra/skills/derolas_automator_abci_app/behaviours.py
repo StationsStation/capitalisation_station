@@ -19,6 +19,7 @@
 """This package contains a behaviours of the Derolas Automator."""
 
 import os
+import time
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, cast
@@ -33,6 +34,8 @@ from aea_ledger_ethereum import (
 from aea.skills.behaviours import State, FSMBehaviour
 
 
+SLEEP = 3
+GAS = 5_000_000
 GAS_PREMIUM = 1.1
 TX_MINING_TIMEOUT = 120  # seconds
 
@@ -108,18 +111,15 @@ class DerolasautomatorabciappEvents(Enum):
     """Events for the fsm."""
 
     EPOCH_ENDED = "EPOCH_ENDED"
-    ALREADY_CLAIMED = "ALREADY_CLAIMED"
     GAME_ON = "GAME_ON"
     MAX_DONATORS_REACHED = "MAX_DONATORS_REACHED"
     NO_TRIGGER = "NO_TRIGGER"
     ELIGIBLE_TO_DONATE = "ELIGIBLE_TO_DONATE"
     EPOCH_ONGOING = "EPOCH_ONGOING"
-    WINDOW_CLOSED = "WINDOW_CLOSED"
     CLAIMED = "CLAIMED"
     DONATED = "DONATED"
     EPOCH_FINISHED = "EPOCH_FINISHED"
     EPOCH_END_NEAR = "EPOCH_END_NEAR"
-    NOT_DONATED = "NOT_DONATED"
     TX_TIMEOUT = "TX_TIMEOUT"
     CANNOT_PLAY_GAME = "CANNOT_PLAY_GAME"
     TX_FAILED = "TX_FAILED"
@@ -136,7 +136,6 @@ class DerolasautomatorabciappStates(Enum):
     MAKECLAIMROUND = "makeclaimround"
     ENDEPOCHROUND = "endepochround"
     CHECKEPOCHROUND = "checkepochround"
-    CHECKCLAIMROUND = "checkclaimround"
     DONATEROUND = "donateround"
 
 
@@ -207,7 +206,7 @@ class BaseState(State, ABC):
             {
                 "from": self.crypto.address,
                 "nonce": nonce,
-                "gas": 500_000,
+                "gas": GAS,
                 "gasPrice": int(self.base_ledger_api.api.eth.gas_price * GAS_PREMIUM),
                 "value": value,
             }
@@ -279,7 +278,9 @@ class AwaitTriggerRound(BaseState):
         self._event = DerolasautomatorabciappEvents.NO_TRIGGER
 
         try:
-            if self.can_play_game:
+            if self.claimable > 0:
+                self._event = DerolasautomatorabciappEvents.CLAIMABLE
+            elif self.can_play_game:
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
@@ -289,6 +290,16 @@ class AwaitTriggerRound(BaseState):
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
+
+    @property
+    def claimable(self) -> int:
+        """Call "claimable" on Derolas contract."""
+
+        return self.derolas_staking_contract.claimable(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+            address=self.crypto.address,
+        )["int"]
 
 
 class CheckEpochRound(BaseState):
@@ -458,63 +469,6 @@ class DonateRound(BaseState):
         )
 
 
-class CheckClaimRound(BaseState):
-    """This class implements the behaviour of the state CheckClaimRound."""
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._state = DerolasautomatorabciappStates.CHECKCLAIMROUND
-
-    def act(self) -> None:
-        """Perfom the act."""
-
-        try:
-            current_epoch = self.current_epoch
-            claim_epoch = current_epoch - 1
-            end_block_claim_epoch = self.epoch_to_end_block(claim_epoch)
-            donations = self.epoch_to_donations(claim_epoch, self.crypto.address)
-            already_claimed = (
-                self.epoch_to_claimed(claim_epoch, self.crypto.address) == 0
-            )
-            # Probably need self.current_block > end_block_claim_epoch + self.epoch_length
-            window_closed = self.current_block > end_block_claim_epoch + (
-                2 * self.epoch_length
-            )
-            if donations == 0:
-                self._event = DerolasautomatorabciappEvents.NOT_DONATED
-            # EPOCH_ONGOING impossible since claim epoch is always current - 1
-            elif already_claimed:
-                self._event = DerolasautomatorabciappEvents.ALREADY_CLAIMED
-            elif window_closed:
-                self._event = DerolasautomatorabciappEvents.WINDOW_CLOSED
-            else:
-                self._event = DerolasautomatorabciappEvents.CLAIMABLE
-        except Exception as e:
-            self.context.logger.info(f"Exception in {self.name}: {e}")
-            self._event = DerolasautomatorabciappEvents.ERROR
-
-        self._is_done = True
-
-    def epoch_to_end_block(self, claim_block: int) -> int:
-        """Call "epoch_to_end_block" on Derolas contract."""
-
-        return self.derolas_staking_contract.epoch_to_end_block(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-            var_0=claim_block,
-        )["int"]
-
-    def epoch_to_claimed(self, claim_block: int, address: str) -> int:
-        """Call "epoch_to_claimed" on Derolas contract."""
-
-        return self.derolas_staking_contract.epoch_to_claimed(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-            var_0=claim_block,
-            var_1=address,
-        )["int"]
-
-
 class MakeClaimRound(BaseState):
     """This class implements the behaviour of the state MakeClaimRound."""
 
@@ -565,7 +519,6 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             AwaitTriggerRound(**kwargs),
             True,
         )
-
         self.register_state(
             DerolasautomatorabciappStates.CHECKREADYTODONATEROUND.value,
             CheckReadyToDonateRound(**kwargs),
@@ -581,13 +534,14 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             CheckEpochRound(**kwargs),
         )
         self.register_state(
-            DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            CheckClaimRound(**kwargs),
-        )
-        self.register_state(
             DerolasautomatorabciappStates.DONATEROUND.value, DonateRound(**kwargs)
         )
 
+        self.register_transition(
+            source=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
+            event=DerolasautomatorabciappEvents.CLAIMABLE,
+            destination=DerolasautomatorabciappStates.MAKECLAIMROUND.value,
+        )
         self.register_transition(
             source=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             event=DerolasautomatorabciappEvents.CANNOT_PLAY_GAME,
@@ -606,36 +560,6 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             event=DerolasautomatorabciappEvents.NO_TRIGGER,
-            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.ALREADY_CLAIMED,
-            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.CLAIMABLE,
-            destination=DerolasautomatorabciappStates.MAKECLAIMROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.EPOCH_ONGOING,
-            destination=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.ERROR,
-            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.NOT_DONATED,
-            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
-        )
-        self.register_transition(
-            source=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
-            event=DerolasautomatorabciappEvents.WINDOW_CLOSED,
             destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
         )
         self.register_transition(
@@ -666,7 +590,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source=DerolasautomatorabciappStates.CHECKREADYTODONATEROUND.value,
             event=DerolasautomatorabciappEvents.ALREADY_DONATED,
-            destination=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
+            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
         )
         self.register_transition(
             source=DerolasautomatorabciappStates.CHECKREADYTODONATEROUND.value,
@@ -691,7 +615,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source=DerolasautomatorabciappStates.DONATEROUND.value,
             event=DerolasautomatorabciappEvents.DONATED,
-            destination=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
+            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
         )
         self.register_transition(
             source=DerolasautomatorabciappStates.DONATEROUND.value,
@@ -706,7 +630,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source=DerolasautomatorabciappStates.DONATEROUND.value,
             event=DerolasautomatorabciappEvents.TX_TIMEOUT,
-            destination=DerolasautomatorabciappStates.CHECKCLAIMROUND.value,
+            destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
         )
         self.register_transition(
             source=DerolasautomatorabciappStates.ENDEPOCHROUND.value,
@@ -763,8 +687,10 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             self.context.logger.info("No state to act on.")
             self.terminate()
         self.context.logger.info(f"Entering {self.current}")
+        time.sleep(SLEEP)
         super().act()
 
     def terminate(self) -> None:
         """Implement the termination."""
+        self.teardown()
         os._exit(0)
