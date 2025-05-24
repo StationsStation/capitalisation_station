@@ -9,7 +9,7 @@ fingerprint:
   .env.example: bafybeihzd3yocyrtad63nzjthcqpxnktjgdumhacil72khllev3kmte56m
   tests/test_service.py: bafybeicslmnjnf43pbzmwlqr7p7xw2iktcrnuq6l7klkrc5r4yberg66u4
 fingerprint_ignore_patterns: []
-agent: eightballer/trader:0.1.0:bafybeifbiial7mqmfiw65xtjdghmcxenecerl35odzagbg7cw7ch7rrjjm
+agent: eightballer/trader:0.1.0:bafybeifbypssy7c4av7mt7rol7xbjca3tnr4gj2gr7wbhcwy34a2txpypi
 number_of_agents: 1
 deployment:
   agent:
