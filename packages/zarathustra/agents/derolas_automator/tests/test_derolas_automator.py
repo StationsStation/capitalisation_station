@@ -45,9 +45,7 @@ class TestAgentLaunch(AEATestCaseMany):
         author = yamls[0]["author"]
         version = yamls[0]["version"]
 
-        self.fetch_agent(
-            f"{author}/{agent_name}:{version}", agent_name, is_local=self.IS_LOCAL
-        )
+        self.fetch_agent(f"{author}/{agent_name}:{version}", agent_name, is_local=self.IS_LOCAL)
         self.set_agent_context(agent_name)
         self.generate_private_key("ethereum")
         self.add_private_key("ethereum", "ethereum_private_key.txt")
