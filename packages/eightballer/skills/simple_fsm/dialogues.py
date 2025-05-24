@@ -42,6 +42,10 @@ from packages.eightballer.protocols.positions.dialogues import (
     PositionsDialogue as BasePositionsDialogue,
     PositionsDialogues as BasePositionsDialogues,
 )
+from packages.zarathustra.protocols.asset_bridging.dialogues import (
+    AssetBridgingDialogue as BaseAssetBridgingDialogue,
+    AssetBridgingDialogues as BaseAssetBridgingDialogues,
+)
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogues as BaseUserInteractionDialogues,
 )
@@ -112,3 +116,7 @@ TickersDialogues = BaseTickersDialogues
 
 ApprovalsDialogue = BaseApprovalsDialogue
 ApprovalsDialogues = BaseApprovalsDialogues
+
+
+AssetBridgingDialogue = BaseAssetBridgingDialogue
+AssetBridgingDialogues = BaseAssetBridgingDialogues

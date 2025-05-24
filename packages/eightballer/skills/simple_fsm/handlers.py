@@ -28,6 +28,9 @@ from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
 from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
+from packages.zarathustra.protocols.asset_bridging.message import (
+    AssetBridgingMessage,
+)
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.skills.abstract_round_abci.handlers import (
     HttpHandler as BaseHttpHandler,
@@ -145,3 +148,21 @@ class UserInteractionHandler(Handler):
 
     def teardown(self):
         """Tear down the handler."""
+
+
+class DexAssetBridgingHandler(AbstractResponseHandler):
+    """This class implements a handler for AssetBridgingHandler messages."""
+
+    SUPPORTED_PROTOCOL = AssetBridgingMessage.protocol_id
+    allowed_response_performatives = frozenset(
+        {
+            AssetBridgingMessage.Performative.BRIDGE_STATUS,
+            AssetBridgingMessage.Performative.ERROR,
+            AssetBridgingMessage.Performative.REQUEST_STATUS,
+        }
+    )
+
+    def handle(self, message):
+        """We log the message and pass it to the dialogue manager."""
+        self.context.logger.info(f"Handling message: {message}")
+        return super().handle(message)

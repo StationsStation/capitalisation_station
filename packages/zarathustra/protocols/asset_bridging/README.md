@@ -8,11 +8,11 @@ A minimal, atomic request-response protocol for cross‑chain asset bridging.
 ```yaml
 name: asset_bridging
 author: zarathustra
-version: 0.0.1
+version: 0.1.0
 description: A minimal, atomic request-response protocol for cross‑chain asset bridging.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
-protocol_specification_id: zarathustra/asset_bridging:0.0.1
+protocol_specification_id: zarathustra/asset_bridging:0.1.0
 speech_acts:
   request_bridge:
     request: ct:BridgeRequest
@@ -25,11 +25,11 @@ speech_acts:
 ...
 ---
 ct:BridgeRequest: |
-  string source_chain = 1;
-  string target_chain = 2;
+  string source_ledger_id = 1;
+  string target_ledger_id = 2;
   string source_token = 3;
   optional string target_token = 4;
-  double amount = 5;
+  float amount = 5;
   string bridge = 6;
   optional string receiver = 7;
 ct:BridgeResult: |

@@ -1,20 +1,20 @@
 name: asset_bridging
 author: zarathustra
-version: 0.0.1
-protocol_specification_id: zarathustra/asset_bridging:0.0.1
+version: 0.1.0
+protocol_specification_id: zarathustra/asset_bridging:0.1.0
 type: protocol
 description: "A minimal, atomic request-response protocol for cross\u2011chain asset\
   \ bridging."
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeif36vpiaiqb7feqliuj4tbugxhf4w5izgov55jkod4kndieyuknma
-  __init__.py: bafybeie3umracixamvjvexrjvcujsa6dqyd3gf576iredozrlib22pltj4
-  asset_bridging.proto: bafybeiepu2n6u7fgb2zptplcricrydhqanqhhyybymdnuhuhe4b7jgm5gi
-  asset_bridging_pb2.py: bafybeibluvjys4e2rwchgwl4raildlbk5htf5m5qvpoxksqc4yovsyiinm
-  custom_types.py: bafybeigxyjbqyuycab6icn2onhihxmrgvz6wybmgiywmg6a75mmq5zx4h4
+  README.md: bafybeif5bjqo4xtshsrlizzmvlocrizdhm4ph32nhbey5k2prbfaxawo6q
+  __init__.py: bafybeibsxfx24txngiu5zzy2okmkwfszpaolslsgoyg6pmecvpjf7iq42y
+  asset_bridging.proto: bafybeibc25wl6d35jpad4yhq4qk5cnh3qjmrznfxvme4hohlw7ie4vkzgm
+  asset_bridging_pb2.py: bafybeig4dg2a5dvcwgury45hxhnucno7ya3gjbn6zzjjllmgdda24tyghi
+  custom_types.py: bafybeielnhf4j25stypr4cxrwdvujbdthwn6l6cg3dozzcmrkwyxfviyli
   dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
-  message.py: bafybeid2ixvjhpni6otgnygaywwrbliciy3mh5aon7t2eb2hsijrmelovm
+  message.py: bafybeie7xdpakh3p2tpdr5wndyqz6vgaecaw3nhb7p7ufeab7m6p4bn5fi
   primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
   tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum

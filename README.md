@@ -87,4 +87,18 @@ contract/vybe/jupitar_swap/0.1.0
 https://github.com/Dassy23/aea_contracts_solana/
 
 
-### Autonomy repos
+# ⚠️ Derolas Codebase Disclaimer - Read or Regret ⚠️
+
+This code is public, open, and unapologetically experimental. It routes value, touches DeFi rails, and assumes you know what you're doing. If you're here to fork, deploy, or integrate, you accept full responsibility for what happens next.
+
+No warranties. No safety nets. No bailouts.
+
+By using this code, you agree that:
+- You understand smart contracts are immutable and unforgiving.
+- You may lose money. Others may lose money. This is not our problem.
+- There is no support, no roadmap, no guarantee of uptime or correctness.
+- This is not a product. This is an artifact. A signal. A fire.
+
+Don't email us. Don't blame us. Don't sue us.
+
+You have the code. What you build with it is on you.

@@ -1,16 +1,16 @@
 syntax = "proto3";
 
-package aea.zarathustra.asset_bridging.v0_0_1;
+package aea.zarathustra.asset_bridging.v0_1_0;
 
 message AssetBridgingMessage{
 
   // Custom Types
   message BridgeRequest{
-    string source_chain = 1;
-    string target_chain = 2;
+    string source_ledger_id = 1;
+    string target_ledger_id = 2;
     string source_token = 3;
     optional string target_token = 4;
-    double amount = 5;
+    float amount = 5;
     string bridge = 6;
     optional string receiver = 7;
   }

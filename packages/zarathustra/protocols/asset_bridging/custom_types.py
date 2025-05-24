@@ -8,7 +8,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from packages.zarathustra.protocols.asset_bridging.primitives import (
-    Double,
+    Float,
 )
 
 
@@ -27,19 +27,19 @@ MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
 class BridgeRequest(BaseModel):
     """BridgeRequest."""
 
-    source_chain: str
-    target_chain: str
+    source_ledger_id: str
+    target_ledger_id: str
     source_token: str
     target_token: Optional[str] = None
-    amount: Double
+    amount: Float
     bridge: str
     receiver: Optional[str] = None
 
     @staticmethod
     def encode(proto_obj, bridgerequest: BridgeRequest) -> None:
         """Encode BridgeRequest to protobuf."""
-        proto_obj.source_chain = bridgerequest.source_chain
-        proto_obj.target_chain = bridgerequest.target_chain
+        proto_obj.source_ledger_id = bridgerequest.source_ledger_id
+        proto_obj.target_ledger_id = bridgerequest.target_ledger_id
         proto_obj.source_token = bridgerequest.source_token
         if bridgerequest.target_token is not None:
             proto_obj.target_token = bridgerequest.target_token
@@ -51,8 +51,8 @@ class BridgeRequest(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeRequest:
         """Decode proto_obj to BridgeRequest."""
-        source_chain = proto_obj.source_chain
-        target_chain = proto_obj.target_chain
+        source_ledger_id = proto_obj.source_ledger_id
+        target_ledger_id = proto_obj.target_ledger_id
         source_token = proto_obj.source_token
         target_token = (
             proto_obj.target_token
@@ -63,8 +63,8 @@ class BridgeRequest(BaseModel):
         bridge = proto_obj.bridge
         receiver = proto_obj.receiver if proto_obj.receiver is not None and proto_obj.HasField("receiver") else None
         return cls(
-            source_chain=source_chain,
-            target_chain=target_chain,
+            source_ledger_id=source_ledger_id,
+            target_ledger_id=target_ledger_id,
             source_token=source_token,
             target_token=target_token,
             amount=amount,

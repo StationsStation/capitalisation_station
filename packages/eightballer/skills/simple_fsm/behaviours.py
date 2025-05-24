@@ -39,6 +39,9 @@ from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import NoOpportunityRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_round import ExecuteOrdersRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.instantiate_bridge_request_round import (
+    InstantiateBridgeRequestRound,
+)
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -72,6 +75,21 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
+        bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
+            portfolio=self.strategy.state.portfolio,
+            prices=self.strategy.state.prices,
+            **self.custom_config.kwargs["strategy_run_kwargs"],
+        )
+
+        if bridging_requests and not self.strategy.state.bridge_requests:
+            self.context.logger.info(f"Bridging requests found: {bridging_requests}")
+            self.strategy.state.bridge_requests = bridging_requests
+            self.strategy.send_notification_to_user(
+                title="Bridging requests found",
+                msg=f"Bridging requests found: {bridging_requests}",
+            )
+            self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
+
         orders = self.strategy.trading_strategy.get_orders(
             portfolio=self.strategy.state.portfolio,
             prices=self.strategy.state.prices,
@@ -81,6 +99,11 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self.strategy.state.unaffordable_opportunity = self.strategy.trading_strategy.unaffordable
         if self.strategy.state.unaffordable_opportunity:
             self.context.logger.info(f"Opportunity unaffordable: {self.strategy.state.unaffordable_opportunity}")
+            self.strategy.send_notification_to_user(
+                title="Opportunity unaffordable please check",
+                msg=f"Opportunity unaffordable: {self.strategy.state.unaffordable_opportunity}",
+            )
+
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             self.strategy.state.new_orders = orders
@@ -207,6 +230,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("cooldownround", CoolDownRound(**kwargs))
         self.register_state("collecttickerround", CollectTickerRound(**kwargs))
         self.register_state("setapprovals", SetApprovalsRound(**kwargs))
+        self.register_state("instantiate_bridge_requests", InstantiateBridgeRequestRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -246,6 +270,17 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             source="identifyopportunityround",
             event=ArbitrageabciappEvents.OPPORTUNITY_FOUND,
             destination="executeordersround",
+        )
+
+        self.register_transition(
+            source="identifyopportunityround",
+            event=ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND,
+            destination="instantiate_bridge_requests",
+        )
+        self.register_transition(
+            source="instantiate_bridge_requests",
+            event=ArbitrageabciappEvents.DONE,
+            destination="cooldownround",
         )
         self.register_transition(
             source="identifyopportunityround", event=ArbitrageabciappEvents.DONE, destination="noopportunityround"
