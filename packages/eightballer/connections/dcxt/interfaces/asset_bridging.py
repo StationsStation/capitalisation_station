@@ -94,6 +94,7 @@ class AssetBridgingInterface(BaseInterface):
                 function=client.withdraw_from_derive,
                 chain_id=target_chain_id,
                 currency=currency,
+                logger=connection.logger,
                 amount=amount,
                 receiver=client.signer.address,
             )
@@ -114,6 +115,7 @@ class AssetBridgingInterface(BaseInterface):
             await self._execute_tx(
                 function=client.transfer_from_funding_to_subaccount,
                 amount=amount,
+                logger=connection.logger,
                 asset_name=request.source_token,
                 subaccount_id=client.subaccount_id,
             )
@@ -142,14 +144,13 @@ class AssetBridgingInterface(BaseInterface):
             result=result,
         )
 
-    async def _execute_tx(self, function, attempts=0, *args, **kwargs):
-        """Execute a transaction and handle exceptions."""
+    async def _execute_tx(self, function, logger, attempts=0, *args, **kwargs):
         """Execute a transaction and handle exceptions."""
         while attempts < 10:
             try:
-                return await function(*args, **kwargs)
+                return function(*args, **kwargs)
             except Exception as e:
-                self.context.logger.exception(f"Error executing transaction: {e}")
+                logger.exception(f"Error executing transaction: {e}")
                 attempts += 1
                 await asyncio.sleep(attempts * 2)
         return None  # or raise an exception if you want to handle it differently
