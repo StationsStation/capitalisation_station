@@ -1,0 +1,47 @@
+graph TD
+
+  %% sleep until we get an external play instruction
+  AwaitTrigger -->|ERROR| AwaitTrigger
+  AwaitTrigger -->|NO_TRIGGER| AwaitTrigger
+  AwaitTrigger -->|CANNOT_PLAY_GAME| AwaitTrigger
+  AwaitTrigger -->|GAME_ON| CheckEpochRound
+
+  %% read-only
+  CheckEpochRound -->|ERROR| AwaitTrigger
+  CheckEpochRound -->|CANNOT_PLAY_GAME| AwaitTrigger
+  CheckEpochRound -->|EPOCH_END_NEAR| CheckEpochRound
+  CheckEpochRound -->|EPOCH_FINISHED| EndEpochRound
+  CheckEpochRound -->|EPOCH_ONGOING| CheckReadyToDonateRound
+
+  %% write & read
+  EndEpochRound -->|ERROR| AwaitTrigger
+  EndEpochRound -->|TX_TIMEOUT| CheckEpochRound
+  EndEpochRound -->|TX_FAILED| CheckEpochRound
+  EndEpochRound -->|EPOCH_ENDED| CheckEpochRound
+
+  %% read-only
+  CheckReadyToDonateRound -->|ERROR| AwaitTrigger
+  CheckReadyToDonateRound -->|CANNOT_PLAY_GAME| AwaitTrigger
+  CheckReadyToDonateRound -->|ALREADY_DONATED| CheckClaimRound
+  CheckReadyToDonateRound -->|MAX_DONATORS_REACHED| AwaitTrigger
+  CheckReadyToDonateRound -->|ELIGIBLE_TO_DONATE| DonateRound
+
+  %% write & read
+  DonateRound -->|ERROR| AwaitTrigger
+  DonateRound -->|TX_TIMEOUT| CheckClaimRound
+  DonateRound -->|TX_FAILED| AwaitTrigger
+  DonateRound -->|DONATED| CheckClaimRound
+  
+  %% read-only
+  CheckClaimRound -->|ERROR| AwaitTrigger
+  CheckClaimRound -->|NOT_DONATED| AwaitTrigger
+  CheckClaimRound -->|ALREADY_CLAIMED| AwaitTrigger
+  CheckClaimRound -->|WINDOW_CLOSED| AwaitTrigger
+  CheckClaimRound -->|EPOCH_ONGOING| CheckClaimRound
+  CheckClaimRound -->|CLAIMABLE| MakeClaimRound
+
+  %% write & read
+  MakeClaimRound -->|ERROR| AwaitTrigger
+  MakeClaimRound -->|TX_TIMEOUT| AwaitTrigger
+  MakeClaimRound -->|TX_FAILED| AwaitTrigger
+  MakeClaimRound -->|CLAIMED| AwaitTrigger
