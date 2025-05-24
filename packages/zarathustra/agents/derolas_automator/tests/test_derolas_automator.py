@@ -36,7 +36,7 @@ class TestAgentLaunch(AEATestCaseMany):
     cli_log_options = ["-v", "DEBUG"]
     package_registry_src_rel = Path(__file__).parent.parent.parent.parent.parent
 
-    def test_install(self) -> None:
+    def install(self) -> None:
         """Install the agent."""
 
         aea_config = THIS_FILE.parent.parent / "aea-config.yaml"
@@ -45,7 +45,9 @@ class TestAgentLaunch(AEATestCaseMany):
         author = yamls[0]["author"]
         version = yamls[0]["version"]
 
-        self.fetch_agent(f"{author}/{agent_name}:{version}", agent_name, is_local=self.IS_LOCAL)
+        self.fetch_agent(
+            f"{author}/{agent_name}:{version}", agent_name, is_local=self.IS_LOCAL
+        )
         self.set_agent_context(agent_name)
         self.generate_private_key("ethereum")
         self.add_private_key("ethereum", "ethereum_private_key.txt")
@@ -55,7 +57,7 @@ class TestAgentLaunch(AEATestCaseMany):
     def test_run(self) -> None:
         """Run the agent."""
 
-        self.test_install()
+        self.install()
         process = self.run_agent()
         first_round = "AwaitTriggerRound"
         missing_strings = self.missing_from_output(

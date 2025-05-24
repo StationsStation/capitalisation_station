@@ -5,7 +5,7 @@ license: Apache-2.0
 description: ''
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
-  tests/test_derolas_automator.py: bafybeifyn2yx4iu76exwjv7bi6djadstcbgqqn2sanhpsfttwdu22yv75q
+  tests/test_derolas_automator.py: bafybeihbjvxs7iuworjmw5gcpzid4ud3t72xo2tzjjbheaq5frszlt7tqe
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
