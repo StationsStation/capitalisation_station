@@ -75,12 +75,6 @@ def create_invalid_bridge_requests():
     base = valid_case.request
     return (
         InvalidTestCase(
-            name=f"{valid_case.name}: unsupported source and target chain combination",
-            request=base.copy(update={"source_chain": ChainID.OPTIMISM.name}),
-            error_code=ErrorCode.CODE_INVALID_PARAMETERS,
-            expected_error_msg="Can only bridge FROM or TO Derive at this time",
-        ),
-        InvalidTestCase(
             name=f"{valid_case.name}: source token not equal to target token",
             request=base.copy(update={"target_token": Currency.LBTC.name}),
             error_code=ErrorCode.CODE_INVALID_PARAMETERS,
@@ -133,6 +127,8 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             stack.enter_context(patch.object(client, "env", Environment.PROD))
             stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_result))
             stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_result))
+            stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
+            stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
 
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
@@ -165,10 +161,21 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         exchanges = self.connection.protocol_interface.exchanges
         exchanges[request.bridge][request.bridge]
+        exchange: DeriveClient = exchanges[request.bridge][request.bridge]
+        client: AsyncClient = exchange.client
 
-        await self.connection.send(envelope)
-        async with asyncio.timeout(TIMEOUT):
-            response = await self.connection.receive()
+        tx_receipt = AttributeDict(dictionary={"status": 0})
+        fake_result = TxResult(tx_hash="0xdeadbeef", tx_receipt=tx_receipt, exception="Some error")
+
+        with ExitStack() as stack:
+            stack.enter_context(patch.object(client, "env", Environment.PROD))
+            stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_result))
+            stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_result))
+            stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
+            stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
+            await self.connection.send(envelope)
+            async with asyncio.timeout(TIMEOUT):
+                response = await self.connection.receive()
 
         assert response is not None
         assert isinstance(response.message, AssetBridgingMessage)

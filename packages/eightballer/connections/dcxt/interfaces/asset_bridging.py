@@ -81,32 +81,38 @@ class AssetBridgingInterface(BaseInterface):
         target_chain_id = ChainID[request.target_ledger_id.upper()]
 
         if request.source_ledger_id == "derive":
-            receiver = client.signer.address
             # we first move to the funding account.
             connection.logger.info(f"Transferring {amount} {request.source_token} from subaccount to funding account.")
             client.transfer_from_subaccount_to_funding(
                 amount=amount, asset_name=request.source_token, subaccount_id=client.subaccount_id
             )
-            await asyncio.sleep(10)
             # then we withdraw to the receiver address.
-            connection.logger.info(f"Withdrawing {amount} {request.source_token} to {receiver} on {target_chain_id}.")
-            tx_result = client.withdraw_from_derive(
+            connection.logger.info(
+                f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain_id}."
+            )
+            tx_result = await self._execute_tx(
+                function=client.withdraw_from_derive,
                 chain_id=target_chain_id,
                 currency=currency,
                 amount=amount,
-                receiver=receiver,
+                receiver=client.signer.address,
             )
+
         else:
-            receiver = client.wallet
+            connection.logger.info(
+                f"Depositing {amount} {request.source_token} to Derive wallet: {client.wallet} on {source_chain_id}."
+            )
             tx_result = client.deposit_to_derive(
                 chain_id=source_chain_id,
                 currency=currency,
                 amount=amount,
-                receiver=receiver,
+                receiver=client.wallet,  # Derive contract wallet
             )
             # we move the funds from the funding account to the subaccount.
             connection.logger.info("Transferring funds from funding account to subaccount.")
-            client.transfer_from_funding_to_subaccount(
+
+            await self._execute_tx(
+                function=client.transfer_from_funding_to_subaccount,
                 amount=amount,
                 asset_name=request.source_token,
                 subaccount_id=client.subaccount_id,
@@ -135,6 +141,18 @@ class AssetBridgingInterface(BaseInterface):
             target_message=message,
             result=result,
         )
+
+    async def _execute_tx(self, function, attempts=0, *args, **kwargs):
+        """Execute a transaction and handle exceptions."""
+        """Execute a transaction and handle exceptions."""
+        while attempts < 10:
+            try:
+                return await function(*args, **kwargs)
+            except Exception as e:
+                self.context.logger.exception(f"Error executing transaction: {e}")
+                attempts += 1
+                await asyncio.sleep(attempts * 2)
+        return None  # or raise an exception if you want to handle it differently
 
     async def request_status(
         self,
