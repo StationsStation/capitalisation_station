@@ -27,7 +27,12 @@ from aea_ledger_ethereum import (
 from aea.configurations.base import PublicId
 
 from packages.eightballer.connections.dcxt.utils import load_contract
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import (
+    Order,
+    OrderSide,
+    OrderType,
+    OrderStatus,
+)
 from packages.eightballer.protocols.tickers.custom_types import Ticker
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
@@ -76,7 +81,11 @@ class InsufficientAllowance(Exception):
 
 SPENDER = {"ethereum": "0x111111125421cA6dc452d289314280a0f8842A65"}
 
-LEDGER_TO_CHAIN_ID = {SupportedLedgers.ETHEREUM: 1, SupportedLedgers.GNOSIS: 100, SupportedLedgers.BASE: 8453}
+LEDGER_TO_CHAIN_ID = {
+    SupportedLedgers.ETHEREUM: 1,
+    SupportedLedgers.GNOSIS: 100,
+    SupportedLedgers.BASE: 8453,
+}
 
 
 @dataclass
@@ -149,7 +158,14 @@ class OneInchSwapApi:
     api_key: str
     logger: Any
 
-    def __init__(self, api: EthereumApi, account: EthereumCrypto, chain_id: int, api_key: str, logger):
+    def __init__(
+        self,
+        api: EthereumApi,
+        account: EthereumCrypto,
+        chain_id: int,
+        api_key: str,
+        logger,
+    ):
         self.api = api
         self.account = account
         self.chain_id = chain_id
@@ -333,7 +349,13 @@ class OneInchApiClient(BaseErc20Exchange):
         )
 
     async def create_order(
-        self, side: OrderSide, asset_a: str, asset_b: str, amount: Decimal, *args, **kwargs
+        self,
+        side: OrderSide,
+        asset_a: str,
+        asset_b: str,
+        amount: Decimal,
+        *args,
+        **kwargs,
     ) -> dict[str, Any]:
         """Create an order."""
         del args
@@ -520,10 +542,16 @@ def perform_swap(
 @click.option("--chain_id", type=int, help="Chain ID for chain to swap on", default=1)
 @click.option("--api_key", type=str, help="API key for 1inch API", default=None)
 @click.option(
-    "--src", type=str, help="Source token address: (usdc)", default="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    "--src",
+    type=str,
+    help="Source token address: (usdc)",
+    default="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
 )
 @click.option(
-    "--dst", type=str, help="Destination token address: (lbtc)", default="0x8236a87084f8b84306f72007f36f2618a5634494"
+    "--dst",
+    type=str,
+    help="Destination token address: (lbtc)",
+    default="0x8236a87084f8b84306f72007f36f2618a5634494",
 )
 @click.option("--amount", type=int, help="Amount of tokens to swap", default="10000000")
 def main(chain_id, src, dst, amount, api_key):  # noqa
@@ -575,11 +603,19 @@ def main(chain_id, src, dst, amount, api_key):  # noqa
         msg = "Insufficient balance in source token"
         raise InsufficientBalance(msg)
 
-    ledger_id = {1: SupportedLedgers.ETHEREUM, 100: SupportedLedgers.GNOSIS, 8453: SupportedLedgers.BASE}[chain_id]
+    ledger_id = {
+        1: SupportedLedgers.ETHEREUM,
+        100: SupportedLedgers.GNOSIS,
+        8453: SupportedLedgers.BASE,
+    }[chain_id]
     allowance = get_allowance(erc_20, api, src, crypto.address, SPENDER[ledger_id.value])
     if allowance < amount:
         result = increase_allowance(
-            token_address=src, spender=SPENDER[str(chain_id)], amount=amount, ledger_api=api, crypto=crypto
+            token_address=src,
+            spender=SPENDER[str(chain_id)],
+            amount=amount,
+            ledger_api=api,
+            crypto=crypto,
         )
         if not result:
             msg = "Failed to increase allowance"

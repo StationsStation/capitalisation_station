@@ -1,0 +1,66 @@
+alphabet_in:
+- EPOCH_ENDED
+- ALREADY_CLAIMED
+- GAME_ON
+- MAX_DONATORS_REACHED
+- NO_TRIGGER
+- ELIGIBLE_TO_DONATE
+- EPOCH_ONGOING
+- WINDOW_CLOSED
+- CLAIMED
+- DONATED
+- EPOCH_FINISHED
+- EPOCH_END_NEAR
+- NOT_DONATED
+- TX_TIMEOUT
+- CANNOT_PLAY_GAME
+- TX_FAILED
+- CLAIMABLE
+- ALREADY_DONATED
+- ERROR
+default_start_state: AwaitTrigger
+final_states: []
+label: DerolasAutomatorAbciApp
+start_states:
+- AwaitTrigger
+states:
+- AwaitTrigger
+- CheckReadyToDonateRound
+- MakeClaimRound
+- EndEpochRound
+- CheckEpochRound
+- CheckClaimRound
+- DonateRound
+transition_func:
+  (AwaitTrigger, CANNOT_PLAY_GAME): AwaitTrigger
+  (AwaitTrigger, ERROR): AwaitTrigger
+  (AwaitTrigger, GAME_ON): CheckEpochRound
+  (AwaitTrigger, NO_TRIGGER): AwaitTrigger
+  (CheckClaimRound, ALREADY_CLAIMED): AwaitTrigger
+  (CheckClaimRound, CLAIMABLE): MakeClaimRound
+  (CheckClaimRound, EPOCH_ONGOING): CheckClaimRound
+  (CheckClaimRound, ERROR): AwaitTrigger
+  (CheckClaimRound, NOT_DONATED): AwaitTrigger
+  (CheckClaimRound, WINDOW_CLOSED): AwaitTrigger
+  (CheckEpochRound, CANNOT_PLAY_GAME): AwaitTrigger
+  (CheckEpochRound, EPOCH_END_NEAR): CheckEpochRound
+  (CheckEpochRound, EPOCH_FINISHED): EndEpochRound
+  (CheckEpochRound, EPOCH_ONGOING): CheckReadyToDonateRound
+  (CheckEpochRound, ERROR): AwaitTrigger
+  (CheckReadyToDonateRound, ALREADY_DONATED): CheckClaimRound
+  (CheckReadyToDonateRound, CANNOT_PLAY_GAME): AwaitTrigger
+  (CheckReadyToDonateRound, ELIGIBLE_TO_DONATE): DonateRound
+  (CheckReadyToDonateRound, ERROR): AwaitTrigger
+  (CheckReadyToDonateRound, MAX_DONATORS_REACHED): AwaitTrigger
+  (DonateRound, DONATED): CheckClaimRound
+  (DonateRound, ERROR): AwaitTrigger
+  (DonateRound, TX_FAILED): AwaitTrigger
+  (DonateRound, TX_TIMEOUT): CheckClaimRound
+  (EndEpochRound, EPOCH_ENDED): CheckEpochRound
+  (EndEpochRound, ERROR): AwaitTrigger
+  (EndEpochRound, TX_FAILED): CheckEpochRound
+  (EndEpochRound, TX_TIMEOUT): CheckEpochRound
+  (MakeClaimRound, CLAIMED): AwaitTrigger
+  (MakeClaimRound, ERROR): AwaitTrigger
+  (MakeClaimRound, TX_FAILED): AwaitTrigger
+  (MakeClaimRound, TX_TIMEOUT): AwaitTrigger
