@@ -9,6 +9,7 @@ fingerprint:
   __init__.py: bafybeiec3flie665tfkp6za2lhl7rkgy2ax7zqbd6d5p3vkqqjbqlfocuy
   build/derolas_staking.json: bafybeifzt6oxtg3u7n4uqciesnlov6xzfvjxfsi4h5bawsybf7njh4urse
   contract.py: bafybeig7j6wjxeb6jzjj6i36lah35phg63khrzmcry2lqcyvu7kafdoaqu
+  tests/test_derolas_staking_contract.py: bafybeigroopxupvifesrm7lehctqv7cpuyrh2kjyzty4x7ypainnocydxa
 fingerprint_ignore_patterns: []
 class_name: DerolasStaking
 contract_interface_paths:
