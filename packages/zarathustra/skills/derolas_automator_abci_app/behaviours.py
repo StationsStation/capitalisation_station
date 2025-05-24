@@ -23,14 +23,14 @@ import time
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, cast
+
 from aea_ledger_ethereum import (
-    JSONLike,
     HexBytes,
+    JSONLike,
     EthereumApi,
     SignedTransaction,
     try_decorator,
 )
-
 from aea.skills.behaviours import State, FSMBehaviour
 
 
@@ -38,6 +38,7 @@ SLEEP = 3
 GAS = 5_000_000
 GAS_PREMIUM = 1.1
 TX_MINING_TIMEOUT = 120  # seconds
+BLOCK_MARGIN = 10
 
 # ruff: noqa: BLE001
 # - BLE001: Do not catch blind exception: `Exception`
@@ -56,9 +57,7 @@ def signed_tx_to_dict(signed_transaction: Any) -> dict[str, str | int]:
 
 
 @try_decorator("Unable to send transaction: {}", logger_method="warning")
-def try_send_signed_transaction(
-    ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any
-) -> str | None:
+def try_send_signed_transaction(ethereum_api: EthereumApi, tx_signed: JSONLike, **_kwargs: Any) -> str | None:
     """Try send a raw signed transaction."""
     signed_transaction = SignedTransactionTranslator.from_dict(tx_signed)
     hex_value = ethereum_api.api.eth.send_raw_transaction(  # pylint: disable=no-member
@@ -88,18 +87,13 @@ class SignedTransactionTranslator:
     @staticmethod
     def from_dict(signed_transaction_dict: JSONLike) -> SignedTransaction:
         """Get SignedTransaction from dict."""
-        if (
-            not isinstance(signed_transaction_dict, dict)
-            and len(signed_transaction_dict) == 5
-        ):
+        if not isinstance(signed_transaction_dict, dict) and len(signed_transaction_dict) == 5:
             msg = f"Invalid for conversion. Found object: {signed_transaction_dict}."
             raise ValueError(  # pragma: nocover
                 msg
             )
         return SignedTransaction(
-            raw_transaction=HexBytes(
-                cast(str, signed_transaction_dict["raw_transaction"])
-            ),
+            raw_transaction=HexBytes(cast(str, signed_transaction_dict["raw_transaction"])),
             hash=HexBytes(cast(str, signed_transaction_dict["hash"])),
             r=cast(int, signed_transaction_dict["r"]),
             s=cast(int, signed_transaction_dict["s"]),
@@ -260,9 +254,7 @@ class BaseState(State, ABC):
     @property
     def current_block(self) -> int:
         """Get current block number."""
-        return self.base_ledger_api.get_state("get_block_number")[
-            "get_block_number_result"
-        ]
+        return self.base_ledger_api.get_state("get_block_number")["get_block_number_result"]
 
 
 class AwaitTriggerRound(BaseState):
@@ -312,15 +304,13 @@ class CheckEpochRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        margin = 10
-
         try:
             blocks_remaining = self.get_blocks_remaining()
             if not self.can_play_game:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
             elif blocks_remaining == 0:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-            elif blocks_remaining < margin:
+            elif blocks_remaining < BLOCK_MARGIN:
                 self._event = DerolasautomatorabciappEvents.EPOCH_END_NEAR
             else:
                 self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
@@ -348,9 +338,7 @@ class EndEpochRound(BaseState):
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(
-                tx_hash, timeout=TX_MINING_TIMEOUT
-            )
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -365,6 +353,8 @@ class EndEpochRound(BaseState):
         self._is_done = True
 
     def end_epoch(self):
+        """Call "end_epoch" on Derolas contract."""
+
         return self.derolas_staking_contract.end_epoch(
             ledger_api=self.base_ledger_api,
             contract_address=self.derolas_contract_address,
@@ -436,9 +426,7 @@ class DonateRound(BaseState):
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(
-                tx_hash, timeout=TX_MINING_TIMEOUT
-            )
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -485,9 +473,7 @@ class MakeClaimRound(BaseState):
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
-            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(
-                tx_hash, timeout=TX_MINING_TIMEOUT
-            )
+            tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
             elif tx_receipt.status == 0:
@@ -523,19 +509,13 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             DerolasautomatorabciappStates.CHECKREADYTODONATEROUND.value,
             CheckReadyToDonateRound(**kwargs),
         )
-        self.register_state(
-            DerolasautomatorabciappStates.MAKECLAIMROUND.value, MakeClaimRound(**kwargs)
-        )
-        self.register_state(
-            DerolasautomatorabciappStates.ENDEPOCHROUND.value, EndEpochRound(**kwargs)
-        )
+        self.register_state(DerolasautomatorabciappStates.MAKECLAIMROUND.value, MakeClaimRound(**kwargs))
+        self.register_state(DerolasautomatorabciappStates.ENDEPOCHROUND.value, EndEpochRound(**kwargs))
         self.register_state(
             DerolasautomatorabciappStates.CHECKEPOCHROUND.value,
             CheckEpochRound(**kwargs),
         )
-        self.register_state(
-            DerolasautomatorabciappStates.DONATEROUND.value, DonateRound(**kwargs)
-        )
+        self.register_state(DerolasautomatorabciappStates.DONATEROUND.value, DonateRound(**kwargs))
 
         self.register_transition(
             source=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,

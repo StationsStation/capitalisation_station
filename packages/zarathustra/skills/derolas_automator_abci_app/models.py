@@ -27,7 +27,9 @@ from aea_ledger_ethereum import EthereumApi, EthereumCrypto
 from aea.configurations.loader import ComponentType, load_component_configuration
 
 from packages.valory.connections.ledger.connection import PUBLIC_ID as LEDGER_PUBLIC_ID
-from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_PUBLIC_ID
+from packages.zarathustra.contracts.derolas_staking import (
+    PUBLIC_ID as DEROLAS_PUBLIC_ID,
+)
 
 
 ROOT = Path(__file__).parent.parent.parent.parent
@@ -60,7 +62,7 @@ class DerolasState(Model):
     @property
     def base_ledger_api(self) -> EthereumApi:
         """Get the Base ledger api."""
-        return EthereumApi(address="https://base.drpc.org", chain_id=str(8453))
+        return EthereumApi(address="https://base.llamarpc.com", chain_id=str(8453))
 
     @property
     def crypto(self) -> EthereumCrypto:
