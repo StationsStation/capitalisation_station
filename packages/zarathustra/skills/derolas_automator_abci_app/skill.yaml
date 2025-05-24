@@ -19,7 +19,7 @@ fingerprint_ignore_patterns: []
 connections:
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
-- zarathustra/derolas_staking:0.1.0:bafybeih3yuqsx6mv3jkvl5zlagegxxacptho7eej6pgx3mfkvfwglpghqa
+- zarathustra/derolas_staking:0.1.0:bafybeif34u55otfhpzf7w5crk26ficijfuoc2gehjn23f7lwsratka66uy
 protocols:
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
