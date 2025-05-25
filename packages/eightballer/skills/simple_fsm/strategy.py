@@ -92,6 +92,7 @@ class AgentState:
     current_period: int = 0
     last_transition_time: datetime.datetime = None
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
+    pending_donations: list[float] = field(default_factory=list)
 
     def write_to_file(self):
         """Write the state to files."""
@@ -163,6 +164,7 @@ class ArbitrageStrategy(Model):
 
     entry_order: Order = None
     exit_order: Order = None
+    donate: bool = True
 
     def __init__(self, **kwargs):
         """Initialize the model."""
