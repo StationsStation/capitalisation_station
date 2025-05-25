@@ -19,7 +19,6 @@
 """This package contains a behaviours of the Derolas Automator."""
 
 import os
-import time
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, cast
@@ -31,7 +30,7 @@ from aea_ledger_ethereum import (
     SignedTransaction,
     try_decorator,
 )
-from aea.skills.behaviours import State, FSMBehaviour
+from aea.skills.behaviours import State, FSMBehaviour, TickerBehaviour
 
 
 SLEEP = 3
@@ -133,7 +132,7 @@ class DerolasautomatorabciappStates(Enum):
     DONATEROUND = "donateround"
 
 
-class BaseState(State, ABC):
+class BaseState(State, ABC):  # noqa: PLR0904
     """Base class for states."""
 
     _state: DerolasautomatorabciappStates = None
@@ -196,7 +195,8 @@ class BaseState(State, ABC):
         """Build the transaction."""
 
         nonce = self.base_ledger_api.api.eth.get_transaction_count(self.crypto.address)
-        return func.build_transaction(
+
+        txn = func.build_transaction(
             {
                 "from": self.crypto.address,
                 "nonce": nonce,
@@ -205,6 +205,17 @@ class BaseState(State, ABC):
                 "value": value,
             }
         )
+        try:
+            self.base_ledger_api.api.eth.call(txn)  # pylint: disable=no-member
+        except Exception as e:
+            self.context.logger.warning(f"Transaction call failed: {e}")
+            raise
+        self.context.logger.info(f"Transaction built: {txn}")
+        return txn
+
+    def simulate_tx(self, raw_tx) -> None:
+        """Simulate the transaction."""
+        self.base_ledger_api.api.eth.call(raw_tx)  # pylint: disable=no-member
 
     @property
     def can_play_game(self) -> bool:
@@ -288,7 +299,7 @@ class AwaitTriggerRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
             elif self.can_play_game:
                 value_captured = self.pending_donations.popleft()
-                msg = f"Value captured: {value_captured} USD, donating: {self.minimum_donation} ETH"
+                msg = f"Value captured: {value_captured} USD, donating: {self.minimum_donation / 1e18} ETH"
                 self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
@@ -352,6 +363,7 @@ class EndEpochRound(BaseState):
         try:
             w3_function = self.end_epoch()
             raw_tx = self.build_transaction(w3_function)
+            self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
@@ -440,6 +452,7 @@ class DonateRound(BaseState):
             value = self.minimum_donation
             w3_function = self.donate()
             raw_tx = self.build_transaction(w3_function, value=value)
+            self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
@@ -478,6 +491,7 @@ class MakeClaimRound(BaseState):
         try:
             w3_function = self.claim()
             raw_tx = self.build_transaction(w3_function)
+            self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
             self.context.logger.info(f"Transaction hash: {tx_hash}")
@@ -503,11 +517,11 @@ class MakeClaimRound(BaseState):
         )
 
 
-class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
+class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(tick_interval=5, **kwargs)
         self.register_state(
             DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             AwaitTriggerRound(**kwargs),
@@ -675,7 +689,6 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour):
             self.context.logger.info("No state to act on.")
             self.terminate()
         self.context.logger.info(f"Entering {self.current}")
-        time.sleep(SLEEP)
         super().act()
 
     def terminate(self) -> None:
