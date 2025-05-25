@@ -168,7 +168,7 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
         self.context.logger.info(f"Handling message: {message}")
         if self.strategy.state.bridge_requests:
             self.context.logger.info(f"Bridge requests before handling: {self.strategy.state.bridge_requests}")
-            self.strategy.state.bridge_requests.pop()
+            self.strategy.state.bridge_requests = []
         return super().handle(message)
 
     @property
