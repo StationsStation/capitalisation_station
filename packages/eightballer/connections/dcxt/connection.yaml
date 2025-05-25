@@ -32,7 +32,7 @@ fingerprint:
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
   interfaces/approvals.py: bafybeidxlvrgbbajfkrplbfvla2sp2vafrnxssx24ga64ox4kgzbdswzlu
-  interfaces/asset_bridging.py: bafybeiaw2nlenvhncbj7m24j5ply67kuf3tfzwho2rokf53lotokd2edq4
+  interfaces/asset_bridging.py: bafybeifzkixwf5b4ykw3vgygpxvzne5o5zf77mk7zqix7evpkb3cpgyifi
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y

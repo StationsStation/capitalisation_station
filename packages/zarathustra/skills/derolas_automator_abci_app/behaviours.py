@@ -256,6 +256,20 @@ class BaseState(State, ABC):
         """Get current block number."""
         return self.base_ledger_api.get_state("get_block_number")["get_block_number_result"]
 
+    @property
+    def minimum_donation(self):
+        """Call "minimum_donation" on Derolas contract."""
+
+        return self.derolas_staking_contract.minimum_donation(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+        )["int"]
+
+    @property
+    def pending_donations(self):
+        """Pending donations from eightballer/skills/simple_fsm PostTradeRound."""
+        return self.context.shared_state.get("state").pending_donations
+
 
 class AwaitTriggerRound(BaseState):
     """This class implements the behaviour of the state AwaitTriggerRound."""
@@ -267,12 +281,15 @@ class AwaitTriggerRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
-        self._event = DerolasautomatorabciappEvents.NO_TRIGGER
-
         try:
             if self.claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
+            elif not self.pending_donations:
+                self._event = DerolasautomatorabciappEvents.NO_TRIGGER
             elif self.can_play_game:
+                value_captured = self.pending_donations.popleft()
+                msg = f"Value captured: {value_captured} USD, donating: {self.minimum_donation} ETH"
+                self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
@@ -438,15 +455,6 @@ class DonateRound(BaseState):
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
-
-    @property
-    def minimum_donation(self):
-        """Call "minimum_donation" on Derolas contract."""
-
-        return self.derolas_staking_contract.minimum_donation(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-        )["int"]
 
     def donate(self):
         """Call "donate" on Derolas contract."""

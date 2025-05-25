@@ -63,6 +63,9 @@ class AssetBridgingInterface(BaseInterface):
         exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
         client: AsyncClient = exchange.client
 
+        await client.connect_ws()
+        await client.login_client()
+
         if request.receiver is not None:
             err_msg = (
                 "Providing a custom receiver isn't supported for the Derive superbridge.\n"

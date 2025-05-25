@@ -23,6 +23,7 @@ import pathlib
 import datetime
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, cast
+from collections import deque
 from dataclasses import field, asdict, dataclass
 
 from aea.skills.base import Model
@@ -30,10 +31,16 @@ from aea.configurations.base import PublicId
 
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
-from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
-from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.eightballer.protocols.user_interaction.message import (
+    UserInteractionMessage,
+)
+from packages.eightballer.protocols.user_interaction.dialogues import (
+    UserInteractionDialogues,
+)
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
-from packages.eightballer.connections.apprise_wrapper.connection import CONNECTION_ID as APPRISE_PUBLIC_ID
+from packages.eightballer.connections.apprise_wrapper.connection import (
+    CONNECTION_ID as APPRISE_PUBLIC_ID,
+)
 
 
 TZ = datetime.datetime.now().astimezone().tzinfo
@@ -92,6 +99,7 @@ class AgentState:
     current_period: int = 0
     last_transition_time: datetime.datetime = None
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
+    pending_donations: deque[float] = field(default_factory=deque)
 
     def write_to_file(self):
         """Write the state to files."""
@@ -163,6 +171,7 @@ class ArbitrageStrategy(Model):
 
     entry_order: Order = None
     exit_order: Order = None
+    donate: bool = True
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -176,10 +185,17 @@ class ArbitrageStrategy(Model):
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
-        self.context.logger.info("ArbitrageStrategy initialized. with cooldown period: %s", self.cooldown_period)
-        self.context.logger.info("ArbitrageStrategy initialized. with strategy public id: %s", self.strategy_public_id)
         self.context.logger.info(
-            "ArbitrageStrategy initialized. with strategy init kwargs: %s", self.strategy_init_kwargs
+            "ArbitrageStrategy initialized. with cooldown period: %s",
+            self.cooldown_period,
+        )
+        self.context.logger.info(
+            "ArbitrageStrategy initialized. with strategy public id: %s",
+            self.strategy_public_id,
+        )
+        self.context.logger.info(
+            "ArbitrageStrategy initialized. with strategy init kwargs: %s",
+            self.strategy_init_kwargs,
         )
 
     def build_initial_state(self) -> dict:
