@@ -149,6 +149,11 @@ config:
     subaccount_id: ${DERIVE_SUBACCOUNT_ID:int:1234}
     ledger_id: derive
     environment: prod
+  - name: kittypunch
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
 ---
 public_id: eightballer/simple_fsm:0.1.0
 type: skill

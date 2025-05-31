@@ -171,6 +171,7 @@ class OneInchSwapApi:
         self.chain_id = chain_id
         self.api_key = api_key
         self.logger = logger
+        self.logger.warning("JUHU connected to 1inch API")
 
     def api_request_url(
         self,
@@ -178,6 +179,7 @@ class OneInchSwapApi:
         query_params,
     ):
         """Build the API request URL."""
+        self.logger("Building API request URL for method: %s with params: %s", method_name, query_params)
         return (
             f"https://api.1inch.dev/swap/v6.0/{self.chain_id}{method_name}?"
             + f"{'&'.join([f'{key}={value}' for key, value in query_params.items()])}"
@@ -185,10 +187,12 @@ class OneInchSwapApi:
 
     def sign_swap_txn(self, swap_transaction):
         """Sign the swap transaction."""
+        self.logger.info(f"Signing swap transaction: {swap_transaction}")
         return signed_tx_to_dict(self.account.entity.sign_transaction(swap_transaction))
 
     async def build_tx_for_swap(self, swap_params, retries=5, cooldown=1):
         """Build the transaction for the swap."""
+        self.logger.info(f"Building transaction for swap: {swap_params}")
         url = self.api_request_url("/swap", swap_params.to_json())
         try:
             response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
@@ -259,6 +263,7 @@ class OneInchSwapApi:
             url = self.api_request_url("/quote", swap_params.to_json())
             response = await httpx.get(url, headers={"Authorization": f"Bearer {self.api_key}"}, timeout=5)  # noqa
             quote = response.json()
+            self.logger(f"Got quote: {quote}")
         except httpx.DecodingError:
             self.logger.exception(
                 f"Rate limit exceeded for 1inch API remaining: {retries} cooldown: {cooldown}",
@@ -279,6 +284,7 @@ class OneInchSwapApi:
 
     async def close(self):
         """Close the connection."""
+        self.logger("Closing connection to 1inch API")
 
 
 class OneInchApiClient(BaseErc20Exchange):
@@ -288,6 +294,7 @@ class OneInchApiClient(BaseErc20Exchange):
         """Create an order from an api call."""
         order = api_call
         order.exchange_id = exchange_id
+        self.logger.warning(f"Parsed order: {order}")
         return order
 
     async def fetch_open_orders(self, address: str) -> dict[str, Any]:

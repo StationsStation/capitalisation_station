@@ -52,7 +52,7 @@ You will receive a sub account address that you can use to deposit funds into th
 
 ```bash
 # create keys MAKE SURE TO SAVE THE GENERATED KEY!
-docker run --workdir /app/tmp -v $(pwd):/app/tmp  -it --entrypoint /app/.venv/bin/autonomy 8ball030/capitalisation_station:latest generate-key ethereum
+docker run --workdir /app/tmp -v $(pwd):/app/tmp  -it --entrypoint /app/.venv/bin/autonomy capitalisation_station:latest generate-key ethereum
 ```
 
 NOTE: You will need to save the generated key for the next step.
@@ -70,7 +70,7 @@ Set up the following variables that were created in Step 4:
 
 ```bash
 export AGENT=eightballer/derive_arbitrage_agent
-docker run --workdir /app/tmp -v $(pwd):/app/tmp -it --entrypoint /app/.venv/bin/python 8ball030/capitalisation_station:latest scripts/generator.py $AGENT
+docker run --workdir /app/tmp -v $(pwd):/app/tmp -it --entrypoint /app/.venv/bin/python capitalisation_station:latest scripts/generator.py $AGENT
 ```
 
 ### Step 6: Run the Trader
