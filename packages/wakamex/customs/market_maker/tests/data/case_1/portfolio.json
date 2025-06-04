@@ -1,0 +1,59 @@
+{
+    "cex": {},
+    "base": {
+        "cowswap": [
+            {
+                "asset_id": "weETH",
+                "free": 0.0,
+                "used": 0.0,
+                "total": 0.0,
+                "is_native": false,
+                "contract_address": "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A"
+            },
+            {
+                "asset_id": "LBTC",
+                "free": 0.38446649,
+                "used": 0.0,
+                "total": 0.38446649,
+                "is_native": false,
+                "contract_address": "0xecAc9C5F704e954931349Da37F60E39f515c11c1"
+            },
+            {
+                "asset_id": "USDC",
+                "free": 40391.276181,
+                "used": 0.0,
+                "total": 40391.276181,
+                "is_native": false,
+                "contract_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+            }
+        ]
+    },
+    "derive": {
+        "derive": [
+            {
+                "asset_id": "LBTC",
+                "free": 0.22359317,
+                "used": 0.0,
+                "total": 0.22359317,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "USDC",
+                "free": 8971.33858822699,
+                "used": 0.0,
+                "total": 8971.33858822699,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "WEETH",
+                "free": 0.10004550377577615,
+                "used": 0.0,
+                "total": 0.10004550377577615,
+                "is_native": false,
+                "contract_address": null
+            }
+        ]
+    }
+}

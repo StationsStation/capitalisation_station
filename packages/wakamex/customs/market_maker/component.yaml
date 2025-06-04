@@ -1,5 +1,5 @@
-name: lbtc_arbitrage
-author: eightballer
+name: market_maker
+author: wakamex
 version: 0.1.0
 type: custom
 description: A simple arbitrage strategy that buys on one exchange and sells on another.
@@ -18,7 +18,7 @@ fingerprint:
   tests/data/case_2/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
   tests/data/case_2/portfolio.json: bafybeifswf74ft3thvp4lw5jmdl5nznncckbsvydhn7ud6nxit6fbw5w5e
   tests/data/case_2/prices.json: bafybeiga3focypcalednqmgmydra23odkpq3rlg4v6lzgapmru46jtb6e4
-  tests/test_strategy.py: bafybeidkdnps4u3mkumn27b2lpqh6j5ta7f3a5ku35hlvbt44ijnqgfli4
+  tests/test_strategy.py: bafybeifxqkfn4bphngkwcbuqmillfoc3thdcv3ds5mw2w722zwsy6bqxsm
 fingerprint_ignore_patterns: []
 dependencies: {}
 strategy_init_kwargs:

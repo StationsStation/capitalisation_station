@@ -21,7 +21,7 @@ fingerprint:
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/token_list.json: bafybeifjiiteo4quslwdk2psdmnka2fof3abmikfe6ycnliace65yfd2cy
-  dcxt/data/tokens.py: bafybeieuyl5lavwyzhnivnvegkvelsgqkjursjiaum5xhw43eszt6tpupy
+  dcxt/data/tokens.py: bafybeicdymqwxtsj7q3r6yrcqs25llguvpuwfcm2t2cfbh5oz2zcp3ocs4
   dcxt/defi_exchange.py: bafybeid7yoku3wxtfd7s2qeoxqbuqrg3w37y4ehkgke7syovz4jewpbfy4
   dcxt/derive.py: bafybeib3wxtm3lmq4o5o6tu3txtjndt76rq3asndn5pfcrqfdgu2ml2uwy
   dcxt/exceptions.py: bafybeiep6fswgvtn5cxn4y5u2b24fbuu6bszs6tdfn6rxzrh2aeae73lri
@@ -128,11 +128,6 @@ config:
     ledger_id: optimism
     rpc_url: https://mainnet.optimism.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-  - name: derive
-    key_path: ethereum_private_key.txt
-    subaccount_id: 1234
-    ledger_id: derive
-    environment: prod
   - name: one_inch
     key_path: ethereum_private_key.txt
     wallet: null

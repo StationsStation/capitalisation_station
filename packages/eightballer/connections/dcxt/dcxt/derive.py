@@ -528,8 +528,13 @@ class DeriveClient:
             "side": DeriveOrderSide(kwargs["side"]),
             "instrument_type": get_instrument_type(kwargs["symbol"]),
             "underlying_currency": get_underlying_currency(asset_a),
-            "time_in_force": DeriveTimeInForce.IOC,
         }
+        if DeriveOrderType(kwargs["type"]) is not DeriveOrderType.LIMIT:
+            params.update(
+                {
+                    "time_in_force": DeriveTimeInForce.IOC,
+                }
+            )
         try:
             return await self.client.create_order(**params)
         except ApiException as error:
