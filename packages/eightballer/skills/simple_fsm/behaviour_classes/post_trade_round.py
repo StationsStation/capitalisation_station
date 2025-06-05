@@ -70,3 +70,5 @@ class PostTradeRound(BaseBehaviour):
             title="Post Successful Arbitrage Execution!",
             msg=report_msg_table,
         )
+        if self.strategy.donate:
+            self.strategy.state.pending_donations.append(value_captured_gross)
