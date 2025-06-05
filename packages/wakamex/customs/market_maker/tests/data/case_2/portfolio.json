@@ -1,0 +1,59 @@
+{
+    "cex": {},
+    "ethereum": {
+        "one_inch": [
+            {
+                "asset_id": "USDC",
+                "free": 7831,
+                "used": 0.0,
+                "total": 7831,
+                "is_native": false,
+                "contract_address": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+            },
+            {
+                "asset_id": "weETH",
+                "free": 0.09270590696157831,
+                "used": 0.0,
+                "total": 0.09270590696157831,
+                "is_native": false,
+                "contract_address": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+            },
+            {
+                "asset_id": "LBTC",
+                "free": 0.01781084,
+                "used": 0.0,
+                "total": 0.01781084,
+                "is_native": false,
+                "contract_address": "0x8236a87084f8B84306f72007F36F2618A5634494"
+            }
+        ]
+    },
+    "derive": {
+        "derive": [
+            {
+                "asset_id": "LBTC",
+                "free": 0.00196,
+                "used": 0.0,
+                "total": 0.00196,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "WEETH",
+                "free": 10.0,
+                "used": 0.0,
+                "total": 0.0,
+                "is_native": false,
+                "contract_address": null
+            },
+            {
+                "asset_id": "USDC",
+                "free": 2068.966308504846,
+                "used": 0.0,
+                "total": 2068.966308504846,
+                "is_native": false,
+                "contract_address": null
+            }
+        ]
+    }
+}
