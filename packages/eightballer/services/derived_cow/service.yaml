@@ -5,11 +5,11 @@ description: A new service, scaffolded by the Adev cli from eightballer/derive_a
 aea_version: '>=1.0.0, <2.0.0'
 license: apache-2.0
 fingerprint:
-  __init__.py: bafybeie6bz23onmpik76bz56we3vnexnxrgxso3r5xiulxtuq3zvkpf5ea
-  tests/__init__.py: bafybeig6wmq5kzol7wkc6rxzjavwylgtkwl7aa6qvep5z4k6loqyg23cbu
-  tests/test_service.py: bafybeicsp7vx522wwhz6zjm3m7za5aowp6vluj7tl2g2w4gbzml3otvhaa
+  __init__.py: bafybeifdc5tk6topwmcviejgkm3lmrhnhk6fqqvh76hv7xwg3qkhxifznm
+  tests/__init__.py: bafybeiausykbndof27hjfgwqg6nnmk7zw7lyytwzekih3gszwdypbtxjka
+  tests/test_service.py: bafybeicplirjoql5q3l5zjl5xrgamnoxuj3year7u2vrtfnzzllzeyutuy
 fingerprint_ignore_patterns: []
-agent: eightballer/derive_arbitrage_agent:0.1.0:bafybeieynqg4blwdwpeynlhp3d3pyni6qebu4du4e5kmy4an2hnote5ig4
+agent: eightballer/derive_arbitrage_agent:0.1.0:bafybeihbyeunyq632l3g6klae4do4qfktexc4nzlbnhwfr2yzd5z4fcdb4
 number_of_agents: 1
 deployment:
   agent:

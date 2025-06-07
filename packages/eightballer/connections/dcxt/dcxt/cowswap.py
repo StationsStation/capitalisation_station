@@ -59,6 +59,7 @@ from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20To
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, LEDGER_TO_WRAPPER, SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
+
 APP_DATA = "0x9d0a9808dca917f13bd98ea3adcc9e6e7a6de25cbbc4e3cce1ba9f0dc3523fe0"
 
 MAX_ORDER_ATTEMPTS = 5
