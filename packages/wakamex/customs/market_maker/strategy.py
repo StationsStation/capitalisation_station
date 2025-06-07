@@ -180,8 +180,8 @@ class ArbitrageStrategy:
         opportunity.required_asset_b = amount * opportunity.best_ask
         if not all([buy_balance, sell_balance]):
             return False
-        opportunity.balance_buy = buy_balance["free"]
-        opportunity.balance_sell = sell_balance["free"]
+        opportunity.balance_a = buy_balance["free"]
+        opportunity.balance_b = sell_balance["free"]
         return not any(
             [
                 opportunity.required_asset_a > opportunity.balance_buy,

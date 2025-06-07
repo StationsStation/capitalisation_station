@@ -32,7 +32,7 @@ from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
 from cowdao_cowpy.order_book.api import OrderBookApi
 from cowdao_cowpy.contracts.order import OrderKind
-from cowdao_cowpy.common.constants import ZERO_APP_DATA, CowContractAddress
+from cowdao_cowpy.common.constants import CowContractAddress
 from cowdao_cowpy.common.api.errors import UnexpectedResponseError
 from cowdao_cowpy.order_book.config import OrderBookAPIConfigFactory
 from cowdao_cowpy.order_book.generated.model import (
@@ -59,12 +59,12 @@ from packages.eightballer.connections.dcxt.erc_20.contract import Erc20, Erc20To
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, LEDGER_TO_WRAPPER, SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
+APP_DATA = "0x9d0a9808dca917f13bd98ea3adcc9e6e7a6de25cbbc4e3cce1ba9f0dc3523fe0"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
 SLIPPAGE_TOLERANCE = 0.00025
 # 1bps fee applied to all trades
-APP_DATA = ZERO_APP_DATA
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
@@ -153,7 +153,7 @@ async def swap_tokens(
     sell_token: ChecksumAddress,
     buy_token: ChecksumAddress,
     safe_address: ChecksumAddress | None = None,
-    app_data: str = ZERO_APP_DATA,
+    app_data: str = APP_DATA,
     slippage_tolerance: float = 0.005,
 ) -> CompletedOrder:
     """Swap tokens using the CoW Protocol.
@@ -641,6 +641,13 @@ def main(
     )
     print(f"Open orders: {open_orders}")
 
+    order_status = asyncio.run(
+        order_book_api.get_order_by_uid(
+            order_uid=open_orders[0].uid if open_orders else None,
+        )
+    )
+    print(f"Order status: {order_status}")
+
     order = asyncio.run(
         swap_tokens(
             order_book_api=order_book_api,
@@ -649,7 +656,7 @@ def main(
             sell_token=sell_token.address,
             chain=LEDGER_TO_COW_CHAIN[ledger],
             account=crypto.entity,
-            app_data=ZERO_APP_DATA,
+            app_data=APP_DATA,
             slippage_tolerance=SLIPPAGE_TOLERANCE,
         )
     )

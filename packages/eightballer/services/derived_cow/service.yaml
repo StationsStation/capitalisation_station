@@ -1,0 +1,99 @@
+name: derived_cow
+author: eightballer
+version: 0.1.0
+description: A new service, scaffolded by the Adev cli from eightballer/derive_arbitrage_agent:0.1.0
+aea_version: '>=1.0.0, <2.0.0'
+license: apache-2.0
+fingerprint:
+  __init__.py: bafybeie6bz23onmpik76bz56we3vnexnxrgxso3r5xiulxtuq3zvkpf5ea
+  tests/__init__.py: bafybeig6wmq5kzol7wkc6rxzjavwylgtkwl7aa6qvep5z4k6loqyg23cbu
+  tests/test_service.py: bafybeicsp7vx522wwhz6zjm3m7za5aowp6vluj7tl2g2w4gbzml3otvhaa
+fingerprint_ignore_patterns: []
+agent: eightballer/derive_arbitrage_agent:0.1.0:bafybeieynqg4blwdwpeynlhp3d3pyni6qebu4du4e5kmy4an2hnote5ig4
+number_of_agents: 1
+deployment:
+  agent:
+    ports: {}
+    volumes: {}
+---
+public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
+type: connection
+config:
+  host: 0.0.0.0
+  port: ${HTTP_PORT:int:8889}
+  target_skill_id: eightballer/trading_state:0.1.0
+---
+public_id: eightballer/prometheus:0.1.1:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
+type: connection
+config:
+  host: 0.0.0.0
+  port: ${PROM_PORT:int:8717}
+---
+public_id: valory/abci:0.1.0:bafybeihofnsokowicviac6yz3uhur52l3mf54s2hz4i2je5ie4vlruouga
+type: connection
+config:
+  host: ${str:localhost}
+  port: ${ABCI_PORT:int:26659}
+  use_tendermint: ${bool:false}
+  target_skill_id: eightballer/chained_dex_app:0.1.0
+---
+public_id: eightballer/ccxt_wrapper:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnklwpe6jrgwmsfjdtk5xabe
+type: connection
+config: {}
+---
+public_id: eightballer/apprise_wrapper:0.1.0
+type: connection
+config:
+  endpoints:
+  - ${APPRISE_ENDPOINT:str:null}
+---
+public_id: eightballer/dcxt:0.1.0:bafybeid2knx2lkd5jz64a357vtcz35gfjtoqey4shmmjtygl3r7dx6kvwq
+type: connection
+config:
+  exchanges:
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: ${ETHEREUM_RPC:str:https://eth.llamarpc.com}
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: base
+    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: arbitrum
+    rpc_url: ${ARBITRUM_RPC:str:https://arbitrum.drpc.org}
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: gnosis
+    rpc_url: ${GNOSIS_RPC:str:https://gnosis.drpc.org}
+  - name: derive
+    key_path: ethereum_private_key.txt
+    wallet: ${DERIVE_WALLET:str:0x1234}
+    subaccount_id: ${DERIVE_SUBACCOUNT_ID:int:1234}
+    ledger_id: derive
+    environment: prod
+---
+public_id: eightballer/simple_fsm:0.1.0
+type: skill
+models:
+  arbitrage_strategy:
+    args:
+      dexs:
+        derive:
+        - derive
+        cowswap: ${COW_CHAINS:list:["arbitrum"]}
+        balancer: []
+      strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
+      strategy_init_kwargs:
+        base_asset: ${BASE_ASSET:str:OLAS}
+        quote_asset: ${QUOTE_ASSET:str:USDC}
+        order_size: ${ORDER_SIZE:float:100}
+        min_profit: ${MIN_PROFIT:float:0.01}
+        max_open_orders: ${MAX_OPEN_ORDERS:int:100}
+      cooldown_period: ${COOLDOWN_PERIOD:int:30}
+      cexs: ${list:[]}
