@@ -20,6 +20,7 @@
 """This package contains a simple arbitrage strategy."""
 
 import operator
+from copy import deepcopy
 from functools import reduce
 from dataclasses import dataclass
 
@@ -61,6 +62,8 @@ class ArbitrageStrategy:
     max_open_orders: int
     unaffordable: list[ArbitrageOpportunity] = None
 
+    target_orderbook_exchange: str = "derive"
+
     def get_orders(
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
@@ -82,39 +85,41 @@ class ArbitrageStrategy:
 
         """
 
-        all_order_list: list[Order] = []
-        for exchanges in orders.values():
-            for exchange_orders in exchanges.values():
-                all_order_list += exchange_orders
+        orders = orders or {}
 
-        # we check if we have any open orders
-        order_set = []
+        possible_counter_parties = [
+            (ledger, exchange)
+            for ledger, exchange in reduce(
+                operator.add,
+                [[(ledger, exchange) for exchange in exchanges] for ledger, exchanges in portfolio.items()],
+            )
+            if exchange != self.target_orderbook_exchange
+        ]
 
-        # we check
-        all_ledger_exchanges = reduce(
-            lambda x, y: (x, y),
-            [(ledger, exchange) for ledger in portfolio for exchange in portfolio[ledger]],
+        # we retrieve the best prices from the ledgers and exchanges
+
+        for ledger, exchange in possible_counter_parties:
+            price = prices[ledger][exchange].pop()
+
+        buy_order = Order(
+            price=price["bid"] * (1 - self.min_profit),
+            exchange_id=self.target_orderbook_exchange,
+            ledger_id=self.target_orderbook_exchange,
+            symbol="DRV-USDC",
+            side=OrderSide.BUY,
+            status=OrderStatus.NEW,
+            amount=self.order_size,
+            type=OrderType.LIMIT,
         )
-        intersections = {}
-        # we calculate where we have overlapping markets
-        for ledger, exchange in all_ledger_exchanges:
-            markets = {k.get("symbol").replace("-", "/").upper(): k for k in prices[ledger][exchange]}
-            intersections[ledger] = set(markets.keys())
-        overlaps = reduce(lambda x, y: x.intersection(y), intersections.values())
-        opportunities = self.get_opportunities(prices, overlaps, all_ledger_exchanges)
-        self.unaffordable = []
-        for opp in opportunities:
-            if self.has_balance_for_opportunity(opp, portfolio, self.order_size):
-                orders = self.get_orders_for_opportunity(opp, portfolio, prices)
-                order_set.append((opp.delta, orders))
-            else:
-                self.unaffordable.append(opp)
-        if len(all_order_list) >= self.max_open_orders:
-            return []
-        if order_set:
-            optimal_orders = max(order_set, key=operator.itemgetter(0))
-            return optimal_orders[1]
-        return []
+
+        sell_order = deepcopy(buy_order)
+        sell_order.side = OrderSide.SELL
+        sell_order.price = price["ask"] * (1 + self.min_profit)
+
+        return [
+            buy_order,
+            sell_order,
+        ]
 
     def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""
@@ -176,8 +181,8 @@ class ArbitrageStrategy:
         opportunity.required_asset_b = amount * opportunity.best_ask
         if not all([buy_balance, sell_balance]):
             return False
-        opportunity.balance_buy = buy_balance["free"]
-        opportunity.balance_sell = sell_balance["free"]
+        opportunity.balance_a = buy_balance["free"]
+        opportunity.balance_b = sell_balance["free"]
         return not any(
             [
                 opportunity.required_asset_a > opportunity.balance_buy,
