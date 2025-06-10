@@ -60,7 +60,7 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, L
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
-APP_DATA = "0x9d0a9808dca917f13bd98ea3adcc9e6e7a6de25cbbc4e3cce1ba9f0dc3523fe0"
+APP_DATA = "0x66df8b6f8bf097b0a79fc5ad6b4c3c53ab986706a5a133828f2f681ca2ce6772"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5

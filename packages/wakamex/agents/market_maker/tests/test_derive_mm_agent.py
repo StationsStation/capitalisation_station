@@ -7,8 +7,8 @@ import pytest
 from aea.test_tools.test_cases import AEATestCaseMany
 
 
-AGENT_NAME = "derive_arbitrage_agent"
-AUTHOR = "eightballer"
+AGENT_NAME = "market_maker"
+AUTHOR = "wakamex"
 VERSION = "0.1.0"
 DEFAULT_LAUNCH_TIMEOUT = 10
 LAUNCH_SUCCEED_MESSAGE = "Successfully connected to"

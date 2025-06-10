@@ -84,7 +84,8 @@ class ArbitrageStrategy:
         [Order]: the orders
 
         """
-        orders.pop()
+
+        orders = orders or {}
 
         possible_counter_parties = [
             (ledger, exchange)
