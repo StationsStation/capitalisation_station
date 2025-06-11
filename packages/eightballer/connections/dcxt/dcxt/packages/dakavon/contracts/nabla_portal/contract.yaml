@@ -1,0 +1,15 @@
+name: nabla_portal
+author: dakavon
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeidwv7yakvrv3cjouthlq5b36bz57bm5iostishy54g23exnbkn6ta
+  contract.py: bafybeicun5pxzg6cgmk4xnfpvlxjny3ocse5xpoyua7b7qvlv2tbxohh2y
+fingerprint_ignore_patterns: []
+class_name: MyScaffoldContract
+contract_interface_paths: {}
+dependencies: {}
+contracts: []
