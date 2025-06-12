@@ -19,10 +19,10 @@
 
 """This package contains a simple arbitrage strategy."""
 
-import operator
-from copy import deepcopy
-from functools import reduce
+import json
 from dataclasses import dataclass
+
+from more_itertools import partition
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
@@ -68,8 +68,7 @@ class ArbitrageStrategy:
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
         prices: dict[str, dict[str, dict[str, float]]],
-        orders: dict[str, dict[str, dict[str, float]]],
-        **kwargs,  # noqa
+        orders: dict[str, dict[str, dict[str, Order]]],
     ) -> list[Order]:
         """Get orders give a set of prices and balances.
 
@@ -87,39 +86,132 @@ class ArbitrageStrategy:
 
         orders = orders or {}
 
-        possible_counter_parties = [
-            (ledger, exchange)
-            for ledger, exchange in reduce(
-                operator.add,
-                [[(ledger, exchange) for exchange in exchanges] for ledger, exchanges in portfolio.items()],
-            )
-            if exchange != self.target_orderbook_exchange
-        ]
-
-        # we retrieve the best prices from the ledgers and exchanges
-
-        for ledger, exchange in possible_counter_parties:
-            price = prices[ledger][exchange].pop()
-
-        buy_order = Order(
-            price=price["bid"] * (1 - self.min_profit),
-            exchange_id=self.target_orderbook_exchange,
-            ledger_id=self.target_orderbook_exchange,
-            symbol="DRV-USDC",
-            side=OrderSide.BUY,
-            status=OrderStatus.NEW,
-            amount=self.order_size,
-            type=OrderType.LIMIT,
+        exchange_orders: list[Order] = list(
+            orders.get(self.target_orderbook_exchange, {}).get(self.target_orderbook_exchange, [])
         )
 
-        sell_order = deepcopy(buy_order)
-        sell_order.side = OrderSide.SELL
-        sell_order.price = price["ask"] * (1 + self.min_profit)
+        open_orders: list[Order] = [o for o in exchange_orders if o.status == OrderStatus.OPEN]
 
-        return [
-            buy_order,
-            sell_order,
-        ]
+        sell_orders, buy_orders = (
+            list(i)
+            for i in partition(
+                lambda o: o.side == OrderSide.BUY,
+                open_orders,
+            )
+        )
+        if len(sell_orders) + len(buy_orders) >= self.max_open_orders:
+            return []
+
+        index_prices = {
+            market.get("symbol"): json.loads(market.get("info", "{}"))
+            for market in prices.get(self.target_orderbook_exchange, {}).get(self.target_orderbook_exchange, [])
+        }
+
+        num_buy_orders = 10
+        num_sell_orders = 10
+
+        remaining_buy_orders = num_buy_orders - len(buy_orders)
+        remaining_sell_orders = num_sell_orders - len(sell_orders)
+
+        orders = []
+        buy_asset = self.quote_asset.upper()
+
+        self.base_asset.upper()
+
+        asset_balances = portfolio.get(self.target_orderbook_exchange, {}).get(self.target_orderbook_exchange, [])
+
+        asset_balances = {asset["asset_id"].upper(): asset for asset in asset_balances}
+
+        # free buy_balance
+        buy_balance = asset_balances.get(buy_asset, {}).get("free", 0)
+        if not buy_balance:
+            return []
+        if remaining_buy_orders <= 0 and remaining_sell_orders <= 0:
+            return []
+
+        return self.get_all_orders(
+            index_prices,
+            buy_balance,
+            remaining_buy_orders,
+            remaining_sell_orders,
+            open_orders,
+        )
+
+    def get_all_orders(
+        self,
+        index_prices: dict[str, dict[str, float]],
+        buy_balance: float,
+        remaining_buy_orders: int,
+        remaining_sell_orders: int,
+        open_orders: list[Order],
+    ) -> list[Order]:
+        """Get buy orders."""
+
+        lower_bound_percentage = 0.8  # lower bound is from the index price
+        upper_bound_percentage = 3.0  # upper bound is from the index price
+
+        orders = []
+        for market, data in index_prices.items():
+            index_price = data.get("index_price", 0)
+            if not index_price:
+                continue
+
+            if remaining_buy_orders:
+                # we create a range of orders starting from the index price
+                min_price = index_price * (lower_bound_percentage)
+                max_price = index_price * (1 - self.min_profit)
+                step = (max_price - min_price) / remaining_buy_orders
+
+                amount = buy_balance / remaining_buy_orders if remaining_buy_orders else 0
+                if not amount:
+                    continue
+
+                for i in range(1, remaining_buy_orders):
+                    price = min_price + (i * step)
+
+                    order_amount = amount / price
+
+                    buy_order = Order(
+                        price=price,
+                        exchange_id=self.target_orderbook_exchange,
+                        ledger_id=self.target_orderbook_exchange,
+                        symbol=market,
+                        side=OrderSide.BUY,
+                        status=OrderStatus.NEW,
+                        amount=order_amount,
+                        type=OrderType.LIMIT,
+                    )
+                    orders.append(buy_order)
+
+            if remaining_sell_orders:
+                # we create a range of orders starting from the index price
+                min_price = index_price * (1 + self.min_profit)
+                max_price = index_price * (upper_bound_percentage)
+                step = (max_price - min_price) / remaining_sell_orders
+
+                amount = buy_balance / remaining_sell_orders if remaining_sell_orders else 0
+
+                for i in range(1, remaining_sell_orders + 1):
+                    price = min_price + (i * step)
+                    order_amount = amount / price
+
+                    sell_order = Order(
+                        price=price,
+                        exchange_id=self.target_orderbook_exchange,
+                        ledger_id=self.target_orderbook_exchange,
+                        symbol=market,
+                        side=OrderSide.SELL,
+                        status=OrderStatus.NEW,
+                        amount=order_amount,
+                        type=OrderType.LIMIT,
+                    )
+                    orders.append(sell_order)
+        # we return the orders
+        # we filter the orders to only include the ones that are not already open
+        orders = [o for o in orders if o not in open_orders]
+
+        orders.sort(key=lambda o: o.price)
+        return orders
 
     def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""

@@ -3,7 +3,7 @@
     "base": {
         "cowswap": [
             {
-                "symbol": "weETH/USDC",
+                "symbol": "LBTC/USDC",
                 "timestamp": 1743529092,
                 "datetime": "2025-04-01T17:38:12.034628+00:00",
                 "ask": 2037.602551307014,
@@ -24,14 +24,14 @@
                 "average": null,
                 "base_volume": null,
                 "quote_volume": null,
-                "info": null
+                "info": "{\"index_price\": 0.027}"
             }
         ]
     },
     "derive": {
         "derive": [
             {
-                "symbol": "WEETH-USDC",
+                "symbol": "LBTC-USDC",
                 "timestamp": 1743529092000,
                 "datetime": "2025-04-01T18:38:12+01:00",
                 "ask": 2400.0,
@@ -52,7 +52,7 @@
                 "average": null,
                 "base_volume": null,
                 "quote_volume": null,
-                "info": null
+                "info": "{\"index_price\": 0.027}"
             }
         ]
     }
