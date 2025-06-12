@@ -1,5 +1,6 @@
 """An interface for the Derive API."""
 
+import json
 import asyncio
 import datetime
 import traceback
@@ -142,6 +143,9 @@ def to_ticker(api_result):
         change=float(api_result["stats"]["usd_change"]),
         percentage=float(api_result["stats"]["percent_change"]),
         baseVolume=float(api_result["stats"]["contract_volume"]),
+        info=json.dumps(
+            {"index_price": float(api_result["index_price"]), "mark_price": float(api_result["mark_price"])}
+        ),
     )
 
 
