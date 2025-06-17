@@ -47,6 +47,7 @@ class PostTradeRound(BaseBehaviour):
             explorers = {
                 "mode": "https://modescan.io/tx/",
                 "gnosis": "https://gnosisscan.io/tx/",
+                "arbitrum": "https://arbiscan.io/tx/",
                 "derive": "https://explorer.derive.xyz/tx/",
                 "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
                 "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
@@ -59,7 +60,7 @@ class PostTradeRound(BaseBehaviour):
         value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
         report_msg_table = dedent(f"""
         [Sell]({get_explorer_link(sell_order)}) {sell_order.symbol} on {sell_order.ledger_id}:{sell_order.exchange_id}
-        {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.amount * sell_order.price:5f}
+        {sell_order.amount}@{sell_order.price:5f}  total: {sell_order.filled * sell_order.price:5f}
         [Buy]({get_explorer_link(buy_order)}) {buy_order.symbol} on {buy_order.ledger_id}:{buy_order.exchange_id}
         {buy_order.amount}@{buy_order.price:5f}  total: {buy_order.amount * buy_order.price:5f}
         --------------------------

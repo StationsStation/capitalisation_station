@@ -22,6 +22,7 @@ import os
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, cast
+from dataclasses import dataclass
 
 from aea_ledger_ethereum import (
     HexBytes,
@@ -31,6 +32,68 @@ from aea_ledger_ethereum import (
     try_decorator,
 )
 from aea.skills.behaviours import State, FSMBehaviour, TickerBehaviour
+
+from packages.zarathustra.contracts.derolas_staking.contract import DerolasStaking
+
+
+#   const gameState = await readContract(_config, {
+#     address: DEPLOYED_CONTRACT_ADDRESS,
+#     abi: derolasAbi.abi,
+#     functionName: "getGameState",
+#     args: [userAddress],
+#   }) as [
+#     bigint, // epochLength
+#     bigint, // currentEpoch
+#     bigint, // epochEndBlock
+#     bigint, // minimalDonation
+#     bigint, // blocksRemaining
+#     bigint, // epochRewards
+#     bigint, // totalDonated
+#     bigint, // totalClaimed
+#     bigint, // incentiveBalance
+#     bigint, // userCurrentDonation
+#     bigint, // userCurrentShare
+#     bigint, // userClaimable
+#     boolean, // hasClaimed
+#     boolean // canPlayGame
+#   ];
+
+#   const [
+#     currentEpoch,
+#     epochLength,
+#     epochEndBlock,
+#     minimalDonation,
+#     blocksRemaining,
+#     epochRewards,
+#     totalDonated,
+#     totalClaimed,
+#     incentiveBalance,
+#     userCurrentDonation,
+#     userCurrentShare,
+#     userClaimable,
+#     hasClaimed,
+#     canPlayGame,
+#   ] = gameState;
+
+
+@dataclass
+class GameState:
+    """Game state dataclass."""
+
+    current_epoch: int
+    epoch_length: int
+    epoch_end_block: int
+    minimal_donation: int
+    blocks_remaining: int
+    epoch_rewards: int
+    total_donated: int
+    total_claimed: int
+    incentive_balance: int
+    user_current_donation: int
+    user_current_share: int
+    user_claimable: int
+    has_claimed: bool
+    can_play_game: bool
 
 
 SLEEP = 3
@@ -172,7 +235,7 @@ class BaseState(State, ABC):  # noqa: PLR0904
         return self.context.contract_api_dialogues
 
     @property
-    def derolas_staking_contract(self):
+    def derolas_staking_contract(self) -> DerolasStaking:
         """Derolas Staking contract."""
         return self.context.derolas_state.derolas_staking_contract
 
@@ -293,7 +356,12 @@ class AwaitTriggerRound(BaseState):
         """Perfom the act."""
 
         try:
-            if self.claimable > 0:
+            game_state = self.game_state
+            self.context.logger.info(f"{self.name}: game state: {game_state}")
+            if not game_state.blocks_remaining:
+                self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
+                self.context.logger.info(f"{self.name}: event {self._event}")
+            elif self.claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
@@ -304,12 +372,22 @@ class AwaitTriggerRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            self.context.logger.info(f"{self.name}: event {self._event}")
+            self.context.logger.debug(f"{self.name}: event {self._event}")
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
+
+    @property
+    def game_state(self) -> GameState:
+        """Get the game state."""
+        state = self.derolas_staking_contract.get_game_state(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+            user=self.crypto.address,
+        )
+        return GameState(*state.values())
 
     @property
     def claimable(self) -> int:
@@ -521,7 +599,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(tick_interval=5, **kwargs)
+        super().__init__(tick_interval=30, **kwargs)
         self.register_state(
             DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             AwaitTriggerRound(**kwargs),
@@ -674,6 +752,11 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
             event=DerolasautomatorabciappEvents.TX_TIMEOUT,
             destination=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
         )
+        self.register_transition(
+            source=DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
+            event=DerolasautomatorabciappEvents.EPOCH_FINISHED,
+            destination=DerolasautomatorabciappStates.CHECKEPOCHROUND.value,
+        )
 
     def setup(self) -> None:
         """Implement the setup."""
@@ -688,7 +771,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
         if self.current is None:
             self.context.logger.info("No state to act on.")
             self.terminate()
-        self.context.logger.info(f"Entering {self.current}")
+        self.context.logger.debug(f"Entering {self.current}")
         super().act()
 
     def terminate(self) -> None:

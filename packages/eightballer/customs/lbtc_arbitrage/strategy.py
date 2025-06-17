@@ -27,8 +27,8 @@ from packages.eightballer.protocols.orders.custom_types import Order, OrderSide,
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 
 
-BRIDGE_TRIGGER = 0.05
-BRIDGE_RATIO = 0.2
+BRIDGE_TRIGGER = 0.25
+BRIDGE_RATIO = 0.1
 
 
 @dataclass
@@ -277,11 +277,11 @@ class ArbitrageStrategy:
         for asset in [asset_a, asset_b]:
             if min_ratios[asset] < BRIDGE_TRIGGER:
                 # we need to bridge the asset
-                from_ledger, from_exchange, from_balance = asset_to_max_balance_exchange[asset]
+                from_ledger, from_exchange, _from_balance = asset_to_max_balance_exchange[asset]
                 to_ledger, to_exchange, _ = asset_to_min_balance_exchange[asset]
                 if from_ledger == to_ledger and from_exchange == to_exchange:
                     continue
-                amount_to_bridge = from_balance - (totals[asset] * BRIDGE_RATIO)
+                amount_to_bridge = totals[asset] * BRIDGE_RATIO
                 if amount_to_bridge <= 0:
                     continue
                 bridge_requests.append(
