@@ -90,6 +90,7 @@ class AssetBridgingInterface(BaseInterface):
                 amount=amount, asset_name=request.source_token, subaccount_id=client.subaccount_id
             )
             # then we withdraw to the receiver address.
+            await asyncio.sleep(60)  # wait for the deposit to be confirmed
             connection.logger.info(
                 f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain_id}."
             )
@@ -113,7 +114,9 @@ class AssetBridgingInterface(BaseInterface):
                 receiver=client.wallet,  # Derive contract wallet
             )
             # we move the funds from the funding account to the subaccount.
-            connection.logger.info("Transferring funds from funding account to subaccount.")
+            # we wait for 60 seconds for the deposit to be confirmed.
+            await asyncio.sleep(60)  # wait for the deposit to be confirmed
+            connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
 
             await self._execute_tx(
                 function=client.transfer_from_funding_to_subaccount,

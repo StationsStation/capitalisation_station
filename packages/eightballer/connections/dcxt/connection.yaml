@@ -23,7 +23,7 @@ fingerprint:
   dcxt/data/token_list.json: bafybeifjiiteo4quslwdk2psdmnka2fof3abmikfe6ycnliace65yfd2cy
   dcxt/data/tokens.py: bafybeicdymqwxtsj7q3r6yrcqs25llguvpuwfcm2t2cfbh5oz2zcp3ocs4
   dcxt/defi_exchange.py: bafybeid7yoku3wxtfd7s2qeoxqbuqrg3w37y4ehkgke7syovz4jewpbfy4
-  dcxt/derive.py: bafybeif42s5v73y5h6ojbcg4xlwe33dostua34qcximgbqgkylrzh3qnua
+  dcxt/derive.py: bafybeid5wuqwatismfnqcxkyrpv6x2lmkmwswewygatlv2qepngr554j3m
   dcxt/exceptions.py: bafybeiep6fswgvtn5cxn4y5u2b24fbuu6bszs6tdfn6rxzrh2aeae73lri
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
@@ -32,7 +32,7 @@ fingerprint:
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
   interfaces/approvals.py: bafybeidxlvrgbbajfkrplbfvla2sp2vafrnxssx24ga64ox4kgzbdswzlu
-  interfaces/asset_bridging.py: bafybeifzkixwf5b4ykw3vgygpxvzne5o5zf77mk7zqix7evpkb3cpgyifi
+  interfaces/asset_bridging.py: bafybeie5x46cakrhgbhg6o4o3quubob5yhzrzdpwpnyhd4bxuqvh534tfa
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y

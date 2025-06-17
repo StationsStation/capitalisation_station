@@ -75,20 +75,39 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
-        bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
-            portfolio=self.strategy.state.portfolio,
-            prices=self.strategy.state.prices,
-            **self.custom_config.kwargs["strategy_run_kwargs"],
-        )
-
-        if bridging_requests and not self.strategy.state.bridge_requests:
-            self.context.logger.info(f"Bridging requests found: {bridging_requests}")
-            self.strategy.state.bridge_requests = bridging_requests
-            self.strategy.send_notification_to_user(
-                title="Bridging requests found",
-                msg=f"Bridging requests found: {bridging_requests}",
+        if (
+            not self.strategy.state.bridge_requests
+            and not self.strategy.state.bridging_in_progress
+            and not self.strategy.state.waiting_balance_difference
+        ):
+            self.strategy.state.bridging_in_progress = True
+            bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
+                portfolio=self.strategy.state.portfolio,
+                prices=self.strategy.state.prices,
+                **self.custom_config.kwargs["strategy_run_kwargs"],
             )
-            self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
+            self.strategy.state.bridge_requests = bridging_requests
+            if bridging_requests:
+                self.context.logger.info(f"Bridging requests found: {bridging_requests}")
+                self.strategy.send_notification_to_user(
+                    title="Bridging requests found",
+                    msg=f"Bridging requests found: {bridging_requests}",
+                )
+                self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
+                return
+
+        if self.strategy.state.waiting_balance_difference:
+            self.context.logger.info(
+                f"Waiting for balance difference: {self.strategy.state.waiting_balance_difference}"
+            )
+            self.strategy.state.waiting_balance_difference = False
+            self.strategy.state.bridging_in_progress = False
+            self.strategy.state.bridge_requests = []
+            self.strategy.send_notification_to_user(
+                title="Bridging request completed",
+                msg="Bridging request completed: Please check the balances.",
+            )
+            return
 
         orders = self.strategy.trading_strategy.get_orders(
             portfolio=self.strategy.state.portfolio,

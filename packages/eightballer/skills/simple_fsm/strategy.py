@@ -100,6 +100,8 @@ class AgentState:
     last_transition_time: datetime.datetime = None
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
+    bridging_in_progress: bool = False
+    waiting_balance_difference: bool = False
 
     def write_to_file(self):
         """Write the state to files."""

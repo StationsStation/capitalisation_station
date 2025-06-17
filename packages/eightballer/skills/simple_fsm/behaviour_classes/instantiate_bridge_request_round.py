@@ -33,7 +33,8 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
     def act(self) -> None:
         """Perform the action of the state."""
 
-        for request in self.strategy.state.bridge_requests:
+        while self.strategy.state.bridge_requests:
+            request = self.strategy.state.bridge_requests.pop(0)
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_BRIDGE,
                 connection_id=DCXT_PUBLIC_ID,
