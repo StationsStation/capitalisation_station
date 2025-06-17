@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from derive_client.clients import AsyncClient
 
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
+    from packages.eightballer.connections.dcxt.interfaces.asset_bridging import AssetBridgingInterface
 
 
 # ruff: noqa: D101, D103
@@ -122,6 +123,9 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         exchanges = self.connection.protocol_interface.exchanges
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
         client: AsyncClient = exchange.client
+        interfaces = self.connection.protocol_interface.supported_protocols
+        bridging_interface: AssetBridgingInterface = interfaces[AssetBridgingMessage.protocol_id]
+        bridging_interface.sleep_time = 0.1
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(client, "env", Environment.PROD))
