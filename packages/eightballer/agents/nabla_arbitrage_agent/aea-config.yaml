@@ -4,12 +4,13 @@ version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
-fingerprint: {}
+fingerprint:
+  tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
 - eightballer/ccxt_wrapper:0.1.0:bafybeihpx3zqdwu5bz4mpoctyacd2jfug5ccj3yt2mwekzelesrzu7hgcm
-- eightballer/dcxt:0.1.0:bafybeifnwgtxcpziljjzi3splygl7lyjxfifbzpp7i5xezncwc2ref6dzi
+- eightballer/dcxt:0.1.0:bafybeibq6rwp54p3jlkabvv6d37bamfocuokysj7q2khelpa4bzvvcy3sm
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -20,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
-- dakavon/nabla_portal:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- dakavon/nabla_portal:0.1.0:bafybeic2mefayfsuzv7jqttkfqgjjm3xtham2gczeoyyvbozcjbw26qwmy
 - eightballer/spl_token:0.1.0:bafybeigqwt7iyurpz7k6elwfiwvdzsb34xzt55f6elt3k54ksfhbycblyu
 - valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
 - vybe/jupitar_swap:0.1.0:bafybeihcabcs6loyb3vjw7q62asn37iufac44onw4sjf6uvjojbyuqd25m
@@ -51,7 +52,7 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeidyx4vfvww43kmea54mspyr4o7nlurdyapdlp2vl6cj6gbgozncda
+- eightballer/simple_fsm:0.1.0:bafybeifmkcu2vtyftp6spqpbq7kueridsonorxwonhoggozrvb6geqsynm
 - eightballer/trading_state:0.1.0:bafybeidmzz6yz56coy7jm2ojnrsllhaiykswogblpwkwb5dezdcw7xc7se
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeidjvuanx7zkcyku6d3q57ib7o2gqeyisjbkpmmwqy6zobb7ayuzru
@@ -143,7 +144,7 @@ config:
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
-    ledger_id: gnosis 
+    ledger_id: gnosis
     rpc_url: ${GNOSIS_RPC:str:https://gnosis.drpc.org}
   - name: derive
     key_path: ethereum_private_key.txt
