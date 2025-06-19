@@ -13387,6 +13387,13 @@
         },
         {
             "chainId": 42161,
+            "address": "0x77b7787a09818502305C95d68A2571F090abb135",
+            "name": "Derive",
+            "symbol": "DRV",
+            "decimals": 18
+        },
+        {
+            "chainId": 42161,
             "address": "0xa684cd057951541187f288294a1e1C2646aA2d24",
             "name": "Vesta",
             "symbol": "VSTA",
