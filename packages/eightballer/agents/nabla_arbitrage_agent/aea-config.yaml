@@ -1,11 +1,10 @@
-agent_name: derive_arbitrage_agent
+agent_name: nabla_arbitrage_agent
 author: eightballer
 version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
-fingerprint:
-  tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
+fingerprint: {}
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
@@ -21,10 +20,13 @@ connections:
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- dakavon/nabla_portal:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
 - eightballer/spl_token:0.1.0:bafybeigqwt7iyurpz7k6elwfiwvdzsb34xzt55f6elt3k54ksfhbycblyu
 - valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
 - vybe/jupitar_swap:0.1.0:bafybeihcabcs6loyb3vjw7q62asn37iufac44onw4sjf6uvjojbyuqd25m
+- zarathustra/derolas_staking:0.1.0:bafybeiaq74gagaqz2wykko4qomqy6qbf4vrrseiqzqhcuxeoamnjcyzxs4
 protocols:
+- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
@@ -35,9 +37,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
 - eightballer/spot_asset:0.1.0:bafybeiawis7yf4yvno4vz6yxpommordi7vqesisn4rcloiq6c4ro25wtdq
-- zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
 - eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
-- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
 - valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
@@ -47,6 +47,7 @@ protocols:
 - valory/ipfs:0.1.0:bafybeifi2nri7sprmkez4rqzwb4lnu6peoy3bax5k6asf6k5ms7kmjpmkq
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 - valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
+- zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
@@ -142,7 +143,7 @@ config:
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
-    ledger_id: gnosis
+    ledger_id: gnosis 
     rpc_url: ${GNOSIS_RPC:str:https://gnosis.drpc.org}
   - name: derive
     key_path: ethereum_private_key.txt
@@ -150,7 +151,7 @@ config:
     subaccount_id: ${DERIVE_SUBACCOUNT_ID:int:1234}
     ledger_id: derive
     environment: prod
-  - name: nabla_finance
+  - name: nabla
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
@@ -162,16 +163,16 @@ models:
   arbitrage_strategy:
     args:
       dexs:
-        derive:
-        - derive
+        derive: []
         cowswap: ${COW_CHAINS:list:["arbitrum"]}
         balancer: []
+        nabla: ${NABLA_CHAINS:list:["base"]}
       strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
       strategy_init_kwargs:
-        base_asset: ${BASE_ASSET:str:OLAS}
+        base_asset: ${BASE_ASSET:str:WETH}
         quote_asset: ${QUOTE_ASSET:str:USDC}
-        order_size: ${ORDER_SIZE:float:100}
-        min_profit: ${MIN_PROFIT:float:0.01}
+        order_size: ${ORDER_SIZE:float:0.1}
+        min_profit: ${MIN_PROFIT:float:0.001}
         max_open_orders: ${MAX_OPEN_ORDERS:int:100}
       cooldown_period: ${COOLDOWN_PERIOD:int:30}
       cexs: ${list:[]}

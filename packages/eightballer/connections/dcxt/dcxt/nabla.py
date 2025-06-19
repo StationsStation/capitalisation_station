@@ -1,20 +1,51 @@
 """Nabla Finance client for swapping tokens on the Nabla Finance DEX."""
 
+from dataclasses import field
+
 import click
 import requests
 from aea_ledger_ethereum import EthereumApi
+from pydantic.dataclasses import dataclass
+
+# from packages.dakavon.contracts.nabla_portal import PUBLIC_ID as NABLA_PORTAL_PUBLIC_ID
+from packages.eightballer.connections.dcxt.utils import load_contract
+from aea.configurations.base import PublicId
 
 # Add the base directory to the Python path (if needed)
 # root_dir = Path(__file__) resolve() parents[5]
 # sys path append(base_dir)
-from packages.dakavon.contracts.nabla_portal import PUBLIC_ID as NABLA_PORTAL_PUBLIC_ID
-from packages.eightballer.connections.dcxt.utils import load_contract
+from packages.eightballer.protocols.orders.custom_types import (
+    Order,
+)
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
-from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
+from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
+    BaseErc20Exchange,
+)
+
+NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
 
 
-BASE_PORTAL_ADDRESS = "0xd24d145f5E351de52934A7E1f8cF55b907E67fFF"
-BASE_ROUTER_ADDRESS = "0x791Fee7b66ABeF59630943194aF17B029c6F487B"
+@dataclass
+class Price:
+    price: int
+    publish_time: int
+
+
+@dataclass
+class ParsedPrice:
+    id: str
+    metadata: dict
+    price: Price
+    address: str = field(init=False)
+    symbol: str = field(init=False)
+    chain: SupportedLedgers = SupportedLedgers.BASE
+
+    def __post_init__(self):
+        self.address = PRICE_FEED_ID_TO_ASSET_ADDRESS[self.id]
+        self.symbol = {
+            k for k, v in ASSET_REGISTRY[self.chain].items() if v == self.address
+        }.pop()
+
 
 ASSET_REGISTRY = {
     SupportedLedgers.BASE: {
@@ -29,14 +60,32 @@ ASSET_ADDRESS_TO_PRICE_FEED_ID = {
     "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf": "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
 }
 PRICE_FEED_ID_TO_ASSET_ADDRESS = {
-    "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x4200000000000000000000000000000000000006",
+    "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x4200000000000000000000000000000000000006",  # WETH
     "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+    # "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a": "",
+    # "3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5": "",  # ARB token
 }
 NABLA_PRICE_API_URL = "https://antenna.nabla.fi/v1/updates/price/latest"
+
+PORTAL_ADDRESSES = {
+    SupportedLedgers.BASE: "0xd24d145f5E351de52934A7E1f8cF55b907E67fFF",
+    SupportedLedgers.ARBITRUM: "0xcB94Eee869a2041F3B44da423F78134aFb6b676B",
+}
+
+BASE_ROUTER_ADDRESS = "0x791Fee7b66ABeF59630943194aF17B029c6F487B"
+ROUTER_ADDRESSES = {
+    SupportedLedgers.BASE: "0x791Fee7b66ABeF59630943194aF17B029c6F487B",
+}
 
 
 class NablaFinanceClient(BaseErc20Exchange):
     """Class for interacting with the Nabla Finance API."""
+
+    exchange_id = "nabla"
+
+    @property
+    def spender_address(self):
+        return PORTAL_ADDRESSES[self.supported_ledger]
 
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         super().__init__(
@@ -47,6 +96,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             logger=logger,
             **kwargs,
         )
+        self.supported_ledger = SupportedLedgers(ledger_id)
 
     async def close(self):
         """Close the client."""
@@ -74,6 +124,33 @@ class NablaFinanceClient(BaseErc20Exchange):
             raise ValueError(msg)
 
         params = params
+
+    def parse_order(self, order, *args, **kwargs) -> Order:
+        """Parse the order."""
+        return order
+
+    async def fetch_positions(self, **kwargs) -> list:
+        """Fetch positions."""
+        return []
+
+    def fetch_tickers(self, *args, **kwargs):
+        """Fetch all tickers."""
+        # NOTE: these are just price feeds now, not tickers as per protocol definition
+
+        response = requests.get(NABLA_PRICE_API_URL, timeout=10)
+        parsed = response.json()["parsed"]
+
+        return [
+            ParsedPrice(**data)
+            for data in parsed
+            if data["id"] in PRICE_FEED_ID_TO_ASSET_ADDRESS
+        ]
+
+    async def create_order(self, *args, retries=0, **kwargs):
+        """Create an order."""
+
+    async def fetch_open_orders(self, **kwargs):
+        """Fetch open orders."""
 
 
 ##################################
@@ -130,7 +207,10 @@ def fetch_price_data(asset_addresses) -> dict:
         }
 
     """
-    params = [("ids[]", get_price_feed_id_by_asset_address(asset_address)) for asset_address in asset_addresses]
+    params = [
+        ("ids[]", get_price_feed_id_by_asset_address(asset_address))
+        for asset_address in asset_addresses
+    ]
     response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
 
     if response.status_code != 200:
@@ -192,11 +272,11 @@ def get_swap_quote(
 
     api = EthereumApi(address="https://base.drpc.org", chain_id=str(8453))
 
-    nabla_portal_contract = load_contract(NABLA_PORTAL_PUBLIC_ID)
+    nabla_portal_contract = load_contract(PublicId.from_str(NABLA_PORTAL_PUBLIC_ID))
 
     swap_amount_out = nabla_portal_contract.quote_swap_exact_tokens_for_tokens(
         ledger_api=api,
-        contract_address=BASE_PORTAL_ADDRESS,
+        contract_address=self.spender_address,
         amount_in=amount,
         token_path=[from_token_address, to_token_address],
         router_path=[BASE_ROUTER_ADDRESS],
@@ -254,7 +334,7 @@ def main(from_token, to_token, chain):
     # ""  }
     #########################################
     price_data = fetch_price_data(asset_addresses)
-    # "print(f"\nPrice data: {price_data}")
+    token_prices = price_data["prices"]
 
     #########################################
     # Step 2: Receive a swap quote
@@ -263,13 +343,26 @@ def main(from_token, to_token, chain):
         from_token_address=from_token_address,
         to_token_address=to_token_address,
         amount=int(1e18),  # Example amount in smallest unit (e.g., 1 WETH = 1e18 wei)
-        token_prices=price_data["prices"],
+        token_prices=token_prices,
     )
-    # "print(f"\nSwap quote: {swap_quote} ${to_token_symbol}")
+
+    # # Price data is USDC denominated (8 decimals precision)
+    # chain_id = LEDGER_TO_CHAIN_ID[chain]
+    # token_data = read_token_list(chain_id)
+    # from_token_data = token_data[from_token_address]
+    # to_token_data = token_data[to_token_address]
+    # from_token_decimals = from_token_data["decimals"]
+    # to_token_decimals = to_token_data["decimals"]
+
+    # token_prices[from_token_address] * from_token_decimals
+    # token_prices[to_token_address] * to_token_decimals
+
+    breakpoint()
 
     #########################################
     # Step 3: Execute the swap (not implemented yet)
     #########################################
+    # contract
 
     #########################################
     # END

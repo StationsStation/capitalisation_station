@@ -1,6 +1,7 @@
 """Token data."""
 
 import json
+import functools
 from enum import Enum
 from pathlib import Path
 
@@ -163,6 +164,7 @@ TOKEN_LIST_PATH = Path(__file__).parent / "token_list.json"
 DEFAULT_ENCODING = "utf-8"
 
 
+@functools.lru_cache
 def read_token_list(chain_id: int):
     """Read the token list."""
     with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:

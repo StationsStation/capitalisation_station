@@ -21,11 +21,11 @@ fingerprint:
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/token_list.json: bafybeifjiiteo4quslwdk2psdmnka2fof3abmikfe6ycnliace65yfd2cy
-  dcxt/data/tokens.py: bafybeih4byljabwntxu7itp5bjv2lnarqgqt7yfyqiml7f5hxjawftpifi
+  dcxt/data/tokens.py: bafybeih4enpjresj522nibzovov7twbkzuw6dyxqtngq7bvgpvsec6kiu4
   dcxt/defi_exchange.py: bafybeid7yoku3wxtfd7s2qeoxqbuqrg3w37y4ehkgke7syovz4jewpbfy4
   dcxt/derive.py: bafybeid5wuqwatismfnqcxkyrpv6x2lmkmwswewygatlv2qepngr554j3m
   dcxt/exceptions.py: bafybeiep6fswgvtn5cxn4y5u2b24fbuu6bszs6tdfn6rxzrh2aeae73lri
-  dcxt/nabla_finance.py: bafybeih44gwpg2he2gqq3bg55ooteicishijsb65dr4uswmwapekhetmpm
+  dcxt/nabla_finance.py: bafybeifmhyuytxkiiqu7tkciedkht5rrgsfrwt72sbaxefc5mzy3j5fug4
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
