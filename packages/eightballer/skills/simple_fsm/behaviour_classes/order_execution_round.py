@@ -45,7 +45,7 @@ FAILED_ORDERS_FILE = "failed_orders.json"
 ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
-ORDER_PLACEMENT_TIMEOUT_SECONDS = 10
+ORDER_PLACEMENT_TIMEOUT_SECONDS = 30
 
 
 class UnexpectedStateException(Exception):

@@ -67,3 +67,6 @@ vybe/contracts/jupitar_swap
 eightballer/skills/metrics
 packages/eightballer/skills/reset_pause_abci/
 packages/eightballer/skills/registration_abci/
+/market_maker
+/tim
+/derived_cow

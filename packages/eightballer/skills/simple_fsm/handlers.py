@@ -26,6 +26,7 @@ from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.markets.message import MarketsMessage
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.balances.message import BalancesMessage
+from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
 from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.zarathustra.protocols.asset_bridging.message import (
@@ -165,4 +166,11 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
     def handle(self, message):
         """We log the message and pass it to the dialogue manager."""
         self.context.logger.info(f"Handling message: {message}")
+        self.strategy.state.bridging_in_progress = False
+        self.strategy.state.waiting_balance_difference = True
         return super().handle(message)
+
+    @property
+    def strategy(self) -> ArbitrageStrategy:
+        """Return the strategy."""
+        return self.context.arbitrage_strategy

@@ -9,7 +9,7 @@ from aea.configurations.base import PublicId
 from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID
 
 
-ADDRESS_BASE = "0x27B863F382791e0E4950497B4bbda5b69CbB10b9"
+ADDRESS_BASE = "0x35CAf83118d58504C179b50D538a095ac08Ebc8f"
 
 
 class DerolasStaking(Contract):
@@ -196,20 +196,20 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.getGameState(user=user).call()
         return {
-            "_currentEpoch": result,
-            "_epochLength": result,
-            "_epochEndBlock": result,
-            "_minimumDonation": result,
-            "_blocksRemaining": result,
-            "_epochRewards": result,
-            "_totalDonated": result,
-            "_totalClaimed": result,
-            "_incentiveBalance": result,
-            "_userCurrentDonation": result,
-            "_userCurrentShare": result,
-            "_userClaimable": result,
-            "_hasClaimed": result,
-            "_canPlayGame": result,
+            "_currentEpoch": result[0],
+            "_epochLength": result[1],
+            "_epochEndBlock": result[2],
+            "_minimumDonation": result[3],
+            "_blocksRemaining": result[4],
+            "_epochRewards": result[5],
+            "_totalDonated": result[6],
+            "_totalClaimed": result[7],
+            "_incentiveBalance": result[8],
+            "_userCurrentDonation": result[9],
+            "_userCurrentShare": result[10],
+            "_userClaimable": result[11],
+            "_hasClaimed": result[12],
+            "_canPlayGame": result[13],
         }
 
     @classmethod

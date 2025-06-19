@@ -56,7 +56,7 @@ class DerolasState(Model):
         name = DEROLAS_PUBLIC_ID.name
         contract = load_contract(ROOT / author / "contracts" / name)
         self.derolas_staking_contract = contract
-        self.derolas_contract_address = "0x27B863F382791e0E4950497B4bbda5b69CbB10b9"
+        self.derolas_contract_address = "0x35CAf83118d58504C179b50D538a095ac08Ebc8f"
         super().__init__(**kwargs)
 
     @property
