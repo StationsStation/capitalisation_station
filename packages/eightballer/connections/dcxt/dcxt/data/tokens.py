@@ -143,6 +143,7 @@ LEDGER_TO_TOKEN_LIST = {
         [
             "0x064f8b858c2a603e1b106a2039f5446d32dc81c1",  # olas
             "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",  # weETH
+            "0x77b7787a09818502305C95d68A2571F090abb135",  # DRV
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ARBITRUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ARBITRUM]]
