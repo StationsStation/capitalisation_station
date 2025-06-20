@@ -1,0 +1,17 @@
+name: nabla_router
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiajasro6g2m4llgqxs4aow3xzofgrb7chu7hfgo4krbpkfcjq7ixi
+  build/nabla_router.json: bafybeiguj5hs34qpjjlvbhyur3iiinwu4zxuivlbq34jngvnekx6wa5kwe
+  contract.py: bafybeibcw7hkymvtcnaldinuyjcxbe5yorjjcellcrgh6so62ysfw3qj2a
+fingerprint_ignore_patterns: []
+class_name: NablaRouter
+contract_interface_paths:
+  ethereum: build/nabla_router.json
+dependencies: {}
+contracts: []

@@ -32,13 +32,28 @@ from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
 from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
-from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovalsRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import CollectDataRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import NoOpportunityRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_round import ExecuteOrdersRound
+from packages.eightballer.skills.simple_fsm.behaviour_classes.base import (
+    BaseBehaviour,
+    BaseConnectionRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import (
+    SetApprovalsRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import (
+    PostTradeRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round import (
+    CollectDataRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import (
+    CollectTickerRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import (
+    NoOpportunityRound,
+)
+from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_round import (
+    ExecuteOrdersRound,
+)
 from packages.eightballer.skills.simple_fsm.behaviour_classes.instantiate_bridge_request_round import (
     InstantiateBridgeRequestRound,
 )
@@ -79,6 +94,7 @@ class IdentifyOpportunityRound(BaseBehaviour):
             not self.strategy.state.bridge_requests
             and not self.strategy.state.bridging_in_progress
             and not self.strategy.state.waiting_balance_difference
+            and not True
         ):
             self.strategy.state.bridging_in_progress = True
             bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
@@ -140,7 +156,11 @@ class IdentifyOpportunityRound(BaseBehaviour):
 
         def validate():
             """Validate the custom configuration."""
-            expected_keys = {"strategy_class", "strategy_init_kwargs", "strategy_run_kwargs"}
+            expected_keys = {
+                "strategy_class",
+                "strategy_init_kwargs",
+                "strategy_run_kwargs",
+            }
             missing_keys = expected_keys - set(self.custom_config.kwargs.keys())
             if missing_keys:
                 msg = (
@@ -261,30 +281,54 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         )
         self.register_state("collectdataround", CollectDataRound(**kwargs))
 
-        self.register_transition(source="setupround", event=ArbitrageabciappEvents.DONE, destination="collectdataround")
-
         self.register_transition(
-            source="setupround", event=ArbitrageabciappEvents.SET_APPROVALS, destination="setapprovals"
-        )
-        self.register_transition(
-            source="setapprovals", event=ArbitrageabciappEvents.DONE, destination="collectdataround"
-        )
-        self.register_transition(source="setapprovals", event=ArbitrageabciappEvents.TIMEOUT, destination="errorround")
-
-        self.register_transition(
-            source="collectdataround", event=ArbitrageabciappEvents.DONE, destination="collecttickerround"
+            source="setupround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="collectdataround",
         )
 
         self.register_transition(
-            source="collecttickerround", event=ArbitrageabciappEvents.DONE, destination="identifyopportunityround"
+            source="setupround",
+            event=ArbitrageabciappEvents.SET_APPROVALS,
+            destination="setapprovals",
         )
         self.register_transition(
-            source="collecttickerround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
+            source="setapprovals",
+            event=ArbitrageabciappEvents.DONE,
+            destination="collectdataround",
         )
         self.register_transition(
-            source="collectdataround", event=ArbitrageabciappEvents.TIMEOUT, destination="cooldownround"
+            source="setapprovals",
+            event=ArbitrageabciappEvents.TIMEOUT,
+            destination="errorround",
         )
-        self.register_transition(source="cooldownround", event=ArbitrageabciappEvents.DONE, destination="setupround")
+
+        self.register_transition(
+            source="collectdataround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="collecttickerround",
+        )
+
+        self.register_transition(
+            source="collecttickerround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="identifyopportunityround",
+        )
+        self.register_transition(
+            source="collecttickerround",
+            event=ArbitrageabciappEvents.TIMEOUT,
+            destination="cooldownround",
+        )
+        self.register_transition(
+            source="collectdataround",
+            event=ArbitrageabciappEvents.TIMEOUT,
+            destination="cooldownround",
+        )
+        self.register_transition(
+            source="cooldownround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="setupround",
+        )
         self.register_transition(
             source="identifyopportunityround",
             event=ArbitrageabciappEvents.OPPORTUNITY_FOUND,
@@ -302,21 +346,31 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             destination="cooldownround",
         )
         self.register_transition(
-            source="identifyopportunityround", event=ArbitrageabciappEvents.DONE, destination="noopportunityround"
+            source="identifyopportunityround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="noopportunityround",
         )
         self.register_transition(
-            source="executeordersround", event=ArbitrageabciappEvents.DONE, destination="posttraderound"
+            source="executeordersround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="posttraderound",
         )
         self.register_transition(
-            source="posttraderound", event=ArbitrageabciappEvents.DONE, destination="cooldownround"
+            source="posttraderound",
+            event=ArbitrageabciappEvents.DONE,
+            destination="cooldownround",
         )
         # register a transation from noopportunityround to setupround
         self.register_transition(
-            source="noopportunityround", event=ArbitrageabciappEvents.DONE, destination="cooldownround"
+            source="noopportunityround",
+            event=ArbitrageabciappEvents.DONE,
+            destination="cooldownround",
         )
         # register a transation from executeordersround to errorround
         self.register_transition(
-            source="executeordersround", event=ArbitrageabciappEvents.ENTRY_EXIT_ERROR, destination="setupround"
+            source="executeordersround",
+            event=ArbitrageabciappEvents.ENTRY_EXIT_ERROR,
+            destination="setupround",
         )
 
     def setup(self) -> None:
