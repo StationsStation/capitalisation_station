@@ -23,7 +23,12 @@ import operator
 from functools import reduce
 from dataclasses import dataclass
 
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import (
+    Order,
+    OrderSide,
+    OrderType,
+    OrderStatus,
+)
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 
 
@@ -102,6 +107,7 @@ class ArbitrageStrategy:
             intersections[ledger] = set(markets.keys())
         overlaps = reduce(lambda x, y: x.intersection(y), intersections.values())
         opportunities = self.get_opportunities(prices, overlaps, all_ledger_exchanges)
+
         self.unaffordable = []
         for opp in opportunities:
             if self.has_balance_for_opportunity(opp, portfolio, self.order_size):
@@ -119,7 +125,14 @@ class ArbitrageStrategy:
     def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""
         opportunities = []
-        best_bid, best_ask, best_ask_exchange, best_bid_exchange, best_ask_ledger, best_bid_ledger = [None] * 6
+        (
+            best_bid,
+            best_ask,
+            best_ask_exchange,
+            best_bid_exchange,
+            best_ask_ledger,
+            best_bid_ledger,
+        ) = [None] * 6
         for market in overlaps:
             # we calculate the best bids and asks
             for ledger, exchange in all_ledger_exchanges:
@@ -159,7 +172,7 @@ class ArbitrageStrategy:
         return not any(
             [
                 opportunity.best_ask_exchange == opportunity.best_bid_exchange,
-                opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+                # opportunity.best_ask_ledger == opportunity.best_bid_ledger,
             ]
         )
 
@@ -245,14 +258,30 @@ class ArbitrageStrategy:
         def _process_balance(ledger, exchange, balance):
             """Process a single balance."""
             if asset not in asset_to_max_balance_exchange:
-                asset_to_max_balance_exchange[asset] = (ledger, exchange, balance["free"])
+                asset_to_max_balance_exchange[asset] = (
+                    ledger,
+                    exchange,
+                    balance["free"],
+                )
             if balance["free"] > asset_to_max_balance_exchange[asset][2]:
-                asset_to_max_balance_exchange[asset] = (ledger, exchange, balance["free"])
+                asset_to_max_balance_exchange[asset] = (
+                    ledger,
+                    exchange,
+                    balance["free"],
+                )
 
             if asset not in asset_to_min_balance_exchange:
-                asset_to_min_balance_exchange[asset] = (ledger, exchange, balance["free"])
+                asset_to_min_balance_exchange[asset] = (
+                    ledger,
+                    exchange,
+                    balance["free"],
+                )
             if balance["free"] < asset_to_min_balance_exchange[asset][2]:
-                asset_to_min_balance_exchange[asset] = (ledger, exchange, balance["free"])
+                asset_to_min_balance_exchange[asset] = (
+                    ledger,
+                    exchange,
+                    balance["free"],
+                )
 
         for asset in [asset_a, asset_b]:
             for ledger, exchanges in portfolio.items():

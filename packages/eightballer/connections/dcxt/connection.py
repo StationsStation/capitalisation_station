@@ -14,7 +14,9 @@ from aea.configurations.base import PublicId
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.default.custom_types import ErrorCode
-from packages.eightballer.connections.dcxt.interfaces.interface import ConnectionProtocolInterface
+from packages.eightballer.connections.dcxt.interfaces.interface import (
+    ConnectionProtocolInterface,
+)
 
 
 if TYPE_CHECKING:
