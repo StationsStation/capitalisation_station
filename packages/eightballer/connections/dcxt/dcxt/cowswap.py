@@ -305,6 +305,9 @@ class CowSwapClient(BaseErc20Exchange):
         except UnexpectedResponseError as error:
             self.logger.exception(f"Failed to get quote: {error}")
             raise RpcError from error
+        except Exception as error:
+            self.logger.exception(f"Failed to get quote: {error}")
+            raise ExchangeNotAvailable("CoW Swap API is not available") from error
 
     def from_quote_to_rates(self, quote, asset_a, asset_b, is_buying=True):
         """Convert a quote to rates."""
