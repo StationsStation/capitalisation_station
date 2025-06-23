@@ -1,12 +1,9 @@
 """Nabla Finance client for swapping tokens on the Nabla Finance DEX."""
 
 import datetime
-from dataclasses import field
 
-import click
 import requests
 from web3.exceptions import TimeExhausted
-from pydantic.dataclasses import dataclass
 from aea.configurations.base import PublicId
 
 from packages.eightballer.connections.dcxt.utils import load_contract
@@ -14,7 +11,7 @@ from packages.eightballer.protocols.orders.custom_types import (
     Order,
     Orders,
 )
-from packages.eightballer.protocols.tickers.custom_types import Ticker
+from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
     BaseErc20Exchange,
@@ -23,32 +20,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
 )
 
 
-# from derive_client.utils.w3 import build_standard_transaction
-
-
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
-
-
-@dataclass
-class Price:
-    price: int
-    publish_time: int
-
-
-@dataclass
-class ParsedPrice:
-    id: str
-    metadata: dict
-    price: Price
-    address: str = field(init=False)
-    symbol: str = field(init=False)
-    chain: SupportedLedgers = SupportedLedgers.BASE
-
-    def __post_init__(self):
-        self.address = PRICE_FEED_ID_TO_ASSET_ADDRESS[self.id]
-        self.symbol = {
-            k for k, v in ASSET_REGISTRY[self.chain].items() if v == self.address
-        }.pop()
 
 
 ASSET_REGISTRY: dict[str, dict[str, str]] = {
@@ -79,8 +51,6 @@ PRICE_FEED_ID_TO_ASSET_ADDRESS: dict[str, str] = {
         "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x4200000000000000000000000000000000000006",  # WETH
         "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
         "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-        # "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a": "",
-        # "3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5": "",  # ARB token
     },
     SupportedLedgers.ARBITRUM: {
         "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH
@@ -108,10 +78,12 @@ class NablaFinanceClient(BaseErc20Exchange):
 
     @property
     def spender_address(self):
+        """Spender address."""
         return PORTAL_ADDRESSES[self.supported_ledger]
 
     @property
     def router_address(self):
+        """Router address."""
         return ROUTER_ADDRESSES[self.supported_ledger]
 
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
@@ -134,8 +106,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         asset_a: str,
         asset_b: str,
     ) -> tuple[float, float]:
-        """
-        Quote a swap both ways and return (ask_price, bid_price).
+        """Quote a swap both ways and return (ask_price, bid_price).
 
         ask_price = amount of B you get per 1 A (sell A → B)
         bid_price = amount of A you get per 1 B (sell B → A)
@@ -161,7 +132,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_b = out_b_units / 10**token_b.decimals
         bid_price = out_b / amount  # B per A
 
-        self.logger.debug(
+        self.logger.info(
             "Bid quote %s→%s: %.6f %s → %.6f %s; bid = %.6f %s/%s",
             token_a.symbol,
             token_b.symbol,
@@ -180,7 +151,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_a = out_a_units / 10**token_a.decimals
         ask_price = out_b / out_a  # B per A
 
-        self.logger.debug(
+        self.logger.info(
             "Ask quote %s→%s: %.6f %s → %.6f %s; ask = %.6f %s/%s",
             token_b.symbol,
             token_a.symbol,
@@ -202,9 +173,10 @@ class NablaFinanceClient(BaseErc20Exchange):
         asset_b: str | None = None,
         params: dict | None = None,
     ) -> Ticker:
-        """Fetches a ticker with live ask/bid from on‐chain quotes."""
+        """Fetches a ticker with live ask/bid from on-chain quotes."""
         if all([symbol is None, asset_a is None or asset_b is None]):
-            raise ValueError("Either symbol or asset_a and asset_b must be provided")
+            msg = "Either symbol or asset_a and asset_b must be provided"
+            raise ValueError(msg)
 
         if symbol is None:
             symbol = f"{asset_a}/{asset_b}"
@@ -214,14 +186,15 @@ class NablaFinanceClient(BaseErc20Exchange):
         asset_b = self.look_up_by_symbol(b_sym, ledger=self.supported_ledger)
 
         if not asset_a or not asset_b:
-            raise ValueError(
+            msg = (
                 f"Could not find token addresses for `{asset_a}` and `{asset_b}` "
                 f"with symbols {a_sym} and {b_sym}"
             )
+            raise ValueError(msg)
 
         # get live ask/bid for X units of asset A
         amount = params.get("amount", 0.5) if params is not None else 0.5
-        ask, bid = await self.get_ask_bid(
+        bid, ask = await self.get_ask_bid(
             amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
         )
 
@@ -248,26 +221,17 @@ class NablaFinanceClient(BaseErc20Exchange):
 
     def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
-        # NOTE: these are just price feeds now, not tickers as per protocol definition
 
-        response = requests.get(NABLA_PRICE_API_URL, timeout=10)
-        parsed = response.json()["parsed"]
-
-        return [
-            ParsedPrice(**data)
-            for data in parsed
-            if data["id"] in PRICE_FEED_ID_TO_ASSET_ADDRESS
-        ]
+        return Tickers(tickers=[])
 
     async def create_order(
         self,
-        *args,
+        *,
         asset_a: str,
         asset_b: str,
         side: str,
         amount: float,
         retries: int = 0,
-        **kwargs,
     ):
         """Create an order."""
         price_data = self.fetch_price_data([asset_a, asset_b])
@@ -297,7 +261,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             amount_out_min=output_token_amount,
             token_path=[from_token_address, to_token_address],
             router_path=[self.router_address],
-            deadline=int(datetime.datetime.now().timestamp() + 36_000),
+            deadline=int(datetime.datetime.now(tz=datetime.UTC).timestamp() + 36_000),
             to=self.account.address,
             price_update_data=[price_update_data],
         )
@@ -340,8 +304,6 @@ class NablaFinanceClient(BaseErc20Exchange):
 
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
-
-        # account = kwargs.get("params", {}).get("account", self.account.entity.address)
 
         parsed_orders = []
         return Orders(
@@ -426,7 +388,6 @@ class NablaFinanceClient(BaseErc20Exchange):
             raise ValueError(msg)
 
         response_json = response.json()
-        # "print(f"Response JSON: {response_json}")"
 
         # Parse prices
         prices = {}
@@ -434,17 +395,12 @@ class NablaFinanceClient(BaseErc20Exchange):
             feed_id = entry.get("id")
             asset_address = self.get_asset_address_by_price_feed_id(feed_id)
             price = entry.get("price", {}).get("price")
-            # "print(f"feed_id: {feed_id}")
-            # "print(f"price: {price}")
             if feed_id and price is not None:
                 prices[asset_address] = price
-
-        # "print(f"Price data: {prices}")
 
         # Parse price update data
         binary_chunks = response_json.get("binary", {}).get("data", [])
         price_update_data = "0x" + "".join(binary_chunks)
-        # "print(f"Price update data: {price_update_data}")
 
         return {"prices": prices, "priceUpdateData": price_update_data}
 
@@ -455,116 +411,3 @@ class NablaFinanceClient(BaseErc20Exchange):
             raise ValueError(msg)
 
         return PRICE_FEED_ID_TO_ASSET_ADDRESS[self.supported_ledger][price_feed_id]
-
-
-##################################
-# Helper functions
-##################################
-def get_token_address(symbol: str, chain: SupportedLedgers) -> str:
-    """Get the token address for a given symbol on a specific chain."""
-
-    if chain not in ASSET_REGISTRY:
-        msg = f"Chain {chain} is not supported."
-        raise ValueError(msg)
-
-    tokens = ASSET_REGISTRY[chain]
-    address = tokens.get(symbol.upper())
-
-    if not address:
-        msg = f"Token {symbol} not found on chain {chain}."
-        raise ValueError(msg)
-
-    return address
-
-
-def get_price_feed_id_by_asset_address(asset_address: str) -> str:
-    """Get the price feed id from the list."""
-
-    """
-    Spaceholder for
-        mapping(asset => mapping(token => priceFeedId))
-    """
-
-    return
-
-
-@click.command()
-@click.option(
-    "--from",
-    "from_token",
-    type=str,
-    required=True,
-    help="Token to swap from",
-    default="WETH",
-)
-@click.option(
-    "--to",
-    "to_token",
-    type=str,
-    required=True,
-    help="Token to swap to",
-    default="CBBTC",
-)
-@click.option(
-    "--chain",
-    "chain",
-    type=click.Choice([ledger.name for ledger in SupportedLedgers]),
-    default="BASE",
-    help="Chain to use for the swap",
-)
-def main(from_token, to_token, chain):
-    """CLI for swapping tokens on the Nabla Finance DEX."""
-
-    from_token_symbol = from_token.upper()
-    to_token_symbol = to_token.upper()
-    chain = SupportedLedgers.BASE
-
-    from_token_address = get_token_address(from_token_symbol, chain)
-    to_token_address = get_token_address(to_token_symbol, chain)
-    asset_addresses = [from_token_address, to_token_address]
-
-    #########################################
-    # Step 1: Get price feed update data
-    # ""  {
-    # ""      "prices": {
-    # ""         _ASSET_ADDRESS: PRICE
-    # ""      },
-    # ""       "priceUpdateData": "0x..."
-    # ""  }
-    #########################################
-    price_data = fetch_price_data(asset_addresses)
-    token_prices = price_data["prices"]
-
-    #########################################
-    # Step 2: Receive a swap quote
-    #########################################
-    get_swap_quote(
-        from_token_address=from_token_address,
-        to_token_address=to_token_address,
-        amount=int(1e18),  # Example amount in smallest unit (e.g., 1 WETH = 1e18 wei)
-        token_prices=token_prices,
-    )
-
-    # # Price data is USDC denominated (8 decimals precision)
-    # chain_id = LEDGER_TO_CHAIN_ID[chain]
-    # token_data = read_token_list(chain_id)
-    # from_token_data = token_data[from_token_address]
-    # to_token_data = token_data[to_token_address]
-    # from_token_decimals = from_token_data["decimals"]
-    # to_token_decimals = to_token_data["decimals"]
-
-    # token_prices[from_token_address] * from_token_decimals
-    # token_prices[to_token_address] * to_token_decimals
-
-    #########################################
-    # Step 3: Execute the swap (not implemented yet)
-    #########################################
-    # contract
-
-    #########################################
-    # END
-    #########################################
-
-
-if __name__ == "__main__":
-    main()
