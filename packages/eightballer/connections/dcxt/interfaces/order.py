@@ -141,6 +141,7 @@ class OrderInterface(BaseInterface):
                 price=order.price,
                 type=order.type.name.lower(),
                 side=order.side.name.lower(),
+                immediate_or_cancel=order.immediate_or_cancel,
                 data=json.loads(order.info) if order.info is not None else {},
                 **kwargs,
             )

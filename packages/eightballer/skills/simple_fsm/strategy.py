@@ -94,10 +94,10 @@ class AgentState:
     new_orders: list[Order]
     failed_orders: list[Order]
     submitted_orders: list[Order]
-    unaffordable_opportunity: list[ArbitrageOpportunity]
     current_round: str = None
     current_period: int = 0
     last_transition_time: datetime.datetime = None
+    unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
     bridging_in_progress: bool = False

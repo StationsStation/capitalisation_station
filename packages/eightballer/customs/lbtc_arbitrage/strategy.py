@@ -21,7 +21,7 @@
 
 import operator
 from functools import reduce
-from dataclasses import dataclass
+from dataclasses import field, dataclass
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
@@ -59,7 +59,7 @@ class ArbitrageStrategy:
     min_profit: float
     order_size: float
     max_open_orders: int
-    unaffordable: list[ArbitrageOpportunity] = None
+    unaffordable: list[ArbitrageOpportunity] = field(default_factory=list)
 
     def get_orders(
         self,
@@ -213,6 +213,7 @@ class ArbitrageStrategy:
             type=OrderType.LIMIT,
             asset_a=portfolio_a[asset_a]["contract_address"] if opportunity.best_ask_exchange != "derive" else None,
             asset_b=portfolio_a[asset_b]["contract_address"] if opportunity.best_ask_exchange != "derive" else None,
+            immediate_or_cancel=opportunity.best_ask_exchange == "derive",
         )
         sell_order = Order(
             price=sell_prices[opportunity.market]["bid"],
@@ -225,6 +226,7 @@ class ArbitrageStrategy:
             type=OrderType.LIMIT,
             asset_a=portfolio_b[asset_a]["contract_address"] if opportunity.best_bid_exchange != "derive" else None,
             asset_b=portfolio_b[asset_b]["contract_address"] if opportunity.best_bid_exchange != "derive" else None,
+            immediate_or_cancel=opportunity.best_bid_exchange == "derive",
         )
         # we set the dervive order to be the first order
         if sell_order.exchange_id == "derive":

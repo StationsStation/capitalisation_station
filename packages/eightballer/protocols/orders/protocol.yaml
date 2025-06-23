@@ -7,23 +7,20 @@ description: A protocol for representing orders.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeie6s77prboqdcrnqgqz7ubi44ptckesshl6zjxgda7cnmgitdm2ym
-  __init__.py: bafybeibsmwmzcqz7xu2xtbgwv7o5q7ikeft5msijl47tvel3fhbi6ajjvy
-  custom_types.py: bafybeid2257jb3mf6t5esw22fq5qfhrkpvzhkqs7takxpc7dix7iozw4ei
-  dialogues.py: bafybeih3w75zedy653osv7yqqy3ywjg64v4bwyw256wacwdy66k5zp3t7e
+  README.md: bafybeialwj2cgsu7kblnwxqjzdat6rbif67lw7vvv7nbvtqfhk5exylscu
+  __init__.py: bafybeib7lrdpkoqc2xibeo7opcbmxfimwlajuoo2nea5uo5dfsfms4fzfm
+  custom_types.py: bafybeic6ycsy26vddmhx7gvcpkth72azm5rr5hycdv6y5vfdf75w3lnkt4
+  dialogues.py: bafybeib6fj67gukcbzz52gnccbs3i4msioklpetfxr3cice4p66migzkka
   message.py: bafybeicqd3eyxt6wehsq5v3q3dyirmeq72ml3vfdsk3rhf5j4js7upjplu
-  orders.proto: bafybeibhrsbinibdzvirjz6csqkfeukszjtso5bps4pzcuxgntubwfzkd4
-  orders_pb2.py: bafybeidjz2tq4c7v6awcv2a34z7huuuj4ckm6hrkm3gwpy6qgyx2ueuady
-  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  orders.proto: bafybeiezb3ltgls2pilnlxpah3dsbnsmr3qr7n4xiepte2faqz6jgdrkxu
+  orders_pb2.py: bafybeigwndpdm2atchcq6n3cxhp62evgpqlfyfad45t7trzthds2sqpmoy
+  protocol_spec.yaml: bafybeiafdmlmtqhrz5tkaohvdsftrsizkveb6h3qymdw5wvktccqke2lya
   serialization.py: bafybeifgv73fxg4d2efivp7jg4hsmmwtjrrwqr2hmxhwdgfcelxzrrcacm
-  tests/__init__.py: bafybeifvvqocqpktr3x6vjisd7hiee7ojl7hou27jmfvp36dxhqdakcxjm
-  tests/performatives.py: bafybeia5o5mjhuzkhlerhvem33v2chaw4tkhyerrpeuqyvnhierw75s5g4
-  tests/primitive_strategies.py: bafybeiart4dpjxiv25xbvfmitri5rvckiaenso7x2tjnknz5curq7afvje
-  tests/test_custom_types.py: bafybeiffdczzihu6dzhmzzb3farot7vufpm5c3favamumke5jyzndzmz34
-  tests/test_orders_dialogues.py: bafybeifksregkjynvmhnewh3s3bfa3zdx4qihcqtz4vqz3tqrk4l4gyb64
-  tests/test_orders_messages.py: bafybeiaggj64mergeoqpfzf463yd5itfoyqpjvbdc3xnq7akvfmqyql6li
+  tests/__init__.py: bafybeibo3lsvh4oyfy3l73qy3g2i4zto34vqw66iybnmzohag5domsx7am
+  tests/dummy_data.yaml: bafybeid6f2r4sqxg6h6xajjxqw2fi43z7nezfoht3l4cuqrlycmxtqq2ui
+  tests/test_orders_dialogues.py: bafybeie4lfumlmm4lgo3ptkgce3yxflhx46ninipdzgj35nizuszjbpax4
+  tests/test_orders_messages.py: bafybeiehaqbl3dqk76xjvxho5j3cpx4it7mcra7snxbmmrzm5e77ok3ebi
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
   pydantic: {}
-  hypothesis: {}

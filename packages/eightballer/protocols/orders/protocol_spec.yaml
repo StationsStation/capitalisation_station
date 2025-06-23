@@ -1,12 +1,3 @@
-# Orders Protocol
-
-## Description
-
-...
-
-## Specification
-
-```yaml
 name: orders
 author: eightballer
 version: 0.1.0
@@ -148,5 +139,3 @@ roles: { agent }
 end_states: [ error]
 keep_terminal_state_dialogues: false
 ...
-
-```

@@ -20,7 +20,7 @@
 """This package contains a simple arbitrage strategy."""
 
 import json
-from dataclasses import dataclass
+from dataclasses import field, dataclass
 
 from more_itertools import partition
 
@@ -60,7 +60,7 @@ class ArbitrageStrategy:
     min_profit: float
     order_size: float
     max_open_orders: int
-    unaffordable: list[ArbitrageOpportunity] = None
+    unaffordable: list[ArbitrageOpportunity] = field(default_factory=list)
 
     target_orderbook_exchange: str = "derive"
 
@@ -107,8 +107,8 @@ class ArbitrageStrategy:
             for market in prices.get(self.target_orderbook_exchange, {}).get(self.target_orderbook_exchange, [])
         }
 
-        num_buy_orders = 10
-        num_sell_orders = 10
+        num_buy_orders = 5
+        num_sell_orders = 5
 
         remaining_buy_orders = num_buy_orders - len(buy_orders)
         remaining_sell_orders = num_sell_orders - len(sell_orders)
@@ -148,7 +148,7 @@ class ArbitrageStrategy:
         """Get buy orders."""
 
         lower_bound_percentage = 0.8  # lower bound is from the index price
-        upper_bound_percentage = 3.0  # upper bound is from the index price
+        upper_bound_percentage = 2.0  # upper bound is from the index price
 
         orders = []
         for market, data in index_prices.items():
@@ -180,6 +180,7 @@ class ArbitrageStrategy:
                         status=OrderStatus.NEW,
                         amount=order_amount,
                         type=OrderType.LIMIT,
+                        immediate_or_cancel=False,
                     )
                     orders.append(buy_order)
 
@@ -204,6 +205,7 @@ class ArbitrageStrategy:
                         status=OrderStatus.NEW,
                         amount=order_amount,
                         type=OrderType.LIMIT,
+                        immediate_or_cancel=False,
                     )
                     orders.append(sell_order)
         # we return the orders
