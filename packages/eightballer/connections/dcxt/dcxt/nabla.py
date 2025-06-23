@@ -21,6 +21,8 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
     signed_tx_to_dict,
     try_send_signed_transaction,
 )
+
+
 # from derive_client.utils.w3 import build_standard_transaction
 
 
@@ -126,48 +128,114 @@ class NablaFinanceClient(BaseErc20Exchange):
     async def close(self):
         """Close the client."""
 
+    async def get_ask_bid(
+        self,
+        amount: float,
+        asset_a: str,
+        asset_b: str,
+    ) -> tuple[float, float]:
+        """
+        Quote a swap both ways and return (ask_price, bid_price).
+
+        ask_price = amount of B you get per 1 A (sell A → B)
+        bid_price = amount of A you get per 1 B (sell B → A)
+        """
+        # fetch price data once
+        price_data = self.fetch_price_data([asset_a, asset_b])
+        token_a = self.get_token(asset_a)
+        token_b = self.get_token(asset_b)
+        token_prices = price_data["prices"]
+
+        # helper to call get_swap_quote
+        async def quote(from_addr: str, to_addr: str, amt_units: int) -> int:
+            return await self.get_swap_quote(
+                from_token_address=from_addr,
+                to_token_address=to_addr,
+                amount=amt_units,
+                token_prices=token_prices,
+            )
+
+        # 1) quote(A → B) is the bid price (B per A)
+        units_a = int(amount * 10**token_a.decimals)
+        out_b_units = await quote(asset_a, asset_b, units_a)
+        out_b = out_b_units / 10**token_b.decimals
+        bid_price = out_b / amount  # B per A
+
+        self.logger.debug(
+            "Bid quote %s→%s: %.6f %s → %.6f %s; bid = %.6f %s/%s",
+            token_a.symbol,
+            token_b.symbol,
+            amount,
+            token_a.symbol,
+            out_b,
+            token_b.symbol,
+            bid_price,
+            token_b.symbol,
+            token_a.symbol,
+        )
+
+        # 2) quote(B → A) inverted is the ask price (B per A)
+        units_b = int(out_b * 10**token_b.decimals)
+        out_a_units = await quote(asset_b, asset_a, units_b)
+        out_a = out_a_units / 10**token_a.decimals
+        ask_price = out_b / out_a  # B per A
+
+        self.logger.debug(
+            "Ask quote %s→%s: %.6f %s → %.6f %s; ask = %.6f %s/%s",
+            token_b.symbol,
+            token_a.symbol,
+            out_b,
+            token_b.symbol,
+            out_a,
+            token_a.symbol,
+            ask_price,
+            token_b.symbol,
+            token_a.symbol,
+        )
+
+        return bid_price, ask_price
+
     async def fetch_ticker(
         self,
         symbol: str | None = None,
         asset_a: str | None = None,
         asset_b: str | None = None,
         params: dict | None = None,
-    ):
-        """Fetches a ticker."""
-
+    ) -> Ticker:
+        """Fetches a ticker with live ask/bid from on‐chain quotes."""
         if all([symbol is None, asset_a is None or asset_b is None]):
-            msg = "Either symbol or asset_a and asset_b must be provided"
-            raise ValueError(msg)
+            raise ValueError("Either symbol or asset_a and asset_b must be provided")
+
         if symbol is None:
             symbol = f"{asset_a}/{asset_b}"
-        if symbol:
-            asset_a_symbol, asset_b_symbol = symbol.split("/")
-            # we need to look up the token addresses for the assets.
-            asset_a = self.look_up_by_symbol(
-                asset_a_symbol, ledger=self.supported_ledger
-            )
-            asset_b = self.look_up_by_symbol(
-                asset_b_symbol, ledger=self.supported_ledger
-            )
-        if not asset_a or not asset_b:
-            msg = f"Could not find token addresses for `{asset_a}` and `{asset_b}`"
-            msg += f" with symbols {asset_a_symbol} and {asset_b_symbol}"
-            raise ValueError(msg)
 
-        params = params
-        ask_price = 10.0
-        bid_price = 10.0
-        timestamp = datetime.datetime.now(tz=datetime.UTC)
+        a_sym, b_sym = symbol.split("/")
+        asset_a = self.look_up_by_symbol(a_sym, ledger=self.supported_ledger)
+        asset_b = self.look_up_by_symbol(b_sym, ledger=self.supported_ledger)
+
+        if not asset_a or not asset_b:
+            raise ValueError(
+                f"Could not find token addresses for `{asset_a}` and `{asset_b}` "
+                f"with symbols {a_sym} and {b_sym}"
+            )
+
+        # get live ask/bid for X units of asset A
+        amount = params.get("amount", 0.5) if params is not None else 0.5
+        ask, bid = await self.get_ask_bid(
+            amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
+        )
+
+        ts = datetime.datetime.now(tz=datetime.UTC)
         return Ticker(
             symbol=symbol,
             asset_a=asset_a.address,
             asset_b=asset_b.address,
-            high=ask_price,
-            low=bid_price,
-            ask=ask_price,
-            bid=bid_price,
-            timestamp=int(timestamp.timestamp()),
-            datetime=timestamp.isoformat(),
+            high=ask,
+            low=bid,
+            ask=ask,
+            bid=bid,
+            timestamp=int(ts.timestamp()),
+            datetime=ts.isoformat(),
         )
 
     def parse_order(self, order, *args, **kwargs) -> Order:
