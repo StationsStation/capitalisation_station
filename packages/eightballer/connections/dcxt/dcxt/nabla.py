@@ -1,8 +1,11 @@
 """Nabla Finance client for swapping tokens on the Nabla Finance DEX."""
 
+import json
 import datetime
+from pathlib import Path
 
 import requests
+from pydantic import BaseModel
 from web3.exceptions import TimeExhausted
 from aea.configurations.base import PublicId
 
@@ -20,19 +23,49 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
 )
 
 
+class Pool(BaseModel):
+    ADDRESS: str
+    NAME: str
+    SYMBOL: str
+    DECIMALS: int
+    ASSET: str
+    ASSET_ADDRESS: str
+
+
+class MainCryptoHub(BaseModel):
+    ROUTER: str
+    POOLS: dict[str, Pool]
+    BACKSTOP_POOL: Pool
+
+
+class NablaLedgerConfig(BaseModel):
+    PORTAL: str
+    PYTH_ADAPTER_V2: str
+    ORACLE: str
+    MAIN_CRYPTO_HUB: MainCryptoHub
+    NABLA_DRIP: str
+    STAKING: str | None = None  # missing on ARBITRUM
+
+
+class NablaConfig(BaseModel):
+    BASE: NablaLedgerConfig
+    ARBITRUM: NablaLedgerConfig
+
+    @classmethod
+    def load(cls):
+        path = Path(__file__).parent / "data" / "nabla" / "config.json"
+        return cls(**json.loads(path.read_text()))
+
+    def __getitem__(self, key: str) -> NablaLedgerConfig:
+        try:
+            return getattr(self, key)
+        except AttributeError as e:
+            raise KeyError(key) from e
+
+
+NABLA_CONFIG = NablaConfig.load()
+
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
-
-
-ASSET_REGISTRY: dict[str, dict[str, str]] = {
-    SupportedLedgers.BASE: {
-        "WETH": "0x4200000000000000000000000000000000000006",
-        "CBBTC": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
-    },
-    SupportedLedgers: {
-        "USDC": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-        "WETH": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-    },
-}
 
 LEDGER_ASSET_ADDRESS_TO_PRICE_FEED_ID: dict[SupportedLedgers, dict[str, str]] = {
     SupportedLedgers.BASE: {
@@ -61,15 +94,6 @@ PRICE_FEED_ID_TO_ASSET_ADDRESS: dict[str, str] = {
 
 NABLA_PRICE_API_URL: str = "https://antenna.nabla.fi/v1/updates/price/latest"
 
-PORTAL_ADDRESSES: dict[str, str] = {
-    SupportedLedgers.BASE: "0xd24d145f5E351de52934A7E1f8cF55b907E67fFF",
-    SupportedLedgers.ARBITRUM: "0xcB94Eee869a2041F3B44da423F78134aFb6b676B",
-}
-ROUTER_ADDRESSES: dict[str, str] = {
-    SupportedLedgers.BASE: "0x791Fee7b66ABeF59630943194aF17B029c6F487B",
-    SupportedLedgers.ARBITRUM: "0x7bcFc8b8ff61456ad7C5E2be8517D01df006d18d",
-}
-
 
 class NablaFinanceClient(BaseErc20Exchange):
     """Class for interacting with the Nabla Finance API."""
@@ -79,12 +103,12 @@ class NablaFinanceClient(BaseErc20Exchange):
     @property
     def spender_address(self):
         """Spender address."""
-        return PORTAL_ADDRESSES[self.supported_ledger]
+        return self.config.PORTAL
 
     @property
     def router_address(self):
         """Router address."""
-        return ROUTER_ADDRESSES[self.supported_ledger]
+        return self.config.MAIN_CRYPTO_HUB.ROUTER
 
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         super().__init__(
@@ -96,6 +120,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             **kwargs,
         )
         self.supported_ledger = SupportedLedgers(ledger_id)
+        self.config = NABLA_CONFIG[self.supported_ledger.name]
 
     async def close(self):
         """Close the client."""
