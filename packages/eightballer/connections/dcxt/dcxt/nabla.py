@@ -21,6 +21,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
     signed_tx_to_dict,
     try_send_signed_transaction,
 )
+# from derive_client.utils.w3 import build_standard_transaction
 
 
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
@@ -43,7 +44,9 @@ class ParsedPrice:
 
     def __post_init__(self):
         self.address = PRICE_FEED_ID_TO_ASSET_ADDRESS[self.id]
-        self.symbol = {k for k, v in ASSET_REGISTRY[self.chain].items() if v == self.address}.pop()
+        self.symbol = {
+            k for k, v in ASSET_REGISTRY[self.chain].items() if v == self.address
+        }.pop()
 
 
 ASSET_REGISTRY: dict[str, dict[str, str]] = {
@@ -140,8 +143,12 @@ class NablaFinanceClient(BaseErc20Exchange):
         if symbol:
             asset_a_symbol, asset_b_symbol = symbol.split("/")
             # we need to look up the token addresses for the assets.
-            asset_a = self.look_up_by_symbol(asset_a_symbol, ledger=self.supported_ledger)
-            asset_b = self.look_up_by_symbol(asset_b_symbol, ledger=self.supported_ledger)
+            asset_a = self.look_up_by_symbol(
+                asset_a_symbol, ledger=self.supported_ledger
+            )
+            asset_b = self.look_up_by_symbol(
+                asset_b_symbol, ledger=self.supported_ledger
+            )
         if not asset_a or not asset_b:
             msg = f"Could not find token addresses for `{asset_a}` and `{asset_b}`"
             msg += f" with symbols {asset_a_symbol} and {asset_b_symbol}"
@@ -178,7 +185,11 @@ class NablaFinanceClient(BaseErc20Exchange):
         response = requests.get(NABLA_PRICE_API_URL, timeout=10)
         parsed = response.json()["parsed"]
 
-        return [ParsedPrice(**data) for data in parsed if data["id"] in PRICE_FEED_ID_TO_ASSET_ADDRESS]
+        return [
+            ParsedPrice(**data)
+            for data in parsed
+            if data["id"] in PRICE_FEED_ID_TO_ASSET_ADDRESS
+        ]
 
     async def create_order(
         self,
@@ -227,29 +238,32 @@ class NablaFinanceClient(BaseErc20Exchange):
             {
                 "from": self.account.address,
                 "nonce": self.web3.api.eth.get_transaction_count(self.account.address),
-                "gas": 500_000,
-                "gasPrice": self.web3.api.eth.gas_price,
+                "gas": 750_000,
+                "gasPrice": int(self.web3.api.eth.gas_price * 1.1),
             }
         )
         self.logger.debug("Built swap transaction", extra={"tx": swap_tx})
-
         signed_tx = signed_tx_to_dict(self.account.entity.sign_transaction(swap_tx))
         self.logger.info(f"Signed transaction: {signed_tx}")
         tx_hash = try_send_signed_transaction(self.web3, signed_tx, raise_on_try=True)
         self.logger.info(f"Transaction hash: {tx_hash}")
 
         try:
-            receipt = self.web3.api.eth.wait_for_transaction_receipt(tx_hash, timeout=60, poll_latency=1)
+            receipt = self.web3.api.eth.wait_for_transaction_receipt(
+                tx_hash, timeout=60, poll_latency=1
+            )
             if receipt.get("status") == 1:
                 self.logger.info(
                     "Transaction succeeded",
                     extra={
-                        "tx_hash": tx_hash.hex(),
+                        "tx_hash": tx_hash,
                         "blockNumber": receipt.get("blockNumber"),
                     },
                 )
             else:
-                self.logger.info("Transaction failed on-chain", extra={"receipt": receipt})
+                self.logger.info(
+                    "Transaction failed on-chain", extra={"receipt": receipt}
+                )
         except TimeExhausted:
             self.logger.exception(f"Timeout waiting for transaction receipt: {tx_hash}")
             receipt = None
@@ -330,13 +344,17 @@ class NablaFinanceClient(BaseErc20Exchange):
         params = [
             (
                 "ids[]",
-                LEDGER_ASSET_ADDRESS_TO_PRICE_FEED_ID[self.supported_ledger][asset_address],
+                LEDGER_ASSET_ADDRESS_TO_PRICE_FEED_ID[self.supported_ledger][
+                    asset_address
+                ],
             )
             for asset_address in asset_addresses
         ]
         response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
         if response.status_code != 200:
-            msg = f"Failed to fetch price data: {response.status_code} - {response.text}"
+            msg = (
+                f"Failed to fetch price data: {response.status_code} - {response.text}"
+            )
             raise ValueError(msg)
 
         response_json = response.json()
