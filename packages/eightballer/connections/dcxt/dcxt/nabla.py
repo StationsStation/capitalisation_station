@@ -24,6 +24,8 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
 
 
 class Pool(BaseModel):
+    """Pool."""
+
     ADDRESS: str
     NAME: str
     SYMBOL: str
@@ -33,12 +35,16 @@ class Pool(BaseModel):
 
 
 class MainCryptoHub(BaseModel):
+    """MainCryptoHub."""
+
     ROUTER: str
     POOLS: dict[str, Pool]
     BACKSTOP_POOL: Pool
 
 
 class NablaLedgerConfig(BaseModel):
+    """NablaLedgerConfig."""
+
     PORTAL: str
     PYTH_ADAPTER_V2: str
     ORACLE: str
@@ -48,15 +54,19 @@ class NablaLedgerConfig(BaseModel):
 
 
 class NablaConfig(BaseModel):
+    """NablaConfig."""
+
     BASE: NablaLedgerConfig
     ARBITRUM: NablaLedgerConfig
 
     @classmethod
     def load(cls):
+        """Load the configuration."""
         path = Path(__file__).parent / "data" / "nabla" / "config.json"
         return cls(**json.loads(path.read_text()))
 
     def __getitem__(self, key: str) -> NablaLedgerConfig:
+        """Dynamic lookup by key."""
         try:
             return getattr(self, key)
         except AttributeError as e:
@@ -66,18 +76,8 @@ class NablaConfig(BaseModel):
 NABLA_CONFIG = NablaConfig.load()
 
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
+NABLA_DIRECT_PRICE_ORACLE_ID = "zarathustra/direct_price_oracle:0.1.0"
 
-LEDGER_ASSET_ADDRESS_TO_PRICE_FEED_ID: dict[SupportedLedgers, dict[str, str]] = {
-    SupportedLedgers.BASE: {
-        "0x4200000000000000000000000000000000000006": "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
-        "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf": "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
-        "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913": "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a",
-    },
-    SupportedLedgers.ARBITRUM: {
-        "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
-        "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a",
-    },
-}
 
 PRICE_FEED_ID_TO_ASSET_ADDRESS: dict[str, str] = {
     SupportedLedgers.BASE: {
@@ -93,6 +93,11 @@ PRICE_FEED_ID_TO_ASSET_ADDRESS: dict[str, str] = {
 }
 
 NABLA_PRICE_API_URL: str = "https://antenna.nabla.fi/v1/updates/price/latest"
+
+DIRECT_PRICE_ORACLE = {
+    SupportedLedgers.BASE: "0x84BEC2c11fe71DA8af8DAfba44f4DdF3769c494D",
+    SupportedLedgers.ARBITRUM: "0x563A8aAB5012d8b7496DF9053F52be2089269859",
+}
 
 
 class NablaFinanceClient(BaseErc20Exchange):
@@ -110,6 +115,10 @@ class NablaFinanceClient(BaseErc20Exchange):
         """Router address."""
         return self.config.MAIN_CRYPTO_HUB.ROUTER
 
+    @property
+    def direct_price_oracle_address(self):
+        return DIRECT_PRICE_ORACLE[self.supported_ledger]
+
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         super().__init__(
             *args,
@@ -121,9 +130,26 @@ class NablaFinanceClient(BaseErc20Exchange):
         )
         self.supported_ledger = SupportedLedgers(ledger_id)
         self.config = NABLA_CONFIG[self.supported_ledger.name]
+        self.direct_price_oracle = load_contract(
+            PublicId.from_str(NABLA_DIRECT_PRICE_ORACLE_ID)
+        )
 
     async def close(self):
         """Close the client."""
+
+    def get_price_feed_id(self, asset_address: str) -> str:
+        """Get price feed id"""
+        asset = self.direct_price_oracle.address_to_asset(
+            ledger_api=self.web3,
+            contract_address=self.direct_price_oracle_address,
+            var_0=asset_address,
+        )["str"]
+        price_feed_id = self.direct_price_oracle.asset_to_price_feed_id(
+            ledger_api=self.web3,
+            contract_address=self.direct_price_oracle_address,
+            var_0=asset,
+        )["str"]
+        return price_feed_id.hex()
 
     async def get_ask_bid(
         self,
@@ -189,7 +215,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             token_a.symbol,
         )
 
-        return bid_price, ask_price
+        return ask_price, bid_price
 
     async def fetch_ticker(
         self,
@@ -199,6 +225,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         params: dict | None = None,
     ) -> Ticker:
         """Fetches a ticker with live ask/bid from on-chain quotes."""
+
         if all([symbol is None, asset_a is None or asset_b is None]):
             msg = "Either symbol or asset_a and asset_b must be provided"
             raise ValueError(msg)
@@ -219,7 +246,7 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         # get live ask/bid for X units of asset A
         amount = params.get("amount", 0.5) if params is not None else 0.5
-        bid, ask = await self.get_ask_bid(
+        ask, bid = await self.get_ask_bid(
             amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
         )
 
@@ -259,6 +286,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         retries: int = 0,
     ):
         """Create an order."""
+
         price_data = self.fetch_price_data([asset_a, asset_b])
         token_a = self.get_token(asset_a)
         token_b = self.get_token(asset_b)
@@ -396,15 +424,8 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         """
 
-        params = [
-            (
-                "ids[]",
-                LEDGER_ASSET_ADDRESS_TO_PRICE_FEED_ID[self.supported_ledger][
-                    asset_address
-                ],
-            )
-            for asset_address in asset_addresses
-        ]
+        price_feeds = {addr: self.get_price_feed_id(addr) for addr in asset_addresses}
+        params = [("ids[]", id_) for id_ in price_feeds.values()]
         response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
         if response.status_code != 200:
             msg = (
