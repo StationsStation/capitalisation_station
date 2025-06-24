@@ -1,0 +1,17 @@
+name: direct_price_oracle
+author: zarathustra
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiho3wv7mykaq4sy7s5gndqxqo2crxvuvhi5rtfxv7vndkikt24k2a
+  build/direct_price_oracle.json: bafybeiakl25iou6vfixewrzhr3xw2thxhjcuwb2nxtyiyobym7acalobwi
+  contract.py: bafybeib5tp2axoehwvaavfbqrcaw7uhxlximfhp5wicah2h2x4ro2v6fva
+fingerprint_ignore_patterns: []
+class_name: DirectPriceOracle
+contract_interface_paths:
+  ethereum: build/direct_price_oracle.json
+dependencies: {}
+contracts: []
