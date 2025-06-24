@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigksdfchxamusazowf3wpy3ahdcrut26g4wmkw7dgnqocpp3x6jgi
-  build/nabla_portal.json: bafybeie6rwqzrp6g4cjqlwb7hcxljx66jogeizubwwbtgasv6op7b5asjq
+  build/nabla_portal.json: bafybeigou5dvwvtqkmom2h7qi5fkwptduk544rdiym64mdaroqposagob4
   contract.py: bafybeievi3achdc77vxsqqjizgplxsg57bwogk6am4yqtfokqxsmeb4h7i
 fingerprint_ignore_patterns: []
 class_name: NablaPortal
