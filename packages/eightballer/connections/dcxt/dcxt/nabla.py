@@ -116,17 +116,9 @@ class PriceFeedResponse(BaseModel):
 
 
 NABLA_CONFIG = NablaConfig.load()
-
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
 NABLA_DIRECT_PRICE_ORACLE_ID = "zarathustra/direct_price_oracle:0.1.0"
-
-
 NABLA_PRICE_API_URL: str = "https://antenna.nabla.fi/v1/updates/price/latest"
-
-DIRECT_PRICE_ORACLE = {
-    SupportedLedgers.BASE: "0x84BEC2c11fe71DA8af8DAfba44f4DdF3769c494D",
-    SupportedLedgers.ARBITRUM: "0x563A8aAB5012d8b7496DF9053F52be2089269859",
-}
 
 
 class NablaFinanceClient(BaseErc20Exchange):
@@ -146,7 +138,7 @@ class NablaFinanceClient(BaseErc20Exchange):
 
     @property
     def direct_price_oracle_address(self):
-        return DIRECT_PRICE_ORACLE[self.supported_ledger]
+        return self.config.ORACLE
 
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         super().__init__(
