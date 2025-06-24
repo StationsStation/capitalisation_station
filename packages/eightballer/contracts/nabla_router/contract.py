@@ -1,4 +1,4 @@
-"""This module contains the scaffold contract definition."""
+"""This module contains the NableRouter contract definition."""
 
 # ruff: noqa: PLR0904
 from aea.common import JSONLike
@@ -6,11 +6,15 @@ from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
 from aea.configurations.base import PublicId
 
+from packages.zarathustra.contracts.direct_price_oracle import (
+    PUBLIC_ID as NABLA_ROUTER_PUBLIC_ID,
+)
+
 
 class NablaRouter(Contract):
-    """The scaffold contract class for a smart contract."""
+    """The NablaRouter contract."""
 
-    contract_id = PublicId.from_str("open_aea/scaffold:0.1.0")
+    contract_id: PublicId = NABLA_ROUTER_PUBLIC_ID
 
     @classmethod
     def get_amount_out(
@@ -192,7 +196,11 @@ class NablaRouter(Contract):
         """Handler method for the 'swap_exact_tokens_for_tokens_without_price_feed_update' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         return instance.functions.swapExactTokensForTokensWithoutPriceFeedUpdate(
-            _amountIn=amount_in, _amountOutMin=amount_out_min, _tokenInOut=token_in_out, _to=to, _deadline=deadline
+            _amountIn=amount_in,
+            _amountOutMin=amount_out_min,
+            _tokenInOut=token_in_out,
+            _to=to,
+            _deadline=deadline,
         )
 
     @classmethod
@@ -234,7 +242,11 @@ class NablaRouter(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("owner", owner), ("oldGate", old_gate), ("newGate", new_gate))
+            for key, value in (
+                ("owner", owner),
+                ("oldGate", old_gate),
+                ("newGate", new_gate),
+            )
             if value is not None
         }
         to_block = to_block or "latest"
@@ -357,7 +369,10 @@ class NablaRouter(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("previousOwner", previous_owner), ("newOwner", new_owner))
+            for key, value in (
+                ("previousOwner", previous_owner),
+                ("newOwner", new_owner),
+            )
             if value is not None
         }
         to_block = to_block or "latest"

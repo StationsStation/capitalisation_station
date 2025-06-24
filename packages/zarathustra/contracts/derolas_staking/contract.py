@@ -6,14 +6,16 @@ from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
 from aea.configurations.base import PublicId
 
-from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID
+from packages.zarathustra.contracts.derolas_staking import (
+    PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID,
+)
 
 
 ADDRESS_BASE = "0x35CAf83118d58504C179b50D538a095ac08Ebc8f"
 
 
 class DerolasStaking(Contract):
-    """The scaffold contract class for a smart contract."""
+    """The DerolasStaking contract."""
 
     contract_id: PublicId = DEROLAS_STAKING_PUBLIC_ID
 
@@ -528,7 +530,10 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("previousOwner", previous_owner), ("newOwner", new_owner))
+            for key, value in (
+                ("previousOwner", previous_owner),
+                ("newOwner", new_owner),
+            )
             if value is not None
         }
         to_block = to_block or "latest"

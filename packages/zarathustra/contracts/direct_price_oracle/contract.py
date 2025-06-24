@@ -1,4 +1,4 @@
-"""This module contains the scaffold contract definition."""
+"""This module contains the DirectPriceOracle contract definition."""
 
 # ruff: noqa: PLR0904
 from aea.common import JSONLike
@@ -6,11 +6,15 @@ from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
 from aea.configurations.base import PublicId
 
+from packages.zarathustra.contracts.direct_price_oracle import (
+    PUBLIC_ID as DIRECT_PRICE_ORACLE_PUOBLIC_ID,
+)
+
 
 class DirectPriceOracle(Contract):
-    """The scaffold contract class for a smart contract."""
+    """The DirectPriceOracle contract."""
 
-    contract_id = PublicId.from_str("open_aea/scaffold:0.1.0")
+    contract_id: PublicId = DIRECT_PRICE_ORACLE_PUOBLIC_ID
 
     @classmethod
     def pyth_adapter(
@@ -134,7 +138,12 @@ class DirectPriceOracle(Contract):
 
     @classmethod
     def verify_signature(
-        cls, ledger_api: LedgerApi, contract_address: str, signer: Address, message: str, signature: str
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        signer: Address,
+        message: str,
+        signature: str,
     ) -> JSONLike:
         """Handler method for the 'verify_signature' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
@@ -149,7 +158,11 @@ class DirectPriceOracle(Contract):
 
     @classmethod
     def register_price_feed_1(
-        cls, ledger_api: LedgerApi, contract_address: str, asset_name: str, price_feed_id: str
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        asset_name: str,
+        price_feed_id: str,
     ) -> JSONLike:
         """Handler method for the 'register_price_feed_1' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
@@ -157,7 +170,11 @@ class DirectPriceOracle(Contract):
 
     @classmethod
     def register_token(
-        cls, ledger_api: LedgerApi, contract_address: str, token_address: Address, asset_name: str
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        token_address: Address,
+        asset_name: str,
     ) -> JSONLike:
         """Handler method for the 'register_token' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
@@ -187,7 +204,11 @@ class DirectPriceOracle(Contract):
 
     @classmethod
     def set_price_max_age(
-        cls, ledger_api: LedgerApi, contract_address: str, nabla_contract: Address, new_price_max_age: int
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        nabla_contract: Address,
+        new_price_max_age: int,
     ) -> JSONLike:
         """Handler method for the 'set_price_max_age' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
@@ -240,7 +261,11 @@ class DirectPriceOracle(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("sender", sender), ("assetName", asset_name), ("priceFeedId", price_feed_id))
+            for key, value in (
+                ("sender", sender),
+                ("assetName", asset_name),
+                ("priceFeedId", price_feed_id),
+            )
             if value is not None
         }
         to_block = to_block or "latest"
@@ -332,7 +357,10 @@ class DirectPriceOracle(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("previousOwner", previous_owner), ("newOwner", new_owner))
+            for key, value in (
+                ("previousOwner", previous_owner),
+                ("newOwner", new_owner),
+            )
             if value is not None
         }
         to_block = to_block or "latest"
@@ -366,7 +394,12 @@ class DirectPriceOracle(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("id", id), ("publishTime", publish_time), ("price", price), ("conf", conf))
+            for key, value in (
+                ("id", id),
+                ("publishTime", publish_time),
+                ("price", price),
+                ("conf", conf),
+            )
             if value is not None
         }
         to_block = to_block or "latest"
@@ -466,7 +499,11 @@ class DirectPriceOracle(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("sender", sender), ("newSigner", new_signer), ("oldSigner", old_signer))
+            for key, value in (
+                ("sender", sender),
+                ("newSigner", new_signer),
+                ("oldSigner", old_signer),
+            )
             if value is not None
         }
         to_block = to_block or "latest"
