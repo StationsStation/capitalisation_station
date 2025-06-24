@@ -93,6 +93,26 @@ class BinaryData(BaseModel):
 class PriceFeedResponse(BaseModel):
     binary: BinaryData
     parsed: list[ParsedEntry]
+    feed_to_address: dict[str, str]
+
+    @property
+    def prices(self) -> dict[str, int]:
+        """Returns a mapping from price-feed ID to price value."""
+        return {entry.id: entry.price.price for entry in self.parsed}
+
+    @property
+    def token_prices(self) -> dict[str, int]:
+        """Returns a mapping from token address to price value."""
+        return {
+            self.feed_to_address[fid]: price
+            for fid, price in self.prices.items()
+            if fid in self.feed_to_address
+        }
+
+    @property
+    def price_update_data(self) -> str:
+        """Returns the concatenated hex string with '0x' prefix."""
+        return "0x" + "".join(self.binary.data)
 
 
 NABLA_CONFIG = NablaConfig.load()
@@ -172,10 +192,10 @@ class NablaFinanceClient(BaseErc20Exchange):
         bid_price = amount of A you get per 1 B (sell B → A)
         """
         # fetch price data once
-        price_data = self.fetch_price_data([asset_a, asset_b])
+        price_feed_response = self.fetch_price_data([asset_a, asset_b])
         token_a = self.get_token(asset_a)
         token_b = self.get_token(asset_b)
-        token_prices = price_data["prices"]
+        token_prices = price_feed_response.token_prices
 
         # helper to call get_swap_quote
         async def quote(from_addr: str, to_addr: str, amt_units: int) -> int:
@@ -296,12 +316,12 @@ class NablaFinanceClient(BaseErc20Exchange):
     ):
         """Create an order."""
 
-        price_data = self.fetch_price_data([asset_a, asset_b])
+        price_feed_response = self.fetch_price_data([asset_a, asset_b])
         token_a = self.get_token(asset_a)
         token_b = self.get_token(asset_b)
 
-        token_prices = price_data["prices"]
-        price_update_data = price_data["priceUpdateData"]
+        token_prices = price_feed_response.token_prices
+        price_update_data = price_feed_response.price_update_data
 
         decimals = token_a.decimals if side == "sell" else token_b.decimals
         from_token_address = asset_a if side == "sell" else asset_b
@@ -417,7 +437,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         )
         return swap_amount_out["amountOut_"]
 
-    def fetch_price_data(self, asset_addresses) -> dict:
+    def fetch_price_data(self, asset_addresses) -> PriceFeedResponse:
         """Fetch price data from the Nabla Finance API.
 
         Args:
@@ -443,13 +463,5 @@ class NablaFinanceClient(BaseErc20Exchange):
             )
             raise ValueError(msg)
 
-        response = PriceFeedResponse(**response.json())
-
-        # Parse prices
-        prices = {}
-        for entry in response.parsed:
-            prices[feed_to_address[entry.id]] = entry.price.price
-
-        price_update_data = "0x" + "".join(response.binary.data)
-
-        return {"prices": prices, "priceUpdateData": price_update_data}
+        payload = {**response.json(), "feed_to_address": feed_to_address}
+        return PriceFeedResponse.parse_obj(payload)
