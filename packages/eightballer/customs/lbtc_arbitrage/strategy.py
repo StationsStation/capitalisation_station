@@ -172,7 +172,6 @@ class ArbitrageStrategy:
         return not any(
             [
                 opportunity.best_ask_exchange == opportunity.best_bid_exchange,
-                # opportunity.best_ask_ledger == opportunity.best_bid_ledger,
             ]
         )
 

@@ -2,8 +2,8 @@
 
 import json
 import datetime
+from typing import Any, Literal
 from pathlib import Path
-from typing import Literal, Any
 
 import requests
 from pydantic import BaseModel
@@ -22,6 +22,9 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
     signed_tx_to_dict,
     try_send_signed_transaction,
 )
+
+
+# ruff: noqa: ARG002
 
 
 class Pool(BaseModel):
@@ -75,22 +78,30 @@ class NablaConfig(BaseModel):
 
 
 class Price(BaseModel):
+    """Price."""
+
     price: int
     publish_time: int
 
 
 class ParsedEntry(BaseModel):
+    """ParsedEntry."""
+
     id: str
     metadata: dict[str, Any]
     price: Price
 
 
 class BinaryData(BaseModel):
+    """BinaryData."""
+
     data: list[str]
     encoding: Literal["hex"]
 
 
 class PriceFeedResponse(BaseModel):
+    """PriceFeedResponse."""
+
     binary: BinaryData
     parsed: list[ParsedEntry]
     feed_to_address: dict[str, str]
@@ -103,11 +114,7 @@ class PriceFeedResponse(BaseModel):
     @property
     def token_prices(self) -> dict[str, int]:
         """Returns a mapping from token address to price value."""
-        return {
-            self.feed_to_address[fid]: price
-            for fid, price in self.prices.items()
-            if fid in self.feed_to_address
-        }
+        return {self.feed_to_address[fid]: price for fid, price in self.prices.items() if fid in self.feed_to_address}
 
     @property
     def price_update_data(self) -> str:
@@ -136,10 +143,6 @@ class NablaFinanceClient(BaseErc20Exchange):
         """Router address."""
         return self.config.MAIN_CRYPTO_HUB.ROUTER
 
-    @property
-    def direct_price_oracle_address(self):
-        return self.config.ORACLE
-
     def __init__(self, ledger_id, rpc_url, key_path, logger, *args, **kwargs):
         super().__init__(
             *args,
@@ -151,23 +154,21 @@ class NablaFinanceClient(BaseErc20Exchange):
         )
         self.supported_ledger = SupportedLedgers(ledger_id)
         self.config = NABLA_CONFIG[self.supported_ledger.name]
-        self.direct_price_oracle = load_contract(
-            PublicId.from_str(NABLA_DIRECT_PRICE_ORACLE_ID)
-        )
+        self.direct_price_oracle = load_contract(PublicId.from_str(NABLA_DIRECT_PRICE_ORACLE_ID))
 
     async def close(self):
         """Close the client."""
 
     def get_price_feed_id(self, asset_address: str) -> str:
-        """Get price feed id"""
+        """Get price feed id."""
         asset = self.direct_price_oracle.address_to_asset(
             ledger_api=self.web3,
-            contract_address=self.direct_price_oracle_address,
+            contract_address=self.config.ORACLE,
             var_0=asset_address,
         )["str"]
         price_feed_id = self.direct_price_oracle.asset_to_price_feed_id(
             ledger_api=self.web3,
-            contract_address=self.direct_price_oracle_address,
+            contract_address=self.config.ORACLE,
             var_0=asset,
         )["str"]
         return price_feed_id.hex()
@@ -259,17 +260,12 @@ class NablaFinanceClient(BaseErc20Exchange):
         asset_b = self.look_up_by_symbol(b_sym, ledger=self.supported_ledger)
 
         if not asset_a or not asset_b:
-            msg = (
-                f"Could not find token addresses for `{asset_a}` and `{asset_b}` "
-                f"with symbols {a_sym} and {b_sym}"
-            )
+            msg = f"Could not find token addresses for `{asset_a}` and `{asset_b}` " f"with symbols {a_sym} and {b_sym}"
             raise ValueError(msg)
 
         # get live ask/bid for X units of asset A
         amount = params.get("amount", 0.5) if params is not None else 0.5
-        ask, bid = await self.get_ask_bid(
-            amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
-        )
+        ask, bid = await self.get_ask_bid(amount=amount, asset_a=asset_a.address, asset_b=asset_b.address)
 
         ts = datetime.datetime.now(tz=datetime.UTC)
         return Ticker(
@@ -312,9 +308,6 @@ class NablaFinanceClient(BaseErc20Exchange):
         token_a = self.get_token(asset_a)
         token_b = self.get_token(asset_b)
 
-        token_prices = price_feed_response.token_prices
-        price_update_data = price_feed_response.price_update_data
-
         decimals = token_a.decimals if side == "sell" else token_b.decimals
         from_token_address = asset_a if side == "sell" else asset_b
         to_token_address = asset_b if side == "sell" else asset_a
@@ -324,7 +317,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             from_token_address=from_token_address,
             to_token_address=to_token_address,
             amount=amt,
-            token_prices=token_prices,
+            token_prices=price_feed_response.token_prices,
         )
         nabla_portal_contract = load_contract(PublicId.from_str(NABLA_PORTAL_PUBLIC_ID))
 
@@ -337,7 +330,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             router_path=[self.router_address],
             deadline=int(datetime.datetime.now(tz=datetime.UTC).timestamp() + 36_000),
             to=self.account.address,
-            price_update_data=[price_update_data],
+            price_update_data=[price_feed_response.price_update_data],
         )
 
         swap_tx = swap_fn.build_transaction(
@@ -355,9 +348,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         self.logger.info(f"Transaction hash: {tx_hash}")
 
         try:
-            receipt = self.web3.api.eth.wait_for_transaction_receipt(
-                tx_hash, timeout=60, poll_latency=1
-            )
+            receipt = self.web3.api.eth.wait_for_transaction_receipt(tx_hash, timeout=60, poll_latency=1)
             if receipt.get("status") == 1:
                 self.logger.info(
                     "Transaction succeeded",
@@ -367,9 +358,7 @@ class NablaFinanceClient(BaseErc20Exchange):
                     },
                 )
             else:
-                self.logger.info(
-                    "Transaction failed on-chain", extra={"receipt": receipt}
-                )
+                self.logger.info("Transaction failed on-chain", extra={"receipt": receipt})
         except TimeExhausted:
             self.logger.exception(f"Timeout waiting for transaction receipt: {tx_hash}")
             receipt = None
@@ -442,6 +431,7 @@ class NablaFinanceClient(BaseErc20Exchange):
                 "prices": Dict[str, int],  # Mapping from price feed ID to price
                 "priceUpdateData": str     # Hex string with 0x prefix
             }
+
         """
 
         price_feeds = {addr: self.get_price_feed_id(addr) for addr in asset_addresses}
@@ -450,9 +440,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         params = [("ids[]", id_) for id_ in price_feeds.values()]
         response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
         if response.status_code != 200:
-            msg = (
-                f"Failed to fetch price data: {response.status_code} - {response.text}"
-            )
+            msg = f"Failed to fetch price data: {response.status_code} - {response.text}"
             raise ValueError(msg)
 
         payload = {**response.json(), "feed_to_address": feed_to_address}

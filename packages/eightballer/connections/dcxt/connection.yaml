@@ -10,7 +10,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
   cli.py: bafybeien63b5czy7ulmar3dqytdo54y272o7m6rcoouqyqhzh2icpl2bym
-  connection.py: bafybeia37jnhg6rwm6mrbb7bfb25ydr3aojrkafy53vphksopkb6snkmum
+  connection.py: bafybeiclibxq6iqw2zospcttqr5lzgpi7ughn3jiks5i362fsbx2dicrgi
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
   dcxt/balancer.py: bafybeifu2vih7xzymw374rejhiwaornoet2e4omur7rwkvo2zg33do7ifm
@@ -20,19 +20,20 @@ fingerprint:
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
-  dcxt/data/token_list.json: bafybeifjiiteo4quslwdk2psdmnka2fof3abmikfe6ycnliace65yfd2cy
+  dcxt/data/nabla/config.json: bafybeigkhrmzzrkn6ir5yvgm5ep6vtftjhptgfvlqpshnx5adddnlz6gqe
+  dcxt/data/token_list.json: bafybeicsb6oddbccgpcpdo7xqak6kpjhrqxvj6hqspvsvnwlbqnpj523gy
   dcxt/data/tokens.py: bafybeih4enpjresj522nibzovov7twbkzuw6dyxqtngq7bvgpvsec6kiu4
   dcxt/defi_exchange.py: bafybeid7yoku3wxtfd7s2qeoxqbuqrg3w37y4ehkgke7syovz4jewpbfy4
   dcxt/derive.py: bafybeid5wuqwatismfnqcxkyrpv6x2lmkmwswewygatlv2qepngr554j3m
   dcxt/exceptions.py: bafybeiep6fswgvtn5cxn4y5u2b24fbuu6bszs6tdfn6rxzrh2aeae73lri
-  dcxt/nabla.py: bafybeideejbwi67b2zmehhswkx36cctph47nftnf6e35ni2l2q37bq2hci
+  dcxt/nabla.py: bafybeienygwhpv5lflnqlgx6jladarhbplluybg2vi6kqg5q2ujwtfu43q
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeichsry2ajfr4okg5yjolqnvaofhupcxyr2kgy3uq4dpfolz25pbpa
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
-  interfaces/approvals.py: bafybeidxlvrgbbajfkrplbfvla2sp2vafrnxssx24ga64ox4kgzbdswzlu
+  interfaces/approvals.py: bafybeigangiqcnjnjiqp4y4y4o5qywy4qvyikrjd5z5d7ox3xnlxtv6fva
   interfaces/asset_bridging.py: bafybeie4zkewgzag6ohmthrxk6xdpmhyv27nm6klmsqn2wscxcz5suc53m
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
