@@ -14,13 +14,13 @@ fingerprint:
   behaviour_classes/instantiate_bridge_request_round.py: bafybeighzx52ebkr2ar3uvpx767b23v3cqgxiaql32invkhra6bp6xwwcu
   behaviour_classes/no_opportunity_round.py: bafybeie6dl4bg6bnd7zllg3vydcc6br6k2u2jxcj7w2fgcbrdkpsb36aii
   behaviour_classes/order_execution_round.py: bafybeidkveizivrr2vge2i6pvqg7pmp3aqhvgdehprvys7rhd3vomtsvem
-  behaviour_classes/post_trade_round.py: bafybeifadhszvyqd6jgib6zzoadsppghdet4vkfsefymxu5tux6uycfklu
+  behaviour_classes/post_trade_round.py: bafybeidfo26asjuzffnzpe2ntoljivlfgexmd2jyr2mvakhtpoov5v6bve
   behaviour_classes/set_approvals.py: bafybeiftb34mrh2rte5uvqtvg25wn5dwsidup4uvtuhw2g3om32jfnz2um
   behaviours.py: bafybeibfzabhgdoha7e46ers3bwahakztv6d5c2cnf7xjvqe67d4wpcziu
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
   handlers.py: bafybeie35qy7zafazv6n4ff6yhy7ncr5fbl3iqofp74w2hvt5s6qpy4ahi
-  strategy.py: bafybeida5b5gjwvks5mbjgulolbojagvksmg7pxbu6cmf3lrz2lxbcjbmu
+  strategy.py: bafybeictd4w3npj3r7xeaarx4ap3ed3fds6bhef6narykrah3okkuvi2iu
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
@@ -75,6 +75,7 @@ models:
       strategy_init_kwargs: {}
       strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
       cooldown_period: 10
+      alert_user: true
     class_name: ArbitrageStrategy
   balances_dialogues:
     args: {}

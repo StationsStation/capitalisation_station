@@ -108,7 +108,7 @@ class ArbitrageStrategy:
         }
 
         num_buy_orders = 5
-        num_sell_orders = 5
+        num_sell_orders = 10
 
         remaining_buy_orders = num_buy_orders - len(buy_orders)
         remaining_sell_orders = num_sell_orders - len(sell_orders)
@@ -135,6 +135,8 @@ class ArbitrageStrategy:
             remaining_buy_orders,
             remaining_sell_orders,
             open_orders,
+            num_buy_orders=num_buy_orders,
+            num_sell_orders=num_sell_orders,
         )
 
     def get_all_orders(
@@ -144,10 +146,12 @@ class ArbitrageStrategy:
         remaining_buy_orders: int,
         remaining_sell_orders: int,
         open_orders: list[Order],
+        num_buy_orders: int = 5,
+        num_sell_orders: int = 10,
     ) -> list[Order]:
         """Get buy orders."""
 
-        lower_bound_percentage = 0.8  # lower bound is from the index price
+        lower_bound_percentage = 0.9  # lower bound is from the index price
         upper_bound_percentage = 2.0  # upper bound is from the index price
 
         orders = []
@@ -162,11 +166,11 @@ class ArbitrageStrategy:
                 max_price = index_price * (1 - self.min_profit)
                 step = (max_price - min_price) / remaining_buy_orders
 
-                amount = buy_balance / remaining_buy_orders if remaining_buy_orders else 0
+                amount = (buy_balance / 3) / num_buy_orders if remaining_buy_orders else 0
                 if not amount:
                     continue
 
-                for i in range(1, remaining_buy_orders):
+                for i in range(1, remaining_buy_orders + 1):
                     price = min_price + (i * step)
 
                     order_amount = amount / price
@@ -190,9 +194,9 @@ class ArbitrageStrategy:
                 max_price = index_price * (upper_bound_percentage)
                 step = (max_price - min_price) / remaining_sell_orders
 
-                amount = buy_balance / remaining_sell_orders if remaining_sell_orders else 0
+                amount = buy_balance / num_sell_orders if remaining_sell_orders else 0
 
-                for i in range(1, remaining_sell_orders + 1):
+                for i in range(remaining_sell_orders):
                     price = min_price + (i * step)
                     order_amount = amount / price
 

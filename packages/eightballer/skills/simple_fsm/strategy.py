@@ -174,6 +174,7 @@ class ArbitrageStrategy(Model):
     entry_order: Order = None
     exit_order: Order = None
     donate: bool = True
+    alert_user: bool = True
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -184,6 +185,7 @@ class ArbitrageStrategy(Model):
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
+        self.alert_user = kwargs.pop("alert_user", True)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
