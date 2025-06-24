@@ -56,7 +56,7 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeidjvuanx7zkcyku6d3q57ib7o2gqeyisjbkpmmwqy6zobb7ayuzru
 customs:
-- wakamex/market_maker:0.1.0:bafybeib5v2hpnd6zghn4ny4d6ppp4kcy55vwdjyc4bhixyi2xu32vh2yfe
+- wakamex/market_maker:0.1.0:bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm
 default_ledger: ethereum
 required_ledgers:
 - ethereum
