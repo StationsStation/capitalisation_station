@@ -3,6 +3,7 @@
 import json
 import datetime
 from pathlib import Path
+from typing import Literal, Any
 
 import requests
 from pydantic import BaseModel
@@ -73,24 +74,32 @@ class NablaConfig(BaseModel):
             raise KeyError(key) from e
 
 
+class Price(BaseModel):
+    price: int
+    publish_time: int
+
+
+class ParsedEntry(BaseModel):
+    id: str
+    metadata: dict[str, Any]
+    price: Price
+
+
+class BinaryData(BaseModel):
+    data: list[str]
+    encoding: Literal["hex"]
+
+
+class PriceFeedResponse(BaseModel):
+    binary: BinaryData
+    parsed: list[ParsedEntry]
+
+
 NABLA_CONFIG = NablaConfig.load()
 
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
 NABLA_DIRECT_PRICE_ORACLE_ID = "zarathustra/direct_price_oracle:0.1.0"
 
-
-PRICE_FEED_ID_TO_ASSET_ADDRESS: dict[str, str] = {
-    SupportedLedgers.BASE: {
-        "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x4200000000000000000000000000000000000006",  # WETH
-        "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
-        "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    },
-    SupportedLedgers.ARBITRUM: {
-        "ff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH
-        "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43": "",  # cbBTC
-        "eaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",  # USDC
-    },
-}
 
 NABLA_PRICE_API_URL: str = "https://antenna.nabla.fi/v1/updates/price/latest"
 
@@ -421,10 +430,11 @@ class NablaFinanceClient(BaseErc20Exchange):
                 "prices": Dict[str, int],  # Mapping from price feed ID to price
                 "priceUpdateData": str     # Hex string with 0x prefix
             }
-
         """
 
         price_feeds = {addr: self.get_price_feed_id(addr) for addr in asset_addresses}
+        feed_to_address = {feed_id: addr for addr, feed_id in price_feeds.items()}
+
         params = [("ids[]", id_) for id_ in price_feeds.values()]
         response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
         if response.status_code != 200:
@@ -433,27 +443,13 @@ class NablaFinanceClient(BaseErc20Exchange):
             )
             raise ValueError(msg)
 
-        response_json = response.json()
+        response = PriceFeedResponse(**response.json())
 
         # Parse prices
         prices = {}
-        for entry in response_json.get("parsed", []):
-            feed_id = entry.get("id")
-            asset_address = self.get_asset_address_by_price_feed_id(feed_id)
-            price = entry.get("price", {}).get("price")
-            if feed_id and price is not None:
-                prices[asset_address] = price
+        for entry in response.parsed:
+            prices[feed_to_address[entry.id]] = entry.price.price
 
-        # Parse price update data
-        binary_chunks = response_json.get("binary", {}).get("data", [])
-        price_update_data = "0x" + "".join(binary_chunks)
+        price_update_data = "0x" + "".join(response.binary.data)
 
         return {"prices": prices, "priceUpdateData": price_update_data}
-
-    def get_asset_address_by_price_feed_id(self, price_feed_id: str) -> str:
-        """Get the asset address from the price feed id."""
-        if price_feed_id not in PRICE_FEED_ID_TO_ASSET_ADDRESS[self.supported_ledger]:
-            msg = f"Price feed ID {price_feed_id} not found."
-            raise ValueError(msg)
-
-        return PRICE_FEED_ID_TO_ASSET_ADDRESS[self.supported_ledger][price_feed_id]
