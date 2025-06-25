@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "capitalisation_station"
-version = "0.1.30"
+version = "0.1.31"
 description = ""
 authors = ["StationsStation"]
 readme = "README.md"
