@@ -21,17 +21,15 @@ class PostTradeRound(BaseBehaviour):
         self.strategy.state.current_period += 1
         self.strategy.error_count = 0
         self._event = ArbitrageabciappEvents.DONE
-        for hook in [
-            self._post_trade_report,
-        ]:
-            hook()
+        if self.strategy.alert_user:
+            self._post_trade_report()
         self._is_done = True
 
     def _post_trade_report(self) -> None:
         """Post trade report."""
         entry_order, exit_order = self.strategy.entry_order, self.strategy.exit_order
         if entry_order is None or exit_order is None:
-            self.strategy.logger.error("No entry or exit order found.")
+            self.context.logger.error("No entry or exit order found.")
             return
         if entry_order.side is OrderSide.SELL:
             buy_order, sell_order = exit_order, entry_order

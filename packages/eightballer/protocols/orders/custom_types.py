@@ -1,31 +1,13 @@
-"""Module containing the pydantic models generated from the .proto file."""
+"""Custom types for the protocol."""
 
-from __future__ import annotations
-
-from enum import IntEnum
-from typing import Optional
+from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel
 
-from packages.eightballer.protocols.orders.primitives import (
-    Float,
-)
 
-
-# ruff: noqa: N806, C901, PLR0912, PLR0914, PLR0915, A001, UP007
-# N806     - variable should be lowercase
-# C901     - function is too complex
-# PLR0912  - too many branches
-# PLR0914  - too many local variables
-# PLR0915  - too many statements
-# A001     - shadowing builtin names like `id` and `type`
-# UP007    - Use X | Y for type annotations  # NOTE: important edge case pydantic-hypothesis interaction!
-
-MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
-
-
-class ErrorCode(IntEnum):
-    """ErrorCode."""
+class ErrorCode(Enum):
+    """This class represents an instance of ErrorCode."""
 
     UNKNOWN_MARKET = 0
     INSUFFICIENT_FUNDS = 1
@@ -33,235 +15,83 @@ class ErrorCode(IntEnum):
     API_ERROR = 3
 
     @staticmethod
-    def encode(pb_obj, error_code: ErrorCode) -> None:
-        """Encode ErrorCode to protobuf."""
-        pb_obj.error_code = error_code
+    def encode(error_code_protobuf_object, error_code_object: "ErrorCode") -> None:
+        """Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the error_code_protobuf_object argument is matched with the instance of this class
+        in the 'error_code_object' argument.
+
+
+
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               error_code_object:  an instance of this class to be encoded in the protocol buffer object.
+
+        """
+        error_code_protobuf_object.error_code = error_code_object.value
 
     @classmethod
-    def decode(cls, pb_obj) -> ErrorCode:
-        """Decode protobuf to ErrorCode."""
-        return cls(pb_obj.error_code)
+    def decode(cls, error_code_protobuf_object) -> "ErrorCode":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'error_code_protobuf_object' argument.
+
+        'error_code_protobuf_object' argument.
 
 
-class Order(BaseModel):
-    """Order."""
+        Args:
+        ----
+               error_code_protobuf_object:  the protocol buffer object whose type corresponds with this class.
 
-    symbol: str
-    status: OrderStatus
-    side: OrderSide
-    type: OrderType
-    price: Optional[Float] = None
-    exchange_id: Optional[str] = None
-    id: Optional[str] = None
-    client_order_id: Optional[str] = None
-    info: Optional[str] = None
-    ledger_id: Optional[str] = None
-    asset_a: Optional[str] = None
-    asset_b: Optional[str] = None
-    timestamp: Optional[Float] = None
-    datetime: Optional[str] = None
-    time_in_force: Optional[str] = None
-    post_only: Optional[bool] = None
-    last_trade_timestamp: Optional[Float] = None
-    stop_price: Optional[Float] = None
-    trigger_price: Optional[Float] = None
-    cost: Optional[Float] = None
-    amount: Optional[Float] = None
-    filled: Optional[Float] = None
-    remaining: Optional[Float] = None
-    fee: Optional[Float] = None
-    average: Optional[Float] = None
-    trades: Optional[str] = None
-    fees: Optional[str] = None
-    last_update_timestamp: Optional[Float] = None
-    reduce_only: Optional[bool] = None
-    take_profit_price: Optional[Float] = None
-    stop_loss_price: Optional[Float] = None
-
-    @staticmethod
-    def encode(proto_obj, order: Order) -> None:
-        """Encode Order to protobuf."""
-        proto_obj.symbol = order.symbol
-        OrderStatus.encode(proto_obj.status, order.status)
-        OrderSide.encode(proto_obj.side, order.side)
-        OrderType.encode(proto_obj.type, order.type)
-        if order.price is not None:
-            proto_obj.price = order.price
-        if order.exchange_id is not None:
-            proto_obj.exchange_id = order.exchange_id
-        if order.id is not None:
-            proto_obj.id = order.id
-        if order.client_order_id is not None:
-            proto_obj.client_order_id = order.client_order_id
-        if order.info is not None:
-            proto_obj.info = order.info
-        if order.ledger_id is not None:
-            proto_obj.ledger_id = order.ledger_id
-        if order.asset_a is not None:
-            proto_obj.asset_a = order.asset_a
-        if order.asset_b is not None:
-            proto_obj.asset_b = order.asset_b
-        if order.timestamp is not None:
-            proto_obj.timestamp = order.timestamp
-        if order.datetime is not None:
-            proto_obj.datetime = order.datetime
-        if order.time_in_force is not None:
-            proto_obj.time_in_force = order.time_in_force
-        if order.post_only is not None:
-            proto_obj.post_only = order.post_only
-        if order.last_trade_timestamp is not None:
-            proto_obj.last_trade_timestamp = order.last_trade_timestamp
-        if order.stop_price is not None:
-            proto_obj.stop_price = order.stop_price
-        if order.trigger_price is not None:
-            proto_obj.trigger_price = order.trigger_price
-        if order.cost is not None:
-            proto_obj.cost = order.cost
-        if order.amount is not None:
-            proto_obj.amount = order.amount
-        if order.filled is not None:
-            proto_obj.filled = order.filled
-        if order.remaining is not None:
-            proto_obj.remaining = order.remaining
-        if order.fee is not None:
-            proto_obj.fee = order.fee
-        if order.average is not None:
-            proto_obj.average = order.average
-        if order.trades is not None:
-            proto_obj.trades = order.trades
-        if order.fees is not None:
-            proto_obj.fees = order.fees
-        if order.last_update_timestamp is not None:
-            proto_obj.last_update_timestamp = order.last_update_timestamp
-        if order.reduce_only is not None:
-            proto_obj.reduce_only = order.reduce_only
-        if order.take_profit_price is not None:
-            proto_obj.take_profit_price = order.take_profit_price
-        if order.stop_loss_price is not None:
-            proto_obj.stop_loss_price = order.stop_loss_price
-
-    @classmethod
-    def decode(cls, proto_obj) -> Order:
-        """Decode proto_obj to Order."""
-        symbol = proto_obj.symbol
-        status = OrderStatus.decode(proto_obj.status)
-        side = OrderSide.decode(proto_obj.side)
-        type = OrderType.decode(proto_obj.type)
-        price = proto_obj.price if proto_obj.price is not None and proto_obj.HasField("price") else None
-        exchange_id = (
-            proto_obj.exchange_id if proto_obj.exchange_id is not None and proto_obj.HasField("exchange_id") else None
-        )
-        id = proto_obj.id if proto_obj.id is not None and proto_obj.HasField("id") else None
-        client_order_id = (
-            proto_obj.client_order_id
-            if proto_obj.client_order_id is not None and proto_obj.HasField("client_order_id")
-            else None
-        )
-        info = proto_obj.info if proto_obj.info is not None and proto_obj.HasField("info") else None
-        ledger_id = proto_obj.ledger_id if proto_obj.ledger_id is not None and proto_obj.HasField("ledger_id") else None
-        asset_a = proto_obj.asset_a if proto_obj.asset_a is not None and proto_obj.HasField("asset_a") else None
-        asset_b = proto_obj.asset_b if proto_obj.asset_b is not None and proto_obj.HasField("asset_b") else None
-        timestamp = proto_obj.timestamp if proto_obj.timestamp is not None and proto_obj.HasField("timestamp") else None
-        datetime = proto_obj.datetime if proto_obj.datetime is not None and proto_obj.HasField("datetime") else None
-        time_in_force = (
-            proto_obj.time_in_force
-            if proto_obj.time_in_force is not None and proto_obj.HasField("time_in_force")
-            else None
-        )
-        post_only = proto_obj.post_only if proto_obj.post_only is not None and proto_obj.HasField("post_only") else None
-        last_trade_timestamp = (
-            proto_obj.last_trade_timestamp
-            if proto_obj.last_trade_timestamp is not None and proto_obj.HasField("last_trade_timestamp")
-            else None
-        )
-        stop_price = (
-            proto_obj.stop_price if proto_obj.stop_price is not None and proto_obj.HasField("stop_price") else None
-        )
-        trigger_price = (
-            proto_obj.trigger_price
-            if proto_obj.trigger_price is not None and proto_obj.HasField("trigger_price")
-            else None
-        )
-        cost = proto_obj.cost if proto_obj.cost is not None and proto_obj.HasField("cost") else None
-        amount = proto_obj.amount if proto_obj.amount is not None and proto_obj.HasField("amount") else None
-        filled = proto_obj.filled if proto_obj.filled is not None and proto_obj.HasField("filled") else None
-        remaining = proto_obj.remaining if proto_obj.remaining is not None and proto_obj.HasField("remaining") else None
-        fee = proto_obj.fee if proto_obj.fee is not None and proto_obj.HasField("fee") else None
-        average = proto_obj.average if proto_obj.average is not None and proto_obj.HasField("average") else None
-        trades = proto_obj.trades if proto_obj.trades is not None and proto_obj.HasField("trades") else None
-        fees = proto_obj.fees if proto_obj.fees is not None and proto_obj.HasField("fees") else None
-        last_update_timestamp = (
-            proto_obj.last_update_timestamp
-            if proto_obj.last_update_timestamp is not None and proto_obj.HasField("last_update_timestamp")
-            else None
-        )
-        reduce_only = (
-            proto_obj.reduce_only if proto_obj.reduce_only is not None and proto_obj.HasField("reduce_only") else None
-        )
-        take_profit_price = (
-            proto_obj.take_profit_price
-            if proto_obj.take_profit_price is not None and proto_obj.HasField("take_profit_price")
-            else None
-        )
-        stop_loss_price = (
-            proto_obj.stop_loss_price
-            if proto_obj.stop_loss_price is not None and proto_obj.HasField("stop_loss_price")
-            else None
-        )
-        return cls(
-            symbol=symbol,
-            status=status,
-            side=side,
-            type=type,
-            price=price,
-            exchange_id=exchange_id,
-            id=id,
-            client_order_id=client_order_id,
-            info=info,
-            ledger_id=ledger_id,
-            asset_a=asset_a,
-            asset_b=asset_b,
-            timestamp=timestamp,
-            datetime=datetime,
-            time_in_force=time_in_force,
-            post_only=post_only,
-            last_trade_timestamp=last_trade_timestamp,
-            stop_price=stop_price,
-            trigger_price=trigger_price,
-            cost=cost,
-            amount=amount,
-            filled=filled,
-            remaining=remaining,
-            fee=fee,
-            average=average,
-            trades=trades,
-            fees=fees,
-            last_update_timestamp=last_update_timestamp,
-            reduce_only=reduce_only,
-            take_profit_price=take_profit_price,
-            stop_loss_price=stop_loss_price,
-        )
+        """
+        return ErrorCode(error_code_protobuf_object.error_code)
 
 
-class OrderSide(IntEnum):
-    """OrderSide."""
+class OrderSide(Enum):
+    """This class represents an instance of OrderSide."""
 
     BUY = 0
     SELL = 1
 
     @staticmethod
-    def encode(pb_obj, order_side: OrderSide) -> None:
-        """Encode OrderSide to protobuf."""
-        pb_obj.order_side = order_side
+    def encode(order_side_protobuf_object, order_side_object: "OrderSide") -> None:
+        """Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the order_side_protobuf_object argument is matched with the instance of this class
+        in the 'order_side_object' argument.
+
+
+
+        Args:
+        ----
+               order_side_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_side_object:  an instance of this class to be encoded in the protocol buffer object.
+
+        """
+        order_side_protobuf_object.order_side = order_side_object.value
 
     @classmethod
-    def decode(cls, pb_obj) -> OrderSide:
-        """Decode protobuf to OrderSide."""
-        return cls(pb_obj.order_side)
+    def decode(cls, order_side_protobuf_object) -> "OrderSide":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'order_side_protobuf_object' argument.
+
+        'order_side_protobuf_object' argument.
 
 
-class OrderStatus(IntEnum):
-    """OrderStatus."""
+        Args:
+        ----
+               order_side_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
+        """
+        return OrderSide(order_side_protobuf_object.order_side)
+
+
+class OrderStatus(Enum):
+    """This class represents an instance of OrderStatus."""
 
     NEW = 0
     SUBMITTED = 1
@@ -274,51 +104,201 @@ class OrderStatus(IntEnum):
     FAILED = 9
 
     @staticmethod
-    def encode(pb_obj, order_status: OrderStatus) -> None:
-        """Encode OrderStatus to protobuf."""
-        pb_obj.order_status = order_status
+    def encode(order_status_protobuf_object, order_status_object: "OrderStatus") -> None:
+        """Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the order_status_protobuf_object argument is matched with the instance of this
+        class in the 'order_status_object' argument.
+
+
+
+        Args:
+        ----
+               order_status_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_status_object:  an instance of this class to be encoded in the protocol buffer object.
+
+        """
+        order_status_protobuf_object.order_status = order_status_object.value
 
     @classmethod
-    def decode(cls, pb_obj) -> OrderStatus:
-        """Decode protobuf to OrderStatus."""
-        return cls(pb_obj.order_status)
+    def decode(cls, order_status_protobuf_object) -> "OrderStatus":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'order_status_protobuf_object' argument.
+
+        'order_status_protobuf_object' argument.
 
 
-class OrderType(IntEnum):
-    """OrderType."""
+        Args:
+        ----
+               order_status_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
+        """
+        return OrderStatus(order_status_protobuf_object.order_status)
+
+
+class OrderType(Enum):
+    """This class represents an instance of OrderType."""
 
     LIMIT = 0
     MARKET = 1
 
     @staticmethod
-    def encode(pb_obj, order_type: OrderType) -> None:
-        """Encode OrderType to protobuf."""
-        pb_obj.order_type = order_type
+    def encode(order_type_protobuf_object, order_type_object: "OrderType") -> None:
+        """Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the order_type_protobuf_object argument is matched with the instance of this class
+        in the 'order_type_object' argument.
+
+
+
+        Args:
+        ----
+               order_type_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               order_type_object:  an instance of this class to be encoded in the protocol buffer object.
+
+        """
+        order_type_protobuf_object.order_type = order_type_object.value
 
     @classmethod
-    def decode(cls, pb_obj) -> OrderType:
-        """Decode protobuf to OrderType."""
-        return cls(pb_obj.order_type)
+    def decode(cls, order_type_protobuf_object) -> "OrderType":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'order_type_protobuf_object' argument.
+
+        'order_type_protobuf_object' argument.
 
 
-class Orders(BaseModel):
-    """Orders."""
+        Args:
+        ----
+               order_type_protobuf_object:  the protocol buffer object whose type corresponds with this class.
 
-    orders: list[Order]
+        """
+        return OrderType(order_type_protobuf_object.order_type)
+
+
+class BaseCustomEncoder(BaseModel):
+    """This class is a base class for encoding and decoding protocol buffer objects."""
 
     @staticmethod
-    def encode(proto_obj, orders: Orders) -> None:
-        """Encode Orders to protobuf."""
-        for item in orders.orders:
-            Order.encode(proto_obj.orders.add(), item)
+    def encode(ps_response_protobuf_object: Any, ps_response_object: Any) -> None:
+        """Encode an instance of this class into the protocol buffer object.
+
+        The protocol buffer object in the ps_response_protobuf_object argument is matched with the instance of this
+        class in the 'ps_response_object' argument.
+
+
+
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+               ps_response_object:  an instance of this class to be encoded in the protocol buffer object.
+
+        """
+        for key, value in ps_response_object.__dict__.items():
+            current_attr = getattr(ps_response_protobuf_object, key)
+            if isinstance(value, Enum):
+                type(value).encode(current_attr, value)
+                continue
+            if isinstance(value, dict):
+                current_attr.update(value)
+                continue
+            if isinstance(value, list):
+                current_attr.extend(value)
+                continue
+            setattr(ps_response_protobuf_object, key, value)
 
     @classmethod
-    def decode(cls, proto_obj) -> Orders:
-        """Decode proto_obj to Orders."""
-        orders = [Order.decode(item) for item in proto_obj.orders]
-        return cls(orders=orders)
+    def decode(cls, ps_response_protobuf_object: Any) -> "Any":
+        """Decode a protocol buffer object that corresponds with this class into an instance of this class.
+
+        A new instance of this class is created that matches the protocol buffer object in the
+        'ps_response_protobuf_object' argument.
+
+        'ps_response_protobuf_object' argument.
 
 
-for cls in BaseModel.__subclasses__():
-    if cls.__module__ == __name__:
-        cls.model_rebuild()
+        Args:
+        ----
+               ps_response_protobuf_object:  the protocol buffer object whose type corresponds with this class.
+
+        """
+        keywords = list(cls.__annotations__.keys())
+        kwargs = {}
+        for keyword in keywords:
+            proto_attr = getattr(ps_response_protobuf_object, keyword)
+            if isinstance(proto_attr, Enum):
+                kwargs[keyword] = type(proto_attr).decode(proto_attr)
+                continue
+            if isinstance(proto_attr, list):
+                kwargs[keyword] = [type(proto_attr[0]).decode(item) for item in proto_attr]
+                continue
+            if isinstance(proto_attr, dict):
+                kwargs[keyword] = dict(proto_attr.items())
+                continue
+            if str(type(proto_attr)) in CUSTOM_ENUM_MAP:
+                kwargs[keyword] = CUSTOM_ENUM_MAP[str(type(proto_attr))].decode(proto_attr).value
+                continue
+            kwargs[keyword] = proto_attr
+        return cls(**kwargs)
+
+    def __eq__(self, other):
+        """Check if two instances of this class are equal."""
+        return self.dict() == other.dict()
+
+    def __hash__(self):
+        """Return the hash value of this instance."""
+        return hash(self.dict())
+
+
+class Order(BaseCustomEncoder):
+    """This class represents an instance of Order."""
+
+    symbol: str
+    status: OrderStatus
+    side: OrderSide
+    type: OrderType
+    price: float | None = None
+    exchange_id: str | None = None
+    id: str | None = None
+    client_order_id: str | None = None
+    info: str | None = None
+    ledger_id: str | None = None
+    asset_a: str | None = None
+    asset_b: str | None = None
+    timestamp: float | None = None
+    datetime: str | None = None
+    time_in_force: str | None = None
+    post_only: bool | None = None
+    last_trade_timestamp: float | None = None
+    stop_price: float | None = None
+    trigger_price: float | None = None
+    cost: float | None = None
+    amount: float | None = None
+    filled: float | None = None
+    remaining: float | None = None
+    fee: float | None = None
+    average: float | None = None
+    trades: str | None = None
+    fees: str | None = None
+    last_update_timestamp: float | None = None
+    reduce_only: bool | None = None
+    take_profit_price: float | None = None
+    stop_loss_price: float | None = None
+    immediate_or_cancel: float | None = None
+
+
+class Orders(BaseCustomEncoder):
+    """This class represents an instance of Orders."""
+
+    orders: list[Order] = []
+
+
+CUSTOM_ENUM_MAP = {
+    "<class 'orders_pb2.ErrorCode'>": ErrorCode,
+    "<class 'orders_pb2.OrderStatus'>": OrderStatus,
+    "<class 'orders_pb2.OrderType'>": OrderType,
+    "<class 'orders_pb2.OrderSide'>": OrderSide,
+}

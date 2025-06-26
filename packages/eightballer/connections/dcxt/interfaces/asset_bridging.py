@@ -118,7 +118,6 @@ class AssetBridgingInterface(BaseInterface):
                     currency=currency,
                     logger=connection.logger,
                     amount=amount,
-                    receiver=client.signer.address,
                 )
 
             else:
@@ -129,7 +128,6 @@ class AssetBridgingInterface(BaseInterface):
                     chain_id=source_chain_id,
                     currency=currency,
                     amount=amount,
-                    receiver=client.wallet,  # Derive contract wallet
                 )
                 # we move the funds from the funding account to the subaccount.
                 # we wait for 60 seconds for the deposit to be confirmed.
