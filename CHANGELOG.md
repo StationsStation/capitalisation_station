@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.33](https://github.com/StationsStation/capitalisation_station/tree/v0.1.33) (2025-06-26)
+
+**Merged pull requests:**
+
+- feat/merge conflict [\#107](https://github.com/StationsStation/capitalisation_station/pull/107)
+- `try/except` in `request\_bridge` [\#106](https://github.com/StationsStation/capitalisation_station/pull/106)
+- feat/improse order functionality [\#105](https://github.com/StationsStation/capitalisation_station/pull/105)
+
 ## [v0.1.32](https://github.com/StationsStation/capitalisation_station/tree/v0.1.32) (2025-06-25)
 
 ## [v0.1.30](https://github.com/StationsStation/capitalisation_station/tree/v0.1.30) (2025-06-17)
