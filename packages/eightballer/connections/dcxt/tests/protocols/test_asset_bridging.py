@@ -133,6 +133,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_result))
             stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
             stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
+            stack.enter_context(patch.object(client, "deposit_to_derive", return_value=fake_result))
 
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
