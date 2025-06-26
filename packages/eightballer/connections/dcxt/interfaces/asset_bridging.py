@@ -77,7 +77,6 @@ class AssetBridgingInterface(BaseInterface):
             exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
             client: AsyncClient = exchange.client
 
-
             await client.connect_ws()
             await client.login_client()
 
