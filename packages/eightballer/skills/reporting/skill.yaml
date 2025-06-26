@@ -19,8 +19,8 @@ fingerprint:
   tests/test_strategy.py: bafybeih7fatlnolimx5buvqltuwgdocenwuj5pc3a5v2bratrbppy6o2tm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt_wrapper:0.1.0:bafybeihpx3zqdwu5bz4mpoctyacd2jfug5ccj3yt2mwekzelesrzu7hgcm
-- eightballer/dcxt:0.1.0:bafybeiclet2agwofkoh46owkef3wqjj33chsurfery7vv2ogjlrdhdcaqq
+- eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
+- eightballer/dcxt:0.1.0:bafybeiaeyialrknb4t4pd2vvuivw6tu34h5znavuts3hrpk4b55khqro4i
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 contracts: []
 protocols:
