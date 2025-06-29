@@ -36,46 +36,6 @@ from aea.skills.behaviours import State, FSMBehaviour, TickerBehaviour
 from packages.zarathustra.contracts.derolas_staking.contract import DerolasStaking
 
 
-#   const gameState = await readContract(_config, {
-#     address: DEPLOYED_CONTRACT_ADDRESS,
-#     abi: derolasAbi.abi,
-#     functionName: "getGameState",
-#     args: [userAddress],
-#   }) as [
-#     bigint, // epochLength
-#     bigint, // currentEpoch
-#     bigint, // epochEndBlock
-#     bigint, // minimalDonation
-#     bigint, // blocksRemaining
-#     bigint, // epochRewards
-#     bigint, // totalDonated
-#     bigint, // totalClaimed
-#     bigint, // incentiveBalance
-#     bigint, // userCurrentDonation
-#     bigint, // userCurrentShare
-#     bigint, // userClaimable
-#     boolean, // hasClaimed
-#     boolean // canPlayGame
-#   ];
-
-#   const [
-#     currentEpoch,
-#     epochLength,
-#     epochEndBlock,
-#     minimalDonation,
-#     blocksRemaining,
-#     epochRewards,
-#     totalDonated,
-#     totalClaimed,
-#     incentiveBalance,
-#     userCurrentDonation,
-#     userCurrentShare,
-#     userClaimable,
-#     hasClaimed,
-#     canPlayGame,
-#   ] = gameState;
-
-
 @dataclass
 class GameState:
     """Game state dataclass."""
@@ -273,7 +233,7 @@ class BaseState(State, ABC):  # noqa: PLR0904
         except Exception as e:
             self.context.logger.warning(f"Transaction call failed: {e}")
             raise
-        self.context.logger.info(f"Transaction built: {txn}")
+        self.context.logger.debug(f"Transaction built: {txn}")
         return txn
 
     def simulate_tx(self, raw_tx) -> None:
@@ -357,10 +317,10 @@ class AwaitTriggerRound(BaseState):
 
         try:
             game_state = self.game_state
-            self.context.logger.info(f"{self.name}: game state: {game_state}")
+            self.context.logger.debug(f"{self.name}: game state: {game_state}")
             if not game_state.blocks_remaining:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-                self.context.logger.info(f"{self.name}: event {self._event}")
+                self.context.logger.debug(f"{self.name}: event {self._event}")
             elif self.claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
@@ -368,7 +328,7 @@ class AwaitTriggerRound(BaseState):
             elif self.can_play_game:
                 value_captured = self.pending_donations.popleft()
                 msg = f"Value captured: {value_captured} USD, donating: {self.minimum_donation / 1e18} ETH"
-                self.context.logger.info(msg)
+                self.context.logger.debug(msg)
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
@@ -420,9 +380,9 @@ class CheckEpochRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.EPOCH_END_NEAR
             else:
                 self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
-            self.context.logger.info(f"{self.name}: event {self._event}")
+            self.context.logger.debug(f"{self.name}: event {self._event}")
         except Exception as e:
-            self.context.logger.info(f"Exception in {self.name}: {e}")
+            self.context.logger.exception(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
@@ -444,7 +404,7 @@ class EndEpochRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            self.context.logger.debug(f"Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -452,7 +412,7 @@ class EndEpochRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.TX_FAILED
             else:  # tx_receipt.status == 1
                 self._event = DerolasautomatorabciappEvents.EPOCH_ENDED
-            self.context.logger.info(f"{self.name}: event {self._event}")
+            self.context.logger.debug(f"{self.name}: event {self._event}")
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
@@ -533,7 +493,7 @@ class DonateRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            self.context.logger.debug(f"Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -572,7 +532,7 @@ class MakeClaimRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            self.context.logger.debug(f"Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT

@@ -225,13 +225,13 @@ class CoolDownRound(BaseBehaviour):
                 + f"until {self.sleep_until} with error count "
                 + f"{self.strategy.error_count}"
             )
-            self.context.logger.info(msg)
+            self.context.logger.debug(msg)
             return
 
         if datetime.now(tz=TZ) < self.sleep_until:
             self.context.logger.debug(f"Sleeping until {self.sleep_until}")
             return
-        self.context.logger.info(f"Cool down finished. at {datetime.now(tz=TZ)}")
+        self.context.logger.debug(f"Cool down finished. at {datetime.now(tz=TZ)}")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
@@ -407,7 +407,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.strategy.state.current_round = str(self.current)
 
         if current_state.is_done():
-            self.context.logger.info(f"State {self.current} is done.")
+            self.context.logger.debug(f"State {self.current} is done.")
             if current_state in self._final_states:
                 # we reached a final state - return.
                 self.logger.info("Reached a final state.")
@@ -415,7 +415,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             event = current_state.event
             next_state = self.transitions.get(self.current, {}).get(event, None)
-            self.context.logger.info(
+            self.context.logger.debug(
                 f"Transitioning from state {self.current} with event {event}. Next state: {next_state}"
             )
             self.current = next_state

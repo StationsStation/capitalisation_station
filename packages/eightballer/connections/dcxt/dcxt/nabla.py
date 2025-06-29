@@ -10,9 +10,13 @@ from pydantic import BaseModel
 from web3.exceptions import TimeExhausted
 from aea.configurations.base import PublicId
 
+from packages.eightballer.connections.dcxt.dcxt.exceptions import UnsupportedAsset
 from packages.eightballer.connections.dcxt.utils import load_contract
 from packages.eightballer.protocols.orders.custom_types import (
     Order,
+    OrderSide,
+    OrderStatus,
+    OrderType,
     Orders,
 )
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
@@ -25,6 +29,8 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
 
 
 # ruff: noqa: ARG002
+
+ZERO_PRICE_FEED = "0000000000000000000000000000000000000000000000000000000000000000"
 
 
 class Pool(BaseModel):
@@ -171,6 +177,10 @@ class NablaFinanceClient(BaseErc20Exchange):
             contract_address=self.config.ORACLE,
             var_0=asset,
         )["str"]
+        if price_feed_id == ZERO_PRICE_FEED:
+            msg = f"No price feed found for asset {asset_address} ({asset})"
+            self.logger.error(msg)
+            raise UnsupportedAsset(msg)
         return price_feed_id.hex()
 
     async def get_ask_bid(
@@ -205,7 +215,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_b = out_b_units / 10**token_b.decimals
         bid_price = out_b / amount  # B per A
 
-        self.logger.info(
+        self.logger.debug(
             "Bid quote %s→%s: %.6f %s → %.6f %s; bid = %.6f %s/%s",
             token_a.symbol,
             token_b.symbol,
@@ -224,7 +234,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_a = out_a_units / 10**token_a.decimals
         ask_price = out_b / out_a  # B per A
 
-        self.logger.info(
+        self.logger.debug(
             "Ask quote %s→%s: %.6f %s → %.6f %s; ask = %.6f %s/%s",
             token_b.symbol,
             token_a.symbol,
@@ -288,7 +298,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         """Fetch positions."""
         return []
 
-    def fetch_tickers(self, *args, **kwargs):
+    async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
 
         return Tickers(tickers=[])
@@ -301,6 +311,10 @@ class NablaFinanceClient(BaseErc20Exchange):
         side: str,
         amount: float,
         retries: int = 0,
+        symbol: str | None = None,
+        price: float | None = None,
+        type: str = "market",
+        data: dict[str, Any] | None = None,
     ):
         """Create an order."""
 
@@ -343,9 +357,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         )
         self.logger.debug("Built swap transaction", extra={"tx": swap_tx})
         signed_tx = signed_tx_to_dict(self.account.entity.sign_transaction(swap_tx))
-        self.logger.info(f"Signed transaction: {signed_tx}")
         tx_hash = try_send_signed_transaction(self.web3, signed_tx, raise_on_try=True)
-        self.logger.info(f"Transaction hash: {tx_hash}")
 
         try:
             receipt = self.web3.api.eth.wait_for_transaction_receipt(tx_hash, timeout=60, poll_latency=1)
@@ -357,13 +369,26 @@ class NablaFinanceClient(BaseErc20Exchange):
                         "blockNumber": receipt.get("blockNumber"),
                     },
                 )
+                status = OrderStatus.FILLED
             else:
                 self.logger.info("Transaction failed on-chain", extra={"receipt": receipt})
+                status = OrderStatus.FAILED
         except TimeExhausted:
             self.logger.exception(f"Timeout waiting for transaction receipt: {tx_hash}")
             receipt = None
 
-        return receipt
+        return Order(
+            exchange_id=self.exchange_id.lower(),
+            ledger_id=self.supported_ledger.name.lower(),
+            symbol=symbol,
+            price= price,
+            side=OrderSide[side.upper()],
+            id=tx_hash,
+            type=OrderType[type.upper()],
+            status=status,
+            amount=amount if side == OrderSide.SELL.name.lower() else amount / price,
+        )
+
 
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
@@ -403,18 +428,22 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         """
 
+
         nabla_portal_contract = load_contract(PublicId.from_str(NABLA_PORTAL_PUBLIC_ID))
         token_prices = [
             token_prices[from_token_address],
             token_prices[to_token_address],
         ]
-        swap_amount_out = nabla_portal_contract.quote_swap_exact_tokens_for_tokens(
-            ledger_api=self.web3,
-            contract_address=self.spender_address,
+        params = dict(
             amount_in=amount,
             token_path=[from_token_address, to_token_address],
             router_path=[self.router_address],
             token_prices=token_prices,
+        )
+        swap_amount_out = nabla_portal_contract.quote_swap_exact_tokens_for_tokens(
+            ledger_api=self.web3,
+            contract_address=self.spender_address,
+            **params,
         )
         return swap_amount_out["amountOut_"]
 
@@ -438,7 +467,12 @@ class NablaFinanceClient(BaseErc20Exchange):
         feed_to_address = {feed_id: addr for addr, feed_id in price_feeds.items()}
 
         params = [("ids[]", id_) for id_ in price_feeds.values()]
-        response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
+        response = requests.get(
+            NABLA_PRICE_API_URL, 
+            data=params, 
+            timeout=10
+        )
+
         if response.status_code != 200:
             msg = f"Failed to fetch price data: {response.status_code} - {response.text}"
             raise ValueError(msg)

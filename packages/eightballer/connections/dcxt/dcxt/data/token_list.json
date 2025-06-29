@@ -13104,6 +13104,14 @@
         },
         {
             "chainId": 8453,
+            "address": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+            "name": "Wrapped BTC",
+            "symbol": "WBTC",
+            "decimals": 8,
+            "logoURI": "https://assets.coingecko.com/coins/images/35916/large/wrapped-bitcoin-wbtc-logo.png?1710210285"
+        },
+        {
+            "chainId": 8453,
             "address": "0xb8DE15Fb529d98C93C749De63c749D48D25A30DF",
             "name": "BASED NUT",
             "symbol": "NUT",
@@ -13261,6 +13269,14 @@
             "symbol": "STONE",
             "decimals": 18,
             "logoURI": "https://coin-images.coingecko.com/coins/images/33103/large/200_200.png?1702602672"
+        },
+        {
+            "chainId": 42161,
+            "address": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
+            "name": "Wrapped BTC",
+            "symbol": "WBTC",
+            "decimals": 8,
+            "logoURI": "https://assets.coingecko.com/coins/images/7598/standard/wrapped_bitcoin_wbtc.png?1696507857"
         },
         {
             "chainId": 42161,

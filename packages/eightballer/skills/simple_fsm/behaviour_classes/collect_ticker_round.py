@@ -106,11 +106,10 @@ class CollectTickerRound(BaseConnectionRound):
 
             self.strategy.state.prices[ticker.ledger_id][ticker.exchange_id] = [t.dict() for t in tickers.tickers]
 
-        self.context.logger.info("Ticker collection complete.")
+        self.context.logger.debug("Ticker collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
-        self.context.logger.info("Parsing Tickers complete.")
         return None
 
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:

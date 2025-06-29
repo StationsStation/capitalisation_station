@@ -259,7 +259,7 @@ class BaseErc20Exchange:
         self.logger.info(f"Setting approval for {asset_id} on {self.exchange_id}")
         token = self.look_up_by_symbol(asset_id, ledger=self.supported_ledger)
         if not token:
-            msg = f"Token {asset_id} not found"
+            msg = f"Token {asset_id} not found for exchange {self.exchange_id} on ledger {self.ledger_id}"
             raise BadSymbol(msg)
 
         if is_eoa:

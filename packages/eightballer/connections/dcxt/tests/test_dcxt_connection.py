@@ -75,11 +75,11 @@ TEST_EXCHANGE_DATA = """
   wallet: null
   ledger_id: ethereum
   rpc_url: https://eth.drpc.org
-- name: nabla_finance
+- name: nabla
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
-  ledger_id: base
-  rpc_url: https://base.drpc.org
+  ledger_id: arbitrum
+  rpc_url: https://arbitrum.drpc.org
 """
 
 TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}

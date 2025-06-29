@@ -155,7 +155,7 @@ async def swap_tokens(
     buy_token: ChecksumAddress,
     safe_address: ChecksumAddress | None = None,
     app_data: str = APP_DATA,
-    slippage_tolerance: float = 0.005,
+    slippage_tolerance: float = 0.000,
 ) -> CompletedOrder:
     """Swap tokens using the CoW Protocol.
     `CowContractAddress.VAULT_RELAYER` needs to be approved to spend the sell token before calling this function.
@@ -176,7 +176,7 @@ async def swap_tokens(
     order_quote: OrderQuoteResponse = await order_book_api.post_quote(order_quote_request, order_side)
     valid_to = order_quote.quote.validTo
     # we set the expiration to be 1 years from now
-    valid_to += 365 * 24 * 60 * 60
+    valid_to += 7 * 24 * 60 * 60
     order = CowOrder(
         sell_token=sell_token,
         buy_token=buy_token,
