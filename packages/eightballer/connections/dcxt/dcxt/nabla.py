@@ -10,16 +10,16 @@ from pydantic import BaseModel
 from web3.exceptions import TimeExhausted
 from aea.configurations.base import PublicId
 
-from packages.eightballer.connections.dcxt.dcxt.exceptions import UnsupportedAsset
 from packages.eightballer.connections.dcxt.utils import load_contract
 from packages.eightballer.protocols.orders.custom_types import (
     Order,
-    OrderSide,
-    OrderStatus,
-    OrderType,
     Orders,
+    OrderSide,
+    OrderType,
+    OrderStatus,
 )
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
+from packages.eightballer.connections.dcxt.dcxt.exceptions import UnsupportedAsset
 from packages.eightballer.connections.dcxt.dcxt.data.tokens import SupportedLedgers
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
     BaseErc20Exchange,
@@ -381,14 +381,13 @@ class NablaFinanceClient(BaseErc20Exchange):
             exchange_id=self.exchange_id.lower(),
             ledger_id=self.supported_ledger.name.lower(),
             symbol=symbol,
-            price= price,
+            price=price,
             side=OrderSide[side.upper()],
             id=tx_hash,
             type=OrderType[type.upper()],
             status=status,
             amount=amount if side == OrderSide.SELL.name.lower() else amount / price,
         )
-
 
     async def fetch_open_orders(self, **kwargs):
         """Fetch open orders."""
@@ -428,18 +427,17 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         """
 
-
         nabla_portal_contract = load_contract(PublicId.from_str(NABLA_PORTAL_PUBLIC_ID))
         token_prices = [
             token_prices[from_token_address],
             token_prices[to_token_address],
         ]
-        params = dict(
-            amount_in=amount,
-            token_path=[from_token_address, to_token_address],
-            router_path=[self.router_address],
-            token_prices=token_prices,
-        )
+        params = {
+            "amount_in": amount,
+            "token_path": [from_token_address, to_token_address],
+            "router_path": [self.router_address],
+            "token_prices": token_prices,
+        }
         swap_amount_out = nabla_portal_contract.quote_swap_exact_tokens_for_tokens(
             ledger_api=self.web3,
             contract_address=self.spender_address,
@@ -467,11 +465,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         feed_to_address = {feed_id: addr for addr, feed_id in price_feeds.items()}
 
         params = [("ids[]", id_) for id_ in price_feeds.values()]
-        response = requests.get(
-            NABLA_PRICE_API_URL, 
-            data=params, 
-            timeout=10
-        )
+        response = requests.get(NABLA_PRICE_API_URL, data=params, timeout=10)
 
         if response.status_code != 200:
             msg = f"Failed to fetch price data: {response.status_code} - {response.text}"

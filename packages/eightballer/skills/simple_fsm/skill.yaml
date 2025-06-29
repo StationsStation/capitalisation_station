@@ -10,13 +10,13 @@ fingerprint:
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
   behaviour_classes/base.py: bafybeihlqnuqqgqqjsgelemayzxkmnmvahi4kcnhcbic453m2m3lcgn5im
   behaviour_classes/collect_data_round.py: bafybeidzp32ivgsgzoite6zig6weur3vfil5o6n2y2oieg7nx2o6z2lgka
-  behaviour_classes/collect_ticker_round.py: bafybeifzpeyzwjl5zc73zll3m5gz5fvehjg4n4v622kuxapwfspeqjhsq4
+  behaviour_classes/collect_ticker_round.py: bafybeigxwkg7ccei2qhatkfaeoajikrehteghr5io7itcdxz6saqnepie4
   behaviour_classes/instantiate_bridge_request_round.py: bafybeighzx52ebkr2ar3uvpx767b23v3cqgxiaql32invkhra6bp6xwwcu
   behaviour_classes/no_opportunity_round.py: bafybeie6dl4bg6bnd7zllg3vydcc6br6k2u2jxcj7w2fgcbrdkpsb36aii
   behaviour_classes/order_execution_round.py: bafybeidkveizivrr2vge2i6pvqg7pmp3aqhvgdehprvys7rhd3vomtsvem
-  behaviour_classes/post_trade_round.py: bafybeifadhszvyqd6jgib6zzoadsppghdet4vkfsefymxu5tux6uycfklu
+  behaviour_classes/post_trade_round.py: bafybeifvbqaiotakdylv7guw5rzwfagomhvizsn4gfci7ld6j2rhiqyexa
   behaviour_classes/set_approvals.py: bafybeiftb34mrh2rte5uvqtvg25wn5dwsidup4uvtuhw2g3om32jfnz2um
-  behaviours.py: bafybeibbdtdpugb3kpa4poco7znhsvf3iujfa37cjye2zsa76aaulf7wba
+  behaviours.py: bafybeiaio62hi2cdexrogcriscn7xnbppubq55q4yjmgq24l5s5znfnm34
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
   handlers.py: bafybeie35qy7zafazv6n4ff6yhy7ncr5fbl3iqofp74w2hvt5s6qpy4ahi
@@ -28,7 +28,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
 - eightballer/ccxt_wrapper:0.1.0:bafybeihpx3zqdwu5bz4mpoctyacd2jfug5ccj3yt2mwekzelesrzu7hgcm
-- eightballer/dcxt:0.1.0:bafybeiegqqwetsk5uxkkkshj6jfcn7nng7vocjc22ltxghywdvoeus3mya
+- eightballer/dcxt:0.1.0:bafybeihrwyqrm2ufejtphhn5tjxyfghvug5wyqkcef7y5uamc6pmgyef2y
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
