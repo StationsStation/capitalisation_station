@@ -64,7 +64,7 @@ APP_DATA = "0x66df8b6f8bf097b0a79fc5ad6b4c3c53ab986706a5a133828f2f681ca2ce6772"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.00025
+SLIPPAGE_TOLERANCE = 0.0  # 0.0 means exact match, no slippage allowed. 0.001 means 0.1% slippage allowed, etc.
 # 1bps fee applied to all trades
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,

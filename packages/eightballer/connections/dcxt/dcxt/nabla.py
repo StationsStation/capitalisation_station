@@ -326,6 +326,8 @@ class NablaFinanceClient(BaseErc20Exchange):
         from_token_address = asset_a if side == "sell" else asset_b
         to_token_address = asset_b if side == "sell" else asset_a
         amt = int(amount * 10**decimals)
+        if side == "buy":
+            amt = int(amt * price)
 
         output_token_amount = await self.get_swap_quote(
             from_token_address=from_token_address,
@@ -386,7 +388,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             id=tx_hash,
             type=OrderType[type.upper()],
             status=status,
-            amount=amount if side == OrderSide.SELL.name.lower() else amount / price,
+            amount=amount,
         )
 
     async def fetch_open_orders(self, **kwargs):
@@ -465,7 +467,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         feed_to_address = {feed_id: addr for addr, feed_id in price_feeds.items()}
 
         params = [("ids[]", id_) for id_ in price_feeds.values()]
-        response = requests.get(NABLA_PRICE_API_URL, data=params, timeout=10)
+        response = requests.get(NABLA_PRICE_API_URL, params=params, timeout=10)
 
         if response.status_code != 200:
             msg = f"Failed to fetch price data: {response.status_code} - {response.text}"

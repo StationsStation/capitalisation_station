@@ -41,16 +41,18 @@ class PostTradeRound(BaseBehaviour):
         def get_explorer_link(order: Order) -> None:
             """Get the explorer link."""
 
+            cow_base = order.ledger_id if order.ledger_id != "arbitrum" else "arb1"
+
             exchange_to_explorer = {
-                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/",
+                "cowswap": f"https://explorer.cow.fi/{cow_base}/orders/",
             }
             explorers = {
                 "mode": "https://modescan.io/tx/",
                 "gnosis": "https://gnosisscan.io/tx/",
-                "arbitrum": "https://arbiscan.io/tx/",
                 "derive": "https://explorer.derive.xyz/tx/",
                 "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
                 "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
+                "arbitrum": exchange_to_explorer.get(order.exchange_id, "https://arbiscan.io/tx/"),
             }
             if order.ledger_id not in explorers:
                 return ""
