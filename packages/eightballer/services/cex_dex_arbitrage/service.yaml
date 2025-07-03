@@ -1,16 +1,15 @@
 name: cex_dex_arbitrage
 author: eightballer
 version: 0.1.0
-description:
-  An agent service to demonstrate simple usage of DCXT and CCXT libraries
+description: An agent service to demonstrate simple usage of DCXT and CCXT libraries
   to perform arbitrage between a CEX and DEX.
-aea_version: ">=1.0.0, <2.0.0"
+aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
   .env.example: bafybeihzd3yocyrtad63nzjthcqpxnktjgdumhacil72khllev3kmte56m
   tests/test_service.py: bafybeicslmnjnf43pbzmwlqr7p7xw2iktcrnuq6l7klkrc5r4yberg66u4
 fingerprint_ignore_patterns: []
-agent: eightballer/trader:0.1.0:bafybeie6zt2m6qwhhzxgm5vgpnfixffprrjwhowmrdvzm2q7yiclqmbwbu
+agent: eightballer/trader:0.1.0:bafybeiern4outkn7r3pg34guxstvuk6dd372eaw3lcau2othqul55rutoe
 number_of_agents: 1
 deployment:
   agent:
@@ -30,13 +29,13 @@ public_id: eightballer/ccxt_wrapper:0.1.0:bafybeidyrx74rtv7x3h757y44cc5xle6crnnk
 type: connection
 config:
   exchanges:
-    - name: mexc
-      api_key: ${MEXC_API_KEY:str}
-      api_secret: ${MEXC_API_SECRET:str}
+  - name: mexc
+    api_key: ${MEXC_API_KEY:str}
+    api_secret: ${MEXC_API_SECRET:str}
   target_skill_id: eightballer/simple_fsm:0.1.0
 ---
 public_id: eightballer/apprise_wrapper:0.1.0
 type: connection
 config:
   endpoints:
-    - ${NTFY_ENDPOINT:str:ntfy://ntfy.sh/agent-arbing}
+  - ${NTFY_ENDPOINT:str:ntfy://ntfy.sh/agent-arbing}

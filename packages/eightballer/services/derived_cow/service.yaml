@@ -2,14 +2,14 @@ name: derived_cow
 author: eightballer
 version: 0.1.0
 description: A new service, scaffolded by the Adev cli from eightballer/derive_arbitrage_agent:0.1.0
-aea_version: ">=1.0.0, <2.0.0"
+aea_version: '>=1.0.0, <2.0.0'
 license: apache-2.0
 fingerprint:
   __init__.py: bafybeifdc5tk6topwmcviejgkm3lmrhnhk6fqqvh76hv7xwg3qkhxifznm
   tests/__init__.py: bafybeiausykbndof27hjfgwqg6nnmk7zw7lyytwzekih3gszwdypbtxjka
   tests/test_service.py: bafybeicplirjoql5q3l5zjl5xrgamnoxuj3year7u2vrtfnzzllzeyutuy
 fingerprint_ignore_patterns: []
-agent: eightballer/derive_arbitrage_agent:0.1.0:bafybeidslka5cb6esqkwerzdv7v4ynz5poiacqlxi7kj6zplqkte5ji2ku
+agent: eightballer/derive_arbitrage_agent:0.1.0:bafybeiaie7ahiz42l2tynghjiekxej5zwufmqbzg2lxolsp5oo6bg4vglu
 number_of_agents: 1
 deployment:
   agent:
@@ -23,7 +23,7 @@ models:
     args:
       dexs:
         derive:
-          - derive
+        - derive
         cowswap: ${COW_CHAINS:list:["arbitrum"]}
         balancer: []
       strategy_public_id: eightballer/lbtc_arbitrage:0.1.0

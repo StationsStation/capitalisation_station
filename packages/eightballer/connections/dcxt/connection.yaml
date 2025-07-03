@@ -2,12 +2,11 @@ name: dcxt
 author: eightballer
 version: 0.1.0
 type: connection
-description:
-  A connection inspired by CCXT, but for DeFi protocols. Allows for agent
+description: A connection inspired by CCXT, but for DeFi protocols. Allows for agent
   native access to DeFi protocols such as Balancer, Lyra, and HundredX. Enables agents
   to interact with DeFi protocols in a standardized way.
 license: Apache-2.0
-aea_version: ">=1.0.0, <2.0.0"
+aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
   cli.py: bafybeien63b5czy7ulmar3dqytdo54y272o7m6rcoouqyqhzh2icpl2bym
@@ -15,27 +14,27 @@ fingerprint:
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
   dcxt/balancer.py: bafybeifu2vih7xzymw374rejhiwaornoet2e4omur7rwkvo2zg33do7ifm
-  dcxt/cowswap.py: bafybeieotyd4jyk36s64isog6xk252v4efmzw3se4aut5qgtgtwrglad7a
+  dcxt/cowswap.py: bafybeifekqsyo3np4d3tlavevz6jn6mxyx4ykazyhgn7gispfag2vlw7dm
   dcxt/data/__init__.py: bafybeiazzyf5llflmu6wrc2zzmwy6aabilr74g5gq2kkr5dxvtug55jy3a
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/nabla/config.json: bafybeigkhrmzzrkn6ir5yvgm5ep6vtftjhptgfvlqpshnx5adddnlz6gqe
-  dcxt/data/token_list.json: bafybeibbvcug2yhgbexhsv3p5wye3uzyvbqgyquph735lnop2q2pw2y7gu
-  dcxt/data/tokens.py: bafybeihl4w2zvt2axcbmznrzbh6rwwbylsbut2sn2s5hlm5iippsae3t5a
-  dcxt/defi_exchange.py: bafybeicpoxgwpouv4vyhkcttjfrbmwgh4qij7q47nhc4jqq4diklbmss5q
-  dcxt/derive.py: bafybeid5wuqwatismfnqcxkyrpv6x2lmkmwswewygatlv2qepngr554j3m
+  dcxt/data/token_list.json: bafybeiakjvmpjcmglppycv444d44h5vcyfqjzd5cmgnjonwryvnuafdq3i
+  dcxt/data/tokens.py: bafybeifw6p4h4us2ciborxpmkaqmfgvcsa4c23d273mbcldmpgakjjqqfq
+  dcxt/defi_exchange.py: bafybeidtww2r3uv5ap62brw65li7emmgadnhqa24aomhdtes42udjs5sci
+  dcxt/derive.py: bafybeighav46lcfbb7uvd4fantnctbiiq2mf5x3kjyhdj6mqxopj7j4l74
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
-  dcxt/nabla.py: bafybeicu4njjn4636yvxoszaknno37sj5np5vve4dzbuz6zyq5adt4yjqe
+  dcxt/nabla.py: bafybeia57vleifwgnp2i32iofsscpltq3apa6zwpzji5bgm2q37pmtvcpu
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
   erc_20/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
   erc_20/build/erc_20.json: bafybeigq7y6pgsnh4yfwngmlq73udgdtqydeya5qriir3lbj3ftj76277e
   erc_20/contract.py: bafybeichsry2ajfr4okg5yjolqnvaofhupcxyr2kgy3uq4dpfolz25pbpa
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
-  interfaces/approvals.py: bafybeigangiqcnjnjiqp4y4y4o5qywy4qvyikrjd5z5d7ox3xnlxtv6fva
-  interfaces/asset_bridging.py: bafybeie4zkewgzag6ohmthrxk6xdpmhyv27nm6klmsqn2wscxcz5suc53m
+  interfaces/approvals.py: bafybeidsl5z72althhmjlmzffyd3hksoau5otus7pgspu2xk5u4y4r53ou
+  interfaces/asset_bridging.py: bafybeig2ivbyufwhpae3nqf4alsjg4ukyt3ino2zroynd5wa7dhf47vpyy
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
@@ -64,93 +63,93 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 restricted_to_protocols:
-  - eightballer/balances:0.1.0
-  - eightballer/markets:0.1.0
-  - eightballer/ohlcv:0.1.0
-  - eightballer/order_book:0.1.0
-  - eightballer/orders:0.1.0
-  - eightballer/positions:0.1.0
-  - eightballer/spot_asset:0.1.0
-  - eightballer/tickers:0.1.0
-  - eightballer/approvals:0.1.0
-  - zarathustra/asset_bridging:0.1.0
+- eightballer/balances:0.1.0
+- eightballer/markets:0.1.0
+- eightballer/ohlcv:0.1.0
+- eightballer/order_book:0.1.0
+- eightballer/orders:0.1.0
+- eightballer/positions:0.1.0
+- eightballer/spot_asset:0.1.0
+- eightballer/tickers:0.1.0
+- eightballer/approvals:0.1.0
+- zarathustra/asset_bridging:0.1.0
 protocols:
-  - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-  - zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
-  - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
-  - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-  - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
-  - eightballer/ohlcv:0.1.0:bafybeigwyeqxnrh3jtfds7y476msgdyalnmlwovyz2g3fuvbepdepquo2i
-  - eightballer/order_book:0.1.0:bafybeiffebyryitykzu7sikddqwmlhrfau2tdohbuuelhojheodoficcqa
-  - eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
-  - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
-  - eightballer/spot_asset:0.1.0:bafybeiawis7yf4yvno4vz6yxpommordi7vqesisn4rcloiq6c4ro25wtdq
-  - eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
+- zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
+- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
+- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
+- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
+- eightballer/ohlcv:0.1.0:bafybeigwyeqxnrh3jtfds7y476msgdyalnmlwovyz2g3fuvbepdepquo2i
+- eightballer/order_book:0.1.0:bafybeiffebyryitykzu7sikddqwmlhrfau2tdohbuuelhojheodoficcqa
+- eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
+- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
+- eightballer/spot_asset:0.1.0:bafybeiawis7yf4yvno4vz6yxpommordi7vqesisn4rcloiq6c4ro25wtdq
+- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
 class_name: DcxtConnection
 config:
   exchanges:
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: ethereum
-      rpc_url: https://eth.drpc.org
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: optimism
-      rpc_url: https://mainnet.optimism.io
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: base
-      rpc_url: https://base-mainnet.public.blastapi.io
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: mode
-      rpc_url: https://1rpc.io/mode
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: gnosis
-      rpc_url: https://gnosis-pokt.nodies.app
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: arbitrum
-      rpc_url: https://endpoints.omniatech.io/v1/arbitrum/one/public
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: balancer
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: optimism
-      rpc_url: https://mainnet.optimism.io
-      etherscan_api_key: YOUR_ETHERSCAN_API_KEY
-    - name: one_inch
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: ethereum
-      rpc_url: https://eth.drpc.org
-      api_key: YOUR_1INCH_API_KEY
-    - name: cowswap
-      key_path: ethereum_private_key.txt
-      wallet: null
-      ledger_id: ethereum
-      rpc_url: https://eth.drpc.org
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: optimism
+    rpc_url: https://mainnet.optimism.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: base
+    rpc_url: https://base-mainnet.public.blastapi.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: mode
+    rpc_url: https://1rpc.io/mode
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: gnosis
+    rpc_url: https://gnosis-pokt.nodies.app
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: arbitrum
+    rpc_url: https://endpoints.omniatech.io/v1/arbitrum/one/public
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: optimism
+    rpc_url: https://mainnet.optimism.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: one_inch
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
+    api_key: YOUR_1INCH_API_KEY
+  - name: cowswap
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
   target_skill_id: null
 excluded_protocols: []
 dependencies:
   dateparser:
-    version: ">=1.1.1"
+    version: '>=1.1.1'
   derive_client:
-    version: ">=0.2.9"
+    version: '>=0.2.9'
   web3:
-    version: ">=5.0.0"
+    version: '>=5.0.0'
   open-aea-ledger-ethereum: {}
   open-balpy: {}
   open-multicaller: {}

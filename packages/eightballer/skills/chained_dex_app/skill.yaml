@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
-aea_version: ">=1.0.0, <2.0.0"
+aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiadapoomcxzwi3gf46tlbb2agwostxeuzxgl2ldjqkyjnne6ysb4a
   behaviours.py: bafybeidayenqw2n7sjecqafnmo4hpmadbnsscqwmjvj4ncmbs5ah3adw7e
@@ -18,16 +18,16 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-  - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-  - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-  - eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
-  - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
-  - eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
+- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
+- eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
+- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
+- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
 skills:
-  - eightballer/dex_data_retrieval:0.1.0:bafybeifnoxdtybos43kxvgcsswcdvbpaspzab7yucjdgka5hth33rcshfq
-  - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
-  - eightballer/registration_abci:0.1.0:bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y
-  - eightballer/reset_pause_abci:0.1.0:bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu
+- eightballer/dex_data_retrieval:0.1.0:bafybeihj3e67ok27tu7g2f3cvutwzs2pebmldpvkj7h24zfvvye5gwcffm
+- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
+- eightballer/registration_abci:0.1.0:bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y
+- eightballer/reset_pause_abci:0.1.0:bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu
 behaviours:
   main:
     args: {}
@@ -106,8 +106,8 @@ models:
         enabled: true
         reporting_enabled: true
         exchange_ids:
-          - deribit
-          - binance
+        - deribit
+        - binance
         extra_kwargs: {}
         backoff: 1.0
         retries: 3
@@ -117,19 +117,19 @@ models:
         chain_id: chain-c4daS1
         consensus_params:
           block:
-            max_bytes: "22020096"
-            max_gas: "-1"
-            time_iota_ms: "1000"
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
           evidence:
-            max_age_duration: "172800000000000"
-            max_age_num_blocks: "100000"
-            max_bytes: "1048576"
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
           validator:
             pub_key_types:
-              - ed25519
+            - ed25519
           version: {}
-        genesis_time: "2022-05-20T16:00:21.735122717Z"
-        voting_power: "10"
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
       history_check_timeout: 1205
       ipfs_domain_name: null
       keeper_allowed_retries: 3
@@ -148,9 +148,9 @@ models:
       service_registry_address: null
       setup:
         all_participants:
-          - "0x0000000000000000000000000000000000000000"
+        - '0x0000000000000000000000000000000000000000'
         consensus_threshold: null
-        safe_contract_address: "0x0000000000000000000000000000000000000000"
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
