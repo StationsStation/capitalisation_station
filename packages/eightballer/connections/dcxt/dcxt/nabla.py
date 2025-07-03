@@ -327,6 +327,9 @@ class NablaFinanceClient(BaseErc20Exchange):
         to_token_address = asset_b if side == "sell" else asset_a
         amt = int(amount * 10**decimals)
 
+        if side == "buy":
+            amt *= price
+
         output_token_amount = await self.get_swap_quote(
             from_token_address=from_token_address,
             to_token_address=to_token_address,
