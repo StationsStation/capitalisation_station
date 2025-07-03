@@ -15,9 +15,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""This module contains the contract for the derolas_staking."""
+"""This module contains the contract for the direct_price_oracle."""
 
 from aea.configurations.base import PublicId
 
 
-PUBLIC_ID = PublicId.from_str("zarathustra/derolas_staking:0.1.0")
+PUBLIC_ID = PublicId.from_str("zarathustra/direct_price_oracle:0.1.0")

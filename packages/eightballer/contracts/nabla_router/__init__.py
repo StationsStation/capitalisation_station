@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2025 zarathustra
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
-"""This module contains the contract for the derolas_staking."""
+"""This module contains the contract for the nabla_router."""
 
 from aea.configurations.base import PublicId
 
 
-PUBLIC_ID = PublicId.from_str("zarathustra/derolas_staking:0.1.0")
+PUBLIC_ID = PublicId.from_str("eightballer/nabla_router:0.1.0")

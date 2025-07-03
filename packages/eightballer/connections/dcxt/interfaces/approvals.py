@@ -6,12 +6,19 @@ import requests
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.approvals.message import ApprovalsMessage
-from packages.eightballer.protocols.approvals.dialogues import ApprovalsDialogue, BaseApprovalsDialogues
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+from packages.eightballer.protocols.approvals.dialogues import (
+    ApprovalsDialogue,
+    BaseApprovalsDialogues,
+)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import (
+    BaseInterface,
+)
 
 
 if TYPE_CHECKING:
-    from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
+    from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
+        BaseErc20Exchange,
+    )
 
 
 class ApprovalsInterface(BaseInterface):
@@ -27,10 +34,9 @@ class ApprovalsInterface(BaseInterface):
         """Get all approvals from the exchange."""
 
         approval = message.approval
-
         exchanges = connection.exchanges.get(approval.ledger_id)
         if exchanges is None:
-            connection.logger.warning(f"Ledger {approval.ledger_id } not found.")
+            connection.logger.warning(f"Ledger {approval.ledger_id} not found.")
             return dialogue.reply(
                 performative=ApprovalsMessage.Performative.ERROR,
                 target_message=message,
