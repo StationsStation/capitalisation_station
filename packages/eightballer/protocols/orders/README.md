@@ -1,7 +1,8 @@
 # Orders Protocol
 
 ## Description
-A protocol for representing orders.
+
+...
 
 ## Specification
 
@@ -120,6 +121,7 @@ ct:Order: |
     optional bool reduce_only = 29;
     optional float take_profit_price = 30;
     optional float stop_loss_price = 31;
+    optional float immediate_or_cancel = 32;
 ct:Orders: |
     repeated Order orders = 1;
 ...
@@ -146,4 +148,5 @@ roles: { agent }
 end_states: [ error]
 keep_terminal_state_dialogues: false
 ...
+
 ```

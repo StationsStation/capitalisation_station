@@ -66,7 +66,9 @@ class ApprovalsInterface(BaseInterface):
             )
 
         except dcxt.exceptions.BadSymbol:
-            connection.logger.warning(f"Bad symbol when fetching approvals for {message.exchange_id}")
+            connection.logger.warning(
+                f"Bad symbol when fetching approvals for {message.approval.exchange_id}: {approval.asset_id}"
+            )
             response_message = dialogue.reply(
                 performative=ApprovalsMessage.Performative.ERROR,
                 target_message=message,
@@ -81,7 +83,7 @@ class ApprovalsInterface(BaseInterface):
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout,
         ):
-            connection.logger.warning(f"Request timeout when fetching approvals for {message.exchange_id}")
+            connection.logger.warning(f"Request timeout when fetching approvals for {message.approval.exchange_id}")
             response_message = dialogue.reply(
                 performative=ApprovalsMessage.Performative.ERROR,
                 target_message=message,

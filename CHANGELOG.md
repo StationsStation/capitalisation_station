@@ -1,5 +1,35 @@
 # Changelog
 
+## [v0.1.33](https://github.com/StationsStation/capitalisation_station/tree/v0.1.33) (2025-06-26)
+
+**Merged pull requests:**
+
+- feat/merge conflict [\#107](https://github.com/StationsStation/capitalisation_station/pull/107)
+- `try/except` in `request\_bridge` [\#106](https://github.com/StationsStation/capitalisation_station/pull/106)
+- feat/improse order functionality [\#105](https://github.com/StationsStation/capitalisation_station/pull/105)
+
+## [v0.1.32](https://github.com/StationsStation/capitalisation_station/tree/v0.1.32) (2025-06-25)
+
+## [v0.1.30](https://github.com/StationsStation/capitalisation_station/tree/v0.1.30) (2025-06-17)
+
+**Closed issues:**
+
+- cannot run install.sh [\#99](https://github.com/StationsStation/capitalisation_station/issues/99)
+
+**Merged pull requests:**
+
+- fix/update to donator [\#103](https://github.com/StationsStation/capitalisation_station/pull/103)
+- feat/market quoter [\#102](https://github.com/StationsStation/capitalisation_station/pull/102)
+- feat/market quoter [\#100](https://github.com/StationsStation/capitalisation_station/pull/100)
+- update docs [\#96](https://github.com/StationsStation/capitalisation_station/pull/96)
+- spot asset bridging [\#95](https://github.com/StationsStation/capitalisation_station/pull/95)
+- Derolas automator [\#94](https://github.com/StationsStation/capitalisation_station/pull/94)
+- spot asset bridging [\#93](https://github.com/StationsStation/capitalisation_station/pull/93)
+- wtf [\#92](https://github.com/StationsStation/capitalisation_station/pull/92)
+- feat/integrating derive changes [\#90](https://github.com/StationsStation/capitalisation_station/pull/90)
+- Generate protocols [\#89](https://github.com/StationsStation/capitalisation_station/pull/89)
+- Asset Bridging Protocol [\#82](https://github.com/StationsStation/capitalisation_station/pull/82)
+
 ## [v0.1.29](https://github.com/StationsStation/capitalisation_station/tree/v0.1.29) (2025-05-05)
 
 **Merged pull requests:**

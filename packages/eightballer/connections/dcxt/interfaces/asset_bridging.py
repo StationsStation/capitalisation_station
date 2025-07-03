@@ -1,16 +1,28 @@
 """Interface for asset_bridging protocol."""
 
 import asyncio
+import traceback
 from typing import TYPE_CHECKING
 from functools import partial
 
 from derive_client.utils import get_w3_connection, wait_for_tx_receipt
 from derive_client.data_types import ChainID, Currency, TxStatus
 
-from packages.zarathustra.protocols.asset_bridging.message import CustomErrorInfo, AssetBridgingMessage
-from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
-from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
-from packages.eightballer.connections.dcxt.interfaces.interface_base import BaseInterface
+from packages.zarathustra.protocols.asset_bridging.message import (
+    CustomErrorInfo,
+    AssetBridgingMessage,
+)
+from packages.zarathustra.protocols.asset_bridging.dialogues import (
+    AssetBridgingDialogue,
+    BaseAssetBridgingDialogues,
+)
+from packages.zarathustra.protocols.asset_bridging.custom_types import (
+    BridgeResult,
+    BridgeRequest,
+)
+from packages.eightballer.connections.dcxt.interfaces.interface_base import (
+    BaseInterface,
+)
 
 
 if TYPE_CHECKING:
@@ -36,120 +48,128 @@ class AssetBridgingInterface(BaseInterface):
         """Handle incoming asset bridge request."""
 
         reply_err = partial(self._error_reply, dialogue=dialogue, target_message=message)
-        if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
-            return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PERFORMATIVE,
-                err_msg="Expecting REQUEST_BRIDGE performative",
-            )
-
-        request: BridgeRequest = message.request
-
-        if request.bridge != ChainID.DERIVE.name.lower():
-            return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
-                err_msg=f"Bridge '{request.bridge}' not supported",
-            )
-        if "derive" not in {request.source_ledger_id, request.target_ledger_id}:
-            return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
-                err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
-            )
-        if request.target_token and request.target_token != request.source_token:
-            return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
-                err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
-            )
-
-        ledger_id = exchange_id = request.bridge
-        exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
-        client: AsyncClient = exchange.client
-
-        await client.connect_ws()
-        await client.login_client()
-
-        if request.receiver is not None:
-            err_msg = (
-                "Providing a custom receiver isn't supported for the Derive superbridge.\n"
-                "We automatically use:\n"
-                f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
-                f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
-            )
-            return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
-                err_msg=err_msg,
-            )
-
-        amount = request.amount
-        currency = Currency[request.source_token]
-        source_chain_id = ChainID[request.source_ledger_id.upper()]
-        target_chain_id = ChainID[request.target_ledger_id.upper()]
-
-        if request.source_ledger_id == "derive":
-            # we first move to the funding account.
-            connection.logger.info(f"Transferring {amount} {request.source_token} from subaccount to funding account.")
-            client.transfer_from_subaccount_to_funding(
-                amount=amount, asset_name=request.source_token, subaccount_id=client.subaccount_id
-            )
-            # then we withdraw to the receiver address.
-            await asyncio.sleep(self.sleep_time)  # wait for the deposit to be confirmed
-            connection.logger.info(
-                f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain_id}."
-            )
-            tx_result = await self._execute_tx(
-                function=client.withdraw_from_derive,
-                chain_id=target_chain_id,
-                currency=currency,
-                logger=connection.logger,
-                amount=amount,
-                receiver=client.signer.address,
-            )
-
-        else:
-            connection.logger.info(
-                f"Depositing {amount} {request.source_token} to Derive wallet: {client.wallet} on {source_chain_id}."
-            )
-            tx_result = client.deposit_to_derive(
-                chain_id=source_chain_id,
-                currency=currency,
-                amount=amount,
-                receiver=client.wallet,  # Derive contract wallet
-            )
-            # we move the funds from the funding account to the subaccount.
-            # we wait for 60 seconds for the deposit to be confirmed.
-            await asyncio.sleep(self.sleep_time)  # wait for the deposit to be confirmed
-            connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
-
-            await self._execute_tx(
-                function=client.transfer_from_funding_to_subaccount,
-                amount=amount,
-                logger=connection.logger,
-                asset_name=request.source_token,
-                subaccount_id=client.subaccount_id,
-            )
-
-        match tx_result.status:
-            case TxStatus.FAILED:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
-            case TxStatus.SUCCESS:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
-            case TxStatus.PENDING:
-                status = BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT
-            case TxStatus.ERROR:
+        try:
+            if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
                 return reply_err(
-                    code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
-                    err_msg=f"{tx_result}",
+                    code=ErrorCode.Code.CODE_INVALID_PERFORMATIVE,
+                    err_msg="Expecting REQUEST_BRIDGE performative",
                 )
 
-        result = BridgeResult(
-            tx_hash=tx_result.tx_hash,
-            status=status,
-            request=request,
-        )
-        return dialogue.reply(
-            performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
-            target_message=message,
-            result=result,
-        )
+            request: BridgeRequest = message.request
+
+            if request.bridge != ChainID.DERIVE.name.lower():
+                return reply_err(
+                    code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
+                    err_msg=f"Bridge '{request.bridge}' not supported",
+                )
+            if "derive" not in {request.source_ledger_id, request.target_ledger_id}:
+                return reply_err(
+                    code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
+                    err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
+                )
+            if request.target_token and request.target_token != request.source_token:
+                return reply_err(
+                    code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
+                    err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
+                )
+
+            ledger_id = exchange_id = request.bridge
+            exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
+            client: AsyncClient = exchange.client
+
+            await client.connect_ws()
+            await client.login_client()
+
+            if request.receiver is not None:
+                err_msg = (
+                    "Providing a custom receiver isn't supported for the Derive superbridge.\n"
+                    "We automatically use:\n"
+                    f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
+                    f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
+                )
+                return reply_err(
+                    code=ErrorCode.Code.CODE_INVALID_PARAMETERS,
+                    err_msg=err_msg,
+                )
+
+            amount = request.amount
+            currency = Currency[request.source_token]
+            source_chain_id = ChainID[request.source_ledger_id.upper()]
+            target_chain_id = ChainID[request.target_ledger_id.upper()]
+
+            if request.source_ledger_id == "derive":
+                # we first move to the funding account.
+                connection.logger.info(
+                    f"Transferring {amount} {request.source_token} from subaccount to funding account."
+                )
+                client.transfer_from_subaccount_to_funding(
+                    amount=amount,
+                    asset_name=request.source_token,
+                    subaccount_id=client.subaccount_id,
+                )
+                # then we withdraw to the receiver address.
+                await asyncio.sleep(self.sleep_time)  # wait for the deposit to be confirmed
+                connection.logger.info(
+                    f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain_id}."
+                )
+                tx_result = await self._execute_tx(
+                    function=client.withdraw_from_derive,
+                    chain_id=target_chain_id,
+                    currency=currency,
+                    logger=connection.logger,
+                    amount=amount,
+                )
+
+            else:
+                connection.logger.info(
+                    f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain_id}."
+                )
+                tx_result = client.deposit_to_derive(
+                    chain_id=source_chain_id,
+                    currency=currency,
+                    amount=amount,
+                )
+                # we move the funds from the funding account to the subaccount.
+                # we wait for 60 seconds for the deposit to be confirmed.
+                await asyncio.sleep(self.sleep_time)  # wait for the deposit to be confirmed
+                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
+
+                await self._execute_tx(
+                    function=client.transfer_from_funding_to_subaccount,
+                    amount=amount,
+                    logger=connection.logger,
+                    asset_name=request.source_token,
+                    subaccount_id=client.subaccount_id,
+                )
+
+            match tx_result.status:
+                case TxStatus.FAILED:
+                    status = BridgeResult.BridgeStatus.BRIDGE_STATUS_FAILED
+                case TxStatus.SUCCESS:
+                    status = BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+                case TxStatus.PENDING:
+                    status = BridgeResult.BridgeStatus.BRIDGE_STATUS_PENDING_TX_RECEIPT
+                case TxStatus.ERROR:
+                    return reply_err(
+                        code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
+                        err_msg=f"{tx_result}",
+                    )
+
+            result = BridgeResult(
+                tx_hash=tx_result.tx_hash,
+                status=status,
+                request=request,
+            )
+            return dialogue.reply(
+                performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
+                target_message=message,
+                result=result,
+            )
+        except Exception as e:  # noqa: BLE001
+            return reply_err(
+                code=ErrorCode.Code.CODE_OTHER_EXCEPTION,
+                err_msg=f"Bridging failure: {e}\n{traceback.format_exc()}",
+            )
 
     async def _execute_tx(self, function, logger, attempts=0, *args, **kwargs):
         """Execute a transaction and handle exceptions."""

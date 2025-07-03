@@ -94,10 +94,10 @@ class AgentState:
     new_orders: list[Order]
     failed_orders: list[Order]
     submitted_orders: list[Order]
-    unaffordable_opportunity: list[ArbitrageOpportunity]
     current_round: str = None
     current_period: int = 0
     last_transition_time: datetime.datetime = None
+    unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
     bridging_in_progress: bool = False
@@ -174,6 +174,7 @@ class ArbitrageStrategy(Model):
     entry_order: Order = None
     exit_order: Order = None
     donate: bool = True
+    alert_user: bool = True
 
     def __init__(self, **kwargs):
         """Initialize the model."""
@@ -184,6 +185,7 @@ class ArbitrageStrategy(Model):
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
+        self.alert_user = kwargs.pop("alert_user", True)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state

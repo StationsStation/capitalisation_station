@@ -2,10 +2,11 @@ name: dex_data_retrieval
 author: eightballer
 version: 0.1.0
 type: skill
-description: This ABCI is designed to collect data from dexs such that it can be reported
+description:
+  This ABCI is designed to collect data from dexs such that it can be reported
   back to the reporting skill. It is heavily inspired by the work from the ccxt skill.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: ">=1.0.0, <2.0.0"
 fingerprint:
   __init__.py: bafybeietsymwzilixsungxwi2ypv5242kwysg3fpesuj2nhnh6fujxwcdi
   behaviours.py: bafybeihncltwiey4c42ryeupeuq4rfzgx4nwd5rlyanfcsgkruw6haqdmm
@@ -25,16 +26,16 @@ fingerprint:
   tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeido4rpbn3ojn4pibkmj5uho3xv3rob6jbxh2c7ocjhkvflxwh5mei
+  - eightballer/dcxt:0.1.0:bafybeido4rpbn3ojn4pibkmj5uho3xv3rob6jbxh2c7ocjhkvflxwh5mei
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-- eightballer/orders:0.1.0:bafybeiaultxkflx4q24hkyn4rddcs7siswwdeh6j6gxgofrv6uglqevo5i
-- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
-- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+  - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
+  - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
+  - eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
+  - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
+  - eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
+  - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 behaviours:
   main:
     args: {}
@@ -115,28 +116,28 @@ models:
         enabled: true
         reporting_enabled: false
         exchange_ids:
-        - balancer_optimism
-        - balancer_base
-        - balancer_ethereum
+          - balancer_optimism
+          - balancer_base
+          - balancer_ethereum
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       finalize_timeout: 60.0
       genesis_config:
         chain_id: chain-c4daS1
         consensus_params:
           block:
-            max_bytes: '22020096'
-            max_gas: '-1'
-            time_iota_ms: '1000'
+            max_bytes: "22020096"
+            max_gas: "-1"
+            time_iota_ms: "1000"
           evidence:
-            max_age_duration: '172800000000000'
-            max_age_num_blocks: '100000'
-            max_bytes: '1048576'
+            max_age_duration: "172800000000000"
+            max_age_num_blocks: "100000"
+            max_bytes: "1048576"
           validator:
             pub_key_types:
-            - ed25519
+              - ed25519
           version: {}
-        genesis_time: '2022-05-20T16:00:21.735122717Z'
-        voting_power: '10'
+        genesis_time: "2022-05-20T16:00:21.735122717Z"
+        voting_power: "10"
       history_check_timeout: 1205
       ipfs_domain_name: null
       keeper_allowed_retries: 3
@@ -155,9 +156,9 @@ models:
       service_registry_address: null
       setup:
         all_participants:
-        - '0x0000000000000000000000000000000000000000'
+          - "0x0000000000000000000000000000000000000000"
         consensus_threshold: null
-        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        safe_contract_address: "0x0000000000000000000000000000000000000000"
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3

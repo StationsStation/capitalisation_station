@@ -6,7 +6,7 @@
 	url = https://github.com/8ball030/v2-action-signing-python.git
 [submodule "third_party/forks/cow-py"]
 	path = third_party/forks/cow-py
-	url = https://github.com/8ball030/cow-py.git
+	url = https://github.com/cowdao-grants/cow-py.git
 [submodule "third_party/forks/balpy"]
 	path = third_party/forks/balpy
 	url = https://github.com/8ball030/balpy.git
