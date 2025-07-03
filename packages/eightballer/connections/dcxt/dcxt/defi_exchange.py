@@ -103,11 +103,10 @@ def sign_and_send_txn(txn, crypto, ledger_api):
 
     signed_txn = _sign_swap_txn(txn)
     txn_hash = try_send_signed_transaction(ledger_api, signed_txn)
-    result = False
     with contextlib.suppress(Exception):
         result = ledger_api.api.eth.wait_for_transaction_receipt(txn_hash, timeout=600)
-    if result.get("status") == 0:
-        return False, txn_hash
+        if result.get("status") == 0:
+            return False, txn_hash
     return True, txn_hash
 
 
