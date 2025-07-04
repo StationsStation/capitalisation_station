@@ -66,13 +66,13 @@ logging_config:
   disable_existing_loggers: false
   formatters:
     standard:
-      class: derive_arbitrage_agent.logger_setup.ShortNameFormatter
+      class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.ShortNameFormatter
       format: '[%(levelname)s] %(short_name)s: %(message)s'
     detailed:
       format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
       datefmt: '%Y-%m-%dT%H:%M:%S%z'
     json:
-      class: derive_arbitrage_agent.logger_setup.JSONFormatter
+      class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.JSONFormatter
       datefmt: '%Y-%m-%dT%H:%M:%S%z'
   handlers:
     console:
