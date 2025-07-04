@@ -5,7 +5,7 @@
 import json
 import logging
 import importlib
-from queue import Queue
+from queue import Full, Queue
 from logging.handlers import QueueHandler, QueueListener
 
 
@@ -110,17 +110,26 @@ def make_handler(handler_cfg: dict, formatter_cfgs: dict) -> logging.Handler:
 class QueuedHandler(logging.Handler):
     """A handler that enqueues records, and a background QueueListener fans them out to real handlers."""
 
-    def __init__(self, queue_size, handler_names, handler_configs, formatter_configs, level=logging.NOTSET):
+    def __init__(
+        self, queue_size, handler_names, handler_configs, formatter_configs, timeout: float = 0.1, level=logging.NOTSET
+    ):
         super().__init__(level=level)
 
         handlers = (make_handler(handler_configs[name], formatter_configs) for name in handler_names)
         queue = Queue(queue_size)
+        self._timeout = timeout
         self._listener = QueueListener(queue, *handlers, respect_handler_level=True)
         self._listener.start()
         self._enqueue = QueueHandler(queue)
 
-    def emit(self, record):
-        self._enqueue.emit(record)
+    def emit(self, record: logging.LogRecord) -> None:
+        """Try to enqueue the record with a bounded timeout. If the queue remains full, fallback to synchronous emit."""
+        try:
+            self._enqueue.queue.put(record, block=True, timeout=self._timeout)
+        except Full:
+            for h in self._real_handlers:
+                if record.levelno >= h.level:
+                    h.handle(record)
 
     def close(self):
         self._listener.stop()
