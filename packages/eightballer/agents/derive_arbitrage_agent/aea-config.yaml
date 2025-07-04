@@ -71,6 +71,9 @@ logging_config:
     detailed:
       format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
       datefmt: '%Y-%m-%dT%H:%M:%S%z'
+    json:
+      class: derive_arbitrage_agent.logger_setup.JSONFormatter
+      datefmt: '%Y-%m-%dT%H:%M:%S%z'
   handlers:
     console:
       class: logging.StreamHandler
@@ -78,8 +81,8 @@ logging_config:
       stream: ext://sys.stdout
     logfile:
       class: logging.handlers.TimedRotatingFileHandler
-      filename: log.txt
-      formatter: detailed
+      filename: log.jsonl
+      formatter: json
       level: INFO
       when: D         # rotate daily
       interval: 1
