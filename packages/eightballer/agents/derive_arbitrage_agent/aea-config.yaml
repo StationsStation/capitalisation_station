@@ -66,7 +66,11 @@ logging_config:
   disable_existing_loggers: false
   formatters:
     standard:
-      format: '%(asctime)s [%(levelname)s]: %(message)s'
+      class: derive_arbitrage_agent.logger_setup.ShortNameFormatter
+      format: '[%(levelname)s] %(short_name)s: %(message)s'
+    detailed:
+      format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
+      datefmt: '%Y-%m-%dT%H:%M:%S%z'
   handlers:
     console:
       class: logging.StreamHandler
@@ -75,7 +79,7 @@ logging_config:
     logfile:
       class: logging.FileHandler
       filename: log.txt
-      formatter: standard
+      formatter: detailed
       level: INFO
   loggers:
     aea:
