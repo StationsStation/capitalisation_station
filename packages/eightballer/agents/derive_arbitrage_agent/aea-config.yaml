@@ -77,10 +77,13 @@ logging_config:
       formatter: standard
       stream: ext://sys.stdout
     logfile:
-      class: logging.FileHandler
+      class: logging.handlers.TimedRotatingFileHandler
       filename: log.txt
       formatter: detailed
       level: INFO
+      when: D         # rotate daily
+      interval: 1
+      backupCount: 7  # keep 7 days
   loggers:
     aea:
       handlers:
