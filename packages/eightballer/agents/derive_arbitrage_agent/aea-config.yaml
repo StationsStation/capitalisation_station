@@ -5,6 +5,9 @@ license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
+  __init__.py: bafybeigfigcohr63kijc3kwb2oli7nntgqt4ooiztsl7eett3d6ycldaru
+  logger_setup.py: bafybeidxqiw3jj5xeyc6vorprsh4rxeznsvfxk7jzhosox7roxpj276rmm
+  no-queue-logging.yaml: bafybeif4lla3yo3pj25kxvxmssh5bzut5zh6w37mtsqq6qcyj3dqerqncy
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
@@ -68,7 +71,9 @@ logging_config:
     queue:
       class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.QueuedHandler
       queue_size: 10000
-      handler_names: ["console", "logfile"]
+      handler_names:
+      - console
+      - logfile
       handler_configs:
         console:
           class: rich.logging.RichHandler
@@ -80,9 +85,9 @@ logging_config:
           filename: log.jsonl
           formatter: json
           level: INFO
-          when: D         # rotate daily
+          when: D
           interval: 1
-          backupCount: 7  # keep 7 days
+          backupCount: 7
       formatter_configs:
         standard:
           class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.ShortNameFormatter
@@ -95,7 +100,8 @@ logging_config:
           datefmt: '%Y-%m-%dT%H:%M:%S%z'
   loggers:
     aea:
-      handlers: [queue]
+      handlers:
+      - queue
       level: INFO
       propagate: false
   version: 1
