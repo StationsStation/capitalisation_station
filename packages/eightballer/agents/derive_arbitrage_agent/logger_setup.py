@@ -51,6 +51,12 @@ class JSONFormatter(logging.Formatter):
             "line": record.lineno,
         }
 
+        if record.exc_info is not None:
+            obj["exc_info"] = self.formatException(record.exc_info)
+
+        if record.stack_info is not None:
+            obj["stack_info"] = self.formatStack(record.stack_info)
+
         # include any extras
         for key, val in record.__dict__.items():
             if key not in LOG_RECORD_BUILTIN_ATTRS:
