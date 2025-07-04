@@ -67,6 +67,7 @@ logging_config:
   handlers:
     queue:
       class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.QueuedHandler
+      queue_size: 10000
       handler_names: ["console", "logfile"]
       handler_configs:
         console:

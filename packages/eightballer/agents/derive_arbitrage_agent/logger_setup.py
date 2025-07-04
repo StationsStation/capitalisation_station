@@ -90,7 +90,7 @@ def make_formatter(fmt_cfg: dict) -> logging.Formatter:
 class QueuedHandler(logging.Handler):
     """A handler that enqueues records, and a background QueueListener fans them out to real handlers."""
 
-    def __init__(self, handler_names, handler_configs, formatter_configs, level=logging.NOTSET):
+    def __init__(self, queue_size, handler_names, handler_configs, formatter_configs, level=logging.NOTSET):
         super().__init__(level=level)
 
         handlers = []
@@ -110,7 +110,7 @@ class QueuedHandler(logging.Handler):
             h.setFormatter(make_formatter(fmt))
             handlers.append(h)
 
-        queue = Queue(-1)
+        queue = Queue(queue_size)
         self._listener = QueueListener(queue, *handlers, respect_handler_level=True)
         self._listener.start()
         self._enqueue = QueueHandler(queue)
