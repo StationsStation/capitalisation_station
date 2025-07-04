@@ -87,29 +87,33 @@ def make_formatter(fmt_cfg: dict) -> logging.Formatter:
     return logging.Formatter(fmt_cfg.get("format"), datefmt=fmt_cfg.get("datefmt"))
 
 
+def make_handler(handler_cfg: dict, formatter_cfgs: dict) -> logging.Handler:
+    """Instantiate a single handler from its config dict."""
+
+    module, clsname = handler_cfg["class"].rsplit(".", 1)
+    cls = getattr(importlib.import_module(module), clsname)
+
+    non_init = {"class", "formatter", "level"}
+    init_kwargs = {k: v for k, v in handler_cfg.items() if k not in non_init}
+    h = cls(**init_kwargs)
+
+    if lvl := handler_cfg.get("level"):
+        numeric = getattr(logging, lvl) if isinstance(lvl, str) else lvl
+        h.setLevel(numeric)
+
+    fmt = formatter_cfgs[handler_cfg["formatter"]]
+    h.setFormatter(make_formatter(fmt))
+
+    return h
+
+
 class QueuedHandler(logging.Handler):
     """A handler that enqueues records, and a background QueueListener fans them out to real handlers."""
 
     def __init__(self, queue_size, handler_names, handler_configs, formatter_configs, level=logging.NOTSET):
         super().__init__(level=level)
 
-        handlers = []
-        non_init_kwargs = {"class", "formatter", "level"}
-        for name in handler_names:
-            cfg = handler_configs[name]
-            module, clsname = cfg["class"].rsplit(".", 1)
-            cls = getattr(importlib.import_module(module), clsname)
-
-            init_kwargs = {k: v for k, v in cfg.items() if k not in non_init_kwargs}
-            h = cls(**init_kwargs)
-
-            if lvl := cfg.get("level"):
-                h.setLevel(getattr(logging, lvl) if isinstance(lvl, str) else lvl)
-
-            fmt = formatter_configs[cfg["formatter"]]
-            h.setFormatter(make_formatter(fmt))
-            handlers.append(h)
-
+        handlers = (make_handler(handler_configs[name], formatter_configs) for name in handler_names)
         queue = Queue(queue_size)
         self._listener = QueueListener(queue, *handlers, respect_handler_level=True)
         self._listener.start()
