@@ -76,9 +76,10 @@ logging_config:
       datefmt: '%Y-%m-%dT%H:%M:%S%z'
   handlers:
     console:
-      class: logging.StreamHandler
+      class: rich.logging.RichHandler
       formatter: standard
-      stream: ext://sys.stdout
+      level: INFO
+      markup: true
     logfile:
       class: logging.handlers.TimedRotatingFileHandler
       filename: log.jsonl
@@ -97,6 +98,7 @@ logging_config:
   version: 1
 dependencies:
   open-aea-ledger-ethereum: {}
+  rich: {}
 default_connection: null
 ---
 public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
