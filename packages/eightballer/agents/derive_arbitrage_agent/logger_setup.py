@@ -121,3 +121,42 @@ class QueuedHandler(logging.Handler):
     def close(self):
         self._listener.stop()
         super().close()
+
+
+def _run_benchmark(cfg, n: int = 1_000):
+    logging.config.dictConfig(cfg)
+    logger = logging.getLogger("aea")
+    start = time.perf_counter()
+    for i in range(n):
+        logger.info("Benchmark message %d", i)
+
+    time.sleep(0.5)  # give listener time to flush
+    duration = time.perf_counter() - start
+    return f"{n} records in {duration:.3f}s — {n / duration:.0f} msg/s"
+
+
+if __name__ == "__main__":
+    import time
+    import logging.config
+    from pathlib import Path
+
+    import yaml
+    from aea.configurations.base import AgentConfig
+    from aea.configurations.loader import ConfigLoader
+
+    base_path = Path(__file__).parent
+    aea_config_yaml = base_path / "aea-config.yaml"
+    config_loader = ConfigLoader("aea-config_schema.json", AgentConfig)
+    agent_config = config_loader.load(aea_config_yaml.read_text())
+    cfg = agent_config.logging_config
+
+    n = 10_000
+    queue_result = _run_benchmark(cfg, n=n)
+
+    no_queue_config_path = base_path / "no-queue-logging.yaml"
+    cfg = yaml.safe_load(no_queue_config_path.read_text())["logging_config"]
+    no_queue_result = _run_benchmark(cfg, n=n)
+
+    logger = logging.getLogger("aea")
+    logger.info(f"Queue: {queue_result}")
+    logger.info(f"No queue: {no_queue_result}")
