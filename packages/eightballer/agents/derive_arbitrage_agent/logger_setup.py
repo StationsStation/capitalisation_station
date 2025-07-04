@@ -127,6 +127,9 @@ class QueuedHandler(logging.Handler):
         try:
             self._enqueue.queue.put(record, block=True, timeout=self._timeout)
         except Full:
+            # annotate the record so JSONFormatter will include it
+            record.synchronous_fallback = True
+            # fallback: synchronous emit
             for h in self._real_handlers:
                 if record.levelno >= h.level:
                     h.handle(record)
