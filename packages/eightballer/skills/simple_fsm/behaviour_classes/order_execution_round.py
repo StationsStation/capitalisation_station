@@ -21,7 +21,6 @@
 
 from typing import Any
 from datetime import datetime
-from textwrap import dedent
 from collections.abc import Generator
 
 from aea.configurations.base import PublicId
@@ -105,32 +104,31 @@ class ExecuteOrdersRound(BaseConnectionRound):
         state: AgentState = self.strategy.state
         inbound = self.supported_protocols.get(OrdersMessage.protocol_id, [])
         if len(inbound) > 1:
-            self.context.logger.error("Multiple inbound messages received.")
             msg = "Multiple inbound messages received."
+            self.context.logger.error(msg, extra={"inbound": inbound})
             raise UnexpectedStateException(msg)
         order_result = inbound.pop()
         is_entry_order = len(state.new_orders) == 1
         is_exit_order = len(state.new_orders) == 0
         self.context.logger.info(f"Received inbound message: {order_result} is entry order: {is_entry_order}")
-        if order_result.performative is not OrdersMessage.Performative.ERROR:
-            is_as_expected = self.handle_submitted_order_response(
-                order=order_result.order,
-            )
-            self.context.logger.info(f"Order created: {order_result.order} is as expected: {is_as_expected}")
-            if not is_as_expected:
-                if is_entry_order:
-                    self._handle_failed_entry_order(order_result.order)
-                else:
-                    self._handle_failed_exit_order("Error creating order")
+        if order_result.performative is OrdersMessage.Performative.ERROR:
+            msg = "Error performative in order."
+            self.context.logger.error(msg, extra={"order_result": order_result})
+            raise UnexpectedStateException(msg)
+
+        is_as_expected = self.handle_submitted_order_response(order=order_result.order)
+        if not is_as_expected:
+            if is_entry_order:
+                self._handle_failed_entry_order(order_result.order)
             else:
-                if is_entry_order:
-                    self.strategy.entry_order = order_result.order
-                if is_exit_order:
-                    self.strategy.exit_order = order_result.order
-                self.context.logger.info(f"Everything is ok: {is_as_expected}")
+                self._handle_failed_exit_order("Error creating order")
             return
-        msg = "Error creating order"
-        raise UnexpectedStateException(msg)
+
+        if is_entry_order:
+            self.strategy.entry_order = order_result.order
+        if is_exit_order:
+            self.strategy.exit_order = order_result.order
+        self.context.logger.info(f"Order created: {order_result.order}")
 
     def act(self) -> None:
         """Perform the action of the state."""
@@ -164,16 +162,14 @@ class ExecuteOrdersRound(BaseConnectionRound):
             if is_entry_order:
                 self._handle_failed_entry_order(state.submitted_orders[0], "Timeout creating order")
             if is_exit_order:
-                msg = "Recovery orders are not yet supported."
-                self._handle_failed_exit_order(msg)
+                self._handle_failed_exit_order("Recovery orders are not yet supported.")
 
     def _handle_failed_entry_order(
         self,
         order: Order,
         msg: str = "Error creating entry order",
     ) -> None:
-        self.context.logger.error(msg)
-        self.context.logger.error(f"Error creating order: {order}")
+        self.context.logger.error(f"{msg}: {order}", extra={"order": order})
         self._is_done = True
         self.failed = ArbitrageabciappEvents.ENTRY_EXIT_ERROR
         self._event = self.failed
@@ -185,10 +181,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
         self.strategy.state.submitted_orders = []
         self.supported_protocols[OrdersMessage.protocol_id] = []
 
-    def _handle_failed_exit_order(
-        self,
-        msg: str,
-    ) -> None:
+    def _handle_failed_exit_order(self, msg: str) -> None:
         self.context.logger.error(msg)
         raise UnexpectedStateException(msg)
 
@@ -225,16 +218,15 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 return self._handle_failed_entry_order(order)
             if is_exit_order:
                 msg = (
-                    "Recovery orders are not yet supported."
+                    "Recovery orders are not yet supported. "
                     + "Timeout creating order, Hard exiting as manual adjustment needed!"
                 )
                 return self._handle_failed_exit_order(msg)
         if response.performative is OrdersMessage.Performative.ERROR or response.order.status is OrderStatus.FAILED:
-            self.context.logger.error(f"Error creating order: {order} response: {response}")
+            msg = f"Error creating order: {order} response: {response}"
             if is_entry_order:
-                return self._handle_failed_entry_order(order)
+                return self._handle_failed_entry_order(order, msg=msg)
             if is_exit_order:
-                msg = f"Error creating order: {response} {order}"
                 return self._handle_failed_exit_order(msg)
         return response
 
@@ -244,65 +236,46 @@ class ExecuteOrdersRound(BaseConnectionRound):
     ) -> bool:
         """Handle the order submission response."""
 
+        extra = {"order": order}
         if order.status == OrderStatus.PARTIALLY_FILLED:
             msg = "Partially filled orders are not yet supported."
-            raise UnexpectedStateException(msg)
-
-        if order.status in (
-            {
-                OrderStatus.FILLED,
-                OrderStatus.OPEN,
-                OrderStatus.NEW,
-            }
-        ):
-            self.context.logger.info(f"Order created: {order}")
-            self.context.logger.info(
-                dedent(f"""
-            Id: {order.id}
-            Exchange: {order.exchange_id}
-            Market:   {order.symbol}
-            Status:   {order.status}
-            Side:     {order.side}
-            Price:    {order.price}
-            Amount:   {order.amount}
-            Filled Amount:   {order.filled}
-            """)
-            )
-            if order.status == OrderStatus.FILLED:
-                self.context.logger.info("Order filled.")
-                self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
-                return True
-            if order.status in {
-                OrderStatus.OPEN,
-                OrderStatus.NEW,
-            }:
-                self.context.logger.info("Order created.")
-                self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
-                return True
-            msg = f"This is a completely unexpected error. Order {order}"
+            self.context.logger.error(msg, extra=extra)
             raise UnexpectedStateException(msg)
         if order.status == OrderStatus.FAILED:
-            self.context.logger.error(f"Order failed: {order}")
+            self.context.logger.error("Order failed.", extra=extra)
             self.strategy.state.failed_orders.append(order)
             self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
             return False
-
         if order.status == OrderStatus.CANCELLED:
             # If we have a cancelled order, and we have Some of it filled we need to handle it.
             filled_amt = order.filled
             if filled_amt > 0:
-                self.context.logger.info(f"Order cancelled: {order} with filled amount: {filled_amt}")
+                self.context.logger.info(f"Order cancelled with filled amount: {filled_amt}", extra=extra)
                 # we get te other order and modify the amount
                 if len(self.strategy.state.new_orders) == 1:
                     self.strategy.state.submitted_orders.pop()
-                    self.strategy.state.new_orders[0].amount = filled_amt
+                    new_order = self.strategy.state.new_orders[0]
+                    old_amount = new_order.amount
+                    new_order.amount = filled_amt
+                    extra["new_order"] = new_order
                     self.context.logger.info(
-                        f"Is entry order, so modifying amount: {self.strategy.state.new_orders[0].amount}"
+                        f"Is entry order, so modifying amount from {old_amount} to {filled_amt}.",
+                        extra=extra,
                     )
                     return True
+            # what do we return here??
+            return True
+        if order.status == OrderStatus.FILLED:
+            self.context.logger.info(f"Order filled.\n{order}", extra=extra)
+            self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
+            return True
+        if order.status in {OrderStatus.OPEN, OrderStatus.NEW}:
+            self.context.logger.info(f"Order created.\n{order}", extra=extra)
+            self.strategy.state.submitted_orders.pop()  # we make the assumption we only have one order...
+            return True
 
-        msg = "This is a placeholder for currently unhandled methods within recieved orders."
-        self.context.logger.error(msg)
+        msg = "This is a completely unexpected error"
+        self.context.logger.error(msg, extra={"order": order})
         raise UnexpectedStateException(msg)
 
     @property
