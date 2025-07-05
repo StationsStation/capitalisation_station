@@ -40,8 +40,8 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
                 connection_id=DCXT_PUBLIC_ID,
                 request=request,
             )
+            self.context.logger.info("Submitted bridge request.", extra={"request": request})
 
-        self.context.logger.info("Bridging requests complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
@@ -49,7 +49,7 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1
         if self.attempts >= attempts:
-            self.context.logger.error("Max attempts reached. Giving up.")
+            self.context.logger.error(f"Max retry attempts ({self.attempts}) reached.")
             self._event = ArbitrageabciappEvents.TIMEOUT
             self._is_done = True
             return False
