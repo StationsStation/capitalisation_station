@@ -163,7 +163,7 @@ class ArbitrageStrategy:
             ]
         )
 
-    def has_balance_for_opportunity(self, opportunity, portfolio, amount):
+    def has_balance_for_opportunity(self, opportunity: ArbitrageOpportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""
         # we get the buy balances, i.e. the balances of the asset we SELLING to buy the asset we are BUYING
         asset_a, asset_b = opportunity.market.split("/")
@@ -176,8 +176,8 @@ class ArbitrageStrategy:
         opportunity.required_asset_b = amount * opportunity.best_ask
         if not all([buy_balance, sell_balance]):
             return False
-        opportunity.balance_buy = buy_balance["free"]
-        opportunity.balance_sell = sell_balance["free"]
+        opportunity.balance_a = buy_balance["free"]
+        opportunity.balance_b = sell_balance["free"]
         return not any(
             [
                 opportunity.required_asset_a > opportunity.balance_buy,
