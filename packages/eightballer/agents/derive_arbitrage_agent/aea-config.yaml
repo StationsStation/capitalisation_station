@@ -5,6 +5,9 @@ license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
+  __init__.py: bafybeigfigcohr63kijc3kwb2oli7nntgqt4ooiztsl7eett3d6ycldaru
+  logger_setup.py: bafybeidxqiw3jj5xeyc6vorprsh4rxeznsvfxk7jzhosox7roxpj276rmm
+  no-queue-logging.yaml: bafybeib6k2usocdkxtz6nqa2igxbwkp7f72inrsxtufyy3pttpbojxysay
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
@@ -64,29 +67,47 @@ connection_private_key_paths: {}
 private_key_paths: {}
 logging_config:
   disable_existing_loggers: false
-  formatters:
-    standard:
-      format: '%(asctime)s [%(levelname)s]: %(message)s'
   handlers:
-    console:
-      class: logging.StreamHandler
-      formatter: standard
-      stream: ext://sys.stdout
-    logfile:
-      class: logging.FileHandler
-      filename: log.txt
-      formatter: standard
-      level: INFO
+    queue:
+      class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.QueuedHandler
+      queue_size: 10000
+      handler_names:
+      - console
+      - logfile
+      handler_configs:
+        console:
+          class: rich.logging.RichHandler
+          formatter: standard
+          level: INFO
+          markup: true
+        logfile:
+          class: logging.handlers.TimedRotatingFileHandler
+          filename: log.jsonl
+          formatter: json
+          level: INFO
+          when: D
+          interval: 1
+          backupCount: 7
+      formatter_configs:
+        standard:
+          class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.ShortNameFormatter
+          format: '[%(levelname)s] %(short_name)s: %(message)s'
+        detailed:
+          format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
+          datefmt: '%Y-%m-%dT%H:%M:%S%z'
+        json:
+          class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.JSONFormatter
+          datefmt: '%Y-%m-%dT%H:%M:%S%z'
   loggers:
     aea:
       handlers:
-      - console
-      - logfile
+      - queue
       level: INFO
       propagate: false
   version: 1
 dependencies:
   open-aea-ledger-ethereum: {}
+  rich: {}
 default_connection: null
 ---
 public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
