@@ -7,7 +7,7 @@ aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigfigcohr63kijc3kwb2oli7nntgqt4ooiztsl7eett3d6ycldaru
   logger_setup.py: bafybeidxqiw3jj5xeyc6vorprsh4rxeznsvfxk7jzhosox7roxpj276rmm
-  no-queue-logging.yaml: bafybeif4lla3yo3pj25kxvxmssh5bzut5zh6w37mtsqq6qcyj3dqerqncy
+  no-queue-logging.yaml: bafybeib6k2usocdkxtz6nqa2igxbwkp7f72inrsxtufyy3pttpbojxysay
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:

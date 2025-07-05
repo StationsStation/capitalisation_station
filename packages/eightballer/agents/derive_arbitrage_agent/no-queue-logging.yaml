@@ -24,11 +24,6 @@ logging_config:
       when: D         # rotate daily
       interval: 1
       backupCount: 7  # keep 7 days
-  queue_handler:
-    class: logging.handlers.QueueHandler
-    handlers:
-    - stderr
-    - file_json
   loggers:
     aea:
       handlers:
