@@ -289,6 +289,14 @@ class Order(BaseCustomEncoder):
     stop_loss_price: float | None = None
     immediate_or_cancel: float | None = None
 
+    def __str__(self) -> str:
+        """Custom method for string interpolation."""
+        lines = []
+        for field, value in self.model_dump(exclude_unset=True).items():
+            field_name = field.replace("_", " ").capitalize()
+            lines.append(f"{field_name}: {value}")
+        return "\n".join(lines)
+
 
 class Orders(BaseCustomEncoder):
     """This class represents an instance of Orders."""
