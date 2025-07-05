@@ -29,7 +29,10 @@ class PostTradeRound(BaseBehaviour):
         """Post trade report."""
         entry_order, exit_order = self.strategy.entry_order, self.strategy.exit_order
         if entry_order is None or exit_order is None:
-            self.context.logger.error("No entry or exit order found.")
+            self.context.logger.error(
+                "No entry or exit order found.",
+                extra={"entry_order": entry_order, "exit_order": exit_order},
+            )
             return
         if entry_order.side is OrderSide.SELL:
             buy_order, sell_order = exit_order, entry_order

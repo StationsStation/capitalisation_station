@@ -40,16 +40,17 @@ class SetApprovalsRound(BaseConnectionRound):
         """Handle the startup of the state."""
         self.started = True
         self.started_at = datetime.now(tz=TZ)
-        self.context.logger.info(f"Starting approvals collection. at {self.started_at}")
+        self.context.logger.info("Starting approval collection.")
         self.pending_approvals: list[BaseDialogue] = []
         for k in self.supported_protocols:
             self.supported_protocols[k] = []
 
         for exchange_id, ledgers in self.strategy.dexs.items():
             for ledger_id in ledgers:
-                for asset in [self.strategy.strategy_init_kwargs.get(i) for i in ["base_asset", "quote_asset"]]:
-                    self.context.logger.info(f"Sending approval for {asset} on {exchange_id}")
-                    approval_request = self.submit_msg(
+                extra = self.strategy.strategy_init_kwargs
+                for asset in (extra["base_asset"], extra["quote_asset"]):
+                    self.context.logger.info(f"Sending approval for {asset} on {exchange_id}", extra=extra)
+                    dialogue = self.submit_msg(
                         protocol_performative=ApprovalsMessage.Performative.SET_APPROVAL,
                         connection_id=DCXT_PUBLIC_ID,
                         approval=Approval(
@@ -60,7 +61,7 @@ class SetApprovalsRound(BaseConnectionRound):
                             is_eoa=True,
                         ),
                     )
-                    self.pending_approvals.append(approval_request)
+                    self.pending_approvals.append(dialogue)
 
     def act(self) -> Generator:
         """Perform the action of the state."""
@@ -69,21 +70,20 @@ class SetApprovalsRound(BaseConnectionRound):
             self._handle_startup()
             return None
 
-        total_expected_responses = len(self.pending_approvals)
-        current_responses = sum(len(i) for i in self.supported_protocols.values())
-        if any(
-            [
-                total_expected_responses != current_responses,
-            ]
-        ):
-            msg = (
-                "Waiting for all messages to be received. "
-                + f"{current_responses}/{total_expected_responses}"
-                + "received."
+        sent_approvals = len(self.pending_approvals)
+        recv_approvals = sum(map(len, self.supported_protocols.values()))
+        if sent_approvals != recv_approvals:
+            self.context.logger.debug(
+                self.context.logger.debug(
+                    "Waiting for pending messages.",
+                    extra={
+                        "sent_approvals": sent_approvals,
+                        "recv_approvals": recv_approvals,
+                    },
+                )
             )
-            self.context.logger.debug(msg)
             if not datetime.now(tz=TZ) - timedelta(seconds=APPROVALS_TIMEOUT_SECONDS) < self.started_at:
-                self.context.logger.error("Timeout waiting for messages.")
+                self.context.logger.error("Timeout waiting for approval messages.")
                 self.started = False
                 return self._handle_error()
             return None

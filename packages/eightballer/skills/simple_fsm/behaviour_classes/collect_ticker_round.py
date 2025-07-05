@@ -49,7 +49,7 @@ class CollectTickerRound(BaseConnectionRound):
         """Handle the startup of the state."""
         self.started = True
         self.started_at = datetime.now(tz=TZ)
-        self.context.logger.info(f"Starting ticker collection. at {self.started_at}")
+        self.context.logger.info("Starting ticker collection.")
         self.pending_tickers: list[AggregateRequest] = []
         for k in self.supported_protocols:
             self.supported_protocols[k] = []
@@ -70,32 +70,35 @@ class CollectTickerRound(BaseConnectionRound):
             self._handle_startup()
             return None
 
-        total_expected_responses = sum(len(i.ticker_request_dialogues) for i in self.pending_tickers)
-        if any(
-            [
-                total_expected_responses != len(self.supported_protocols.get(TickersMessage.protocol_id)),
-            ]
-        ):
-            msg = (
-                "Waiting for all messages to be received. "
-                + f"{len(self.supported_protocols.get(TickersMessage.protocol_id))} "
-                + f"received out of {total_expected_responses} expected."
+        sent_tickers = sum(len(i.ticker_request_dialogues) for i in self.pending_tickers)
+        recv_tickers = len(self.supported_protocols.get(TickersMessage.protocol_id))
+        if sent_tickers != recv_tickers:
+            self.context.logger.debug(
+                self.context.logger.debug(
+                    "Waiting for pending messages.",
+                    extra={
+                        "sent_tickers": sent_tickers,
+                        "recv_tickers": recv_tickers,
+                    },
+                )
             )
-            self.context.logger.debug(msg)
             if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
-                self.context.logger.error("Timeout waiting for messages.")
+                self.context.logger.error("Timeout waiting for messages getting tickers from all exchanges.")
                 self.started = False
                 return self._handle_error()
             return None
 
-        errors = []
+        invalid_messages = []
         for aggregate_request in self.pending_tickers:
-            for ticker_request in aggregate_request.ticker_request_dialogues:
-                if not ticker_request.validation_func(ticker_request.last_message):
-                    errors.append(f"Error validating message: {ticker_request.last_message}")
+            for dialogue in aggregate_request.ticker_request_dialogues:
+                if not dialogue.validation_func(dialogue.last_message):
+                    invalid_messages.append(dialogue.last_message)
 
-        if errors:
-            self.context.logger.error("Error getting tickers for all exchanges")
+        if invalid_messages:
+            self.context.logger.error(
+                "Not all received ticker messages are valid.",
+                extra={"invalid_messages": invalid_messages},
+            )
             self._handle_error()
             return None
 
@@ -106,17 +109,16 @@ class CollectTickerRound(BaseConnectionRound):
 
             self.strategy.state.prices[ticker.ledger_id][ticker.exchange_id] = [t.dict() for t in tickers.tickers]
 
-        self.context.logger.info("Ticker collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
-        self.context.logger.info("Parsing Tickers complete.")
+        self.context.logger.debug("Ticker collection complete.")
         return None
 
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1
         if self.attempts >= attempts:
-            self.context.logger.error("Max attempts reached. Giving up.")
+            self.context.logger.error(f"Max retry attempts ({self.attempts}) reached.")
             self._event = ArbitrageabciappEvents.TIMEOUT
             self._is_done = True
             return False
