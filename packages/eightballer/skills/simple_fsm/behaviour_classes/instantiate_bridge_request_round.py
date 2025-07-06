@@ -40,6 +40,7 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
                 connection_id=DCXT_PUBLIC_ID,
                 request=request,
             )
+            self.strategy.state.bridge_requests_in_progress += 1
 
         self.context.logger.info("Bridging requests complete.")
         self._is_done = True
