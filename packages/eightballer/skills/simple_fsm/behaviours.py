@@ -144,10 +144,7 @@ class IdentifyOpportunityRound(BaseBehaviour):
         module = importlib.import_module(strategy_path)
         strategy_class = getattr(module, strategy_class_name)
         self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
-
-        self.context.logger.debug("Strategy Kwargs:")
-        for k, v in self.strategy.strategy_init_kwargs.items():
-            self.context.logger.debug(f"    {k}: {v}")
+        self.context.logger.debug("Strategy Kwargs:", extra=self.strategy.strategy_init_kwargs)
 
     @property
     def strategy(self) -> ArbitrageStrategy:
@@ -162,7 +159,7 @@ class ErrorRound(BaseBehaviour):
         """Perform the action of the state."""
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
-        self.context.logger.info("ErrorRound: Performing action")
+        self.context.logger.info("ErrorRound: Performing action - exiting")
         sys.exit(1)
 
 
@@ -177,22 +174,21 @@ class CoolDownRound(BaseBehaviour):
         if not self.started:
             self._is_done = False
             self.started = True
+            error_count = self.strategy.error_count
+            backoff = max((2**error_count), 1)
+            duration = self.strategy.cooldown_period * backoff
+            cool_down = timedelta(seconds=duration)
             self.started_at = datetime.now(tz=TZ)
-            self.sleep_until = datetime.now(tz=TZ) + timedelta(
-                seconds=self.strategy.cooldown_period * max((2**self.strategy.error_count), 1)
-            )
-            msg = (
-                f"Starting cool down. at {self.started_at.isoformat()} "
-                + f"until {self.sleep_until} with error count "
-                + f"{self.strategy.error_count}"
-            )
-            self.context.logger.info(msg)
+            self.sleep_until = self.started_at + cool_down
+            self.context.logger.info(f"Cool down for {duration}s, error count: {error_count}")
             return
 
-        if datetime.now(tz=TZ) < self.sleep_until:
-            self.context.logger.debug(f"Sleeping until {self.sleep_until}")
+        now = datetime.now(tz=TZ)
+        if now < self.sleep_until:
+            remaining = (self.sleep_until - now).total_seconds()
+            self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
-        self.context.logger.info(f"Cool down finished. at {datetime.now(tz=TZ)}")
+        self.context.logger.info(f"Cool down finished. at {now}")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
@@ -342,9 +338,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             event = current_state.event
             next_state = self.transitions.get(self.current, {}).get(event, None)
-            self.context.logger.info(
-                f"Transitioning from state {self.current} with event {event}. Next state: {next_state}"
-            )
+            self.context.logger.info(f"Transitioning: {self.current} --[{event}]--> {next_state}")
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
         self.current_behaviour.act()
