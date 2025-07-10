@@ -34,7 +34,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
 - eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
+- eightballer/abstract_round_abci:0.1.0:bafybeidjnlaau62iiiocizyxyd3jd22kfu7vc6656n6eo2xihnbbrm7otq
 behaviours:
   main:
     args: {}
