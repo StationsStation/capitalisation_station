@@ -75,8 +75,11 @@ class CollectDataRound(BaseConnectionRound):
             self.context.logger.debug(f"Getting balances for {exchange_id} on {CEX_LEDGER_ID}")
             futures = yield from self.get_futures(exchange_id, CEX_LEDGER_ID)
             balances, tickers, orders = yield from self.parse_futures(futures)
-            if any(f is None for f in (balances, tickers, orders)):
-                self.context.logger.error(f"Error getting data for {exchange_id} on {CEX_LEDGER_ID}")
+            if not all((balances, tickers, orders)):
+                self.context.logger.error(
+                    f"Error getting data for {exchange_id} on {CEX_LEDGER_ID}",
+                    extra={"balances": balances, "tickers": tickers, "orders": orders},
+                )
                 yield from self._handle_error()
                 return
 
@@ -87,7 +90,10 @@ class CollectDataRound(BaseConnectionRound):
                     orders.performative == OrdersMessage.Performative.ERROR,
                 ]
             ):
-                self.context.logger.error(f"Error getting data for {exchange_id} on {CEX_LEDGER_ID}")
+                self.context.logger.error(
+                    f"Error performative for {exchange_id} on {CEX_LEDGER_ID}",
+                    extra={"balances": balances, "tickers": tickers, "orders": orders},
+                )
                 yield from self._handle_error()
                 return
             self.strategy.agent_state.portfolio[CEX_LEDGER_ID][exchange_id] = [
@@ -104,7 +110,7 @@ class CollectDataRound(BaseConnectionRound):
         if not self.started:
             self.started = True
             self.started_at = datetime.now(tz=TZ)
-            self.context.logger.debug(f"Starting data collection. at {self.started_at!s}")
+            self.context.logger.debug("Starting data collection.")
             self.pending_bals = []
             self.pending_tickers = []
             self.pending_orders = []
@@ -136,29 +142,40 @@ class CollectDataRound(BaseConnectionRound):
                     orders.ledger_id = ledger_id
                     self.pending_orders.append(orders)
             return
-        if any(
-            [
-                len(self.pending_bals) != len(self.supported_protocols.get(BalancesMessage.protocol_id)),
-                len(self.pending_orders) != len(self.supported_protocols.get(OrdersMessage.protocol_id)),
-            ]
-        ):
+
+        sent_bals = len(self.pending_bals)
+        recv_bals = len(self.supported_protocols.get(BalancesMessage.protocol_id))
+        sent_orders = len(self.pending_orders)
+        recv_orders = len(self.supported_protocols.get(OrdersMessage.protocol_id))
+        if sent_bals != recv_bals or sent_orders != recv_orders:
             self.context.logger.debug(
-                f"Waiting for all messages to be received. {len(self.pending_bals)} {len(self.pending_orders)}"
+                "Waiting for pending messages.",
+                extra={
+                    "sent_bals": sent_bals,
+                    "recv_bals": recv_bals,
+                    "sent_orders": sent_orders,
+                    "recv_orders": recv_orders,
+                },
             )
             if not datetime.now(tz=TZ) - timedelta(seconds=DATA_COLLECTION_TIMEOUT_SECONDS) < self.started_at:
-                self.context.logger.error("Timeout waiting for messages.")
+                self.context.logger.error("Timeout waiting for messages getting data from all exchanges.")
                 self._event = ArbitrageabciappEvents.TIMEOUT
                 self._is_done = True
-                self.context.logger.error("Error getting data for all exchanges")
                 self.started = False
                 return
             return
 
         # we validate all the responses
-        are_all_valid = all(f.validation_func(f.last_message) for f in self.pending_bals + self.pending_orders)
+        invalid_messages = []
+        for dialogue in self.pending_bals + self.pending_orders:
+            if not dialogue.validation_func(dialogue.last_message):
+                invalid_messages.append(dialogue.last_message)
 
-        if not are_all_valid:
-            self.context.logger.error("Error getting data for all exchanges")
+        if invalid_messages:
+            self.context.logger.error(
+                "Not all received balance and order messages are valid.",
+                extra={"invalid_messages": invalid_messages},
+            )
             self._handle_error()
             return
 
@@ -172,10 +189,10 @@ class CollectDataRound(BaseConnectionRound):
                 b.dict() for b in bal.last_message.balances.balances
             ]
 
-        self.context.logger.debug("Data collection complete.")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
+        self.context.logger.debug("Data collection complete.")
 
     def _validate_orders_msg(self, orders: OrdersMessage) -> bool:
         """Validate the orders message."""
@@ -183,10 +200,10 @@ class CollectDataRound(BaseConnectionRound):
             self.context.logger.error("Orders message is None")
             return False
         if orders.performative is OrdersMessage.Performative.ERROR:
-            self.context.logger.error(f"Error getting orders: {orders}")
+            self.context.logger.error("Error performative.", extra={"orders": orders})
             return False
         if orders.performative is not OrdersMessage.Performative.ORDERS:
-            self.context.logger.error(f"Invalid performative: {orders.performative}")
+            self.context.logger.error("Invalid performative.", extra={"orders": orders})
             return False
         try:
             return all(
@@ -196,10 +213,9 @@ class CollectDataRound(BaseConnectionRound):
                     orders.orders is not None,
                 ]
             )
-        except Exception as err:
-            self.context.logger.exception("Orders message is None")
-            msg = f"Error validating orders message: {err}"
-            raise ValueError(msg) from err
+        except Exception:
+            self.context.logger.exception("Error validating orders message.")
+            return False
 
     def _validate_balance_msg(self, balances: BalancesMessage) -> bool:
         """Validate the balance message."""
@@ -214,7 +230,7 @@ class CollectDataRound(BaseConnectionRound):
     def _handle_error(self, attempts=1) -> Generator[None, None, bool]:
         self.attempts += 1
         if self.attempts >= attempts:
-            self.context.logger.error("Max attempts reached. Giving up.")
+            self.context.logger.error(f"Max retry attempts ({self.attempts}) reached.")
             self._event = ArbitrageabciappEvents.TIMEOUT
             self._is_done = True
             return False
