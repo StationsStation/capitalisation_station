@@ -17,10 +17,11 @@ fingerprint:
   behaviour_classes/post_trade_round.py: bafybeiay7vwdsnerz5pblqupubteeqz57buwxymo32jqkja7y52ii4lnty
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
   behaviours.py: bafybeicplvdcwn4bttzrsz7sp2efyyn7tdvu26oubc2vuhfczidfwu7apa
+
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
-  handlers.py: bafybeie35qy7zafazv6n4ff6yhy7ncr5fbl3iqofp74w2hvt5s6qpy4ahi
-  strategy.py: bafybeictd4w3npj3r7xeaarx4ap3ed3fds6bhef6narykrah3okkuvi2iu
+  handlers.py: bafybeihs5dycozu4ytsjjb3x2ufl7sykoqgywb3arw4ot5nld6mfqds7iy
+  strategy.py: bafybeiaytqldg4fac6iifvkznsm3rw67q56okkp6js3wn7w2h5mgdcjexm
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq

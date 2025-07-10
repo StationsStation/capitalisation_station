@@ -51,6 +51,7 @@ skills:
 - eightballer/simple_fsm:0.1.0:bafybeibhj7jn7gdsmvsp5hr4d2sis22o3oiqhcargcje6jmujj2mn5wq7u
 - valory/abstract_abci:0.1.0:bafybeieteucm3rudnnbesnu53wbv3ojnhrwqbvfrsqwvhg6ksgriqyl67i
 - eightballer/abstract_round_abci:0.1.0:bafybeidjnlaau62iiiocizyxyd3jd22kfu7vc6656n6eo2xihnbbrm7otq
+
 customs:
 - eightballer/arbitrage_strategy:0.1.0:bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py
 default_ledger: ethereum

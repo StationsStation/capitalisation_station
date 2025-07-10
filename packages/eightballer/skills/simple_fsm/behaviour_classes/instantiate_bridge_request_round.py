@@ -41,6 +41,7 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
                 request=request,
             )
             self.context.logger.info("Submitted bridge request.", extra={"request": request})
+            self.strategy.state.bridge_requests_in_progress += 1
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

@@ -1,7 +1,6 @@
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023
-#   Copyright 2023 valory-xyz
+#   Copyright 2024 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -75,18 +74,13 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
-        if (
-            not self.strategy.state.bridge_requests
-            and not self.strategy.state.bridging_in_progress
-            and not self.strategy.state.waiting_balance_difference
-        ):
-            self.strategy.state.bridging_in_progress = True
+        if not self.strategy.state.bridge_requests and not self.strategy.state.bridge_requests_in_progress:
             bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
                 portfolio=self.strategy.state.portfolio,
                 prices=self.strategy.state.prices,
                 **self.custom_config.kwargs["strategy_run_kwargs"],
             )
-            self.strategy.state.bridge_requests = bridging_requests
+            self.strategy.state.bridge_requests.extend(bridging_requests)
             if bridging_requests:
                 self.context.logger.info(f"Bridging requests found: {bridging_requests}")
                 self.strategy.send_notification_to_user(
@@ -95,17 +89,6 @@ class IdentifyOpportunityRound(BaseBehaviour):
                 )
                 self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
                 return
-
-        if self.strategy.state.waiting_balance_difference:
-            self.context.logger.info("Waiting for balance difference.")
-            self.strategy.state.waiting_balance_difference = False
-            self.strategy.state.bridging_in_progress = False
-            self.strategy.state.bridge_requests = []
-            self.strategy.send_notification_to_user(
-                title="Bridging request completed",
-                msg="Bridging request completed: Please check the balances.",
-            )
-            return
 
         orders = self.strategy.trading_strategy.get_orders(
             portfolio=self.strategy.state.portfolio,
