@@ -36,6 +36,9 @@ class NablaQuote(Contract):
         """Handler method for the 'quote' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.quote(
-            _amountIn=amount_in, _tokenPath=token_path, _routerPath=router_path, _tokenPrices=token_prices
+            _amountIn=amount_in,
+            _tokenPath=token_path,
+            _routerPath=router_path,
+            _tokenPrices=token_prices,
         ).call()
-        return {"bidAmountOut_": result, "askAmountOut_": result}
+        return {"bidAmountOut_": result[0], "askAmountOut_": result[1]}
