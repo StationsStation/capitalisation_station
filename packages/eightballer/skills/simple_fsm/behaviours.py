@@ -196,7 +196,7 @@ class CoolDownRound(BaseBehaviour):
             duration = self.strategy.cooldown_period * backoff
             cool_down = timedelta(seconds=duration)
             self.started_at = datetime.now(tz=TZ)
-            self.sleep_until = self.start_at + cool_down
+            self.sleep_until = self.started_at + cool_down
             self.context.logger.info(f"Cool down for {duration}s, error count: {error_count}")
             return
 
