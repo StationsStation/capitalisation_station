@@ -31,6 +31,7 @@ from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
 # ruff: noqa: ARG002
 
 ZERO_PRICE_FEED = "0000000000000000000000000000000000000000000000000000000000000000"
+MULTICALL3_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11"
 
 
 class Pool(BaseModel):
@@ -136,6 +137,7 @@ class PriceFeedResponse(BaseModel):
 NABLA_CONFIG = NablaConfig.load()
 NABLA_PORTAL_PUBLIC_ID = "dakavon/nabla_portal:0.1.0"
 NABLA_QUOTE_PUBLIC_ID = "dakavon/nabla_quote:0.1.0"
+MULTICALL3_PUBLIC_ID = "dakavon/multicall3:0.1.0"
 NABLA_DIRECT_PRICE_ORACLE_ID = "zarathustra/direct_price_oracle:0.1.0"
 NABLA_PRICE_API_URL: str = "https://antenna.nabla.fi/v1/updates/price/latest"
 
@@ -345,6 +347,130 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         return ask_price, bid_price
 
+    async def get_orderbook(
+        self,
+        asset_a: str,
+        asset_b: str,
+        amounts: list[float]
+    ) -> list[tuple[float, float]]:
+        """Get the orderbook for a given token pair.
+
+        Args:
+            from_token_address (str): Address of the token to swap from.
+            to_token_address (str): Address of the token to swap to.
+            amounts (list[float]): List of amounts to get quotes for.
+
+        Returns:
+            list[tuple[float, float]]: List of tuples containing (ask_price, bid_price) for each amount.
+        """
+        # fetch price data
+        price_feed_response = self.fetch_price_data([asset_a, asset_b])
+        token_a = self.get_token(asset_a)
+        token_b = self.get_token(asset_b)
+        token_prices = price_feed_response.token_prices
+
+        # load the Multicall3 contract
+        multicall3_contract = load_contract(PublicId.from_str(MULTICALL3_PUBLIC_ID))
+        # load the NablaQuote contract
+        nabla_quote_contract = load_contract(PublicId.from_str(NABLA_QUOTE_PUBLIC_ID))
+
+        # Prepare the calls for the Multicall3 contract
+        call3s = []
+        quotes = []
+
+        for amount in amounts:
+            params = {
+                "amount_in": int(amount * 10**token_a.decimals),
+                "token_path": [token_a.address, token_b.address],
+                "router_path": [self.router_address],
+                "token_prices": [
+                    token_prices[token_a.address],
+                    token_prices[token_b.address],
+                ],
+            }
+
+            nabla_quote_calldata = nabla_quote_contract.quote_calldata(
+                ledger_api=self.web3,
+                contract_address=self.nabla_quote_address,
+                **params,
+            )
+
+            quote_call3_struct = {
+                "target": self.nabla_quote_address,
+                "allowFailure": True,
+                "callData": nabla_quote_calldata,
+            }
+
+            call3s.append(quote_call3_struct)
+
+        # Call the Multicall3 contract to aggregate the quotes
+        multicall3_quotes_calldata = multicall3_contract.aggregate3(
+            ledger_api=self.web3, contract_address=MULTICALL3_ADDRESS, calls=call3s
+        )
+        multicall3_quotes_returned = multicall3_quotes_calldata.call()
+
+        # Decode the multicall3 returned data
+        for i, (success, returned_data) in enumerate(multicall3_quotes_returned):
+            if not success:
+                self.logger.error(
+                    f"Multicall3 call {i} for amount {amounts[i]} failed."
+                )
+                continue
+
+            if len(returned_data) < 64:
+                self.logger.error(
+                    f"Multicall3 call {i} for amount {amounts[i]} returned unexpected data length."
+                )
+                continue
+
+            # Decode bid and ask as uint256
+            amount_out_token_b_units = int.from_bytes(
+                returned_data[:32], byteorder="big"
+            )
+            amount_out_token_a_units = int.from_bytes(
+                returned_data[32:64], byteorder="big"
+            )
+
+            # Convert to decimals
+            amount_out_token_b = amount_out_token_b_units / 10**token_b.decimals
+            amount_out_token_a = amount_out_token_a_units / 10**token_a.decimals
+
+            # BID price: Quote (sell A → B), i.e. market buy price for B using A
+            bid_price = amount_out_token_b / amounts[i]  # B per A ($B/$A)
+
+            self.logger.debug(
+                "### BID quote $%s → $%s: %.6f $%s → %.6f $%s; bid_price = %.6f $%s/$%s",
+                token_a.symbol,
+                token_b.symbol,
+                amounts[i],
+                token_a.symbol,
+                amount_out_token_b,
+                token_b.symbol,
+                bid_price,
+                token_b.symbol,
+                token_a.symbol,
+            )
+
+            # ASK price: Quote (buy A ← B), i.e. market sell price for B using A
+            ask_price = amount_out_token_b / amount_out_token_a  # B per A ($B/$A)
+
+            self.logger.debug(
+                "### ASK quote $%s → $%s: %.6f $%s → %.6f $%s; ask_price = %.6f $%s/$%s",
+                token_b.symbol,
+                token_a.symbol,
+                amount_out_token_b,
+                token_b.symbol,
+                amount_out_token_a,
+                token_a.symbol,
+                ask_price,
+                token_b.symbol,
+                token_a.symbol,
+            )
+
+            quotes.append((ask_price, bid_price))
+
+        return quotes if quotes else [(0.0, 0.0)] * len(amounts)
+
     async def fetch_ticker(
         self,
         symbol: str | None = None,
@@ -378,7 +504,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
         )
 
-        ts = datetime.datetime.now(tz=datetime.UTC)
+        ts = datetime.datetime.now(tz=datetime.timezone.utc)
         return Ticker(
             symbol=symbol,
             asset_a=asset_a.address,

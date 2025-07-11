@@ -42,3 +42,23 @@ class NablaQuote(Contract):
             _tokenPrices=token_prices,
         ).call()
         return {"bidAmountOut_": result[0], "askAmountOut_": result[1]}
+
+    @classmethod
+    def quote_calldata(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        amount_in: int,
+        token_path: list[Address],
+        router_path: list[Address],
+        token_prices: list[int],
+    ) -> str:
+        """Return calldata for the 'quote' function."""
+        instance = cls.get_instance(ledger_api, contract_address)
+        calldata = instance.functions.quote(
+            _amountIn=amount_in,
+            _tokenPath=token_path,
+            _routerPath=router_path,
+            _tokenPrices=token_prices,
+        )._encode_transaction_data()
+        return calldata
