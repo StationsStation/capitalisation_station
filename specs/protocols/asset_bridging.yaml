@@ -1,7 +1,7 @@
 name: asset_bridging
 author: zarathustra
 version: 0.1.0
-description: A minimal, atomic request-response protocol for cross‑chain asset bridging.
+description: A minimal, atomic request-response protocol for cross-chain asset bridging.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 protocol_specification_id: zarathustra/asset_bridging:0.1.0
@@ -25,16 +25,20 @@ ct:BridgeRequest: |
   string bridge = 6;
   optional string receiver = 7;
 ct:BridgeResult: |
-  enum BridgeStatus {
+  enum Status {
       FAILED = 0;
-      COMPLETED = 1;
-      PENDING_TX_RECEIPT = 2;
-      AWAITING_TARGET_FINALITY = 3;
+      SUCCESS = 1;
+      PENDING = 2;
+      ERROR = 3;
       CLAIMABLE = 4;
     }
-  string tx_hash = 1;
-  BridgeStatus status = 2;
-  BridgeRequest request = 3;
+  string source_chain = 1;
+  string target_chain = 2;
+  optional string source_tx_hash = 3;
+  optional string target_tx_hash = 4;
+  optional uint64 target_from_block = 5;
+  Status status = 6;
+  map<string,string> extra_info = 7;
 ct:ErrorInfo: |
   enum Code {
       INVALID_PERFORMATIVE = 0;

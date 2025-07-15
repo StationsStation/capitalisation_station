@@ -3,26 +3,19 @@ author: zarathustra
 version: 0.1.0
 protocol_specification_id: zarathustra/asset_bridging:0.1.0
 type: protocol
-description: "A minimal, atomic request-response protocol for cross\u2011chain asset\
-  \ bridging."
+description: A minimal, atomic request-response protocol for cross-chain asset bridging.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeif5bjqo4xtshsrlizzmvlocrizdhm4ph32nhbey5k2prbfaxawo6q
-  __init__.py: bafybeibsxfx24txngiu5zzy2okmkwfszpaolslsgoyg6pmecvpjf7iq42y
-  asset_bridging.proto: bafybeibc25wl6d35jpad4yhq4qk5cnh3qjmrznfxvme4hohlw7ie4vkzgm
-  asset_bridging_pb2.py: bafybeig4dg2a5dvcwgury45hxhnucno7ya3gjbn6zzjjllmgdda24tyghi
-  custom_types.py: bafybeielnhf4j25stypr4cxrwdvujbdthwn6l6cg3dozzcmrkwyxfviyli
-  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
-  message.py: bafybeie7xdpakh3p2tpdr5wndyqz6vgaecaw3nhb7p7ufeab7m6p4bn5fi
-  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  __init__.py: bafybeiev5h43cvugldln6lxgn3wyvh7fr2otomwgg4w4lqxdd3jajnag74
+  asset_bridging.proto: bafybeiduz3ilw77lwv7ropttmy7bosk774jgtivjg4jo2wnxydcqmhfdrq
+  asset_bridging_pb2.py: bafybeicvtbdplkyjoe44hbdv37mkrivaalxugnujie5cy2et2xw7bftmka
+  custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
+  dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
+  message.py: bafybeiepv57seaits3lavpsbqdh6b3vtvjyy7ckdtahwvsklmqnxfdoqxi
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
-  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
-  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
-  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
-  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
-  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
+  tests/test_asset_bridging_dialogues.py: bafybeif43wj2hdxs5ssdw2nebduiefs7ernbkiwhpz5fhirrr66vmc2pxu
+  tests/test_asset_bridging_messages.py: bafybeih5r2wjyxbyukf2ynnrqjks3e3kqfmg7wiczzhhk6xinbmzgjgp6m
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

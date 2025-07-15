@@ -44,7 +44,7 @@ DEFAULT_BODY_SIZE = 4
 
 
 class AssetBridgingMessage(Message):
-    """A minimal, atomic request-response protocol for cross‑chain asset bridging."""
+    """A minimal, atomic request-response protocol for cross-chain asset bridging."""
 
     protocol_id = PublicId.from_str("zarathustra/asset_bridging:0.1.0")
     protocol_specification_id = PublicId.from_str("zarathustra/asset_bridging:0.1.0")
