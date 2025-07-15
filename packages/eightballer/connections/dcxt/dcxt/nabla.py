@@ -161,27 +161,34 @@ class NablaFinanceClient(BaseErc20Exchange):
         self.supported_ledger = SupportedLedgers(ledger_id)
         self.config = NABLA_CONFIG[self.supported_ledger.name]
         self.direct_price_oracle = load_contract(PublicId.from_str(NABLA_DIRECT_PRICE_ORACLE_ID))
+        self.nabla_price_feed_ids = {} # Cache for asset (string) to price feed ID (bytes32)
 
     async def close(self):
         """Close the client."""
 
     def get_price_feed_id(self, asset_address: str) -> str:
         """Get price feed id."""
-        asset = self.direct_price_oracle.address_to_asset(
-            ledger_api=self.web3,
-            contract_address=self.config.ORACLE,
-            var_0=asset_address,
-        )["str"]
-        price_feed_id = self.direct_price_oracle.asset_to_price_feed_id(
-            ledger_api=self.web3,
-            contract_address=self.config.ORACLE,
-            var_0=asset,
-        )["str"]
-        if price_feed_id == ZERO_PRICE_FEED:
-            msg = f"No price feed found for asset {asset_address} ({asset})"
-            self.logger.error(msg)
-            raise UnsupportedAsset(msg)
-        return price_feed_id.hex()
+        if asset_address not in self.nabla_price_feed_ids:
+            asset = self.direct_price_oracle.address_to_asset(
+                ledger_api=self.web3,
+                contract_address=self.config.ORACLE,
+                var_0=asset_address,
+            )["str"]
+
+            price_feed_id = self.direct_price_oracle.asset_to_price_feed_id(
+                ledger_api=self.web3,
+                contract_address=self.config.ORACLE,
+                var_0=asset,
+            )["str"]
+
+            if price_feed_id == ZERO_PRICE_FEED:
+                msg = f"No price feed found for asset {asset_address} ({asset})"
+                self.logger.error(msg)
+                raise UnsupportedAsset(msg)
+
+            self.nabla_price_feed_ids[asset_address] = price_feed_id
+
+        return self.nabla_price_feed_ids[asset_address]
 
     async def get_ask_bid(
         self,
