@@ -89,7 +89,11 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
-        if not self.strategy.state.bridge_requests and not self.strategy.state.bridge_requests_in_progress:
+        if (
+            not self.strategy.state.bridge_requests
+            and not self.strategy.state.bridge_requests_in_progress
+            and self.strategy.bridging_enabled
+        ):
             bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
                 portfolio=self.strategy.state.portfolio,
                 prices=self.strategy.state.prices,
