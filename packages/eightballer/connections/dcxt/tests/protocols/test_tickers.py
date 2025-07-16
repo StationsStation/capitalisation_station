@@ -54,7 +54,7 @@ class TestFetchTickers(BaseDcxtConnectionTest):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("exchange", list(TEST_EXCHANGES.keys())[:2])
+@pytest.mark.parametrize("exchange", list(TEST_EXCHANGES.keys()))
 class TestFetchTicker(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""
 

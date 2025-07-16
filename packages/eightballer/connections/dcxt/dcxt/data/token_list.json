@@ -12515,7 +12515,6 @@
             "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x4200000000000000000000000000000000000006.png"
         },
         {
-
             "chainId": 8453,
             "address": "0xecac9c5f704e954931349da37f60e39f515c11c1",
             "name": "Lombard BTC",
@@ -12524,7 +12523,6 @@
             "logoURI": "https://etherscan.io/token/images/lombardfinance_32.png"
         },
         {
-
             "chainId": 8453,
             "address": "0x9d0e8f5b25384c7310cb8c6ae32c8fbeb645d083",
             "name": "Derive",
@@ -12533,7 +12531,6 @@
             "logoURI": ""
         },
         {
-
             "chainId": 8453,
             "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
             "name": "USDC",
@@ -13107,6 +13104,14 @@
         },
         {
             "chainId": 8453,
+            "address": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+            "name": "Wrapped BTC",
+            "symbol": "WBTC",
+            "decimals": 8,
+            "logoURI": "https://assets.coingecko.com/coins/images/35916/large/wrapped-bitcoin-wbtc-logo.png?1710210285"
+        },
+        {
+            "chainId": 8453,
             "address": "0xb8DE15Fb529d98C93C749De63c749D48D25A30DF",
             "name": "BASED NUT",
             "symbol": "NUT",
@@ -13264,6 +13269,14 @@
             "symbol": "STONE",
             "decimals": 18,
             "logoURI": "https://coin-images.coingecko.com/coins/images/33103/large/200_200.png?1702602672"
+        },
+        {
+            "chainId": 42161,
+            "address": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
+            "name": "Wrapped BTC",
+            "symbol": "WBTC",
+            "decimals": 8,
+            "logoURI": "https://assets.coingecko.com/coins/images/7598/standard/wrapped_bitcoin_wbtc.png?1696507857"
         },
         {
             "chainId": 42161,
