@@ -1,14 +1,14 @@
 name: nabla_quote
 author: dakavon
-version: 0.1.0
+version: 0.2.0
 type: contract
 description: The scaffold contract scaffolds a contract to be implemented by the developer.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeia55j7yn7ckdlkmomxe6t2zykohyr3fdlignfvmqgmfzneqvg7jvm
-  build/nabla_quote.json: bafybeidkyg3rdl6izxh576obhccrn3cmvmidvbveg4aegocncfa7secirq
-  contract.py: bafybeia6ue6id2wuav4sq7is5z7xz5mebc7j456uqamnuukiweh5kyadfa
+  build/nabla_quote.json: bafybeigzmsiqqejtlzujsdwvxqncyigims52ucsmoyawyexqr2agojh4ka
+  contract.py: bafybeic33k4ffxfczdrkhptia4qfub62hn4r4ed7itw4hvjtgywfwso5ly
 fingerprint_ignore_patterns: []
 class_name: NablaQuote
 contract_interface_paths:
