@@ -196,8 +196,8 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.getGameState(user=user).call()
         return {
-            "_currentEpoch": result[0],
-            "_epochLength": result[1],
+            "_epochLength": result[0],
+            "_currentEpoch": result[1],
             "_epochEndBlock": result[2],
             "_minimumDonation": result[3],
             "_blocksRemaining": result[4],
@@ -387,14 +387,14 @@ class DerolasStaking(Contract):
         return instance.functions.donate()
 
     @classmethod
-    def end_epoch(
+    def end_round(
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
     ) -> JSONLike:
-        """Handler method for the 'end_epoch' requests."""
+        """Handler method for the 'end_round' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
-        return instance.functions.endEpoch()
+        return instance.functions.endRound()
 
     @classmethod
     def force_advance_epoch(
