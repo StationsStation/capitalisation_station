@@ -16,11 +16,11 @@ fingerprint:
   behaviour_classes/order_execution_round.py: bafybeidkveizivrr2vge2i6pvqg7pmp3aqhvgdehprvys7rhd3vomtsvem
   behaviour_classes/post_trade_round.py: bafybeiay7vwdsnerz5pblqupubteeqz57buwxymo32jqkja7y52ii4lnty
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
-  behaviours.py: bafybeig2t74zr7xxq3wfmnzyr5jopzw5k7hv7ul7vqiny66igmmkwk7b4u
+  behaviours.py: bafybeiat4xrwbbehw3skgqi4jo744w75dwu5qico7pe2fokbedvxp5cxfy
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
   handlers.py: bafybeihs5dycozu4ytsjjb3x2ufl7sykoqgywb3arw4ot5nld6mfqds7iy
-  strategy.py: bafybeiaytqldg4fac6iifvkznsm3rw67q56okkp6js3wn7w2h5mgdcjexm
+  strategy.py: bafybeiae3utgw4rctr6wapr3seyyl5immwpmwznasmemgtgomxlyze6a4u
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
@@ -28,7 +28,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
 - eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
-- eightballer/dcxt:0.1.0:bafybeia622v3q4whp4wbb2tna4wkckohi763jegkixf4b76fbzszbiu4uq
+- eightballer/dcxt:0.1.0:bafybeigkr7v6gpzmcri4gezs6tg2r6mlze22hw36oacipzuj36ehkiqa7e
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
@@ -75,7 +75,7 @@ models:
       strategy_init_kwargs: {}
       strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
       cooldown_period: 10
-      bridging_enabled: False
+      bridging_enabled: false
       alert_user: true
     class_name: ArbitrageStrategy
   balances_dialogues:
