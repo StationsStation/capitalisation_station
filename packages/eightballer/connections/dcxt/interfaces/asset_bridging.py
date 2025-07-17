@@ -32,6 +32,16 @@ if TYPE_CHECKING:
 ErrorCode = ErrorInfo.CODE
 
 
+DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
+    DeriveTxStatus.REQUESTED: BridgeResult.Status.STATUS_PENDING,
+    DeriveTxStatus.PENDING: BridgeResult.Status.STATUS_PENDING,
+    DeriveTxStatus.SETTLED: BridgeResult.Status.STATUS_SUCCESS,
+    DeriveTxStatus.REVERTED: BridgeResult.Status.STATUS_FAILED,
+    DeriveTxStatus.IGNORED: BridgeResult.Status.STATUS_ERROR,
+    DeriveTxStatus.TIMED_OUT: BridgeResult.Status.STATUS_ERROR,
+}
+
+
 class AssetBridgingInterface(BaseInterface):
     """Interface for the asset bridging protocol."""
 
@@ -109,9 +119,10 @@ class AssetBridgingInterface(BaseInterface):
                     "derive_tx_hash": derive_tx_result.tx_hash or "",
                     **{k: str(v) for k, v in derive_tx_result.error_log.items()},
                 }
+                status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
                 result = BridgeResult(
                     request=request,
-                    status=BridgeResult.Status.STATUS_ERROR,
+                    status=status,
                     extra_info=extra_info,
                 )
             else:
