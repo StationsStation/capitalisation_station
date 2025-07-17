@@ -14,7 +14,6 @@ from aea.common import Address
 from aea.skills.base import Model
 from aea.protocols.base import Message
 from aea.protocols.dialogue.base import Dialogue, Dialogues, DialogueLabel
-
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 
 

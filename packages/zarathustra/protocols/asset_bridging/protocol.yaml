@@ -8,8 +8,8 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiev5h43cvugldln6lxgn3wyvh7fr2otomwgg4w4lqxdd3jajnag74
-  asset_bridging.proto: bafybeiduz3ilw77lwv7ropttmy7bosk774jgtivjg4jo2wnxydcqmhfdrq
-  asset_bridging_pb2.py: bafybeicvtbdplkyjoe44hbdv37mkrivaalxugnujie5cy2et2xw7bftmka
+  asset_bridging.proto: bafybeidvhmdnq7xxlrtxjwwdljgqv2rknjt37j6i7v6jm2vh2iqmkqg3iy
+  asset_bridging_pb2.py: bafybeiggxdoeswwdkexlnxvhudbqwmxswl67dvkjdny46bmq54jg7v6kje
   custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
   dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
   message.py: bafybeiepv57seaits3lavpsbqdh6b3vtvjyy7ckdtahwvsklmqnxfdoqxi

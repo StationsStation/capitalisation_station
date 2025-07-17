@@ -5,7 +5,6 @@
 from pydantic import BaseModel
 from hypothesis import given, strategies as st
 from aea.mail.base import Envelope
-
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.tests.performatives import (
     Error,

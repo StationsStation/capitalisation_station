@@ -40,13 +40,12 @@ ct:BridgeResult: |
       ERROR = 3;
       CLAIMABLE = 4;
     }
-  string source_chain = 1;
-  string target_chain = 2;
-  optional string source_tx_hash = 3;
-  optional string target_tx_hash = 4;
-  optional uint64 target_from_block = 5;
-  Status status = 6;
-  map<string,string> extra_info = 7;
+  BridgeRequest request = 1;
+  optional string source_tx_hash = 2;
+  optional string target_tx_hash = 3;
+  optional uint64 target_from_block = 4;
+  Status status = 5;
+  map<string,string> extra_info = 6;
 ct:ErrorInfo: |
   enum Code {
       INVALID_PERFORMATIVE = 0;
@@ -54,7 +53,8 @@ ct:ErrorInfo: |
       INVALID_ROUTE = 2;
       INVALID_PARAMETERS = 3;
       ALREADY_FINALIZED = 4;
-      OTHER_EXCEPTION = 5;
+      TX_SUBMISSION_FAILED = 5;
+      OTHER_EXCEPTION = 6;
     }
   Code code = 1;
   string message = 2;

@@ -6,7 +6,6 @@ from enum import IntEnum
 from typing import Optional
 
 from pydantic import BaseModel
-
 from packages.zarathustra.protocols.asset_bridging.primitives import (
     Float,
     UInt64,
@@ -86,8 +85,7 @@ class BridgeResult(BaseModel):
         STATUS_ERROR = 3
         STATUS_CLAIMABLE = 4
 
-    source_chain: str
-    target_chain: str
+    request: BridgeRequest
     source_tx_hash: Optional[str] = None
     target_tx_hash: Optional[str] = None
     target_from_block: Optional[UInt64] = None
@@ -97,8 +95,7 @@ class BridgeResult(BaseModel):
     @staticmethod
     def encode(proto_obj, bridgeresult: BridgeResult) -> None:
         """Encode BridgeResult to protobuf."""
-        proto_obj.source_chain = bridgeresult.source_chain
-        proto_obj.target_chain = bridgeresult.target_chain
+        BridgeRequest.encode(proto_obj.request, bridgeresult.request)
         if bridgeresult.source_tx_hash is not None:
             proto_obj.source_tx_hash = bridgeresult.source_tx_hash
         if bridgeresult.target_tx_hash is not None:
@@ -112,8 +109,7 @@ class BridgeResult(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeResult:
         """Decode proto_obj to BridgeResult."""
-        source_chain = proto_obj.source_chain
-        target_chain = proto_obj.target_chain
+        request = BridgeRequest.decode(proto_obj.request)
         source_tx_hash = (
             proto_obj.source_tx_hash
             if proto_obj.source_tx_hash is not None and proto_obj.HasField("source_tx_hash")
@@ -132,8 +128,7 @@ class BridgeResult(BaseModel):
         status = proto_obj.status
         extra_info = dict(proto_obj.extra_info)
         return cls(
-            source_chain=source_chain,
-            target_chain=target_chain,
+            request=request,
             source_tx_hash=source_tx_hash,
             target_tx_hash=target_tx_hash,
             target_from_block=target_from_block,
@@ -153,7 +148,8 @@ class ErrorInfo(BaseModel):
         CODE_INVALID_ROUTE = 2
         CODE_INVALID_PARAMETERS = 3
         CODE_ALREADY_FINALIZED = 4
-        CODE_OTHER_EXCEPTION = 5
+        CODE_TX_SUBMISSION_FAILED = 5
+        CODE_OTHER_EXCEPTION = 6
 
     code: ErrorInfo.Code
     message: str

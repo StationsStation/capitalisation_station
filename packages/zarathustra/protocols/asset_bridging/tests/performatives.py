@@ -2,8 +2,8 @@
 
 """Models for the asset_bridging protocol performatives to facilitate hypothesis strategy generation."""
 
-from pydantic import BaseModel
 
+from pydantic import BaseModel
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorInfo,
     BridgeResult,
