@@ -3,8 +3,8 @@
 from typing import TYPE_CHECKING
 from functools import partial
 
-from derive_client.utils import get_w3_connection, wait_for_tx_receipt
-from derive_client.data_types import ChainID, Currency, TxStatus, BridgeTxResult, DeriveTxResult, DeriveTxStatus
+from pydantic import BaseModel, ConfigDict
+from derive_client.data_types import ChainID, Currency, TxStatus, BridgeTxResult, DeriveTxResult, DeriveTxStatus, TxResult, BridgeType
 
 from packages.zarathustra.protocols.asset_bridging.message import (
     ErrorInfo,
@@ -41,6 +41,21 @@ DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
     DeriveTxStatus.TIMED_OUT: BridgeResult.Status.STATUS_ERROR,
 }
 
+DERIVE_TX_FINAL_STATES = {
+    DeriveTxStatus.SETTLED,
+    DeriveTxStatus.REVERTED,
+    DeriveTxStatus.IGNORED,
+    DeriveTxStatus.TIMED_OUT,
+}
+
+
+class ExtraInfo(BaseModel):
+    model_config = ConfigDict(validate_assignment=True, extra="allow")
+    derive_status: str = ""
+    transaction_id: str = ""
+    derive_tx_hash: str = ""
+    bridge_type: str = ""
+
 
 class AssetBridgingInterface(BaseInterface):
     """Interface for the asset bridging protocol."""
@@ -48,6 +63,7 @@ class AssetBridgingInterface(BaseInterface):
     protocol_id = AssetBridgingMessage.protocol_id
     dialogue_class = AssetBridgingDialogue
     dialogues_class = BaseAssetBridgingDialogues
+
 
     async def request_bridge(  # noqa: PLR0911
         self, message: AssetBridgingMessage, dialogue: AssetBridgingDialogue, connection
@@ -111,19 +127,19 @@ class AssetBridgingInterface(BaseInterface):
                 asset_name=request.source_token,
                 subaccount_id=client.subaccount_id,
             )
+            info = ExtraInfo(
+                derive_status=derive_tx_result.status.value,
+                transaction_id=derive_tx_result.transaction_id,
+                derive_tx_hash=derive_tx_result.tx_hash or "",
+                **{k: str(v) for k, v in derive_tx_result.error_log.items()},
+            )
 
             if derive_tx_result.status is not DeriveTxStatus.SETTLED:
-                extra_info = {
-                    "derive_status": derive_tx_result.status.value,
-                    "transaction_id": derive_tx_result.transaction_id,
-                    "derive_tx_hash": derive_tx_result.tx_hash or "",
-                    **{k: str(v) for k, v in derive_tx_result.error_log.items()},
-                }
                 status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
                 result = BridgeResult(
                     request=request,
                     status=status,
-                    extra_info=extra_info,
+                    extra_info=info.model_dump(),
                 )
             else:
                 connection.logger.info(
@@ -149,14 +165,14 @@ class AssetBridgingInterface(BaseInterface):
                             err_msg=f"{bridge_tx_result}",
                         )
 
-                extra_info = {"bridge_type": bridge_tx_result.bridge.name}
+                info.brige = bridge_tx_result.bridge.name
                 result = BridgeResult(
                     request=request,
                     source_tx_hash=bridge_tx_result.source_tx.tx_hash,
                     target_tx_hash=None,
                     target_from_block=bridge_tx_result.target_from_block,
                     status=status,
-                    extra_info=extra_info,
+                    extra_info=info.model_dump(),
                 )
 
         else:
@@ -183,14 +199,14 @@ class AssetBridgingInterface(BaseInterface):
                         err_msg=f"{bridge_tx_result}",
                     )
 
-            extra_info = {"bridge_type": bridge_tx_result.bridge.name}
+            info = ExtraInfo(bridge_type=bridge_tx_result.bridge.name)
             result = BridgeResult(
                 request=request,
                 source_tx_hash=bridge_tx_result.source_tx.tx_hash,
                 target_tx_hash=None,
                 target_from_block=bridge_tx_result.target_from_block,
                 status=status,
-                extra_info=extra_info,
+                extra_info=info.model_dump(),
             )
 
             # if bridge_tx_result.status == TxStatus.SUCCESS:
@@ -222,6 +238,7 @@ class AssetBridgingInterface(BaseInterface):
         self,
         message: AssetBridgingMessage,
         dialogue: AssetBridgingDialogue,
+        connection,
     ) -> AssetBridgingMessage | None:
         """Handle incoming asset bridge status update request."""
 
@@ -236,46 +253,142 @@ class AssetBridgingInterface(BaseInterface):
         result: BridgeResult = message.result
         request: BridgeRequest = result.request
 
-        if request.bridge != ChainID.DERIVE.name.lower():
+        if result.status is not BridgeResult.Status.STATUS_PENDING:
             return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
-                err_msg=f"Bridge '{request.bridge}' not supported",
-            )
-        if "derive" not in {request.source_ledger_id, request.target_ledger_id}:
-            return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
-                err_msg=f"Can only bridge FROM or TO Derive at this time: {request}",
-            )
-        if request.target_token and request.target_token != request.source_token:
-            return reply_err(
-                code=ErrorCode.CODE_INVALID_PARAMETERS,
-                err_msg=f"Socket superbridge requires source_token == target_token, got {request}",
+                code=ErrorCode.ALREADY_FINALIZED,
+                err_msg="",
             )
 
-        source_chain_id = ChainID[request.source_chain.upper()]
+        amount = request.amount
+        currency = Currency[request.source_token]
+        source_chain = ChainID[request.source_ledger_id.upper()]
+        target_chain = ChainID[request.target_ledger_id.upper()]
 
-        try:
-            w3 = get_w3_connection(chain_id=source_chain_id)
-            tx_receipt = wait_for_tx_receipt(w3=w3, tx_hash=result.tx_hash)
-        except ConnectionError:
-            return reply_err(
-                code=ErrorCode.CONNECTION_ERROR,
-                err_msg=f"Failed to connect to {source_chain_id}",
+        ledger_id = exchange_id = request.bridge
+        exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
+        client: AsyncClient = exchange.client
+
+        info = ExtraInfo(**result.extra_info)
+
+        if request.source_ledger_id == "derive":
+            # 1. DeriveTxResult not finalized
+            if not info.derive_tx_hash:
+                derive_tx_result: DeriveTxResult = client.get_transaction(info.transaction_id)
+                info = ExtraInfo(
+                    derive_status=derive_tx_result.status.value,
+                    transaction_id=derive_tx_result.transaction_id,
+                    derive_tx_hash=derive_tx_result.tx_hash or "",
+                    **{k: str(v) for k, v in derive_tx_result.error_log.items()},
+                )
+                if derive_tx_result.status is not DeriveTxStatus.SETTLED:
+                    status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
+                    result = BridgeResult(
+                        request=request,
+                        status=status,
+                        extra_info=info.model_dump(),
+                    )
+                    return dialogue.reply(
+                        performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
+                        target_message=message,
+                        result=result
+                    )
+                else:  # we still need to start the bridge
+                    connection.logger.info(
+                        f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
+                    )
+                    bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
+                        chain_id=target_chain,
+                        currency=currency,
+                        amount=amount,
+                    )
+                    bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
+
+                    match bridge_tx_result.status:
+                        case TxStatus.FAILED:
+                            status = BridgeResult.Status.STATUS_FAILED
+                        case TxStatus.SUCCESS:
+                            status = BridgeResult.Status.STATUS_SUCCESS
+                        case TxStatus.PENDING:
+                            status = BridgeResult.Status.STATUS_PENDING
+                        case TxStatus.ERROR:
+                            return reply_err(
+                                code=ErrorCode.CODE_OTHER_EXCEPTION,
+                                err_msg=f"{bridge_tx_result}",
+                            )
+                    info.brige = bridge_tx_result.bridge.name
+                    result = BridgeResult(
+                        request=request,
+                        source_tx_hash=bridge_tx_result.source_tx.tx_hash,
+                        target_tx_hash=None,
+                        target_from_block=bridge_tx_result.target_from_block,
+                        status=status,
+                        extra_info=info.model_dump(),
+                    )
+            # 2. BridgeTxResult not finalized
+            else:
+                # re-hydrate the "in‐flight" BridgeTxResult
+                bridge_type = BridgeType[info.bridge]
+                source_tx = TxResult(tx_hash=result.source_tx_hash)
+                target_tx = (
+                    TxResult(tx_hash=result.target_tx_hash)
+                    if result.target_tx_hash is not None else
+                    None
+                )
+                bridge_tx_result = BridgeTxResult(
+                    currency=currency,
+                    bridge=bridge_type,
+                    source_chain=source_chain,
+                    target_chain=target_chain,
+                    source_tx=source_tx,
+                    target_from_block=result.target_from_block,
+                    target_tx=target_tx,
+                )
+
+                bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
+        else:
+            # re-hydrate the "in‐flight" BridgeTxResult
+            bridge_type = BridgeType[info.bridge]
+            source_tx = TxResult(tx_hash=result.source_tx_hash)
+            target_tx = (
+                TxResult(tx_hash=result.target_tx_hash)
+                if result.target_tx_hash is not None else
+                None
             )
-        except TimeoutError:
-            return dialogue.reply(
-                performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
-                target_message=message,
-                result=result,
+            bridge_tx_result = BridgeTxResult(
+                currency=currency,
+                bridge=bridge_type,
+                source_chain=source_chain,
+                target_chain=target_chain,
+                source_tx=source_tx,
+                target_from_block=result.target_from_block,
+                target_tx=target_tx,
             )
 
-        match tx_receipt.status:  # ∈ {0, 1} (EIP-658)
-            case TxStatus.SUCCESS:
-                status = BridgeResult.COMPLETED
-            case _:
-                status = BridgeResult.FAILED
+            # 3. BridgeTxResult not finalized
+            if not bridge_tx_result.target_tx:
+                connection.logger.info(
+                    f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+                )
+                bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
 
-        result.status = status
+            # 4. DeriveTxResult not finalized
+            if bridge_tx_result.status == TxStatus.SUCCESS:
+                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
+                derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
+                    amount=amount,
+                    asset_name=request.source_token,
+                    subaccount_id=client.subaccount_id,
+                )
+                info = ExtraInfo(
+                    derive_status=derive_tx_result.status.value,
+                    transaction_id=derive_tx_result.transaction_id,
+                    derive_tx_hash=derive_tx_result.tx_hash or "",
+                    **{k: str(v) for k, v in derive_tx_result.error_log.items()},
+                )
+                status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
+                result.status = status
+                result.extra_info = info.model_dump()
+
         return dialogue.reply(
             performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
             target_message=message,
