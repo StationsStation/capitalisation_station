@@ -1,5 +1,6 @@
 """Interface for asset_bridging protocol."""
 
+import asyncio
 from typing import TYPE_CHECKING
 from functools import partial
 
@@ -64,6 +65,7 @@ class AssetBridgingInterface(BaseInterface):
     dialogue_class = AssetBridgingDialogue
     dialogues_class = BaseAssetBridgingDialogues
 
+    # def verify_request(self, message, reply_err):
 
     async def request_bridge(  # noqa: PLR0911
         self, message: AssetBridgingMessage, dialogue: AssetBridgingDialogue, connection
@@ -301,7 +303,7 @@ class AssetBridgingInterface(BaseInterface):
                         currency=currency,
                         amount=amount,
                     )
-                    bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
+                    bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
 
                     match bridge_tx_result.status:
                         case TxStatus.FAILED:
@@ -344,7 +346,7 @@ class AssetBridgingInterface(BaseInterface):
                     target_tx=target_tx,
                 )
 
-                bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
+                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
         else:
             # re-hydrate the "in‐flight" BridgeTxResult
             bridge_type = BridgeType[info.bridge]
@@ -369,7 +371,7 @@ class AssetBridgingInterface(BaseInterface):
                 connection.logger.info(
                     f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
                 )
-                bridge_tx_result = client.poll_bridge_progress(bridge_tx_result)
+                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
 
             # 4. DeriveTxResult not finalized
             if bridge_tx_result.status == TxStatus.SUCCESS:
