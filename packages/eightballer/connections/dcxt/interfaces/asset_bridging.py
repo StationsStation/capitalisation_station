@@ -58,6 +58,26 @@ class ExtraInfo(BaseModel):
     bridge_type: str = ""
 
 
+def bridge_result_to_bridge_tx_result(
+    result: BridgeResult,
+) -> BridgeTxResult:
+    """Reconstruct a BridgeTxResult from a prior BridgeResult."""
+
+    req = result.request
+    info = ExtraInfo(**result.extra_info)
+
+    return BridgeTxResult(
+        currency=Currency[req.source_token],
+        bridge=BridgeType[info.bridge_type.upper()],
+        source_chain=ChainID[req.source_ledger_id.upper()],
+        target_chain=ChainID[req.target_ledger_id.upper()],
+        source_tx=TxResult(tx_hash=result.source_tx_hash),
+        target_tx=TxResult(tx_hash=result.target_tx_hash) if result.target_tx_hash else None,
+        target_from_block=result.target_from_block,
+    )
+
+
+
 class AssetBridgingInterface(BaseInterface):
     """Interface for the asset bridging protocol."""
 
@@ -329,42 +349,11 @@ class AssetBridgingInterface(BaseInterface):
             # 2. BridgeTxResult not finalized
             else:
                 # re-hydrate the "in‐flight" BridgeTxResult
-                bridge_type = BridgeType[info.bridge]
-                source_tx = TxResult(tx_hash=result.source_tx_hash)
-                target_tx = (
-                    TxResult(tx_hash=result.target_tx_hash)
-                    if result.target_tx_hash is not None else
-                    None
-                )
-                bridge_tx_result = BridgeTxResult(
-                    currency=currency,
-                    bridge=bridge_type,
-                    source_chain=source_chain,
-                    target_chain=target_chain,
-                    source_tx=source_tx,
-                    target_from_block=result.target_from_block,
-                    target_tx=target_tx,
-                )
-
+                bridge_tx_result = bridge_result_to_bridge_tx_result(result)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
         else:
             # re-hydrate the "in‐flight" BridgeTxResult
-            bridge_type = BridgeType[info.bridge]
-            source_tx = TxResult(tx_hash=result.source_tx_hash)
-            target_tx = (
-                TxResult(tx_hash=result.target_tx_hash)
-                if result.target_tx_hash is not None else
-                None
-            )
-            bridge_tx_result = BridgeTxResult(
-                currency=currency,
-                bridge=bridge_type,
-                source_chain=source_chain,
-                target_chain=target_chain,
-                source_tx=source_tx,
-                target_from_block=result.target_from_block,
-                target_tx=target_tx,
-            )
+            bridge_tx_result = bridge_result_to_bridge_tx_result(result)
 
             # 3. BridgeTxResult not finalized
             if not bridge_tx_result.target_tx:
