@@ -5,7 +5,16 @@ from typing import TYPE_CHECKING
 from functools import partial
 
 from pydantic import BaseModel, ConfigDict
-from derive_client.data_types import ChainID, Currency, TxStatus, BridgeTxResult, DeriveTxResult, DeriveTxStatus, TxResult, BridgeType
+from derive_client.data_types import (
+    ChainID,
+    Currency,
+    TxResult,
+    TxStatus,
+    BridgeType,
+    BridgeTxResult,
+    DeriveTxResult,
+    DeriveTxStatus,
+)
 
 from packages.zarathustra.protocols.asset_bridging.message import (
     ErrorInfo,
@@ -65,9 +74,6 @@ def bridge_tx_result_to_bridge_result(
 ) -> BridgeResult:
     """Convert BridgeTxResult + optionally DeriveTxResult into BridgeResult."""
 
-    if derive_tx_result and derive_tx_result.status is not DeriveTxStatus.SETTLED:
-        raise ValueError("To invoke this derive_tx_result must be settled")
-
     if derive_tx_result:
         info = ExtraInfo(
             derive_status=derive_tx_result.status.value,
@@ -89,6 +95,10 @@ def bridge_tx_result_to_bridge_result(
             status = BridgeResult.Status.STATUS_FAILED
         case TxStatus.ERROR:
             status = BridgeResult.Status.STATUS_ERROR
+
+    # TODO: only on deposit this takes precedence over bridge tx result
+    if derive_tx_result:
+        status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
 
     return BridgeResult(
         request=request,
@@ -126,7 +136,7 @@ class AssetBridgingInterface(BaseInterface):
     dialogue_class = AssetBridgingDialogue
     dialogues_class = BaseAssetBridgingDialogues
 
-    async def request_bridge(  # noqa: PLR0911
+    async def request_bridge(
         self, message: AssetBridgingMessage, dialogue: AssetBridgingDialogue, connection
     ) -> AssetBridgingMessage | None:
         """Handle incoming asset bridge request."""
@@ -272,10 +282,12 @@ class AssetBridgingInterface(BaseInterface):
         exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
         client: AsyncClient = exchange.client
 
-        info = ExtraInfo(**result.extra_info)
+        await client.connect_ws()
+        await client.login_client()
 
         if request.source_ledger_id == "derive":
             # 1. Transfer from subaccount to smart contract funding account not SETTLED
+            info = ExtraInfo(**result.extra_info)
             if not info.derive_tx_hash:
                 derive_tx_result: DeriveTxResult = client.get_transaction(info.transaction_id)
                 info = ExtraInfo(
@@ -295,46 +307,29 @@ class AssetBridgingInterface(BaseInterface):
                     return dialogue.reply(
                         performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
                         target_message=message,
-                        result=result
+                        result=result,
                     )
 
-                # If the subaccount transfer is SETTLED, we still need to commence the bridging process 
-                else:
-                    connection.logger.info(
-                        f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
-                    )
-                    bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
-                        chain_id=target_chain,
-                        currency=currency,
-                        amount=amount,
-                    )
-                    bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
+                # If the subaccount transfer is SETTLED, we still need to commence the bridging process
+                connection.logger.info(
+                    f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
+                )
+                bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
+                    chain_id=target_chain,
+                    currency=currency,
+                    amount=amount,
+                )
+                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
+                result = bridge_tx_result_to_bridge_result(
+                    bridge_tx_result=bridge_tx_result,
+                    request=request,
+                    derive_tx_result=derive_tx_result,
+                )
 
-                    match bridge_tx_result.status:
-                        case TxStatus.FAILED:
-                            status = BridgeResult.Status.STATUS_FAILED
-                        case TxStatus.SUCCESS:
-                            status = BridgeResult.Status.STATUS_SUCCESS
-                        case TxStatus.PENDING:
-                            status = BridgeResult.Status.STATUS_PENDING
-                        case TxStatus.ERROR:
-                            return reply_err(
-                                code=ErrorCode.CODE_OTHER_EXCEPTION,
-                                err_msg=f"{bridge_tx_result}",
-                            )
-                    info.bridge_type = bridge_tx_result.bridge.name
-                    result = BridgeResult(
-                        request=request,
-                        source_tx_hash=bridge_tx_result.source_tx.tx_hash,
-                        target_tx_hash=None,
-                        target_from_block=bridge_tx_result.target_from_block,
-                        status=status,
-                        extra_info=info.model_dump(),
-                    )
             # 2. The bridge process was started but is still PENDING
             else:
                 bridge_tx_result = bridge_result_to_bridge_tx_result(result)
-                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
+                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
                 result = bridge_tx_result_to_bridge_result(bridge_tx_result)
 
         else:  # deposit
@@ -345,9 +340,10 @@ class AssetBridgingInterface(BaseInterface):
                 connection.logger.info(
                     f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
                 )
-                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress(bridge_tx_result))
+                bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
 
             # 4. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
+            derive_tx_result = None
             if bridge_tx_result.status == TxStatus.SUCCESS:
                 connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
                 derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
@@ -355,15 +351,12 @@ class AssetBridgingInterface(BaseInterface):
                     asset_name=request.source_token,
                     subaccount_id=client.subaccount_id,
                 )
-                info = ExtraInfo(
-                    derive_status=derive_tx_result.status.value,
-                    transaction_id=derive_tx_result.transaction_id,
-                    derive_tx_hash=derive_tx_result.tx_hash or "",
-                    **{k: str(v) for k, v in derive_tx_result.error_log.items()},
-                )
-                status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
-                result.status = status
-                result.extra_info = info.model_dump()
+
+            result = bridge_tx_result_to_bridge_result(
+                bridge_tx_result=bridge_tx_result,
+                request=request,
+                derive_tx_result=derive_tx_result,
+            )
 
         return dialogue.reply(
             performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
