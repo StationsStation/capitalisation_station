@@ -37,7 +37,7 @@ from packages.eightballer.protocols.user_interaction.message import (
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogues,
 )
-from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest, BridgeResult
 from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
@@ -98,9 +98,9 @@ class AgentState:
     current_period: int = 0
     last_transition_time: datetime.datetime = None
     unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
-    bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
-    bridge_requests_in_progress: int = 0
+    bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
+    bridge_requests_in_progress: dict[str, BridgeResult | None] = field(default_factory=dict)
 
     def write_to_file(self):
         """Write the state to files."""

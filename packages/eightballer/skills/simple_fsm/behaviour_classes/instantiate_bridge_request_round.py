@@ -34,14 +34,23 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
         """Perform the action of the state."""
 
         while self.strategy.state.bridge_requests:
-            request = self.strategy.state.bridge_requests.pop(0)
+            request = self.strategy.state.bridge_requests.popleft()
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_BRIDGE,
                 connection_id=DCXT_PUBLIC_ID,
                 request=request,
             )
             self.context.logger.info("Submitted bridge request.", extra={"request": request})
-            self.strategy.state.bridge_requests_in_progress += 1
+            self.strategy.state.bridge_requests_in_progress[request.request_id] = None
+
+        for result in self.strategy.state.bridge_requests_in_progress.values():
+            if result is None:  # in-flight
+            self.submit_msg(
+                protocol_performative=AssetBridgingMessage.Performative.REQUEST_STATUS,
+                connection_id=DCXT_PUBLIC_ID,
+                result=result,
+            )
+            self.context.logger.info("Submitted bridge request status.", extra={"result": result})
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

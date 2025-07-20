@@ -32,6 +32,9 @@ from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.zarathustra.protocols.asset_bridging.message import (
     AssetBridgingMessage,
 )
+from packages.zarathustra.protocols.asset_bridging.custom_types import (
+    BridgeResult,
+)
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.skills.abstract_round_abci.handlers import (
     HttpHandler as BaseHttpHandler,
@@ -159,20 +162,37 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
         {
             AssetBridgingMessage.Performative.BRIDGE_STATUS,
             AssetBridgingMessage.Performative.ERROR,
-            AssetBridgingMessage.Performative.REQUEST_STATUS,
         }
     )
 
     def handle(self, message):
         """We log the message and pass it to the dialogue manager."""
-        self.strategy.state.bridge_requests_in_progress -= 1
-        self.context.logger.info(
-            f"Handling message: {message}, remaining requests: {self.strategy.state.bridge_requests_in_progress}"
-        )
-        if self.strategy.state.bridge_requests_in_progress < 0:
-            msg = "Unexpected critical error on bridge requests."
-            self.context.logger.critical(msg)
-            raise ValueError(msg)
+
+        if message.performative == AssetBridgingMessage.Performatives.BRIDGE_STATUS:
+
+            result = message.result
+            request_id = result.request.request_id
+
+            if request_id not in self.strategy.state.bridge_requests_in_progress:
+                self.context.logger.error(f"Unknown result for request_id={request_id}: {message}")
+                return
+
+            match result.status:
+                case BridgeResult.Status.STATUS_PENDING:
+                    self.strategy.state.bridge_requests_in_progress[request_id] = result
+                    self.context.logger.info(f"Bridge request pending: {result}")
+                case BridgeResult.Status.STATUS_SUCCESS:
+                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
+                    self.context.logger.info(f"Bridge request completed: {result}")
+                case BridgeResult.Status.STATUS_FAILED:
+                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
+                    self.context.logger.error(f"Bridge request failed: {result}")
+                case BridgeResult.Status.ERROR:
+                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
+                    self.context.logger.exception(f"Bridge request error: {result}")
+                case _:
+                    self.context.logger.exception(f"Unexpected bridge request status: {result}")
+
         return super().handle(message)
 
     @property
