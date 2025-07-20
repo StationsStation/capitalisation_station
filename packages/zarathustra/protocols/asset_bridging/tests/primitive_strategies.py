@@ -1,6 +1,7 @@
 """Module containing hypothesis strategies for the custom primitives."""
 
 from hypothesis import strategies as st
+
 from packages.zarathustra.protocols.asset_bridging.primitives import (
     Float,
     Int32,

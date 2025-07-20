@@ -1,6 +1,7 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
 from hypothesis import given, strategies as st
+
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorInfo,
     BridgeResult,
