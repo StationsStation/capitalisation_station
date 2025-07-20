@@ -7,21 +7,15 @@ description: A minimal, atomic request-response protocol for cross-chain asset b
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  README.md: bafybeifmhlpfgkrzjwdo3gyzhodgngxllg5vazllvnt2ymcy5jlunypi7e
-  __init__.py: bafybeihi6cjvw7iuabkgpni3ksybe3mcv3wc5idas55qm7hao2qfcaxify
-  asset_bridging.proto: bafybeidvhmdnq7xxlrtxjwwdljgqv2rknjt37j6i7v6jm2vh2iqmkqg3iy
-  asset_bridging_pb2.py: bafybeigrzybxjyo2qkpt2qnj6safep2a7cykeprbyrt742ttndrxci7eda
-  custom_types.py: bafybeibte3zrhq4bchogtj6bbt5pijxwi2ylkvrm5bg5inm4rzmhuzzkoy
-  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
+  __init__.py: bafybeiev5h43cvugldln6lxgn3wyvh7fr2otomwgg4w4lqxdd3jajnag74
+  asset_bridging.proto: bafybeib25yspiimsbgixtw33irctgsvsfbsvnuhqsp7uthdak6xqykvcoa
+  asset_bridging_pb2.py: bafybeifonmm7dnavqmf5ovs7c56hdzz5uzksjby4gfhcbocvzh4sprrlh4
+  custom_types.py: bafybeigpiielvkwynxykdwidul2y7zc33xkxcf6m74uxr6tyb6vtbv7igm
+  dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
   message.py: bafybeiepv57seaits3lavpsbqdh6b3vtvjyy7ckdtahwvsklmqnxfdoqxi
-  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
-  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
-  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
-  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
-  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
-  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
+  tests/test_asset_bridging_dialogues.py: bafybeif43wj2hdxs5ssdw2nebduiefs7ernbkiwhpz5fhirrr66vmc2pxu
+  tests/test_asset_bridging_messages.py: bafybeih5r2wjyxbyukf2ynnrqjks3e3kqfmg7wiczzhhk6xinbmzgjgp6m
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}
