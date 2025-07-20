@@ -32,7 +32,7 @@ fingerprint:
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
   interfaces/approvals.py: bafybeihfetz3mim4quwllpuu335qs3igjkdizlbhnzgr3g3oondlhxrc2a
-  interfaces/asset_bridging.py: bafybeig2ivbyufwhpae3nqf4alsjg4ukyt3ino2zroynd5wa7dhf47vpyy
+  interfaces/asset_bridging.py: bafybeia6kgnmhem34te6nbgofgs74x4qu547w66uwrlhtpjzcdgxxupuge
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
@@ -73,7 +73,7 @@ restricted_to_protocols:
 - zarathustra/asset_bridging:0.1.0
 protocols:
 - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
+- zarathustra/asset_bridging:0.1.0:bafybeihquixjbvq4p35apiydj7fgwtfa3ahfflzybujq73n6airxhcsmue
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa

@@ -39,6 +39,8 @@ if TYPE_CHECKING:
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
 
 
+# ruff: noqa: PLR0914  # Too many local variables
+
 ErrorCode = ErrorInfo.CODE
 
 
@@ -53,6 +55,7 @@ DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
 
 
 class ExtraInfo(BaseModel):
+    """ExtraInfo."""
     model_config = ConfigDict(validate_assignment=True, extra="allow")
     derive_status: str = ""
     transaction_id: str = ""
@@ -287,7 +290,8 @@ class AssetBridgingInterface(BaseInterface):
 
             # 1. The bridge process was started but is still PENDING
             if not bridge_tx_result.target_tx:
-                msg = f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+                token = request.source_token
+                msg = f"Depositing {amount} {token} to Derive wallet {client.wallet} on {source_chain.name}."
                 connection.logger.info(msg)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
 
