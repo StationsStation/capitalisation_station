@@ -1,5 +1,6 @@
 """Collect data round behaviour class."""
 
+import time
 from collections.abc import Generator
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
@@ -8,7 +9,7 @@ from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
 from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
-
+from packages.eightballer.skills.simple_fsm.strategy import InProgressBridgeRequest
 
 AWAITING_INITIAL_BRIDGE_RESULT = object()
 APPROVALS_TIMEOUT_SECONDS = 120
@@ -42,17 +43,24 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
                 request=request,
             )
             self.context.logger.info("Submitted bridge request.", extra={"request": request})
-            self.strategy.state.bridge_requests_in_progress[request.request_id] = AWAITING_INITIAL_BRIDGE_RESULT
+            entry = InProgressBridgeRequest(payload=AWAITING_INITIAL_BRIDGE_RESULT)
+            self.strategy.state.bridge_requests_in_progress[request.request_id] = entry
 
-        for result in self.strategy.state.bridge_requests_in_progress.values():
-            if result is AWAITING_INITIAL_BRIDGE_RESULT:
+        now = time.monotonic()
+        for rid, entry in tuple(self.strategy.state.bridge_requests_in_progress.items()):
+            if  now - entry.ts > self.strategy.bridge_request_timeout:
+                self.strategy.state.bridge_requests_in_progress.pop(rid)
+                self.context.logger.warning(f"Bridge request {rid} timed out after {now - entry.ts:.1f}s: {entry}")
+
+        for entry in self.strategy.state.bridge_requests_in_progress.values():
+            if entry.payload is AWAITING_INITIAL_BRIDGE_RESULT:
                 continue
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_STATUS,
                 connection_id=DCXT_PUBLIC_ID,
-                result=result,
+                result=entry.payload,
             )
-            self.context.logger.info("Submitted bridge request status.", extra={"result": result})
+            self.context.logger.info("Submitted bridge request status.", extra={"result": entry.payload})
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

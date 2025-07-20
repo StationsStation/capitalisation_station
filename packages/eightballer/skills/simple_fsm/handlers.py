@@ -179,7 +179,8 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
 
             match result.status:
                 case BridgeResult.Status.STATUS_PENDING:
-                    self.strategy.state.bridge_requests_in_progress[request_id] = result
+                    current = self.strategy.state.bridge_requests_in_progress[request_id]
+                    current.payload = result
                     self.context.logger.info(f"Bridge request pending: {result}")
                 case BridgeResult.Status.STATUS_SUCCESS:
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
