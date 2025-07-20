@@ -63,6 +63,7 @@ class ExtraInfo(BaseModel):
 def bridge_tx_result_to_bridge_result(
     bridge_tx_result: BridgeTxResult,
     request: BridgeRequest,
+    is_deposit: bool,
     derive_tx_result: DeriveTxResult | None = None,
 ) -> BridgeResult:
     """Convert BridgeTxResult + optionally DeriveTxResult into BridgeResult."""
@@ -89,8 +90,7 @@ def bridge_tx_result_to_bridge_result(
         case TxStatus.ERROR:
             status = BridgeResult.Status.STATUS_ERROR
 
-    # TODO: only on deposit this takes precedence over bridge tx result
-    if derive_tx_result:
+    if derive_tx_result and is_deposit:
         status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
 
     return BridgeResult(
@@ -197,6 +197,7 @@ class AssetBridgingInterface(BaseInterface):
             result = bridge_tx_result_to_bridge_result(
                 bridge_tx_result=bridge_tx_result,
                 request=request,
+                is_deposit=is_deposit,
             )
 
         else:
@@ -231,6 +232,7 @@ class AssetBridgingInterface(BaseInterface):
                 result = bridge_tx_result_to_bridge_result(
                     bridge_tx_result=bridge_tx_result,
                     request=request,
+                    is_deposit=is_deposit,
                     derive_tx_result=derive_tx_result,
                 )
 
@@ -302,6 +304,7 @@ class AssetBridgingInterface(BaseInterface):
             updated_result = bridge_tx_result_to_bridge_result(
                 bridge_tx_result=bridge_tx_result,
                 request=request,
+                is_deposit=is_deposit,
                 derive_tx_result=derive_tx_result,
             )
 
@@ -342,6 +345,7 @@ class AssetBridgingInterface(BaseInterface):
                 updated_result = bridge_tx_result_to_bridge_result(
                     bridge_tx_result=bridge_tx_result,
                     request=request,
+                    is_deposit=is_deposit,
                     derive_tx_result=derive_tx_result,
                 )
 
@@ -352,6 +356,7 @@ class AssetBridgingInterface(BaseInterface):
                 updated_result = bridge_tx_result_to_bridge_result(
                     bridge_tx_result=bridge_tx_result,
                     request=request,
+                    is_deposit=is_deposit,
                 )
                 updated_result.extra_info = result.extra_info
 
