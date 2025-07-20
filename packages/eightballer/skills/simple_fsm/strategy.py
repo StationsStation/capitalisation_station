@@ -100,7 +100,7 @@ class AgentState:
     unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
     bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
-    bridge_requests_in_progress: dict[str, BridgeResult | None] = field(default_factory=dict)
+    bridge_requests_in_progress: dict[str, BridgeResult | object] = field(default_factory=dict)
 
     def write_to_file(self):
         """Write the state to files."""

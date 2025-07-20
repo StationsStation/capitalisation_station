@@ -10,6 +10,7 @@ from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingM
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
 
 
+AWAITING_INITIAL_BRIDGE_RESULT = object()
 APPROVALS_TIMEOUT_SECONDS = 120
 DEFAULT_ENCODING = "utf-8"
 
@@ -41,10 +42,11 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
                 request=request,
             )
             self.context.logger.info("Submitted bridge request.", extra={"request": request})
-            self.strategy.state.bridge_requests_in_progress[request.request_id] = None
+            self.strategy.state.bridge_requests_in_progress[request.request_id] = AWAITING_INITIAL_BRIDGE_RESULT
 
         for result in self.strategy.state.bridge_requests_in_progress.values():
-            if result is None:  # in-flight
+            if result is AWAITING_INITIAL_BRIDGE_RESULT:
+                continue
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_STATUS,
                 connection_id=DCXT_PUBLIC_ID,
