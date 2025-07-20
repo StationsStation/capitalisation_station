@@ -187,9 +187,8 @@ class AssetBridgingInterface(BaseInterface):
         is_deposit = request.target_ledger_id == "derive"
 
         if is_deposit:
-            connection.logger.info(
-                f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
-            )
+            msg = f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+            connection.logger.info(msg)
             bridge_tx_result: BridgeTxResult = client.deposit_to_derive(
                 chain_id=source_chain,
                 currency=currency,
@@ -222,9 +221,8 @@ class AssetBridgingInterface(BaseInterface):
                     extra_info=info.model_dump(),
                 )
             else:
-                connection.logger.info(
-                    f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
-                )
+                msg = f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
+                connection.logger.info(msg)
                 bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
                     chain_id=target_chain,
                     currency=currency,
@@ -265,7 +263,7 @@ class AssetBridgingInterface(BaseInterface):
         if result.status is not BridgeResult.Status.STATUS_PENDING:
             return reply_err(
                 code=ErrorCode.ALREADY_FINALIZED,
-                err_msg="",
+                err_msg=f"{result}",
             )
 
         amount = request.amount
@@ -283,14 +281,12 @@ class AssetBridgingInterface(BaseInterface):
         is_deposit = request.target_ledger_id == "derive"
 
         if is_deposit:
-
             bridge_tx_result = bridge_result_to_bridge_tx_result(result)
 
             # 1. The bridge process was started but is still PENDING
             if not bridge_tx_result.target_tx:
-                connection.logger.info(
-                    f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
-                )
+                msg = f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+                connection.logger.info(msg)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
 
             # 2. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
@@ -335,9 +331,8 @@ class AssetBridgingInterface(BaseInterface):
                     )
 
                 # If the subaccount transfer is SETTLED, we still need to commence the bridging process
-                connection.logger.info(
-                    f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
-                )
+                msg = f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
+                connection.logger.info(msg)
                 bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
                     chain_id=target_chain,
                     currency=currency,
