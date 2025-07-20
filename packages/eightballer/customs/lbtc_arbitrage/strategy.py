@@ -1,7 +1,6 @@
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023
-#   Copyright 2023 valory-xyz
+#   Copyright 2025 eightballer
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -22,6 +21,7 @@
 import operator
 from functools import reduce
 from dataclasses import field, dataclass
+from uuid import uuid4
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
@@ -288,6 +288,7 @@ class ArbitrageStrategy:
                     continue
                 bridge_requests.append(
                     BridgeRequest(
+                        request_id=str(uuid4()),
                         source_ledger_id=from_ledger,
                         target_ledger_id=to_ledger,
                         amount=amount_to_bridge,
