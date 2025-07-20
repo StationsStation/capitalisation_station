@@ -291,7 +291,7 @@ class AssetBridgingInterface(BaseInterface):
 
             # 2. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
             derive_tx_result = None
-            if bridge_tx_result.status == TxStatus.SUCCESS:
+            if bridge_tx_result.status is TxStatus.SUCCESS:
                 connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
                 derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
                     amount=amount,
@@ -299,7 +299,7 @@ class AssetBridgingInterface(BaseInterface):
                     subaccount_id=client.subaccount_id,
                 )
 
-            result = bridge_tx_result_to_bridge_result(
+            updated_result = bridge_tx_result_to_bridge_result(
                 bridge_tx_result=bridge_tx_result,
                 request=request,
                 derive_tx_result=derive_tx_result,
@@ -339,7 +339,7 @@ class AssetBridgingInterface(BaseInterface):
                     amount=amount,
                 )
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
-                result = bridge_tx_result_to_bridge_result(
+                updated_result = bridge_tx_result_to_bridge_result(
                     bridge_tx_result=bridge_tx_result,
                     request=request,
                     derive_tx_result=derive_tx_result,
@@ -349,12 +349,16 @@ class AssetBridgingInterface(BaseInterface):
             else:
                 bridge_tx_result = bridge_result_to_bridge_tx_result(result)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
-                result = bridge_tx_result_to_bridge_result(bridge_tx_result)
+                updated_result = bridge_tx_result_to_bridge_result(
+                    bridge_tx_result=bridge_tx_result,
+                    request=request,
+                )
+                updated_result.extra_info = result.extra_info
 
         return dialogue.reply(
             performative=AssetBridgingMessage.Performative.BRIDGE_STATUS,
             target_message=message,
-            result=result,
+            result=updated_result,
         )
 
     def _error_reply(
