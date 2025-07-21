@@ -330,19 +330,18 @@ class AwaitTriggerRound(BaseState):
             self.context.logger.info(f"{self.name}: game state: {game_state}")
             if not game_state.blocks_remaining:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-                self.context.logger.info(f"{self.name}: event {self._event}")
             elif game_state.user_claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
-            elif game_state.can_play_game:
+            elif game_state.can_play_game and self.pending_donations:
                 value_captured = self.pending_donations.popleft()
                 msg = f"Value captured: {value_captured} USD, donating: {game_state.minimum_donation / 1e18} ETH"
                 self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            self.context.logger.debug(f"{self.name}: event {self._event}")
+            self.context.logger.info(f"{self.name}: event {self._event}")
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR

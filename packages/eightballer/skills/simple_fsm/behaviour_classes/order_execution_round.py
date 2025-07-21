@@ -255,7 +255,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 OrderStatus.NEW,
             }
         ):
-            self.context.logger.info(f"Order created: {order}")
+            self.context.logger.info("Order created:")
             self.context.logger.info(
                 dedent(f"""
             Id: {order.id}
