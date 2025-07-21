@@ -159,7 +159,6 @@ class ArbitrageStrategy:
         return not any(
             [
                 opportunity.best_ask_exchange == opportunity.best_bid_exchange,
-                opportunity.best_ask_ledger == opportunity.best_bid_ledger,
             ]
         )
 
@@ -229,7 +228,7 @@ class ArbitrageStrategy:
             immediate_or_cancel=opportunity.best_bid_exchange == "derive",
         )
         # we set the dervive order to be the first order
-        if sell_order.exchange_id == "derive":
+        if sell_order.exchange_id in ["derive", "nabla"]:
             return [sell_order, buy_order]
         return [buy_order, sell_order]
 
