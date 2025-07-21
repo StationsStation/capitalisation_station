@@ -347,6 +347,32 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         return ask_price, bid_price
 
+    async def convert_amount(
+        self,
+        from_amount: int,
+        from_price: float,
+        to_price: float,
+        from_token_decimals: int,
+        to_token_decimals: int,
+    ) -> int:
+        """Price conversion from one token to another.
+
+        Args:
+            from_amount (int): Amount of the from token.
+            from_price (float): Price of the from token in USD.
+            to_price (float): Price of the to token in USD.
+            from_token_decimals (int): Decimals of the from token.
+            to_token_decimals (int): Decimals of the to token.
+
+        Returns:
+            int: Equivalent amount in the to token.
+        """
+        return (
+            from_amount
+            * (from_price / to_price)
+            / (10 ** (from_token_decimals - to_token_decimals))
+        )
+
     async def get_orderbook(
         self,
         asset_a: str,
@@ -379,8 +405,21 @@ class NablaFinanceClient(BaseErc20Exchange):
         quotes = []
 
         for amount in amounts:
+            # Prepare amounts
+            bid_amount_in = int(amount * 10**token_a.decimals)
+            ask_amount_in = self.convert_amount(
+                from_amount=bid_amount_in,
+                from_price=token_prices[token_a.address],
+                to_price=token_prices[token_b.address],
+                from_token_decimals=token_a.decimals,
+                to_token_decimals=token_b.decimals,
+            )
+
+            breakpoint()
+
             params = {
-                "amount_in": int(amount * 10**token_a.decimals),
+                "bid_amount_in": bid_amount_in,
+                "ask_amount_in": ask_amount_in,
                 "token_path": [token_a.address, token_b.address],
                 "router_path": [self.router_address],
                 "token_prices": [
@@ -389,10 +428,12 @@ class NablaFinanceClient(BaseErc20Exchange):
                 ],
             }
 
-            nabla_quote_calldata = nabla_quote_contract.quote_calldata(
-                ledger_api=self.web3,
-                contract_address=self.nabla_quote_address,
-                **params,
+            nabla_quote_calldata = (
+                nabla_quote_contract.quote_with_reference_price_calldata(
+                    ledger_api=self.web3,
+                    contract_address=self.nabla_quote_address,
+                    **params,
+                )
             )
 
             quote_call3_struct = {
@@ -408,6 +449,8 @@ class NablaFinanceClient(BaseErc20Exchange):
             ledger_api=self.web3, contract_address=MULTICALL3_ADDRESS, calls=call3s
         )
         multicall3_quotes_returned = multicall3_quotes_calldata.call()
+
+        breakpoint()
 
         # Decode the multicall3 returned data
         for i, (success, returned_data) in enumerate(multicall3_quotes_returned):
@@ -500,9 +543,15 @@ class NablaFinanceClient(BaseErc20Exchange):
 
         # get live ask/bid for X units of asset A from NablaQuote contract
         amount = params.get("amount", 0.5) if params is not None else 0.5
-        ask, bid = await self.get_nabla_quote(
-            amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
+        # ask, bid = await self.get_nabla_quote(
+        #     amount=amount, asset_a=asset_a.address, asset_b=asset_b.address
+        # )
+
+        orderbook = self.get_orderbook(
+            asset_a=asset_a.address, asset_b=asset_b.address, amounts=[amount]
         )
+
+        breakpoint()
 
         ts = datetime.datetime.now(tz=datetime.timezone.utc)
         return Ticker(
