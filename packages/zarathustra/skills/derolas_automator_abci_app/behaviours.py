@@ -436,7 +436,7 @@ class CheckReadyToDonateRound(BaseState):
 
         try:
             gamestate: GameState = self.game_state
-            if not gamestate.can_play_game and self.pending_donations:
+            if not gamestate.can_play_game or not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
             else:
                 value_captured = self.pending_donations.popleft()
