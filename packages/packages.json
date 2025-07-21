@@ -1,7 +1,7 @@
 {
     "dev": {
         "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py",
-        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeiat6u5ehujwtjn6ta2lm6343jxhsdbr6tee2ysfmeycer6nlnpgfe",
+        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeibsrotxifnjfju55l7gm7pqewy23ykz6ymv4i4filokz3yinynvvi",
         "custom/wakamex/market_maker/0.1.0": "bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm",
         "protocol/eightballer/default/0.1.0": "bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy",
         "protocol/eightballer/orders/0.1.0": "bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu",
@@ -44,12 +44,12 @@
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeihgpb6xgvuj2mqiwt36kclqiq33iqkp5wgt6dug24mzkk3z5cgi3i",
         "agent/eightballer/trader/0.1.0": "bafybeif5gjmk3pqxrwbcyjtsd3jr6ns5xvioetl3fj7kt7tlj6psgiuegu",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeiakptijvhzgwx3kh7ysmx67ajmsz64dq67btq7mkvkym5j7pavbkq",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeidsl7755mr3flpg6ut364gjwetzzzsxrtnpf2jh2obrrd3hzj5meq",
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeiakf3m4iopwuctnah6de4cbvnlmsoluzjknznt4d5kfprl5m5zpk4",
         "agent/zarathustra/derolas_automator/0.1.0": "bafybeieussu7kq4ggceiyqx2ez3w7n2eloiqbjiazfnucrtnzbxwafacza",
         "agent/wakamex/market_maker/0.1.0": "bafybeib2qwioyt5ucvwwuaxixjgmn7wxccgak2usjycsj2jzksnltgumea",
-        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeibnyfzb2wb23iyw4wmniojnqxlk2etlnc5niv3bhmy5vo4tgyhbyq",
+        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeicgvavkwzx2wjsrx7e7rkafidvvq4otzwcaobbbhuk6kxq6fmxysy",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeihw25g2rwuudofu7sm2nfjiuocwgpqiujw2nm4rdb7ggx6lws3e2y",
-        "service/eightballer/derived_cow/0.1.0": "bafybeigx3cucp2qush2g24l4zwobykdmj3spfat6hmmdpdfopximcwggrq"
+        "service/eightballer/derived_cow/0.1.0": "bafybeiebvgrt2ijt5lzp3ipa3vhftzacdyfuxhjtqhm42iqu77n2aeyomq"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",
