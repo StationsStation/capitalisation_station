@@ -334,10 +334,7 @@ class AwaitTriggerRound(BaseState):
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
-            elif game_state.can_play_game and self.pending_donations:
-                value_captured = self.pending_donations.popleft()
-                msg = f"Value captured: {value_captured} USD, donating: {game_state.minimum_donation / 1e18} ETH"
-                self.context.logger.info(msg)
+            elif game_state.can_play_game:
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
@@ -439,14 +436,18 @@ class CheckReadyToDonateRound(BaseState):
 
         try:
             gamestate: GameState = self.game_state
-            if not gamestate.can_play_game:
+            if not gamestate.can_play_game or not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
             else:
+                value_captured = self.pending_donations.popleft()
+                msg = f"Value captured: {value_captured} USD, donating: {gamestate.minimum_donation / 1e18} ETH"
+                self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.ELIGIBLE_TO_DONATE
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
+        self.context.logger.info(f"{self.name}: event {self._event}")
         self._is_done = True
 
     @property

@@ -47,6 +47,7 @@ packages/valory/skills/reset_pause_abci
 packages/eightballer/protocols/user_interaction
 
 /derive_arbitrage_agent*
+/nabla_arbitrage_agent*
 
 
 .runner_secrets
