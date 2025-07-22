@@ -160,7 +160,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
 
     def get_error_message(
         self,
-        error: str,
+        error: type[Exception],
         request: Message | None,
         response_message: Message | None,
     ):
@@ -168,7 +168,7 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.logger.error("Unable to handle protocol : %s message", request.performative)
         message = DefaultMessage(
             performative=DefaultMessage.Performative.ERROR,
-            error_msg=bytes(str(error), "utf-8"),
+            error_msg=str(error),
             error_code=ErrorCode.DECODING_ERROR,
         )
         if response_message:
