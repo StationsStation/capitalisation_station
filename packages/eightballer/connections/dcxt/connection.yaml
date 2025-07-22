@@ -141,6 +141,11 @@ config:
     wallet: null
     ledger_id: ethereum
     rpc_url: https://eth.drpc.org
+  - name: nabla
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: ethereum
+    rpc_url: https://eth.drpc.org
   target_skill_id: null
 excluded_protocols: []
 dependencies:
