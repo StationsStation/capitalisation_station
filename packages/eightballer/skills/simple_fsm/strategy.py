@@ -100,8 +100,7 @@ class AgentState:
     unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
     bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
-    bridging_in_progress: bool = False
-    waiting_balance_difference: bool = False
+    bridge_requests_in_progress: int = 0
 
     def write_to_file(self):
         """Write the state to files."""
@@ -186,6 +185,7 @@ class ArbitrageStrategy(Model):
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
         self.alert_user = kwargs.pop("alert_user", True)
+        self.bridging_enabled = kwargs.pop("bridging_enabled", False)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
