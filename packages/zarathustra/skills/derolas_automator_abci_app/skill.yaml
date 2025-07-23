@@ -8,10 +8,10 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeihqgalcx4nc3zmhypemwg2lo4gq42ugkt7b3qlfqnh545sw34jq44
-  behaviours.py: bafybeicejpmipwnug4xjbocjcc2aupzrgqsbp6r6ejbqj6objzjflity2a
+  behaviours.py: bafybeifz2gwqrmk5e32o2uanbn2jogbzeuevnnwqh3ndg3xuumvfnskzxi
   dialogues.py: bafybeidvkg2ztaxkchnaml747jln5xva7egcqo7mz5zhyfbpp5qixumoqy
   handlers.py: bafybeig62xdj6tkysnlylaxsjomqox5yg5wmgaebcp5gijk3yn5aevokx4
-  models.py: bafybeiex2c5xqd23knea2lynsvmc5cn6vgha4iw6s75bixlznqcileooxu
+  models.py: bafybeiftmpkh3fi7z22qjey3qrfis7wxyte4g4luodh6rmxxgexwyoabha
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeibbvivbs5yje5f35q2mda3io7jouqwr25tkt3emo42ui2gqa2c2xe
   tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
@@ -19,7 +19,7 @@ fingerprint_ignore_patterns: []
 connections:
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
-- zarathustra/derolas_staking:0.1.0:bafybeign6fvlqgj7zzkrcjc7vizknszi77ddsnbrtti3ui6qr4wxjxjglm
+- zarathustra/derolas_staking:0.1.0:bafybeidd7j3zynbege6j4scdueejojxh4ig2dhddrc5hmocnxyba6gxax4
 protocols:
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme

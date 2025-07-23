@@ -6,9 +6,9 @@ description: The Derolas staking contract.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibtelgnqabncedvt4w2fqy336b3pkm2pykl2xaofaws55tyvbct4a
-  build/derolas_staking.json: bafybeic43eyyiycy67v7tgmpbyd2d3w7c3txrz63glrxhczpnklfpociqa
-  contract.py: bafybeia4jjwa5todoqabkvrfpahqffblnuj2a3lbyd7gyjifb5k2zy7jca
+  __init__.py: bafybeiec3flie665tfkp6za2lhl7rkgy2ax7zqbd6d5p3vkqqjbqlfocuy
+  build/derolas_staking.json: bafybeibjmonsvgfi766lpkhpwevp47qqqlnaympep6deryvyqjxljtf77m
+  contract.py: bafybeiffzcz5tbw6mbs7z5e67uf27qhhk6aa6up7azlasr735rmfztha4i
   tests/test_derolas_staking_contract.py: bafybeigroopxupvifesrm7lehctqv7cpuyrh2kjyzty4x7ypainnocydxa
 fingerprint_ignore_patterns: []
 class_name: DerolasStaking

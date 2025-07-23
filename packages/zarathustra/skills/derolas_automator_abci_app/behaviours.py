@@ -43,7 +43,7 @@ class GameState:
     current_epoch: int
     epoch_length: int
     epoch_end_block: int
-    minimal_donation: int
+    minimum_donation: int
     blocks_remaining: int
     epoch_rewards: int
     total_donated: int
@@ -304,6 +304,16 @@ class BaseState(State, ABC):  # noqa: PLR0904
         """Pending donations from eightballer/skills/simple_fsm PostTradeRound."""
         return self.context.shared_state.get("state").pending_donations
 
+    @property
+    def game_state(self) -> GameState:
+        """Get the game state."""
+        state = self.derolas_staking_contract.get_game_state(
+            ledger_api=self.base_ledger_api,
+            contract_address=self.derolas_contract_address,
+            user=self.crypto.address,
+        )
+        return GameState(*state.values())
+
 
 class AwaitTriggerRound(BaseState):
     """This class implements the behaviour of the state AwaitTriggerRound."""
@@ -320,34 +330,20 @@ class AwaitTriggerRound(BaseState):
             self.context.logger.debug(f"{self.name}: game state: {game_state}")
             if not game_state.blocks_remaining:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-                self.context.logger.debug(f"{self.name}: event {self._event}")
-            elif self.claimable > 0:
+            elif game_state.user_claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
-            elif self.can_play_game:
-                value_captured = self.pending_donations.popleft()
-                msg = f"Value captured: {value_captured} USD, donating: {self.minimum_donation / 1e18} ETH"
-                self.context.logger.debug(msg)
+            elif game_state.can_play_game:
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            self.context.logger.debug(f"{self.name}: event {self._event}")
+            self.context.logger.info(f"{self.name}: event {self._event}")
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
-
-    @property
-    def game_state(self) -> GameState:
-        """Get the game state."""
-        state = self.derolas_staking_contract.get_game_state(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-            user=self.crypto.address,
-        )
-        return GameState(*state.values())
 
     @property
     def claimable(self) -> int:
@@ -371,12 +367,12 @@ class CheckEpochRound(BaseState):
         """Perfom the act."""
 
         try:
-            blocks_remaining = self.get_blocks_remaining()
-            if not self.can_play_game:
-                self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            elif blocks_remaining == 0:
+            game_state: GameState = self.game_state
+            if game_state.blocks_remaining == 0:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-            elif blocks_remaining < BLOCK_MARGIN:
+            elif not game_state.can_play_game:
+                self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
+            elif game_state.blocks_remaining < BLOCK_MARGIN:
                 self._event = DerolasautomatorabciappEvents.EPOCH_END_NEAR
             else:
                 self._event = DerolasautomatorabciappEvents.EPOCH_ONGOING
@@ -422,7 +418,7 @@ class EndEpochRound(BaseState):
     def end_epoch(self):
         """Call "end_epoch" on Derolas contract."""
 
-        return self.derolas_staking_contract.end_epoch(
+        return self.derolas_staking_contract.end_round(
             ledger_api=self.base_ledger_api,
             contract_address=self.derolas_contract_address,
         )
@@ -439,22 +435,19 @@ class CheckReadyToDonateRound(BaseState):
         """Perfom the act."""
 
         try:
-            current_epoch = self.current_epoch
-            donations = self.epoch_to_donations(current_epoch, self.crypto.address)
-            epoch_to_total_donated = self.epoch_to_total_donated(current_epoch)
-            max_donators_per_epoch = self.max_donators_per_epoch
-            if not self.can_play_game:
+            gamestate: GameState = self.game_state
+            if not gamestate.can_play_game or not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            elif donations != 0:
-                self._event = DerolasautomatorabciappEvents.ALREADY_DONATED
-            elif epoch_to_total_donated >= max_donators_per_epoch:
-                self._event = DerolasautomatorabciappEvents.MAX_DONATORS_REACHED
             else:
+                value_captured = self.pending_donations.popleft()
+                msg = f"Value captured: {value_captured} USD, donating: {gamestate.minimum_donation / 1e18} ETH"
+                self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.ELIGIBLE_TO_DONATE
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
+        self.context.logger.info(f"{self.name}: event {self._event}")
         self._is_done = True
 
     @property
@@ -487,9 +480,9 @@ class DonateRound(BaseState):
         """Perfom the act."""
 
         try:
-            value = self.minimum_donation
+            state: GameState = self.game_state
             w3_function = self.donate()
-            raw_tx = self.build_transaction(w3_function, value=value)
+            raw_tx = self.build_transaction(w3_function, value=state.minimal_donation)
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
