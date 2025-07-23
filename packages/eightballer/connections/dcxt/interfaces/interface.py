@@ -47,19 +47,19 @@ class ConnectionProtocolInterface:  # pylint: disable=too-many-instance-attribut
         }
         self.handle_task_done = kwargs.get("done_callback")
 
-    def validate_envelope(self, envelope):
+    def validate_envelope(self, envelope: Envelope) -> bool:
         """Handles the message."""
         interface = self.supported_protocols.get(envelope.message.protocol_id)
         return interface is not None
 
-    async def handle_envelope(self, envelope):
+    async def handle_envelope(self, envelope: Envelope) -> Message:
         """Handles the message."""
         interface = self.supported_protocols.get(envelope.message.protocol_id)
         msg, dialogue, performative = interface.validate_msg(envelope.message)
         handler: Callable[[Any], Any] = interface.get_handler(performative)
         return await handler(msg, dialogue, connection=self)
 
-    def build_envelope(self, request: Envelope | None, response_message: Message | None):
+    def build_envelope(self, request: Envelope | None, response_message: Message | None) -> Envelope | None:
         """Build the envelope."""
         response_envelope = None
 

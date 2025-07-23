@@ -18,8 +18,6 @@ from packages.eightballer.connections.dcxt.interfaces.interface import Connectio
 
 
 if TYPE_CHECKING:
-    from aea.protocols.dialogue.base import Dialogue
-
     from packages.eightballer.protocols.markets.custom_types import Market
 
 
@@ -125,31 +123,25 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.executing_tasks.append(task)
         self.task_to_request[task] = envelope
 
-    async def receive(self, *args: Any, **kwargs: Any) -> Envelope | None:
+    async def receive(self, *args: Any, **kwargs: Any) -> Envelope:  # noqa: ARG002
         """Receive a message."""
-        envelope = cast(
-            Envelope,
-            await self.queue.get(),
-        )
-        del args, kwargs
-        return envelope
+        return cast(Envelope, await self.queue.get())
 
-    async def _execute(self, envelope=None) -> Message | None:
-        dialogue: Dialogue
+    async def _execute(self, envelope: Envelope) -> Message:
         try:
-            dialogue = self.protocol_interface.validate_envelope(envelope)
+            self.protocol_interface.validate_envelope(envelope)
             return await self.protocol_interface.handle_envelope(envelope)
         except Exception as error:  # pylint: disable=broad-except
             self.logger.exception(f"Couldn't execute task, e={error} traceback={traceback.print_exc()}")
-            return self.get_error_message(error, envelope.message, dialogue)
+            return self.get_error_message(error, envelope.message)
 
-    def _handle_req(self, envelope) -> Task:
+    def _handle_req(self, envelope: Envelope) -> Task:
         """Create a task."""
         return self.loop.create_task(self._execute(envelope))
 
     def _handle_done_task(self, task: Task) -> None:
         """Handle completed task."""
-        request = self.task_to_request.pop(task, None)
+        request = self.task_to_request.pop(task)
         self.executing_tasks.remove(task)
         response_message: Message | None = task.result()
         response_envelope = self.protocol_interface.build_envelope(request, response_message)
@@ -158,19 +150,11 @@ class DcxtConnection(Connection):  # pylint: disable=too-many-instance-attribute
         self.logger.debug(f"Placing {response_message} in queue")
         self.queue.put_nowait(response_envelope)
 
-    def get_error_message(
-        self,
-        error: type[Exception],
-        request: Message | None,
-        response_message: Message | None,
-    ):
+    def get_error_message(self, error: Exception, request: Message):
         """Get the error message."""
         self.logger.error("Unable to handle protocol : %s message", request.performative)
-        message = DefaultMessage(
+        return DefaultMessage(
             performative=DefaultMessage.Performative.ERROR,
             error_msg=str(error),
             error_code=ErrorCode.DECODING_ERROR,
         )
-        if response_message:
-            return response_message
-        return message
