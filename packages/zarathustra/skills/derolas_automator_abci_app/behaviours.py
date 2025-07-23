@@ -482,7 +482,7 @@ class DonateRound(BaseState):
         try:
             state: GameState = self.game_state
             w3_function = self.donate()
-            raw_tx = self.build_transaction(w3_function, value=state.minimal_donation)
+            raw_tx = self.build_transaction(w3_function, value=state.minimum_donation)
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)

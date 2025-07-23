@@ -55,13 +55,12 @@ class NablaQuote(Contract):
     ) -> str:
         """Return calldata for the 'quote' function."""
         instance = cls.get_instance(ledger_api, contract_address)
-        calldata = instance.functions.quote(
+        return instance.functions.quote(  # noqa: SLF001
             _amountIn=amount_in,
             _tokenPath=token_path,
             _routerPath=router_path,
             _tokenPrices=token_prices,
         )._encode_transaction_data()
-        return calldata
 
     @classmethod
     def quote_with_reference_price(
@@ -98,11 +97,10 @@ class NablaQuote(Contract):
     ) -> str:
         """Return calldata for the 'quote_with_reference_price' function."""
         instance = cls.get_instance(ledger_api, contract_address)
-        calldata = instance.functions.quoteWithReferencePrice(
+        return instance.functions.quoteWithReferencePrice(  # noqa: SLF001
             _bidAmountIn=bid_amount_in,
             _askAmountIn=ask_amount_in,
             _tokenPath=token_path,
             _routerPath=router_path,
             _tokenPrices=token_prices,
         )._encode_transaction_data()
-        return calldata

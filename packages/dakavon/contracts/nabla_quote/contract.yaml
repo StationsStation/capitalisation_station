@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeia55j7yn7ckdlkmomxe6t2zykohyr3fdlignfvmqgmfzneqvg7jvm
   build/nabla_quote.json: bafybeigzmsiqqejtlzujsdwvxqncyigims52ucsmoyawyexqr2agojh4ka
-  contract.py: bafybeic33k4ffxfczdrkhptia4qfub62hn4r4ed7itw4hvjtgywfwso5ly
+  contract.py: bafybeigsaaahq2llknehqh2rnk7cu2zcvjlpkjtj3ch4dsznvfta3m7psy
 fingerprint_ignore_patterns: []
 class_name: NablaQuote
 contract_interface_paths:
