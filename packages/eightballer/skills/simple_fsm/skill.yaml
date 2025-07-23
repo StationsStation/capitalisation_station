@@ -28,7 +28,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
 - eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
-- eightballer/dcxt:0.1.0:bafybeidc46onibuabuhtwdzl4ldz2acdn27f663vz4hh4a5d4rpequk3zy
+- eightballer/dcxt:0.1.0:bafybeid4pujv2cioehggqxzdgzrswzutatlh3rwtdcju4jtxd4r4bszpne
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
