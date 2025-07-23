@@ -153,7 +153,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
+    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
@@ -170,11 +170,11 @@ config:
     subaccount_id: ${DERIVE_SUBACCOUNT_ID:int:1234}
     ledger_id: derive
     environment: prod
-  - name: nabla_finance
+  - name: nabla
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
+    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
 ---
 public_id: eightballer/simple_fsm:0.1.0
 type: skill
