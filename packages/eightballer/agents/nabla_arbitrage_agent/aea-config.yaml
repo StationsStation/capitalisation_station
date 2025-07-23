@@ -22,7 +22,7 @@ connections:
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
 - dakavon/nabla_portal:0.1.0:bafybeihwsmtro43enkfquo5arrfzwu3ymg2msvzuztansxtfuzeevpz7tm
-- dakavon/nabla_quote:0.2.0:bafybeiemtpfyyteym43qzojobggl6tfgqj4nuopnu5flbtbvrg7cpslt6a
+- dakavon/nabla_quote:0.2.0:bafybeihnbmr6vbodcooygxhq7oiee32jxh4jdh7iruo6sfu44qm44lr57a
 - dakavon/multicall3:0.1.0:bafybeiebva5dl7yvxhax74c47pg6v6rqakpujkrt5dzl7bnb6bdsipza24
 - eightballer/spl_token:0.1.0:bafybeigqwt7iyurpz7k6elwfiwvdzsb34xzt55f6elt3k54ksfhbycblyu
 - valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea

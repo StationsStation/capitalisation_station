@@ -30,7 +30,7 @@
         "contract/zarathustra/derolas_staking/0.1.0": "bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui",
         "contract/eightballer/nabla_router/0.1.0": "bafybeib5xd3c7prdvassggke3pi2uphvhllf3pcgq7dttybepsuc36hwya",
         "contract/zarathustra/direct_price_oracle/0.1.0": "bafybeibtecdcn5digyuu4eayynks5jr4neli7httbc2x2nxpi6j2eljioi",
-        "contract/dakavon/nabla_quote/0.2.0": "bafybeiemtpfyyteym43qzojobggl6tfgqj4nuopnu5flbtbvrg7cpslt6a",
+        "contract/dakavon/nabla_quote/0.2.0": "bafybeihnbmr6vbodcooygxhq7oiee32jxh4jdh7iruo6sfu44qm44lr57a",
         "contract/dakavon/multicall3/0.1.0": "bafybeiebva5dl7yvxhax74c47pg6v6rqakpujkrt5dzl7bnb6bdsipza24",
         "connection/eightballer/dcxt/0.1.0": "bafybeid4pujv2cioehggqxzdgzrswzutatlh3rwtdcju4jtxd4r4bszpne",
         "connection/eightballer/ccxt_wrapper/0.1.0": "bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq",
@@ -49,7 +49,7 @@
         "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeieokcic77idwxjaesvdx62bhpmpoa6akmpmrcdcp53x5mloyqq3b4",
         "agent/zarathustra/derolas_automator/0.1.0": "bafybeih65xx7wxz7ttkcln5zy7vimpkunv47gzjy2yawzvmze6kytc3qge",
         "agent/wakamex/market_maker/0.1.0": "bafybeif6axmyxkf4mplwy73wvurflc2tyqxhjbhuaysknrpfofyb3xt7dm",
-        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeih5r34p7t3lfsbvdeobfcumgkizhg24awnmzfm5afgpt5xu2bmfga",
+        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeidk74cpshjtp7pmqydelncdc34yjjmmn7i2xcgvoxuc2zl4u4wi6y",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeibxghpprw7g23y5sbq472ayq63sj4pvnmot7inyefmjkqd3xnouxi",
         "service/eightballer/derived_cow/0.1.0": "bafybeihxmoxg3afgiruerxbzg772253vpyyq752fxln7ecbcgezzmvoez4"
     },
