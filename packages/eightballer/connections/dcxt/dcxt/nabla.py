@@ -236,7 +236,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_b = out_b_units / 10**token_b.decimals
         bid_price = out_b / amount  # B per A
 
-        self.logger.debug(
+        self.logger.info(
             "Bid quote %s→%s: %.6f %s → %.6f %s; bid = %.6f %s/%s",
             token_a.symbol,
             token_b.symbol,
@@ -255,7 +255,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         out_a = out_a_units / 10**token_a.decimals
         ask_price = out_b / out_a  # B per A
 
-        self.logger.debug(
+        self.logger.info(
             "Ask quote %s→%s: %.6f %s → %.6f %s; ask = %.6f %s/%s",
             token_b.symbol,
             token_a.symbol,
@@ -594,6 +594,7 @@ class NablaFinanceClient(BaseErc20Exchange):
         price: float | None = None,
         type: str = "market",
         data: dict[str, Any] | None = None,
+        **kwargs,
     ):
         """Create an order."""
 
@@ -633,11 +634,11 @@ class NablaFinanceClient(BaseErc20Exchange):
             {
                 "from": self.account.address,
                 "nonce": self.web3.api.eth.get_transaction_count(self.account.address),
-                "gas": 750_000,
+                "gas": 850_000,
                 "gasPrice": int(self.web3.api.eth.gas_price * 1.1),
             }
         )
-        self.logger.debug("Built swap transaction", extra={"tx": swap_tx})
+        self.logger.info("Built swap transaction", extra={"tx": swap_tx})
         signed_tx = signed_tx_to_dict(self.account.entity.sign_transaction(swap_tx))
         tx_hash = try_send_signed_transaction(self.web3, signed_tx, raise_on_try=True)
 
