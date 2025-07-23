@@ -43,7 +43,7 @@ class GameState:
     current_epoch: int
     epoch_length: int
     epoch_end_block: int
-    minimal_donation: int
+    minimum_donation: int
     blocks_remaining: int
     epoch_rewards: int
     total_donated: int
@@ -330,19 +330,15 @@ class AwaitTriggerRound(BaseState):
             self.context.logger.info(f"{self.name}: game state: {game_state}")
             if not game_state.blocks_remaining:
                 self._event = DerolasautomatorabciappEvents.EPOCH_FINISHED
-                self.context.logger.info(f"{self.name}: event {self._event}")
             elif game_state.user_claimable > 0:
                 self._event = DerolasautomatorabciappEvents.CLAIMABLE
             elif not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.NO_TRIGGER
             elif game_state.can_play_game:
-                value_captured = self.pending_donations.popleft()
-                msg = f"Value captured: {value_captured} USD, donating: {game_state.minimum_donation / 1e18} ETH"
-                self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.GAME_ON
             else:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
-            self.context.logger.debug(f"{self.name}: event {self._event}")
+            self.context.logger.info(f"{self.name}: event {self._event}")
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
@@ -440,14 +436,18 @@ class CheckReadyToDonateRound(BaseState):
 
         try:
             gamestate: GameState = self.game_state
-            if not gamestate.can_play_game:
+            if not gamestate.can_play_game or not self.pending_donations:
                 self._event = DerolasautomatorabciappEvents.CANNOT_PLAY_GAME
             else:
+                value_captured = self.pending_donations.popleft()
+                msg = f"Value captured: {value_captured} USD, donating: {gamestate.minimum_donation / 1e18} ETH"
+                self.context.logger.info(msg)
                 self._event = DerolasautomatorabciappEvents.ELIGIBLE_TO_DONATE
         except Exception as e:
             self.context.logger.info(f"Exception in {self.name}: {e}")
             self._event = DerolasautomatorabciappEvents.ERROR
 
+        self.context.logger.info(f"{self.name}: event {self._event}")
         self._is_done = True
 
     @property

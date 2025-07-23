@@ -56,13 +56,13 @@ class DerolasState(Model):
         name = DEROLAS_PUBLIC_ID.name
         contract = load_contract(ROOT / author / "contracts" / name)
         self.derolas_staking_contract = contract
-        self.derolas_contract_address = "0xa6D763592f02699de751d03d7Cb41388D3572909"
+        self.derolas_contract_address = "0x2216ebB7f5f983b1D15713F90556edd56EB88DeE"
         super().__init__(**kwargs)
 
     @property
     def base_ledger_api(self) -> EthereumApi:
         """Get the Base ledger api."""
-        return EthereumApi(address="https://base.llamarpc.com", chain_id=str(8453))
+        return EthereumApi(address="https://1rpc.io/base", chain_id=str(8453))
 
     @property
     def crypto(self) -> EthereumCrypto:
