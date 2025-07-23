@@ -458,17 +458,12 @@ class NablaFinanceClient(BaseErc20Exchange):
         # Decode the multicall3 returned data
         for i, (success, returned_data) in enumerate(multicall3_quotes_returned):
             if not success:
-
-                self.logger.error(
-                    f"Multicall3 call {i} for amount {bid_amounts[i]} failed."
-                )
+                self.logger.error(f"Multicall3 call {i} for amount {bid_amounts[i]} failed.")
                 quotes.append((None, None))
                 continue
 
             if len(returned_data) < 64:
-                self.logger.error(
-                    f"Multicall3 call {i} for amount {bid_amounts[i]} returned unexpected data length."
-                )
+                self.logger.error(f"Multicall3 call {i} for amount {bid_amounts[i]} returned unexpected data length.")
                 quotes.append((None, None))
                 continue
 
@@ -481,9 +476,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             amount_out_token_a = amount_out_token_a_units / 10**token_a.decimals
 
             # BID price: Quote (sell A → B), i.e. market buy price for B using A, i.e. B per A ($B/$A)
-            bid_price = (
-                amount_out_token_b / bid_amounts[i] if bid_amounts[i] != 0.0 else 0.0
-            )
+            bid_price = amount_out_token_b / bid_amounts[i] if bid_amounts[i] != 0.0 else 0.0
 
             self.logger.info(
                 "### BID quote $%s → $%s: %.6f $%s → %.6f $%s; bid_price = %.6f $%s/$%s",
@@ -500,15 +493,7 @@ class NablaFinanceClient(BaseErc20Exchange):
 
             # ASK price: Quote (buy A ← B), i.e. market sell price for B using A, i.e. B per A ($B/$A)
 
-            # implementation for NablaQuote:quote()
-            # ask_price = amount_out_token_b / amount_out_token_a  # B per A ($B/$A)
-
-            # implementation for NablaQuote:quote_with_reference_price()
-            ask_price = (
-                ask_amounts[i] / amount_out_token_a
-                if amount_out_token_a != 0.0
-                else 0.0
-            )
+            ask_price = ask_amounts[i] / amount_out_token_a if amount_out_token_a != 0.0 else 0.0
 
             self.logger.info(
                 "### ASK quote $%s → $%s: %.6f $%s → %.6f $%s; ask_price = %.6f $%s/$%s",
@@ -525,12 +510,12 @@ class NablaFinanceClient(BaseErc20Exchange):
 
             quotes.append(
                 (
-                    ask_price if not ask_price == 0.0 else None,
-                    bid_price if not bid_price == 0.0 else None,
+                    ask_price if ask_price != 0.0 else None,
+                    bid_price if bid_price != 0.0 else None,
                 )
             )
 
-        return quotes if quotes else [(None, None)] * len(amounts)
+        return quotes or [(None, None)] * len(amounts)
 
     async def fetch_ticker(
         self,
