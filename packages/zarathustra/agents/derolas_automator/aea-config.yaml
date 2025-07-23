@@ -13,7 +13,7 @@ connections:
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
-- zarathustra/derolas_staking:0.1.0:bafybeidd7j3zynbege6j4scdueejojxh4ig2dhddrc5hmocnxyba6gxax4
+- zarathustra/derolas_staking:0.1.0:bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui
 protocols:
 - eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
@@ -23,7 +23,7 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 skills:
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeidl7ecui43t2zjh6zy2okwglchjfnlh66ledq5ttyjatlk7yuttcq
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeid75flu7oeqlogjzlhnzslipnn3e7cpumynm4ra6advpxxrlravwu
 customs: []
 default_ledger: ethereum
 required_ledgers:
