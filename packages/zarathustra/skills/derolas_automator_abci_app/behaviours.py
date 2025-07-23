@@ -43,7 +43,7 @@ class GameState:
     current_epoch: int
     epoch_length: int
     epoch_end_block: int
-    minimal_donation: int
+    minimum_donation: int
     blocks_remaining: int
     epoch_rewards: int
     total_donated: int
