@@ -2,9 +2,11 @@
 
 # ruff: noqa: D101, D102
 
+import sys
 import json
 import logging
 import importlib
+import threading
 from queue import Full, Queue
 from logging.handlers import QueueHandler, QueueListener
 
@@ -105,6 +107,24 @@ def make_handler(handler_cfg: dict, formatter_cfgs: dict) -> logging.Handler:
     h.setFormatter(make_formatter(fmt))
 
     return h
+
+
+class BufferedHandler(logging.Handler):
+    def __init__(self, formatter=None, level=logging.NOTSET):
+        super().__init__(level=level)
+        self._stream = sys.stdout
+        self._lock = threading.Lock()
+        if formatter:
+            self.setFormatter(formatter)
+
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            with self._lock:
+                self._stream.write(msg + "\n")
+                self._stream.flush()
+        except Exception:  # noqa
+            self.handleError(record)
 
 
 class QueuedHandler(logging.Handler):
