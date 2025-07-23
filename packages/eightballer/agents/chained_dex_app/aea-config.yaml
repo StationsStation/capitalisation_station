@@ -9,7 +9,7 @@ fingerprint:
   tests/test_agent.py: bafybeihwx6iifsqdd5mzggpmm2gjtucwcdgnnek6oktvucoc23xa4z2urm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/ccxt_wrapper:0.1.0:bafybeiephconoeoihkldl5thtwnza4v55pi2emqoileubas32zhq3bfwzy
+- eightballer/ccxt_wrapper:0.1.0:bafybeicmyhlbm2akczt5fniti4dpze4bdzqzzlu73phpyqt6aynfndnniy
 - eightballer/dcxt:0.1.0:bafybeidwzs3w52awt7jhr5b2on3wvdybaqzs7e23cx6c3db72gnhxoxzdy
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
