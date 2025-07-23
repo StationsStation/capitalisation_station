@@ -34,7 +34,6 @@ import ccxt.async_support as ccxt  # noqa
 
 
 if TYPE_CHECKING:
-    from aea.protocols.dialogue.base import Dialogue
 
     from packages.eightballer.connections.ccxt_wrapper.interfaces.market import Market
 

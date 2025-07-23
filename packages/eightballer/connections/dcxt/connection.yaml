@@ -10,7 +10,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
   cli.py: bafybeien63b5czy7ulmar3dqytdo54y272o7m6rcoouqyqhzh2icpl2bym
-  connection.py: bafybeidbvypqxdq7tgbsipj3hkwzlv3vwwjlqrfjjvnkbt2kw4owobuexy
+  connection.py: bafybeidsjiyybdsb6qgjxo633d2va625iiy56u63gjtnyiuf22kvfeerym
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeibfmvwnlagh7xsncvphg3kbial7ab2wvjdyg3qls2zu5wvuhalali
   dcxt/balancer.py: bafybeifu2vih7xzymw374rejhiwaornoet2e4omur7rwkvo2zg33do7ifm
