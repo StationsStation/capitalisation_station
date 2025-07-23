@@ -41,11 +41,11 @@
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeibl7qzjaytrdno46qljfqoccr7vh7xp47syifyx3a2tkahlje6b2i",
         "agent/eightballer/trader/0.1.0": "bafybeiaxtu66lsnrstjbp5wcseudaszdbrt4lb3ujgczy424cba7gog3sy",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeiakptijvhzgwx3kh7ysmx67ajmsz64dq67btq7mkvkym5j7pavbkq",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeievkmmpchk3lmprjvsh3na6y6n3xuomeqql4b6evz425zkcfg6zke",
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeibf5zd5gvjzpmuahrlb3p4nwuww2pvgpm5payeg5a7hxpe6fixzje",
         "agent/zarathustra/derolas_automator/0.1.0": "bafybeicmeyq5kalvkp53szqf5ajc3y44qezthnpjecuke2quhn3ugg6zbm",
         "agent/wakamex/market_maker/0.1.0": "bafybeia5krppwuxsa5wo7hyvvfrbfieropdx6qgfmmnma5teyifhzopzsa",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeiaf6plpowwaxcozjx4ns5rupb4vuvv72cel6lhfclvkzm2ydajgzu",
-        "service/eightballer/derived_cow/0.1.0": "bafybeigw6ytt5pruyczjj3yarik4tu2mutszwhqqpp7f6upu27fzkajxam"
+        "service/eightballer/derived_cow/0.1.0": "bafybeibce7gmanx56akxe4glnbzodph3lxly5ggzwozkh3o4kgzn26qa3y"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",

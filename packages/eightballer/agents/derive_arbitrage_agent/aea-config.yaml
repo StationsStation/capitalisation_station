@@ -6,7 +6,6 @@ description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigfigcohr63kijc3kwb2oli7nntgqt4ooiztsl7eett3d6ycldaru
-  log.jsonl: bafybeig43o3yadhqfa234l7z5tnlujxux5lqyeze4xjcc4uf2wju6o7x2u
   logger_setup.py: bafybeicboqnvizlhdsnmlncvayrswskbyw6vshi34bnrs75qshbz3wdlqu
   no-queue-logging.yaml: bafybeib6k2usocdkxtz6nqa2igxbwkp7f72inrsxtufyy3pttpbojxysay
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
