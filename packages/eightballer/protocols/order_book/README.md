@@ -1,8 +1,7 @@
 # Order Book Protocol
 
 ## Description
-
-...
+A protocol to enable agents to subscribe to order books and receive updates in real-time. This protocol facilitates monitoring changes in bid and ask prices along with their volumes for given trading pairs on specified exchanges.
 
 ## Specification
 

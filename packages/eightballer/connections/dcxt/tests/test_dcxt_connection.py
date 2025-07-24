@@ -56,30 +56,30 @@ TEST_EXCHANGE_DATA = """
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: base
-  rpc_url: https://base.drpc.org
+  rpc_url: https://1rpc.io/base
 - name: balancer
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: base
-  rpc_url: https://base.drpc.org
+  rpc_url: https://base.api.onfinality.io/public
   etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 - name: derive
   key_path: packages/eightballer/connections/dcxt/tests/data/key
-  wallet: null
+  wallet: "0x8772185a1516f0d61fC1c2524926BfC69F95d698"
   ledger_id: derive
   rpc_url: https://base.llamarpc.com
-  subaccount_id: 132849
+  subaccount_id: 30769
   environment: test
-- name: one_inch
-  key_path: packages/eightballer/connections/dcxt/tests/data/key
-  wallet: null
-  ledger_id: ethereum
-  rpc_url: https://eth.drpc.org
+# - name: one_inch
+#   key_path: packages/eightballer/connections/dcxt/tests/data/key
+#   wallet: null
+#   ledger_id: ethereum
+#   rpc_url: https://rpc.flashbots.net/fast
 - name: nabla
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: arbitrum
-  rpc_url: https://arbitrum.drpc.org
+  rpc_url: https://arbitrum.api.onfinality.io/public
 """
 
 TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}

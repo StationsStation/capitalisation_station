@@ -402,11 +402,13 @@ class NablaFinanceClient(BaseErc20Exchange):
         nabla_quote_contract = load_contract(PublicId.from_str(NABLA_QUOTE_PUBLIC_ID))
 
         # Prepare the calls for the Multicall3 contract
+        bid_amounts = []
+        ask_amounts = []
         call3s = []
         quotes = []
 
         for amount in amounts:
-            # Prepare amounts
+            # Prepare amounts in token units
             bid_amount_in = int(amount * 10**token_a.decimals)
             ask_amount_in = int(
                 await self.convert_amount(
@@ -417,6 +419,10 @@ class NablaFinanceClient(BaseErc20Exchange):
                     to_token_decimals=token_b.decimals,
                 )
             )
+
+            # Save bid/ask amounts in decimals
+            bid_amounts.append(amount)
+            ask_amounts.append(ask_amount_in / 10**token_b.decimals)
 
             params = {
                 "bid_amount_in": bid_amount_in,
@@ -452,11 +458,13 @@ class NablaFinanceClient(BaseErc20Exchange):
         # Decode the multicall3 returned data
         for i, (success, returned_data) in enumerate(multicall3_quotes_returned):
             if not success:
-                self.logger.error(f"Multicall3 call {i} for amount {amounts[i]} failed.")
+                self.logger.error(f"Multicall3 call {i} for amount {bid_amounts[i]} failed.")
+                quotes.append((None, None))
                 continue
 
             if len(returned_data) < 64:
-                self.logger.error(f"Multicall3 call {i} for amount {amounts[i]} returned unexpected data length.")
+                self.logger.error(f"Multicall3 call {i} for amount {bid_amounts[i]} returned unexpected data length.")
+                quotes.append((None, None))
                 continue
 
             # Decode bid and ask as uint256
@@ -467,14 +475,14 @@ class NablaFinanceClient(BaseErc20Exchange):
             amount_out_token_b = amount_out_token_b_units / 10**token_b.decimals
             amount_out_token_a = amount_out_token_a_units / 10**token_a.decimals
 
-            # BID price: Quote (sell A → B), i.e. market buy price for B using A
-            bid_price = amount_out_token_b / amounts[i]  # B per A ($B/$A)
+            # BID price: Quote (sell A → B), i.e. market buy price for B using A, i.e. B per A ($B/$A)
+            bid_price = amount_out_token_b / bid_amounts[i] if bid_amounts[i] != 0.0 else 0.0
 
             self.logger.info(
                 "### BID quote $%s → $%s: %.6f $%s → %.6f $%s; bid_price = %.6f $%s/$%s",
                 token_a.symbol,
                 token_b.symbol,
-                amounts[i],
+                bid_amounts[i],
                 token_a.symbol,
                 amount_out_token_b,
                 token_b.symbol,
@@ -483,14 +491,15 @@ class NablaFinanceClient(BaseErc20Exchange):
                 token_a.symbol,
             )
 
-            # ASK price: Quote (buy A ← B), i.e. market sell price for B using A
-            ask_price = amount_out_token_b / amount_out_token_a  # B per A ($B/$A)
+            # ASK price: Quote (buy A ← B), i.e. market sell price for B using A, i.e. B per A ($B/$A)
+
+            ask_price = ask_amounts[i] / amount_out_token_a if amount_out_token_a != 0.0 else 0.0
 
             self.logger.info(
                 "### ASK quote $%s → $%s: %.6f $%s → %.6f $%s; ask_price = %.6f $%s/$%s",
                 token_b.symbol,
                 token_a.symbol,
-                amount_out_token_b,
+                ask_amounts[i],
                 token_b.symbol,
                 amount_out_token_a,
                 token_a.symbol,
@@ -499,9 +508,14 @@ class NablaFinanceClient(BaseErc20Exchange):
                 token_a.symbol,
             )
 
-            quotes.append((ask_price, bid_price))
+            quotes.append(
+                (
+                    ask_price if ask_price != 0.0 else None,
+                    bid_price if bid_price != 0.0 else None,
+                )
+            )
 
-        return quotes or [(0.0, 0.0)] * len(amounts)
+        return quotes or [(None, None)] * len(amounts)
 
     async def fetch_ticker(
         self,

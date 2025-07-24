@@ -27,16 +27,16 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
-- eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
-- eightballer/dcxt:0.1.0:bafybeid4pujv2cioehggqxzdgzrswzutatlh3rwtdcju4jtxd4r4bszpne
+- eightballer/ccxt_wrapper:0.1.0:bafybeidcwqrhyajqqrliz52adqsdya3iyp6rkcbncvxcmjsuzimyhsuefa
+- eightballer/dcxt:0.1.0:bafybeidtfz7zwn3ywunm3obtxvgmpsnmhme5mzvz6iaotfip4dnlfknf2a
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-- eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
-- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
-- zarathustra/asset_bridging:0.1.0:bafybeietwg5egxy2slyrxgarhilcqcbkkiwgvjgdn22z63ef3c7rhldb54
-- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
+- zarathustra/asset_bridging:0.1.0:bafybeidvq4ow3i2rwkvkmaqa56hdahppgrfmh7tipgoylcfyk3o6bbnb2i
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:

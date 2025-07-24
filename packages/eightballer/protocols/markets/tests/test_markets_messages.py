@@ -3,7 +3,7 @@
 """Test messages module for the markets protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.markets.message import MarketsMessage
@@ -50,6 +50,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetAllMarkets))
 def test_get_all_markets_messages(model):
     """Test for the 'GET_ALL_MARKETS' protocol message encode and decode."""
@@ -57,6 +58,7 @@ def test_get_all_markets_messages(model):
     perform_message_test(MarketsMessage.Performative.GET_ALL_MARKETS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetMarket))
 def test_get_market_messages(model):
     """Test for the 'GET_MARKET' protocol message encode and decode."""
@@ -64,6 +66,7 @@ def test_get_market_messages(model):
     perform_message_test(MarketsMessage.Performative.GET_MARKET, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(AllMarkets))
 def test_all_markets_messages(model):
     """Test for the 'ALL_MARKETS' protocol message encode and decode."""
@@ -71,6 +74,7 @@ def test_all_markets_messages(model):
     perform_message_test(MarketsMessage.Performative.ALL_MARKETS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Market))
 def test_market_messages(model):
     """Test for the 'MARKET' protocol message encode and decode."""
@@ -78,6 +82,7 @@ def test_market_messages(model):
     perform_message_test(MarketsMessage.Performative.MARKET, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""

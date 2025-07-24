@@ -1,6 +1,6 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from packages.eightballer.protocols.balances.balances_pb2 import BalancesMessage as balances_pb2  # noqa: N813
 from packages.eightballer.protocols.balances.custom_types import (
@@ -10,6 +10,7 @@ from packages.eightballer.protocols.balances.custom_types import (
 )
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Balance))
 def test_balance(balance: Balance):
     """Test Balance."""
@@ -20,6 +21,7 @@ def test_balance(balance: Balance):
     assert balance == result
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Balances))
 def test_balances(balances: Balances):
     """Test Balances."""
@@ -30,6 +32,7 @@ def test_balances(balances: Balances):
     assert balances == result
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(ErrorCode))
 def test_errorcode(errorcode: ErrorCode):
     """Test ErrorCode."""

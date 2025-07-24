@@ -279,7 +279,7 @@ class CowSwapClient(BaseErc20Exchange):
         self.last_buy_quote = buy_quote
         self.last_sell_quote = sell_quote
 
-        timestamp = datetime.datetime.now(tz=datetime.timezone.utc)
+        timestamp = datetime.datetime.now(tz=datetime.UTC)
         return Ticker(
             symbol=symbol,
             asset_a=asset_a.address,

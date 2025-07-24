@@ -9,6 +9,7 @@ fingerprint:
   __init__.py: bafybeia55j7yn7ckdlkmomxe6t2zykohyr3fdlignfvmqgmfzneqvg7jvm
   build/nabla_quote.json: bafybeigzmsiqqejtlzujsdwvxqncyigims52ucsmoyawyexqr2agojh4ka
   contract.py: bafybeigsaaahq2llknehqh2rnk7cu2zcvjlpkjtj3ch4dsznvfta3m7psy
+  tests/test_nabla_quote_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
 fingerprint_ignore_patterns: []
 class_name: NablaQuote
 contract_interface_paths:
