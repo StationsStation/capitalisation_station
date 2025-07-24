@@ -20,9 +20,9 @@ fingerprint:
   tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
   tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
   tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
-  tests/test_asset_bridging_dialogues.py: bafybeifymfnm2eercad36pu7wgmfer45soe7agmgtd2eps7f2nskawe2ma
-  tests/test_asset_bridging_messages.py: bafybeia2y6dn3br4ymh7qcowf3lc6giirazbt6q6cukgrmtvgc35r4s6ty
-  tests/test_custom_types.py: bafybeiey7hy3zgbuw2k36gf3qc75ivwt5zg6vg6so7va6loyvikxtmd7ey
+  tests/test_asset_bridging_dialogues.py: bafybeihy4nurtizihhbcp673mdpqr6tet2zlyb3z3esr33bhlh3ptvlvxe
+  tests/test_asset_bridging_messages.py: bafybeidwrkhbq5dlcvgbzyvmkny2edv24nfs2mtdnrknjtfkgm2uvjhzdq
+  tests/test_custom_types.py: bafybeifhkfkqb7xneaoqv2pdv2wv2tk2lhbi7pgo4zhcwyrv7dwfg2meau
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

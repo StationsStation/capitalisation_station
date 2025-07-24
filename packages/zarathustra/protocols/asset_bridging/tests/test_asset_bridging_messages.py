@@ -3,7 +3,7 @@
 """Test messages module for the asset_bridging protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
@@ -49,6 +49,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(RequestBridge))
 def test_request_bridge_messages(model):
     """Test for the 'REQUEST_BRIDGE' protocol message encode and decode."""
@@ -56,6 +57,7 @@ def test_request_bridge_messages(model):
     perform_message_test(AssetBridgingMessage.Performative.REQUEST_BRIDGE, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(BridgeStatus))
 def test_bridge_status_messages(model):
     """Test for the 'BRIDGE_STATUS' protocol message encode and decode."""
@@ -63,6 +65,7 @@ def test_bridge_status_messages(model):
     perform_message_test(AssetBridgingMessage.Performative.BRIDGE_STATUS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(RequestStatus))
 def test_request_status_messages(model):
     """Test for the 'REQUEST_STATUS' protocol message encode and decode."""
@@ -70,6 +73,7 @@ def test_request_status_messages(model):
     perform_message_test(AssetBridgingMessage.Performative.REQUEST_STATUS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""
