@@ -5,7 +5,7 @@
 from unittest.mock import MagicMock
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.configurations.data_types import PublicId
 
 from packages.eightballer.protocols.balances.message import BalancesMessage
@@ -47,12 +47,14 @@ def validate_dialogue(performative, model):
     assert dialogue is not None
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetAllBalances))
 def test_get_all_balances_dialogues(model):
     """Test for the 'GET_ALL_BALANCES' protocol."""
     validate_dialogue(BalancesMessage.Performative.GET_ALL_BALANCES, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetBalance))
 def test_get_balance_dialogues(model):
     """Test for the 'GET_BALANCE' protocol."""

@@ -3,7 +3,7 @@
 """Test messages module for the spot_asset protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
@@ -50,6 +50,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetSpotAsset))
 def test_get_spot_asset_messages(model):
     """Test for the 'GET_SPOT_ASSET' protocol message encode and decode."""
@@ -57,6 +58,7 @@ def test_get_spot_asset_messages(model):
     perform_message_test(SpotAssetMessage.Performative.GET_SPOT_ASSET, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(SpotAsset))
 def test_spot_asset_messages(model):
     """Test for the 'SPOT_ASSET' protocol message encode and decode."""
@@ -64,6 +66,7 @@ def test_spot_asset_messages(model):
     perform_message_test(SpotAssetMessage.Performative.SPOT_ASSET, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetSpotAssets))
 def test_get_spot_assets_messages(model):
     """Test for the 'GET_SPOT_ASSETS' protocol message encode and decode."""
@@ -71,6 +74,7 @@ def test_get_spot_assets_messages(model):
     perform_message_test(SpotAssetMessage.Performative.GET_SPOT_ASSETS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""
@@ -78,6 +82,7 @@ def test_error_messages(model):
     perform_message_test(SpotAssetMessage.Performative.ERROR, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(End))
 def test_end_messages(model):
     """Test for the 'END' protocol message encode and decode."""

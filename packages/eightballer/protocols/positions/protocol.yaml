@@ -8,20 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeicg7piqc4kjur7neyf4hiwcnryu5wbeoopkgt5dicad3tjnxghgkq
-  __init__.py: bafybeicxrgn3ljr33y2gfoaj4fgjvswfx4ohpprlde5zl36oqpawngimra
+  __init__.py: bafybeiebv2f5kwmbqcggcjrs5ce3g2gpuacvi2rjwr432o6634e2nvajr4
   custom_types.py: bafybeidzt5oiwkry6sazygnr7t2rp7o3rumerydjm4bpmc3gqpwfhzuwza
   dialogues.py: bafybeigofqfco2plgjph7yowfq2xudycf744lbymmo33ucabpbb5shet3a
   message.py: bafybeid2thph5premj3daoggm6e6ewpeqkj2x7yft4uawpehcsq4yz2lie
   positions.proto: bafybeiah7hzd664isluds2wzq4ahxive3bcykwrx33mpgchmh5sdce7w6y
-  positions_pb2.py: bafybeic3l6ekcfhf4hs4fi6mv6uaa7dfdt5tlpjeu7duzqaj5rpg7hyige
+  positions_pb2.py: bafybeifgltmvsvckd3ddpdaiip6dsfjrpt37oevgic74e5asugos23vrhm
   primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
   serialization.py: bafybeihyycffimwykv77ukeummi6cchqy6xn2xton56wyr3g5uegjqjn5e
   tests/__init__.py: bafybeiduk2fjlgyi4hlb6ygswcginf33noe5twanpucdl3jvjz66qttqxq
   tests/performatives.py: bafybeiglemuh3xsvd6ai6ygmsk3mmlgc5ulq3eswb4juhvsbe6dx7obemy
   tests/primitive_strategies.py: bafybeihmy36guklhbyxdgxwiw4u4dvr55uwxavevod7czuv5gydd46vi7y
-  tests/test_custom_types.py: bafybeiclbnthu4iezduyk34o4ujhu3h6nyn2iswrlvnqtj3hm4c2bfblxy
-  tests/test_positions_dialogues.py: bafybeicjnroh3aazhwjbhapqqkxtceqyy74pb7oknydpvxpfojqccsbmqy
-  tests/test_positions_messages.py: bafybeifxsx2e2scoiqsqw5pqhvpcorpebqlbrfv46vyvjb7cs4ljhurjbq
+  tests/test_custom_types.py: bafybeieo26mly2fv6mbyj2ponlet4m5r7dfuftui74mgo4q6ulut52z5au
+  tests/test_positions_dialogues.py: bafybeibum2zd5ppjyhuok7xk6bif7ozva2tgmypwoyvrawhlgapdmbmr7m
+  tests/test_positions_messages.py: bafybeibfnxouratcmbpzfckcuzotdf3o236ykl2bjh6akuzg4wpiwpnn7y
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

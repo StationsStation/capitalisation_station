@@ -6,7 +6,7 @@ from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
 from aea.configurations.base import PublicId
 
-from packages.zarathustra.contracts.direct_price_oracle import (
+from packages.eightballer.contracts.nabla_router import (
     PUBLIC_ID as NABLA_ROUTER_PUBLIC_ID,
 )
 

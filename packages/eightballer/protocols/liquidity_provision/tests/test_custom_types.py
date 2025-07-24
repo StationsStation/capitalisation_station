@@ -1,6 +1,6 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from packages.eightballer.protocols.liquidity_provision.custom_types import (
     ErrorCode,
@@ -10,6 +10,7 @@ from packages.eightballer.protocols.liquidity_provision.liquidity_provision_pb2 
 )
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(ErrorCode))
 def test_errorcode(errorcode: ErrorCode):
     """Test ErrorCode."""

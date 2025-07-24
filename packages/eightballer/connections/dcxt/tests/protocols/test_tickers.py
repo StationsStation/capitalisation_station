@@ -73,7 +73,7 @@ class TestFetchTicker(BaseDcxtConnectionTest):
             performative=TickersMessage.Performative.GET_TICKER,
             exchange_id=exchange_id,
             ledger_id=ledger_id,
-            symbol=TEST_MARKET,
+            symbol=TEST_MARKET if exchange_id != "derive" else "ETH/USDC",  # Derive exchange does not support WETH/USDC
         )
         envelope = Envelope(
             to=request.to,

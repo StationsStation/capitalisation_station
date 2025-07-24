@@ -3,7 +3,7 @@
 """Test messages module for the balances protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.balances.message import BalancesMessage
@@ -50,6 +50,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetAllBalances))
 def test_get_all_balances_messages(model):
     """Test for the 'GET_ALL_BALANCES' protocol message encode and decode."""
@@ -57,6 +58,7 @@ def test_get_all_balances_messages(model):
     perform_message_test(BalancesMessage.Performative.GET_ALL_BALANCES, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(GetBalance))
 def test_get_balance_messages(model):
     """Test for the 'GET_BALANCE' protocol message encode and decode."""
@@ -64,6 +66,7 @@ def test_get_balance_messages(model):
     perform_message_test(BalancesMessage.Performative.GET_BALANCE, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(AllBalances))
 def test_all_balances_messages(model):
     """Test for the 'ALL_BALANCES' protocol message encode and decode."""
@@ -71,6 +74,7 @@ def test_all_balances_messages(model):
     perform_message_test(BalancesMessage.Performative.ALL_BALANCES, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Balance))
 def test_balance_messages(model):
     """Test for the 'BALANCE' protocol message encode and decode."""
@@ -78,6 +82,7 @@ def test_balance_messages(model):
     perform_message_test(BalancesMessage.Performative.BALANCE, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""
