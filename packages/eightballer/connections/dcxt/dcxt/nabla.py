@@ -612,8 +612,8 @@ class NablaFinanceClient(BaseErc20Exchange):
         swap_fn = nabla_portal_contract.swap_exact_tokens_for_tokens(
             ledger_api=self.web3,
             contract_address=self.spender_address,
-            amount_in=amt,
-            amount_out_min=output_token_amount,
+            amount_in=int(amt),
+            amount_out_min=int(output_token_amount),
             token_path=[from_token_address, to_token_address],
             router_path=[self.router_address],
             deadline=int(datetime.datetime.now(tz=datetime.UTC).timestamp() + 36_000),
@@ -707,7 +707,7 @@ class NablaFinanceClient(BaseErc20Exchange):
             token_prices[to_token_address],
         ]
         params = {
-            "amount_in": amount,
+            "amount_in": int(amount),
             "token_path": [from_token_address, to_token_address],
             "router_path": [self.router_address],
             "token_prices": token_prices,

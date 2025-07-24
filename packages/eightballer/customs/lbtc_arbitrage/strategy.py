@@ -124,12 +124,12 @@ class ArbitrageStrategy:
             # we calculate the best bids and asks
             for ledger, exchange in all_ledger_exchanges:
                 price = [f for f in prices[ledger][exchange] if f["symbol"].replace("-", "/").upper() == market].pop()
-                if best_bid is None or price["bid"] > best_bid:
+                if price["bid"] and (best_bid is None or price["bid"] > best_bid):
                     best_bid = price["bid"]
                     best_bid_exchange = exchange
                     best_bid_ledger = ledger
 
-                if (best_ask is None or price["ask"] < best_ask) and price["ask"] > 0:
+                if price["ask"] and (best_ask is None or price["ask"] < best_ask) and price["ask"] > 0:
                     best_ask = price["ask"]
                     best_ask_exchange = exchange
                     best_ask_ledger = ledger
