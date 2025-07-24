@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicxqnmnipke3vj2emp3iat7u4ynx4272thfrbpk4wginu2ou37eey
-  connection.py: bafybeidvnktv6tcdfacphlfwacait76aoettxobpegdsngoj5ldunhhf7m
+  connection.py: bafybeicgofslhgoudi3jmuqmm7dmgwxbv7vgly5o2xk3rie4qaesvxow3e
   interfaces/__init__.py: bafybeifdh6zocdvygxq64hr47ueajgsv67pvaaei5ffwu5c5a6nhssoz5y
   interfaces/balance.py: bafybeie3kn2pgrfxl7dj4vxedekqearayvsljg7d62jp5katfps5uifjrm
   interfaces/interface.py: bafybeideydkoxnh7nrmphlb422exakcbdisojw2wfmnwpcxz3jo7kq4xwi

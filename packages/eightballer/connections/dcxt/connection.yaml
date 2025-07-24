@@ -10,7 +10,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
   cli.py: bafybeien63b5czy7ulmar3dqytdo54y272o7m6rcoouqyqhzh2icpl2bym
-  connection.py: bafybeiclibxq6iqw2zospcttqr5lzgpi7ughn3jiks5i362fsbx2dicrgi
+  connection.py: bafybeigvyvdxfdeyrngejss7kywffu7skktq2ljebfmclb2plunbnud7la
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
   dcxt/balancer.py: bafybeifu2vih7xzymw374rejhiwaornoet2e4omur7rwkvo2zg33do7ifm
@@ -36,7 +36,7 @@ fingerprint:
   interfaces/approvals.py: bafybeidsl5z72althhmjlmzffyd3hksoau5otus7pgspu2xk5u4y4r53ou
   interfaces/asset_bridging.py: bafybeig2ivbyufwhpae3nqf4alsjg4ukyt3ino2zroynd5wa7dhf47vpyy
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
-  interfaces/interface.py: bafybeihhmn4kfa7xyi7grasmoxrgxldkipmhw3mgr42wrpxxb5svwyexcm
+  interfaces/interface.py: bafybeibtfsog3vacsn4z3wzdr734egph5swx76ugzuya6njxvr5hpdv7de
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
   interfaces/market.py: bafybeia3jb74cyyj6nxobkyrvhzzi66eky5r2smtur6wnwalvzsmonm77y
   interfaces/ohlcv.py: bafybeifok6ch2mzpn5qzkyykroozrjrswosrlznxgnakn76librey76ufa
