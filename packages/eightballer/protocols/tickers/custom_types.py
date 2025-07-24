@@ -49,8 +49,8 @@ class Ticker(BaseModel):
     symbol: str
     timestamp: Int64
     datetime: str
-    ask: Float
-    bid: Float
+    ask: Optional[Float] = None
+    bid: Optional[Float] = None
     asset_a: Optional[str] = None
     asset_b: Optional[str] = None
     bid_volume: Optional[Float] = None
@@ -75,8 +75,10 @@ class Ticker(BaseModel):
         proto_obj.symbol = ticker.symbol
         proto_obj.timestamp = ticker.timestamp
         proto_obj.datetime = ticker.datetime
-        proto_obj.ask = ticker.ask
-        proto_obj.bid = ticker.bid
+        if ticker.ask is not None:
+            proto_obj.ask = ticker.ask
+        if ticker.bid is not None:
+            proto_obj.bid = ticker.bid
         if ticker.asset_a is not None:
             proto_obj.asset_a = ticker.asset_a
         if ticker.asset_b is not None:
@@ -118,8 +120,8 @@ class Ticker(BaseModel):
         symbol = proto_obj.symbol
         timestamp = proto_obj.timestamp
         datetime = proto_obj.datetime
-        ask = proto_obj.ask
-        bid = proto_obj.bid
+        ask = proto_obj.ask if proto_obj.ask is not None and proto_obj.HasField("ask") else None
+        bid = proto_obj.bid if proto_obj.bid is not None and proto_obj.HasField("bid") else None
         asset_a = proto_obj.asset_a if proto_obj.asset_a is not None and proto_obj.HasField("asset_a") else None
         asset_b = proto_obj.asset_b if proto_obj.asset_b is not None and proto_obj.HasField("asset_b") else None
         bid_volume = (

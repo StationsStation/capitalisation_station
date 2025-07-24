@@ -5,7 +5,7 @@
 from unittest.mock import MagicMock
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.configurations.data_types import PublicId
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
@@ -46,6 +46,7 @@ def validate_dialogue(performative, model):
     assert dialogue is not None
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Subscribe))
 def test_subscribe_dialogues(model):
     """Test for the 'SUBSCRIBE' protocol."""

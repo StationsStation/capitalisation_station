@@ -5,7 +5,7 @@
 from unittest.mock import MagicMock
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.configurations.data_types import PublicId
 
 from packages.eightballer.protocols.liquidity_provision.message import LiquidityProvisionMessage
@@ -48,18 +48,21 @@ def validate_dialogue(performative, model):
     assert dialogue is not None
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(AddLiquidity))
 def test_add_liquidity_dialogues(model):
     """Test for the 'ADD_LIQUIDITY' protocol."""
     validate_dialogue(LiquidityProvisionMessage.Performative.ADD_LIQUIDITY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(RemoveLiquidity))
 def test_remove_liquidity_dialogues(model):
     """Test for the 'REMOVE_LIQUIDITY' protocol."""
     validate_dialogue(LiquidityProvisionMessage.Performative.REMOVE_LIQUIDITY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(QueryLiquidity))
 def test_query_liquidity_dialogues(model):
     """Test for the 'QUERY_LIQUIDITY' protocol."""

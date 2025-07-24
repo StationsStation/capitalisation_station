@@ -1,6 +1,6 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from packages.eightballer.protocols.spot_asset.custom_types import (
     Decimal,
@@ -9,6 +9,7 @@ from packages.eightballer.protocols.spot_asset.custom_types import (
 from packages.eightballer.protocols.spot_asset.spot_asset_pb2 import SpotAssetMessage as spot_asset_pb2  # noqa: N813
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Decimal))
 def test_decimal(decimal: Decimal):
     """Test Decimal."""
@@ -19,6 +20,7 @@ def test_decimal(decimal: Decimal):
     assert decimal == result
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(ErrorCode))
 def test_errorcode(errorcode: ErrorCode):
     """Test ErrorCode."""

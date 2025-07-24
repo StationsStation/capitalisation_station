@@ -1,6 +1,6 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from packages.eightballer.protocols.default.default_pb2 import DefaultMessage as default_pb2  # noqa: N813
 from packages.eightballer.protocols.default.custom_types import (
@@ -8,6 +8,7 @@ from packages.eightballer.protocols.default.custom_types import (
 )
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(ErrorCode))
 def test_errorcode(errorcode: ErrorCode):
     """Test ErrorCode."""

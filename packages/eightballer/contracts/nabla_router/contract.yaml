@@ -1,0 +1,19 @@
+name: nabla_router
+author: eightballer
+version: 0.1.0
+type: contract
+description: Smart contract interface for the Nabla Router contract, providing multi-step
+  swap and routing functionality.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeihe3vbqsurwalfsmqqy6x6c7pajzaba7viqx5vgmumhq4hduvpe2q
+  build/nabla_router.json: bafybeiguj5hs34qpjjlvbhyur3iiinwu4zxuivlbq34jngvnekx6wa5kwe
+  contract.py: bafybeibomzmx6pombudu6lxpnk6i25gefdjjy36rpclvim3nxwbygstgd4
+  tests/test_nabla_router_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: NablaRouter
+contract_interface_paths:
+  ethereum: build/nabla_router.json
+dependencies: {}
+contracts: []

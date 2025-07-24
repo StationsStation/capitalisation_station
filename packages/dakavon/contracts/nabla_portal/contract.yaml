@@ -1,0 +1,19 @@
+name: nabla_portal
+author: dakavon
+version: 0.1.0
+type: contract
+description: Contract interface defining the swap and utility methods of the Nabla
+  Portal DEX gateway.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeidkz36zv7gkjattx3zguc3lfbclykuvhz4fisuopuf25b3cv7yu4a
+  build/nabla_portal.json: bafybeigou5dvwvtqkmom2h7qi5fkwptduk544rdiym64mdaroqposagob4
+  contract.py: bafybeievi3achdc77vxsqqjizgplxsg57bwogk6am4yqtfokqxsmeb4h7i
+  tests/test_nabla_portal_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: NablaPortal
+contract_interface_paths:
+  ethereum: build/nabla_portal.json
+dependencies: {}
+contracts: []

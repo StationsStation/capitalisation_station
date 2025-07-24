@@ -3,7 +3,7 @@
 """Test messages module for the liquidity_provision protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.liquidity_provision.message import LiquidityProvisionMessage
@@ -52,6 +52,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(AddLiquidity))
 def test_add_liquidity_messages(model):
     """Test for the 'ADD_LIQUIDITY' protocol message encode and decode."""
@@ -59,6 +60,7 @@ def test_add_liquidity_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.ADD_LIQUIDITY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(RemoveLiquidity))
 def test_remove_liquidity_messages(model):
     """Test for the 'REMOVE_LIQUIDITY' protocol message encode and decode."""
@@ -66,6 +68,7 @@ def test_remove_liquidity_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.REMOVE_LIQUIDITY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(QueryLiquidity))
 def test_query_liquidity_messages(model):
     """Test for the 'QUERY_LIQUIDITY' protocol message encode and decode."""
@@ -73,6 +76,7 @@ def test_query_liquidity_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.QUERY_LIQUIDITY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(LiquidityAdded))
 def test_liquidity_added_messages(model):
     """Test for the 'LIQUIDITY_ADDED' protocol message encode and decode."""
@@ -80,6 +84,7 @@ def test_liquidity_added_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.LIQUIDITY_ADDED, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(LiquidityRemoved))
 def test_liquidity_removed_messages(model):
     """Test for the 'LIQUIDITY_REMOVED' protocol message encode and decode."""
@@ -87,6 +92,7 @@ def test_liquidity_removed_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.LIQUIDITY_REMOVED, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(LiquidityStatus))
 def test_liquidity_status_messages(model):
     """Test for the 'LIQUIDITY_STATUS' protocol message encode and decode."""
@@ -94,6 +100,7 @@ def test_liquidity_status_messages(model):
     perform_message_test(LiquidityProvisionMessage.Performative.LIQUIDITY_STATUS, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""

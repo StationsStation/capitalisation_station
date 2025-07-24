@@ -1,0 +1,99 @@
+{
+    "BASE": {
+        "PORTAL": "0xd24d145f5E351de52934A7E1f8cF55b907E67fFF",
+        "PYTH_ADAPTER_V2": "0x276d61F41fED44a9A5Fc0AAdbf5b328173197Fe3",
+        "ORACLE": "0x84BEC2c11fe71DA8af8DAfba44f4DdF3769c494D",
+        "MAIN_CRYPTO_HUB": {
+            "ROUTER": "0x791Fee7b66ABeF59630943194aF17B029c6F487B",
+            "POOLS": {
+                "WETH": {
+                    "ADDRESS": "0x123456C6C27bb57013F4b943A0f032a0ab9c12eB",
+                    "NAME": "Nabla Crypto WETH Swap LP",
+                    "SYMBOL": "naWETHc",
+                    "DECIMALS": 18,
+                    "ASSET": "Wrapped Ether",
+                    "ASSET_ADDRESS": "0x4200000000000000000000000000000000000006"
+                },
+                "CBBTC": {
+                    "ADDRESS": "0xa83a20F4dCaB1a63a9118E9E432932c8BEB39b85",
+                    "NAME": "Nabla Crypto CBBTC Swap LP",
+                    "SYMBOL": "naCBBTCc",
+                    "DECIMALS": 8,
+                    "ASSET": "Coinbase Wrapped Bitcoin",
+                    "ASSET_ADDRESS": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
+                }
+            },
+            "BACKSTOP_POOL": {
+                "ADDRESS": "0x50841f086891fe57829ee0a809f8B10174892b69",
+                "NAME": "Nabla Crypto Backstop LP",
+                "SYMBOL": "naBSPc",
+                "DECIMALS": 6,
+                "ASSET": "USD Coin",
+                "ASSET_ADDRESS": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+            }
+        },
+        "NABLA_DRIP": "0xAeEcA60D3d9262250AD1F1dEA0B73F65AEa787Cf",
+        "STAKING": "0x2e56CE8c5e28D02113974856a2E92B20787674F1",
+        "NABLA_QUOTE": "0x601fbC83258A1e81Eb6bd4aBfA86Db537c00462A"
+    },
+    "ARBITRUM": {
+        "PORTAL": "0xcB94Eee869a2041F3B44da423F78134aFb6b676B",
+        "PYTH_ADAPTER_V2": "0x4cC48Fde2296E49E7dA73159c0bf0f89Bd8AF4aa",
+        "ORACLE": "0x563A8aAB5012d8b7496DF9053F52be2089269859",
+        "MAIN_CRYPTO_HUB": {
+            "ROUTER": "0x7bcFc8b8ff61456ad7C5E2be8517D01df006d18d",
+            "POOLS": {
+                "WETH": {
+                    "ADDRESS": "0x272dF896f4D0c97F65e787f861bb6e882776a155",
+                    "NAME": "Nabla Crypto WETH Swap LP",
+                    "SYMBOL": "naWETHc",
+                    "DECIMALS": 18,
+                    "ASSET": "Wrapped Ether",
+                    "ASSET_ADDRESS": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+                },
+                "USDC": {
+                    "ADDRESS": "0x058a0875DB2168AF97bbf01043C3e8F751cCd9A8",
+                    "NAME": "Nabla Crypto USDC Swap LP",
+                    "SYMBOL": "naUSDCc",
+                    "DECIMALS": 6,
+                    "ASSET": "USD Coin",
+                    "ASSET_ADDRESS": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+                },
+                "ARB": {
+                    "ADDRESS": "0xE70292D6054B753214D555930e0F11CD7206Efeb",
+                    "NAME": "Nabla Crypto ARB Swap LP",
+                    "SYMBOL": "naARBc",
+                    "DECIMALS": 18,
+                    "ASSET": "Arbitrum",
+                    "ASSET_ADDRESS": "0x912CE59144191C1204E64559FE8253a0e49E6548"
+                },
+                "WBTC": {
+                    "ADDRESS": "0x411eF79fE9Df8Ba82A09c7e93FdE85AF5732BF12",
+                    "NAME": "Nabla Crypto WBTC Swap LP",
+                    "SYMBOL": "naWBTCc",
+                    "DECIMALS": 8,
+                    "ASSET": "Wrapped Bitcoin",
+                    "ASSET_ADDRESS": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+                },
+                "CBBTC": {
+                    "ADDRESS": "0x4d044dc45fBA99E3f75040061b5B82c0C81dD3C4",
+                    "NAME": "Nabla Crypto CBBTC Swap LP",
+                    "SYMBOL": "naCBBTCc",
+                    "DECIMALS": 8,
+                    "ASSET": "Coinbase Wrapped Bitcoin",
+                    "ASSET_ADDRESS": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf"
+                }
+            },
+            "BACKSTOP_POOL": {
+                "ADDRESS": "0x337B03C2a7482c6eb29d8047eA073119dc68a29A",
+                "NAME": "Nabla Crypto Backstop LP",
+                "SYMBOL": "naBSPc",
+                "DECIMALS": 6,
+                "ASSET": "USD Coin",
+                "ASSET_ADDRESS": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+            }
+        },
+        "NABLA_DRIP": "0xf1df596077C10D21BFaEa029d951a3c5F858264f",
+        "NABLA_QUOTE": "0x3f9fb70bAf081A4f3c415827aB49a2030b9dbd16"
+    }
+}
