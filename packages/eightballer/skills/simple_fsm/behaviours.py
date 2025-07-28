@@ -38,8 +38,8 @@ from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_data_round
 from packages.eightballer.skills.simple_fsm.behaviour_classes.collect_ticker_round import CollectTickerRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.no_opportunity_round import NoOpportunityRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_round import ExecuteOrdersRound
-from packages.eightballer.skills.simple_fsm.behaviour_classes.instantiate_bridge_request_round import (
-    InstantiateBridgeRequestRound,
+from packages.eightballer.skills.simple_fsm.behaviour_classes.check_bridge_request_round import (
+    CheckBridgeRequestRound,
 )
 
 
@@ -104,10 +104,19 @@ class IdentifyOpportunityRound(BaseBehaviour):
                 msg=f"Opportunity unaffordable: {self.strategy.state.unaffordable_opportunity}",
             )
 
+        # If there are opportunities, we prioritize executing those
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             self.strategy.state.new_orders = orders
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
+            return
+
+        # By this time, outstanding requests may have long completed
+        if self.strategy.state.bridge_requests_in_progress:
+            self.context.logger.info("Checking status of bridge requests in progress",
+            extra={"bridge_requests_in_progress": self.strategy.state.bridge_requests_in_progress},
+        )
+            self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
 
     def setup(self) -> None:
         """Setup the state."""
@@ -226,7 +235,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_state("cooldownround", CoolDownRound(**kwargs))
         self.register_state("collecttickerround", CollectTickerRound(**kwargs))
         self.register_state("setapprovals", SetApprovalsRound(**kwargs))
-        self.register_state("instantiate_bridge_requests", InstantiateBridgeRequestRound(**kwargs))
+        self.register_state("check_bridge_requests_round", CheckBridgeRequestRound(**kwargs))
 
         self.register_state(
             "identifyopportunityround",
@@ -271,10 +280,10 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
         self.register_transition(
             source="identifyopportunityround",
             event=ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND,
-            destination="instantiate_bridge_requests",
+            destination="check_bridge_requests_round",
         )
         self.register_transition(
-            source="instantiate_bridge_requests",
+            source="check_bridge_requests_round",
             event=ArbitrageabciappEvents.DONE,
             destination="cooldownround",
         )

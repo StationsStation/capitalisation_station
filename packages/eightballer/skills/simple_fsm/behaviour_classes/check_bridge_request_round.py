@@ -16,10 +16,10 @@ APPROVALS_TIMEOUT_SECONDS = 120
 DEFAULT_ENCODING = "utf-8"
 
 
-class InstantiateBridgeRequestRound(BaseConnectionRound):
-    """This class implements the CollectDataRound state."""
+class CheckBridgeRequestRound(BaseConnectionRound):
+    """This class implements the CheckBridgeRequestRound state."""
 
-    matching_round = "instantiatebridgerequest"
+    matching_round = "checkbridgerequestround"
     attempts = 0
     started = False
 
@@ -51,6 +51,7 @@ class InstantiateBridgeRequestRound(BaseConnectionRound):
             if  now - entry.ts > self.strategy.bridge_request_timeout:
                 self.strategy.state.bridge_requests_in_progress.pop(rid)
                 self.context.logger.warning(f"Bridge request {rid} timed out after {now - entry.ts:.1f}s: {entry}")
+                # TODO: remove: we won't ever use THIS bridge again if no completion
 
         for entry in self.strategy.state.bridge_requests_in_progress.values():
             if entry.payload is AWAITING_INITIAL_BRIDGE_RESULT:
