@@ -192,6 +192,7 @@ class ArbitrageStrategy(Model):
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
         self.alert_user = kwargs.pop("alert_user", True)
+        self.bridging_enabled = kwargs.pop("bridging_enabled", False)
         self.bridge_request_timeout = kwargs.pop("bridge_request_timeout", 600)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)

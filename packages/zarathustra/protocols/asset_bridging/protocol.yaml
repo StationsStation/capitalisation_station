@@ -14,8 +14,12 @@ fingerprint:
   dialogues.py: bafybeidf2725uhm5cuyqfqpelyp6na5y2rkxeqzrfmlngr4y422l2hxsu4
   message.py: bafybeiepv57seaits3lavpsbqdh6b3vtvjyy7ckdtahwvsklmqnxfdoqxi
   serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
-  tests/test_asset_bridging_dialogues.py: bafybeif43wj2hdxs5ssdw2nebduiefs7ernbkiwhpz5fhirrr66vmc2pxu
-  tests/test_asset_bridging_messages.py: bafybeih5r2wjyxbyukf2ynnrqjks3e3kqfmg7wiczzhhk6xinbmzgjgp6m
+  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
+  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
+  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
+  tests/test_asset_bridging_dialogues.py: bafybeihy4nurtizihhbcp673mdpqr6tet2zlyb3z3esr33bhlh3ptvlvxe
+  tests/test_asset_bridging_messages.py: bafybeidwrkhbq5dlcvgbzyvmkny2edv24nfs2mtdnrknjtfkgm2uvjhzdq
+  tests/test_custom_types.py: bafybeifhkfkqb7xneaoqv2pdv2wv2tk2lhbi7pgo4zhcwyrv7dwfg2meau
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

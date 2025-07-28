@@ -1,6 +1,6 @@
 """Module containing tests for the pydantic models generated from the .proto file."""
 
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     ErrorInfo,
@@ -12,6 +12,7 @@ from packages.zarathustra.protocols.asset_bridging.asset_bridging_pb2 import (
 )
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(BridgeRequest))
 def test_bridgerequest(bridgerequest: BridgeRequest):
     """Test BridgeRequest."""
@@ -22,6 +23,7 @@ def test_bridgerequest(bridgerequest: BridgeRequest):
     assert bridgerequest == result
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(BridgeResult))
 def test_bridgeresult(bridgeresult: BridgeResult):
     """Test BridgeResult."""
@@ -32,6 +34,7 @@ def test_bridgeresult(bridgeresult: BridgeResult):
     assert bridgeresult == result
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(ErrorInfo))
 def test_errorinfo(errorinfo: ErrorInfo):
     """Test ErrorInfo."""

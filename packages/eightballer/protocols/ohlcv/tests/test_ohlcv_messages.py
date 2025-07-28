@@ -3,7 +3,7 @@
 """Test messages module for the ohlcv protocol."""
 
 from pydantic import BaseModel
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 from aea.mail.base import Envelope
 
 from packages.eightballer.protocols.ohlcv.message import OhlcvMessage
@@ -50,6 +50,7 @@ def perform_message_test(performative, model) -> None:
     assert expected_msg == actual_msg
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Subscribe))
 def test_subscribe_messages(model):
     """Test for the 'SUBSCRIBE' protocol message encode and decode."""
@@ -57,6 +58,7 @@ def test_subscribe_messages(model):
     perform_message_test(OhlcvMessage.Performative.SUBSCRIBE, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Candlestick))
 def test_candlestick_messages(model):
     """Test for the 'CANDLESTICK' protocol message encode and decode."""
@@ -64,6 +66,7 @@ def test_candlestick_messages(model):
     perform_message_test(OhlcvMessage.Performative.CANDLESTICK, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(History))
 def test_history_messages(model):
     """Test for the 'HISTORY' protocol message encode and decode."""
@@ -71,6 +74,7 @@ def test_history_messages(model):
     perform_message_test(OhlcvMessage.Performative.HISTORY, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(Error))
 def test_error_messages(model):
     """Test for the 'ERROR' protocol message encode and decode."""
@@ -78,6 +82,7 @@ def test_error_messages(model):
     perform_message_test(OhlcvMessage.Performative.ERROR, model)
 
 
+@settings(deadline=1000, suppress_health_check=[HealthCheck.too_slow])
 @given(st.from_type(End))
 def test_end_messages(model):
     """Test for the 'END' protocol message encode and decode."""

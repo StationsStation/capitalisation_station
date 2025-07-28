@@ -1,0 +1,19 @@
+name: direct_price_oracle
+author: zarathustra
+version: 0.1.0
+type: contract
+description: Smart contract interface mapping token addresses to price-feed IDs for
+  real-time oracles.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeieyhzbuku4agfmtpg5bllc2g4mg2b5v2faurhxiwp7zulxw6xm3uy
+  build/direct_price_oracle.json: bafybeibk76wty6puiks45volddn5o6jvs7sw565j43fkb3tfsgqc3tf374
+  contract.py: bafybeicbtu5c5chm473wp6q47mzfls4ujzhtojqpxp7m6piu73krgyttie
+  tests/test_direct_price_oracle_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: DirectPriceOracle
+contract_interface_paths:
+  ethereum: build/direct_price_oracle.json
+dependencies: {}
+contracts: []
