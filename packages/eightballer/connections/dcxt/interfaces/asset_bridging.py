@@ -17,7 +17,6 @@ from derive_client.data_types import (
 )
 
 from packages.zarathustra.protocols.asset_bridging.message import (
-    ErrorInfo,
     AssetBridgingMessage,
 )
 from packages.zarathustra.protocols.asset_bridging.dialogues import (
@@ -41,7 +40,7 @@ if TYPE_CHECKING:
 
 # ruff: noqa: PLR0914  # Too many local variables
 
-ErrorCode = ErrorInfo.CODE
+ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
 
 DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
@@ -141,7 +140,7 @@ class AssetBridgingInterface(BaseInterface):
 
         if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
             return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PERFORMATIVE,
+                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
                 err_msg="Expecting REQUEST_BRIDGE performative",
             )
 
