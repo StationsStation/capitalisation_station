@@ -117,9 +117,10 @@ class IdentifyOpportunityRound(BaseBehaviour):
 
         # By this time, outstanding requests may have long completed
         if self.strategy.state.bridge_requests_in_progress:
-            self.context.logger.info("Checking status of bridge requests in progress",
-            extra={"bridge_requests_in_progress": self.strategy.state.bridge_requests_in_progress},
-        )
+            self.context.logger.info(
+                "Checking status of bridge requests in progress",
+                extra={"bridge_requests_in_progress": self.strategy.state.bridge_requests_in_progress},
+            )
             self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
 
     def setup(self) -> None:

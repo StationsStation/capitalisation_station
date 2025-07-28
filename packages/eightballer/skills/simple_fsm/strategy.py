@@ -38,7 +38,7 @@ from packages.eightballer.protocols.user_interaction.message import (
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogues,
 )
-from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest, BridgeResult
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
 from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
@@ -68,8 +68,10 @@ UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
 
 @dataclass
 class InProgressBridgeRequest:
+    """InProgressBridgeRequest."""
+
     payload: BridgeResult | object
-    ts: float = field(default_factory=lambda: time.monotonic())
+    ts: float = field(default_factory=time.monotonic)
 
 
 @dataclass

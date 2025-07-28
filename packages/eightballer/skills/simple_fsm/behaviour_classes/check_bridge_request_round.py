@@ -5,11 +5,11 @@ from collections.abc import Generator
 
 from packages.eightballer.connections.dcxt import PUBLIC_ID as DCXT_PUBLIC_ID
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
-from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy
+from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategy, InProgressBridgeRequest
 from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseConnectionRound
-from packages.eightballer.skills.simple_fsm.strategy import InProgressBridgeRequest
+
 
 AWAITING_INITIAL_BRIDGE_RESULT = object()
 APPROVALS_TIMEOUT_SECONDS = 120
@@ -46,12 +46,12 @@ class CheckBridgeRequestRound(BaseConnectionRound):
             entry = InProgressBridgeRequest(payload=AWAITING_INITIAL_BRIDGE_RESULT)
             self.strategy.state.bridge_requests_in_progress[request.request_id] = entry
 
+        # NOTE: remove: if we cannot confirm bridge tx settlelemtn, we will not use this bridge again
         now = time.monotonic()
         for rid, entry in tuple(self.strategy.state.bridge_requests_in_progress.items()):
-            if  now - entry.ts > self.strategy.bridge_request_timeout:
+            if now - entry.ts > self.strategy.bridge_request_timeout:
                 self.strategy.state.bridge_requests_in_progress.pop(rid)
                 self.context.logger.warning(f"Bridge request {rid} timed out after {now - entry.ts:.1f}s: {entry}")
-                # TODO: remove: we won't ever use THIS bridge again if no completion
 
         for entry in self.strategy.state.bridge_requests_in_progress.values():
             if entry.payload is AWAITING_INITIAL_BRIDGE_RESULT:

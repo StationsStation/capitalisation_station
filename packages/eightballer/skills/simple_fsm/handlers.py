@@ -32,9 +32,6 @@ from packages.eightballer.protocols.positions.message import PositionsMessage
 from packages.zarathustra.protocols.asset_bridging.message import (
     AssetBridgingMessage,
 )
-from packages.zarathustra.protocols.asset_bridging.custom_types import (
-    BridgeResult,
-)
 from packages.eightballer.protocols.user_interaction.message import UserInteractionMessage
 from packages.eightballer.skills.abstract_round_abci.handlers import (
     HttpHandler as BaseHttpHandler,
@@ -47,6 +44,9 @@ from packages.eightballer.skills.abstract_round_abci.handlers import (
     AbstractResponseHandler,
 )
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
+from packages.zarathustra.protocols.asset_bridging.custom_types import (
+    BridgeResult,
+)
 
 
 ABCIHandler = BaseABCIRoundHandler
@@ -169,13 +169,12 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
         """We log the message and pass it to the dialogue manager."""
 
         if message.performative == AssetBridgingMessage.Performatives.BRIDGE_STATUS:
-
             result = message.result
             request_id = result.request.request_id
 
             if request_id not in self.strategy.state.bridge_requests_in_progress:
                 self.context.logger.error(f"Unknown result for request_id={request_id}: {message}")
-                return
+                return None
 
             match result.status:
                 case BridgeResult.Status.STATUS_PENDING:

@@ -19,9 +19,9 @@
 """This package contains a simple arbitrage strategy."""
 
 import operator
+from uuid import uuid4
 from functools import reduce
 from dataclasses import field, dataclass
-from uuid import uuid4
 
 from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, OrderType, OrderStatus
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest

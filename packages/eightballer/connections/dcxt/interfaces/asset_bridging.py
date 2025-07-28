@@ -55,6 +55,7 @@ DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
 
 class ExtraInfo(BaseModel):
     """ExtraInfo."""
+
     model_config = ConfigDict(validate_assignment=True, extra="allow")
     derive_status: str = ""
     transaction_id: str = ""

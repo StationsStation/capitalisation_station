@@ -33,8 +33,8 @@ fingerprint:
   erc_20/contract.py: bafybeichsry2ajfr4okg5yjolqnvaofhupcxyr2kgy3uq4dpfolz25pbpa
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
-  interfaces/approvals.py: bafybeihfetz3mim4quwllpuu335qs3igjkdizlbhnzgr3g3oondlhxrc2a
-  interfaces/asset_bridging.py: bafybeia6kgnmhem34te6nbgofgs74x4qu547w66uwrlhtpjzcdgxxupuge
+  interfaces/approvals.py: bafybeidsl5z72althhmjlmzffyd3hksoau5otus7pgspu2xk5u4y4r53ou
+  interfaces/asset_bridging.py: bafybeiflgj7lucgzhepjhrcd4cgdpvo2j7igk5y7pdofchl2mjyehmesua
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeibtfsog3vacsn4z3wzdr734egph5swx76ugzuya6njxvr5hpdv7de
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
@@ -74,10 +74,10 @@ restricted_to_protocols:
 - eightballer/approvals:0.1.0
 - zarathustra/asset_bridging:0.1.0
 protocols:
-- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- zarathustra/asset_bridging:0.1.0:bafybeihquixjbvq4p35apiydj7fgwtfa3ahfflzybujq73n6airxhcsmue
-- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
-- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/ohlcv:0.1.0:bafybeia6vg6tnnlc75bq2hlj5vgcmkscvthneezzyuwasztini2dbd3ziq
 - eightballer/order_book:0.1.0:bafybeicvwtfstunyoxqf7hnxbipukk4m6mkzwrime5hc37ew64by4tqdki
