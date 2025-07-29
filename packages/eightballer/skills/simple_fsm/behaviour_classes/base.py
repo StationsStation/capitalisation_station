@@ -74,6 +74,7 @@ class BaseConnectionRound(BaseBehaviourUtils, State):
             TickersMessage.Performative.GET_TICKER: self.context.tickers_dialogues,
             ApprovalsMessage.Performative.SET_APPROVAL: self.context.approvals_dialogues,
             AssetBridgingMessage.Performative.REQUEST_BRIDGE: self.context.asset_bridging_dialogues,
+            AssetBridgingMessage.Performative.REQUEST_STATUS: self.context.asset_bridging_dialogues,
         }
         self.started = False
         self._is_done = False
