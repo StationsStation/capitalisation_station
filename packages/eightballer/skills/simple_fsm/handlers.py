@@ -168,7 +168,7 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
     def handle(self, message):
         """We log the message and pass it to the dialogue manager."""
 
-        if message.performative == AssetBridgingMessage.Performatives.BRIDGE_STATUS:
+        if message.performative == AssetBridgingMessage.Performative.BRIDGE_STATUS:
             result = message.result
             request_id = result.request.request_id
 
