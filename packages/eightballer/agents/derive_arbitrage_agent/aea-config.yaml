@@ -190,3 +190,4 @@ models:
         max_open_orders: ${MAX_OPEN_ORDERS:int:100}
       cooldown_period: ${COOLDOWN_PERIOD:int:30}
       cexs: ${list:[]}
+      bridging_enabled: true
