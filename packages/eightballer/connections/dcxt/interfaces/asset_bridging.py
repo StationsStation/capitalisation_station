@@ -5,8 +5,6 @@ from typing import TYPE_CHECKING
 from functools import partial
 
 from pydantic import BaseModel, ConfigDict
-from derive_client.exceptions import DeriveJSONRPCException
-from derive_client.utils.retry import retry
 from derive_client.data_types import (
     ChainID,
     Currency,
@@ -302,12 +300,7 @@ class AssetBridgingInterface(BaseInterface):
             derive_tx_result = None
             if bridge_tx_result.status is TxStatus.SUCCESS:
                 connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}.")
-                # Once target chain bridge event is detected, may still not be finalized
-                derive_tx_result: DeriveTxResult = retry(
-                    client.transfer_from_funding_to_subaccount,
-                    retries=3,
-                    delay=3.0,
-                    exception=DeriveJSONRPCException,
+                derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
                     amount=amount,
                     asset_name=request.source_token,
                     subaccount_id=client.subaccount_id,
