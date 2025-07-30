@@ -62,7 +62,7 @@ class CheckBridgeRequestRound(BaseConnectionRound):
                 result=entry.payload,
             )
             entry.last_status_sent = now
-            self.context.logger.info(f"Submitted bridge request status: {entry.payload}", extra={"result": entry.payload})
+            self.context.logger.info("Submitted bridge request status.", extra={"result": entry.payload})
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

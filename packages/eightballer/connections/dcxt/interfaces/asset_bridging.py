@@ -205,7 +205,8 @@ class AssetBridgingInterface(BaseInterface):
             )
 
         else:
-            connection.logger.info(f"Transferring {amount} {request.source_token} from subaccount to funding account.")
+            msg = f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}."
+            connection.logger.info(msg)
             derive_tx_result: DeriveTxResult = client.transfer_from_subaccount_to_funding(
                 amount=amount,
                 asset_name=request.source_token,
@@ -299,7 +300,8 @@ class AssetBridgingInterface(BaseInterface):
             # 2. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
             derive_tx_result = None
             if bridge_tx_result.status is TxStatus.SUCCESS:
-                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}.")
+                msg = f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}."
+                connection.logger.info(msg)
                 derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
                     amount=amount,
                     asset_name=request.source_token,
