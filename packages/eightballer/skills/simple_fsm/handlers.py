@@ -172,8 +172,9 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
             result = message.result
             request_id = result.request.request_id
 
+            # case: a bridge status update message arrived after finalization
             if request_id not in self.strategy.state.bridge_requests_in_progress:
-                self.context.logger.error(f"Unknown result for request_id={request_id}: {message}")
+                self.context.logger.info(f"Bridge request already finalized {request_id}: {message}")
                 return None
 
             match result.status:
