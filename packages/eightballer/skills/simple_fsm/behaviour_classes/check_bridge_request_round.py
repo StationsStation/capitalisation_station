@@ -46,22 +46,23 @@ class CheckBridgeRequestRound(BaseConnectionRound):
             entry = InProgressBridgeRequest(payload=AWAITING_INITIAL_BRIDGE_RESULT)
             self.strategy.state.bridge_requests_in_progress[request.request_id] = entry
 
-        # NOTE: remove: if we cannot confirm bridge tx settlelemtn, we will not use this bridge again
         now = time.monotonic()
-        for rid, entry in tuple(self.strategy.state.bridge_requests_in_progress.items()):
-            if now - entry.ts > self.strategy.bridge_request_timeout:
-                self.strategy.state.bridge_requests_in_progress.pop(rid)
-                self.context.logger.warning(f"Bridge request {rid} timed out after {now - entry.ts:.1f}s: {entry}")
-
+        self.context.logger.info(f"Bridge requests in progress: {self.strategy.state.bridge_requests_in_progress}")
         for entry in self.strategy.state.bridge_requests_in_progress.values():
+            # skip if still awaiting initial response
             if entry.payload is AWAITING_INITIAL_BRIDGE_RESULT:
                 continue
+            # throttle: always exceeds interval on first check, after only if enough time has elapsed
+            if now - entry.last_status_sent < self.strategy.bridge_status_check_interval:
+                continue
+
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_STATUS,
                 connection_id=DCXT_PUBLIC_ID,
                 result=entry.payload,
             )
-            self.context.logger.info("Submitted bridge request status.", extra={"result": entry.payload})
+            entry.last_status_sent = now
+            self.context.logger.info(f"Submitted bridge request status: {entry.payload}", extra={"result": entry.payload})
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

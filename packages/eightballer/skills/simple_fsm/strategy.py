@@ -19,7 +19,6 @@
 """This package contains a scaffold of a model."""
 
 import json
-import time
 import pathlib
 import datetime
 from copy import deepcopy
@@ -71,7 +70,7 @@ class InProgressBridgeRequest:
     """InProgressBridgeRequest."""
 
     payload: BridgeResult | object
-    ts: float = field(default_factory=time.monotonic)
+    last_status_sent: float = 0.0
 
 
 @dataclass
@@ -195,7 +194,7 @@ class ArbitrageStrategy(Model):
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
         self.alert_user = kwargs.pop("alert_user", True)
         self.bridging_enabled = kwargs.pop("bridging_enabled", False)
-        self.bridge_request_timeout = kwargs.pop("bridge_request_timeout", 600)
+        self.bridge_status_check_interval = kwargs.pop("bridge_status_check_interval", 30)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state
