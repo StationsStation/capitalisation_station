@@ -252,8 +252,8 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
         """Handle UserInteractionMessage with NOTIFICATION Perfomative."""
 
         title = message.title
-        body = message.body
-        attach = message.attach
+        body = message.body or ""
+        attach = message.attach or ""
 
         success = self._connection.notify(body=message.body, title=message.title, attach=message.attach)
 
@@ -264,7 +264,7 @@ class AppriseAsyncChannel(BaseAsyncChannel):  # pylint: disable=too-many-instanc
         if not success:
             params["error_code"] = ErrorCode.NOTIFICATION_FAILED
             params["error_msg"] = "Failed to send notification"
-            params["error_data"] = {"title": title, "body": body, "attach": attach}
+            params["error_data"] = {"title": title.encode(), "body": body.encode(), "attach": attach.encode()}
         return dialogue.reply(**params)
 
 
