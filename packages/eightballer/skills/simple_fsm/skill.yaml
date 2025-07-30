@@ -8,35 +8,35 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
-  behaviour_classes/base.py: bafybeihz4xzwd6vr7usp6f23ykhl25emh2jrv7hcpft6zs7reqkq4pkgfu
+  behaviour_classes/base.py: bafybeidz6jd65piveuqtc6aidg35z3n3kyk5clmwpae2hqd2ip6h6vnmpa
+  behaviour_classes/check_bridge_request_round.py: bafybeigawdqhpfehgj3c24z6zhr6k2dkczy5jqlsrd6l5be26xlbngihgu
   behaviour_classes/collect_data_round.py: bafybeihee3y4wfqp3qmhd76heknpq4losvx3sjqkxqtyrh7vvwb4hgizmi
   behaviour_classes/collect_ticker_round.py: bafybeih2ye3mr2ytdtzj6vzqsm4yn3exfl5q3npbkpocmiy6h73pe7n2we
-  behaviour_classes/instantiate_bridge_request_round.py: bafybeiad5jtlqkk2rw74emt6m2lwgu4sn6gyss2r6ycw2ph5gm7rmmilfy
   behaviour_classes/no_opportunity_round.py: bafybeie6dl4bg6bnd7zllg3vydcc6br6k2u2jxcj7w2fgcbrdkpsb36aii
-  behaviour_classes/order_execution_round.py: bafybeidkveizivrr2vge2i6pvqg7pmp3aqhvgdehprvys7rhd3vomtsvem
+  behaviour_classes/order_execution_round.py: bafybeibvcb2wn4fw7aeaenwive5m4izfhljzm4hvnau3iuc3w6vvh4gucm
   behaviour_classes/post_trade_round.py: bafybeiay7vwdsnerz5pblqupubteeqz57buwxymo32jqkja7y52ii4lnty
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
-  behaviours.py: bafybeicxudx5j4sqdo4s3ca6qjuhewvjrqwkxceki4cq2qioqrsvncnb4m
+  behaviours.py: bafybeic5a23mnhsv6xhii7lyewzbewfffs6q5svszawsplde3pcaovrumu
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
-  handlers.py: bafybeihs5dycozu4ytsjjb3x2ufl7sykoqgywb3arw4ot5nld6mfqds7iy
-  strategy.py: bafybeiaytqldg4fac6iifvkznsm3rw67q56okkp6js3wn7w2h5mgdcjexm
+  handlers.py: bafybeihwsriwd2brjn7pthlcwlmdktgxqkqnkhx5debm4ehvmc33abaqhm
+  strategy.py: bafybeiadcvwu5nwpmddv4e7w7gbjssc7jsfswmewxbhegjupke27jww65q
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
-- eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
-- eightballer/dcxt:0.1.0:bafybeia4txkxku4qhpnern2omckyuo33a57f2ekd6p3wfa2zoxtzqv3mta
+- eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
+- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
+- eightballer/dcxt:0.1.0:bafybeic56h46v3q43qlkniuzyydujnql45sfzm4jig6lbe5fqyfw3ugvb4
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-- eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
-- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
-- zarathustra/asset_bridging:0.1.0:bafybeihquixjbvq4p35apiydj7fgwtfa3ahfflzybujq73n6airxhcsmue
-- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 skills:
@@ -75,6 +75,7 @@ models:
       strategy_init_kwargs: {}
       strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
       cooldown_period: 10
+      bridging_enabled: false
       alert_user: true
     class_name: ArbitrageStrategy
   balances_dialogues:

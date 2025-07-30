@@ -28,6 +28,7 @@ MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
 class BridgeRequest(BaseModel):
     """BridgeRequest."""
 
+    request_id: str
     source_ledger_id: str
     target_ledger_id: str
     source_token: str
@@ -39,6 +40,7 @@ class BridgeRequest(BaseModel):
     @staticmethod
     def encode(proto_obj, bridgerequest: BridgeRequest) -> None:
         """Encode BridgeRequest to protobuf."""
+        proto_obj.request_id = bridgerequest.request_id
         proto_obj.source_ledger_id = bridgerequest.source_ledger_id
         proto_obj.target_ledger_id = bridgerequest.target_ledger_id
         proto_obj.source_token = bridgerequest.source_token
@@ -52,6 +54,7 @@ class BridgeRequest(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeRequest:
         """Decode proto_obj to BridgeRequest."""
+        request_id = proto_obj.request_id
         source_ledger_id = proto_obj.source_ledger_id
         target_ledger_id = proto_obj.target_ledger_id
         source_token = proto_obj.source_token
@@ -64,6 +67,7 @@ class BridgeRequest(BaseModel):
         bridge = proto_obj.bridge
         receiver = proto_obj.receiver if proto_obj.receiver is not None and proto_obj.HasField("receiver") else None
         return cls(
+            request_id=request_id,
             source_ledger_id=source_ledger_id,
             target_ledger_id=target_ledger_id,
             source_token=source_token,

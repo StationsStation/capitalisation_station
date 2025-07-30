@@ -6,14 +6,14 @@ description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigfigcohr63kijc3kwb2oli7nntgqt4ooiztsl7eett3d6ycldaru
-  logger_setup.py: bafybeidxqiw3jj5xeyc6vorprsh4rxeznsvfxk7jzhosox7roxpj276rmm
+  logger_setup.py: bafybeicboqnvizlhdsnmlncvayrswskbyw6vshi34bnrs75qshbz3wdlqu
   no-queue-logging.yaml: bafybeib6k2usocdkxtz6nqa2igxbwkp7f72inrsxtufyy3pttpbojxysay
   tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise_wrapper:0.1.0:bafybeicoaxug7f7xq32yjiql5xrgek7ve7pwguv4d5blyojcayktk4l7z4
-- eightballer/ccxt_wrapper:0.1.0:bafybeig7libtuyhyqsolehspqttbjq245zqegz26qug2e6hjo7i6jzymnq
-- eightballer/dcxt:0.1.0:bafybeia4txkxku4qhpnern2omckyuo33a57f2ekd6p3wfa2zoxtzqv3mta
+- eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
+- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
+- eightballer/dcxt:0.1.0:bafybeic56h46v3q43qlkniuzyydujnql45sfzm4jig6lbe5fqyfw3ugvb4
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -28,18 +28,18 @@ contracts:
 - valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
 - vybe/jupitar_swap:0.1.0:bafybeihcabcs6loyb3vjw7q62asn37iufac44onw4sjf6uvjojbyuqd25m
 protocols:
-- eightballer/balances:0.1.0:bafybeielsp5qqemr6ltiebd67oj2jdyvkx6mcwyvs46gvd7lvmwaoajyhy
-- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
-- eightballer/markets:0.1.0:bafybeiapjxnkmx6r5hr7ogdggi3dlospg2igx3go4aoprobbtdc72dfoq4
-- eightballer/ohlcv:0.1.0:bafybeigwyeqxnrh3jtfds7y476msgdyalnmlwovyz2g3fuvbepdepquo2i
-- eightballer/order_book:0.1.0:bafybeiffebyryitykzu7sikddqwmlhrfau2tdohbuuelhojheodoficcqa
-- eightballer/orders:0.1.0:bafybeiekzeqhuos56tbvex45dd4ciqbi363dcnxv7ks54f3wrq7gqefvtu
-- eightballer/positions:0.1.0:bafybeibcijk2ge6qbsdlm4gua6vhdo6vjeyknmcrzqwpsg5d2ikviplmoi
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/ohlcv:0.1.0:bafybeia6vg6tnnlc75bq2hlj5vgcmkscvthneezzyuwasztini2dbd3ziq
+- eightballer/order_book:0.1.0:bafybeicvwtfstunyoxqf7hnxbipukk4m6mkzwrime5hc37ew64by4tqdki
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
-- eightballer/spot_asset:0.1.0:bafybeiawis7yf4yvno4vz6yxpommordi7vqesisn4rcloiq6c4ro25wtdq
-- zarathustra/asset_bridging:0.1.0:bafybeihquixjbvq4p35apiydj7fgwtfa3ahfflzybujq73n6airxhcsmue
-- eightballer/tickers:0.1.0:bafybeidyw4zdmurzeuvrdsdgv2na4wafcozefj6faosrssubolylcq3r6q
+- eightballer/spot_asset:0.1.0:bafybeigilsvcxaq2qwxmvclmx56cerdmnrp3jvxph3sqec3usipkblbhze
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
 - eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
@@ -53,12 +53,12 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- eightballer/simple_fsm:0.1.0:bafybeic34olbhjpyijrl4fktaj762xpkjdpujrfosld5kptwmgjzexqelu
-- eightballer/trading_state:0.1.0:bafybeidmzz6yz56coy7jm2ojnrsllhaiykswogblpwkwb5dezdcw7xc7se
+- eightballer/simple_fsm:0.1.0:bafybeieey5sxw2excz2y3v4b3qclv7ffipdzzwlcetsfeptblyvrwy6wkq
+- eightballer/trading_state:0.1.0:bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeidjvuanx7zkcyku6d3q57ib7o2gqeyisjbkpmmwqy6zobb7ayuzru
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeigk6seiw6f2n44flaichphplqarwngkh26eq7olszlekszz6jqsba
+- eightballer/lbtc_arbitrage:0.1.0:bafybeicy7rorp56pjka5h6fivsnfhvrk3dsi4yknu3xxrxiemcd4zsfnri
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -66,7 +66,7 @@ default_routing: {}
 connection_private_key_paths: {}
 private_key_paths: {}
 logging_config:
-  disable_existing_loggers: false
+  disable_existing_loggers: true
   handlers:
     queue:
       class: logger_setup.QueuedHandler
@@ -76,7 +76,7 @@ logging_config:
       - logfile
       handler_configs:
         console:
-          class: logging.StreamHandler
+          class: logger_setup.BufferedHandler
           formatter: standard
           level: INFO
         logfile:
@@ -153,7 +153,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
+    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
@@ -190,3 +190,4 @@ models:
         max_open_orders: ${MAX_OPEN_ORDERS:int:100}
       cooldown_period: ${COOLDOWN_PERIOD:int:30}
       cexs: ${list:[]}
+      bridging_enabled: true

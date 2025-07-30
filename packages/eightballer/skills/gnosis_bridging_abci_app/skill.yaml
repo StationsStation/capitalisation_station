@@ -27,7 +27,7 @@ contracts:
 - eightballer/amb_gnosis:0.1.0:bafybeifsswwirlf5lt2b5o4yv3u3iw5a2qtfcr7q2ibob7bweeux63itpe
 - eightballer/amb_gnosis_helper:0.1.0:bafybeig37p3q4se2it75kt4zvqvrvzk4fqc7eyspspt3txooxxljkurkey
 protocols:
-- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 skills: []
 behaviours:

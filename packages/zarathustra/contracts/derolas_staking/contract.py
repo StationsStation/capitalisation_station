@@ -6,14 +6,16 @@ from aea.crypto.base import Address, LedgerApi
 from aea.contracts.base import Contract
 from aea.configurations.base import PublicId
 
-from packages.zarathustra.contracts.derolas_staking import PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID
+from packages.zarathustra.contracts.derolas_staking import (
+    PUBLIC_ID as DEROLAS_STAKING_PUBLIC_ID,
+)
 
 
 ADDRESS_BASE = "0x35CAf83118d58504C179b50D538a095ac08Ebc8f"
 
 
 class DerolasStaking(Contract):
-    """The scaffold contract class for a smart contract."""
+    """The DerolasStaking contract."""
 
     contract_id: PublicId = DEROLAS_STAKING_PUBLIC_ID
 
@@ -196,8 +198,8 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         result = instance.functions.getGameState(user=user).call()
         return {
-            "_currentEpoch": result[0],
-            "_epochLength": result[1],
+            "_epochLength": result[0],
+            "_currentEpoch": result[1],
             "_epochEndBlock": result[2],
             "_minimumDonation": result[3],
             "_blocksRemaining": result[4],
@@ -387,14 +389,14 @@ class DerolasStaking(Contract):
         return instance.functions.donate()
 
     @classmethod
-    def end_epoch(
+    def end_round(
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
     ) -> JSONLike:
-        """Handler method for the 'end_epoch' requests."""
+        """Handler method for the 'end_round' requests."""
         instance = cls.get_instance(ledger_api, contract_address)
-        return instance.functions.endEpoch()
+        return instance.functions.endRound()
 
     @classmethod
     def force_advance_epoch(
@@ -528,7 +530,10 @@ class DerolasStaking(Contract):
         instance = cls.get_instance(ledger_api, contract_address)
         arg_filters = {
             key: value
-            for key, value in (("previousOwner", previous_owner), ("newOwner", new_owner))
+            for key, value in (
+                ("previousOwner", previous_owner),
+                ("newOwner", new_owner),
+            )
             if value is not None
         }
         to_block = to_block or "latest"

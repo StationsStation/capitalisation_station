@@ -13,9 +13,9 @@ connections:
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 contracts:
-- zarathustra/derolas_staking:0.1.0:bafybeiaq74gagaqz2wykko4qomqy6qbf4vrrseiqzqhcuxeoamnjcyzxs4
+- zarathustra/derolas_staking:0.1.0:bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui
 protocols:
-- eightballer/default:0.1.0:bafybeickzbjjhatxl2a5gq3qr2taczznuw7co7w7et33gtb3hagx2wlesy
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
 - eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
@@ -23,7 +23,7 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 skills:
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeidjvuanx7zkcyku6d3q57ib7o2gqeyisjbkpmmwqy6zobb7ayuzru
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
 customs: []
 default_ledger: ethereum
 required_ledgers:
@@ -40,7 +40,7 @@ logging_config:
   handlers:
     console:
       class: rich.logging.RichHandler
-      level: INFO
+      level: DEBUG
     logfile:
       class: logging.FileHandler
       filename: log.txt

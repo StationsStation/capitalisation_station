@@ -37,7 +37,7 @@ from packages.eightballer.protocols.user_interaction.message import (
 from packages.eightballer.protocols.user_interaction.dialogues import (
     UserInteractionDialogues,
 )
-from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
+from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
 from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
@@ -63,6 +63,14 @@ ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
 UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
+
+
+@dataclass
+class InProgressBridgeRequest:
+    """InProgressBridgeRequest."""
+
+    payload: BridgeResult | object
+    last_status_sent: float = 0.0
 
 
 @dataclass
@@ -98,9 +106,9 @@ class AgentState:
     current_period: int = 0
     last_transition_time: datetime.datetime = None
     unaffordable_opportunity: list[ArbitrageOpportunity] = field(default_factory=list)
-    bridge_requests: list[BridgeRequest] = field(default_factory=list)
     pending_donations: deque[float] = field(default_factory=deque)
-    bridge_requests_in_progress: int = 0
+    bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
+    bridge_requests_in_progress: dict[str, InProgressBridgeRequest] = field(default_factory=dict)
 
     def write_to_file(self):
         """Write the state to files."""
@@ -185,6 +193,8 @@ class ArbitrageStrategy(Model):
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
         self.alert_user = kwargs.pop("alert_user", True)
+        self.bridging_enabled = kwargs.pop("bridging_enabled", False)
+        self.bridge_status_check_interval = kwargs.pop("bridge_status_check_interval", 30)
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
         self.context.shared_state["state"] = self.state

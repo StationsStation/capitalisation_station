@@ -111,7 +111,6 @@ class ExecuteOrdersRound(BaseConnectionRound):
         order_result = inbound.pop()
         is_entry_order = len(state.new_orders) == 1
         is_exit_order = len(state.new_orders) == 0
-        self.context.logger.info(f"Received inbound message: {order_result} is entry order: {is_entry_order}")
         if order_result.performative is not OrdersMessage.Performative.ERROR:
             is_as_expected = self.handle_submitted_order_response(
                 order=order_result.order,
@@ -255,7 +254,7 @@ class ExecuteOrdersRound(BaseConnectionRound):
                 OrderStatus.NEW,
             }
         ):
-            self.context.logger.info(f"Order created: {order}")
+            self.context.logger.info("Order created:")
             self.context.logger.info(
                 dedent(f"""
             Id: {order.id}

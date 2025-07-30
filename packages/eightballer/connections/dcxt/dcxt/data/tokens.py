@@ -1,6 +1,7 @@
 """Token data."""
 
 import json
+import functools
 from enum import Enum
 from pathlib import Path
 
@@ -119,6 +120,8 @@ LEDGER_TO_TOKEN_LIST = {
             "0xecac9c5f704e954931349da37f60e39f515c11c1",  # LBTC
             "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A",  # weETH
             "0x9d0e8f5b25384c7310cb8c6ae32c8fbeb645d083",  # DRV
+            "0x4200000000000000000000000000000000000006",  # WETH
+            "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",  # CBBTC
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]]
@@ -143,6 +146,7 @@ LEDGER_TO_TOKEN_LIST = {
         [
             "0x064f8b858c2a603e1b106a2039f5446d32dc81c1",  # olas
             "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",  # weETH
+            "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",  # WBTC
             "0x77b7787a09818502305C95d68A2571F090abb135",  # DRV
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ARBITRUM]
@@ -162,6 +166,7 @@ TOKEN_LIST_PATH = Path(__file__).parent / "token_list.json"
 DEFAULT_ENCODING = "utf-8"
 
 
+@functools.lru_cache
 def read_token_list(chain_id: int):
     """Read the token list."""
     with open(TOKEN_LIST_PATH, encoding=DEFAULT_ENCODING) as file:

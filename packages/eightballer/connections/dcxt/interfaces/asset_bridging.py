@@ -17,7 +17,6 @@ from derive_client.data_types import (
 )
 
 from packages.zarathustra.protocols.asset_bridging.message import (
-    ErrorInfo,
     AssetBridgingMessage,
 )
 from packages.zarathustra.protocols.asset_bridging.dialogues import (
@@ -41,7 +40,7 @@ if TYPE_CHECKING:
 
 # ruff: noqa: PLR0914  # Too many local variables
 
-ErrorCode = ErrorInfo.CODE
+ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
 
 DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
@@ -56,6 +55,7 @@ DERIVE_TX_TO_BRIDGE_STATUS: dict[DeriveTxStatus, BridgeResult.Status] = {
 
 class ExtraInfo(BaseModel):
     """ExtraInfo."""
+
     model_config = ConfigDict(validate_assignment=True, extra="allow")
     derive_status: str = ""
     transaction_id: str = ""
@@ -141,7 +141,7 @@ class AssetBridgingInterface(BaseInterface):
 
         if message.performative != AssetBridgingMessage.Performative.REQUEST_BRIDGE:
             return reply_err(
-                code=ErrorCode.Code.CODE_INVALID_PERFORMATIVE,
+                code=ErrorCode.CODE_INVALID_PERFORMATIVE,
                 err_msg="Expecting REQUEST_BRIDGE performative",
             )
 
@@ -190,7 +190,8 @@ class AssetBridgingInterface(BaseInterface):
         is_deposit = request.target_ledger_id == "derive"
 
         if is_deposit:
-            msg = f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+            token = request.source_token
+            msg = f"Depositing {amount} {token} from {source_chain.name} to Derive wallet {client.wallet}."
             connection.logger.info(msg)
             bridge_tx_result: BridgeTxResult = client.deposit_to_derive(
                 chain_id=source_chain,
@@ -204,7 +205,8 @@ class AssetBridgingInterface(BaseInterface):
             )
 
         else:
-            connection.logger.info(f"Transferring {amount} {request.source_token} from subaccount to funding account.")
+            msg = f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}."
+            connection.logger.info(msg)
             derive_tx_result: DeriveTxResult = client.transfer_from_subaccount_to_funding(
                 amount=amount,
                 asset_name=request.source_token,
@@ -291,14 +293,15 @@ class AssetBridgingInterface(BaseInterface):
             # 1. The bridge process was started but is still PENDING
             if not bridge_tx_result.target_tx:
                 token = request.source_token
-                msg = f"Depositing {amount} {token} to Derive wallet {client.wallet} on {source_chain.name}."
+                msg = f"Depositing {amount} {token} from {source_chain.name} to Derive wallet {client.wallet}."
                 connection.logger.info(msg)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
 
             # 2. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
             derive_tx_result = None
             if bridge_tx_result.status is TxStatus.SUCCESS:
-                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
+                msg = f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}."
+                connection.logger.info(msg)
                 derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
                     amount=amount,
                     asset_name=request.source_token,
@@ -323,6 +326,7 @@ class AssetBridgingInterface(BaseInterface):
                     derive_tx_hash=derive_tx_result.tx_hash or "",
                     **{k: str(v) for k, v in derive_tx_result.error_log.items()},
                 )
+
                 # If still not SETTLED, we return the BridgeResult (which may or may not be final)
                 if derive_tx_result.status is not DeriveTxStatus.SETTLED:
                     status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
