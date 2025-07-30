@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from functools import partial
 
 from pydantic import BaseModel, ConfigDict
+from derive_client.exceptions import DeriveJSONRPCException
+from derive_client.utils.retry import retry
 from derive_client.data_types import (
     ChainID,
     Currency,
@@ -190,7 +192,8 @@ class AssetBridgingInterface(BaseInterface):
         is_deposit = request.target_ledger_id == "derive"
 
         if is_deposit:
-            msg = f"Depositing {amount} {request.source_token} to Derive wallet {client.wallet} on {source_chain.name}."
+            token = request.source_token
+            msg = f"Depositing {amount} {token} from {source_chain.name} to Derive wallet {client.wallet}."
             connection.logger.info(msg)
             bridge_tx_result: BridgeTxResult = client.deposit_to_derive(
                 chain_id=source_chain,
@@ -291,15 +294,20 @@ class AssetBridgingInterface(BaseInterface):
             # 1. The bridge process was started but is still PENDING
             if not bridge_tx_result.target_tx:
                 token = request.source_token
-                msg = f"Depositing {amount} {token} to Derive wallet {client.wallet} on {source_chain.name}."
+                msg = f"Depositing {amount} {token} from {source_chain.name} to Derive wallet {client.wallet}."
                 connection.logger.info(msg)
                 bridge_tx_result = await asyncio.to_thread(client.poll_bridge_progress, bridge_tx_result)
 
             # 2. If the bridge process was a SUCCESS, we must transfer from smart contract funding account to subaccount
             derive_tx_result = None
             if bridge_tx_result.status is TxStatus.SUCCESS:
-                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount.")
-                derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
+                connection.logger.info(f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}.")
+                # Once target chain bridge event is detected, may still not be finalized
+                derive_tx_result: DeriveTxResult = retry(
+                    client.transfer_from_funding_to_subaccount,
+                    retries=3,
+                    delay=3.0,
+                    exception=DeriveJSONRPCException,
                     amount=amount,
                     asset_name=request.source_token,
                     subaccount_id=client.subaccount_id,
@@ -323,6 +331,7 @@ class AssetBridgingInterface(BaseInterface):
                     derive_tx_hash=derive_tx_result.tx_hash or "",
                     **{k: str(v) for k, v in derive_tx_result.error_log.items()},
                 )
+
                 # If still not SETTLED, we return the BridgeResult (which may or may not be final)
                 if derive_tx_result.status is not DeriveTxStatus.SETTLED:
                     status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
