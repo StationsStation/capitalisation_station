@@ -390,7 +390,7 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
                 return
             event = current_state.event
             next_state = self.transitions.get(self.current, {}).get(event, None)
-            self.context.logger.info(f"Transitioning: {self.current} --[{event}]--> {next_state}")
+            self.context.logger.info(f"Transitioning: {self.current} --[{event.name}]--> {next_state}")
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
         self.current_behaviour.act()
