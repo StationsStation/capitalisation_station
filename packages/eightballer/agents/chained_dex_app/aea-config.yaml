@@ -10,7 +10,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
-- eightballer/dcxt:0.1.0:bafybeigtm4zcud5v35y2bavmj6j4qmih7pdi7gufwobef5lmdfuiuex3bq
+- eightballer/dcxt:0.1.0:bafybeic56h46v3q43qlkniuzyydujnql45sfzm4jig6lbe5fqyfw3ugvb4
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/prometheus:0.1.1:bafybeicy4ck2wvauo2vh6ji64xrzlgezh27powi6ztokr4yujtf3cft6wi
@@ -29,7 +29,7 @@ protocols:
 - eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
 - eightballer/ohlcv:0.1.0:bafybeia6vg6tnnlc75bq2hlj5vgcmkscvthneezzyuwasztini2dbd3ziq
 - eightballer/order_book:0.1.0:bafybeicvwtfstunyoxqf7hnxbipukk4m6mkzwrime5hc37ew64by4tqdki
-- zarathustra/asset_bridging:0.1.0:bafybeidvq4ow3i2rwkvkmaqa56hdahppgrfmh7tipgoylcfyk3o6bbnb2i
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
 - eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
 - eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
 - eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
@@ -50,8 +50,8 @@ skills:
 - eightballer/registration_abci:0.1.0:bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y
 - eightballer/reset_pause_abci:0.1.0:bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
-- eightballer/chained_dex_app:0.1.0:bafybeifd2dbewociecruvauxdsg5exe6u7hb3d2flm233jv74fws2stztq
-- eightballer/dex_data_retrieval:0.1.0:bafybeif65epbosg3ljwj6fi6d2g6l52gses4lkqhbg27ccuvsq3mbhrlh4
+- eightballer/chained_dex_app:0.1.0:bafybeihqhefhdimuqu5gpby55vmzvwcsmvqtzmd3oqhujzejpfwdkd6u3u
+- eightballer/dex_data_retrieval:0.1.0:bafybeidtblexta3ipkgg4sth6b4b3rkx5yzybxx7hkpt4w5iqm7kooemhe
 default_ledger: ethereum
 required_ledgers:
 - ethereum

@@ -23,7 +23,7 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
 skills:
 - eightballer/prometheus:0.1.0:bafybeicl5i7e467aowfarke4bbyixo2dggar276njmvyuwbsby5pxshhtu
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeihqxyj2yl2p5sbhss2n33ugxtk5cwslnltyamdypfyiant6iwkx6a
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
 customs: []
 default_ledger: ethereum
 required_ledgers:

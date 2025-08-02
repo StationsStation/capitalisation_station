@@ -10,7 +10,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihdcbemj3a5xi4phi3am7xht5c4zdsd5rtqmxsg5bppt4jgio6ygm
   cli.py: bafybeien63b5czy7ulmar3dqytdo54y272o7m6rcoouqyqhzh2icpl2bym
-  connection.py: bafybeigvyvdxfdeyrngejss7kywffu7skktq2ljebfmclb2plunbnud7la
+  connection.py: bafybeia7444ug26wxiwg5gprpxhhfad6glp74pxee4ks6xq6cpdhrzlufu
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
   dcxt/balancer.py: bafybeifu2vih7xzymw374rejhiwaornoet2e4omur7rwkvo2zg33do7ifm
@@ -24,7 +24,7 @@ fingerprint:
   dcxt/data/token_list.json: bafybeiakjvmpjcmglppycv444d44h5vcyfqjzd5cmgnjonwryvnuafdq3i
   dcxt/data/tokens.py: bafybeifw6p4h4us2ciborxpmkaqmfgvcsa4c23d273mbcldmpgakjjqqfq
   dcxt/defi_exchange.py: bafybeidtww2r3uv5ap62brw65li7emmgadnhqa24aomhdtes42udjs5sci
-  dcxt/derive.py: bafybeibiffohrdgv2g5lkx6yomvm4iii6kjtcldtsrbt3zjl2nhxrgbk2u
+  dcxt/derive.py: bafybeiadqhtyiewu2ywz5w3mkd2vhblnka6gyxors2wxao4q4pmgtrwurm
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
   dcxt/nabla.py: bafybeidfto63bu5csieqdnjnzgcos7ntf6u5u6bvpiultipyx6ububsvxq
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
@@ -34,7 +34,7 @@ fingerprint:
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
   interfaces/approvals.py: bafybeidsl5z72althhmjlmzffyd3hksoau5otus7pgspu2xk5u4y4r53ou
-  interfaces/asset_bridging.py: bafybeig2ivbyufwhpae3nqf4alsjg4ukyt3ino2zroynd5wa7dhf47vpyy
+  interfaces/asset_bridging.py: bafybeie7v46573hqoiuj7lm5k56ybl3qmawbqoffowgzhwygnb63pwx6yq
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeibtfsog3vacsn4z3wzdr734egph5swx76ugzuya6njxvr5hpdv7de
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
@@ -75,7 +75,7 @@ restricted_to_protocols:
 - zarathustra/asset_bridging:0.1.0
 protocols:
 - eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
-- zarathustra/asset_bridging:0.1.0:bafybeidvq4ow3i2rwkvkmaqa56hdahppgrfmh7tipgoylcfyk3o6bbnb2i
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
 - eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
 - eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
 - eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa

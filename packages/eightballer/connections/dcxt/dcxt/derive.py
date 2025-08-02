@@ -17,7 +17,8 @@ from derive_client.data_types import (
     InstrumentType,
     UnderlyingCurrency,
 )
-from derive_client.clients.async_client import AsyncClient as DeriveAsyncClient, ApiException
+from derive_client.exceptions import ApiException
+from derive_client.clients.async_client import AsyncClient as DeriveAsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
