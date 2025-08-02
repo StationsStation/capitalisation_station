@@ -239,7 +239,7 @@ class ArbitrageStrategy:
     ) -> list[Order]:
         """Get bridge requests based on basic portfolio management strategy."""
 
-        asset_a, asset_b = self.base_asset.upper(), self.quote_asset.upper()
+        asset_a, asset_b = self.base_asset, self.quote_asset
 
         asset_to_max_balance_exchange, asset_to_min_balance_exchange = {}, {}
 
@@ -259,7 +259,7 @@ class ArbitrageStrategy:
             for ledger, exchanges in portfolio.items():
                 for exchange in exchanges:
                     balances = portfolio[ledger][exchange]
-                    for balance in [b for b in balances if b["asset_id"].upper() == asset]:
+                    for balance in [b for b in balances if b["asset_id"] == asset]:
                         _process_balance(ledger, exchange, balance)
 
         totals = {
@@ -268,7 +268,7 @@ class ArbitrageStrategy:
                 for ledger in portfolio
                 for exchange in portfolio[ledger]
                 for balance in portfolio[ledger][exchange]
-                if balance["asset_id"].upper() == asset
+                if balance["asset_id"] == asset
             )
             for asset in [asset_a, asset_b]
         }
