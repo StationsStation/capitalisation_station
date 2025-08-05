@@ -58,3 +58,10 @@ def test_check_balances(ledger: SupportedLedgers, exchange: SupportedExchanges):
     runner = CliRunner()
     result = runner.invoke(main, ["check-balances", NULL_ADDRESS, "--ledger", ledger.value, "--supported-exchanges", exchange.value])
     assert result.exit_code == 0
+
+
+@pytest.mark.parametrize("ledger, exchange", PARAM_LIST, ids=PARAM_IDS)
+def test_fetch_trades(ledger: SupportedLedgers, exchange: SupportedExchanges):
+    runner = CliRunner()
+    result = runner.invoke(main, ["fetch-trades", NULL_ADDRESS, "--ledger", ledger.value, "--supported-exchanges", exchange.value])
+    assert result.exit_code == 0
