@@ -63,3 +63,7 @@ class ApprovalError(Exception):
 
 class RpcError(Exception):
     """Exception raised when an RPC error occurs."""
+
+
+class UnsupportedAsset(Exception):
+    """Raised when the asset is not supported by the exchange."""

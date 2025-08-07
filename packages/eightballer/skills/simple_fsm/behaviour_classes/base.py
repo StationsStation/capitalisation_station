@@ -18,7 +18,6 @@ from packages.eightballer.protocols.approvals.message import ApprovalsMessage
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.eightballer.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour as BaseBehaviourUtils,
-    TimeoutException,
 )
 
 
@@ -75,6 +74,7 @@ class BaseConnectionRound(BaseBehaviourUtils, State):
             TickersMessage.Performative.GET_TICKER: self.context.tickers_dialogues,
             ApprovalsMessage.Performative.SET_APPROVAL: self.context.approvals_dialogues,
             AssetBridgingMessage.Performative.REQUEST_BRIDGE: self.context.asset_bridging_dialogues,
+            AssetBridgingMessage.Performative.REQUEST_STATUS: self.context.asset_bridging_dialogues,
         }
         self.started = False
         self._is_done = False
@@ -114,54 +114,6 @@ class BaseConnectionRound(BaseBehaviourUtils, State):
         self._dialogue_to_response_msgs = {dialogue.dialogue_label.dialogue_starter_reference: None}
         response = yield from self._do_request(msg, dialogue, timeout)
         return response
-
-    def get_callback_request(self) -> Callable[[Message, "BaseBehaviour"], None]:
-        """Wrapper for callback request which depends on whether the message has not been handled on time."""
-
-        def callback_request(
-            message: Message,
-        ) -> None:
-            """The callback request."""
-            self.context.logger.info(f"Callback request: {message}")
-            if message.protocol_id in self.supported_protocols:
-                self.context.logger.info(f"Message: {message}")
-                self._message = message
-                self.supported_protocols.get(message.protocol_id).append(message)
-                return
-            self.context.logger.info(
-                f"Message not supported: {message.protocol_id}. Supported protocols: {self.supported_protocols}"
-            )
-
-        return callback_request
-
-    def wait_for_message(
-        self,
-        condition: Callable = lambda message: True,  # noqa
-        timeout: float | None = None,
-    ) -> Any:
-        """Wait for message.
-
-        Care must be taken. This method does not handle concurrent requests.
-        Use directly after a request is being sent.
-        This is a local method that does not depend on the global clock,
-        so the usage of datetime.now() is acceptable here.
-
-        """
-        if timeout is not None:
-            deadline = datetime.datetime.now(tz=TZ) + datetime.timedelta(0, timeout)
-        else:
-            deadline = datetime.datetime.max
-
-        try:
-            while self.current_message is None:
-                yield
-                if timeout is not None and datetime.datetime.now(tz=TZ) > deadline:
-                    raise TimeoutException
-            self.context.logger.debug(f"Received message: {self._message}")
-            return self.current_message
-        except TimeoutException:
-            self.context.logger.info("Timeout!")
-            return None  # noqa
 
     @property
     def event(self) -> str | None:
@@ -213,10 +165,9 @@ class BaseConnectionRound(BaseBehaviourUtils, State):
             """The callback request."""
             if message.protocol_id in self.supported_protocols:
                 self.context.logger.debug(f"Message: {message} {dialogue}: {behaviour}")
-                self._message = message
                 self.supported_protocols.get(message.protocol_id).append(message)
                 return
-            self.context.logger.info(
+            self.context.logger.error(
                 f"Message not supported: {message.protocol_id}. Supported protocols: {self.supported_protocols}"
             )
 

@@ -61,7 +61,7 @@ class TickerInterface(BaseInterface):
                 symbol=message.symbol,
                 asset_a=message.asset_a,
                 asset_b=message.asset_b,
-                params=json.loads(message.params.decode("utf-8")) if message.params is not None else None,
+                params=json.loads(message.params.decode("utf-8")) if message.params is not None else {},
             )
             response_message = dialogue.reply(
                 performative=TickersMessage.Performative.TICKER,

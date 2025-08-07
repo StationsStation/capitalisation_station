@@ -17,7 +17,8 @@ from derive_client.data_types import (
     InstrumentType,
     UnderlyingCurrency,
 )
-from derive_client.clients.async_client import AsyncClient as DeriveAsyncClient, ApiException
+from derive_client.exceptions import ApiException
+from derive_client.clients.async_client import AsyncClient as DeriveAsyncClient
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
@@ -435,8 +436,12 @@ class DeriveClient:
 
     async def fetch_ticker(self, *args, symbol, asset_a, asset_b, **kwargs):
         """Fetch all tickers."""
-        del args, kwargs, symbol  # should parse from name to instrument type?
-        instrument_name = f"{asset_a}-{asset_b}".upper()
+        del args, kwargs  # should parse from name to instrument type?
+        if (not asset_a and not asset_b) and (not symbol):
+            msg = "Either asset_a, asset_b or symbol must be provided."
+            raise ValueError(msg)
+
+        instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
             result = await self.client.fetch_ticker(instrument_name=instrument_name)
             return to_ticker(result)

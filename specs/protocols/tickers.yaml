@@ -43,8 +43,8 @@ ct:Ticker: |
     string symbol = 1;
     int64 timestamp = 2;
     string datetime = 3;
-    float ask = 4;
-    float bid = 5;
+    optional float ask = 4;
+    optional float bid = 5;
     optional string asset_a = 6;
     optional string asset_b = 7;
     optional float bid_volume = 8;

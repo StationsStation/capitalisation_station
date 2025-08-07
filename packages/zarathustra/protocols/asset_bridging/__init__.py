@@ -18,7 +18,7 @@
 
 """This module contains the support resources for the asset_bridging protocol.
 
-It was created with protocol buffer compiler version `libprotoc 27.2` and aea protocol generator version `1.0.0`.
+It was created with protocol buffer compiler version `libprotoc 31.1` and aea protocol generator version `1.0.0`.
 """
 
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage

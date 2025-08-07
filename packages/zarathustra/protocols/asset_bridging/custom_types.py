@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from packages.zarathustra.protocols.asset_bridging.primitives import (
     Float,
+    UInt64,
 )
 
 
@@ -27,6 +28,7 @@ MAX_PROTO_SIZE = 2 * 1024 * 1024 * 1024
 class BridgeRequest(BaseModel):
     """BridgeRequest."""
 
+    request_id: str
     source_ledger_id: str
     target_ledger_id: str
     source_token: str
@@ -38,6 +40,7 @@ class BridgeRequest(BaseModel):
     @staticmethod
     def encode(proto_obj, bridgerequest: BridgeRequest) -> None:
         """Encode BridgeRequest to protobuf."""
+        proto_obj.request_id = bridgerequest.request_id
         proto_obj.source_ledger_id = bridgerequest.source_ledger_id
         proto_obj.target_ledger_id = bridgerequest.target_ledger_id
         proto_obj.source_token = bridgerequest.source_token
@@ -51,6 +54,7 @@ class BridgeRequest(BaseModel):
     @classmethod
     def decode(cls, proto_obj) -> BridgeRequest:
         """Decode proto_obj to BridgeRequest."""
+        request_id = proto_obj.request_id
         source_ledger_id = proto_obj.source_ledger_id
         target_ledger_id = proto_obj.target_ledger_id
         source_token = proto_obj.source_token
@@ -63,6 +67,7 @@ class BridgeRequest(BaseModel):
         bridge = proto_obj.bridge
         receiver = proto_obj.receiver if proto_obj.receiver is not None and proto_obj.HasField("receiver") else None
         return cls(
+            request_id=request_id,
             source_ledger_id=source_ledger_id,
             target_ledger_id=target_ledger_id,
             source_token=source_token,
@@ -76,33 +81,65 @@ class BridgeRequest(BaseModel):
 class BridgeResult(BaseModel):
     """BridgeResult."""
 
-    class BridgeStatus(IntEnum):
-        """BridgeStatus."""
+    class Status(IntEnum):
+        """Status."""
 
-        BRIDGE_STATUS_FAILED = 0
-        BRIDGE_STATUS_COMPLETED = 1
-        BRIDGE_STATUS_PENDING_TX_RECEIPT = 2
-        BRIDGE_STATUS_AWAITING_TARGET_FINALITY = 3
-        BRIDGE_STATUS_CLAIMABLE = 4
+        STATUS_FAILED = 0
+        STATUS_SUCCESS = 1
+        STATUS_PENDING = 2
+        STATUS_ERROR = 3
+        STATUS_CLAIMABLE = 4
 
-    tx_hash: str
-    status: BridgeResult.BridgeStatus
     request: BridgeRequest
+    source_tx_hash: Optional[str] = None
+    target_tx_hash: Optional[str] = None
+    target_from_block: Optional[UInt64] = None
+    status: BridgeResult.Status
+    extra_info: dict[str, str]
 
     @staticmethod
     def encode(proto_obj, bridgeresult: BridgeResult) -> None:
         """Encode BridgeResult to protobuf."""
-        proto_obj.tx_hash = bridgeresult.tx_hash
-        proto_obj.status = bridgeresult.status
         BridgeRequest.encode(proto_obj.request, bridgeresult.request)
+        if bridgeresult.source_tx_hash is not None:
+            proto_obj.source_tx_hash = bridgeresult.source_tx_hash
+        if bridgeresult.target_tx_hash is not None:
+            proto_obj.target_tx_hash = bridgeresult.target_tx_hash
+        if bridgeresult.target_from_block is not None:
+            proto_obj.target_from_block = bridgeresult.target_from_block
+        proto_obj.status = bridgeresult.status
+        for key, value in bridgeresult.extra_info.items():
+            proto_obj.extra_info[key] = value
 
     @classmethod
     def decode(cls, proto_obj) -> BridgeResult:
         """Decode proto_obj to BridgeResult."""
-        tx_hash = proto_obj.tx_hash
-        status = proto_obj.status
         request = BridgeRequest.decode(proto_obj.request)
-        return cls(tx_hash=tx_hash, status=status, request=request)
+        source_tx_hash = (
+            proto_obj.source_tx_hash
+            if proto_obj.source_tx_hash is not None and proto_obj.HasField("source_tx_hash")
+            else None
+        )
+        target_tx_hash = (
+            proto_obj.target_tx_hash
+            if proto_obj.target_tx_hash is not None and proto_obj.HasField("target_tx_hash")
+            else None
+        )
+        target_from_block = (
+            proto_obj.target_from_block
+            if proto_obj.target_from_block is not None and proto_obj.HasField("target_from_block")
+            else None
+        )
+        status = proto_obj.status
+        extra_info = dict(proto_obj.extra_info)
+        return cls(
+            request=request,
+            source_tx_hash=source_tx_hash,
+            target_tx_hash=target_tx_hash,
+            target_from_block=target_from_block,
+            status=status,
+            extra_info=extra_info,
+        )
 
 
 class ErrorInfo(BaseModel):
@@ -116,7 +153,8 @@ class ErrorInfo(BaseModel):
         CODE_INVALID_ROUTE = 2
         CODE_INVALID_PARAMETERS = 3
         CODE_ALREADY_FINALIZED = 4
-        CODE_OTHER_EXCEPTION = 5
+        CODE_TX_SUBMISSION_FAILED = 5
+        CODE_OTHER_EXCEPTION = 6
 
     code: ErrorInfo.Code
     message: str

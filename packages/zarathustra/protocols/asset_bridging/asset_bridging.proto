@@ -6,26 +6,30 @@ message AssetBridgingMessage{
 
   // Custom Types
   message BridgeRequest{
-    string source_ledger_id = 1;
-    string target_ledger_id = 2;
-    string source_token = 3;
-    optional string target_token = 4;
-    float amount = 5;
-    string bridge = 6;
-    optional string receiver = 7;
+    string request_id = 1;
+    string source_ledger_id = 2;
+    string target_ledger_id = 3;
+    string source_token = 4;
+    optional string target_token = 5;
+    float amount = 6;
+    string bridge = 7;
+    optional string receiver = 8;
   }
 
   message BridgeResult{
-    enum BridgeStatus {
-      BRIDGE_STATUS_FAILED = 0;
-      BRIDGE_STATUS_COMPLETED = 1;
-      BRIDGE_STATUS_PENDING_TX_RECEIPT = 2;
-      BRIDGE_STATUS_AWAITING_TARGET_FINALITY = 3;
-      BRIDGE_STATUS_CLAIMABLE = 4;
+    enum Status {
+      STATUS_FAILED = 0;
+      STATUS_SUCCESS = 1;
+      STATUS_PENDING = 2;
+      STATUS_ERROR = 3;
+      STATUS_CLAIMABLE = 4;
     }
-    string tx_hash = 1;
-    BridgeStatus status = 2;
-    BridgeRequest request = 3;
+    BridgeRequest request = 1;
+    optional string source_tx_hash = 2;
+    optional string target_tx_hash = 3;
+    optional uint64 target_from_block = 4;
+    Status status = 5;
+    map<string,string> extra_info = 6;
   }
 
   message ErrorInfo{
@@ -35,7 +39,8 @@ message AssetBridgingMessage{
       CODE_INVALID_ROUTE = 2;
       CODE_INVALID_PARAMETERS = 3;
       CODE_ALREADY_FINALIZED = 4;
-      CODE_OTHER_EXCEPTION = 5;
+      CODE_TX_SUBMISSION_FAILED = 5;
+      CODE_OTHER_EXCEPTION = 6;
     }
     Code code = 1;
     string message = 2;
