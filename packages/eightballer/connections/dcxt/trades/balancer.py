@@ -1,48 +1,54 @@
-from balpy.graph.graph import Client, BALANCER_API_ENDPOINT, Chain, RequestsHTTPTransport, gql
+from pathlib import Path
+from enum import Enum
+from pydantic import BaseModel
+from balpy.graph.graph import Client, BALANCER_API_ENDPOINT, RequestsHTTPTransport, gql
 
 
-BALANCER_SWAP_QUERY = gql("""
-query GetSwapsForAddress(
-  $address: String!
-  $chain: [GqlChain!]!
-  $first: Int!
-  $skip: Int!
-) {
-  poolEvents(
-    first: $first
-    skip: $skip
-    where: {
-      typeIn: [SWAP]
-      chainIn: $chain
-      userAddress: $address
-    }
-  ) {
-    __typename
-    ... on GqlPoolSwapEventV3 {
-      id
-      type
-      timestamp
-      poolId
-      userAddress
-      valueUSD
-      chain
-      logIndex
-      tx
-      tokenIn {
-        address
-      }
-      tokenOut {
-        address
-      }
-    }
-  }
-}
-"""
-)
+BALANCER_SWAP_QUERY = gql((Path(__file__).parent / "balancer.graphql").read_text())
+
+
+class GqlChain(Enum):
+    ARBITRUM = "ARBITRUM"
+    AVALANCHE = "AVALANCHE"
+    BASE = "BASE"
+    FANTOM = "FANTOM"
+    FRAXTAL = "FRAXTAL"
+    GNOSIS = "GNOSIS"
+    HYPEREVM = "HYPEREVM"
+    MAINNET = "MAINNET"
+    MODE = "MODE"
+    OPTIMISM = "OPTIMISM"
+    POLYGON = "POLYGON"
+    SEPOLIA = "SEPOLIA"
+    SONIC = "SONIC"
+    ZKEVM = "ZKEVM"
+
+
+class GqlPoolEventType(Enum):
+    ADD = "ADD"
+    REMOVE = "REMOVE"
+    SWAP = "SWAP"
+
+
+class GqlPoolEventsDataRange(Enum):
+    SEVEN_DAYS = "SEVEN_DAYS"
+    THIRTY_DAYS = "THIRTY_DAYS"
+    NINETY_DAYS = "NINETY_DAYS"
+
+
+class GqlPoolEventsFilter(BaseModel, use_enum_values=True):
+    chainIn: list[GqlChain] | None = None
+    poolIdIn: list[str] | None = None
+    range: GqlPoolEventsDataRange | None = None
+    typeIn: list[GqlPoolEventType] | None = None
+    userAddress: str | None = None
+    valueUSD_gt: float | None = None
+    valueUSD_gte: float | None = None
+
 
 def get_trades_balancer(
     address: str,
-    chain: Chain,
+    chain: GqlChain,
     first: int = 1,
     skip: int = 0,
 ) -> list[dict]:
@@ -58,11 +64,16 @@ def get_trades_balancer(
         fetch_schema_from_transport=True,
     )
 
+    flt = GqlPoolEventsFilter(
+        chainIn    = [chain],
+        typeIn     = [GqlPoolEventType.SWAP],
+        userAddress= address,
+    )
+
     variables = {
-        "address": address,
-        "first": first,
-        "skip": skip,
-        "chain": chain.name,
+        "filter": flt.model_dump(exclude_none=True),
+        "first":  first,
+        "skip":   skip,
     }
 
     all_events = []
@@ -82,7 +93,7 @@ def get_trades_balancer(
 
 if __name__ == "__main__":
     address = "0xafecd96c59b253427317be597cde368ae8395884"
-    chain = Chain.BASE
+    chain = GqlChain.BASE
     trades = get_trades_balancer(
         address=address,
         chain=chain,
