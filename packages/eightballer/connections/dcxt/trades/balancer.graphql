@@ -1,0 +1,29 @@
+query GetSwapsForAddress(
+  $filter: GqlPoolEventsFilter!
+  $first:  Int!
+  $skip:   Int!
+) {
+  poolEvents(
+    first: $first
+    skip:  $skip
+    where: $filter
+  ) {
+    __typename
+    ...SwapFields
+  }
+}
+
+fragment SwapFields on GqlPoolSwapEventV3 {
+  id
+  type
+  timestamp
+  poolId
+  userAddress
+  valueUSD
+  chain
+  logIndex
+  tx
+  tokenIn  { address amount }
+  tokenOut { address amount }
+  fee      { address amount }
+}
