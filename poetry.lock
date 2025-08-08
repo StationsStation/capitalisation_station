@@ -1263,16 +1263,14 @@ aiofiles = "^24.1.0"
 aiolimiter = "^1.1.0"
 backoff = "^2.2.1"
 eth-abi = "^5.1.0"
-eth-typing = "^5.0.0"
+eth-typing = ">=4,<6"
 httpx = ">=0.23.0,<1.0.0"
 jsonref = "^1.1.0"
 multiformats = "^0.3.1.post4"
-pybars3 = "^0.9.7"
 pycryptodomex = "^3.20.0"
 pydantic = "^2.7.0"
 pymerkle = ">=5,<7"
 pymultihash = "^0.8.2"
-pytest-mock = "^3.14.0"
 web3 = ">=6,<8"
 
 [package.source]
@@ -1528,7 +1526,7 @@ develop = false
 [package.dependencies]
 eth-abi = ">=4.2.1"
 eth-account = ">=0.13.4"
-eth-typing = "5.0.0"
+eth-typing = ">=4,<6"
 hexbytes = ">=0.3.1"
 setuptools = "^75.8.0"
 web3 = ">=6.4.0,<7.0.0"
@@ -1859,22 +1857,19 @@ test = ["eth-hash[pycryptodome]", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
 
 [[package]]
 name = "eth-typing"
-version = "5.0.0"
+version = "4.0.0"
 description = "eth-typing: Common type annotations for ethereum python packages"
 optional = false
-python-versions = "<4,>=3.8"
+python-versions = ">=3.8, <4"
 groups = ["main"]
 markers = "python_version <= \"3.11\""
 files = [
-    {file = "eth_typing-5.0.0-py3-none-any.whl", hash = "sha256:c7ebc8595e7b65175bb4b4176c2b548ab21b13329f2058e84d4f8c289ba9f577"},
-    {file = "eth_typing-5.0.0.tar.gz", hash = "sha256:87ce7cee75665c09d2dcff8de1b496609d5e32fcd2e2b1d8fc0370c29eedcdc0"},
+    {file = "eth-typing-4.0.0.tar.gz", hash = "sha256:9af0b6beafbc5c2e18daf19da5f5a68315023172c4e79d149e12ad10a3d3f731"},
+    {file = "eth_typing-4.0.0-py3-none-any.whl", hash = "sha256:7e556bea322b6e8c0a231547b736c258e10ce9eed5ddc254f51031b12af66a16"},
 ]
 
-[package.dependencies]
-typing-extensions = ">=4.5.0"
-
 [package.extras]
-dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "ipython", "mypy (==1.10.0)", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "sphinx (>=6.0.0)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
+dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "ipython", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "sphinx (>=6.0.0)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
 docs = ["sphinx (>=6.0.0)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)"]
 test = ["pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
 
@@ -3972,21 +3967,6 @@ six = ">=1.10.0,<2.0"
 varint = ">=1.0.2,<2.0.0"
 
 [[package]]
-name = "pybars3"
-version = "0.9.7"
-description = "Handlebars.js templating for Python 3 and 2"
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "pybars3-0.9.7.tar.gz", hash = "sha256:6ac847e905e53b9c5b936af112c910475e27bf767f79f4528c16f9af1ec0e252"},
-]
-
-[package.dependencies]
-PyMeta3 = ">=0.5.1"
-
-[[package]]
 name = "pycares"
 version = "4.5.0"
 description = "Python interface for c-ares"
@@ -4395,18 +4375,6 @@ files = [
 ]
 
 [[package]]
-name = "pymeta3"
-version = "0.5.1"
-description = "Pattern-matching language based on OMeta for Python 3 and 2"
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "PyMeta3-0.5.1.tar.gz", hash = "sha256:18bda326d9a9bbf587bfc0ee0bc96864964d78b067288bcf55d4d98681d05bcb"},
-]
-
-[[package]]
 name = "pymultihash"
 version = "0.8.2"
 description = "Python implementation of the multihash specification"
@@ -4558,25 +4526,6 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
-
-[[package]]
-name = "pytest-mock"
-version = "3.14.0"
-description = "Thin-wrapper around the mock package for easier use with pytest"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-markers = "python_version <= \"3.11\""
-files = [
-    {file = "pytest-mock-3.14.0.tar.gz", hash = "sha256:2719255a1efeceadbc056d6bf3df3d1c5015530fb40cf347c0f9afac88410bd0"},
-    {file = "pytest_mock-3.14.0-py3-none-any.whl", hash = "sha256:0b72c38033392a5f4621342fe11e9219ac11ec9d375f8e2a0c164539e0d70f6f"},
-]
-
-[package.dependencies]
-pytest = ">=6.2.5"
-
-[package.extras]
-dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
 name = "pytest-randomly"
@@ -6070,4 +6019,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "5531fe8a26c87e67d72de61dd65b3dfa2f8b49a6f2613262b9be4b73bc8aa606"
+content-hash = "d8b4d9aa1177d604e73bf0925fba57fffeae0659b62ad19842ead524b8a92f55"
