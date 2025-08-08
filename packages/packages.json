@@ -1,7 +1,7 @@
 {
     "dev": {
         "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py",
-        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeif6gyoewchy52oyrolrbgbcnff5cthcye7fhijoqpwns7myhbigym",
+        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeib3o7wamj652x727bcv5bq5loc7tzyyppv5mdkvnpshkdfyawuuii",
         "custom/wakamex/market_maker/0.1.0": "bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm",
         "protocol/eightballer/default/0.1.0": "bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u",
         "protocol/eightballer/orders/0.1.0": "bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364",
@@ -35,6 +35,7 @@
         "connection/eightballer/dcxt/0.1.0": "bafybeidxjqntks7cfl7kxeyuqfrcxwgttnvcyddjtd4iftuz4eoa7iwwt4",
         "connection/eightballer/ccxt_wrapper/0.1.0": "bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m",
         "connection/eightballer/apprise_wrapper/0.1.0": "bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci",
+        "connection/eightballer/prometheus/0.1.1": "bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq",
         "skill/eightballer/dex_data_retrieval/0.1.0": "bafybeicrjyw77yxkzf3f7yehnfp3gzbbwpl6gbmq2dwijohvnu4cn4gwmu",
         "skill/eightballer/reporting/0.1.0": "bafybeibyziu2v73hm6up3jqead3sqrftd7ugpnpodcdj5c4xayvc64j3qu",
         "skill/eightballer/chained_dex_app/0.1.0": "bafybeia7tb7jydrxnspch7p662vomhjfbhyu6hbc7ur5k6kyd5chhzvik4",
@@ -43,15 +44,16 @@
         "skill/eightballer/trading_state/0.1.0": "bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i",
         "skill/zarathustra/derolas_automator_abci_app/0.1.0": "bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y",
         "skill/eightballer/metrics/0.1.0": "bafybeigdbvilkbhgwnreve5yjerjyhnzf3lkxxfhjnmokmprdnla3k2veq",
+        "skill/eightballer/prometheus/0.1.0": "bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze",
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeibhdsdvewuqf4ua7in76odzlqzopm53bgcawqfapcghminbztxtfa",
         "agent/eightballer/trader/0.1.0": "bafybeidhrmii3en5lq4knf3rlpe76q6fzni3znelxhijrxznl3in2acfe4",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeigdpbdxx7lfvcjue625vymdif32wq7ehvvqgx626akjmayhu4abuy",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeiczt4nit4edx4zf5gaxvxlhzx32wgkbd33oglwre4ld2tpxdyls5u",
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeih2kkoa4jdbgs4zqchgkqrmaincql5h4xpz52g4fctcsslb73esq4",
         "agent/zarathustra/derolas_automator/0.1.0": "bafybeid3vgbwqa4h5yew26bmfdeb6mt4dl4u7pkyd2bg37zqvyjsw7jzhm",
         "agent/wakamex/market_maker/0.1.0": "bafybeihnbhiayuaixktns6aehlaxfhp3cv5c7crlwqxrmg54dbuf5fj6hi",
-        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeidgfw5zyws4mtx3u5ovfuhkluyztxniaibzfc743weve772iutkdi",
+        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeiglmbffieksvqij4eh2ih2hdfhoh4kxbbzjbqdb2bfmvvosfu6imy",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeigqbhu3enzimwbwgkd4wjlmuyanuvc4fm6kvqoekwbpr7sn5i2mdi",
-        "service/eightballer/derived_cow/0.1.0": "bafybeie5bbbnui3kqv4v2ubxyp7sb4bw475xcovrsppo27gjgzecbl45vi"
+        "service/eightballer/derived_cow/0.1.0": "bafybeih25heo2vdyskmvcsr2opvfgwm6fqrdpnnt22hew3ikavzk77blte"
     },
     "third_party": {
         "protocol/valory/abci/0.1.0": "bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u",
@@ -66,7 +68,6 @@
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm",
         "protocol/eightballer/user_interaction/0.1.0": "bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi",
         "contract/valory/service_registry/0.1.0": "bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea",
-        "connection/eightballer/prometheus/0.1.1": "bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq",
         "connection/eightballer/p2p_libp2p_client/0.1.0": "bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy",
         "connection/eightballer/http_client/0.1.0": "bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u",
         "connection/eightballer/http_server/0.1.0": "bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq",
@@ -78,7 +79,6 @@
         "skill/eightballer/registration_abci/0.1.0": "bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y",
         "skill/eightballer/reset_pause_abci/0.1.0": "bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu",
         "skill/eightballer/abstract_round_abci/0.1.0": "bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re",
-        "skill/eightballer/prometheus/0.1.0": "bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze",
         "skill/valory/abstract_abci/0.1.0": "bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya",
         "skill/valory/abstract_round_abci/0.1.0": "bafybeicmpzqjqdjrekvzmklirjrr6b7r6f2kdsnlc45eo7564igljfdbza",
         "skill/valory/registration_abci/0.1.0": "bafybeieblcsd55lb4k47rmzo5dv6w7jmb3wikv24y4hmm76uqdm7tnau2q",
