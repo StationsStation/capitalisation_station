@@ -56,7 +56,7 @@ TEST_EXCHANGE_DATA = """
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: base
-  rpc_url: https://1rpc.io/base
+  rpc_url: https://base-pokt.nodies.app
 - name: balancer
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
