@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 from web3.datastructures import AttributeDict
-from derive_client.data_types import ChainID, Currency, BridgeTxResult, TxResult, Environment
+from derive_client.data_types import ChainID, Currency, TxResult, Environment, BridgeTxResult
 from derive_client._bridge.client import BridgeClient  # noqa: PLC2701
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
@@ -33,6 +33,7 @@ ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
 
 DUMMY_TX_HASH = "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+
 
 @dataclass
 class ValidTestCase:
