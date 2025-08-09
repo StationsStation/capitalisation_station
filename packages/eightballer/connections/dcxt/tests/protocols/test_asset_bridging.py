@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 from web3.datastructures import AttributeDict
-from derive_client.data_types import ChainID, Currency, TxResult, Environment
+from derive_client.data_types import ChainID, Currency, BridgeTxResult, TxResult, Environment
 from derive_client._bridge.client import BridgeClient  # noqa: PLC2701
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
@@ -32,6 +32,8 @@ if TYPE_CHECKING:
 ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
 
+DUMMY_TX_HASH = "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+
 @dataclass
 class ValidTestCase:
     name: str
@@ -50,6 +52,7 @@ VALID_BRIDGE_REQUESTS = (
     ValidTestCase(
         name="DeriveClient.withdraw_from_derive",
         request=BridgeRequest(
+            request_id="withdraw_from_derive",
             source_ledger_id=ChainID.BASE.name.lower(),
             target_ledger_id=ChainID.DERIVE.name.lower(),
             source_token=Currency.USDC.name,
@@ -60,6 +63,7 @@ VALID_BRIDGE_REQUESTS = (
     ValidTestCase(
         name="DeriveClient.deposit_to_derive",
         request=BridgeRequest(
+            request_id="deposit_to_derive",
             source_ledger_id=ChainID.BASE.name.lower(),
             target_ledger_id=ChainID.DERIVE.name.lower(),
             source_token=Currency.USDC.name,
@@ -91,7 +95,6 @@ def create_invalid_bridge_requests():
 
 
 @pytest.mark.asyncio
-@pytest.mark.flaky(reruns=3, reruns_delay=1)
 class TestAssetBridging(BaseDcxtConnectionTest):
     """Test asset bridging protocol messages are handled."""
 
@@ -118,7 +121,15 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         )
 
         tx_receipt = AttributeDict(dictionary={"status": 1})
-        fake_result = TxResult(tx_hash="0xdeadbeef", tx_receipt=tx_receipt, exception=None)
+        fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=None)
+        fake_bridge_result = BridgeTxResult(
+            currency=Currency.USDC,
+            source_chain=ChainID[request.source_ledger_id.upper()],
+            target_chain=ChainID[request.target_ledger_id.upper()],
+            source_tx=fake_result,
+            bridge="socket",
+            target_from_block=0,
+        )
 
         exchanges = self.connection.protocol_interface.exchanges
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
@@ -129,11 +140,11 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_result))
-            stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_result))
+            stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_bridge_result))
+            stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_bridge_result))
+            stack.enter_context(patch.object(client, "deposit_to_derive", return_value=fake_bridge_result))
             stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
             stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
-            stack.enter_context(patch.object(client, "deposit_to_derive", return_value=fake_result))
 
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
@@ -142,7 +153,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         assert response is not None
         assert isinstance(response.message, AssetBridgingMessage)
         assert response.message.performative == AssetBridgingMessage.Performative.BRIDGE_STATUS, f"Error: {response}"
-        assert response.message.result.status == BridgeResult.BridgeStatus.BRIDGE_STATUS_COMPLETED
+        assert response.message.result.status == BridgeResult.Status.STATUS_PENDING, f"Error: {response}"
 
     @pytest.mark.parametrize("case", create_invalid_bridge_requests())
     async def test_handles_invalid_bridge_request(self, case: InvalidTestCase) -> None:
@@ -170,7 +181,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         client: AsyncClient = exchange.client
 
         tx_receipt = AttributeDict(dictionary={"status": 0})
-        fake_result = TxResult(tx_hash="0xdeadbeef", tx_receipt=tx_receipt, exception="Some error")
+        fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=Exception("Some error"))
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(client, "env", Environment.PROD))
