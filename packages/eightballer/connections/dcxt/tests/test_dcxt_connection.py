@@ -67,7 +67,7 @@ TEST_EXCHANGE_DATA = """
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: "0x8772185a1516f0d61fC1c2524926BfC69F95d698"
   ledger_id: derive
-  rpc_url: https://base.llamarpc.com
+  rpc_url: https://base-rpc.publicnode.com
   subaccount_id: 30769
   environment: test
 # - name: one_inch
