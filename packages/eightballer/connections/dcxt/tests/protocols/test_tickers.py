@@ -18,7 +18,6 @@ TEST_MARKET = "WETH/USDC"
 DEFAULT_EXCHANGE = list(TEST_EXCHANGES.keys()).pop()
 
 
-
 @pytest.mark.flaky(reruns=3, reruns_delay=60)
 @pytest.mark.asyncio
 @pytest.mark.parametrize("exchange", TEST_EXCHANGES)

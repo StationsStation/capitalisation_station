@@ -13,7 +13,6 @@ from packages.eightballer.protocols.balances.dialogues import BalancesDialogue, 
 from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIMEOUT
 
 
-
 @pytest.mark.flaky(reruns=3, reruns_delay=60)
 @pytest.mark.asyncio
 @pytest.mark.parametrize("exchange", TEST_EXCHANGES)
