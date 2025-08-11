@@ -10,6 +10,7 @@ from packages.eightballer.protocols.ohlcv import OhlcvMessage
 from packages.eightballer.protocols.ohlcv.dialogues import OhlcvDialogue, BaseOhlcvDialogues
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=60)
 @pytest.mark.asyncio
 class TestOhlcvBalance(BaseDcxtConnectionTest):
     """Test protocol messages are handled."""

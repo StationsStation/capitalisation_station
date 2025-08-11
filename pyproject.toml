@@ -42,7 +42,6 @@ tomli = "^2.2.1"
 apprise = ">=1.7.5,<2.0.0"
 open-aea-ledger-ethereum = {path = "third_party/forks/open-aea/plugins/aea-ledger-ethereum"}
 eth-account = "^0.13.5"
-eth-typing = "<=5.2.0"
 web3 = ">=5.0.0"
 cowdao-cowpy = {path = "third_party/forks/cow-py"}
 protobuf = ">=4.21.6,<4.25.0"
@@ -68,6 +67,8 @@ pytest = ">=7.2.1"
 pytz = "2022.2.1"
 typing-extensions = ">=3.10.0.2"
 derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
+pymultihash = "0.8.2"
+eth-typing = "4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 tbump = "^6.11.0"

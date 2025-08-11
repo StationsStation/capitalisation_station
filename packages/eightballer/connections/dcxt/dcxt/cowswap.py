@@ -60,11 +60,11 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, L
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
-APP_DATA = "0x66df8b6f8bf097b0a79fc5ad6b4c3c53ab986706a5a133828f2f681ca2ce6772"
+APP_DATA = "0xf142fb87fd167a929b0aacb90fca1e6bf963fcf0513a57af7e4223897df4d93e"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.00025
+SLIPPAGE_TOLERANCE = 0.0
 # 1bps fee applied to all trades
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
