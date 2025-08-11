@@ -25,6 +25,8 @@ tag_template = "v{new_version}"
 src = "pyproject.toml"
 [[file]]
 src = ".github/workflows/release.yml"
+[[file]]
+src = "charts/derolas-agents/Chart.yaml"
 
 # You can specify a list of commands to
 # run after the files have been patched
