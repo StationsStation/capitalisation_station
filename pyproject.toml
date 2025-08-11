@@ -1,0 +1,125 @@
+[tool.poetry]
+name = "capitalisation_station"
+version = "0.1.34"
+description = ""
+authors = ["StationsStation"]
+readme = "README.md"
+license = "Apache-2.0"
+classifiers = [
+    'License :: OSI Approved :: Apache Software License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+]
+
+packages = [
+    { include = "packages", from = "" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+cython = "<3.0.0"
+open-aea-ledger-solana = "==1.65.0"
+open-aea-ledger-cosmos = "==1.65.0"
+open-aea-cli-ipfs = "==1.65.0"
+open-aea= "==1.65.0"
+open-aea-test-autonomy = "==0.19.11"
+open-autonomy = "==0.19.11"
+autonomy-dev = {version = "==0.2.157", extras = ["all"]}
+ccxt = ">=3.1.43"
+numpy = ">=1.26.0,<2"
+derive-client = {path = "third_party/upstream/derive_client"}
+pandas = "2.2.3"
+psycopg2-binary = "==2.9.6"
+sqlalchemy = "==1.4.45"
+cytoolz = "==1.0.0"
+async-timeout = "^4.0.3"
+openapi-core = "0.14.5"
+open-balpy = "<1"
+open-multicaller = "^0.2.0"
+tomli = "^2.2.1"
+apprise = ">=1.7.5,<2.0.0"
+open-aea-ledger-ethereum = {path = "third_party/forks/open-aea/plugins/aea-ledger-ethereum"}
+eth-account = "^0.13.5"
+web3 = ">=5.0.0"
+cowdao-cowpy = {path = "third_party/forks/cow-py"}
+protobuf = ">=4.21.6,<4.25.0"
+pydantic = "^2.11.2"
+solana = ">=0.30.2"
+asn1crypto = ">=1.4.0,<1.5.0"
+ecdsa = ">=0.15"
+grpcio = ">=1.51.0"
+hypothesis = "6.122.3"
+dateparser = ">=1.1.1"
+aiohttp = ">=3.8.5,<4.0.0"
+ipfshttpclient = "0.8.0a2"
+requests = ">=2.28.1,<2.31.2"
+jsonschema = ">=4.3.3"
+openapi-spec-validator = "0.2.8"
+pytest-asyncio = ">=0.21.0"
+aioprometheus = ">=20.0.0,<21.0.0"
+psutil = ">=5.9.5,<6.0.0"
+certifi = "^2025.1.31"
+multidict = "^6.3.2"
+py-ecc = "^7.0.1"
+pytest = ">=7.2.1"
+pytz = "2022.2.1"
+typing-extensions = ">=3.10.0.2"
+derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
+pymultihash = "0.8.2"
+eth-typing = "4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+tbump = "^6.11.0"
+
+[poetry.group.dev.dependencies]
+
+
+[tool.poetry.extras]
+dev = ["pre-commit", "virtualenv", "pip", "toml", "bump2version"]
+doc = [
+    "mkdocs",
+    "mkdocs-include-markdown-plugin",
+    "mkdocs-material",
+    "mkdocstrings",
+    "mkdocs-material-extension",
+    "mkdocs-autorefs",
+]
+
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+target-version = ['py38', 'py39', 'py310']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 120
+skip_gitignore = true
+
+[tool.poetry.scripts]
+dcxt = "packages.eightballer.connections.dcxt.cli:main"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "setuptools"]

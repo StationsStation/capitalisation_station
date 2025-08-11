@@ -1,0 +1,28 @@
+[submodule "third_party/forks/open_aea"]
+	path = third_party/forks/open-aea
+	url = https://github.com/8ball030/open-aea.git
+[submodule "third_party/upstream/v2-action-signing-python"]
+	path = third_party/upstream/v2-action-signing-python
+	url = https://github.com/8ball030/v2-action-signing-python.git
+[submodule "third_party/forks/cow-py"]
+	path = third_party/forks/cow-py
+	url = https://github.com/cowdao-grants/cow-py.git
+[submodule "third_party/forks/balpy"]
+	path = third_party/forks/balpy
+	url = https://github.com/8ball030/balpy.git
+[submodule "third_party/forks/multicaller"]
+	path = third_party/forks/multicaller
+	url = https://github.com/8ball030/multicaller.git
+# [submodule "third_party/forks/web3-ethereum-defi"]
+# 	path = third_party/forks/web3-ethereum-defi
+# 	url = https://github.com/8ball030/open-web3-ethereum-defi.git
+[submodule "third_party/upstream/aea_contracts_solana"]
+	path = third_party/upstream/aea_contracts_solana
+	url = https://github.com/Dassy23/aea_contracts_solana.git
+[submodule "third_party/upstream/derive_client"]
+	path = third_party/upstream/derive_client
+	url = https://github.com/8ball030/derive_client.git
+
+[submodule "third_party/upstream/tokenlists"]
+	path = third_party/upstream/tokenlists
+	url = https://github.com/8ball030/tokenlists.git

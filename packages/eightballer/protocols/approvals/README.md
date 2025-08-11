@@ -1,0 +1,57 @@
+# Approvals Protocol
+
+## Description
+
+...
+
+## Specification
+
+```yaml
+name: approvals
+author: eightballer
+version: 0.1.0
+description: A protocol for setting approvals for assets on ledgers.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+protocol_specification_id: eightballer/approvals:0.1.0
+speech_acts:
+  set_approval:
+    approval: ct:Approval
+  get_approval:
+    approval: ct:Approval
+  approval_response:
+    approval: ct:Approval
+  error:
+    error_code: ct:ErrorCode
+    error_msg: pt:str
+    error_data: pt:dict[pt:str, pt:bytes]
+---
+ct:ErrorCode: |
+  enum ErrorCodeEnum {
+      UNKNOWN_ASSET = 0;
+      UNKNOWN_LEDGER = 1;
+      UNKNOWN_EXCHANGE = 2;
+      FAILED_TO_SET_APPROVAL = 3;
+      FAILED_TO_GET_APPROVAL = 4;
+    }
+  ErrorCodeEnum error_code = 1;
+ct:Approval: |
+    string asset_id = 1;
+    string ledger_id = 2;
+    string exchange_id = 3;
+    bool is_eoa = 4;
+    optional int64 amount = 5;
+    optional bytes data = 6;
+---
+initiation: [set_approval, get_approval]
+reply:
+  set_approval: [approval_response, error]
+  get_approval: [approval_response, error]
+  approval_response: []
+  error: []
+termination: [approval_response, error]
+roles: {agent, ledger}
+end_states: [approval_response, error]
+keep_terminal_state_dialogues: false
+...
+```

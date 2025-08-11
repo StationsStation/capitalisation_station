@@ -1,0 +1,54 @@
+name: gnosis_bridging_abci_app
+author: eightballer
+version: 0.1.0
+type: skill
+description: The http echo skill prints out the content of received http messages
+  and responds with success.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeigpvbcqzjaa6pfyglg6anuykp3onj2q5xohowwregh7c4qroi5j4m
+  __init__.py: bafybeifua5zk4h3t2nng3v6lwtmwavh2452ucrivlpbmbdc7x3jdtn76du
+  behaviours.py: bafybeib5juhiv7qmgmdoaelyyb37u2lieyuybgqvsmuo34cwfw2fusigzu
+  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  handlers.py: bafybeicpkff5nwwkznh4u2ry4qm3w5hmniyvkgdxaf7hf5r5jshum2ypem
+  strategy.py: bafybeifzyxmkghux6b6wfejjagkvsozg5fx73a3y22llbwoi4v54rfx7aa
+  tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
+  tests/test_behaviours.py: bafybeiby3lxi2zjmljjxubuo7iksvzvskurdi4qrbnrjuha3lwv4jg57gy
+  tests/test_metrics.py: bafybeihinskbohxozmjqailht6sfwfuwienifc7lcpeoynkuqk757n52lm
+  tests/test_metrics_dialogues.py: bafybeidptlod3rj6znca6ha2uvygjt5zwyjxjuyeiphld6izrixdrx422m
+fingerprint_ignore_patterns: []
+connections: []
+contracts:
+- eightballer/olas:0.1.0:bafybeieyij2qwvudihfte4wm662nd6x4sanuuq3npigwidgxobptvt3uxe
+- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- eightballer/omni_bridge:0.1.0:bafybeialhffmk7lw7el7wcye73it7jogqbra3z2hv4wkhqhmhxllfaul5e
+- eightballer/amb_mainnet:0.1.0:bafybeiecfrsrysggmmosj5bhboqkcyrixxtjkdj4fjcjmyu3puwtzu2zmy
+- eightballer/amb_gnosis:0.1.0:bafybeifsswwirlf5lt2b5o4yv3u3iw5a2qtfcr7q2ibob7bweeux63itpe
+- eightballer/amb_gnosis_helper:0.1.0:bafybeig37p3q4se2it75kt4zvqvrvzk4fqc7eyspspt3txooxxljkurkey
+protocols:
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+skills: []
+behaviours:
+  main:
+    args: {}
+    class_name: GnosisbridgingabciappFsmBehaviour
+handlers:
+  metrics_handler:
+    args:
+      enable_cors: false
+    class_name: HttpHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  bridging_strategy:
+    args: {}
+    class_name: BridgingStrategy
+dependencies: {}
+is_abstract: false
+customs: []

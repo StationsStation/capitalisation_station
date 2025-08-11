@@ -1,0 +1,70 @@
+agent_name: bridging_agent
+author: eightballer
+version: 0.1.0
+license: Apache-2.0
+description: ''
+aea_version: '>=1.55.0, <2.0.0'
+fingerprint:
+  tests/test_bridging_agent.py: bafybeifay56xnh5voba4qyzpjooomnh2kfhbhy7ywp7h5zl52wu56fznry
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
+- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
+- eightballer/prometheus:0.1.1:bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq
+contracts:
+- eightballer/olas:0.1.0:bafybeieyij2qwvudihfte4wm662nd6x4sanuuq3npigwidgxobptvt3uxe
+- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- eightballer/amb_mainnet:0.1.0:bafybeiecfrsrysggmmosj5bhboqkcyrixxtjkdj4fjcjmyu3puwtzu2zmy
+- eightballer/amb_gnosis:0.1.0:bafybeifsswwirlf5lt2b5o4yv3u3iw5a2qtfcr7q2ibob7bweeux63itpe
+- eightballer/amb_gnosis_helper:0.1.0:bafybeig37p3q4se2it75kt4zvqvrvzk4fqc7eyspspt3txooxxljkurkey
+- eightballer/amb_gnosis_eth_xdai:0.1.0:bafybeiamyb7fq3as3wcv3dvlwm7ilt5clzfsyrlv7uihn2yipvv6h2cn5a
+protocols:
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
+- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+skills:
+- eightballer/gnosis_bridging_abci_app:0.1.0:bafybeihrnha66dge7gjjfuh53chupi2hpipcxg5ndnrkgfbuyfzkwhgpry
+- eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
+customs: []
+default_ledger: ethereum
+required_ledgers:
+- ethereum
+default_routing: {}
+connection_private_key_paths: {}
+private_key_paths: {}
+logging_config:
+  disable_existing_loggers: true
+  formatters:
+    standard:
+      format: '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+  handlers:
+    console:
+      class: rich.logging.RichHandler
+      level: INFO
+    logfile:
+      class: logging.FileHandler
+      filename: log.txt
+      formatter: standard
+      level: INFO
+  loggers:
+    aea:
+      handlers:
+      - console
+      - logfile
+      level: INFO
+      propagate: false
+  version: 1
+dependencies:
+  open-aea-ledger-cosmos: {}
+  open-aea-ledger-ethereum: {}
+  rich: {}
+default_connection: null
+build_entrypoint: setup_broker.sh
+---
+public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
+type: connection
+config:
+  host: 0.0.0.0
+  port: 8888
+  target_skill_id: eightballer/gnosis_bridging_abci_app:0.1.0

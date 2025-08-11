@@ -1,0 +1,166 @@
+agent_name: chained_dex_app
+author: eightballer
+version: 0.1.0
+license: Apache-2.0
+description: ''
+aea_version: '>=1.35.0, <2.0.0'
+fingerprint:
+  tests/__init__.py: bafybeibraxfmr5puv7g26bkckx3bxesc2wcjuwmd4gs4qirmgdvtbqa7ua
+  tests/test_agent.py: bafybeihwx6iifsqdd5mzggpmm2gjtucwcdgnnek6oktvucoc23xa4z2urm
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
+- eightballer/dcxt:0.1.0:bafybeie2t66bli72oxyrhu44v3o353pmvudsxgyg5eabcz5mfwavuqqd3a
+- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
+- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
+- eightballer/prometheus:0.1.1:bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq
+- valory/abci:0.1.0:bafybeibkpnqv5dilyhu5durj6k3q3tuw7t62zw5vjtbk4qvtfvbchasjaq
+- valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
+- valory/ipfs:0.1.0:bafybeiamz23olgtow4wqf7zpsfnfzf7pxiognrxl2mhn5kvqutlwhgukxa
+- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+- valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
+contracts:
+- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
+- valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
+protocols:
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/ohlcv:0.1.0:bafybeia6vg6tnnlc75bq2hlj5vgcmkscvthneezzyuwasztini2dbd3ziq
+- eightballer/order_book:0.1.0:bafybeicvwtfstunyoxqf7hnxbipukk4m6mkzwrime5hc37ew64by4tqdki
+- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
+- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
+- eightballer/spot_asset:0.1.0:bafybeigilsvcxaq2qwxmvclmx56cerdmnrp3jvxph3sqec3usipkblbhze
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
+- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
+- valory/acn:1.1.0:bafybeic6h55ov5lrzbah6fate54c4u6spopcexxspw3abotbmffabfddeu
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
+- valory/ipfs:0.1.0:bafybeifi2nri7sprmkez4rqzwb4lnu6peoy3bax5k6asf6k5ms7kmjpmkq
+- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
+- valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
+skills:
+- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
+- eightballer/metrics:0.1.0:bafybeigdbvilkbhgwnreve5yjerjyhnzf3lkxxfhjnmokmprdnla3k2veq
+- eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
+- eightballer/registration_abci:0.1.0:bafybeidkvlkqim2x73rcna3glejswwjm6weuidw4w54fg3ryem22uphi2y
+- eightballer/reset_pause_abci:0.1.0:bafybeicjjqievw6h27g43goga5birbmbebpugls3iv2zd2mtv2qvrjlitu
+- valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
+- eightballer/chained_dex_app:0.1.0:bafybeibbz5zoozcxt3muhe7jnkgbzkibjpu6aafpjkyyybfflqz5z36d34
+- eightballer/dex_data_retrieval:0.1.0:bafybeiav2rvhqbu2ya5yttvl5xvt2n5naglyvsvmp3pagt7icpbvjwyzk4
+default_ledger: ethereum
+required_ledgers:
+- ethereum
+default_routing: {}
+connection_private_key_paths: {}
+private_key_paths: {}
+logging_config:
+  disable_existing_loggers: true
+  version: 1
+  formatters:
+    standard:
+      format: '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: standard
+      level: INFO
+      stream: ext://sys.stdout
+    logfile:
+      class: logging.FileHandler
+      formatter: standard
+      filename: ${LOG_FILE:str:log.txt}
+      level: INFO
+  loggers:
+    aea:
+      handlers:
+      - console
+      - logfile
+      level: INFO
+      propagate: false
+dependencies:
+  open-aea-ledger-ethereum: {}
+customs: []
+default_connection: null
+---
+public_id: valory/ipfs:0.1.0:bafybeiatjutuiav7oxl4hszy3oypdwuetr6crjpminush54c5k4nbeciv4
+type: connection
+config:
+  ipfs_domain: /dns/registry.autonolas.tech/tcp/443/https
+---
+public_id: valory/abci:0.1.0:bafybeihofnsokowicviac6yz3uhur52l3mf54s2hz4i2je5ie4vlruouga
+type: connection
+config:
+  host: ${str:localhost}
+  port: ${int:26658}
+  use_tendermint: ${bool:false}
+  target_skill_id: eightballer/chained_dex_app:0.1.0
+---
+public_id: eightballer/prometheus:0.1.1:bafybeiemx6sryvqdjied7xqqxge5vyplyyzyiro4a4pubqpjrps4sxm7xe
+type: connection
+config:
+  port: 8888
+  host: 0.0.0.0
+---
+public_id: eightballer/http_server:0.1.0:bafybeih7adv4sxwek3g3ns6x6sguhnos7ixmsdaywqdaxhexczm2gotivm
+type: connection
+config:
+  target_skill_id: eightballer/metrics:0.1.0
+  host: 0.0.0.0
+  port: 8889
+---
+public_id: eightballer/dcxt:0.1.0
+type: connection
+config:
+  target_skill_id: eightballer/chained_dex_app:0.1.0
+  exchanges:
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    ledger_id: ethereum
+    rpc_url: https://rpc.ankr.com/eth
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    ledger_id: optimism
+    rpc_url: https://mainnet.optimism.io
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    ledger_id: base
+    rpc_url: https://base.llamarpc.com
+    etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+---
+public_id: eightballer/chained_dex_app:0.1.0
+type: skill
+models:
+  params:
+    args:
+      dex_data_retrieval_config:
+        enabled: true
+        reporting_enabled: true
+        exchange_ids:
+        - balancer_optimism
+        - balancer_ethereum
+        - balancer_base
+        extra_kwargs: {}
+        backoff: 1.0
+        retries: 3
+      max_healthcheck: 1200
+      on_chain_service_id: null
+      reset_pause_duration: 10
+      reset_tendermint_after: 10
+      round_timeout_seconds: 35.0
+      service_registry_address: null
+      setup:
+        all_participants: ${list:["0x92d9610BC04aa4F0162e45B031b7fa6d76d4B4b3"]}
+        consensus_threshold: 1
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+      share_tm_config_on_startup: false
+      tendermint_com_url: ${str:http://localhost:8080}
+      tendermint_p2p_url: ${str:localhost:26656}
+      tendermint_url: ${str:http://localhost:26657}
+      validate_timeout: 1205

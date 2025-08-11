@@ -1,0 +1,197 @@
+name: dex_data_retrieval
+author: eightballer
+version: 0.1.0
+type: skill
+description: This ABCI is designed to collect data from dexs such that it can be reported
+  back to the reporting skill. It is heavily inspired by the work from the ccxt skill.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeietsymwzilixsungxwi2ypv5242kwysg3fpesuj2nhnh6fujxwcdi
+  behaviours.py: bafybeihncltwiey4c42ryeupeuq4rfzgx4nwd5rlyanfcsgkruw6haqdmm
+  check_cex_balances.yaml: bafybeigz4ba5jfscg2y6yoxxsmwc63ictz5iqneaann3fptgc2t5qohcra
+  dialogues.py: bafybeigrcbdpv36pydquczdp2a7mnqfk57t3glg2e2gsogzw66i74djvdm
+  fsm_specification.yaml: bafybeidbypph3ghds673b3xl5paxsnax5enwjdrrx7lwqyavusd4dju7te
+  handlers.py: bafybeigsbeckynnqri2b6qhy6wfefj4ozsa65a6taqvbcmamppdxn3qtwa
+  models.py: bafybeigysi64hrxsm2jyuy3hwo5umulh4lq6i4m24s5m4wwb6jzb2psmee
+  payloads.py: bafybeifvigkcuv6qs7r47myj5towpyri5wiur6ylxqo4w7y3eglcinjesa
+  rounds.py: bafybeienymb7r7gqz6ggkgbiqj3vdtumclnagjde5weq5wl26frh35c3cu
+  tests/__init__.py: bafybeifiiu2gpv7v4mgwar33hcguxk7p6n27nh64viejxkuomf2uguj6em
+  tests/test_behaviours.py: bafybeidshdurcvjkmcyvpl2ege7amtannbm5hhrfi3464os5wb4cxz4lmm
+  tests/test_dialogues.py: bafybeihkk3xs6dxrco4yup2ao5rj23ijh7cwb4am5kamgghqpm44vmhfnu
+  tests/test_handlers.py: bafybeicsslzmvse5wat2kwxtpao7inwwqymg2vrsqvtbjrqeffi2xq6vky
+  tests/test_models.py: bafybeichjk466nga4norjbslh5y63knhypqtc74yl34xldnaiutoynr7ly
+  tests/test_payloads.py: bafybeicqwwdkq5x3v6evylvs5l5lur6ghxgbn3ixl3kwisalgzwgrkewsi
+  tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/dcxt:0.1.0:bafybeie2t66bli72oxyrhu44v3o353pmvudsxgyg5eabcz5mfwavuqqd3a
+contracts: []
+protocols:
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
+skills:
+- eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
+behaviours:
+  main:
+    args: {}
+    class_name: DexDataRetrievalRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIHandler
+  balances:
+    args: {}
+    class_name: DexBalancesHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  markets:
+    args: {}
+    class_name: DexMarketsHandler
+  orders:
+    args: {}
+    class_name: DexOrdersHandler
+  positions:
+    args: {}
+    class_name: DexPositionsHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+  tickers:
+    args: {}
+    class_name: DexTickersHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  balances_dialogues:
+    args: {}
+    class_name: BalancesDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  markets_dialogues:
+    args: {}
+    class_name: MarketsDialogues
+  orders_dialogues:
+    args: {}
+    class_name: OrdersDialogues
+  params:
+    args:
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      dex_data_retrieval_config:
+        retries: 3
+        backoff: 1.0
+        enabled: true
+        reporting_enabled: false
+        exchange_ids:
+        - balancer_optimism
+        - balancer_base
+        - balancer_ethereum
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      ipfs_domain_name: null
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_pause_duration: 10
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: hello_world
+      service_registry_address: null
+      setup:
+        all_participants:
+        - '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      tx_timeout: 10.0
+      use_termination: false
+      validate_timeout: 1205
+      use_slashing: false
+      slash_cooldown_hours: 24
+      slash_threshold_amount: 100
+      light_slash_unit_amount: 100
+      serious_slash_unit_amount: 1000
+    class_name: Params
+  positions_dialogues:
+    args: {}
+    class_name: PositionsDialogues
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+  tickers_dialogues:
+    args: {}
+    class_name: TickersDialogues
+dependencies: {}
+is_abstract: true
+customs: []

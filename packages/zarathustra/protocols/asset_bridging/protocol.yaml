@@ -1,0 +1,29 @@
+name: asset_bridging
+author: zarathustra
+version: 0.1.0
+protocol_specification_id: zarathustra/asset_bridging:0.1.0
+type: protocol
+description: A minimal, atomic request-response protocol for cross-chain asset bridging.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeih47bms5lv3jmib5avfpb3n35sxur34dtmw3yttrmo5hgq2n2a5ca
+  __init__.py: bafybeihi6cjvw7iuabkgpni3ksybe3mcv3wc5idas55qm7hao2qfcaxify
+  asset_bridging.proto: bafybeib25yspiimsbgixtw33irctgsvsfbsvnuhqsp7uthdak6xqykvcoa
+  asset_bridging_pb2.py: bafybeifc42ng3jbscdyjrulo573fqvj3fcgay6c6hj6ac73tcmwn7c5diq
+  custom_types.py: bafybeidv4vm3lwm73ww2aoupd46ie2vs3owv3lh4gtpsxu6mmwfct6nlee
+  dialogues.py: bafybeifk5vbtet3hhbxrrbdhtdyy335kggrx6z6hvlnw2fzk37mbgipjqu
+  message.py: bafybeiepv57seaits3lavpsbqdh6b3vtvjyy7ckdtahwvsklmqnxfdoqxi
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeieu2nbepohrbo6rlmzzoaxxx4yj24x5gaqapavhxfnxryxoxfslla
+  tests/__init__.py: bafybeid2c2cz7u4gu62xrnwfs56c2micaeae3jdnydmw7uyjkomtlmnrum
+  tests/performatives.py: bafybeif26zbebsisdxntrh4uumxjpsib6h7yu6tx35zbzno6rk4jseywsu
+  tests/primitive_strategies.py: bafybeids7zgu2g72olnl6fcxc6gff7g6joog4j4ot4uzmyu2oueqvj2sha
+  tests/test_asset_bridging_dialogues.py: bafybeihy4nurtizihhbcp673mdpqr6tet2zlyb3z3esr33bhlh3ptvlvxe
+  tests/test_asset_bridging_messages.py: bafybeidwrkhbq5dlcvgbzyvmkny2edv24nfs2mtdnrknjtfkgm2uvjhzdq
+  tests/test_custom_types.py: bafybeifhkfkqb7xneaoqv2pdv2wv2tk2lhbi7pgo4zhcwyrv7dwfg2meau
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

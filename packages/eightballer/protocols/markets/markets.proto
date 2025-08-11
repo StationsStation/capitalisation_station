@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package aea.eightballer.markets.v0_1_0;
+
+message MarketsMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNSUPPORTED_PROTOCOL = 0;
+      ERROR_CODE_ENUM_DECODING_ERROR = 1;
+      ERROR_CODE_ENUM_INVALID_MESSAGE = 2;
+      ERROR_CODE_ENUM_UNSUPPORTED_SKILL = 3;
+      ERROR_CODE_ENUM_INVALID_DIALOGUE = 4;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Market{
+    string id = 1;
+    optional string lowercase_id = 2;
+    optional string exchange_id = 3;
+    optional string symbol = 4;
+    optional string base = 5;
+    optional string quote = 6;
+    optional string settle = 7;
+    optional string base_id = 8;
+    optional string quote_id = 9;
+    optional string settle_id = 10;
+    optional string type = 11;
+    optional bool spot = 12;
+    optional bool margin = 13;
+    optional bool swap = 14;
+    optional bool future = 15;
+    optional bool option = 16;
+    optional bool active = 17;
+    optional bool contract = 18;
+    optional bool linear = 19;
+    optional bool inverse = 20;
+    optional float taker = 21;
+    optional float maker = 22;
+    optional float contract_size = 23;
+    optional float expiry = 24;
+    optional string expiry_datetime = 25;
+    optional float strike = 26;
+    optional string option_type = 27;
+    optional float precision = 28;
+    optional string limits = 29;
+    optional string info = 30;
+  }
+
+  message Markets{
+    repeated Market markets = 1;
+  }
+
+
+  // Performatives and contents
+  message Get_All_Markets_Performative{
+    string exchange_id = 1;
+    string currency = 2;
+    bool currency_is_set = 3;
+  }
+
+  message Get_Market_Performative{
+    string id = 1;
+    string exchange_id = 2;
+  }
+
+  message All_Markets_Performative{
+    Markets markets = 1;
+  }
+
+  message Market_Performative{
+    Market market = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Markets_Performative all_markets = 5;
+    Error_Performative error = 6;
+    Get_All_Markets_Performative get_all_markets = 7;
+    Get_Market_Performative get_market = 8;
+    Market_Performative market = 9;
+  }
+}

@@ -1,0 +1,18 @@
+name: omni_bridge
+author: eightballer
+version: 0.1.0
+type: contract
+description: The scaffold contract scaffolds a contract to be implemented by the developer.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiarqt5jtargavn2fvfyb4xfakvblpogz7wzkr4cvgl3ndvjh73yaq
+  build/omni_bridge.json: bafybeibl55v4g2mg4fscfr5nxu7rxk35rh3qjpkx5r4ja6nkts5a3dvzdy
+  contract.py: bafybeibjuhfi7jztfgxgwkjh6lq2ecc475ytvjjdrarmtizzk2xyvu5iby
+  tests/test_omni_bridge_contract.py: bafybeig2kdhgppvwrsdwzbycctgg43ymu6sp7cbsog2vstlcebw3lztqoq
+fingerprint_ignore_patterns: []
+class_name: OmniBridge
+contract_interface_paths:
+  ethereum: build/omni_bridge.json
+dependencies: {}
+contracts: []

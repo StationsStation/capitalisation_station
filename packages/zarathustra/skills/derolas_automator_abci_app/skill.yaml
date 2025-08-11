@@ -1,0 +1,56 @@
+name: derolas_automator_abci_app
+author: zarathustra
+version: 0.1.0
+type: skill
+description: The Derolas Automator for donating to the Derolas staking contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
+  __init__.py: bafybeihqgalcx4nc3zmhypemwg2lo4gq42ugkt7b3qlfqnh545sw34jq44
+  behaviours.py: bafybeieytaejiquqh676sv52vc2umraimwucr3tsea3nlh2yntq526l2f4
+  dialogues.py: bafybeidvkg2ztaxkchnaml747jln5xva7egcqo7mz5zhyfbpp5qixumoqy
+  handlers.py: bafybeig62xdj6tkysnlylaxsjomqox5yg5wmgaebcp5gijk3yn5aevokx4
+  models.py: bafybeiguovtoy6b3tnfb4yg6xutmf3fdnh74x5pdwdpj3n3lppmvgmolv4
+  tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
+  tests/test_metrics.py: bafybeibbvivbs5yje5f35q2mda3io7jouqwr25tkt3emo42ui2gqa2c2xe
+  tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
+fingerprint_ignore_patterns: []
+connections:
+- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+contracts:
+- zarathustra/derolas_staking:0.1.0:bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui
+protocols:
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
+skills: []
+behaviours:
+  main:
+    args: {}
+    class_name: DerolasautomatorabciappFsmBehaviour
+handlers:
+  metrics_handler:
+    args:
+      enable_cors: false
+    class_name: HttpHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  derolas_state:
+    args: {}
+    class_name: DerolasState
+dependencies: {}
+is_abstract: false
+customs: []

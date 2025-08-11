@@ -1,0 +1,25 @@
+name: market_maker
+author: wakamex
+version: 0.1.0
+type: custom
+description: A simple arbitrage strategy that buys on one exchange and sells on another.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiejn3ahy33huktlei2koe47mzoc5obnajkwhufpfcugbmnqqtj2bi
+  strategy.py: bafybeibzhjhqqvuayhtugxaewxaopwmj3u4jsj6ocrooc5ddwegzkutaxu
+  tests/__init__.py: bafybeiajoajrn2ja2mzsvvhia4gm5wkz3gbraohwzpciwr6quhi2tdzzxy
+  tests/data/case_0/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
+  tests/data/case_0/portfolio.json: bafybeicrjikqazrab7hljkkcpxp7wp6yyhxwbgxzz7vqcd6gydf3ovmujq
+  tests/data/case_0/prices.json: bafybeihtkcygx7gtjbqujhgo3i5lwr4hgq7i2h3o4edr26xu2dh7piitwm
+  tests/test_strategy.py: bafybeifqbvuk36266yxwoidn6u74afx27y2byewcqqh6kk5dtrlc3jv7v4
+fingerprint_ignore_patterns: []
+dependencies: {}
+strategy_init_kwargs:
+  base_asset: USDC
+  quote_asset: LBTC
+  min_profit: 0.01
+  order_size: 0.001
+  max_open_orders: 10
+strategy_run_kwargs: {}
+strategy_class: ArbitrageStrategy

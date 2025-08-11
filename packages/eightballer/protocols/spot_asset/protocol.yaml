@@ -1,0 +1,29 @@
+name: spot_asset
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/spot_asset:0.1.0
+type: protocol
+description: A protocol for representing spot_assets.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiffato5wgv2e4podsvw27ehh3ivpmwvamn3yu7rnznbxh6d7ps5wm
+  __init__.py: bafybeiacwbnbeezmvuprodusiupehbpfxc6hlpotitjkkfviy7lqc3d2vi
+  custom_types.py: bafybeigbywbj364ks4hflktchhx4j4qiaccp4lsnl3lfj3oeoiem2jnwvu
+  dialogues.py: bafybeic33fbxzb6fsdknajoww62z4ghvg35ohpfsrhumttaou6tvypf64m
+  message.py: bafybeicplldtbbhawq2dzdusyn457737okpsijl7d4yiv35xnuyk2f6q6e
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeihyt7lklrdxy4jzqetx7zsixug2rk23opzkzhu7i3j7u3g3tvny4q
+  spot_asset.proto: bafybeieqolmjhlldlvax7fk6s73huz72yk2udvagx4asectfimzsqyd4n4
+  spot_asset_pb2.py: bafybeiarft6lxxifstm4wqbg6atg6oq2dn5vameycg2kg4asdfgri3xkuq
+  tests/__init__.py: bafybeihm7bjzvvug76uavnkacy7mne74fgxkg2xznsqks2l2giibqhadhu
+  tests/performatives.py: bafybeieljr6dw57x234r2iwwgkrxvt7igbtzg2lrbogkqi3yvpqdlqibgu
+  tests/primitive_strategies.py: bafybeie2a6lnsnmyckrtybyszmbnmsj2psqkr7omalyozwzogq7qth42ka
+  tests/test_custom_types.py: bafybeidfmdsmev4bvf3ktfsm4rmmgqvjbwhneuj23deicibmcndeb5aivu
+  tests/test_spot_asset_dialogues.py: bafybeihv63obt4jnmfjwtkrsbaucduy4ew5jootnsyer3u6copqzda66x4
+  tests/test_spot_asset_messages.py: bafybeieeqzljtxzf3myeagb2576krrdvnahymjhky4ubjoha3okjl7qzcy
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

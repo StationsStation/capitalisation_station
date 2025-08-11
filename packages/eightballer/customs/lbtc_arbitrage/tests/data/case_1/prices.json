@@ -1,0 +1,59 @@
+{
+    "cex": {},
+    "base": {
+        "cowswap": [
+            {
+                "symbol": "weETH/USDC",
+                "timestamp": 1743529138,
+                "datetime": "2025-04-01T17:38:58.522987+00:00",
+                "ask": 2038.1853151195303,
+                "bid": 2037.965774967796,
+                "asset_a": "0x04C0599Ae5A44757c0af6F9eC3b93da8976c150A",
+                "asset_b": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "bid_volume": null,
+                "ask_volume": null,
+                "high": 2038.1853151195303,
+                "low": 2037.965774967796,
+                "vwap": null,
+                "open": null,
+                "close": null,
+                "last": null,
+                "previous_close": null,
+                "change": null,
+                "percentage": null,
+                "average": null,
+                "base_volume": null,
+                "quote_volume": null,
+                "info": null
+            }
+        ]
+    },
+    "derive": {
+        "derive": [
+            {
+                "symbol": "WEETH-USDC",
+                "timestamp": 1743529139000,
+                "datetime": "2025-04-01T18:38:59+01:00",
+                "ask": 2400.0,
+                "bid": 2039.3,
+                "asset_a": null,
+                "asset_b": null,
+                "bid_volume": null,
+                "ask_volume": null,
+                "high": 2010.1,
+                "low": 1969.3,
+                "vwap": null,
+                "open": null,
+                "close": 2036.6,
+                "last": 2036.6,
+                "previous_close": null,
+                "change": 85.1,
+                "percentage": 0.043614,
+                "average": null,
+                "base_volume": null,
+                "quote_volume": null,
+                "info": null
+            }
+        ]
+    }
+}

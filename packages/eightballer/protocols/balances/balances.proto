@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package aea.eightballer.balances.v0_1_0;
+
+message BalancesMessage{
+
+  // Custom Types
+  message Balance{
+    string asset_id = 1;
+    float free = 2;
+    float used = 3;
+    float total = 4;
+    bool is_native = 5;
+    optional string contract_address = 6;
+  }
+
+  message Balances{
+    repeated Balance balances = 1;
+  }
+
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNKNOWN_EXCHANGE = 0;
+      ERROR_CODE_ENUM_UNKNOWN_ASSET = 1;
+      ERROR_CODE_ENUM_API_ERROR = 2;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+
+  // Performatives and contents
+  message Get_All_Balances_Performative{
+    map<string, bytes> params = 1;
+    bool params_is_set = 2;
+    string exchange_id = 3;
+    bool exchange_id_is_set = 4;
+    string ledger_id = 5;
+    bool ledger_id_is_set = 6;
+    string address = 7;
+    bool address_is_set = 8;
+  }
+
+  message Get_Balance_Performative{
+    string asset_id = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+    string address = 6;
+    bool address_is_set = 7;
+  }
+
+  message All_Balances_Performative{
+    Balances balances = 1;
+    string ledger_id = 2;
+    bool ledger_id_is_set = 3;
+    string exchange_id = 4;
+    bool exchange_id_is_set = 5;
+  }
+
+  message Balance_Performative{
+    Balance balance = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Balances_Performative all_balances = 5;
+    Balance_Performative balance = 6;
+    Error_Performative error = 7;
+    Get_All_Balances_Performative get_all_balances = 8;
+    Get_Balance_Performative get_balance = 9;
+  }
+}

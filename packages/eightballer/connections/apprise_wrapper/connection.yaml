@@ -1,0 +1,31 @@
+name: apprise_wrapper
+author: eightballer
+version: 0.1.0
+type: connection
+description: This is a connection to send notifications using the Apprise library.
+  The user can be notified via various services such as email, SMS, Slack, Discord,
+  etc.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeig2mnxn6qkckwvfjca4ary3ctgwnrbhh2b7todxgqrkedcpxzcnt4
+  __init__.py: bafybeiedjyvl6kbspjhvzfiz6b6uhrep4nyolybcuug3645cbcfgur4fnu
+  connection.py: bafybeiawadyt3u2226ki34dmmdycru7hognsovwngjnmpkb73t3y7hd47y
+  tests/__init__.py: bafybeic7sbvhv3hzf4vjgycb6oqogqknle72kag2fanocp2ql7b33qx77a
+  tests/test_connection.py: bafybeifqwp6upbu5d4ckjdoc4dk3fycs4ipjvbujsnxf3lgyasddym224a
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
+class_name: AppriseConnection
+config:
+  endpoints:
+  - ntfy://ntfy.sh/8baller
+excluded_protocols: []
+restricted_to_protocols:
+- eightballer/user_interaction:0.1.0
+dependencies:
+  apprise:
+    version: <2.0.0,>=1.7.5
+is_abstract: false
+cert_requests: []

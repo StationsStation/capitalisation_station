@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package aea.eightballer.orders.v0_1_0;
+
+message OrdersMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNKNOWN_MARKET = 0;
+      ERROR_CODE_ENUM_INSUFFICIENT_FUNDS = 1;
+      ERROR_CODE_ENUM_UNKNOWN_ORDER = 2;
+      ERROR_CODE_ENUM_API_ERROR = 3;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Order{
+    string symbol = 2;
+    OrderStatus status = 3;
+    OrderSide side = 4;
+    OrderType type = 5;
+    optional float price = 1;
+    optional string exchange_id = 6;
+    optional string id = 7;
+    optional string client_order_id = 8;
+    optional string info = 9;
+    optional string ledger_id = 10;
+    optional string asset_a = 11;
+    optional string asset_b = 12;
+    optional float timestamp = 13;
+    optional string datetime = 14;
+    optional string time_in_force = 15;
+    optional bool post_only = 16;
+    optional float last_trade_timestamp = 17;
+    optional float stop_price = 18;
+    optional float trigger_price = 19;
+    optional float cost = 20;
+    optional float amount = 21;
+    optional float filled = 22;
+    optional float remaining = 23;
+    optional float fee = 24;
+    optional float average = 25;
+    optional string trades = 26;
+    optional string fees = 27;
+    optional float last_update_timestamp = 28;
+    optional bool reduce_only = 29;
+    optional float take_profit_price = 30;
+    optional float stop_loss_price = 31;
+    optional float immediate_or_cancel = 32;
+  }
+
+  message OrderSide{
+    enum OrderSideEnum{
+      ORDER_SIDE_ENUM_BUY = 0;
+      ORDER_SIDE_ENUM_SELL = 1;
+    }
+    OrderSideEnum order_side = 1;
+  }
+
+  message OrderStatus{
+    enum OrderStatusEnum{
+      ORDER_STATUS_ENUM_NEW = 0;
+      ORDER_STATUS_ENUM_SUBMITTED = 1;
+      ORDER_STATUS_ENUM_OPEN = 2;
+      ORDER_STATUS_ENUM_PARTIALLY_FILLED = 3;
+      ORDER_STATUS_ENUM_CANCELLED = 4;
+      ORDER_STATUS_ENUM_FILLED = 5;
+      ORDER_STATUS_ENUM_CLOSED = 6;
+      ORDER_STATUS_ENUM_EXPIRED = 7;
+      ORDER_STATUS_ENUM_FAILED = 9;
+    }
+    OrderStatusEnum order_status = 1;
+  }
+
+  message OrderType{
+    enum OrderTypeEnum{
+      ORDER_TYPE_ENUM_LIMIT = 0;
+      ORDER_TYPE_ENUM_MARKET = 1;
+    }
+    OrderTypeEnum order_type = 1;
+  }
+
+  message Orders{
+    repeated Order orders = 1;
+  }
+
+
+  // Performatives and contents
+  message Create_Order_Performative{
+    Order order = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+  }
+
+  message Order_Created_Performative{
+    Order order = 1;
+  }
+
+  message Cancel_Order_Performative{
+    Order order = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+  }
+
+  message Order_Cancelled_Performative{
+    Order order = 1;
+  }
+
+  message Get_Orders_Performative{
+    string symbol = 1;
+    bool symbol_is_set = 2;
+    string currency = 3;
+    bool currency_is_set = 4;
+    OrderType order_type = 5;
+    bool order_type_is_set = 6;
+    OrderSide side = 7;
+    bool side_is_set = 8;
+    OrderStatus status = 9;
+    bool status_is_set = 10;
+    string exchange_id = 11;
+    bool exchange_id_is_set = 12;
+    string ledger_id = 13;
+    bool ledger_id_is_set = 14;
+    string account = 15;
+    bool account_is_set = 16;
+  }
+
+  message Get_Settlements_Performative{
+    string currency = 1;
+    bool currency_is_set = 2;
+    double end_timestamp = 3;
+    bool end_timestamp_is_set = 4;
+    double start_timestamp = 5;
+    bool start_timestamp_is_set = 6;
+    string ledger_id = 7;
+    bool ledger_id_is_set = 8;
+    string exchange_id = 9;
+    bool exchange_id_is_set = 10;
+  }
+
+  message Get_Order_Performative{
+    Order order = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+  }
+
+  message Order_Performative{
+    Order order = 1;
+  }
+
+  message Orders_Performative{
+    Orders orders = 1;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    Cancel_Order_Performative cancel_order = 5;
+    Create_Order_Performative create_order = 6;
+    Error_Performative error = 7;
+    Get_Order_Performative get_order = 8;
+    Get_Orders_Performative get_orders = 9;
+    Get_Settlements_Performative get_settlements = 10;
+    Order_Performative order = 11;
+    Order_Cancelled_Performative order_cancelled = 12;
+    Order_Created_Performative order_created = 13;
+    Orders_Performative orders = 14;
+  }
+}

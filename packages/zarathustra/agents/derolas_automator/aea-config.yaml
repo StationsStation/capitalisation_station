@@ -1,0 +1,68 @@
+agent_name: derolas_automator
+author: zarathustra
+version: 0.1.0
+license: Apache-2.0
+description: ''
+aea_version: '>=1.55.0, <2.0.0'
+fingerprint:
+  tests/test_derolas_automator.py: bafybeiepsmd6l33qxsk2ao6wnug7gkid3hqkkgtejv25npm3tkkpyrj6he
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
+- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
+- eightballer/prometheus:0.1.1:bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq
+- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+contracts:
+- zarathustra/derolas_staking:0.1.0:bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui
+protocols:
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
+- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
+skills:
+- eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
+customs: []
+default_ledger: ethereum
+required_ledgers:
+- ethereum
+default_routing: {}
+connection_private_key_paths: {}
+private_key_paths: {}
+period: 10
+logging_config:
+  disable_existing_loggers: true
+  formatters:
+    standard:
+      format: '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+  handlers:
+    console:
+      class: rich.logging.RichHandler
+      level: DEBUG
+    logfile:
+      class: logging.FileHandler
+      filename: log.txt
+      formatter: standard
+      level: INFO
+  loggers:
+    aea:
+      handlers:
+      - console
+      - logfile
+      level: INFO
+      propagate: false
+  version: 1
+dependencies:
+  open-aea-ledger-cosmos: {}
+  open-aea-ledger-ethereum: {}
+  rich: {}
+default_connection: null
+---
+public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
+type: connection
+config:
+  host: 0.0.0.0
+  port: 8888
+  target_skill_id: zarathustra/derolas_automator_abci_app:0.1.0

@@ -1,0 +1,4 @@
+# Ignore sensitive files globally
+/envs
+**/.env
+**/*private_key*.*

@@ -1,0 +1,29 @@
+name: ohlcv
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/ohlcv:0.1.0
+type: protocol
+description: A protocol for passing ohlcv data between compoents.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeia6q5ospijt63f4hn52kkjfcbfadvhknb537rb2ftv5wj2ogxppra
+  __init__.py: bafybeihcbdotc6iklyipuh54h2x3jdh2lmh36z2fm2cdcuczcr5wvt2cdq
+  custom_types.py: bafybeiejon23nd2lovj2ug3vkyqccc25vps3zl4t3qt7ctgq5csya5h2g4
+  dialogues.py: bafybeibms3cxbc4x67foxeyq72dzye7p47hq7dgkdeg5jdb5c7bi2hw2mi
+  message.py: bafybeifs4lr4sgwmowzgq77poc64kabvogg4vyyt2nac4te6k2asrcqosq
+  ohlcv.proto: bafybeihwjdssrfvvtagrucw4o62ok4aoqehv5dzwau55deqlvavm4xlzqm
+  ohlcv_pb2.py: bafybeieiw5hllftwc7qofxidjmfflcuf7ug6o5ajfnslia26kfbytrmklq
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiapne6vmy22bw6kdcaivev7kf4jklpu32k6xjx3iqjbywbrvf3nvy
+  tests/__init__.py: bafybeicvnzd6toogzkt2gv6vw2o74lnuelqrzpjfj45oj23ufook2656je
+  tests/performatives.py: bafybeidydmthcyzs2eenogunbp67diywsk637e6bjnpyvyg55hdsplk2bu
+  tests/primitive_strategies.py: bafybeiffzmsmxk2bhm2h4iz3ep7cgtemxzs4ehcqeioydqxhokrsdef2gq
+  tests/test_custom_types.py: bafybeievgeoyojigb4vzsdmjvohcl5bd3c7v4nn3xjflzqz7fnsqxn77ta
+  tests/test_ohlcv_dialogues.py: bafybeicawjk35e2afah7oe6v4oih2ofasb3in564u3uh3tw5zwpd35svve
+  tests/test_ohlcv_messages.py: bafybeibolcssfgq5fpp4vyqusec6rrv3zgt3o6ysbkdqmr5n56s6ghdxam
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package aea.eightballer.order_book.v0_1_0;
+
+message OrderBookMessage{
+
+  // Custom Types
+  message OrderBook{
+    string exchange_id = 1;
+    string symbol = 2;
+    repeated int32 bids = 3;
+    repeated int32 asks = 4;
+    int32 timestamp = 5;
+    string datetime = 6;
+    int32 nonce = 7;
+  }
+
+
+  // Performatives and contents
+  message Subscribe_Performative{
+    string exchange_id = 1;
+    string symbol = 2;
+    string precision = 3;
+    bool precision_is_set = 4;
+    int32 interval = 5;
+    bool interval_is_set = 6;
+  }
+
+  message Unsubscribe_Performative{
+    string exchange_id = 1;
+    string symbol = 2;
+  }
+
+  message Order_Book_Update_Performative{
+    OrderBook order_book = 1;
+  }
+
+  message Error_Performative{
+    string error_msg = 1;
+  }
+
+
+  oneof performative{
+    Error_Performative error = 5;
+    Order_Book_Update_Performative order_book_update = 6;
+    Subscribe_Performative subscribe = 7;
+    Unsubscribe_Performative unsubscribe = 8;
+  }
+}

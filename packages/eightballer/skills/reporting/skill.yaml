@@ -1,0 +1,97 @@
+name: reporting
+author: eightballer
+version: 0.1.0
+type: skill
+description: The scaffold skill is a scaffold for your own skill implementation.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeicckwn6vc53mifuyrvfbd4jokm5jj7rktlqfzw3nynyfqfpglwvii
+  behaviours.py: bafybeidgqq54dyw52nwnens3eavvnkyozz22ylak5heewvtayafrvlwrim
+  dialogues.py: bafybeib5rxgfedhq2l5q33cr7al5rvcdszxggiujrk4nwz7cgonxzxerpu
+  handlers.py: bafybeibjgfeofu2cw7gm6tdrjp3z275hvpa3fcmerbzhbrxtb74pss665m
+  slack.py: bafybeifu4yup7pbw4gvgo7yxzkm62f25msu53kmmi5wmofwllt7d73mlfa
+  strategy.py: bafybeie4s5v5epojxkgjr5keme57hza2twdgaf4yeud4uw5lxtd6ekwmni
+  tests/__init__.py: bafybeidqvfmjxcrhqif6hzu3zejykhgzgeyuxarega3th7gz7bccpr76om
+  tests/cases.py: bafybeifvkeajwg67hrryev6ajj2tsj376ge5sxrg4qevoyjxuwly3n6twu
+  tests/test_behaviour.py: bafybeigzbxo2o5nezssknolhymwcfccufm4vdws4lyh43qnvpg6fwergti
+  tests/test_handlers.py: bafybeiebrpcgko7aizgjv4777mbdoitrytete7f6mkmsosw42fds4n7pbm
+  tests/test_strategy.py: bafybeih7fatlnolimx5buvqltuwgdocenwuj5pc3a5v2bratrbppy6o2tm
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
+- eightballer/dcxt:0.1.0:bafybeie2t66bli72oxyrhu44v3o353pmvudsxgyg5eabcz5mfwavuqqd3a
+- valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
+contracts: []
+protocols:
+- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
+- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
+- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
+- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
+- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
+- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
+skills: []
+behaviours:
+  eod_reporting:
+    args:
+      daily_report_enabled: false
+      daily_report_times:
+      - 15:00:00-05:00
+      enabled: true
+      interval: 1
+      uploader:
+        class_name: SlackUploader
+        config:
+          enabled: false
+          channel: ABC123
+          token: xoxb-123345324423-112312323-ABC123123123123
+    class_name: EodReportingBehaviour
+  reconciliation_reporting:
+    args:
+      currency: ETH
+      enabled: true
+      interval: 300
+      start_timestamp: 1693519879
+    class_name: ReconciliationBehaviour
+handlers:
+  balances_reporting_handler:
+    args: {}
+    class_name: BalancesReportingHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  markets_reporting_handler:
+    args: {}
+    class_name: MarketsReportingHandler
+  orders_reporting_handler:
+    args: {}
+    class_name: OrdersReportingHandler
+  positions_reporting_handler:
+    args: {}
+    class_name: PositionsReportingHandler
+  tickers_reporting_handler:
+    args: {}
+    class_name: TickersReportingHandler
+models:
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  orders_dialogues:
+    args: {}
+    class_name: OrdersDialogues
+  positions_dialogues:
+    args: {}
+    class_name: PositionsDialogues
+  reporting_strategy:
+    args:
+      connection_string: sqlite:///test.db
+    class_name: ReportingStrategy
+dependencies:
+  pandas:
+    version: ==1.3.5
+  psycopg2-binary:
+    version: ==2.9.6
+  sqlalchemy:
+    version: ==1.4.45
+is_abstract: false
+customs: []

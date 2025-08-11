@@ -1,0 +1,53 @@
+name: Publish Helm Charts
+
+on:
+  push:
+    branches:
+      - main # Change to your default branch
+    paths:
+      - "charts/**"
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Package chart
+        run: |
+          mkdir -p packaged
+          helm package charts/derolas-agents -d packaged
+
+      - name: Checkout gh-pages branch
+        run: |
+          git fetch origin gh-pages || true
+          git checkout gh-pages || git checkout --orphan gh-pages
+          mkdir -p charts
+
+      - name: Copy packaged chart
+        run: |
+          cp packaged/*.tgz charts/
+
+      - name: Update index.yaml
+        run: |
+          helm repo index charts --url https://stationsstation.github.io/capitalisation_station/charts --merge charts/index.yaml || \
+          helm repo index charts --url https://stationsstation.github.io/capitalisation_station/charts
+
+      - name: Commit and push
+        run: |
+          git add charts
+          git commit -m "Update Helm chart repo" || echo "No changes to commit"
+          git push origin gh-pages

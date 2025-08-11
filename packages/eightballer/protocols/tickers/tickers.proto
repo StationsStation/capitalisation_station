@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package aea.eightballer.tickers.v0_1_0;
+
+message TickersMessage{
+
+  // Custom Types
+  message ErrorCode{
+    enum ErrorCodeEnum {
+      ERROR_CODE_ENUM_UNKNOWN_EXCHANGE = 0;
+      ERROR_CODE_ENUM_UNKNOWN_TICKER = 1;
+      ERROR_CODE_ENUM_API_ERROR = 2;
+    }
+    ErrorCodeEnum error_code = 1;
+  }
+
+  message Ticker{
+    string symbol = 1;
+    int64 timestamp = 2;
+    string datetime = 3;
+    optional float ask = 4;
+    optional float bid = 5;
+    optional string asset_a = 6;
+    optional string asset_b = 7;
+    optional float bid_volume = 8;
+    optional float ask_volume = 9;
+    optional float high = 10;
+    optional float low = 11;
+    optional float vwap = 12;
+    optional float open = 13;
+    optional float close = 14;
+    optional float last = 15;
+    optional float previous_close = 16;
+    optional float change = 17;
+    optional float percentage = 18;
+    optional float average = 19;
+    optional float base_volume = 20;
+    optional float quote_volume = 21;
+    optional string info = 22;
+  }
+
+  message Tickers{
+    repeated Ticker tickers = 1;
+  }
+
+
+  // Performatives and contents
+  message Get_All_Tickers_Performative{
+    string ledger_id = 1;
+    bool ledger_id_is_set = 2;
+    string exchange_id = 3;
+    bool exchange_id_is_set = 4;
+    bytes params = 5;
+    bool params_is_set = 6;
+  }
+
+  message Get_Ticker_Performative{
+    string symbol = 1;
+    bool symbol_is_set = 2;
+    string asset_a = 3;
+    bool asset_a_is_set = 4;
+    string asset_b = 5;
+    bool asset_b_is_set = 6;
+    string exchange_id = 7;
+    bool exchange_id_is_set = 8;
+    string ledger_id = 9;
+    bool ledger_id_is_set = 10;
+    bytes params = 11;
+    bool params_is_set = 12;
+  }
+
+  message All_Tickers_Performative{
+    Tickers tickers = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+  }
+
+  message Ticker_Performative{
+    Ticker ticker = 1;
+    string exchange_id = 2;
+    bool exchange_id_is_set = 3;
+    string ledger_id = 4;
+    bool ledger_id_is_set = 5;
+  }
+
+  message Error_Performative{
+    ErrorCode error_code = 1;
+    string error_msg = 2;
+    map<string, bytes> error_data = 3;
+  }
+
+
+  oneof performative{
+    All_Tickers_Performative all_tickers = 5;
+    Error_Performative error = 6;
+    Get_All_Tickers_Performative get_all_tickers = 7;
+    Get_Ticker_Performative get_ticker = 8;
+    Ticker_Performative ticker = 9;
+  }
+}

@@ -1,0 +1,29 @@
+name: balances
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/balances:0.1.0
+type: protocol
+description: A protocol for passing balance data between agent components.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeigtrrocwghnjivvyz43bso2boz7bfa3puuimddri7cn2aber457zm
+  __init__.py: bafybeidna2lmkiytfxq4lc7nyhxnwuourgxie7gijvqfprwvkza3ia4lue
+  balances.proto: bafybeihtghazozjiqsoojzw4fozycfgtxanlpj3lrxlo5ybaxvoqxaikme
+  balances_pb2.py: bafybeibphomx5rpbqzrb5agugik2hhdriskofhl5onwuubjeus3uldrg6e
+  custom_types.py: bafybeicjgvrllscap6hauc5tbho7mkyf4sjjhnm2dbpu7s5edapfbrjirm
+  dialogues.py: bafybeib4nyuu3qtzoyxdgvrkbgnnmnzbergh477stnm4qq6rr6avvx7vf4
+  message.py: bafybeiaifpxfdnol3hyl2j5q2tuywbttkdoqlxargtprpr22k3oetzshay
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiakzxq6vliqdu37i64lma4absjymtqexut4sztq2xt6xi4i53njnu
+  tests/__init__.py: bafybeidiiqh2tpyihp634ildi5hsdgujqmwxvdhnmfmzo5qndn3creurki
+  tests/performatives.py: bafybeia5zkz3rle5fyzigu5rfpaudeh23jkeizm4g3o34qstmabjyap5hq
+  tests/primitive_strategies.py: bafybeictzjrd57xoxvdgprc346vdx2666s5qezzgtscyrhx3yl2ynjjahi
+  tests/test_balances_dialogues.py: bafybeif4z7ns2rvwrd4sdnamn3rxeuq5vz4hmgizu2esl3t776ecu6h3si
+  tests/test_balances_messages.py: bafybeiajvahn6hcuqpz5xkz4ouhfqqqoayq643bapzx4zuhaxaeffrcf5y
+  tests/test_custom_types.py: bafybeidjb3nhtoqfjtta7tf3nbm7laakztmhoznmm44qsb7joy5r2ddbya
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

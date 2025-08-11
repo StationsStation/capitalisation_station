@@ -1,0 +1,31 @@
+name: order_book
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/order_book:0.1.0
+type: protocol
+description: A protocol to enable agents to subscribe to order books and receive updates
+  in real-time. This protocol facilitates monitoring changes in bid and ask prices
+  along with their volumes for given trading pairs on specified exchanges.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiazv5vxvh3l2545ngmy4rxj7doqpdalr55nh3gl2dcpyuvaxctou4
+  __init__.py: bafybeiepdjuc776ctv74a4ukfjt6kdr75f3t45or7rugya46bisq56doli
+  custom_types.py: bafybeihp72on3goivit25rlmlrlbkbny6n3ksgmfo7wl5yvpm46ldmx73i
+  dialogues.py: bafybeiedl3nsugvmoytbbwy2u5vhkxipqjpnfbateth57f7vphs6zylsrm
+  message.py: bafybeia3kd7j4cpuwrjojicsdh75zbep4gapfz6xshxbschatmmbv6q6ly
+  order_book.proto: bafybeidt2amtydxm7fbti4jflfkfq4aiq5hwv3ndelwwp3sysy4mfhsske
+  order_book_pb2.py: bafybeiertzl32hpt2nwi7aamujculb3pbjxdmg4f5ccg2sgrd5b6tq6maa
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiarpafujerygrlxftopx7qfov7tlazehqak2tlex4ial575u23mou
+  tests/__init__.py: bafybeidybbhsi7ehv4dzlyigfttwbzbptt5z5p7ow7uf6ozkojn76sugzm
+  tests/performatives.py: bafybeihmuovbpcfcrh6f2nrvsnzybphvayyaqqijwy4pvbnyneevvu3d2i
+  tests/primitive_strategies.py: bafybeiai5in6ymin4f7nxnkcwstuedqphzoojzivyjbvarg4ecwapnjmmq
+  tests/test_custom_types.py: bafybeifs7kv5lsxoe4gr2jodohtkoyengerap676xnngb3jp2xvjsrorde
+  tests/test_order_book_dialogues.py: bafybeiag32prrh6xeb4qxvpesmeqnq6if7v42pk62qfutgaouq5ulwlrl4
+  tests/test_order_book_messages.py: bafybeicitea5qftnmq5orpvliazlwuiaqtqort7bin4bm5kpmiijli2iku
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

@@ -1,0 +1,162 @@
+name: abstract_round_abci
+author: eightballer
+version: 0.1.0
+type: skill
+description: abstract round-based ABCI application
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeievb7bhfm46p5adx3x4gvsynjpq35fcrrapzn5m2whcdt4ufxfvfq
+  __init__.py: bafybeieobibzy5hmesgpp4c743xba7z4ibodt6rxkf4tcyzmdpjaubldn4
+  abci_app_chain.py: bafybeih7sxb2ywi7ucct245v4u2m222yvahnc3m2fgtp5c43ejcesjoke4
+  base.py: bafybeicgca4k77qwwgpxdavkuqex7zkozkxl3cnlcv65zqgmns7ymgnfgy
+  behaviour_utils.py: bafybeieab5tlnjrpuobyoecu76amnuagmda4qy26yewuajegmimjx25yii
+  behaviours.py: bafybeifpienx66qtzclnw3l25pmcstcgbpnnn4okenvcozfwgipir6kgw4
+  common.py: bafybeidgjwu7zr773nzt5ma5aldq7ykqenvel3iwgjtne6ql2b4fwl7u7u
+  dialogues.py: bafybeibpaul3h3n4b4wop4dv2lk3gqto7bnhp7owec67kf3hcmvq32ljym
+  handlers.py: bafybeie77ktkhzoagfr6fpw2tcbl5mgorjohfgdqtwwomkib6nhudvb5vy
+  io_/__init__.py: bafybeiaipqgkbizxqcy6r2fm6cngz7hkciwqtcb3appv7ny3unhot2otsi
+  io_/ipfs.py: bafybeib3liqe5raed2pwatxwxcro5q65c4b4ebmxaxlkwavy56qtjypdsi
+  io_/load.py: bafybeier5jrocrrcdrqnrh2rre4p5dewipk7c5npme3eoaljw3qpiime4e
+  io_/paths.py: bafybeie7i4erjkkkqms4jqmd26qvr2x5d3fvdfismmyyp36s2qdfv3wyuu
+  io_/store.py: bafybeicwjtkq7o4hkma5f35mwhv6vbhz5utvdwwnf6xbxfhwvsjxhvchyi
+  models.py: bafybeibw7vac2cqbgvoib2uekz3rd5bc3xqom36t3jyqfgtffeiorhuppu
+  test_tools/__init__.py: bafybeibz54e6bmotc5qwflqmektoljs4zufntbyhz2ajgnyguxtyja26qy
+  test_tools/abci_app.py: bafybeie6z4wxh7aasb65tf7yb6di6lijepacb7pg66jbszllmo7iaili7q
+  test_tools/base.py: bafybeid5ocfasblvk2ql5xnwqkkyxb6j7zexy3ksrdjhgb5rfx42l5bfjy
+  test_tools/common.py: bafybeie6qw3cunenorqx6ymrub646ye77c6wqc3osofbl7o6xpnj54u4ra
+  test_tools/integration.py: bafybeiesllpf23uwhxzmcneqw7tkgjyxrqc2kcq7wfm3t76dfb3kbe35xe
+  test_tools/rounds.py: bafybeiepgcgw7le6qmtwz3jduv7zrks4yuwu3zxkemttnr2eh4qtuezjlu
+  tests/__init__.py: bafybeifhinnpvqyube4nurvbf2yual2pypygpxvryu52xziedchxqh4hbq
+  tests/conftest.py: bafybeihrmmyzdtugrjah44robqaw4bsapfr7nqi6zevcon43tadrbeornm
+  tests/data/__init__.py: bafybeiehvgfhhvky6gwnn2jghpryghfiaozo5lthmgmtkjaxjoyw6hpnfy
+  tests/data/dummy_abci/__init__.py: bafybeigseug7oyukaenbmejlahco4dxjkboww37smd7u3ql7h2rorl7uhy
+  tests/data/dummy_abci/behaviours.py: bafybeigqyk6pjvqqmdhoob5mki5wnb4ey7mygvqtwb5mfajqwd43i7uw2m
+  tests/data/dummy_abci/dialogues.py: bafybeiag2kohggvrvru2quoloj32lwxw4knlmmdxllvtwf6wqq3kqoklni
+  tests/data/dummy_abci/handlers.py: bafybeicivbj3pdmvbzvna34wqcosmlbogmorsdatv2wtdecbqlwlhjbjeu
+  tests/data/dummy_abci/models.py: bafybeidbmljrcumcrz5lnoezctluuz3vrsn2nkkkegw3epcaenqzskhuwm
+  tests/data/dummy_abci/payloads.py: bafybeiejbsjzpo56yxtpzrwluk5vxbj4a2ecuv6zsnmhtpy5jofknljkeq
+  tests/data/dummy_abci/rounds.py: bafybeifkzcvt2ehiraglfigro5t5gk2okifxvatnd6mvy3lowfhwygi5eq
+  tests/test_abci_app_chain.py: bafybeic4abdje36wdco6nln4iquqrgy3ye6yey3asbmrip7zrsptubqelm
+  tests/test_base.py: bafybeigrhedtthszmbxrp3nrcl4i7sljmgtlegszrmpz4ovwbiyh3cpsmu
+  tests/test_base_rounds.py: bafybeigstmmvoze7l7tvniprlt7hsfjp2elkv34j6lzeq4vetujwuzpfeq
+  tests/test_behaviours.py: bafybeicataryqnrct3nxkyuoo2ev3g4yi72zo5tffeibnyr6xup5pwi2ve
+  tests/test_behaviours_utils.py: bafybeiabmiq2yphy3ow6jrnmibtdwwbu77yrdrtldsgomubb4bkxgr65ru
+  tests/test_common.py: bafybeiezn7csd5busxqp6ur2bk4ckigo2i5wc4244khxmkblfy2sspuwkq
+  tests/test_dialogues.py: bafybeiacum7xw22ycwm552lkhjzvkgam3tbn4x2rhz2bj47hq2ug77cuoe
+  tests/test_handlers.py: bafybeiae6imkeaojz6gj5sbrlloz7cgmymq3mai2t65syjhoev3tbflmay
+  tests/test_io/__init__.py: bafybeifpngmxal6emqangbr76jcoisctivvhhd5zuk4kddy6xpe4rtjau4
+  tests/test_io/test_ipfs.py: bafybeih2c2in6m6s56npoe3ssoibndriugcybm4rm42grwavilqpdg3ls4
+  tests/test_io/test_load.py: bafybeifpj7nto7hc3i4wjz7pubuafbc5v5zbaxpa6vliof6odnhvumqlbm
+  tests/test_io/test_store.py: bafybeifwaurvdcxbmo6tru7e7evkazduw5ymryr5inflztfrjwwp4vvaue
+  tests/test_models.py: bafybeidh5i2n4i35r2qxq23crlfbbsncyl3jyo3sacszqf2nggp5qfosla
+  tests/test_tools/__init__.py: bafybeicoqwwujz65qnj2e2qz5i4jtlkucibfgtssaehb3apxh2xdy42gxe
+  tests/test_tools/base.py: bafybeidb43ircmu6yule7ghhwtapxy77zgkhigptkddsomkkauhnoua6cq
+  tests/test_tools/test_base.py: bafybeie2zsnv2s36mohkjiaqwwglizylli3gworqvhxz76qj7t3zouyrty
+  tests/test_tools/test_common.py: bafybeih7gskcjhysbpenm4izhwzmw422fg3q6jnit4cyfcv7yvycjieqlu
+  tests/test_tools/test_integration.py: bafybeife2zgawj7cqo4b2zr6qdsjcsgl7yczghjrck5m4divpmagdb64sa
+  tests/test_tools/test_rounds.py: bafybeifdk4sw5bbcqegfhjs6bupwvzloz2rvkfyuvgby67aupjd3yukpku
+  tests/test_utils.py: bafybeidp2ou6kpqmfhn4hpbkvcq5heism5br4waw6vvdk5oxg2cym43nx4
+  utils.py: bafybeiakoatsdzcsm5g6fz6brrnicd65c4kr2ix7fekolpfdupk7tdhxxi
+fingerprint_ignore_patterns: []
+connections:
+- eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
+- valory/abci:0.1.0:bafybeibkpnqv5dilyhu5durj6k3q3tuw7t62zw5vjtbk4qvtfvbchasjaq
+- valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
+- valory/ipfs:0.1.0:bafybeiamz23olgtow4wqf7zpsfnfzf7pxiognrxl2mhn5kvqutlwhgukxa
+- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+contracts:
+- valory/service_registry:0.1.0:bafybeigmiyl3c23qbklwhnf5vpmhmign3cn6nakfdxqi2c7efthq57qaea
+protocols:
+- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- valory/abci:0.1.0:bafybeiatodhboj6a3p35x4f4b342lzk6ckxpud23awnqbxwjeon3k5y36u
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
+- valory/ipfs:0.1.0:bafybeifi2nri7sprmkez4rqzwb4lnu6peoy3bax5k6asf6k5ms7kmjpmkq
+- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
+- valory/tendermint:0.1.0:bafybeigydrbfrlmr4f7shbtqx44kvmbg22im27mxdap2e3m5tkti6t445y
+skills:
+- valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
+behaviours:
+  main:
+    args: {}
+    class_name: AbstractRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  api_specs:
+    args: {}
+    class_name: ApiSpecs
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies:
+  eth_typing: {}
+  hypothesis:
+    version: '>=6.21.6'
+  ipfshttpclient:
+    version: ==0.8.0a2
+  open-aea-cli-ipfs: {}
+  open-aea-test-autonomy:
+    version: '>=0.19.5'
+  protobuf:
+    version: <4.25.0,>=4.21.6
+  py-ecc: {}
+  pytest:
+    version: '>=7.2.1'
+  pytz:
+    version: ==2022.2.1
+  requests:
+    version: <2.31.2,>=2.28.1
+  typing_extensions:
+    version: '>=3.10.0.2'
+is_abstract: true
+customs: []

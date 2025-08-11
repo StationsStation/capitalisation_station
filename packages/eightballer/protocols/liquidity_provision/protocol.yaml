@@ -1,0 +1,30 @@
+name: liquidity_provision
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/liquidity_provision:0.1.0
+type: protocol
+description: This protocol specifies interactions for managing liquidity in DeFi platforms,
+  including adding and removing liquidity, and querying liquidity conditions.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeihy3a7e5yaps7vdzyh5w7mth3cxuqvoweibkpwki5r6sxzkaiarsm
+  __init__.py: bafybeiafnqi4ietcvrubqlpsakve35wacyjraajwtln6xdgunovsflkhla
+  custom_types.py: bafybeibkinqhiecv2vm3x6atkkj363nedc4zkkpniuow3q5kbq4wglhnda
+  dialogues.py: bafybeiadhlha6iv3tpnnmkapxffbaol3vc2ok6wqekeckoht653cjfwzsm
+  liquidity_provision.proto: bafybeighpquyeg65xpjuj66bhld53bv5yjbh55ss2nswmcpdjljcdr7dse
+  liquidity_provision_pb2.py: bafybeigffs5irqis2iqxrj4wqtaz667yziycexkrobpc7kpwgo3zlusvtu
+  message.py: bafybeigceu7zg2bjnczsxb445o25xjoirbuvtzfj5jbhu2x3jf6aoahm5q
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeig57ardkbxau5icufm5hl6sqdkyoawym3yyuewgrnb6rgs6jkhezi
+  tests/__init__.py: bafybeibgfylesumm3kvr3zycmkunaw6ptmkppgeeozzrtpyv4gsztrckea
+  tests/performatives.py: bafybeibibl7es7owrx72cerf5fgehgrvqq6jgoudeurj2ud7x7yc3lxagy
+  tests/primitive_strategies.py: bafybeif6q5gk642u5usofqzpbdd42ykvhq534tru6wj5n7d6gljraqvssm
+  tests/test_custom_types.py: bafybeigytkolhhzhg6pa5vke4ocvzvubqu6lwqtz7sys3pfqttyjo2hbym
+  tests/test_liquidity_provision_dialogues.py: bafybeiakt5uvapbfrda4cnzxkuc65p4t3nwqoflmvf3vfkj2ehoqhnv4fq
+  tests/test_liquidity_provision_messages.py: bafybeid42mwsvey5ndpoztonxfgh7p22qmao7quhx2xkxsdvzd3uwhz7iu
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

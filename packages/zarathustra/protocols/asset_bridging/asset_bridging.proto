@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package aea.zarathustra.asset_bridging.v0_1_0;
+
+message AssetBridgingMessage{
+
+  // Custom Types
+  message BridgeRequest{
+    string request_id = 1;
+    string source_ledger_id = 2;
+    string target_ledger_id = 3;
+    string source_token = 4;
+    optional string target_token = 5;
+    float amount = 6;
+    string bridge = 7;
+    optional string receiver = 8;
+  }
+
+  message BridgeResult{
+    enum Status {
+      STATUS_FAILED = 0;
+      STATUS_SUCCESS = 1;
+      STATUS_PENDING = 2;
+      STATUS_ERROR = 3;
+      STATUS_CLAIMABLE = 4;
+    }
+    BridgeRequest request = 1;
+    optional string source_tx_hash = 2;
+    optional string target_tx_hash = 3;
+    optional uint64 target_from_block = 4;
+    Status status = 5;
+    map<string,string> extra_info = 6;
+  }
+
+  message ErrorInfo{
+    enum Code {
+      CODE_INVALID_PERFORMATIVE = 0;
+      CODE_CONNECTION_ERROR = 1;
+      CODE_INVALID_ROUTE = 2;
+      CODE_INVALID_PARAMETERS = 3;
+      CODE_ALREADY_FINALIZED = 4;
+      CODE_TX_SUBMISSION_FAILED = 5;
+      CODE_OTHER_EXCEPTION = 6;
+    }
+    Code code = 1;
+    string message = 2;
+  }
+
+
+  // Performatives and contents
+  message Request_Bridge_Performative{
+    BridgeRequest request = 1;
+  }
+
+  message Bridge_Status_Performative{
+    BridgeResult result = 1;
+  }
+
+  message Request_Status_Performative{
+    BridgeResult result = 1;
+  }
+
+  message Error_Performative{
+    ErrorInfo info = 1;
+  }
+
+
+  oneof performative{
+    Bridge_Status_Performative bridge_status = 5;
+    Error_Performative error = 6;
+    Request_Bridge_Performative request_bridge = 7;
+    Request_Status_Performative request_status = 8;
+  }
+}

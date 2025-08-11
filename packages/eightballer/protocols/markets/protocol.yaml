@@ -1,0 +1,29 @@
+name: markets
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/markets:0.1.0
+type: protocol
+description: A protocol for passing ohlcv data between compoents.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeifknqpsknwfwwgwsaymmebdc6yhfzda6ewqdan67uedpogrpypivm
+  __init__.py: bafybeiebsp7ev33vclpyjzi7gqnofv24dqnhucp3i6hhnn5zf7uaii3xrq
+  custom_types.py: bafybeidfqowkwvpd4zgtx7ulkmagzakw2npirlcfgw52ugootufz6sdc2u
+  dialogues.py: bafybeibfl663h7pfdrci4fyxaznjzntsl422kfn5afl4pblxuzvskmxmhm
+  markets.proto: bafybeid4xijcamqmv4rqzwvvjpik4z334ayz3kiojkjtcmuj25vzt5hlji
+  markets_pb2.py: bafybeiayid4yfdbw4el7eq6lqksybvxggovyjb3g5ng2wtlpfy3pl7jy6q
+  message.py: bafybeidwqtcnwkmj4y4n2bh3ej5zop2k4u7kbtyv6suc2dxwxpqgl3mmti
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiffhev2fhdf2nk3qtvjjyx4ozsmqstnzz5lrvrucdlnbyfgxmvfwi
+  tests/__init__.py: bafybeicmrwwpbalkxx7zofz2ybev25dnnowzx2gptq7ebitnllii5dfpua
+  tests/performatives.py: bafybeibyntifxrmohyeqw35fkusbo2ejzkrq36whhsm7b6mw5vqpvqpsky
+  tests/primitive_strategies.py: bafybeieb7wzw735sk2a5nzutyoohvbgzndthqy6nezqo3ige5g6bwklary
+  tests/test_custom_types.py: bafybeieaqi2ml53jce2hlismzktnyyp4emsh2odxnhnaqjin5wnf6ibq5y
+  tests/test_markets_dialogues.py: bafybeiaswxg3exsxkbiugwvjm45oc7lon3twrp5bttjsu5djqie4ab5alq
+  tests/test_markets_messages.py: bafybeidiall3rqr2ppb2rqoewixc4r6ua4xdcl6dw66yvodxngl3xizm4m
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}

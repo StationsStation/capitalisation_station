@@ -1,0 +1,29 @@
+name: default
+author: eightballer
+version: 0.1.0
+protocol_specification_id: eightballer/default:0.1.0
+type: protocol
+description: A protocol for exchanging any bytes message.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiaak3h3o3rajjzfr5pslpfe4rj7negd45pb7eora7fwaevgne3wiu
+  __init__.py: bafybeigl56bk6g36e2ohbn3lq55d6km6v5aojxd7eoddyjplsolkqq6oty
+  custom_types.py: bafybeiejon23nd2lovj2ug3vkyqccc25vps3zl4t3qt7ctgq5csya5h2g4
+  default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq
+  default_pb2.py: bafybeih4kyulvf4jyktn5l7i5e3kn66nalkdfok76vmgbjlrs7gpthuwpi
+  dialogues.py: bafybeidetv7ktcnfb6no6m7v33xe3z5knc6rr32jmffaow4r6purutabse
+  message.py: bafybeicix3s6tt74opxoxct6qsvz5s57ber7a65buiovxyyitefw3ypu4y
+  primitives.py: bafybeidislnoj3jyimmc76pwm4gqsne4bxdnogxj5mx6bauacx5bltokey
+  serialization.py: bafybeiaj4565mqfghkmrokai2u2hocztf4ruwdws3ko3hrybhi6wuaczuu
+  tests/__init__.py: bafybeiehpir7bshrwlmzbvupcrd52c4whyfe4m3how6kd6irsumsllkg6y
+  tests/performatives.py: bafybeifddhximnpd4pznzq5tcftfg5abpk6fnazz5po7jlo4hkpdblz2ie
+  tests/primitive_strategies.py: bafybeibwgozigij2pvii55hw4uhgtcns26w6royebcyb6zro4e2asv57su
+  tests/test_custom_types.py: bafybeiezq67m3u4qykhhakhrwjihpbkaxdu6czzoa2he7woxyyi7qiovuu
+  tests/test_default_dialogues.py: bafybeiahi3zsuplsrncfrdjpx6k2ipgoalzd3j43sq4zoi2mb4pzhr3xcu
+  tests/test_default_messages.py: bafybeibx6krmlr5fhiozefuc4ligivnwbcczrkvmdgintjlfh62uwfbznq
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
+  pydantic: {}
+  hypothesis: {}
