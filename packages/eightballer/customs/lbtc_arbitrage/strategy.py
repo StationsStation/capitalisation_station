@@ -28,7 +28,7 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeReq
 
 
 BRIDGE_TRIGGER = 0.25
-BRIDGE_RATIO = 0.5
+BRIDGE_RATIO = 0.4
 
 
 @dataclass

@@ -58,7 +58,7 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeib3o7wamj652x727bcv5bq5loc7tzyyppv5mdkvnpshkdfyawuuii
+- eightballer/lbtc_arbitrage:0.1.0:bafybeig336cliqddgbqds3xqtzzoxu5e34mn2zw22rsl7fafjxhcqkzw5i
 default_ledger: ethereum
 required_ledgers:
 - ethereum

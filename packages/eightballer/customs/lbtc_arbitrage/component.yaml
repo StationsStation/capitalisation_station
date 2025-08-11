@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiejn3ahy33huktlei2koe47mzoc5obnajkwhufpfcugbmnqqtj2bi
-  strategy.py: bafybeieyenzp6taadbgst5ec4bzjzur32o6p3ehzogiwutsaddnf5dgaza
+  strategy.py: bafybeib6d7zro4dyx3hr6pcpms2ple5rrhh4fptapxdytftm4qjo3dz7du
   tests/__init__.py: bafybeiajoajrn2ja2mzsvvhia4gm5wkz3gbraohwzpciwr6quhi2tdzzxy
   tests/data/case_0/existing_orders.json: bafybeidohhysvjqyajhuw2otvtfpswexy7nrdpnpsmkfa3zjitlso2usnq
   tests/data/case_0/portfolio.json: bafybeicrjikqazrab7hljkkcpxp7wp6yyhxwbgxzz7vqcd6gydf3ovmujq
