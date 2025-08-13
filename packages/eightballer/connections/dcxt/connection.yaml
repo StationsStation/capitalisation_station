@@ -122,7 +122,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: arbitrum
-    rpc_url: https://endpoints.omniatech.io/v1/arbitrum/one/public
+    rpc_url: https://arbitrum.drpc.org
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
@@ -130,6 +130,11 @@ config:
     ledger_id: optimism
     rpc_url: https://mainnet.optimism.io
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: polygon_pos
+    rpc_url: https://polygon.drpc.org
   - name: one_inch
     key_path: ethereum_private_key.txt
     wallet: null
@@ -146,6 +151,11 @@ config:
     wallet: null
     ledger_id: ethereum
     rpc_url: https://eth.drpc.org
+  - name: derive
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: derive
+    rpc_url: https://rpc.derive.xyz/
   target_skill_id: null
 excluded_protocols: []
 dependencies:
