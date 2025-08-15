@@ -189,6 +189,7 @@ async def swap_tokens(
         kind=OrderQuoteSideKindSell.sell.value,
         sell_token_balance=CowAsset.ERC20.value,
         buy_token_balance=CowAsset.ERC20.value,
+        partially_fillable= True,
     )
 
     base_url = CHAIN_TO_EXPLORER.get(chain_id, "https://explorer.cow.fi")
