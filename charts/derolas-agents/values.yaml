@@ -123,3 +123,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+environment:
+  # This is for setting environment variables more information can be found here: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+  - name: EXAMPLE_ENV_VAR
+    value: "example_value"
