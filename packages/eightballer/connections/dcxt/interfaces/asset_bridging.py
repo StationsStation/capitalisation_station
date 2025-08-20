@@ -14,6 +14,7 @@ from derive_client.data_types import (
     BridgeTxResult,
     DeriveTxResult,
     DeriveTxStatus,
+    PreparedBridgeTx,
 )
 
 from packages.zarathustra.protocols.asset_bridging.message import (
@@ -39,6 +40,16 @@ if TYPE_CHECKING:
 
 
 # ruff: noqa: PLR0914  # Too many local variables
+
+
+BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
+BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
+
+TRANSFER_TO_FUNDING = "Transferring %(amount)s %(token)s from subaccount %(subaccount)s to funding wallet %(wallet)s."
+TRANSFER_TO_SUBACC_NOT_SETTLED = "Transfer to subaccount not (yet) settled: %(status)s."
+TRANSFER_TO_SUBACC = "Transferring %(amount)s %(token)s from funding wallet %(wallet)s to subaccount %(subaccount)s."
+TRANSFER_TO_FUNDING_NOT_SETTLED = "Transfer to funding wallet not (yet) settled: %(status)s."
+
 
 ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
@@ -90,8 +101,6 @@ def bridge_tx_result_to_bridge_result(
             status = BridgeResult.Status.STATUS_PENDING
         case TxStatus.FAILED:
             status = BridgeResult.Status.STATUS_FAILED
-        case TxStatus.ERROR:
-            status = BridgeResult.Status.STATUS_ERROR
 
     if derive_tx_result and is_deposit:
         status = DERIVE_TX_TO_BRIDGE_STATUS[derive_tx_result.status]
@@ -190,14 +199,17 @@ class AssetBridgingInterface(BaseInterface):
         is_deposit = request.target_ledger_id == "derive"
 
         if is_deposit:
-            token = request.source_token
-            msg = f"Depositing {amount} {token} from {source_chain.name} to Derive wallet {client.wallet}."
-            connection.logger.info(msg)
-            bridge_tx_result: BridgeTxResult = client.deposit_to_derive(
-                chain_id=source_chain,
+            kwargs = dict(amount=amount, token=currency.name, address=client.account.address, chain=source_chain.name, wallet=client.wallet)
+            connection.logger.info(BRIDGE_DEPOSIT, kwargs)
+
+            prepared_tx: PreparedBridgeTx = await client.prepare_deposit_to_derive(
+                human_amount=amount,
                 currency=currency,
-                amount=amount,
+                chain_id=source_chain
             )
+
+            bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
+
             result = bridge_tx_result_to_bridge_result(
                 bridge_tx_result=bridge_tx_result,
                 request=request,
@@ -205,8 +217,9 @@ class AssetBridgingInterface(BaseInterface):
             )
 
         else:
-            msg = f"Transferring {amount} {request.source_token} to subaccount {client.subaccount_id}."
-            connection.logger.info(msg)
+            kwargs = dict(amount=amount, token=currency.name, subaccount=client.subacount, wallet=client.wallet)
+            connection.logger.info(TRANSFER_TO_FUNDING, amount, request.source_token, client.subaccount_id, client.wallet)
+
             derive_tx_result: DeriveTxResult = client.transfer_from_subaccount_to_funding(
                 amount=amount,
                 asset_name=request.source_token,
@@ -226,14 +239,19 @@ class AssetBridgingInterface(BaseInterface):
                     status=status,
                     extra_info=info.model_dump(),
                 )
+                connection.logger.warning(TRANSFER_TO_SUBACC_NOT_SETTLED, dict(status=status))
             else:
-                msg = f"Withdrawing {amount} {request.source_token} to {client.signer.address} on {target_chain.name}."
-                connection.logger.info(msg)
-                bridge_tx_result: BridgeTxResult = client.withdraw_from_derive(
-                    chain_id=target_chain,
+                kwargs = dict(amount=amount, token=currency.name, wallet=client.wallet, eoa=client.account.address, chain=target_chain.name)
+                connection.logger.info(BRIDGE_WITHDRAWAL, kwargs)
+
+                prepared_tx: PreparedBridgeTx = await client.prepare_withdrawal_from_derive(
+                    human_amount=amount,
                     currency=currency,
-                    amount=amount,
+                    chain_id=source_chain
                 )
+
+                bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
+
                 result = bridge_tx_result_to_bridge_result(
                     bridge_tx_result=bridge_tx_result,
                     request=request,
