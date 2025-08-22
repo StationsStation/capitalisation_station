@@ -157,10 +157,7 @@ class ArbitrageStrategy:
         # - we are not buying and selling on the same exchange
         # - we are not buying and selling on the same ledger
         del opportunity
-        return not any(
-            [
-            ]
-        )
+        return not any([])
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""

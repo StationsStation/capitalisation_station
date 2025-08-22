@@ -1,7 +1,7 @@
 {
     "dev": {
         "custom/eightballer/arbitrage_strategy/0.1.0": "bafybeidqzz4ytiqumdttvqsykamwrizpzkiy4nuvg5jvnbjeykz7ned4py",
-        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeignjbqt5jwjb44lqjfyyr7ohpzvzyzuht534y6ifcaf5o3jmyfn4a",
+        "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeic2hklg7335qvr532dcierwpm4ljh433yzhw4krdixj23cj57cuvm",
         "custom/wakamex/market_maker/0.1.0": "bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm",
         "protocol/eightballer/default/0.1.0": "bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u",
         "protocol/eightballer/orders/0.1.0": "bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364",
@@ -46,13 +46,13 @@
         "agent/eightballer/chained_dex_app/0.1.0": "bafybeid7ws7nxkfg2oh7cu3agjea2u7oe2qaynla4uvtbfdokalnuf7yoi",
         "agent/eightballer/trader/0.1.0": "bafybeigbwzs75itsljdj4ffg5n5h4flvrf3re7szae5ljxlhaq7auwchhm",
         "agent/eightballer/bridging_agent/0.1.0": "bafybeigdpbdxx7lfvcjue625vymdif32wq7ehvvqgx626akjmayhu4abuy",
-        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeift4bcb4kguagr7mibhmoz4lkayq4my2dpnxrg44sszxxfbaajufu",
+        "agent/eightballer/derive_arbitrage_agent/0.1.0": "bafybeicmc67pzywt2o73akpxxqwtlmda6fgekkbur5jcp7o7rkejuhzm7q",
         "agent/zarathustra/derolas_automator/0.1.0": "bafybeid3vgbwqa4h5yew26bmfdeb6mt4dl4u7pkyd2bg37zqvyjsw7jzhm",
         "agent/wakamex/market_maker/0.1.0": "bafybeigantnsyi6ruqrmzeqstejw4d2wqgh4mzk4hp4yf4pajvskfev23m",
-        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeicnqf5u5fv77ii5obueqhf5j2m3wfceff4rr3hylre4o57d3fmwsy",
-        "agent/eightballer/cow_squared/0.1.0": "bafybeih6wy46igkyvzttp2shggenxsac6w3oekhescgobmsyd4eawyisau",
+        "agent/eightballer/nabla_arbitrage_agent/0.1.0": "bafybeifgmssgskj4gmdky5tt4alz3gywsj253mjmyxxbq5v433af6brneq",
+        "agent/eightballer/cow_squared/0.1.0": "bafybeiagqkdocwcwg5m3rqt3mwq4ere5zfaczi2im2hn2mwiqaxn3o2aa4",
         "service/eightballer/cex_dex_arbitrage/0.1.0": "bafybeignfuegwfccatafcnq5jtermvxzwgsz2vfvmnyco7nggqae6ulblu",
-        "service/eightballer/derived_cow/0.1.0": "bafybeiewpj2f33mgzbn5qm5q64rcvdxqtndl6du676lxwkg64jxb2vzyhq"
+        "service/eightballer/derived_cow/0.1.0": "bafybeies7km6mlne5bualtatnhehuqc45so2i4y5eb26sgz4iwr5xmp3om"
     },
     "third_party": {
         "custom/eightballer/lbtc_arbitrage/0.1.0": "bafybeig336cliqddgbqds3xqtzzoxu5e34mn2zw22rsl7fafjxhcqkzw5i",
