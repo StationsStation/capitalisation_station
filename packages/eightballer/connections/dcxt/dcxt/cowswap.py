@@ -64,7 +64,7 @@ APP_DATA = "0xf142fb87fd167a929b0aacb90fca1e6bf963fcf0513a57af7e4223897df4d93e"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.0
+SLIPPAGE_TOLERANCE = 0.0025
 # 1bps fee applied to all trades
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,

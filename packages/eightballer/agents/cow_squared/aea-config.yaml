@@ -1,11 +1,13 @@
-agent_name: market_maker
-author: wakamex
+agent_name: cow_squared
+author: eightballer
 version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
 aea_version: '>=1.55.0, <2.0.0'
 fingerprint:
-  tests/test_derive_mm_agent.py: bafybeiewncjve36ledhxoy6xrgctbqfuc3rvqz4kmrecxvpqgtgpdi226q
+  logger_setup.py: bafybeicboqnvizlhdsnmlncvayrswskbyw6vshi34bnrs75qshbz3wdlqu
+  no-queue-logging.yaml: bafybeib6k2usocdkxtz6nqa2igxbwkp7f72inrsxtufyy3pttpbojxysay
+  tests/test_derive_trader_agent.py: bafybeif4ycyf6kcisfxm6gr224lqxhei4dwk7apfoux4vvpmtoots3ddri
 fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
@@ -56,7 +58,7 @@ skills:
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
 customs:
-- wakamex/market_maker:0.1.0:bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm
+- eightballer/lbtc_arbitrage:0.1.0:bafybeignjbqt5jwjb44lqjfyyr7ohpzvzyzuht534y6ifcaf5o3jmyfn4a
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -64,30 +66,47 @@ default_routing: {}
 connection_private_key_paths: {}
 private_key_paths: {}
 logging_config:
-  disable_existing_loggers: false
-  formatters:
-    standard:
-      format: '%(asctime)s [%(levelname)s]: %(message)s'
+  disable_existing_loggers: true
   handlers:
-    console:
-      class: logging.StreamHandler
-      formatter: standard
-      stream: ext://sys.stdout
-    logfile:
-      class: logging.FileHandler
-      filename: log.txt
-      formatter: standard
-      level: INFO
+    queue:
+      class: logger_setup.QueuedHandler
+      queue_size: 10000
+      handler_names:
+      - console
+      - logfile
+      handler_configs:
+        console:
+          class: logger_setup.BufferedHandler
+          formatter: standard
+          level: INFO
+        logfile:
+          class: logging.handlers.TimedRotatingFileHandler
+          filename: log.jsonl
+          formatter: json
+          level: INFO
+          when: D
+          interval: 1
+          backupCount: 7
+      formatter_configs:
+        standard:
+          class: logger_setup.ShortNameFormatter
+          format: '[%(levelname)s]%(message)s'
+        detailed:
+          format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
+          datefmt: '%Y-%m-%dT%H:%M:%S%z'
+        json:
+          class: logger_setup.JSONFormatter
+          datefmt: '%Y-%m-%dT%H:%M:%S%z'
   loggers:
     aea:
       handlers:
-      - console
-      - logfile
+      - queue
       level: INFO
       propagate: false
   version: 1
 dependencies:
   open-aea-ledger-ethereum: {}
+  rich: {}
 default_connection: null
 ---
 public_id: eightballer/http_server:0.1.0:bafybeicp3ubkonolxjgnwgqmaz624qduwzzz74fbjizu77lyvnpo77uv7u
@@ -134,7 +153,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
+    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
   - name: cowswap
     key_path: ethereum_private_key.txt
     wallet: null
@@ -145,12 +164,6 @@ config:
     wallet: null
     ledger_id: gnosis
     rpc_url: ${GNOSIS_RPC:str:https://gnosis.drpc.org}
-  - name: derive
-    key_path: ethereum_private_key.txt
-    wallet: ${DERIVE_WALLET:str:0x1234}
-    subaccount_id: ${DERIVE_SUBACCOUNT_ID:int:1234}
-    ledger_id: derive
-    environment: prod
 ---
 public_id: eightballer/simple_fsm:0.1.0
 type: skill
@@ -158,17 +171,16 @@ models:
   arbitrage_strategy:
     args:
       dexs:
-        derive:
-        - derive
-        cowswap: []
+        derive: []
+        cowswap: ${COW_CHAINS:list:["arbitrum","base"]}
         balancer: []
-      strategy_public_id: wakamex/market_maker:0.1.0
+      strategy_public_id: eightballer/lbtc_arbitrage:0.1.0
       strategy_init_kwargs:
         base_asset: ${BASE_ASSET:str:OLAS}
         quote_asset: ${QUOTE_ASSET:str:USDC}
-        order_size: ${ORDER_SIZE:float:100}
-        min_profit: ${MIN_PROFIT:float:0.01}
-        max_open_orders: ${MAX_OPEN_ORDERS:int:100}
-      cooldown_period: ${COOLDOWN_PERIOD:int:30}
+        order_size: ${ORDER_SIZE:float:1000}
+        min_profit: ${MIN_PROFIT:float:0.0025}
+        max_open_orders: ${MAX_OPEN_ORDERS:int:1000}
+      cooldown_period: ${COOLDOWN_PERIOD:int:60}
       cexs: ${list:[]}
-      alert_user: ${bool:false}
+      bridging_enabled: false

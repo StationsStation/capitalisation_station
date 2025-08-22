@@ -156,9 +156,9 @@ class ArbitrageStrategy:
         # sense checks as we will get eaten by mev if we try to do on one exchange
         # - we are not buying and selling on the same exchange
         # - we are not buying and selling on the same ledger
+        del opportunity
         return not any(
             [
-                opportunity.best_ask_exchange == opportunity.best_bid_exchange,
             ]
         )
 
