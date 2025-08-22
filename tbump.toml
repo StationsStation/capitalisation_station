@@ -1,7 +1,7 @@
 github_url = "https://github.com/StationsStation/capitalisation_station/"
 
 [version]
-current = "0.1.34"
+current = "0.1.36"
 
 # Example of a semver regexp.
 # Make sure this matches current_version before
@@ -25,6 +25,8 @@ tag_template = "v{new_version}"
 src = "pyproject.toml"
 [[file]]
 src = ".github/workflows/release.yml"
+[[file]]
+src = "charts/derolas-agents/Chart.yaml"
 
 # You can specify a list of commands to
 # run after the files have been patched

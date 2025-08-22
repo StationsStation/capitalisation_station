@@ -87,6 +87,8 @@ sync:
 	@echo "Syncing to latest version done."
 	@echo "Ready to go 🚀"
 
+release:
+	poetry run adev release
 
 run-drv-arber:
 	poetry run adev run dev eightballer/derive_arbitrage_agent --force --no-use-tendermint
