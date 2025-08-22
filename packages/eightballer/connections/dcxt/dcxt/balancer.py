@@ -114,7 +114,7 @@ WHITELISTED_POOLS = {
 class BalancerClient(BaseErc20Exchange):
     """Balancer exchange."""
 
-    tokens: dict[str:Erc20Token] = {}
+    tokens: dict[str, Erc20Token] = {}
 
     def __init__(self, key_path: str, ledger_id: str, rpc_url: str, etherscan_api_key: str, **kwargs):  # pylint: disable=super-init-not-called
         if SupportedLedgers(ledger_id) not in LEDGER_IDS_CHAIN_NAMES:
@@ -318,12 +318,24 @@ class BalancerClient(BaseErc20Exchange):
             self.tickers[symbol] = ticker
         return Tickers(tickers=list(self.tickers.values()))
 
-    def get_params_for_swap(self, input_token_address, output_token_address, input_amount, is_buy=False):
+    def get_params_for_swap(
+        self,
+        input_token_address: str,
+        output_token_address: str,
+        input_amount: float,
+        is_buy: bool = False,
+        slippage: float = 0.1,
+        sender_address: str | None = None,
+    ) -> dict:
         """Given the data, we get the params for the swap from the balancer exchange."""
         gas_price = self.bal.web3.eth.gas_price * GAS_PRICE_PREMIUM
+
+        # Use sender_address if provided, otherwise fall back to account address
+        address_to_use = sender_address or self.account.address
+
         return {
             "network": self.balancer_deployment.value,
-            "slippageTolerancePercent": "0.1",  # 1%
+            "slippageTolerancePercent": str(slippage),
             "sor": {
                 "sellToken": input_token_address,
                 "buyToken": output_token_address,  # // token out
@@ -333,8 +345,8 @@ class BalancerClient(BaseErc20Exchange):
             },
             "batchSwap": {
                 "funds": {
-                    "sender": self.account.address,  # // your address
-                    "recipient": self.account.address,  # // your address
+                    "sender": address_to_use,  # Uses provided address or default
+                    "recipient": address_to_use,  # Uses provided address or default
                     "fromInternalBalance": False,  # // to/from internal balance
                     "toInternalBalance": False,  # // set to "false" unless you know what you're doing
                 },
@@ -483,12 +495,51 @@ class BalancerClient(BaseErc20Exchange):
             machine_amount = asset_a_token.to_machine(human_amount)
             amount = human_amount
 
+        # Parse extra data for safe contract address
+        extra_data = kwargs.get("data")
+        safe_contract_address = None
+        vault = self.bal.balLoadContract("Vault")
+        vault_address = vault.address
+
+        if extra_data:
+            safe_contract_address = extra_data.get("safe_contract_address", None)
+
         params = self.get_params_for_swap(
             input_token_address=input_token_address,
             output_token_address=output_token_address,
             input_amount=amount,
             is_buy=False,
+            sender_address=safe_contract_address,
         )
+
+        if safe_contract_address:
+            try:
+                payload = self.bal.balSorQueryCalldata(params)
+                status = OrderStatus.NEW
+            except Exception as exc:
+                self.logger.exception(f"Error querying SOR calldata: {traceback.format_exc()}")
+                msg = f"Error querying SOR calldata: {exc}"
+                raise SorRetrievalException(msg) from exc
+
+            return Order(
+                exchange_id="balancer",
+                symbol=symbol,
+                status=status,
+                side=OrderSide.BUY if is_buy else OrderSide.SELL,
+                type=OrderType.MARKET,
+                ledger_id=self.ledger_id.value,
+                info=json.dumps(
+                    {
+                        "to": payload["to"],
+                        "data": payload["data"],
+                        "value": payload["value"],
+                        "chain_id": self.bal.web3.eth.chain_id,
+                        "vault_address": vault_address,
+                    }
+                ),
+            )
+
+        # Original EOA path
         try:
             sor_result = self.bal.balSorQuery(params)
         except Exception as exc:  # pylint: disable=W0703
@@ -496,8 +547,6 @@ class BalancerClient(BaseErc20Exchange):
             self.logger.exception(f"Error querying SOR: {traceback.format_exc()}")
             msg = f"Error querying SOR: {exc}"
             raise SorRetrievalException(msg) from exc
-
-        # We now parse the result;
 
         if not sor_result["swaps"]:
             self.logger("Problem with SOR retrieval!!")
@@ -517,17 +566,8 @@ class BalancerClient(BaseErc20Exchange):
             msg = f"Error parsing SOR response: {sor_result}"
             raise SorRetrievalException(msg)
 
-        # we now do the txn if its not a multi sig.
-        extra_data = kwargs.get("data", None)
-        safe_contract_address = None
-        if extra_data:
-            safe_contract_address = extra_data.get("safe_contract_address", None)
-        if not safe_contract_address:
-            self.logger.info("Handling EOA txn")
-            fnc = self._handle_eoa_txn
-        else:
-            self.logger.info(f"Handling safe txn request in dcxt for {safe_contract_address!r}")
-            fnc = self._handle_safe_txn
+        self.logger.info("Handling EOA txn")
+        fnc = self._handle_eoa_txn
         return fnc(
             batch_swap,
             symbol,
@@ -599,7 +639,7 @@ class BalancerClient(BaseErc20Exchange):
     def _do_eoa_approval(self, input_token_address, machine_amount, vault, contract) -> None:
         """Do the EOA approval."""
         del input_token_address
-        func = contract.functions.approve(vault.address, int(machine_amount * 1e240))
+        func = contract.functions.approve(vault.address, machine_amount * 3)
         return self._do_txn(func)
 
     def _do_txn(self, func):
