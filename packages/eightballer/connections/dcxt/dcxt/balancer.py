@@ -82,7 +82,7 @@ LEDGER_IDS_CHAIN_NAMES = {
     SupportedLedgers.MODE: SupportedBalancerDeployments.MODE,
     SupportedLedgers.GNOSIS: SupportedBalancerDeployments.GNOSIS,
     SupportedLedgers.ARBITRUM: SupportedBalancerDeployments.ARBITRUM,
-    SupportedLedgers.POLYGON_POS: SupportedBalancerDeployments.POLYGON,
+    SupportedLedgers.POLYGON: SupportedBalancerDeployments.POLYGON,
 }
 
 WHITELISTED_POOLS = {
@@ -107,7 +107,7 @@ WHITELISTED_POOLS = {
         "0xbdee91916b38bca811f2c4c261daf1a8953262ca00000000000000000000000b",
         "0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007",
     ],
-    SupportedLedgers.POLYGON_POS: [],
+    SupportedLedgers.POLYGON: [],
 }
 
 
