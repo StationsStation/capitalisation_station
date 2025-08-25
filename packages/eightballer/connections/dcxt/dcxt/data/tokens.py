@@ -11,7 +11,7 @@ class SupportedLedgers(Enum):
 
     ETHEREUM = "ethereum"
     GNOSIS = "gnosis"
-    POLYGON_POS = "polygon_pos"
+    POLYGON = "polygon"
     ARBITRUM = "arbitrum"
     OPTIMISM = "optimism"
     BASE = "base"
@@ -42,7 +42,7 @@ LEDGER_TO_STABLECOINS = {
         "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0",  # USDC.e
         "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",  # USDC
     ],
-    SupportedLedgers.POLYGON_POS: [
+    SupportedLedgers.POLYGON: [
         "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
         "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",  # USDC
     ],
@@ -62,7 +62,7 @@ LEDGER_TO_NATIVE_SYMBOL = {
     SupportedLedgers.OPTIMISM: "ETH",
     SupportedLedgers.BASE: "ETH",
     SupportedLedgers.GNOSIS: "xDAI",
-    SupportedLedgers.POLYGON_POS: "POL",
+    SupportedLedgers.POLYGON: "POL",
     SupportedLedgers.ARBITRUM: "ETH",
     SupportedLedgers.MODE: "ETH",
 }
@@ -72,7 +72,7 @@ LEDGER_TO_WRAPPER = {
     SupportedLedgers.OPTIMISM: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
     SupportedLedgers.BASE: "0x4200000000000000000000000000000000000006",
     SupportedLedgers.GNOSIS: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
-    SupportedLedgers.POLYGON_POS: "0x0000000000000000000000000000000000001010",
+    SupportedLedgers.POLYGON: "0x0000000000000000000000000000000000001010",
     SupportedLedgers.ARBITRUM: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
     SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
 }
@@ -81,7 +81,7 @@ LEDGER_TO_OLAS = {
     SupportedLedgers.OPTIMISM: "0xfc2e6e6bcbd49ccf3a5f029c79984372dcbfe527",
     SupportedLedgers.BASE: "0x54330d28ca3357f294334bdc454a032e7f353416",
     SupportedLedgers.GNOSIS: "0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f",
-    SupportedLedgers.POLYGON_POS: "0xFEF5d947472e72Efbb2E388c730B7428406F2F95",
+    SupportedLedgers.POLYGON: "0xFEF5d947472e72Efbb2E388c730B7428406F2F95",
     SupportedLedgers.ARBITRUM: "0x064f8b858c2a603e1b106a2039f5446d32dc81c1",
     SupportedLedgers.MODE: "0xcfD1D50ce23C46D3Cf6407487B2F8934e96DC8f9",
 }
@@ -134,13 +134,13 @@ LEDGER_TO_TOKEN_LIST = {
         + [LEDGER_TO_WRAPPER[SupportedLedgers.GNOSIS]]
         + [LEDGER_TO_WETH[SupportedLedgers.GNOSIS]]
     ),
-    SupportedLedgers.POLYGON_POS: set(
+    SupportedLedgers.POLYGON: set(
         [
             "0xFEF5d947472e72Efbb2E388c730B7428406F2F95",  # olas
             "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",  # weth
         ]
-        + LEDGER_TO_STABLECOINS[SupportedLedgers.POLYGON_POS]
-        + [LEDGER_TO_WRAPPER[SupportedLedgers.POLYGON_POS]]
+        + LEDGER_TO_STABLECOINS[SupportedLedgers.POLYGON]
+        + [LEDGER_TO_WRAPPER[SupportedLedgers.POLYGON]]
     ),
     SupportedLedgers.ARBITRUM: set(
         [

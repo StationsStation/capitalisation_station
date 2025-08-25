@@ -64,19 +64,21 @@ APP_DATA = "0xf142fb87fd167a929b0aacb90fca1e6bf963fcf0513a57af7e4223897df4d93e"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.0
+SLIPPAGE_TOLERANCE = 0.0025
 # 1bps fee applied to all trades
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.BASE: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.ARBITRUM: CowContractAddress.VAULT_RELAYER.value,
+    SupportedLedgers.POLYGON: CowContractAddress.VAULT_RELAYER.value,
 }
 LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET.value[0].value,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS.value[0].value,
     SupportedLedgers.BASE: CowChains.BASE.value[0].value,
     SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE.value[0].value,
+    SupportedLedgers.POLYGON: CowChains.POLYGON.value[0].value,
 }
 
 LEDGER_TO_COW_CHAIN = {
@@ -84,6 +86,7 @@ LEDGER_TO_COW_CHAIN = {
     SupportedLedgers.GNOSIS: CowChains.GNOSIS,
     SupportedLedgers.BASE: CowChains.BASE,
     SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE,
+    SupportedLedgers.POLYGON: CowChains.POLYGON,
 }
 
 LEDGER_TO_RPC = {
@@ -91,6 +94,7 @@ LEDGER_TO_RPC = {
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
     SupportedLedgers.BASE: "https://base.llamarpc.com",
     SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
+    SupportedLedgers.POLYGON: "https://polygon.llamarpc.com",
 }
 
 warnings.filterwarnings("ignore", category=UserWarning)
