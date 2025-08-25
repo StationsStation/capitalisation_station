@@ -75,7 +75,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncClient, logger
     kwargs = {
         "amount": amount,
         "token": currency.name,
-        "address": client.account.address,
+        "eoa": client.account.address,
         "chain": source_chain.name,
         "wallet": client.wallet,
     }
@@ -117,7 +117,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncClient, log
     currency = Currency[request.source_token]
     target_chain = ChainID[request.target_ledger_id.upper()]
 
-    kwargs = {"amount": amount, "token": currency.name, "subaccount": client.subacount_id, "wallet": client.wallet}
+    kwargs = {"amount": amount, "token": currency.name, "subaccount": client.subaccount_id, "wallet": client.wallet}
     logger.info(TRANSFER_TO_FUNDING, kwargs)
 
     # 1. Transfer from subaccount to funding account
@@ -175,7 +175,7 @@ def create_bridge_result(
         **{k: str(v) for k, v in derive_tx_result.error_log.items()},
     )
 
-    info.bridge_type = bridge_tx_result.bridge.name
+    info.bridge_type = bridge_tx_result.bridge_type.name
 
     match bridge_tx_result.status:
         case TxStatus.SUCCESS:
