@@ -69,6 +69,7 @@ typing-extensions = ">=3.10.0.2"
 derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
 pymultihash = "0.8.2"
 eth-typing = "4.0.0"
+returns = "^0.26.0"
 
 [tool.poetry.group.dev.dependencies]
 tbump = "^6.11.0"
