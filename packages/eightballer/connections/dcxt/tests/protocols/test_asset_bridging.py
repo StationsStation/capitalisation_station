@@ -9,8 +9,19 @@ from unittest.mock import patch
 import pytest
 from aea.mail.base import Envelope
 from web3.datastructures import AttributeDict
-from derive_client.data_types import ChainID, Currency, TxResult, Environment, BridgeTxResult
-from derive_client._bridge.client import BridgeClient  # noqa: PLC2701
+from derive_client.data_types import (
+    ChainID,
+    Currency,
+    TxResult,
+    BridgeType,
+    Environment,
+    BridgeTxResult,
+    DeriveTxResult,
+    DeriveTxStatus,
+    BridgeTxDetails,
+    PreparedBridgeTx,
+    PSignedTransaction,
+)
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
@@ -102,7 +113,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
     DIALOGUES = get_dialogues(BaseAssetBridgingDialogues, AssetBridgingDialogue)
 
     @pytest.mark.parametrize("case", VALID_BRIDGE_REQUESTS)
-    async def test_handles_valid_bridge_request(self, case: ValidTestCase) -> None:
+    async def test_handles_valid_bridge_request(self, case: ValidTestCase) -> None:  # noqa: PLR0914
         """Test handle valid bridge request messages."""
 
         request = case.request
@@ -123,13 +134,48 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         tx_receipt = AttributeDict(dictionary={"status": 1})
         fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=None)
+
+        fake_prepared_tx = PreparedBridgeTx(
+            amount=0,
+            value=0,
+            currency=Currency.USDC,
+            source_chain=ChainID.BASE,
+            target_chain=ChainID.DERIVE,
+            bridge_type=BridgeType.SOCKET,
+            fee_value=0,
+            fee_in_token=1,
+            tx_details=BridgeTxDetails(
+                contract="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+                method="some_method",
+                kwargs={"some_arg": "some_value"},
+                signed_tx=PSignedTransaction(
+                    raw_transaction="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+                    hash="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbe",
+                    r=1,
+                    s=1,
+                    v=1,
+                ),
+                tx={},
+            ),
+        )
         fake_bridge_result = BridgeTxResult(
             currency=Currency.USDC,
             source_chain=ChainID[request.source_ledger_id.upper()],
             target_chain=ChainID[request.target_ledger_id.upper()],
             source_tx=fake_result,
+            target_tx=fake_result,
             bridge="socket",
             target_from_block=0,
+            prepared_tx=fake_prepared_tx,
+        )
+
+        fake_derive_tx = DeriveTxResult(
+            transaction_hash=DUMMY_TX_HASH,
+            exception=None,
+            data={},
+            status=DeriveTxStatus.SETTLED,
+            error_log={},
+            transaction_id="some_tx_id",
         )
 
         exchanges = self.connection.protocol_interface.exchanges
@@ -141,11 +187,15 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_bridge_result))
-            stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_bridge_result))
-            stack.enter_context(patch.object(client, "deposit_to_derive", return_value=fake_bridge_result))
-            stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
-            stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
+            stack.enter_context(patch.object(client, "prepare_deposit_to_derive", return_value=fake_prepared_tx))
+            stack.enter_context(patch.object(client, "submit_bridge_tx", return_value=fake_bridge_result))
+            stack.enter_context(patch.object(client, "poll_bridge_progress", return_value=fake_bridge_result))
+            stack.enter_context(
+                patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_derive_tx)
+            )
+            stack.enter_context(
+                patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_derive_tx)
+            )
 
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
@@ -154,7 +204,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         assert response is not None
         assert isinstance(response.message, AssetBridgingMessage)
         assert response.message.performative == AssetBridgingMessage.Performative.BRIDGE_STATUS, f"Error: {response}"
-        assert response.message.result.status == BridgeResult.Status.STATUS_PENDING, f"Error: {response}"
+        assert response.message.result.status == BridgeResult.Status.STATUS_SUCCESS, f"Error: {response}"
 
     @pytest.mark.parametrize("case", create_invalid_bridge_requests())
     async def test_handles_invalid_bridge_request(self, case: InvalidTestCase) -> None:
@@ -186,8 +236,6 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(BridgeClient, "withdraw_with_wrapper", return_value=fake_result))
-            stack.enter_context(patch.object(BridgeClient, "deposit", return_value=fake_result))
             stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
             stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
             await self.connection.send(envelope)

@@ -233,7 +233,7 @@ class ArbitrageStrategy:
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
         **kwargs,  # noqa
-    ) -> list[Order]:
+    ) -> list[BridgeRequest]:
         """Get bridge requests based on basic portfolio management strategy."""
 
         asset_a, asset_b = self.base_asset, self.quote_asset
