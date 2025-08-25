@@ -14,7 +14,6 @@ from derive_client.data_types import (
     DeriveTxStatus,
     PreparedBridgeTx,
 )
-from derive_client.exceptions import PartialBridgeResult
 from derive_client.clients.async_client import AsyncClient
 
 from packages.zarathustra.protocols.asset_bridging.message import (
@@ -39,8 +38,6 @@ if TYPE_CHECKING:
 
 # ruff: noqa: PLR0914  # Too many local variables
 # ruff: noqa: PLR0911  # Too many return statements
-
-MAX_RETRIES = 3
 
 BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
 BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
@@ -93,15 +90,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncClient, logger
     bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
 
     # 3. Poll bridge transaction result
-    for attempt in range(MAX_RETRIES):
-        try:
-            bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
-            break
-        except PartialBridgeResult as e:
-            if attempt == MAX_RETRIES - 1:
-                msg = f"Bridge did not succeed: {bridge_tx_result}"
-                raise BridgeFailed(msg) from e
-            continue
+    bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
 
     # If we didn't raise above, TxStatus is considered final and FAILED
     if bridge_tx_result.status is not TxStatus.SUCCESS:
@@ -162,15 +151,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncClient, log
     bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
 
     # 3. Poll bridge transaction result
-    for attempt in range(MAX_RETRIES):
-        try:
-            bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
-            break
-        except PartialBridgeResult as e:
-            if attempt == MAX_RETRIES - 1:
-                msg = f"Bridge did not succeed: {bridge_tx_result}"
-                raise BridgeFailed(msg) from e
-            continue
+    bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
 
     # If we didn't raise above, TxStatus is considered final and FAILED
     if bridge_tx_result.status is not TxStatus.SUCCESS:
@@ -199,10 +180,10 @@ def create_bridge_result(
     match bridge_tx_result.status:
         case TxStatus.SUCCESS:
             status = BridgeResult.Status.STATUS_SUCCESS
-        case TxStatus.PENDING:  # should not be possible
-            status = BridgeResult.Status.STATUS_PENDING
         case TxStatus.FAILED:
             status = BridgeResult.Status.STATUS_FAILED
+        case TxStatus.PENDING:  # should not be possible
+            status = BridgeResult.Status.STATUS_PENDING
 
     return BridgeResult(
         request=request,

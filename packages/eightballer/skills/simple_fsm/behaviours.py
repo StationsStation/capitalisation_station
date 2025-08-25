@@ -22,7 +22,7 @@ import os
 import sys
 import pathlib
 import importlib
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from datetime import datetime, timedelta
 
 from aea.skills.behaviours import FSMBehaviour
@@ -41,6 +41,10 @@ from packages.eightballer.skills.simple_fsm.behaviour_classes.order_execution_ro
 from packages.eightballer.skills.simple_fsm.behaviour_classes.check_bridge_request_round import (
     CheckBridgeRequestRound,
 )
+
+
+if TYPE_CHECKING:
+    from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeRequest
 
 
 DEFAULT_ENCODING = "utf-8"
@@ -79,7 +83,7 @@ class IdentifyOpportunityRound(BaseBehaviour):
             and not self.strategy.state.bridge_requests_in_progress
             and self.strategy.bridging_enabled
         ):
-            bridging_requests = self.strategy.trading_strategy.get_bridge_requests(
+            bridging_requests: list[BridgeRequest] = self.strategy.trading_strategy.get_bridge_requests(
                 portfolio=self.strategy.state.portfolio,
                 prices=self.strategy.state.prices,
                 **self.custom_config.kwargs["strategy_run_kwargs"],
@@ -108,20 +112,11 @@ class IdentifyOpportunityRound(BaseBehaviour):
                 msg=f"Opportunity unaffordable: {self.strategy.state.unaffordable_opportunity}",
             )
 
-        # If there are opportunities, we prioritize executing those
+        # If there are opportunities, we execute those
         if orders:
             self.context.logger.info(f"Opportunity found: {orders}")
             self.strategy.state.new_orders = orders
             self._event = ArbitrageabciappEvents.OPPORTUNITY_FOUND
-            return
-
-        # By this time, outstanding requests may have long completed
-        if self.strategy.state.bridge_requests_in_progress:
-            self.context.logger.info(
-                "Checking status of bridge requests in progress",
-                extra={"bridge_requests_in_progress": self.strategy.state.bridge_requests_in_progress},
-            )
-            self._event = ArbitrageabciappEvents.BRIDGE_REQUEST_FOUND
 
     def setup(self) -> None:
         """Setup the state."""
