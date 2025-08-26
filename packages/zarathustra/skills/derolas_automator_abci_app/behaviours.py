@@ -318,7 +318,7 @@ class BaseState(State, ABC):  # noqa: PLR0904
             ).call()
 
             # ------- Sign the hash (EIP-712 style: sign the raw 32-byte digest) -------
-            sig = self.crypto._entity.unsafe_sign_hash(message_hash=HexBytes(safe_tx_hash))  # noqa: SLF001
+            sig = self.crypto._entity.unsafe_sign_hash(message_hash=HexBytes(safe_tx_hash))  # noqa:SLF001
             # Signature format for Safe: r(32) + s(32) + v(1)
             sig_bytes = sig.r.to_bytes(32, "big") + sig.s.to_bytes(32, "big") + bytes([sig.v])
 
@@ -517,7 +517,7 @@ class EndEpochRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.info(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"End Epoch Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -604,7 +604,7 @@ class DonateRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.debug(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"Donate Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -643,7 +643,7 @@ class MakeClaimRound(BaseState):
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.debug(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"Claim Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -670,7 +670,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(tick_interval=3, **kwargs)
+        super().__init__(**kwargs)
         self.register_state(
             DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             AwaitTriggerRound(**kwargs),

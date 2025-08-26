@@ -21,6 +21,7 @@
 from typing import Any
 from pathlib import Path
 
+from web3 import Web3
 from propcache import cached_property
 from aea.skills.base import Model
 from aea.contracts.base import Contract, contract_registry
@@ -59,9 +60,9 @@ class DerolasState(Model):
         name = DEROLAS_PUBLIC_ID.name
         contract = load_contract(ROOT / author / "contracts" / name)
         self.derolas_staking_contract = contract
-        self.derolas_contract_address = kwargs.pop("derolas_contract_address")
         self.eth_endpoint = kwargs.pop("eth_endpoint")
-        self.safe_address = kwargs.pop("safe_address")
+        self.derolas_contract_address = Web3.to_checksum_address(kwargs.pop("derolas_contract_address"))
+        self.safe_address = Web3.to_checksum_address(kwargs.pop("safe_address"))
         self.use_safe = self.safe_address != ETH_ZERO_ADDRESS
         super().__init__(**kwargs)
 
