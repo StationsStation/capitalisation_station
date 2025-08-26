@@ -200,4 +200,4 @@ models:
 behaviours:
   main:
     args:
-      tick_interval: 3
+      tick_interval: 5
