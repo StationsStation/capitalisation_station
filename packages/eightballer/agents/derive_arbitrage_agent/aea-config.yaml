@@ -56,7 +56,7 @@ skills:
 - eightballer/simple_fsm:0.1.0:bafybeibsl4breph6oltjsqhx7blolfhj6xjb5olchpureg3bxacw2ciaby
 - eightballer/trading_state:0.1.0:bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiarlrjeahmz7bnknj73sgyk5ioumwvsa2nxzo56jy56gc5blshr3y
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeigboulbbqlvkexqobdkfpdgztia3nzftms3rhg4zav27gmgl5lcbq
 customs:
 - eightballer/lbtc_arbitrage:0.1.0:bafybeiakvlacyothzr7u4qae5vhc647hpyaxvbz6rhfy55khe2gudwxeky
 default_ledger: ethereum
