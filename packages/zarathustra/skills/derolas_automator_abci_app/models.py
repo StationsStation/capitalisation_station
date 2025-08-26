@@ -21,6 +21,7 @@
 from typing import Any
 from pathlib import Path
 
+from propcache import cached_property
 from aea.skills.base import Model
 from aea.contracts.base import Contract, contract_registry
 from aea_ledger_ethereum import EthereumApi, EthereumCrypto
@@ -36,6 +37,8 @@ ROOT = Path(__file__).parent.parent.parent.parent
 
 
 _TMP = LEDGER_PUBLIC_ID
+
+ETH_ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 
 def load_contract(contract_path: Path) -> Contract:
@@ -56,15 +59,18 @@ class DerolasState(Model):
         name = DEROLAS_PUBLIC_ID.name
         contract = load_contract(ROOT / author / "contracts" / name)
         self.derolas_staking_contract = contract
-        self.derolas_contract_address = "0x2216ebB7f5f983b1D15713F90556edd56EB88DeE"
+        self.derolas_contract_address = kwargs.pop("derolas_contract_address")
+        self.eth_endpoint = kwargs.pop("eth_endpoint")
+        self.safe_address = kwargs.pop("safe_address")
+        self.use_safe = self.safe_address != ETH_ZERO_ADDRESS
         super().__init__(**kwargs)
 
-    @property
+    @cached_property
     def base_ledger_api(self) -> EthereumApi:
         """Get the Base ledger api."""
-        return EthereumApi(address="https://base.llamarpc.com", chain_id=str(8453))
+        return EthereumApi(address=self.eth_endpoint, chain_id=str(8453))
 
-    @property
+    @cached_property
     def crypto(self) -> EthereumCrypto:
         """Get EthereumCrypto."""
         return EthereumCrypto(private_key_path="ethereum_private_key.txt")
