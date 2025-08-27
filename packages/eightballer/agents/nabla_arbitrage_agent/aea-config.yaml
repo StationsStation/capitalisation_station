@@ -154,6 +154,11 @@ config:
     wallet: null
     ledger_id: arbitrum
     rpc_url: ${ARBITRUM_RPC:str:https://arbitrum.drpc.org}
+  - name: nabla
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: base
+    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
 ---
 public_id: eightballer/simple_fsm:0.1.0
 type: skill
