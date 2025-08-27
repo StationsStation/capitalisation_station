@@ -13,6 +13,9 @@ import httpx
 import httpcore
 import rich_click as click
 from rich import print
+from eth_abi import encode
+from eth_utils import keccak, to_checksum_address
+from eth_account import Account
 from aea_ledger_ethereum import Address, EthereumApi, EthereumCrypto
 from cowdao_cowpy.cow.swap import (
     CHAIN_TO_EXPLORER,
@@ -25,14 +28,20 @@ from cowdao_cowpy.cow.swap import (
     ChecksumAddress,
     PreSignSignature,
     post_order,
-    sign_order,
 )
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
+from cowdao_cowpy.contracts.sign import (
+    EcdsaSignature,
+    Eip1271Signature,
+    Eip1271SignatureData,
+    sign_order as _sign_order,
+)
 from cowdao_cowpy.order_book.api import OrderBookApi
-from cowdao_cowpy.contracts.order import OrderKind
+from cowdao_cowpy.contracts.order import OrderKind, hash_order
 from cowdao_cowpy.common.constants import CowContractAddress
+from cowdao_cowpy.contracts.domain import domain
 from cowdao_cowpy.common.api.errors import UnexpectedResponseError
 from cowdao_cowpy.order_book.config import OrderBookAPIConfigFactory
 from cowdao_cowpy.order_book.generated.model import (
@@ -60,25 +69,23 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import NATIVE_ETH, L
 from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
 
 
-APP_DATA = "0xf142fb87fd167a929b0aacb90fca1e6bf963fcf0513a57af7e4223897df4d93e"
+APP_DATA = "0x66df8b6f8bf097b0a79fc5ad6b4c3c53ab986706a5a133828f2f681ca2ce6772"
 
 MAX_ORDER_ATTEMPTS = 5
 MAX_QUOTE_ATTEMPTS = 5
-SLIPPAGE_TOLERANCE = 0.0025
+SLIPPAGE_TOLERANCE = 0.00025
 # 1bps fee applied to all trades
 SPENDER = {
     SupportedLedgers.ETHEREUM: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.GNOSIS: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.BASE: CowContractAddress.VAULT_RELAYER.value,
     SupportedLedgers.ARBITRUM: CowContractAddress.VAULT_RELAYER.value,
-    SupportedLedgers.POLYGON: CowContractAddress.VAULT_RELAYER.value,
 }
 LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.ETHEREUM: CowChains.MAINNET.value[0].value,
     SupportedLedgers.GNOSIS: CowChains.GNOSIS.value[0].value,
     SupportedLedgers.BASE: CowChains.BASE.value[0].value,
     SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE.value[0].value,
-    SupportedLedgers.POLYGON: CowChains.POLYGON.value[0].value,
 }
 
 LEDGER_TO_COW_CHAIN = {
@@ -86,7 +93,6 @@ LEDGER_TO_COW_CHAIN = {
     SupportedLedgers.GNOSIS: CowChains.GNOSIS,
     SupportedLedgers.BASE: CowChains.BASE,
     SupportedLedgers.ARBITRUM: CowChains.ARBITRUM_ONE,
-    SupportedLedgers.POLYGON: CowChains.POLYGON,
 }
 
 LEDGER_TO_RPC = {
@@ -94,7 +100,6 @@ LEDGER_TO_RPC = {
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
     SupportedLedgers.BASE: "https://base.llamarpc.com",
     SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
-    SupportedLedgers.POLYGON: "https://polygon.llamarpc.com",
 }
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -150,6 +155,33 @@ async def get_quote(
         raise ExchangeNotAvailable(msg) from err
 
 
+def sign_hash_with_account(account: LocalAccount, hash_to_sign: bytes) -> bytes:
+    """Helper function to sign a hash for EIP1271 with a LocalAccount."""
+    signed = Account._sign_hash(hash_to_sign, private_key=account.key)  # noqa: SLF001
+    return signed.signature
+
+
+def compute_safe_message_hash(message: bytes, safe_address: str, chain_id: int) -> bytes:
+    """Compute the Safe message hash for EIP1271 signing."""
+    # Type hash for SafeMessage(bytes message)
+    safe_message_typehash = keccak(text="SafeMessage(bytes message)")
+
+    # Domain separator for Safe
+    domain_type_hash = keccak(text="EIP712Domain(uint256 chainId,address verifyingContract)")
+    domain_separator = keccak(
+        encode(["bytes32", "uint256", "address"], [domain_type_hash, chain_id, to_checksum_address(safe_address)])
+    )
+
+    # Hash the message data
+    message_hash = keccak(message)
+
+    # Encode the SafeMessage struct
+    safe_message_struct_hash = keccak(encode(["bytes32", "bytes32"], [safe_message_typehash, message_hash]))
+
+    # Final EIP-712 hash
+    return keccak(b"\x19\x01" + domain_separator + safe_message_struct_hash)
+
+
 async def swap_tokens(
     amount: Wei,
     account: LocalAccount,
@@ -159,7 +191,8 @@ async def swap_tokens(
     buy_token: ChecksumAddress,
     safe_address: ChecksumAddress | None = None,
     app_data: str = APP_DATA,
-    slippage_tolerance: float = 0.000,
+    slippage_tolerance: float = 0.005,
+    use_eip1271: bool = False,
 ) -> CompletedOrder:
     """Swap tokens using the CoW Protocol.
     `CowContractAddress.VAULT_RELAYER` needs to be approved to spend the sell token before calling this function.
@@ -180,7 +213,7 @@ async def swap_tokens(
     order_quote: OrderQuoteResponse = await order_book_api.post_quote(order_quote_request, order_side)
     valid_to = order_quote.quote.validTo
     # we set the expiration to be 1 years from now
-    valid_to += 7 * 24 * 60 * 60
+    valid_to += 365 * 24 * 60 * 60
     order = CowOrder(
         sell_token=sell_token,
         buy_token=buy_token,
@@ -196,18 +229,44 @@ async def swap_tokens(
     )
 
     base_url = CHAIN_TO_EXPLORER.get(chain_id, "https://explorer.cow.fi")
-    signature = (
-        PreSignSignature(
-            scheme=SigningScheme.PRESIGN,
-            data=safe_address,
-        )
-        if safe_address is not None
-        else sign_order(chain, account, order)
-    )
+
+    if safe_address is not None:
+        if use_eip1271:
+            order_domain = domain(chain=chain, verifying_contract=CowContractAddress.SETTLEMENT_CONTRACT.value)
+            order_data_hash = hash_order(order_domain, order)
+            safe_message_hash = compute_safe_message_hash(
+                message=order_data_hash, safe_address=safe_address, chain_id=chain_id.value
+            )
+
+            sig_bytes = sign_hash_with_account(account, safe_message_hash)
+
+            signature = Eip1271Signature(
+                scheme=SigningScheme.EIP1271, data=Eip1271SignatureData(verifier=safe_address, signature=sig_bytes)
+            )
+
+        else:
+            signature = PreSignSignature(
+                scheme=SigningScheme.PRESIGN,
+                data=safe_address,
+            )
+    else:
+        signature = sign_order(chain, account, order)
+
     order_uid = await post_order(account, safe_address, order, signature, order_book_api)
     order_link = f"{base_url}/orders/{order_uid.root!s}".lower()
     order_link = order_book_api.get_order_link(order_uid)
     return CompletedOrder(uid=order_uid, url=order_link)
+
+
+def sign_order(
+    chain: CowChains,
+    account: LocalAccount,
+    order: Order,
+    signing_scheme: SigningScheme = SigningScheme.EIP712,
+) -> EcdsaSignature:
+    """Sign a CoW order with the specified signing scheme."""
+    order_domain = domain(chain=chain, verifying_contract=CowContractAddress.SETTLEMENT_CONTRACT.value)
+    return _sign_order(order_domain, order, account, signing_scheme)
 
 
 class CowSwapClient(BaseErc20Exchange):
@@ -352,6 +411,9 @@ class CowSwapClient(BaseErc20Exchange):
             raise ValueError(msg)
         amount_int = sell_token.to_machine(amount)
 
+        extra_data = kwargs.get("data", {})
+        safe_address = extra_data.get("safe_contract_address")
+
         print(f""""
         amount={amount_int},
         buy_token={buy_token.address},
@@ -363,30 +425,61 @@ class CowSwapClient(BaseErc20Exchange):
         """)
         self.logger.info(f"Submitting {side} order for {amount} {sell_token.symbol} for {buy_token.symbol}")
 
-        try:
-            raw_order = await swap_tokens(
-                order_book_api=self.order_book_api,
-                buy_token=buy_token.address,
-                sell_token=sell_token.address,
-                amount=amount_int,
-                chain=self.chain,
-                account=self.account.entity,
-                slippage_tolerance=SLIPPAGE_TOLERANCE,  # we need it to be exact!
-            )
-        except Exception as error:
-            await asyncio.sleep(cooldown * attempts)
-            self.logger.exception(f"Failed to submit order: {error}")
-            return await self.create_order(attempts=attempts + 1, **kwargs)
+        if safe_address:
+            try:
+                raw_order = await self._create_eip1271_order(
+                    sell_token=sell_token.address,
+                    buy_token=buy_token.address,
+                    amount=amount_int,
+                    safe_address=safe_address,
+                    account=self.account.entity,
+                    slippage_tolerance=SLIPPAGE_TOLERANCE,
+                )
 
-        return self._parse_order(
-            order=raw_order,
-            exchange_id=self.exchange_id,
-            symbol=symbol,
-            price=price,
-            amount=amount,
-            side=side,
-            ledger_id=self.ledger_id,
-        )
+                return self._parse_order(
+                    order=raw_order,
+                    exchange_id=self.exchange_id,
+                    symbol=symbol,
+                    price=price,
+                    amount=amount,
+                    side=side,
+                    ledger_id=self.ledger_id,
+                    status=OrderStatus.OPEN,
+                )
+            except Exception as e:
+                await asyncio.sleep(cooldown * attempts)
+                self.logger.exception(f"Failed to create CoW order: {e}")
+                return await self.create_order(attempts=attempts + 1, **kwargs)
+        else:
+            try:
+                raw_order = await swap_tokens(
+                    order_book_api=self.order_book_api,
+                    buy_token=buy_token.address,
+                    sell_token=sell_token.address,
+                    amount=amount_int,
+                    chain=self.chain,
+                    account=self.account.entity,
+                    slippage_tolerance=SLIPPAGE_TOLERANCE,  # we need it to be exact!
+                )
+            except Exception as error:
+                await asyncio.sleep(cooldown * attempts)
+                self.logger.exception(f"Failed to submit order: {error}")
+                return await self.create_order(attempts=attempts + 1, **kwargs)
+
+            return self._parse_order(
+                order=raw_order,
+                exchange_id=self.exchange_id,
+                symbol=symbol,
+                price=price,
+                amount=amount,
+                side=side,
+                ledger_id=self.ledger_id,
+            )
+
+    async def _create_eip1271_order(self, **params):
+        """Create an EIP1271 order."""
+        self.logger.info(f"Creating EIP1271 order with params: {params}")
+        return await swap_tokens(order_book_api=self.order_book_api, chain=self.chain, use_eip1271=True, **params)
 
     @lru_cache(maxsize=128)  # noqa
     def get_assets_from_symbols(self, symbol_a, symbol_b):
