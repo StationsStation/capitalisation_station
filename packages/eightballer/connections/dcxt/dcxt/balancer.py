@@ -1,5 +1,6 @@
 """Balancer exchange."""
 
+from functools import cached_property
 import json
 import time
 import traceback
@@ -17,7 +18,7 @@ from collections import defaultdict
 import web3
 from balpy import balpy
 from aea.contracts.base import Contract
-from aea_ledger_ethereum import Account, EthereumApi
+from aea_ledger_ethereum import EthereumApi, EthereumCrypto
 from aea.configurations.loader import ComponentType, ContractConfig, load_component_configuration
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -123,6 +124,8 @@ class BalancerClient(BaseErc20Exchange):
 
         self.ledger_id = SupportedLedgers(ledger_id)
         self.balancer_deployment = LEDGER_IDS_CHAIN_NAMES[self.ledger_id]
+        self.exchange_id = "balancer"
+        self.supported_ledger = self.ledger_id
 
         self.rpc_url = rpc_url
 
@@ -130,11 +133,11 @@ class BalancerClient(BaseErc20Exchange):
 
         with open(key_path, encoding=DEFAULT_ENCODING) as file:
             key = file.read().strip()
-        self.account = Account.from_key(private_key=key)
+        self.account = EthereumCrypto(key_path)
         self.bal: balpy.balpy = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
-                "privateKey": self.account._private_key,  # noqa
+                "privateKey":key,  # noqa
                 "customRPC": self.rpc_url,
                 "etherscanApiKey": self.etherscan_api_key,
             },
@@ -168,6 +171,12 @@ class BalancerClient(BaseErc20Exchange):
             )
             for address, token in self.raw_token_data.items()
         }
+
+    @cached_property
+    def spender_address(self) -> str:
+        """Get the spender address."""
+        vault = self.bal.balLoadContract("Vault")
+        return web3.Web3.to_checksum_address(vault.address)
 
     async def fetch_markets(
         self,
@@ -799,74 +808,7 @@ class BalancerClient(BaseErc20Exchange):
 
     async def fetch_open_orders(self, **kwargs):
         """Get an order."""
-        vault = self.bal.balLoadContract("Vault")
-        params = kwargs.get("params", {})
-
-        def parse_transaction(events, _):
-            def net_out_swaps(swap_events):
-                # This dictionary will hold net amounts for each token address
-                token_balances = defaultdict(lambda: {"spent": 0, "received": 0})
-
-                # Loop over each swap event and net out the amounts
-                for event in swap_events:
-                    # Extract the details from each swap event
-                    token_in = event["args"]["tokenIn"]
-                    token_out = event["args"]["tokenOut"]
-                    amount_in = event["args"]["amountIn"]
-                    amount_out = event["args"]["amountOut"]
-
-                    # Update the 'spent' (tokenIn) and 'received' (tokenOut) amounts
-                    token_balances[token_in]["spent"] += amount_in
-                    token_balances[token_out]["received"] += amount_out
-
-                # Calculate the net balances for each token
-                net_balances = {}
-                for token, balances in token_balances.items():
-                    net_bal = balances["received"] - balances["spent"]
-                    if net_bal != 0:
-                        net_balances[token] = net_bal
-
-                return net_balances
-
-            net_balances = net_out_swaps(events)
-            for address, raw_balance in net_balances.items():
-                token = self.get_token(address)
-                balance = token.to_human(raw_balance)
-                net_balances[address] = balance
-            return net_balances
-
-        all_events = []
-        # We have to batch up the events as the filter can only return 10k events at a time
-        start = 21076969
-        interval = 2000
-        end = self.bal.web3.eth.block_number
-        account = params.get("account")
-        for i in range(0, end - start, interval):
-            start += i
-            to = start + interval
-            if to > end:
-                to = end - 1
-            if start >= end:
-                break
-            events = vault.events.Swap.create_filter(fromBlock=start, toBlock=to, address=account).get_all_entries()
-            all_events.extend(events)
-
-        # We create a bundle of events for each transaction
-        event_bundles = defaultdict(list)
-        for event in events:
-            tx_hash = event["transactionHash"].hex()
-            event_bundles[tx_hash].append(event)
-
-        # We now parse all the individual transactions
-        trades = {}
-
-        transaction_data = {}
-        for tx_hash, events in event_bundles.items():
-            trades[tx_hash] = parse_transaction(events, tx_hash)
-            transaction_data[tx_hash] = self.bal.web3.eth.get_transaction(tx_hash)
-
-        {k: v for k, v in transaction_data.items() if v["from"] == account}
-
+        del kwargs
         return Orders(orders=[])
 
     async def get_all_markets(self, *args, **kwargs):
