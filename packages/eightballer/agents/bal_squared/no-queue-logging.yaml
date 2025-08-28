@@ -1,0 +1,34 @@
+logging_config:
+  disable_existing_loggers: false
+  formatters:
+    standard:
+      class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.ShortNameFormatter
+      format: '[%(levelname)s] %(short_name)s: %(message)s'
+    detailed:
+      format: '[%(levelname)s|%(pathname)s|L%(lineno)d] %(asctime)s: %(message)s'
+      datefmt: '%Y-%m-%dT%H:%M:%S%z'
+    json:
+      class: packages.eightballer.agents.derive_arbitrage_agent.logger_setup.JSONFormatter
+      datefmt: '%Y-%m-%dT%H:%M:%S%z'
+  handlers:
+    console:
+      class: rich.logging.RichHandler
+      formatter: standard
+      level: INFO
+      markup: true
+    logfile:
+      class: logging.handlers.TimedRotatingFileHandler
+      filename: log.jsonl
+      formatter: json
+      level: INFO
+      when: D         # rotate daily
+      interval: 1
+      backupCount: 7  # keep 7 days
+  loggers:
+    aea:
+      handlers:
+      - console
+      - logfile
+      level: INFO
+      propagate: false
+  version: 1
