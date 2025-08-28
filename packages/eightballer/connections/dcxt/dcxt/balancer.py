@@ -1,6 +1,5 @@
 """Balancer exchange."""
 
-from functools import cached_property
 import json
 import time
 import traceback
@@ -13,7 +12,7 @@ from pathlib import Path
 # pylint: disable=R0914,R0902,R0912
 # ruff: noqa: PLR0914,PLR0915
 from datetime import datetime
-from collections import defaultdict
+from functools import cached_property
 
 import web3
 from balpy import balpy
@@ -137,7 +136,7 @@ class BalancerClient(BaseErc20Exchange):
         self.bal: balpy.balpy = balpy.balpy(
             LEDGER_IDS_CHAIN_NAMES[self.ledger_id].value,
             manualEnv={
-                "privateKey":key,  # noqa
+                "privateKey": key,
                 "customRPC": self.rpc_url,
                 "etherscanApiKey": self.etherscan_api_key,
             },
