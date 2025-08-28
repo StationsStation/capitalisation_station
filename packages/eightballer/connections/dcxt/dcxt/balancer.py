@@ -408,15 +408,20 @@ class BalancerClient(BaseErc20Exchange):
             msg += f" with symbols {asset_a_symbol} and {asset_b_symbol}"
             raise ValueError(msg)
 
-        input_token = self.get_token(asset_a)
-        output_token = self.get_token(asset_b)
-        symbol = f"{input_token.symbol}/{output_token.symbol}"
+        output_token = self.get_token(asset_a)
+        input_token = self.get_token(asset_b)
+        symbol = f"{output_token.symbol}/{input_token.symbol}"
 
-        # We now calculate the price of the token.
-        params["is_sell"] = True
-        bid_price = self.get_price(input_token.address, output_token.address, **params)
-        params["amount"] = bid_price * Decimal(params["amount"])
-        ask_price = 1 / self.get_price(output_token.address, input_token.address, **params)
+        ask_price, bid_price = self.bal.graph.getTicker(
+            chain=self.balancer_deployment.value,
+            tokenIn=input_token.address,
+            tokenOut=output_token.address,
+            amount=params["amount"],
+        )
+
+        ask_price = float(ask_price)
+        bid_price = float(bid_price)
+
         timestamp = datetime.now(tz=datetime.now().astimezone().tzinfo)
         self.logger.debug(f"Got ticker for {symbol} with ask: {ask_price} and bid: {bid_price}")
         return Ticker(
