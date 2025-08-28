@@ -156,11 +156,8 @@ class ArbitrageStrategy:
         # sense checks as we will get eaten by mev if we try to do on one exchange
         # - we are not buying and selling on the same exchange
         # - we are not buying and selling on the same ledger
-        return not any(
-            [
-                opportunity.best_ask_exchange == opportunity.best_bid_exchange,
-            ]
-        )
+        del opportunity
+        return not any([])
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""
@@ -236,7 +233,7 @@ class ArbitrageStrategy:
         self,
         portfolio: dict[str, dict[str, dict[str, float]]],
         **kwargs,  # noqa
-    ) -> list[Order]:
+    ) -> list[BridgeRequest]:
         """Get bridge requests based on basic portfolio management strategy."""
 
         asset_a, asset_b = self.base_asset, self.quote_asset

@@ -13,8 +13,8 @@ fingerprint:
   connection.py: bafybeia7444ug26wxiwg5gprpxhhfad6glp74pxee4ks6xq6cpdhrzlufu
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
-  dcxt/balancer.py: bafybeiff7howwl6sfx2ulabzrpqvzjgyxtwrpxpjsq4pd75fxmpywdows4
-  dcxt/cowswap.py: bafybeibm25rea2f7hakx7okmkxye2zag4wgavtqutqvudceecz26jn2wim
+  dcxt/balancer.py: bafybeid6owxeygdpuh3bb7aby44are6cieepgibmf5ue4zk2zioims6yby
+  dcxt/cowswap.py: bafybeiespyiremsagi7nt4x3bjaozegspxiemviffi46n4tyrwcvrxn5vm
   dcxt/data/__init__.py: bafybeiazzyf5llflmu6wrc2zzmwy6aabilr74g5gq2kkr5dxvtug55jy3a
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
@@ -22,8 +22,8 @@ fingerprint:
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/nabla/config.json: bafybeihrezo6ivumya4kygvguzbvb5phjkhcrjaholbjdoqjlc4encj5d4
   dcxt/data/token_list.json: bafybeiakjvmpjcmglppycv444d44h5vcyfqjzd5cmgnjonwryvnuafdq3i
-  dcxt/data/tokens.py: bafybeifw6p4h4us2ciborxpmkaqmfgvcsa4c23d273mbcldmpgakjjqqfq
-  dcxt/defi_exchange.py: bafybeidtww2r3uv5ap62brw65li7emmgadnhqa24aomhdtes42udjs5sci
+  dcxt/data/tokens.py: bafybeih4jkdz7i32iv7z2g6c3fk2z7un7shdxwcxvbd5eeicjxsz3egsbu
+  dcxt/defi_exchange.py: bafybeid7fh3ynu7mzhk7mlvo2klh4zhln54sipwqgxs4qlr7yt77rredwe
   dcxt/derive.py: bafybeiadqhtyiewu2ywz5w3mkd2vhblnka6gyxors2wxao4q4pmgtrwurm
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
   dcxt/nabla.py: bafybeidfto63bu5csieqdnjnzgcos7ntf6u5u6bvpiultipyx6ububsvxq
@@ -34,7 +34,7 @@ fingerprint:
   exchange.py: bafybeih3asaxnt2zokz25khfl5pjr24huth3g5j45psdhzky6ztozleb7y
   interfaces/__init__.py: bafybeieilhpbmbywcckv7wqjahnrkfnjj55fb6rdpuexk2rvmran5yqdhe
   interfaces/approvals.py: bafybeidsl5z72althhmjlmzffyd3hksoau5otus7pgspu2xk5u4y4r53ou
-  interfaces/asset_bridging.py: bafybeie7v46573hqoiuj7lm5k56ybl3qmawbqoffowgzhwygnb63pwx6yq
+  interfaces/asset_bridging.py: bafybeifexcgshbdecf3xl7c7nivzme4one4ascqrxemsh4shvcn4kssziq
   interfaces/balance.py: bafybeibobms6f5jask25atzlfmz2uqs3jmdz3ims6qofzqjl3bo4xctcnq
   interfaces/interface.py: bafybeibtfsog3vacsn4z3wzdr734egph5swx76ugzuya6njxvr5hpdv7de
   interfaces/interface_base.py: bafybeieukreeo37tdnnss7xv2sbwkhhshkomsauwvqy5gop4xfpxf3jx6y
@@ -50,7 +50,7 @@ fingerprint:
   tests/balancer/test_balancer.py: bafybeia2btocoexcjx4eqsk7ayliuoadzuu3ak7xpy4vfgeowcootn6jrq
   tests/data/key: bafybeidq4s5ytnyclxsb6nodvo7w3daysiuuul5cs7vlx35onllspt7fpm
   tests/protocols/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
-  tests/protocols/test_asset_bridging.py: bafybeie76vnnrkdiu3hhjgjncjijdk7lisedt5y5yf6j4not26b523536y
+  tests/protocols/test_asset_bridging.py: bafybeignrvv62c4kgqjio2siryiausbju6knfwktk2zoight4weksb35su
   tests/protocols/test_balances.py: bafybeicw37cv4asgwwnu34ddwkuydlkm4axfea6x4cuzn63whx5sha4pme
   tests/protocols/test_market.py: bafybeietvfijv7xz4tza57w6anslcldfdgqpkdbvh2dfwjqmu5x6yiwqgy
   tests/protocols/test_ohlcv_interface.py: bafybeidj2urmtzqqjlkgot7m4fsjrisgouoba4bc5jlyrsj3qt2psse4ea

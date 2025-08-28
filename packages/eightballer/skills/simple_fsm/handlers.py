@@ -172,27 +172,19 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
             result = message.result
             request_id = result.request.request_id
 
-            # case: a bridge status update message arrived after finalization
-            if request_id not in self.strategy.state.bridge_requests_in_progress:
-                self.context.logger.info(f"Bridge request already finalized {request_id}: {message}")
-                return None
-
             match result.status:
-                case BridgeResult.Status.STATUS_PENDING:
-                    current = self.strategy.state.bridge_requests_in_progress[request_id]
-                    current.payload = result
-                    self.context.logger.info(f"Bridge request pending: {result}")
                 case BridgeResult.Status.STATUS_SUCCESS:
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
                     self.context.logger.info(f"Bridge request completed: {result}")
-                case BridgeResult.Status.STATUS_FAILED:
-                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
-                    self.context.logger.error(f"Bridge request failed: {result}")
-                case BridgeResult.Status.ERROR:
-                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
-                    self.context.logger.exception(f"Bridge request error: {result}")
                 case _:
-                    self.context.logger.exception(f"Unexpected bridge request status: {result}")
+                    self.strategy.bridging_enabled = False
+                    msg = f"Bridging requests failed, status: {result.status}. Disabled bridging."
+                    self.context.logger.warning(msg, extra={"result": result})
+                    self.strategy.send_notification_to_user(
+                        title=msg,
+                        msg=f"Bridging requests failed: {result}",
+                    )
+                    self.strategy.state.bridge_requests_in_progress.pop(request_id)
 
         return super().handle(message)
 

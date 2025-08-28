@@ -28,12 +28,68 @@ from aea_ledger_ethereum import (
     HexBytes,
     JSONLike,
     EthereumApi,
+    EthereumCrypto,
     SignedTransaction,
     try_decorator,
 )
 from aea.skills.behaviours import State, FSMBehaviour, TickerBehaviour
 
 from packages.zarathustra.contracts.derolas_staking.contract import DerolasStaking
+
+
+# ------- ABIs -------
+SAFE_ABI = [
+    {
+        "inputs": [],
+        "name": "nonce",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [],
+        "name": "getThreshold",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [
+            {"internalType": "address", "name": "to", "type": "address"},
+            {"internalType": "uint256", "name": "value", "type": "uint256"},
+            {"internalType": "bytes", "name": "data", "type": "bytes"},
+            {"internalType": "enum Enum.Operation", "name": "operation", "type": "uint8"},
+            {"internalType": "uint256", "name": "safeTxGas", "type": "uint256"},
+            {"internalType": "uint256", "name": "baseGas", "type": "uint256"},
+            {"internalType": "uint256", "name": "gasPrice", "type": "uint256"},
+            {"internalType": "address", "name": "gasToken", "type": "address"},
+            {"internalType": "address payable", "name": "refundReceiver", "type": "address"},
+            {"internalType": "bytes", "name": "signatures", "type": "bytes"},
+        ],
+        "name": "execTransaction",
+        "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
+        "stateMutability": "payable",
+        "type": "function",
+    },
+    {
+        "inputs": [
+            {"internalType": "address", "name": "to", "type": "address"},
+            {"internalType": "uint256", "name": "value", "type": "uint256"},
+            {"internalType": "bytes", "name": "data", "type": "bytes"},
+            {"internalType": "enum Enum.Operation", "name": "operation", "type": "uint8"},
+            {"internalType": "uint256", "name": "safeTxGas", "type": "uint256"},
+            {"internalType": "uint256", "name": "baseGas", "type": "uint256"},
+            {"internalType": "uint256", "name": "gasPrice", "type": "uint256"},
+            {"internalType": "address", "name": "gasToken", "type": "address"},
+            {"internalType": "address", "name": "refundReceiver", "type": "address"},
+            {"internalType": "uint256", "name": "_nonce", "type": "uint256"},
+        ],
+        "name": "getTransactionHash",
+        "outputs": [{"internalType": "bytes32", "name": "", "type": "bytes32"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+]
 
 
 @dataclass
@@ -62,6 +118,7 @@ GAS_PREMIUM = 1.1
 TX_MINING_TIMEOUT = 120  # seconds
 BLOCK_MARGIN = 10
 
+SAFE_ADDRESS = "0xb8b78f80FFdA7F02477AD487Aca136b0fb7f663D"  # example safe
 # ruff: noqa: BLE001
 # - BLE001: Do not catch blind exception: `Exception`
 
@@ -210,7 +267,7 @@ class BaseState(State, ABC):  # noqa: PLR0904
         return self.context.derolas_state.base_ledger_api
 
     @property
-    def crypto(self):
+    def crypto(self) -> EthereumCrypto:
         """Ethereum crypto."""
         return self.context.derolas_state.crypto
 
@@ -235,6 +292,66 @@ class BaseState(State, ABC):  # noqa: PLR0904
             raise
         self.context.logger.debug(f"Transaction built: {txn}")
         return txn
+
+    def build_safe_transaction(self, func, value: int = 0):  # noqa: PLR0914
+        """Build a transaction from the safe contract."""
+        # get the safe contract
+
+        safe = self.base_ledger_api.api.eth.contract(address=self.safe_address, abi=SAFE_ABI)
+        calldata = func._encode_transaction_data()  # noqa: SLF001
+
+        # ------- Safe tx fields (owner pays gas) -------
+        to = self.derolas_contract_address
+        data = HexBytes(calldata)
+        operation = 0  # CALL
+        safe_tx_gas = 120000  # conservative for ERC20 transfer via Safe
+        base_gas = 0
+        gas_price = 0
+        gas_token = "0x0000000000000000000000000000000000000000"
+        refund_receiver = "0x0000000000000000000000000000000000000000"
+
+        try:
+            # ------- Compute EIP-712 hash via Safe contract -------
+            nonce = safe.functions.nonce().call()
+            safe_tx_hash = safe.functions.getTransactionHash(
+                to, value, data, operation, safe_tx_gas, base_gas, gas_price, gas_token, refund_receiver, nonce
+            ).call()
+
+            # ------- Sign the hash (EIP-712 style: sign the raw 32-byte digest) -------
+            sig = self.crypto._entity.unsafe_sign_hash(message_hash=HexBytes(safe_tx_hash))  # noqa:SLF001
+            # Signature format for Safe: r(32) + s(32) + v(1)
+            sig_bytes = sig.r.to_bytes(32, "big") + sig.s.to_bytes(32, "big") + bytes([sig.v])
+
+            # ------- Execute -------
+            threshold = safe.functions.getThreshold().call()
+            if threshold != 1:
+                msg = f"Safe threshold = {threshold}. This script only executes with a single signature."
+                raise ValueError(msg)
+
+            nonce = self.base_ledger_api.api.eth.get_transaction_count(self.crypto.address)
+            tx = safe.functions.execTransaction(
+                to, value, data, operation, safe_tx_gas, base_gas, gas_price, gas_token, refund_receiver, sig_bytes
+            ).build_transaction(
+                {
+                    "from": self.crypto.address,
+                    "chainId": self.base_ledger_api.api.eth.chain_id,
+                    "nonce": nonce,
+                    "gas": GAS,
+                    "value": value,
+                    "gasPrice": int(self.base_ledger_api.api.eth.gas_price * GAS_PREMIUM),
+                }
+            )
+
+            ok = safe.functions.execTransaction(
+                to, value, data, operation, safe_tx_gas, base_gas, gas_price, gas_token, refund_receiver, sig_bytes
+            ).call({"from": self.crypto.address})
+            if not ok:
+                msg = "call() returned False, aborting."
+                raise ValueError(msg)
+        except Exception as e:
+            msg = f"call() failed: {e}"
+            raise ValueError(msg) from e
+        return tx
 
     def simulate_tx(self, raw_tx) -> None:
         """Simulate the transaction."""
@@ -307,12 +424,21 @@ class BaseState(State, ABC):  # noqa: PLR0904
     @property
     def game_state(self) -> GameState:
         """Get the game state."""
+        user = self.crypto.address if not self.use_safe else self.safe_address
         state = self.derolas_staking_contract.get_game_state(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-            user=self.crypto.address,
+            ledger_api=self.base_ledger_api, contract_address=self.derolas_contract_address, user=user
         )
         return GameState(*state.values())
+
+    @property
+    def use_safe(self) -> bool:
+        """Whether to use the safe for transactions."""
+        return self.context.derolas_state.use_safe
+
+    @property
+    def safe_address(self) -> str:
+        """Get the safe address."""
+        return self.context.derolas_state.safe_address
 
 
 class AwaitTriggerRound(BaseState):
@@ -344,16 +470,6 @@ class AwaitTriggerRound(BaseState):
             self._event = DerolasautomatorabciappEvents.ERROR
 
         self._is_done = True
-
-    @property
-    def claimable(self) -> int:
-        """Call "claimable" on Derolas contract."""
-
-        return self.derolas_staking_contract.claimable(
-            ledger_api=self.base_ledger_api,
-            contract_address=self.derolas_contract_address,
-            address=self.crypto.address,
-        )["int"]
 
 
 class CheckEpochRound(BaseState):
@@ -394,13 +510,14 @@ class EndEpochRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
+        builder = self.build_safe_transaction if self.use_safe else self.build_transaction
         try:
             w3_function = self.end_epoch()
-            raw_tx = self.build_transaction(w3_function)
+            raw_tx = builder(w3_function)
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.debug(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"End Epoch Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -479,14 +596,15 @@ class DonateRound(BaseState):
     def act(self) -> None:
         """Perfom the act."""
 
+        builder = self.build_safe_transaction if self.use_safe else self.build_transaction
         try:
             state: GameState = self.game_state
             w3_function = self.donate()
-            raw_tx = self.build_transaction(w3_function, value=state.minimum_donation)
+            raw_tx = builder(w3_function, value=state.minimum_donation)
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.debug(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"Donate Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -518,14 +636,14 @@ class MakeClaimRound(BaseState):
 
     def act(self) -> None:
         """Perfom the act."""
-
+        builder = self.build_safe_transaction if self.use_safe else self.build_transaction
         try:
             w3_function = self.claim()
-            raw_tx = self.build_transaction(w3_function)
+            raw_tx = builder(w3_function)
             self.simulate_tx(raw_tx)
             signed_tx = signed_tx_to_dict(self.crypto.entity.sign_transaction(raw_tx))
             tx_hash = try_send_signed_transaction(self.base_ledger_api, signed_tx)
-            self.context.logger.debug(f"Transaction hash: {tx_hash}")
+            self.context.logger.info(f"Claim Transaction hash: {tx_hash}")
             tx_receipt = self.base_ledger_api.api.eth.wait_for_transaction_receipt(tx_hash, timeout=TX_MINING_TIMEOUT)
             if tx_receipt is None:
                 self._event = DerolasautomatorabciappEvents.TX_TIMEOUT
@@ -552,7 +670,7 @@ class DerolasautomatorabciappFsmBehaviour(FSMBehaviour, TickerBehaviour):
     """This class implements a simple Finite State Machine behaviour."""
 
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__(tick_interval=30, **kwargs)
+        super().__init__(**kwargs)
         self.register_state(
             DerolasautomatorabciappStates.AWAITTRIGGERROUND.value,
             AwaitTriggerRound(**kwargs),
