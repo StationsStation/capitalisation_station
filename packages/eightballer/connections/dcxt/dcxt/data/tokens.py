@@ -43,8 +43,7 @@ LEDGER_TO_STABLECOINS = {
         "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",  # USDC
     ],
     SupportedLedgers.POLYGON: [
-        "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
-        "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",  # USDC
+        "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",  # usdc
     ],
     SupportedLedgers.ARBITRUM: [
         "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
@@ -91,6 +90,7 @@ LEDGER_TO_WETH = {
     SupportedLedgers.MODE: "0x4200000000000000000000000000000000000006",
     SupportedLedgers.BASE: "0x4200000000000000000000000000000000000006",
     SupportedLedgers.GNOSIS: "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1",
+    SupportedLedgers.POLYGON: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
 }
 
 
@@ -138,7 +138,7 @@ LEDGER_TO_TOKEN_LIST = {
     SupportedLedgers.POLYGON: set(
         [
             "0xFEF5d947472e72Efbb2E388c730B7428406F2F95",  # olas
-            "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",  # weth
+            "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",  # WETH
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.POLYGON]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.POLYGON]]
