@@ -155,7 +155,8 @@ LEDGER_TO_TOKEN_LIST = {
     ),
     SupportedLedgers.MODE: set(
         [
-            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",  # mode
+            "0xcfd1d50ce23c46d3cf6407487b2f8934e96dc8f9",  # olas
+            "0xd988097fb8612cc24eeC14542bC03424c656005f",  # USDC on Mode
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.MODE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.MODE]]
