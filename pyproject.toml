@@ -36,7 +36,7 @@ sqlalchemy = "==1.4.45"
 cytoolz = "==1.0.0"
 async-timeout = "^4.0.3"
 openapi-core = "0.14.5"
-open-balpy = "<1"
+open-balpy = {path = "third_party/forks/balpy"}
 open-multicaller = "^0.2.0"
 tomli = "^2.2.1"
 apprise = ">=1.7.5,<2.0.0"
