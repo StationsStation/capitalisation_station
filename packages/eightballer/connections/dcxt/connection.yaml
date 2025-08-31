@@ -21,8 +21,8 @@ fingerprint:
   dcxt/data/balancer/mode.json: bafybeigiqdurylh67jhysjbfyhfnz7lyjmmw7mh4iojdoq6oswd4fkx4kq
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/nabla/config.json: bafybeihrezo6ivumya4kygvguzbvb5phjkhcrjaholbjdoqjlc4encj5d4
-  dcxt/data/token_list.json: bafybeiakjvmpjcmglppycv444d44h5vcyfqjzd5cmgnjonwryvnuafdq3i
-  dcxt/data/tokens.py: bafybeihom6czvpmvmb3trle64ex7aomin22gf57nub73eqs7qzj7wflxpi
+  dcxt/data/token_list.json: bafybeifrirmeszf636advw7q6e7dveijolz4oeci3cuslyfytauhimoqpy
+  dcxt/data/tokens.py: bafybeihmwbixjrz2tvs7lspzvezxtftbo3egpzhihbio4qy3winio6w5ci
   dcxt/defi_exchange.py: bafybeigz2wpqplwuup2hejfhdtlm6oeni7cvxrhhjfmf42semrklh36i4i
   dcxt/derive.py: bafybeiadqhtyiewu2ywz5w3mkd2vhblnka6gyxors2wxao4q4pmgtrwurm
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
