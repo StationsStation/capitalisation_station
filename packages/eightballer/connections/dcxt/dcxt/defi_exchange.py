@@ -35,6 +35,7 @@ LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.BASE: 8453,
     SupportedLedgers.ARBITRUM: 42161,
     SupportedLedgers.POLYGON: 137,
+    SupportedLedgers.OPTIMISM: 10,
 }
 
 

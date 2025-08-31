@@ -12,7 +12,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
 - eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
-- eightballer/dcxt:0.1.0:bafybeidvq5h7bpz6dvx5mxhpupx6afhu67plzoseqahpvjihsbz4pcjkhe
+- eightballer/dcxt:0.1.0:bafybeifoceel7wah62bdztox7wtkxdftvyml2ovll4ojcg3ay5frhfol2e
 - eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
 - eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
 - eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
@@ -53,7 +53,7 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
-- eightballer/simple_fsm:0.1.0:bafybeidcw5qn5j53abybf4xml5nzldtdbftefn5f6ciz7qad4m6ahczy4u
+- eightballer/simple_fsm:0.1.0:bafybeiazm6qyzsup7vvdsbbqtzl5qj5v5hx3vmlv3vfbnubp2ot7q4m3hm
 - eightballer/trading_state:0.1.0:bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeigboulbbqlvkexqobdkfpdgztia3nzftms3rhg4zav27gmgl5lcbq
@@ -154,7 +154,7 @@ config:
     key_path: ethereum_private_key.txt
     wallet: null
     ledger_id: base
-    rpc_url: ${BASE_RPC:str:https://base.llamarpc.com}
+    rpc_url: ${BASE_RPC:str:https://base.drpc.org}
     etherscan_api_key: NULL_KEY
   - name: balancer
     key_path: ethereum_private_key.txt
@@ -168,6 +168,18 @@ config:
     ledger_id: gnosis
     rpc_url: ${GNOSIS_RPC:str:https://gnosis.drpc.org}
     etherscan_api_key: NULL_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: polygon
+    rpc_url: ${POLYGON_RPC:str:https://polygon.drpc.org}
+    etherscan_api_key: NULL_KEY
+  - name: balancer
+    key_path: ethereum_private_key.txt
+    wallet: null
+    ledger_id: optimism
+    rpc_url: ${OPTIMISM_RPC:str:https://optimism.drpc.org}
+    etherscan_api_key: NULL_KEY
 ---
 public_id: eightballer/simple_fsm:0.1.0
 type: skill
@@ -180,8 +192,8 @@ models:
       strategy_init_kwargs:
         base_asset: ${BASE_ASSET:str:OLAS}
         quote_asset: ${QUOTE_ASSET:str:USDC}
-        order_size: ${ORDER_SIZE:float:1000}
-        min_profit: ${MIN_PROFIT:float:0.0025}
+        order_size: ${ORDER_SIZE:float:250}
+        min_profit: ${MIN_PROFIT:float:0.00}
         max_open_orders: ${MAX_OPEN_ORDERS:int:1000}
       cooldown_period: ${COOLDOWN_PERIOD:int:60}
       cexs: ${list:[]}

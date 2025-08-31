@@ -35,7 +35,11 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
     SupportedLedgers,
     read_token_list,
 )
-from packages.eightballer.connections.dcxt.dcxt.defi_exchange import BaseErc20Exchange
+from packages.eightballer.connections.dcxt.dcxt.defi_exchange import (
+    BaseErc20Exchange,
+    signed_tx_to_dict,
+    try_send_signed_transaction,
+)
 
 
 GAS_PRICE_PREMIUM = 20
@@ -109,6 +113,124 @@ WHITELISTED_POOLS = {
     ],
     SupportedLedgers.POLYGON: [],
 }
+
+
+def get_buy_rate(
+    bal: balpy,
+    quote_asset: str,
+    base_asset: str,
+    amount: float,
+    sender_address: str | None = None,
+    sor_data: dict | None = None,
+) -> float:
+    """Perform a buy of base asset with quote asset."""
+    params = get_params_for_swap(
+        bal=bal,
+        input_token_address=quote_asset,
+        output_token_address=base_asset,
+        input_amount=amount,
+        is_buy=True,
+        sender_address=sender_address or bal.address,
+    )
+    batch_swap = bal.balSorResponseToBatchSwapFormat(params, sor_data.get("ask")).get("batchSwap", None)
+    mc_args = bal.balFormatBatchSwapData(batch_swap)
+    # retrieve the actual rate from the limits
+    limits = mc_args[-2]
+    in_amt, out_amt = min(limits), max(limits)
+    input_amount = -in_amt * 10 ** -bal.erc20GetDecimals(base_asset)
+    output_amount = out_amt * 10 ** -bal.erc20GetDecimals(quote_asset)
+    real_rate = output_amount / input_amount
+    return real_rate, mc_args
+
+
+def get_sell_rate(
+    bal: balpy,
+    quote_asset: str,
+    base_asset: str,
+    amount: float,
+    sender_address: str | None = None,
+    sor_data: dict | None = None,
+) -> None:
+    """Perform a sell of base asset for quote asset."""
+
+    params = get_params_for_swap(
+        bal=bal,
+        input_token_address=base_asset,
+        output_token_address=quote_asset,
+        input_amount=amount,
+        is_buy=False,
+        sender_address=sender_address or bal.address,
+    )
+
+    batch_swap = bal.balSorResponseToBatchSwapFormat(params, sor_data.get("bid")).get("batchSwap", None)
+    mc_args = bal.balFormatBatchSwapData(batch_swap)
+    limits = mc_args[-2]
+    in_amt, out_amt = min(limits), max(limits)
+    input_amount = in_amt * 10 ** -bal.erc20GetDecimals(quote_asset)
+    output_amount = -out_amt * 10 ** -bal.erc20GetDecimals(base_asset)
+    real_rate = input_amount / output_amount
+    return real_rate, mc_args
+
+
+def get_params_for_swap(
+    bal: balpy,
+    input_token_address: str,
+    output_token_address: str,
+    input_amount: float,
+    is_buy: bool = False,
+    slippage: float = 0.01,
+    sender_address: str | None = None,
+) -> dict:
+    """Given the data, we get the params for the swap from the balancer exchange."""
+    gas_price = bal.web3.eth.gas_price * 2
+
+    # Use sender_address if provided, otherwise fall back to account address
+    address_to_use = sender_address
+
+    return {
+        "network": bal.network,
+        "slippageTolerancePercent": str(slippage),
+        "sor": {
+            "sellToken": input_token_address,
+            "buyToken": output_token_address,  # // token out
+            "orderKind": "buy" if is_buy else "sell",
+            "amount": input_amount,
+            "gasPrice": gas_price,
+        },
+        "batchSwap": {
+            "funds": {
+                "sender": address_to_use,  # Uses provided address or default
+                "recipient": address_to_use,  # Uses provided address or default
+                "fromInternalBalance": False,  # // to/from internal balance
+                "toInternalBalance": False,  # // set to "false" unless you know what you're doing
+            },
+            # // unix timestamp after which the trade will revert if it hasn't executed yet
+            "deadline": datetime.now(tz=TZ).timestamp() + 600,
+        },
+    }
+
+
+def parse_book_data(data, bal: balpy, quote_asset: str, base_asset: str, amount: float) -> dict:
+    """Parse book data."""
+    actual_buy_rate, buy_mc_args = get_buy_rate(
+        bal=bal,
+        quote_asset=quote_asset,
+        base_asset=base_asset,
+        amount=amount,
+        sor_data=data,
+    )
+    actual_sell_rate, sell_mc_args = get_sell_rate(
+        bal=bal,
+        quote_asset=quote_asset,
+        base_asset=base_asset,
+        amount=amount,
+        sor_data=data,
+    )
+    data["buy_mc_args"] = buy_mc_args
+    data["sell_mc_args"] = sell_mc_args
+    data["actual_buy_rate"] = actual_buy_rate
+    data["actual_sell_rate"] = actual_sell_rate
+    return data
 
 
 class BalancerClient(BaseErc20Exchange):
@@ -326,43 +448,6 @@ class BalancerClient(BaseErc20Exchange):
             self.tickers[symbol] = ticker
         return Tickers(tickers=list(self.tickers.values()))
 
-    def get_params_for_swap(
-        self,
-        input_token_address: str,
-        output_token_address: str,
-        input_amount: float,
-        is_buy: bool = False,
-        slippage: float = 0.1,
-        sender_address: str | None = None,
-    ) -> dict:
-        """Given the data, we get the params for the swap from the balancer exchange."""
-        gas_price = self.bal.web3.eth.gas_price * GAS_PRICE_PREMIUM
-
-        # Use sender_address if provided, otherwise fall back to account address
-        address_to_use = sender_address or self.account.address
-
-        return {
-            "network": self.balancer_deployment.value,
-            "slippageTolerancePercent": str(slippage),
-            "sor": {
-                "sellToken": input_token_address,
-                "buyToken": output_token_address,  # // token out
-                "orderKind": "buy" if is_buy else "sell",
-                "amount": input_amount,
-                "gasPrice": gas_price,
-            },
-            "batchSwap": {
-                "funds": {
-                    "sender": address_to_use,  # Uses provided address or default
-                    "recipient": address_to_use,  # Uses provided address or default
-                    "fromInternalBalance": False,  # // to/from internal balance
-                    "toInternalBalance": False,  # // set to "false" unless you know what you're doing
-                },
-                # // unix timestamp after which the trade will revert if it hasn't executed yet
-                "deadline": datetime.now(tz=TZ).timestamp() + 600,
-            },
-        }
-
     def get_price(
         self, input_token_address: str, output_token_address: str, amount: float, is_sell: bool = False
     ) -> float:
@@ -407,28 +492,33 @@ class BalancerClient(BaseErc20Exchange):
             msg = "Either symbol or asset_a and asset_b must be provided"
             raise ValueError(msg)
         if symbol:
-            asset_a_symbol, asset_b_symbol = symbol.split("/")
-            # we need to look up the token addresses for the assets.
-            asset_a = self.get_token_address(asset_a_symbol)
-            asset_b = self.get_token_address(asset_b_symbol)
+            asset_a, asset_b = symbol.split("/")
         if not asset_a or not asset_b:
             msg = f"Could not find token addresses for `{asset_a}` and `{asset_b}`"
-            msg += f" with symbols {asset_a_symbol} and {asset_b_symbol}"
             raise ValueError(msg)
 
-        output_token = self.get_token(asset_a)
-        input_token = self.get_token(asset_b)
-        symbol = f"{output_token.symbol}/{input_token.symbol}"
+        base_asset = self.look_up_by_symbol(asset_a, self.supported_ledger)
+        quote_asset = self.look_up_by_symbol(asset_b, self.supported_ledger)
+        symbol = f"{base_asset.symbol}/{quote_asset.symbol}"
 
-        ask_price, bid_price = self.bal.graph.getTicker(
+        book_data = self.bal.graph.getTicker(
             chain=self.balancer_deployment.value,
-            tokenIn=input_token.address,
-            tokenOut=output_token.address,
+            baseAsset=base_asset.address,
+            quoteAsset=quote_asset.address,
             amount=params["amount"],
         )
+        self.last_sor_data = parse_book_data(
+            book_data, self.bal, quote_asset=quote_asset.address, base_asset=base_asset.address, amount=params["amount"]
+        )
 
-        ask_price = float(ask_price)
-        bid_price = float(bid_price)
+        ask_price = float(self.last_sor_data["actual_buy_rate"])
+        bid_price = float(self.last_sor_data["actual_sell_rate"])
+
+        msg = (
+            f"Got bid: {bid_price} and ask: {ask_price} for {symbol} on Balancer "
+            + f"{self.ledger_id} amount: {params['amount']}"
+        )
+        self.logger.info(msg)
 
         timestamp = datetime.now(tz=datetime.now().astimezone().tzinfo)
         self.logger.debug(f"Got ticker for {symbol} with ask: {ask_price} and bid: {bid_price}")
@@ -443,13 +533,6 @@ class BalancerClient(BaseErc20Exchange):
             timestamp=int(timestamp.timestamp()),
             datetime=timestamp.isoformat(),
         )
-
-    def get_token_address(self, symbol: str) -> str:
-        """Get the token address."""
-        for token_address, token in self.tokens.items():
-            if token.symbol == symbol:
-                return token_address
-        return None
 
     async def fetch_positions(self, **kwargs) -> list:
         """Fetches the positions, notice as this is a balancer exchange, we do not have positions.
@@ -467,8 +550,6 @@ class BalancerClient(BaseErc20Exchange):
 
     async def create_order(
         self,
-        *args,
-        retries=1,
         **kwargs,
     ) -> Order:
         """Create an order.
@@ -497,37 +578,37 @@ class BalancerClient(BaseErc20Exchange):
 
         is_buy = kwargs.get("side") == "buy"
         if is_buy:
-            input_token_address = asset_b
-            output_token_address = asset_a
             amount = human_amount * kwargs.get("price") if kwargs.get("price") else human_amount
-            machine_amount = asset_a_token.to_machine(amount)
+            asset_a_token.to_machine(amount)
             self.logger.debug(f"Creating buy order for {human_amount} {asset_a} -> {asset_b}")
         else:
-            input_token_address = asset_a
-            output_token_address = asset_b
-            machine_amount = asset_a_token.to_machine(human_amount)
+            asset_a_token.to_machine(human_amount)
             amount = human_amount
 
         # Parse extra data for safe contract address
         extra_data = kwargs.get("data")
-        safe_contract_address = None
         vault = self.bal.balLoadContract("Vault")
         vault_address = vault.address
 
+        safe_contract_address = None
         if extra_data:
             safe_contract_address = extra_data.get("safe_contract_address", None)
-
-        params = self.get_params_for_swap(
-            input_token_address=input_token_address,
-            output_token_address=output_token_address,
-            input_amount=amount,
-            is_buy=False,
-            sender_address=safe_contract_address,
-        )
+            if safe_contract_address:
+                pass
+        else:
+            pass
 
         if safe_contract_address:
             try:
-                payload = self.bal.balSorQueryCalldata(params)
+                batch_swap = self.last_sor_data.get("ask") if is_buy else self.last_sor_data.get("bid")
+                batch_swap["funds"]["sender"] = safe_contract_address
+                batch_swap["funds"]["recipient"] = safe_contract_address
+                # i think this contains a lot of redundency i.e. extra calls within the bal sdk
+                # effectively the only different between the safe_contract call and the eoa call
+                # is that the sender and recipient are the safe contract address
+                # additionally, the eoa transaction tries to actually execute, while the safe contract
+                # just returns the call data.
+                payload = self.bal.balSorQueryCalldata(batch_swap)
                 status = OrderStatus.NEW
             except Exception as exc:
                 self.logger.exception(f"Error querying SOR calldata: {traceback.format_exc()}")
@@ -552,44 +633,22 @@ class BalancerClient(BaseErc20Exchange):
                 ),
             )
 
-        # Original EOA path
-        try:
-            sor_result = self.bal.balSorQuery(params)
-        except Exception as exc:  # pylint: disable=W0703
-            self.logger.exception(exc)
-            self.logger.exception(f"Error querying SOR: {traceback.format_exc()}")
-            msg = f"Error querying SOR: {exc}"
-            raise SorRetrievalException(msg) from exc
+        mc_args = self.last_sor_data.get("buy_mc_args") if is_buy else self.last_sor_data.get("sell_mc_args")
 
-        if not sor_result["swaps"]:
-            self.logger("Problem with SOR retrieval!!")
-            if retries > 0:
-                self.logger(f"Retrying transaction. {retries} retries left")
-                return self.create_order(*args, **kwargs, retries=retries - 1)
-            msg = f"Error querying SOR: {sor_result}"
-            raise SorRetrievalException(msg)
-
-        msg = (
-            f"Recommended swap: for {human_amount} {asset_a} -> {asset_b} is: " + f"{json.dumps(sor_result, indent=4)}"
+        tx_hash = self._handle_eoa_txn(
+            mc_args,
         )
-        self.logger.debug(msg)
-        batch_swap = self.bal.balSorResponseToBatchSwapFormat(params, sor_result).get("batchSwap", None)
 
-        if not batch_swap:
-            msg = f"Error parsing SOR response: {sor_result}"
-            raise SorRetrievalException(msg)
-
-        self.logger.info("Handling EOA txn")
-        fnc = self._handle_eoa_txn
-        return fnc(
-            batch_swap,
-            symbol,
-            input_token_address,
-            machine_amount=machine_amount,
-            safe_address=safe_contract_address,
+        return Order(
+            id=tx_hash,
+            exchange_id="balancer",
+            ledger_id=self.ledger_id.value,
+            symbol=symbol,
             price=kwargs.get("price"),
             amount=kwargs.get("amount"),
-            side=kwargs.get("side"),
+            status=OrderStatus.FILLED,
+            type=OrderType.MARKET,
+            side=OrderSide.BUY if is_buy else OrderSide.SELL,
         )
 
     def _handle_safe_txn(
@@ -649,12 +708,6 @@ class BalancerClient(BaseErc20Exchange):
             ),
         )
 
-    def _do_eoa_approval(self, input_token_address, machine_amount, vault, contract) -> None:
-        """Do the EOA approval."""
-        del input_token_address
-        func = contract.functions.approve(vault.address, machine_amount * 3)
-        return self._do_txn(func)
-
     def _do_txn(self, func):
         base_fee = self.bal.web3.eth.fee_history(1, "latest")["baseFeePerGas"][-1]  # Get the current base fee
         priority_fee = self.bal.web3.to_wei(
@@ -664,14 +717,14 @@ class BalancerClient(BaseErc20Exchange):
         kwargs = {
             "from": self.account.address,
             "nonce": self.bal.web3.eth.get_transaction_count(self.account.address),
-            "gas": func.estimate_gas(),  # Estimated gas limit
+            "gas": 850_000,  # Estimated gas limit
         }
         if self.ledger_id == SupportedLedgers.GNOSIS:
             kwargs["maxFeePerGas"] = base_fee + priority_fee
             kwargs["maxPriorityFeePerGas"] = priority_fee
         tx_1 = func.build_transaction(kwargs)
-        signed_tx = self.account.sign_transaction(tx_1)
-        tx_hash_1 = self.bal.web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        signed_tx = signed_tx_to_dict(self.account.entity.sign_transaction(tx_1))
+        tx_hash = try_send_signed_transaction(self.web3, signed_tx, raise_on_try=True)
         # we wait for the transaction to be mined
         self.logger.info("Waiting for transaction to be mined")
         # we wait for the next block to be sure that the transaction nonce is correct
@@ -679,101 +732,45 @@ class BalancerClient(BaseErc20Exchange):
         while current_block == self.bal.web3.eth.block_number:
             time.sleep(0.1)
         self.logger.info("Waiting for transaction to be mined")
-        receipt = self.bal.web3.eth.wait_for_transaction_receipt(tx_hash_1)
+        receipt = self.web3.api.eth.wait_for_transaction_receipt(tx_hash)
         self.logger.info("Transaction mined")
         self.logger.debug(f"Receipt: {receipt}")
         was_successful = receipt["status"]
         if not was_successful:
             msg = f"Transaction failed: {receipt}"
             raise ValueError(msg)
-        return tx_hash_1.hex()
+        return tx_hash
 
     def _handle_eoa_txn(  # pylint: disable=unused-argument
-        self, swap, symbol, input_token_address, machine_amount, execute=True, **kwargs
+        self, mc_args
     ) -> Order:  # pylint: disable=unused-argument
         """Handle the EOA transaction."""
-
-        vault = self.bal.balLoadContract("Vault")
-
-        # We do a call on the erc_20 not on the balancer contract as the balancer contract checks the spenders account.
-
-        approved = self.bal.erc20GetAllowanceStandard(
-            tokenAddress=input_token_address,
-            allowedAddress=vault.address,
-        )
 
         # We approve the token if we have not already done so.
 
         tx_hash = None
-        if approved < machine_amount:
-            self.logger.info(f"Approving {machine_amount} {input_token_address} for {vault.address}")
-            contract = self.bal.erc20GetContract(input_token_address)
-            data = contract.encodeABI("approve", [vault.address, machine_amount * 3])
-            vault_address = contract.address
-
-            if execute:
-                # We recall the function to get the updated allowance.
-                self._do_eoa_approval(input_token_address, machine_amount, vault, contract)
-                return self._handle_eoa_txn(
-                    swap, symbol, input_token_address, machine_amount, execute=execute, **kwargs
-                )
-        else:
-            try:
-                mc_args = self.bal.balFormatBatchSwapData(swap)
-                vault = self.bal.balLoadContract("Vault")
-                function_name = "batchSwap"
-                data = vault.encodeABI(function_name, mc_args)
-                fn = vault.get_function_by_name(fn_name=function_name)
-                # Assuming this does not revert, we have our call data for the order.
-                fn(*mc_args).call()
-                vault_address = vault.address
-                if execute:
-                    self.logger.info(f"Creating order for {symbol} with data: {data} to {vault_address}")
-
-                    tx_hash = self._do_txn(fn(*mc_args))
-                    self.logger.info(f"Transaction hash: {tx_hash!r} to {self.rpc_url}")
-            except ValueError as exc:
-                if "EffectivePriorityFeePerGas" in str(exc):
-                    self.logger.info("Transaction reverted due to insufficient gas price")
-                    self.logger.exception(exc)
-                if kwargs.get("attempts", 0) < 3:
-                    kwargs["attempts"] = 1 + kwargs.get("attempts", 0)
-                    self.logger.info(f"Retrying transaction. {kwargs['attempts']} retries left")
-                    return self._handle_eoa_txn(
-                        swap, symbol, input_token_address, machine_amount, execute=execute, **kwargs
-                    )
-                raise
-
-            except web3.exceptions.ContractLogicError as exc:
-                self.logger.exception(exc)
-                self.logger.exception(f"Error calling batchSwapFn: {traceback.format_exc()}")
-                if "BAL#508" in str(exc):
-                    msg = "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
-                    raise ExchangeError(msg) from exc
-                if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
-                    msg = f"ERC20: transfer amount exceeds allowance: {exc}"
-                    raise ApprovalError(msg) from exc
-                msg = f"Error calling batchSwapFn: {exc}"
-                raise SorRetrievalException(msg) from exc
-
-        return Order(
-            id=tx_hash,
-            exchange_id="balancer",
-            ledger_id=self.ledger_id.value,
-            symbol=symbol,
-            price=kwargs.get("price"),
-            amount=kwargs.get("amount"),
-            status=OrderStatus.NEW if not execute else OrderStatus.FILLED,
-            type=OrderType.LIMIT,
-            side=OrderSide.BUY if kwargs.get("side") == "buy" else OrderSide.SELL,
-            info=json.dumps(
-                {
-                    "data": data,
-                    "vault_address": vault_address,
-                    "chain_id": self.bal.web3.eth.chain_id,
-                }
-            ),
-        )
+        try:
+            vault = self.bal.balLoadContract("Vault")
+            func = vault.functions.batchSwap(*mc_args)
+            # Assuming this does not revert, we have our call data for the order.
+            func(*mc_args).call()
+            tx_hash = self._do_txn(func(*mc_args))
+            self.logger.info(f"Transaction hash: {tx_hash!r} to {self.rpc_url}")
+        except ValueError as exc:
+            msg = f"Error sending transaction: {exc}"
+            raise ExchangeError(msg) from exc
+        except web3.exceptions.ContractLogicError as exc:
+            self.logger.exception(exc)
+            self.logger.exception(f"Error calling batchSwapFn: {traceback.format_exc()}")
+            if "BAL#508" in str(exc):
+                msg = "SWAP_DEADLINE: Swap transaction not mined within the specified deadline"
+                raise ExchangeError(msg) from exc
+            if "execution reverted: ERC20: transfer amount exceeds allowance" in str(exc):
+                msg = f"ERC20: transfer amount exceeds allowance: {exc}"
+                raise ApprovalError(msg) from exc
+            msg = f"Error calling batchSwapFn: {exc}"
+            raise SorRetrievalException(msg) from exc
+        return tx_hash
 
     def parse_order(self, order, *args, **kwargs) -> Order:
         """Parse the order.
