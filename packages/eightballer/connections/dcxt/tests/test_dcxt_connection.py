@@ -61,7 +61,7 @@ TEST_EXCHANGE_DATA = """
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: base
-  rpc_url: https://base.api.onfinality.io/public
+  rpc_url: https://base-rpc.publicnode.com
   etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 - name: derive
   key_path: packages/eightballer/connections/dcxt/tests/data/key
@@ -79,7 +79,7 @@ TEST_EXCHANGE_DATA = """
   key_path: packages/eightballer/connections/dcxt/tests/data/key
   wallet: null
   ledger_id: arbitrum
-  rpc_url: https://arbitrum.api.onfinality.io/public
+  rpc_url: https://1rpc.io/arb
 """
 
 TEST_EXCHANGES = {(k["name"], k["ledger_id"]): k for k in yaml.safe_load(TEST_EXCHANGE_DATA)}

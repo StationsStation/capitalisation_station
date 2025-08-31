@@ -110,6 +110,7 @@ LEDGER_TO_TOKEN_LIST = {
         [
             "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
             "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+            "0xfc2e6e6bcbd49ccf3a5f029c79984372dcbfe527",  # olas
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.OPTIMISM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.OPTIMISM]]

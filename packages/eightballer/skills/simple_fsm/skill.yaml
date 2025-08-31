@@ -14,7 +14,7 @@ fingerprint:
   behaviour_classes/collect_ticker_round.py: bafybeih2ye3mr2ytdtzj6vzqsm4yn3exfl5q3npbkpocmiy6h73pe7n2we
   behaviour_classes/no_opportunity_round.py: bafybeie6dl4bg6bnd7zllg3vydcc6br6k2u2jxcj7w2fgcbrdkpsb36aii
   behaviour_classes/order_execution_round.py: bafybeibvcb2wn4fw7aeaenwive5m4izfhljzm4hvnau3iuc3w6vvh4gucm
-  behaviour_classes/post_trade_round.py: bafybeiay7vwdsnerz5pblqupubteeqz57buwxymo32jqkja7y52ii4lnty
+  behaviour_classes/post_trade_round.py: bafybeicwj4rcwnrrvwwom3v25777qo5qqse3y3p55sc62jliqetldmjsuy
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
   behaviours.py: bafybeiefajf7cyvkhzosanuzvhexbfgonwxuvhsetnypekherlyyduafrm
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
@@ -28,7 +28,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
 - eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
-- eightballer/dcxt:0.1.0:bafybeigeidbuvd7kpwvvyznc5v4ezyva3bkdcjb3a5gycgpykluwzch4zy
+- eightballer/dcxt:0.1.0:bafybeibziyycua4nwk6q5ezd7bow3rqvot2l6h3zj5vpndsvfwtt57s6s4
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
