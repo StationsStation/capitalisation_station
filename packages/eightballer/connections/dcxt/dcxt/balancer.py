@@ -709,6 +709,7 @@ class BalancerClient(BaseErc20Exchange):
         )
 
     def _do_txn(self, func):
+        self.logger.info(f"Sending transaction to {self.rpc_url}")
         base_fee = self.bal.web3.eth.fee_history(1, "latest")["baseFeePerGas"][-1]  # Get the current base fee
         priority_fee = self.bal.web3.to_wei(
             GAS_PRICE_PREMIUM, "gwei"
@@ -726,11 +727,11 @@ class BalancerClient(BaseErc20Exchange):
         signed_tx = signed_tx_to_dict(self.account.entity.sign_transaction(tx_1))
         tx_hash = try_send_signed_transaction(self.web3, signed_tx, raise_on_try=True)
         # we wait for the transaction to be mined
-        self.logger.info("Waiting for transaction to be mined")
+        self.logger.info(f"Waiting for transaction to be mined: {tx_hash}")
         # we wait for the next block to be sure that the transaction nonce is correct
         current_block = self.bal.web3.eth.block_number
         while current_block == self.bal.web3.eth.block_number:
-            time.sleep(0.1)
+            time.sleep(0.5)
         self.logger.info("Waiting for transaction to be mined")
         receipt = self.web3.api.eth.wait_for_transaction_receipt(tx_hash)
         self.logger.info("Transaction mined")

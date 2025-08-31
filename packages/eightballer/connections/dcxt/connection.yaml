@@ -13,7 +13,7 @@ fingerprint:
   connection.py: bafybeia7444ug26wxiwg5gprpxhhfad6glp74pxee4ks6xq6cpdhrzlufu
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
-  dcxt/balancer.py: bafybeieaeuxeorfgc44afneje2vforxhazowfazegosgxuum6z6sdt3yye
+  dcxt/balancer.py: bafybeigd7pnrexdnmu62lqsvfr3pusglmw5yblvnjudm4pqwgwrieypy24
   dcxt/cowswap.py: bafybeiespyiremsagi7nt4x3bjaozegspxiemviffi46n4tyrwcvrxn5vm
   dcxt/data/__init__.py: bafybeiazzyf5llflmu6wrc2zzmwy6aabilr74g5gq2kkr5dxvtug55jy3a
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
@@ -22,7 +22,7 @@ fingerprint:
   dcxt/data/balancer/optimism.json: bafybeidgfy6syyullxoviirhlgbsflseamuuckf6o3hvwjfq6pu5yon6jq
   dcxt/data/nabla/config.json: bafybeihrezo6ivumya4kygvguzbvb5phjkhcrjaholbjdoqjlc4encj5d4
   dcxt/data/token_list.json: bafybeiakjvmpjcmglppycv444d44h5vcyfqjzd5cmgnjonwryvnuafdq3i
-  dcxt/data/tokens.py: bafybeih4jkdz7i32iv7z2g6c3fk2z7un7shdxwcxvbd5eeicjxsz3egsbu
+  dcxt/data/tokens.py: bafybeifwdywxqigwxmhlgudmgklmvgxouibxqroi4ks6a52rw6cqifarfa
   dcxt/defi_exchange.py: bafybeidf2fooxl4fua7z72f2fuykcsconqriqgn7pf4oxl326snwaltg5m
   dcxt/derive.py: bafybeiadqhtyiewu2ywz5w3mkd2vhblnka6gyxors2wxao4q4pmgtrwurm
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
