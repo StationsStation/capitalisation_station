@@ -156,8 +156,10 @@ class ArbitrageStrategy:
         # sense checks as we will get eaten by mev if we try to do on one exchange
         # - we are not buying and selling on the same exchange
         # - we are not buying and selling on the same ledger
-        del opportunity
-        return not any([])
+        return not all(
+            opportunity.best_ask_exchange == opportunity.best_bid_exchange,
+            opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+        )
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
         """Check if we have the balance for an opportunity."""
