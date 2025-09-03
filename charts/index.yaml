@@ -2,13 +2,13 @@ apiVersion: v1
 entries:
   derolas-agents:
   - apiVersion: v2
-    appVersion: 0.1.39
-    created: "2025-09-02T13:03:36.019759406Z"
+    appVersion: 0.1.40
+    created: "2025-09-03T12:35:14.010995602Z"
     description: A Helm chart for Kubernetes
-    digest: 5fefc1e2fd33b5713d3021e49d93605e7ad66307a31db492478284ee792ede15
+    digest: b8aa693b82a327793659e40eb2e0e36ff2dcb5e3f86d2073207cb7e5dea27225
     name: derolas-agents
     type: application
     urls:
     - https://stationsstation.github.io/capitalisation_station/charts/derolas-agents-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-02T13:03:36.019229861Z"
+generated: "2025-09-03T12:35:14.010394012Z"
