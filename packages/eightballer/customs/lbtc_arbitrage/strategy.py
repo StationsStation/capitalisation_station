@@ -157,8 +157,10 @@ class ArbitrageStrategy:
         # - we are not buying and selling on the same exchange
         # - we are not buying and selling on the same ledger
         return not all(
-            opportunity.best_ask_exchange == opportunity.best_bid_exchange,
-            opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+            [
+                opportunity.best_ask_exchange == opportunity.best_bid_exchange,
+                opportunity.best_ask_ledger == opportunity.best_bid_ledger,
+            ]
         )
 
     def has_balance_for_opportunity(self, opportunity, portfolio, amount):
