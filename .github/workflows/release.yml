@@ -91,7 +91,7 @@ jobs:
     # Docker
     env:
       IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
-      RELEASE_VERSION: 0.1.39
+      RELEASE_VERSION: 0.1.40
     strategy:
       matrix:
         include:
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}
-      RELEASE_VERSION: 0.1.39
+      RELEASE_VERSION: 0.1.40
     steps:
       - uses: docker/setup-buildx-action@v3
 
