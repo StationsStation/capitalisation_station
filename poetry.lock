@@ -3336,16 +3336,14 @@ cli = ["click (>=8.1.0,<9)", "coverage (>=6.4.4,<8.0.0)", "open-aea-cli-ipfs (==
 
 [[package]]
 name = "open-balpy"
-version = "0.1.1"
+version = "0.1.3"
 description = "Balancer V2 Python API"
 optional = false
-python-versions = "<4,>=3.9"
+python-versions = ">=3.9,<4"
 groups = ["main"]
 markers = "python_version <= \"3.11\""
-files = [
-    {file = "open_balpy-0.1.1-py3-none-any.whl", hash = "sha256:d280de12f0f2bad03573fb186da67ea454f41f53364d0bd5aee9dc3a7b5e5001"},
-    {file = "open_balpy-0.1.1.tar.gz", hash = "sha256:a9eb319cd662de5f7f9ae770e079c8fb0dfacd228512520b987549822c48ce51"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 Cython = ">=0.29.24"
@@ -3355,8 +3353,12 @@ gql = ">=2.0.0"
 jstyleson = ">=0.0.2"
 open-multicaller = ">=0.2.0"
 requests = ">=2.25.1"
-requests-toolbelt = ">=1.0.0,<2.0.0"
-web3 = ">=6,<7"
+requests-toolbelt = "^1.0.0"
+web3 = "~6"
+
+[package.source]
+type = "directory"
+url = "third_party/forks/balpy"
 
 [[package]]
 name = "open-multicaller"
@@ -6045,4 +6047,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "2987237f9bf0429acdd88e883a407b111ed074ca64fc1f3f84add798d5af051e"
+content-hash = "baae1e853b2c3d0119cb083570b97824d3c854e9994e4e68093bb7fb051debcc"

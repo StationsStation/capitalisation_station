@@ -50,6 +50,8 @@ class PostTradeRound(BaseBehaviour):
                 "gnosis": "https://gnosisscan.io/tx/",
                 "arbitrum": "https://arbiscan.io/tx/",
                 "derive": "https://explorer.derive.xyz/tx/",
+                "optimism": "https://optimistic.etherscan.io/tx/",
+                "polygon": "https://polygonscan.com/tx/",
                 "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
                 "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
             }
