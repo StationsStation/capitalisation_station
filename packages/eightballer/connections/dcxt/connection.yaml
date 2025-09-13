@@ -158,4 +158,5 @@ dependencies:
   open-aea-ledger-ethereum: {}
   open-balpy: {}
   open-multicaller: {}
+  cowdao-cowpy: {}
 is_abstract: false
