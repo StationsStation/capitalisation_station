@@ -119,20 +119,43 @@ class ArbitrageStrategy:
     def get_opportunities(self, prices, overlaps, all_ledger_exchanges):
         """Get opportunities."""
         opportunities = []
-        best_bid, best_ask, best_ask_exchange, best_bid_exchange, best_ask_ledger, best_bid_ledger = [None] * 6
+        best_ask_exchange, best_bid_exchange, best_ask_ledger, best_bid_ledger = [None] * 4
         for market in overlaps:
             # we calculate the best bids and asks
-            for ledger, exchange in all_ledger_exchanges:
-                price = [f for f in prices[ledger][exchange] if f["symbol"].replace("-", "/").upper() == market].pop()
-                if price["bid"] and (best_bid is None or price["bid"] > best_bid):
-                    best_bid = price["bid"]
-                    best_bid_exchange = exchange
-                    best_bid_ledger = ledger
+            (ledger_a, exchange_a), (ledger_b, exchange_b) = all_ledger_exchanges
+            book_a = [f for f in prices[ledger_a][exchange_a] if f["symbol"].replace("-", "/").upper() == market].pop()
+            book_b = [f for f in prices[ledger_b][exchange_b] if f["symbol"].replace("-", "/").upper() == market].pop()
+            # check if can buy on a and sell on b
+            if all(
+                [
+                    book_a["ask"] and book_b["bid"],
+                    book_a["ask"] < book_b["bid"],
+                    book_a["ask"] > 0,
+                ]
+            ):
+                best_ask = book_a["ask"]
+                best_bid = book_b["bid"]
+                best_ask_exchange = exchange_a
+                best_ask_ledger = ledger_a
+                best_bid_exchange = exchange_b
+                best_bid_ledger = ledger_b
+            # check if can buy on b and sell on a
+            elif all(
+                [
+                    book_b["ask"] and book_a["bid"],
+                    book_b["ask"] < book_a["bid"],
+                    book_b["ask"] > 0,
+                ]
+            ):
+                best_ask = book_b["ask"]
+                best_bid = book_a["bid"]
+                best_ask_exchange = exchange_b
+                best_ask_ledger = ledger_b
+                best_bid_exchange = exchange_a
+                best_bid_ledger = ledger_a
+            else:
+                continue
 
-                if price["ask"] and (best_ask is None or price["ask"] < best_ask) and price["ask"] > 0:
-                    best_ask = price["ask"]
-                    best_ask_exchange = exchange
-                    best_ask_ledger = ledger
             delta = best_bid - best_ask
             percent = delta / best_ask
             if percent > self.min_profit:
