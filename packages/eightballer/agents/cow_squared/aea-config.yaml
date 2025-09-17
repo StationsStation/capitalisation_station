@@ -53,12 +53,12 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeigd3jef57azx7fl3j2dey4eywuqppzpm2ngl3gxci63koqvjsm3re
 - eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
-- eightballer/simple_fsm:0.1.0:bafybeicuk73fbdrn6tuoexwniw7qverz2uwxl7bckjlnqc4aazaas3jlyy
+- eightballer/simple_fsm:0.1.0:bafybeicm5dstrg7g3lrm6zdkd4wdctyirvhxz7gcxz2kqqgfm2a52qc4k4
 - eightballer/trading_state:0.1.0:bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i
 - valory/abstract_abci:0.1.0:bafybeigiri3x4am542wtw3puasr4rtssvdk3kpu23kmdr6jskommbeoiya
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeigboulbbqlvkexqobdkfpdgztia3nzftms3rhg4zav27gmgl5lcbq
 customs:
-- eightballer/lbtc_arbitrage:0.1.0:bafybeicn65za7bkrpx2kxemlfq7hhqwkrdev4jexnyatu7zvlberk4dnwi
+- eightballer/lbtc_arbitrage:0.1.0:bafybeicdkimixlcbjnu5nnwxyl6wyrent5b76zilzhmry34ithhulcp6iq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
