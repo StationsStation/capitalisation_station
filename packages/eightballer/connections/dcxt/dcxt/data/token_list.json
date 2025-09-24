@@ -21,6 +21,13 @@
     "tokens": [
         {
             "chainId": 1,
+            "address": "0x2a5ee480b67BA1e5Ada2F6E63B1D95Af0b0178A4",
+            "name": "Xerberus",
+            "symbol": "XER",
+            "decimals": 18
+        },
+        {
+            "chainId": 1,
             "address": "0x8236a87084f8b84306f72007f36f2618a5634494",
             "name": "Lombard BTC",
             "symbol": "LBTC",
@@ -12497,6 +12504,13 @@
             "symbol": "USDC.e",
             "decimals": 6,
             "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x37eaa0ef3549a5bb7d431be78a3d99bd360d19e5.png"
+        },
+        {
+            "chainId": 8453,
+            "address": "0x2a5ee480b67BA1e5Ada2F6E63B1D95Af0b0178A4",
+            "name": "Xerberus",
+            "symbol": "XER",
+            "decimals": 18
         },
         {
             "chainId": 8453,
