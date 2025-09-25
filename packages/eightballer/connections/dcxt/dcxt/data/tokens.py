@@ -102,6 +102,7 @@ LEDGER_TO_TOKEN_LIST = {
             "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "0x8236a87084f8b84306f72007f36f2618a5634494",  # lbtc
             "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",  # wrapped ethena eth
+            "0x2a5ee480b67BA1e5Ada2F6E63B1D95Af0b0178A4",  # XER
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.ETHEREUM]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.ETHEREUM]]
@@ -123,6 +124,7 @@ LEDGER_TO_TOKEN_LIST = {
             "0x9d0e8f5b25384c7310cb8c6ae32c8fbeb645d083",  # DRV
             "0x4200000000000000000000000000000000000006",  # WETH
             "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",  # CBBTC
+            "0x2a5ee480b67BA1e5Ada2F6E63B1D95Af0b0178A4",  # XER
         ]
         + LEDGER_TO_STABLECOINS[SupportedLedgers.BASE]
         + [LEDGER_TO_WRAPPER[SupportedLedgers.BASE]]
