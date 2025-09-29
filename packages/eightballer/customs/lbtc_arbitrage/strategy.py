@@ -126,12 +126,16 @@ class ArbitrageStrategy:
             book_a = [f for f in prices[ledger_a][exchange_a] if f["symbol"].replace("-", "/").upper() == market].pop()
             book_b = [f for f in prices[ledger_b][exchange_b] if f["symbol"].replace("-", "/").upper() == market].pop()
             # check if can buy on a and sell on b
-            if all(
-                [
-                    book_a["ask"] and book_b["bid"],
-                    book_a["ask"] < book_b["bid"],
-                    book_a["ask"] > 0,
-                ]
+            if (
+                book_a["ask"]
+                and book_b["bid"]
+                and all(
+                    [
+                        book_a["ask"] and book_b["bid"],
+                        book_a["ask"] < book_b["bid"],
+                        book_a["ask"] > 0,
+                    ]
+                )
             ):
                 best_ask = book_a["ask"]
                 best_bid = book_b["bid"]
@@ -140,12 +144,16 @@ class ArbitrageStrategy:
                 best_bid_exchange = exchange_b
                 best_bid_ledger = ledger_b
             # check if can buy on b and sell on a
-            elif all(
-                [
-                    book_b["ask"] and book_a["bid"],
-                    book_b["ask"] < book_a["bid"],
-                    book_b["ask"] > 0,
-                ]
+            elif (
+                book_b["ask"]
+                and book_a["bid"]
+                and all(
+                    [
+                        book_b["ask"] and book_a["bid"],
+                        book_b["ask"] < book_a["bid"],
+                        book_b["ask"] > 0,
+                    ]
+                )
             ):
                 best_ask = book_b["ask"]
                 best_bid = book_a["bid"]
