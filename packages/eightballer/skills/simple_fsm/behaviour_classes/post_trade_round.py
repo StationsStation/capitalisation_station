@@ -42,22 +42,32 @@ class PostTradeRound(BaseBehaviour):
         def get_explorer_link(order: Order) -> None:
             """Get the explorer link."""
 
-            exchange_to_explorer = {
-                "cowswap": f"https://explorer.cow.fi/{order.ledger_id}/orders/",
+            cow_exchange_to_explorer = {
+                "arbitrum": "https://explorer.cow.fi/arb1/orders/",
+                "base": "https://explorer.cow.fi/base/orders/",
+                "gnosis": "https://explorer.cow.fi/gc/orders/",
+                "polygon": "https://explorer.cow.fi/pol/orders/",
+                "ethereum": "https://explorer.cow.fi/orders/",
             }
             explorers = {
                 "mode": "https://modescan.io/tx/",
                 "gnosis": "https://gnosisscan.io/tx/",
-                "arbitrum": "https://arbiscan.io/tx/",
                 "derive": "https://explorer.derive.xyz/tx/",
                 "optimism": "https://optimistic.etherscan.io/tx/",
                 "polygon": "https://polygonscan.com/tx/",
-                "ethereum": exchange_to_explorer.get(order.exchange_id, "https://etherscan.io/tx/"),
-                "base": exchange_to_explorer.get(order.exchange_id, "https://basescan.org/tx/"),
+                "ethereum": "https://etherscan.io/tx/",
+                "base": "https://basescan.org/tx/",
+                "arbitrum": "https://arbiscan.io/tx/",
             }
+
+            def get_explorer_from_order(order: Order) -> str:
+                if order.exchange_id == "cowswap":
+                    return cow_exchange_to_explorer[order.ledger_id]
+                return explorers[order.ledger_id]
+
             if order.ledger_id not in explorers:
                 return ""
-            return f"{explorers[order.ledger_id]}{order.id}"
+            return f"{get_explorer_from_order(order)}{order.id}"
 
         delta = -(buy_order.price / sell_order.price * 100 - 100)
         value_captured_gross = -(buy_order.price - sell_order.price) * sell_order.amount
