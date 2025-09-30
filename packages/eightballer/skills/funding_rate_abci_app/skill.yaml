@@ -1,0 +1,43 @@
+name: funding_rate_abci_app
+author: eightballer
+version: 0.1.0
+type: skill
+description: The http echo skill prints out the content of received http messages
+  and responds with success.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
+  __init__.py: bafybeiejrapwssn7qbhgmbfs5vm6lcb5seswwpoieezh54iyt7hcoxwdju
+  behaviours.py: bafybeibqbyx7j2nvsi2mi4b44tcu6oo7kznhcihtfgzv7v6paz4rcbhdby
+  dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
+  handlers.py: bafybeiggbnjadbp6xsnlxt3brd4dwdhx4p7qhid63mq74cvtyktpu2jycu
+  tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
+  tests/test_metrics.py: bafybeie5xutaijime7ygshdkirtsigjelxlcrfsvqb5kbmgplxpggagmdm
+  tests/test_metrics_dialogues.py: bafybeih2fdxn24e6uogznucu6il4bnqufw6kqgrmfyqi7qxxsgkfeymp5q
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols:
+- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
+- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+skills: []
+behaviours:
+  main:
+    args: {}
+    class_name: FundingrateabciappFsmBehaviour
+handlers:
+  metrics_handler:
+    args:
+      enable_cors: false
+    class_name: HttpHandler
+models:
+  default_dialogues:
+    args: {}
+    class_name: DefaultDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+dependencies: {}
+is_abstract: false
+customs: []
