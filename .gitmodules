@@ -7,6 +7,7 @@
 [submodule "third_party/forks/cow-py"]
 	path = third_party/forks/cow-py
 	url = https://github.com/cowdao-grants/cow-py.git
+	branch = feat/object-oriented-limit-orders
 [submodule "third_party/forks/balpy"]
 	path = third_party/forks/balpy
 	url = https://github.com/8ball030/balpy.git

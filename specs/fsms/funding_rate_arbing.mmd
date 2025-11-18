@@ -1,0 +1,14 @@
+graph TD
+    GetDataRound -->|DONE| CheckStrategyRound
+    CheckStrategyRound -->|SHOULD_LONG_EXCHANGE_A_AND_SHORT_B| EnterShortLongRound
+    CheckStrategyRound -->|SHOULD_LONG_EXCHANGE_B_AND_SHORT_A| EnterLongShortRound
+    CheckStrategyRound -->|SHOULD_UNWIND| UnwindPositionsRound
+    CheckStrategyRound -->|DO_NOTHING| DoNothingRound
+    CheckStrategyRound -->|BRIDGE_NEEDED| BridgeRound
+    EnterShortLongRound -->|DONE| DoNothingRound
+    EnterLongShortRound -->|DONE| DoNothingRound
+    UnwindPositionsRound -->|DONE| DoNothingRound
+    BridgeRound -->|DONE| DoNothingRound
+    DoNothingRound -->|DONE| GetDataRound
+
+    
