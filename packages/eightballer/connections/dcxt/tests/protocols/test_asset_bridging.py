@@ -16,11 +16,15 @@ from derive_client.data_types import (
     BridgeType,
     Environment,
     BridgeTxResult,
-    DeriveTxResult,
-    DeriveTxStatus,
     BridgeTxDetails,
     PreparedBridgeTx,
-    PSignedTransaction,
+    TypedSignedTransaction,
+)
+from derive_client.data_types.generated_models import (
+    TxStatus as DeriveTxStatus,
+    # PrivateDepositResultSchema,
+    # PrivateWithdrawResultSchema,
+    PublicGetTransactionResultSchema,
 )
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
@@ -31,7 +35,7 @@ from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIM
 
 
 if TYPE_CHECKING:
-    from derive_client.clients import AsyncClient
+    from derive_client import AsyncHTTPClient
 
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
     from packages.eightballer.connections.dcxt.interfaces.asset_bridging import AssetBridgingInterface
@@ -148,7 +152,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
                 contract="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                 method="some_method",
                 kwargs={"some_arg": "some_value"},
-                signed_tx=PSignedTransaction(
+                signed_tx=TypedSignedTransaction(
                     raw_transaction="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                     hash="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbe",
                     r=1,
@@ -169,7 +173,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             prepared_tx=fake_prepared_tx,
         )
 
-        fake_derive_tx = DeriveTxResult(
+        fake_derive_tx = PublicGetTransactionResultSchema(
             transaction_hash=DUMMY_TX_HASH,
             exception=None,
             data={},
@@ -180,7 +184,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
 
         exchanges = self.connection.protocol_interface.exchanges
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
-        client: AsyncClient = exchange.client
+        client: AsyncHTTPClient = exchange.client
         interfaces = self.connection.protocol_interface.supported_protocols
         bridging_interface: AssetBridgingInterface = interfaces[AssetBridgingMessage.protocol_id]
         bridging_interface.sleep_time = 0.1
@@ -229,7 +233,7 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         exchanges = self.connection.protocol_interface.exchanges
         exchanges[request.bridge][request.bridge]
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
-        client: AsyncClient = exchange.client
+        client: AsyncHTTPClient = exchange.client
 
         tx_receipt = AttributeDict(dictionary={"status": 0})
         fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=Exception("Some error"))
