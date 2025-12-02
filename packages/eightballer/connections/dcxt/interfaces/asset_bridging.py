@@ -5,16 +5,23 @@ from logging import Logger
 from functools import partial
 
 from pydantic import BaseModel, ConfigDict
+from derive_client import AsyncHTTPClient
 from derive_client.data_types import (
+    D,
     ChainID,
     Currency,
     TxStatus,
     BridgeTxResult,
-    DeriveTxResult,
-    DeriveTxStatus,
+    # DeriveTxResult,
+    # DeriveTxStatus,
     PreparedBridgeTx,
 )
-from derive_client.clients.async_client import AsyncClient
+from derive_client.data_types.generated_models import (
+    TxStatus as DeriveTxStatus,
+    PrivateDepositResultSchema,
+    PrivateWithdrawResultSchema,
+    PublicGetTransactionResultSchema,
+)
 
 from packages.zarathustra.protocols.asset_bridging.message import (
     AssetBridgingMessage,
@@ -67,8 +74,16 @@ class ExtraInfo(BaseModel):
     bridge_type: str = ""
 
 
-async def _deposit_to_derive(request: BridgeRequest, client: AsyncClient, logger):
-    amount = request.amount
+async def wait_for_settlement(
+    client: AsyncHTTPClient,
+    result: PrivateDepositResultSchema | PrivateWithdrawResultSchema,
+) -> PublicGetTransactionResultSchema:
+    """Wait for transaction settlement on Derive chain."""
+    return await client.transactions.get(transaction_id=result.transaction_id)
+
+
+async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, logger):
+    amount = D(request.amount)
     currency = Currency[request.source_token]
     source_chain = ChainID[request.source_ledger_id.upper()]
 
@@ -82,15 +97,17 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncClient, logger
     logger.info(BRIDGE_DEPOSIT, kwargs)
 
     # 1. Prepare bridge transaction
-    prepared_tx: PreparedBridgeTx = await client.prepare_deposit_to_derive(
-        human_amount=amount, currency=currency, chain_id=source_chain
+    prepared_tx: PreparedBridgeTx = await client.bridge.prepare_deposit_tx(
+        amount=amount,
+        currency=currency,
+        chain_id=source_chain,
     )
 
     # 2. Submit bridge transaction
-    bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
+    bridge_tx_result: BridgeTxResult = await client.brdige.submit_tx(prepared_tx=prepared_tx)
 
     # 3. Poll bridge transaction result
-    bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
+    bridge_tx_result = await client.bridge.poll_tx_progress(tx_result=bridge_tx_result)
 
     # If we didn't raise above, TxStatus is considered final and FAILED
     if bridge_tx_result.status is not TxStatus.SUCCESS:
@@ -98,37 +115,59 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncClient, logger
         raise BridgeFailed(msg)
 
     # 4. Transfer from funding account to subaccount
-    kwargs = {"amount": amount, "token": currency.name, "wallet": client.wallet, "subaccount": client.subaccount_id}
+    kwargs = {
+        "amount": amount,
+        "token": currency.name,
+        "wallet": client.wallet,
+        "subaccount": client.subaccount_id,
+    }
     logger.info(TRANSFER_TO_SUBACC, kwargs)
-    derive_tx_result: DeriveTxResult = client.transfer_from_funding_to_subaccount(
+
+    deposit_result: PrivateDepositResultSchema = client.collateral.deposit_to_subaccount(
         amount=amount,
         asset_name=request.source_token,
         subaccount_id=client.subaccount_id,
     )
+
+    # Wait for settlement
+    derive_tx_result: PublicGetTransactionResultSchema = wait_for_settlement(client=client, result=deposit_result)
+
     if derive_tx_result.status is not DeriveTxStatus.SETTLED:
-        msg = f"Funding -> subaccount transfer failed: {derive_tx_result}"
+        msg = f"Funding -> subaccount transfer failed: {deposit_result}"
         raise DeriveTransferFailed(msg)
 
-    return create_bridge_result(request=request, bridge_tx_result=bridge_tx_result, derive_tx_result=derive_tx_result)
+    return create_bridge_result(
+        request=request,
+        bridge_tx_result=bridge_tx_result,
+        derive_tx_result=derive_tx_result,
+    )
 
 
-async def _withdraw_from_derive(request: BridgeRequest, client: AsyncClient, logger: Logger):
-    amount = request.amount
+async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient, logger: Logger):
+    amount = D(request.amount)
     currency = Currency[request.source_token]
     target_chain = ChainID[request.target_ledger_id.upper()]
 
-    kwargs = {"amount": amount, "token": currency.name, "subaccount": client.subaccount_id, "wallet": client.wallet}
+    kwargs = {
+        "amount": amount,
+        "token": currency.name,
+        "subaccount": client.subaccount_id,
+        "wallet": client.wallet,
+    }
     logger.info(TRANSFER_TO_FUNDING, kwargs)
 
     # 1. Transfer from subaccount to funding account
-    derive_tx_result: DeriveTxResult = client.transfer_from_subaccount_to_funding(
+    withdraw_result: PrivateWithdrawResultSchema = client.collateral.withdraw_from_subaccount(
         amount=amount,
         asset_name=request.source_token,
         subaccount_id=client.subaccount_id,
     )
 
+    # Wait for settlement
+    derive_tx_result: PublicGetTransactionResultSchema = wait_for_settlement(client=client, result=withdraw_result)
+
     if derive_tx_result.status is not DeriveTxStatus.SETTLED:
-        msg = f"Subaccount -> funding transfer failed: {derive_tx_result}"
+        msg = f"Subaccount -> funding transfer failed: {withdraw_result}"
         raise DeriveTransferFailed(msg)
 
     kwargs = {
@@ -141,35 +180,39 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncClient, log
     logger.info(BRIDGE_WITHDRAWAL, kwargs)
 
     # 2. Prepare bridge transaction
-    prepared_tx: PreparedBridgeTx = await client.prepare_withdrawal_from_derive(
-        human_amount=amount,
+    prepared_tx: PreparedBridgeTx = await client.bridge.prepare_withdrawal_tx(
+        amount=amount,
         currency=currency,
         chain_id=target_chain,
     )
 
     # 3. Submit bridge transaction
-    bridge_tx_result: BridgeTxResult = await client.submit_bridge_tx(prepared_tx=prepared_tx)
+    bridge_tx_result: BridgeTxResult = await client.bridge.submit_tx(prepared_tx=prepared_tx)
 
     # 3. Poll bridge transaction result
-    bridge_tx_result = await client.poll_bridge_progress(tx_result=bridge_tx_result)
+    bridge_tx_result = await client.bridge.poll_tx_progress(tx_result=bridge_tx_result)
 
     # If we didn't raise above, TxStatus is considered final and FAILED
     if bridge_tx_result.status is not TxStatus.SUCCESS:
         msg = f"Bridge did not succeed: {bridge_tx_result}"
         raise BridgeFailed(msg)
 
-    return create_bridge_result(request=request, bridge_tx_result=bridge_tx_result, derive_tx_result=derive_tx_result)
+    return create_bridge_result(
+        request=request,
+        bridge_tx_result=bridge_tx_result,
+        derive_tx_result=derive_tx_result,
+    )
 
 
 def create_bridge_result(
     request: BridgeRequest,
     bridge_tx_result: BridgeTxResult,
-    derive_tx_result: DeriveTxResult,
+    derive_tx_result: PublicGetTransactionResultSchema,
 ) -> BridgeResult:
     """Convert BridgeTxResult + DeriveTxResult into BridgeResult."""
 
     info = ExtraInfo(
-        derive_status=derive_tx_result.status.value,
+        derive_status=derive_tx_result.value,
         transaction_id=derive_tx_result.transaction_id,
         derive_tx_hash=derive_tx_result.tx_hash or "",
         **{k: str(v) for k, v in derive_tx_result.error_log.items()},
@@ -235,10 +278,9 @@ class AssetBridgingInterface(BaseInterface):
 
         ledger_id = exchange_id = request.bridge
         exchange: DeriveClient = connection.exchanges[ledger_id][exchange_id]
-        client: AsyncClient = exchange.client
+        client: AsyncHTTPClient = exchange.client
 
-        await client.connect_ws()
-        await client.login_client()
+        await client.connect()
 
         if request.receiver is not None:
             err_msg = (
