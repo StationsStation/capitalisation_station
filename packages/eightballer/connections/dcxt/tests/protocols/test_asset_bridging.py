@@ -8,7 +8,6 @@ from unittest.mock import patch
 
 import pytest
 from aea.mail.base import Envelope
-from web3.datastructures import AttributeDict
 from derive_client.data_types import (
     ChainID,
     Currency,
@@ -19,6 +18,7 @@ from derive_client.data_types import (
     BridgeTxDetails,
     PreparedBridgeTx,
     TypedSignedTransaction,
+    TypedTxReceipt,
 )
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 
 ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
-
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 DUMMY_TX_HASH = "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
 
@@ -136,7 +136,22 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             message=message,
         )
 
-        tx_receipt = AttributeDict(dictionary={"status": 1})
+        tx_receipt = TypedTxReceipt(
+            blockHash=b"",
+            blockNumber=123,
+            contractAddress=ZERO_ADDRESS,
+            cumulativeGasUsed=1,
+            effectiveGasPrice=1,
+            from_=ZERO_ADDRESS,
+            gasUsed=1,
+            logs=[],
+            logsBloom=b"",
+            status=1,
+            to=ZERO_ADDRESS,
+            transactionHash=DUMMY_TX_HASH,
+            transactionIndex=1,
+            type=2,
+        )
         fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=None)
 
         fake_prepared_tx = PreparedBridgeTx(
@@ -150,8 +165,8 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             fee_in_token=1,
             tx_details=BridgeTxDetails(
                 contract="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-                method="some_method",
-                kwargs={"some_arg": "some_value"},
+                fn_name="some_method",
+                fn_kwargs={"some_arg": "some_value"},
                 signed_tx=TypedSignedTransaction(
                     raw_transaction="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                     hash="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbe",
@@ -234,14 +249,30 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         exchanges[request.bridge][request.bridge]
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
         client: AsyncHTTPClient = exchange.client
+        await client.connect()
 
-        tx_receipt = AttributeDict(dictionary={"status": 0})
+        tx_receipt = TypedTxReceipt(
+            blockHash=b"",
+            blockNumber=123,
+            contractAddress=ZERO_ADDRESS,
+            cumulativeGasUsed=1,
+            effectiveGasPrice=1,
+            from_=ZERO_ADDRESS,
+            gasUsed=1,
+            logs=[],
+            logsBloom=b"",
+            status=1,
+            to=ZERO_ADDRESS,
+            transactionHash=DUMMY_TX_HASH,
+            transactionIndex=1,
+            type=2,
+        )
         fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=Exception("Some error"))
 
         with ExitStack() as stack:
-            stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
-            stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
+            stack.enter_context(patch.object(client, "_env", Environment.PROD))
+            stack.enter_context(patch.object(client.collateral, "deposit_to_subaccount", return_value=fake_result))
+            stack.enter_context(patch.object(client.collateral, "withdraw_from_subaccount", return_value=fake_result))
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
                 response = await self.connection.receive()
