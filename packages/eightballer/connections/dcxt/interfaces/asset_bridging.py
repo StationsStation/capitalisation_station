@@ -286,8 +286,8 @@ class AssetBridgingInterface(BaseInterface):
             err_msg = (
                 "Providing a custom receiver isn't supported for the Derive.\n"
                 "We automatically use:\n"
-                f"  • Your EOA ({client.signer.address}) when withdrawing FROM Derive.\n"
-                f"  • The Derive contract wallet ({client.wallet}) when depositing TO Derive."
+                f"  • Your EOA ({client._auth.account.address}) when withdrawing FROM Derive.\n"
+                f"  • The Derive contract wallet ({client._auth.wallet}) when depositing TO Derive."
             )
             return reply_err(
                 code=ErrorCode.CODE_INVALID_PARAMETERS,
