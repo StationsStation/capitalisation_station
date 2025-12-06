@@ -4,11 +4,10 @@ import asyncio
 from typing import TYPE_CHECKING
 from contextlib import ExitStack
 from dataclasses import dataclass
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from aea.mail.base import Envelope
-from web3.datastructures import AttributeDict
 from derive_client.data_types import (
     ChainID,
     Currency,
@@ -16,12 +15,19 @@ from derive_client.data_types import (
     BridgeType,
     Environment,
     BridgeTxResult,
-    DeriveTxResult,
-    DeriveTxStatus,
+    TypedTxReceipt,
     BridgeTxDetails,
     PreparedBridgeTx,
-    PSignedTransaction,
+    TypedSignedTransaction,
 )
+from derive_client.data_types.generated_models import (
+    TxStatus as DeriveTxStatus,
+    PrivateDepositResultSchema,
+    PrivateWithdrawResultSchema,
+    PublicGetTransactionResultSchema,
+)
+from derive_client._clients.rest.async_http.client import AsyncBridgeClient
+from derive_client._clients.rest.async_http.collateral import CollateralOperations
 
 from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
@@ -31,18 +37,18 @@ from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIM
 
 
 if TYPE_CHECKING:
-    from derive_client.clients import AsyncClient
+    from derive_client import AsyncHTTPClient
 
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
     from packages.eightballer.connections.dcxt.interfaces.asset_bridging import AssetBridgingInterface
 
 
-# ruff: noqa: D101, D103
+# ruff: noqa: D101, D103, PLC2701
 
 
 ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
-
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 DUMMY_TX_HASH = "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
 
@@ -132,7 +138,22 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             message=message,
         )
 
-        tx_receipt = AttributeDict(dictionary={"status": 1})
+        tx_receipt = TypedTxReceipt(
+            blockHash=b"",
+            blockNumber=123,
+            contractAddress=ZERO_ADDRESS,
+            cumulativeGasUsed=1,
+            effectiveGasPrice=1,
+            from_=ZERO_ADDRESS,
+            gasUsed=1,
+            logs=[],
+            logsBloom=b"",
+            status=1,
+            to=ZERO_ADDRESS,
+            transactionHash=DUMMY_TX_HASH,
+            transactionIndex=1,
+            type=2,
+        )
         fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=None)
 
         fake_prepared_tx = PreparedBridgeTx(
@@ -146,9 +167,9 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             fee_in_token=1,
             tx_details=BridgeTxDetails(
                 contract="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-                method="some_method",
-                kwargs={"some_arg": "some_value"},
-                signed_tx=PSignedTransaction(
+                fn_name="some_method",
+                fn_kwargs={"some_arg": "some_value"},
+                signed_tx=TypedSignedTransaction(
                     raw_transaction="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                     hash="0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbe",
                     r=1,
@@ -169,33 +190,82 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             prepared_tx=fake_prepared_tx,
         )
 
-        fake_derive_tx = DeriveTxResult(
+        mock_deposit_result = PrivateDepositResultSchema(
+            status=DeriveTxStatus.pending,
+            transaction_id="dummy-deposit-tx-id",
+        )
+
+        mock_withdraw_result = PrivateWithdrawResultSchema(
+            status=DeriveTxStatus.pending,
+            transaction_id="dummy-withdraw-tx-id",
+        )
+
+        fake_derive_tx = PublicGetTransactionResultSchema(
             transaction_hash=DUMMY_TX_HASH,
-            exception=None,
             data={},
-            status=DeriveTxStatus.SETTLED,
+            status=DeriveTxStatus.settled,
             error_log={},
-            transaction_id="some_tx_id",
         )
 
         exchanges = self.connection.protocol_interface.exchanges
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
-        client: AsyncClient = exchange.client
+        client: AsyncHTTPClient = exchange.client
         interfaces = self.connection.protocol_interface.supported_protocols
         bridging_interface: AssetBridgingInterface = interfaces[AssetBridgingMessage.protocol_id]
         bridging_interface.sleep_time = 0.1
 
         with ExitStack() as stack:
-            stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(client, "prepare_deposit_to_derive", return_value=fake_prepared_tx))
-            stack.enter_context(patch.object(client, "submit_bridge_tx", return_value=fake_bridge_result))
-            stack.enter_context(patch.object(client, "poll_bridge_progress", return_value=fake_bridge_result))
+            # Patch the environment BEFORE connect
+            stack.enter_context(patch.object(client, "_env", Environment.PROD))
+
+            # Patch the AsyncBridgeClient class methods BEFORE connect() creates an instance
             stack.enter_context(
-                patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_derive_tx)
+                patch.object(
+                    AsyncBridgeClient, "prepare_deposit_tx", new_callable=AsyncMock, return_value=fake_prepared_tx
+                )
             )
             stack.enter_context(
-                patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_derive_tx)
+                patch.object(
+                    AsyncBridgeClient, "prepare_withdrawal_tx", new_callable=AsyncMock, return_value=fake_prepared_tx
+                )
             )
+            stack.enter_context(
+                patch.object(AsyncBridgeClient, "submit_tx", new_callable=AsyncMock, return_value=fake_bridge_result)
+            )
+            stack.enter_context(
+                patch.object(
+                    AsyncBridgeClient, "poll_tx_progress", new_callable=AsyncMock, return_value=fake_bridge_result
+                )
+            )
+
+            # Patch CollateralOperations class methods BEFORE connect() creates a Subaccount instance
+            stack.enter_context(
+                patch.object(
+                    CollateralOperations,
+                    "deposit_to_subaccount",
+                    new_callable=AsyncMock,
+                    return_value=mock_deposit_result,
+                )
+            )
+            stack.enter_context(
+                patch.object(
+                    CollateralOperations,
+                    "withdraw_from_subaccount",
+                    new_callable=AsyncMock,
+                    return_value=mock_withdraw_result,
+                )
+            )
+
+            stack.enter_context(
+                patch(
+                    "packages.eightballer.connections.dcxt.interfaces.asset_bridging.wait_for_settlement",
+                    new_callable=AsyncMock,
+                    return_value=fake_derive_tx,
+                )
+            )
+
+            # NOW connect - the instances created will have mocked methods
+            await client.connect()
 
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
@@ -229,15 +299,11 @@ class TestAssetBridging(BaseDcxtConnectionTest):
         exchanges = self.connection.protocol_interface.exchanges
         exchanges[request.bridge][request.bridge]
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
-        client: AsyncClient = exchange.client
-
-        tx_receipt = AttributeDict(dictionary={"status": 0})
-        fake_result = TxResult(tx_hash=DUMMY_TX_HASH, tx_receipt=tx_receipt, exception=Exception("Some error"))
+        client: AsyncHTTPClient = exchange.client
+        await client.connect()
 
         with ExitStack() as stack:
-            stack.enter_context(patch.object(client, "env", Environment.PROD))
-            stack.enter_context(patch.object(client, "transfer_from_subaccount_to_funding", return_value=fake_result))
-            stack.enter_context(patch.object(client, "transfer_from_funding_to_subaccount", return_value=fake_result))
+            stack.enter_context(patch.object(client, "_env", Environment.PROD))
             await self.connection.send(envelope)
             async with asyncio.timeout(TIMEOUT):
                 response = await self.connection.receive()

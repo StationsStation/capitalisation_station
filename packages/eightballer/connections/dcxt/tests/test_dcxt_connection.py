@@ -65,10 +65,10 @@ TEST_EXCHANGE_DATA = """
   etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 - name: derive
   key_path: packages/eightballer/connections/dcxt/tests/data/key
-  wallet: "0x8772185a1516f0d61fC1c2524926BfC69F95d698"
+  wallet: "0xA419f70C696a4b449a4A24F92e955D91482d44e9"
   ledger_id: derive
-  rpc_url: https://base-rpc.publicnode.com
-  subaccount_id: 30769
+  rpc_url: https://rpc.derive.xyz/
+  subaccount_id: 137626
   environment: test
 # - name: one_inch
 #   key_path: packages/eightballer/connections/dcxt/tests/data/key
