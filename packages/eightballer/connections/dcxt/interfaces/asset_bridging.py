@@ -12,8 +12,6 @@ from derive_client.data_types import (
     Currency,
     TxStatus,
     BridgeTxResult,
-    # DeriveTxResult,
-    # DeriveTxStatus,
     PreparedBridgeTx,
 )
 from derive_client.data_types.generated_models import (
@@ -45,6 +43,8 @@ if TYPE_CHECKING:
 
 # ruff: noqa: PLR0914  # Too many local variables
 # ruff: noqa: PLR0911  # Too many return statements
+# ruff: noqa: SLF001   # Private member accessed
+
 
 BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
 BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
@@ -90,9 +90,9 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     kwargs = {
         "amount": amount,
         "token": currency.name,
-        "eoa": client.account.address,
+        "eoa": client._auth.account.address,
         "chain": source_chain.name,
-        "wallet": client.wallet,
+        "wallet": client._auth.wallet,
     }
     logger.info(BRIDGE_DEPOSIT, kwargs)
 
@@ -104,7 +104,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     )
 
     # 2. Submit bridge transaction
-    bridge_tx_result: BridgeTxResult = await client.brdige.submit_tx(prepared_tx=prepared_tx)
+    bridge_tx_result: BridgeTxResult = await client.bridge.submit_tx(prepared_tx=prepared_tx)
 
     # 3. Poll bridge transaction result
     bridge_tx_result = await client.bridge.poll_tx_progress(tx_result=bridge_tx_result)
@@ -118,21 +118,20 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     kwargs = {
         "amount": amount,
         "token": currency.name,
-        "wallet": client.wallet,
-        "subaccount": client.subaccount_id,
+        "wallet": client._auth.wallet,
+        "subaccount": client._subaccount_id,
     }
     logger.info(TRANSFER_TO_SUBACC, kwargs)
 
-    deposit_result: PrivateDepositResultSchema = client.collateral.deposit_to_subaccount(
+    deposit_result: PrivateDepositResultSchema = await client.collateral.deposit_to_subaccount(
         amount=amount,
         asset_name=request.source_token,
-        subaccount_id=client.subaccount_id,
     )
 
     # Wait for settlement
-    derive_tx_result: PublicGetTransactionResultSchema = wait_for_settlement(client=client, result=deposit_result)
+    derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(client=client, result=deposit_result)
 
-    if derive_tx_result.status is not DeriveTxStatus.SETTLED:
+    if derive_tx_result.status is not DeriveTxStatus.settled:
         msg = f"Funding -> subaccount transfer failed: {deposit_result}"
         raise DeriveTransferFailed(msg)
 
@@ -140,6 +139,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
         request=request,
         bridge_tx_result=bridge_tx_result,
         derive_tx_result=derive_tx_result,
+        transaction_id=deposit_result.transaction_id,
     )
 
 
@@ -151,30 +151,31 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
     kwargs = {
         "amount": amount,
         "token": currency.name,
-        "subaccount": client.subaccount_id,
-        "wallet": client.wallet,
+        "subaccount": client._subaccount_id,
+        "wallet": client._auth.wallet,
     }
     logger.info(TRANSFER_TO_FUNDING, kwargs)
 
     # 1. Transfer from subaccount to funding account
-    withdraw_result: PrivateWithdrawResultSchema = client.collateral.withdraw_from_subaccount(
+    withdraw_result: PrivateWithdrawResultSchema = await client.collateral.withdraw_from_subaccount(
         amount=amount,
         asset_name=request.source_token,
-        subaccount_id=client.subaccount_id,
     )
 
     # Wait for settlement
-    derive_tx_result: PublicGetTransactionResultSchema = wait_for_settlement(client=client, result=withdraw_result)
+    derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(
+        client=client, result=withdraw_result
+    )
 
-    if derive_tx_result.status is not DeriveTxStatus.SETTLED:
+    if derive_tx_result.status is not DeriveTxStatus.settled:
         msg = f"Subaccount -> funding transfer failed: {withdraw_result}"
         raise DeriveTransferFailed(msg)
 
     kwargs = {
         "amount": amount,
         "token": currency.name,
-        "wallet": client.wallet,
-        "eoa": client.account.address,
+        "wallet": client._auth.wallet,
+        "eoa": client._auth.account.address,
         "chain": target_chain.name,
     }
     logger.info(BRIDGE_WITHDRAWAL, kwargs)
@@ -201,6 +202,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
         request=request,
         bridge_tx_result=bridge_tx_result,
         derive_tx_result=derive_tx_result,
+        transaction_id=withdraw_result.transaction_id,
     )
 
 
@@ -208,13 +210,14 @@ def create_bridge_result(
     request: BridgeRequest,
     bridge_tx_result: BridgeTxResult,
     derive_tx_result: PublicGetTransactionResultSchema,
+    transaction_id: str,
 ) -> BridgeResult:
     """Convert BridgeTxResult + DeriveTxResult into BridgeResult."""
 
     info = ExtraInfo(
-        derive_status=derive_tx_result.value,
-        transaction_id=derive_tx_result.transaction_id,
-        derive_tx_hash=derive_tx_result.tx_hash or "",
+        derive_status=derive_tx_result.status,
+        transaction_id=transaction_id,
+        derive_tx_hash=derive_tx_result.transaction_hash,
         **{k: str(v) for k, v in derive_tx_result.error_log.items()},
     )
 
