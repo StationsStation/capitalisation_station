@@ -1,0 +1,33 @@
+alphabet_in:
+- SHOULD_LONG_EXCHANGE_B_AND_SHORT_A
+- DO_NOTHING
+- SHOULD_UNWIND
+- SHOULD_LONG_EXCHANGE_A_AND_SHORT_B
+- DONE
+- BRIDGE_NEEDED
+default_start_state: CheckStrategyRound
+final_states: []
+label: FundingRateAbciApp
+start_states:
+- CheckStrategyRound
+states:
+- GetDataRound
+- DoNothingRound
+- UnwindPositionsRound
+- CheckStrategyRound
+- EnterShortLongRound
+- EnterLongShortRound
+- BridgeRound
+transition_func:
+  (BridgeRound, DONE): DoNothingRound
+  (CheckStrategyRound, BRIDGE_NEEDED): BridgeRound
+  (CheckStrategyRound, DO_NOTHING): DoNothingRound
+  (CheckStrategyRound, SHOULD_LONG_EXCHANGE_A_AND_SHORT_B): EnterShortLongRound
+  (CheckStrategyRound, SHOULD_LONG_EXCHANGE_B_AND_SHORT_A): EnterLongShortRound
+  (CheckStrategyRound, SHOULD_UNWIND): UnwindPositionsRound
+  (DoNothingRound, DONE): GetDataRound
+  (EnterLongShortRound, DONE): DoNothingRound
+  (EnterShortLongRound, DONE): DoNothingRound
+  (GetDataRound, DONE): CheckStrategyRound
+  (UnwindPositionsRound, DONE): DoNothingRound
+
