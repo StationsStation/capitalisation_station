@@ -30,7 +30,7 @@ open-autonomy = "==0.21.5"
 # autonomy-dev = {version = "==0.2.157", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=2,<3"
-derive-client = {path = "third_party/upstream/derive_client"}
+derive-client = ">=0.3.2"
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"

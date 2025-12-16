@@ -1710,34 +1710,32 @@ url = "third_party/upstream/v2-action-signing-python"
 
 [[package]]
 name = "derive-client"
-version = "0.3.1"
+version = "0.3.2"
 description = ""
 optional = false
-python-versions = ">=3.10,<=3.13"
+python-versions = "<=3.13,>=3.10"
 groups = ["main"]
 markers = "python_version <= \"3.11\""
-files = []
-develop = false
+files = [
+    {file = "derive_client-0.3.2-py3-none-any.whl", hash = "sha256:2ec81ea0d0cf3465065d9302f662f6424e168a8dee05a1aa2f46b8129f878536"},
+    {file = "derive_client-0.3.2.tar.gz", hash = "sha256:9b0bfe499e0ce96c3f25bce5e5190f008ac1c329c801c1b8416ae5aa08274290"},
+]
 
 [package.dependencies]
-aiolimiter = "^1.2.1"
-derive-action-signing = "^0.0.13"
-msgspec = "^0.19.0"
+aiolimiter = ">=1.2.1,<2.0.0"
+derive-action-signing = ">=0.0.13,<0.0.14"
+msgspec = ">=0.19.0,<0.20.0"
 numpy = ">2,<3"
 pandas = ">=1,<=3"
-py-vollib = "^1.0.1"
-pydantic = "^2.11.3"
+py-vollib = ">=1.0.1,<2.0.0"
+pydantic = ">=2.11.3,<3.0.0"
 python-dotenv = ">=0.14.0,<2"
 pyyaml = ">=6.0.1"
-requests = "^2"
-returns = "^0.26.0"
-rich-click = "^1.7.1"
+requests = ">=2,<3"
+returns = ">=0.26.0,<0.27.0"
+rich-click = ">=1.7.1,<2.0.0"
 setuptools = ">=68.2.2,<80"
-web3 = "^7.14.0"
-
-[package.source]
-type = "directory"
-url = "third_party/upstream/derive_client"
+web3 = ">=7.14.0,<8.0.0"
 
 [[package]]
 name = "dictpath"
@@ -3546,7 +3544,7 @@ url = "third_party/forks/balpy"
 
 [[package]]
 name = "open-multicaller"
-version = "0.3.2"
+version = "0.3.3"
 description = "web3py multicaller simplified interface"
 optional = false
 python-versions = ">=3.8.1,<4"
@@ -6412,4 +6410,4 @@ doc = []
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "0c8e4631c9e50fabdc132589e6a92cba697c65f15f77d3f7323f41b750452d21"
+content-hash = "fc58091d947b24d18ae1e5ffd69c7b0cf48a8fb64d4169835e170fa62ce1941f"
