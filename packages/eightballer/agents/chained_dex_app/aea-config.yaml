@@ -17,7 +17,7 @@ connections:
 - valory/abci:0.1.0:bafybeibtiw6wlcrkov6vshboixsjgaeodkhxjppk2fbzwleknbp24ci42i
 - valory/http_client:0.23.0:bafybeifcxgtlp3rcuptxtu7fkipauuxl3mcbawuofe6nnejhnq3mjw2rjq
 - valory/ipfs:0.1.0:bafybeif7exoq2viwhfgfcjplxq73hnxvgpsx7pwshhntx6aekza25mdwli
-- valory/ledger:0.19.0:bafybeiacsz3p6mdi2t5vkdaqd74vjbjbtccvxwq7ywv2kkmjlwqvimqbdy
+- valory/ledger:0.19.0:bafybeiflmep26twrfk25olhyxuagceaa2cfvg5qtgsisaxh6z4pdapg6dy
 - valory/p2p_libp2p_client:0.1.0:bafybeib3hbc2dju5grxl6ej3ccber77bw3mssadipbdsdqld5mff733wv4
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
@@ -44,14 +44,14 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeicwup3faznzvuciqkljejo2c6gbv3dliaglscf5bibu6633tylkfq
 - valory/tendermint:0.1.0:bafybeif5wq5i2ugr66alniej2bk4vws5sikal7otx674y5kz52e3ulo2qm
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
+- eightballer/abstract_round_abci:0.1.0:bafybeibaxi47gozccfsf7j2bizthfw7t6zs5ajfynq5eju42bnvb5glc7i
 - eightballer/metrics:0.1.0:bafybeifa4yxuoskhgjdl7xhodksgzlm62ucqbdqu4yb7ppjma6fdv2tzeq
 - eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
-- eightballer/registration_abci:0.1.0:bafybeicgy3lwlsubn3n7xiduahnickps57iekhihx2eib7kids5be6ijti
-- eightballer/reset_pause_abci:0.1.0:bafybeieesl7hrkselccf2efiiswl37y2aiyvswxig5trepxauqmul2cwui
+- eightballer/registration_abci:0.1.0:bafybeicymyuc4l7pwmgd32nvdhawv7obzje3sudfg6cjutt7s6ykza4xzy
+- eightballer/reset_pause_abci:0.1.0:bafybeibsofqutf7booodqfvt26ez6sbzv5kwxunr6wvuc3s5dupek2bdky
 - valory/abstract_abci:0.1.0:bafybeidr3dqykchbw7rnmxcrp3qkuafk24pyvr7zehfbkcfon62qwuft7y
-- eightballer/chained_dex_app:0.1.0:bafybeif2mo32madoigwr2rnkhgxjrf54filqdk2gbf4tauemvetuq5hhzi
-- eightballer/dex_data_retrieval:0.1.0:bafybeidy46nj7sk23bvnezuv6vf467xxtycnn4plqyxmlftjfdkrxengny
+- eightballer/chained_dex_app:0.1.0:bafybeibsu3y4qls6o5tn2vzi63yfxprvbsp23vjry6orofrdghncro5lyq
+- eightballer/dex_data_retrieval:0.1.0:bafybeidnp4yynhjihmmq7vv5fpbu2kqli5sgral2dj76ldn6zaqpcfvdrm
 default_ledger: ethereum
 required_ledgers:
 - ethereum

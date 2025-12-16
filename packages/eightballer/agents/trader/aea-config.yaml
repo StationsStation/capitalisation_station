@@ -17,7 +17,7 @@ connections:
 - valory/abci:0.1.0:bafybeibtiw6wlcrkov6vshboixsjgaeodkhxjppk2fbzwleknbp24ci42i
 - valory/http_client:0.23.0:bafybeifcxgtlp3rcuptxtu7fkipauuxl3mcbawuofe6nnejhnq3mjw2rjq
 - valory/ipfs:0.1.0:bafybeif7exoq2viwhfgfcjplxq73hnxvgpsx7pwshhntx6aekza25mdwli
-- valory/ledger:0.19.0:bafybeiacsz3p6mdi2t5vkdaqd74vjbjbtccvxwq7ywv2kkmjlwqvimqbdy
+- valory/ledger:0.19.0:bafybeiflmep26twrfk25olhyxuagceaa2cfvg5qtgsisaxh6z4pdapg6dy
 - valory/p2p_libp2p_client:0.1.0:bafybeib3hbc2dju5grxl6ej3ccber77bw3mssadipbdsdqld5mff733wv4
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
@@ -48,9 +48,9 @@ protocols:
 skills:
 - eightballer/metrics:0.1.0:bafybeifa4yxuoskhgjdl7xhodksgzlm62ucqbdqu4yb7ppjma6fdv2tzeq
 - eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
-- eightballer/simple_fsm:0.1.0:bafybeihivkeeg55emszmatosczxz4i5oylj75qibqy2chqpdp45rr7jtvm
+- eightballer/simple_fsm:0.1.0:bafybeihrdpxk4owbmk7yaqceq2wuzwlps5bbphfcqmtrs4deimloyrlru4
 - valory/abstract_abci:0.1.0:bafybeidr3dqykchbw7rnmxcrp3qkuafk24pyvr7zehfbkcfon62qwuft7y
-- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
+- eightballer/abstract_round_abci:0.1.0:bafybeibaxi47gozccfsf7j2bizthfw7t6zs5ajfynq5eju42bnvb5glc7i
 customs:
 - eightballer/arbitrage_strategy:0.1.0:bafybeiaacwheojls4fbzjm3teyrahsaq4aznjejdmpjpvobr4t6vdrqoli
 default_ledger: ethereum

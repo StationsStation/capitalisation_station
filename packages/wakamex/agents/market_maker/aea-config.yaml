@@ -18,7 +18,7 @@ connections:
 - valory/abci:0.1.0:bafybeibtiw6wlcrkov6vshboixsjgaeodkhxjppk2fbzwleknbp24ci42i
 - valory/http_client:0.23.0:bafybeifcxgtlp3rcuptxtu7fkipauuxl3mcbawuofe6nnejhnq3mjw2rjq
 - valory/ipfs:0.1.0:bafybeif7exoq2viwhfgfcjplxq73hnxvgpsx7pwshhntx6aekza25mdwli
-- valory/ledger:0.19.0:bafybeiacsz3p6mdi2t5vkdaqd74vjbjbtccvxwq7ywv2kkmjlwqvimqbdy
+- valory/ledger:0.19.0:bafybeiflmep26twrfk25olhyxuagceaa2cfvg5qtgsisaxh6z4pdapg6dy
 contracts:
 - eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
 - eightballer/spl_token:0.1.0:bafybeieozewfydqtdlygehzkhofque6klpcr6pkkcx5bd3eug7uuwcl7nm
@@ -49,12 +49,12 @@ protocols:
 - valory/tendermint:0.1.0:bafybeif5wq5i2ugr66alniej2bk4vws5sikal7otx674y5kz52e3ulo2qm
 - zarathustra/asset_bridging:0.1.0:bafybeiaisse2jqpfvb2jqhgnwsa3p2b6v7ommontm5llagtfphqgkmyzkq
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
+- eightballer/abstract_round_abci:0.1.0:bafybeibaxi47gozccfsf7j2bizthfw7t6zs5ajfynq5eju42bnvb5glc7i
 - eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
-- eightballer/simple_fsm:0.1.0:bafybeihivkeeg55emszmatosczxz4i5oylj75qibqy2chqpdp45rr7jtvm
+- eightballer/simple_fsm:0.1.0:bafybeihrdpxk4owbmk7yaqceq2wuzwlps5bbphfcqmtrs4deimloyrlru4
 - eightballer/trading_state:0.1.0:bafybeihvzriswvf2oijlnkp25at65uiol763h6t26v3etbgsa2erhbaana
 - valory/abstract_abci:0.1.0:bafybeidr3dqykchbw7rnmxcrp3qkuafk24pyvr7zehfbkcfon62qwuft7y
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeianjotxyycnukby4xfeo7ia6mhmk2tgljx3kz2thpbqnj5zj2bl3u
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeie66kgmojdwlcgx7g2vovdju3pu6boix3z5ypy6lttrg6fma6fq3u
 customs:
 - wakamex/market_maker:0.1.0:bafybeihv3hv6l2rqpbub6dujb7zztq6elehxe23lvzpwwlq62tsrdsai2u
 default_ledger: ethereum
