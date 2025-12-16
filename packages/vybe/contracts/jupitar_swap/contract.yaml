@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeia4kcp4oc2bursyknhw5skjre3jvqv65abayqifdqongfdjgcts4u
   __init__.py: bafybeidkwxijpczdjccvc4yu727n2achwvlrui6zsaaa7tl22ektoivyp4
-  contract.py: bafybeic2rlseyqscl3apnfeo2c544i667o7bjc4t7amgdh6dewdzgwgu7a
+  contract.py: bafybeigtpwpwky5z5joept65fil6ak2y33xm26p5lbksjynk5c5cqta64a
   tests/__init__.py: bafybeiax2knfjzzcghsdbwvneepv5viij4vzt4x7c3ze2is57q3pdyypiq
-  tests/test_contract_jup.py: bafybeihojdaynaoogpigd63znlxxipn6ufwwcxzavvafpfs27hped2lxvi
+  tests/test_contract_jup.py: bafybeicq7bkvy45gdfry565pm347ipg36acpb64esfixqqu2lw6kmbev4a
 fingerprint_ignore_patterns: []
 class_name: JupitarSwapContract
 contract_interface_paths: {}

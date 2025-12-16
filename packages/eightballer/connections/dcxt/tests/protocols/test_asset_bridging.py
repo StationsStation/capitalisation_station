@@ -20,6 +20,7 @@ from derive_client.data_types import (
     PreparedBridgeTx,
     TypedSignedTransaction,
 )
+from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
     PrivateDepositResultSchema,
@@ -29,7 +30,6 @@ from derive_client.data_types.generated_models import (
 from derive_client._clients.rest.async_http.client import AsyncBridgeClient
 from derive_client._clients.rest.async_http.collateral import CollateralOperations
 
-from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest

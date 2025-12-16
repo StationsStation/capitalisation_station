@@ -14,7 +14,7 @@ fingerprint:
   custom.py: bafybeieis6fefh5vyuzi3q6bxlc4jxr5fgk4dhwrjd5v2xw6q4vogjgy44
   dcxt/__init__.py: bafybeifz4zjfv4rdari3p2n7eduudifuv4lnzu7lxdcpk4qsgvjrdt3exi
   dcxt/balancer.py: bafybeigd7pnrexdnmu62lqsvfr3pusglmw5yblvnjudm4pqwgwrieypy24
-  dcxt/cowswap.py: bafybeie3s3y6hkgehoqfgce2phu62wp6m7tgvyv2oub2puqlumtjjctszm
+  dcxt/cowswap.py: bafybeiccwkfplaapbcobiwg7qzlby4j7q24ngiesuv3syvk56v473h4hkm
   dcxt/data/__init__.py: bafybeiazzyf5llflmu6wrc2zzmwy6aabilr74g5gq2kkr5dxvtug55jy3a
   dcxt/data/balancer/base.json: bafybeih6nx7ti2df2kahkvqss565ggakozxurn5l4fj27xffhns57ldusm
   dcxt/data/balancer/mainnet.json: bafybeib6f3o4njfm7a2krxk5tftqkillcmsijve5br25tjqygwzpyvzfyu
@@ -50,14 +50,14 @@ fingerprint:
   tests/balancer/test_balancer.py: bafybeia2btocoexcjx4eqsk7ayliuoadzuu3ak7xpy4vfgeowcootn6jrq
   tests/data/key: bafybeidq4s5ytnyclxsb6nodvo7w3daysiuuul5cs7vlx35onllspt7fpm
   tests/protocols/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
-  tests/protocols/test_asset_bridging.py: bafybeibj5omxhavf7z5oiwx6axt6x4tfl6fvvl3obaecprue6budohje44
-  tests/protocols/test_balances.py: bafybeicw37cv4asgwwnu34ddwkuydlkm4axfea6x4cuzn63whx5sha4pme
-  tests/protocols/test_market.py: bafybeietvfijv7xz4tza57w6anslcldfdgqpkdbvh2dfwjqmu5x6yiwqgy
-  tests/protocols/test_ohlcv_interface.py: bafybeidj2urmtzqqjlkgot7m4fsjrisgouoba4bc5jlyrsj3qt2psse4ea
-  tests/protocols/test_order_interface.py: bafybeihzo7edgdatckqslk53yg4kltdqfwc5xn7dbadapqol6ybxg7xp3e
-  tests/protocols/test_positions_interface.py: bafybeidtwlw4scoskt4lh7ewfkhvg6mrldobco7smoo5df7o252wm2fj7i
-  tests/protocols/test_spot_asset_interface.py: bafybeihjr2mroxziwt75xraypil5bkkuftr7ahiso6qgxtpszeh3k66j5q
-  tests/protocols/test_tickers.py: bafybeibvft5l3xa6rptt4bejeqmpoxvot24tzzdr6ksxno3pz6xsvt5mla
+  tests/protocols/test_asset_bridging.py: bafybeibdx7crb4aj7fzzqu7t6o27itqc47pnk6qu4mhqcwfac7q3odjbwq
+  tests/protocols/test_balances.py: bafybeih65nwvvkvrja3kan6enopuo4izh7y7uekutpoopfjxgmpcipkbly
+  tests/protocols/test_market.py: bafybeighhih4ugz7pemwlrarm4d7gkeczynvnbnqzbgzgfi5tisyuf7a4q
+  tests/protocols/test_ohlcv_interface.py: bafybeiftj6udakfxa27mwutrupguspuznxd63jmroauyw6f7myk3n33tf4
+  tests/protocols/test_order_interface.py: bafybeidie2iltdrmidvymzefvrj7y2h635mmqdqwrs7jilenjvglumcore
+  tests/protocols/test_positions_interface.py: bafybeibhnzkv4gd2qn7oth2wkj2h4cltweoakui5yq5354kksmud2kybiu
+  tests/protocols/test_spot_asset_interface.py: bafybeig7z7ilnyqdqglt726khveiy3giaf5r7he3mhmbcwg6do6bpszcue
+  tests/protocols/test_tickers.py: bafybeigu3sk2lyigdlyk53ta7g4aj6lyhpcexo2xtofpxmlqlonchuoame
   tests/test_dcxt_connection.py: bafybeiep2ya6sb5nercfan3jhbn2at2hsiklw4psdegsuthv7ogjqmdjye
   utils.py: bafybeic7n4jpmcxeotiovy3mxvqq4upwqm3lmxxtcvofk3e322ruvb4e7a
 fingerprint_ignore_patterns: []

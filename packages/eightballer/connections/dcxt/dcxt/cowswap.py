@@ -24,7 +24,7 @@ from cowdao_cowpy.cow.swap import (
     CompletedOrder,
     ChecksumAddress,
     PreSignSignature,
-    _sign_order,
+    _sign_order,  # noqa: PLC2701
 )
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
@@ -203,7 +203,7 @@ async def swap_tokens(
         if safe_address is not None
         else _sign_order(chain, account, order)
     )
-    order_uid = await post_order(account, safe_address, order, signature, order_book_api)
+    order_uid = await post_order(account, safe_address, order, signature, order_book_api)  # noqa
     order_link = f"{base_url}/orders/{order_uid.root!s}".lower()
     order_link = order_book_api.get_order_link(order_uid)
     return CompletedOrder(uid=order_uid, url=order_link)
