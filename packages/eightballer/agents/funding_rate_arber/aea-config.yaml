@@ -3,24 +3,24 @@ author: eightballer
 version: 0.1.0
 license: Apache-2.0
 description: ''
-aea_version: '>=1.55.0, <2.0.0'
+aea_version: '>=1.55.0, <3.0.0'
 fingerprint:
   tests/__init__.py: bafybeibk76alseqt3ufreyev7rnz5zuk6dcftt7c2ob54gmhpt6xrhkg2y
   tests/test_agent.py: bafybeihqdv4eug2iuwf3dgnv5upphuf67gtol2pkcoel2ilckblkkuwd4q
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
-- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
-- eightballer/prometheus:0.1.1:bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq
+- eightballer/http_client:0.1.0:bafybeigqr2eudiwksmr2cavk6as63li2oqf3x2edwzvs5vepntuqhemnge
+- eightballer/http_server:0.1.0:bafybeieispawqnpoeqidgkt7u7vsynualtcmbs3vsgggpb6hzkdsyd3fve
+- eightballer/prometheus:0.1.1:bafybeicgvmn5eo57jotbcwasjqlmzog3ss5dvvembw7jaytfz33z4kbaoa
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
-- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
-- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
-- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
+- eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
+- eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
+- open_aea/signing:1.0.0:bafybeigalbjxbpl6pezijj6it2zspjcjy3znm66t5ygbe4kz5kxcnbu65y
 skills:
-- eightballer/funding_rate_abci_app:0.1.0:bafybeicujnc7wdn35xkyrh4zdsd2v6if2ympqc53iksbkhkgf2p75foekm
-- eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
+- eightballer/funding_rate_abci_app:0.1.0:bafybeihgqwsodohh327vr3fnklnh5ovnjpk5ezvdxsoqwudrfcmdobc77q
+- eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
 customs: []
 default_ledger: ethereum
 required_ledgers:

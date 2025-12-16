@@ -11,7 +11,7 @@ author: eightballer
 version: 0.1.0
 description: This protocol specifies interactions for managing liquidity in DeFi platforms, including adding and removing liquidity, and querying liquidity conditions.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 protocol_specification_id: eightballer/liquidity_provision:0.1.0
 speech_acts:
   add_liquidity:

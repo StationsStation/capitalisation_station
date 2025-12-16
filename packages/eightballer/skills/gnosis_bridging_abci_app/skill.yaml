@@ -5,7 +5,7 @@ type: skill
 description: The http echo skill prints out the content of received http messages
   and responds with success.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeigpvbcqzjaa6pfyglg6anuykp3onj2q5xohowwregh7c4qroi5j4m
   __init__.py: bafybeifua5zk4h3t2nng3v6lwtmwavh2452ucrivlpbmbdc7x3jdtn76du
@@ -20,15 +20,15 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- eightballer/olas:0.1.0:bafybeieyij2qwvudihfte4wm662nd6x4sanuuq3npigwidgxobptvt3uxe
-- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
-- eightballer/omni_bridge:0.1.0:bafybeialhffmk7lw7el7wcye73it7jogqbra3z2hv4wkhqhmhxllfaul5e
-- eightballer/amb_mainnet:0.1.0:bafybeiecfrsrysggmmosj5bhboqkcyrixxtjkdj4fjcjmyu3puwtzu2zmy
-- eightballer/amb_gnosis:0.1.0:bafybeifsswwirlf5lt2b5o4yv3u3iw5a2qtfcr7q2ibob7bweeux63itpe
-- eightballer/amb_gnosis_helper:0.1.0:bafybeig37p3q4se2it75kt4zvqvrvzk4fqc7eyspspt3txooxxljkurkey
+- eightballer/olas:0.1.0:bafybeied2un2ieyq3qoxlpv4hu7nezan4vwil4wgcavrhqnackkwgjmyuy
+- eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
+- eightballer/omni_bridge:0.1.0:bafybeiaql76rwc75p4n3xquelkel577ocectja7illxv72jsl2ztcyjuje
+- eightballer/amb_mainnet:0.1.0:bafybeihjtm2ke6dd7mejqzi5r7k7kpnjvgxbzyoyrgx3biyjpd3cca4fz4
+- eightballer/amb_gnosis:0.1.0:bafybeicudwt5qs55vmtbohqojtid4nhfkh334eogtpqrvyefqkvt6e5q5q
+- eightballer/amb_gnosis_helper:0.1.0:bafybeiakxsmqefkukmttb2av3zwrvatop4rhrn4ee6za2j7hbukgxldysu
 protocols:
-- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
-- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
+- eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 skills: []
 behaviours:
   main:

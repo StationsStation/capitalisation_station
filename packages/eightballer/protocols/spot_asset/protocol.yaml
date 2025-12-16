@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/spot_asset:0.1.0
 type: protocol
 description: A protocol for representing spot_assets.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeiffato5wgv2e4podsvw27ehh3ivpmwvamn3yu7rnznbxh6d7ps5wm
+  README.md: bafybeibpki7kzsmnzjuiku5qmrnroxgfupglv2hcr4snejkkvrqcxaftg4
   __init__.py: bafybeiacwbnbeezmvuprodusiupehbpfxc6hlpotitjkkfviy7lqc3d2vi
   custom_types.py: bafybeigbywbj364ks4hflktchhx4j4qiaccp4lsnl3lfj3oeoiem2jnwvu
   dialogues.py: bafybeic33fbxzb6fsdknajoww62z4ghvg35ohpfsrhumttaou6tvypf64m

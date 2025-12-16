@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/positions:0.1.0
 type: protocol
 description: A protocol for passing position data between agent components.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeicg7piqc4kjur7neyf4hiwcnryu5wbeoopkgt5dicad3tjnxghgkq
+  README.md: bafybeiernzqdv6rwec4qi27gfoh54ovgnpeofoo265pqoqrprdhmsqmddm
   __init__.py: bafybeiebv2f5kwmbqcggcjrs5ce3g2gpuacvi2rjwr432o6634e2nvajr4
   custom_types.py: bafybeidzt5oiwkry6sazygnr7t2rp7o3rumerydjm4bpmc3gqpwfhzuwza
   dialogues.py: bafybeigofqfco2plgjph7yowfq2xudycf744lbymmo33ucabpbb5shet3a

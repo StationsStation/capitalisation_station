@@ -4,7 +4,7 @@ version: 0.2.0
 type: contract
 description: The scaffold contract scaffolds a contract to be implemented by the developer.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeia55j7yn7ckdlkmomxe6t2zykohyr3fdlignfvmqgmfzneqvg7jvm
   build/nabla_quote.json: bafybeigzmsiqqejtlzujsdwvxqncyigims52ucsmoyawyexqr2agojh4ka

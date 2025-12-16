@@ -6,9 +6,9 @@ type: protocol
 description: This protocol specifies interactions for managing liquidity in DeFi platforms,
   including adding and removing liquidity, and querying liquidity conditions.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeihy3a7e5yaps7vdzyh5w7mth3cxuqvoweibkpwki5r6sxzkaiarsm
+  README.md: bafybeiewlqvo76zkhvx4avzwkruw2ttxntg4n5yfa46ab6dglrc46bkwwa
   __init__.py: bafybeiafnqi4ietcvrubqlpsakve35wacyjraajwtln6xdgunovsflkhla
   custom_types.py: bafybeibkinqhiecv2vm3x6atkkj363nedc4zkkpniuow3q5kbq4wglhnda
   dialogues.py: bafybeiadhlha6iv3tpnnmkapxffbaol3vc2ok6wqekeckoht653cjfwzsm

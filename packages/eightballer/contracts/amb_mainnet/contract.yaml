@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: The scaffold contract scaffolds a contract to be implemented by the developer.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeih5ebis6bvbrrwchsquka5bio2ic5utfyaw32gs5eieahc7auf5dy
   build/amb_mainnet.json: bafybeiacz4jmnkam3zl4nmiicnor7rzu3iemykqp6r7kjvztf2dgtrlqu4

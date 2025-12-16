@@ -29,7 +29,7 @@ from solders.transaction import VersionedTransaction
 from aea.configurations.base import PublicId
 
 
-JUPITAR_URL = "https://quote-api.jup.ag/v6"
+JUPITAR_URL = "https://api.jup.ag/v6"
 TIMEOUT = 10
 
 

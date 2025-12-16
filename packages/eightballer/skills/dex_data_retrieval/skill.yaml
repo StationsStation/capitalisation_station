@@ -5,7 +5,7 @@ type: skill
 description: This ABCI is designed to collect data from dexs such that it can be reported
   back to the reporting skill. It is heavily inspired by the work from the ccxt skill.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeietsymwzilixsungxwi2ypv5242kwysg3fpesuj2nhnh6fujxwcdi
   behaviours.py: bafybeihncltwiey4c42ryeupeuq4rfzgx4nwd5rlyanfcsgkruw6haqdmm
@@ -25,16 +25,16 @@ fingerprint:
   tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeibahsmb6xnfz4bdxsgtdkkpkfcgoce2evuzajdrwawc57a2b6cjom
+- eightballer/dcxt:0.1.0:bafybeifcasuuqqviddlgqp6iidmsc6om7xn3hjg7bchs7jm6wbxxzfy65u
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
-- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
-- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
-- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
-- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
+- eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
+- eightballer/markets:0.1.0:bafybeih2anyaxbqibhlufqvqx5trixarl4kmfhtatnortdrck3grjjgaga
+- eightballer/orders:0.1.0:bafybeifsi7b6pw5eifxelco7ibxjcegmhxqcyl2t2ckclmwyjdyn7wef5e
+- eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
+- eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeifwqchgwyys76mpjfxqm6o6c6se6tm3khnujcoqh2wi6ildao76ze
+- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
 behaviours:
   main:
     args: {}

@@ -5,7 +5,7 @@ type: contract
 description: Implements a number of simple methods to enable interaction with a spl
   token, along with a representation of the spl token itself.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeias4a2otjui24npytdea54vcsjv2hymxb2uz2xbzej23s5lg6shze
   contract.py: bafybeigp5llr4rhwtoczyqp4duad7z4izqmd43kpzrj7mthi47rthyjh6a

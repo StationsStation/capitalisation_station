@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/ohlcv:0.1.0
 type: protocol
 description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeia6q5ospijt63f4hn52kkjfcbfadvhknb537rb2ftv5wj2ogxppra
+  README.md: bafybeicwzwl23ams5vizfnjnes5yjqkapmwbbp6kpt5qplzazjt6vbaq5e
   __init__.py: bafybeihcbdotc6iklyipuh54h2x3jdh2lmh36z2fm2cdcuczcr5wvt2cdq
   custom_types.py: bafybeiejon23nd2lovj2ug3vkyqccc25vps3zl4t3qt7ctgq5csya5h2g4
   dialogues.py: bafybeibms3cxbc4x67foxeyq72dzye7p47hq7dgkdeg5jdb5c7bi2hw2mi

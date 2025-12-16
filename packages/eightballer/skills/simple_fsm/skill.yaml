@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: A simple single agent fsm to execute against arbitrage opportunities.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeihgykp7z3xmknfpaxxoksnfwwyra7di35t2ievcvqzcvbimr4pdtu
   behaviour_classes/__init__.py: bafybeieyvgaevouacdrdkafzrhe2jojwts43u3bnvxx3o65ofrd3y26p3y
@@ -26,21 +26,21 @@ fingerprint:
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
-- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
-- eightballer/dcxt:0.1.0:bafybeibahsmb6xnfz4bdxsgtdkkpkfcgoce2evuzajdrwawc57a2b6cjom
+- eightballer/apprise_wrapper:0.1.0:bafybeiafvyh2l3imqusjn374wnnet6gzhyvc4o5wrczdlt3mz535og7elm
+- eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
+- eightballer/dcxt:0.1.0:bafybeifcasuuqqviddlgqp6iidmsc6om7xn3hjg7bchs7jm6wbxxzfy65u
 contracts: []
 protocols:
-- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
-- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
-- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
-- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
-- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
-- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
-- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
-- eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
+- eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
+- eightballer/markets:0.1.0:bafybeih2anyaxbqibhlufqvqx5trixarl4kmfhtatnortdrck3grjjgaga
+- eightballer/orders:0.1.0:bafybeifsi7b6pw5eifxelco7ibxjcegmhxqcyl2t2ckclmwyjdyn7wef5e
+- eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
+- zarathustra/asset_bridging:0.1.0:bafybeiaisse2jqpfvb2jqhgnwsa3p2b6v7ommontm5llagtfphqgkmyzkq
+- eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
+- eightballer/approvals:0.1.0:bafybeid72h5vqtg4aqwluzdfwr5plj5mnkrd7yi6dpzzs3qptzugngxgyu
+- eightballer/user_interaction:0.1.0:bafybeidhs7hwsfinvgkkyodgq5qoolg5i4rf5vr2c2xcuvkbyoodefcvoq
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeifwqchgwyys76mpjfxqm6o6c6se6tm3khnujcoqh2wi6ildao76ze
+- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
 behaviours:
   main:
     args: {}

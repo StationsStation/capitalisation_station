@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/orders:0.1.0
 type: protocol
 description: A protocol for representing orders.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeie2vgsgp2gj5yvpnn6b5x7m2vwhqk7m7abodq33gmpfabdpejavqm
+  README.md: bafybeibjhf4u7u4qcf6lrpicqpwkb3qb2kg3wap3qrctaewuxcilbo3zra
   __init__.py: bafybeigavdklcqngyu5mgifu3xs5h5mpmlphfpbrbrnonylqvgd3ujpt6q
   custom_types.py: bafybeih6dwytuf4pgmqwdtuaygs73dktkxmmczniugpzsw35m6mkjxr3n4
   dialogues.py: bafybeih3w75zedy653osv7yqqy3ywjg64v4bwyw256wacwdy66k5zp3t7e

@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/default:0.1.0
 type: protocol
 description: A protocol for exchanging any bytes message.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeiaak3h3o3rajjzfr5pslpfe4rj7negd45pb7eora7fwaevgne3wiu
+  README.md: bafybeidpkjywlhywzcgr3w27vauovqywmc5u3tvffldaxogl6rfu7p46ma
   __init__.py: bafybeigl56bk6g36e2ohbn3lq55d6km6v5aojxd7eoddyjplsolkqq6oty
   custom_types.py: bafybeiejon23nd2lovj2ug3vkyqccc25vps3zl4t3qt7ctgq5csya5h2g4
   default.proto: bafybeicqfjlmrqsmzipwip34zv62jbrpxs4ihz3jietnfc237hfv4owgeq

@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: The scaffold contract scaffolds a contract to be implemented by the developer.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeifvf3gvauaksowmnsgqin4nivu4vzx4e4gyexmft322dumypm5xdy
   build/multicall3.json: bafybeiceko6mu7oybz7puo3dzgu3zif7ha36beizkn244stwbad5opslwy

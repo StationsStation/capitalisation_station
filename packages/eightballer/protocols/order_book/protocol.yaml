@@ -7,9 +7,9 @@ description: A protocol to enable agents to subscribe to order books and receive
   in real-time. This protocol facilitates monitoring changes in bid and ask prices
   along with their volumes for given trading pairs on specified exchanges.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeiazv5vxvh3l2545ngmy4rxj7doqpdalr55nh3gl2dcpyuvaxctou4
+  README.md: bafybeierhwamq6tws7q36y3xvazm3komizjeff3gwujsyj2ialzwlwil3i
   __init__.py: bafybeiepdjuc776ctv74a4ukfjt6kdr75f3t45or7rugya46bisq56doli
   custom_types.py: bafybeihp72on3goivit25rlmlrlbkbny6n3ksgmfo7wl5yvpm46ldmx73i
   dialogues.py: bafybeiedl3nsugvmoytbbwy2u5vhkxipqjpnfbateth57f7vphs6zylsrm

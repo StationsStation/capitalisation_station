@@ -5,7 +5,7 @@ type: skill
 description: The http echo skill prints out the content of received http messages
   and responds with success.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeid5462ekyrcitxhganoexoc6kxcofdy245evwdpprf3uwfpek7fcq
@@ -18,8 +18,8 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols:
-- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
-- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
+- eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
+- eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 skills: []
 behaviours: {}
 handlers:

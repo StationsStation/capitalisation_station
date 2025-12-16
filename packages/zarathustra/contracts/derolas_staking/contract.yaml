@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: The Derolas staking contract.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibtelgnqabncedvt4w2fqy336b3pkm2pykl2xaofaws55tyvbct4a
   build/derolas_staking.json: bafybeibjmonsvgfi766lpkhpwevp47qqqlnaympep6deryvyqjxljtf77m

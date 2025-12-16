@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/tickers:0.1.0
 type: protocol
 description: A protocol for passing ticker data between agent components.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeialvsiqiht4xxkozfnf3z4pzkvgtxaodhlj42w3whpakslqwsywuu
+  README.md: bafybeiavazifp3luuzlfsmkgreztos6mkyuaxijaoltwbrk7rvazcfzgq4
   __init__.py: bafybeigk3gue6mjjzimfq3oy2s4x4ct4oy3ynzrglpc6ihwnhqdeia7o2m
   custom_types.py: bafybeigdkv26c3tnxscezgemtmxw4z6ce6j4kqtc2dr24ma4uboryehelm
   dialogues.py: bafybeieatbpa62hycaf5jocp7pywde5ahzpiucwkeg3t7yqb4csm4gh3kq

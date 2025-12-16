@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: The scaffold contract scaffolds a contract to be implemented by the developer.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeigbjqf2tw6laydmrrrqxkbmac5adlu66vgnrr3imqcomxz5vki5ja
   build/amb_gnosis_helper.json: bafybeibb5ftqknkh72c6hgqdwh4njv6ci3ehewqgun6wrrr5p4yilknwzm

@@ -3,60 +3,60 @@ author: wakamex
 version: 0.1.0
 license: Apache-2.0
 description: Simple Agent to demonstrate Dex-Cex Arbitrage
-aea_version: '>=1.55.0, <2.0.0'
+aea_version: '>=1.55.0, <3.0.0'
 fingerprint:
   tests/test_derive_mm_agent.py: bafybeiewncjve36ledhxoy6xrgctbqfuc3rvqz4kmrecxvpqgtgpdi226q
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise_wrapper:0.1.0:bafybeibekoqsadyztskr353x3usoxe4bmjlr45ecafmyfbxay6dc4jxcci
-- eightballer/ccxt_wrapper:0.1.0:bafybeicpqaa3cdfukr23erysbs3edffsqh2ijgd37szuzzkkl7gewzb53m
-- eightballer/dcxt:0.1.0:bafybeibahsmb6xnfz4bdxsgtdkkpkfcgoce2evuzajdrwawc57a2b6cjom
-- eightballer/http_client:0.1.0:bafybeiaz5auftwxpt4czrmeeesggqlkc2kosmetq6adrebeu6g7bkhqc2u
-- eightballer/http_server:0.1.0:bafybeidrvllrr23mc6bvjxn6v3hny6oiwhfgi72n2b7w6ck5luousjfbbq
-- eightballer/p2p_libp2p_client:0.1.0:bafybeidpnpe46i4lj2iv4nwyhwhsadazgzbxdlmiybwomts54heaebobvy
-- eightballer/prometheus:0.1.1:bafybeigw2unvrvt5mv3i4nay564s3p3wpiym2ftmc5qkwmxh53edncmcdq
+- eightballer/apprise_wrapper:0.1.0:bafybeiafvyh2l3imqusjn374wnnet6gzhyvc4o5wrczdlt3mz535og7elm
+- eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
+- eightballer/dcxt:0.1.0:bafybeifcasuuqqviddlgqp6iidmsc6om7xn3hjg7bchs7jm6wbxxzfy65u
+- eightballer/http_client:0.1.0:bafybeigqr2eudiwksmr2cavk6as63li2oqf3x2edwzvs5vepntuqhemnge
+- eightballer/http_server:0.1.0:bafybeieispawqnpoeqidgkt7u7vsynualtcmbs3vsgggpb6hzkdsyd3fve
+- eightballer/p2p_libp2p_client:0.1.0:bafybeifhzqibd6dlddkntsv6iyjkltfm25snfify3v5r6dobd47qnomisa
+- eightballer/prometheus:0.1.1:bafybeicgvmn5eo57jotbcwasjqlmzog3ss5dvvembw7jaytfz33z4kbaoa
 - valory/abci:0.1.0:bafybeibtiw6wlcrkov6vshboixsjgaeodkhxjppk2fbzwleknbp24ci42i
-- valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
+- valory/http_client:0.23.0:bafybeifcxgtlp3rcuptxtu7fkipauuxl3mcbawuofe6nnejhnq3mjw2rjq
 - valory/ipfs:0.1.0:bafybeif7exoq2viwhfgfcjplxq73hnxvgpsx7pwshhntx6aekza25mdwli
-- valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
+- valory/ledger:0.19.0:bafybeiacsz3p6mdi2t5vkdaqd74vjbjbtccvxwq7ywv2kkmjlwqvimqbdy
 contracts:
-- eightballer/erc_20:0.1.0:bafybeiegd5pdj34s4cuhiaxermjdtyhnapu5usy545vcf6mi5grfazlnpa
-- eightballer/spl_token:0.1.0:bafybeigqwt7iyurpz7k6elwfiwvdzsb34xzt55f6elt3k54ksfhbycblyu
+- eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
+- eightballer/spl_token:0.1.0:bafybeieozewfydqtdlygehzkhofque6klpcr6pkkcx5bd3eug7uuwcl7nm
 - valory/service_registry:0.1.0:bafybeigcr4y6ylathz5owdyq6nhvrdpv5unyeb3ol3h3xbncq24useqlpa
-- vybe/jupitar_swap:0.1.0:bafybeihcabcs6loyb3vjw7q62asn37iufac44onw4sjf6uvjojbyuqd25m
-- zarathustra/derolas_staking:0.1.0:bafybeifqqoxeempf5czt2mek2cdio4bwbxbjhgkmtpvnzmfgxmslu6rrui
+- vybe/jupitar_swap:0.1.0:bafybeiee75r3x6e5dvnkzmzio6p5xecnoq3lzu3ab2fwrckvbp4a6vr65e
+- zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 protocols:
-- eightballer/approvals:0.1.0:bafybeie7z3qdnfifpjddzutmdg3p52uskt7admpan4ucmrijazbmpc7usa
-- eightballer/balances:0.1.0:bafybeibt7adq2fvlaxvw5mwr7zbpseto5w36ixk4moamp2hjcfid7d6dnu
-- eightballer/default:0.1.0:bafybeihx7izpxqpj42jxbi7s2q6bijtv2vcb7kz2r5bwtfxt7ixlh77s7u
-- eightballer/http:0.1.0:bafybeid75xhq7hfdt7sgj7yrn44yj57xrgxscaw34ir46tndfzvodioxme
-- eightballer/markets:0.1.0:bafybeigh4uve25kg7qqdgehwvdrtdydske2fga56fitvhvssvcw2dq5ha4
-- eightballer/ohlcv:0.1.0:bafybeia6vg6tnnlc75bq2hlj5vgcmkscvthneezzyuwasztini2dbd3ziq
-- eightballer/order_book:0.1.0:bafybeicvwtfstunyoxqf7hnxbipukk4m6mkzwrime5hc37ew64by4tqdki
-- eightballer/orders:0.1.0:bafybeicwsxnxvy5cclbwzp6kj6hm2g655j47wdvhe6co3oge7lorwlt364
-- eightballer/positions:0.1.0:bafybeic53mxlsg52htdwiuxnuw6bgtqfwxdupgzqtfpoa3bee4ccgmmmle
-- eightballer/prometheus:1.0.0:bafybeidxo32tu43ru3xlk3kd5b6xlwf6vaytxvvhtjbh7ag52kexos4ke4
-- eightballer/spot_asset:0.1.0:bafybeigilsvcxaq2qwxmvclmx56cerdmnrp3jvxph3sqec3usipkblbhze
-- eightballer/tickers:0.1.0:bafybeicpoaxh4mbzk3rn7rjzvlhrfkzo4st3otzpcs35cixeg3fdvn5dsq
-- eightballer/user_interaction:0.1.0:bafybeidmfy3vdnlbz6wexi4gwhofown4a7l6jt7nzh2x7lvghumxlgh4vi
-- open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
+- eightballer/approvals:0.1.0:bafybeid72h5vqtg4aqwluzdfwr5plj5mnkrd7yi6dpzzs3qptzugngxgyu
+- eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
+- eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
+- eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
+- eightballer/markets:0.1.0:bafybeih2anyaxbqibhlufqvqx5trixarl4kmfhtatnortdrck3grjjgaga
+- eightballer/ohlcv:0.1.0:bafybeicmclhj5db6fs2kf22hdgijw5hdigrii2ub4vcxcxuh7n4zxryp34
+- eightballer/order_book:0.1.0:bafybeibdkpj3qy7gcybni7goneqe75cgeqcialsv6he3ozmzgqqms7oxfu
+- eightballer/orders:0.1.0:bafybeifsi7b6pw5eifxelco7ibxjcegmhxqcyl2t2ckclmwyjdyn7wef5e
+- eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
+- eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
+- eightballer/spot_asset:0.1.0:bafybeifjra7gn24377acdpxa2p4h4u4kbfmkxw26qh5s3k2vpkb7h54d6e
+- eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
+- eightballer/user_interaction:0.1.0:bafybeidhs7hwsfinvgkkyodgq5qoolg5i4rf5vr2c2xcuvkbyoodefcvoq
+- open_aea/signing:1.0.0:bafybeigalbjxbpl6pezijj6it2zspjcjy3znm66t5ygbe4kz5kxcnbu65y
 - valory/abci:0.1.0:bafybeigdi6wsbdn2nv7clzhnuhki3taywgiiajwawdaat57o5ntlgqj2qe
-- valory/acn:1.1.0:bafybeic6h55ov5lrzbah6fate54c4u6spopcexxspw3abotbmffabfddeu
-- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
-- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
+- valory/acn:1.1.0:bafybeihrfsualuoxnwxfmhgbbyty4ttqijuwzcesg3kwsqxfzcmxc7t4rm
+- valory/contract_api:1.0.0:bafybeigzv2yxgkednegkiepkm5uxv2ekdn3y5czvh6ycba6t7n3k2otu24
+- valory/http:1.0.0:bafybeiczj4q3lkuiwhb6vzn7ptxifqgjtnvl7722t7c4eystbuel5cd34i
 - valory/ipfs:0.1.0:bafybeib7jhgyocjwdq3r5wzq3z4qeubj3dwi3aqjn2uxzuwnjp5fhvafcu
-- valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
+- valory/ledger_api:1.0.0:bafybeicwup3faznzvuciqkljejo2c6gbv3dliaglscf5bibu6633tylkfq
 - valory/tendermint:0.1.0:bafybeif5wq5i2ugr66alniej2bk4vws5sikal7otx674y5kz52e3ulo2qm
-- zarathustra/asset_bridging:0.1.0:bafybeicgmkrdqx7h24w7a6676nn6x75qmhor5h4u5tuxvozrnwwxvqktta
+- zarathustra/asset_bridging:0.1.0:bafybeiaisse2jqpfvb2jqhgnwsa3p2b6v7ommontm5llagtfphqgkmyzkq
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeifwqchgwyys76mpjfxqm6o6c6se6tm3khnujcoqh2wi6ildao76ze
-- eightballer/prometheus:0.1.0:bafybeid4ssotxk7ajsesyzh5p7vpbclsviwj2tqxo46qgkoel2h5fzepze
-- eightballer/simple_fsm:0.1.0:bafybeihe3higzcaxqau3ipslrc7jsn7dzf7vd37hpfszojcbbf6otpba74
-- eightballer/trading_state:0.1.0:bafybeifzb77g4m7f6bbvq4dwfn4mtbml5osf26jrfgqoldrrft7ldsov7i
+- eightballer/abstract_round_abci:0.1.0:bafybeideya7gr5qt5a4yd56abbtaefp2j42winnxddbt7st2lhfqiyngq4
+- eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
+- eightballer/simple_fsm:0.1.0:bafybeihivkeeg55emszmatosczxz4i5oylj75qibqy2chqpdp45rr7jtvm
+- eightballer/trading_state:0.1.0:bafybeihvzriswvf2oijlnkp25at65uiol763h6t26v3etbgsa2erhbaana
 - valory/abstract_abci:0.1.0:bafybeidr3dqykchbw7rnmxcrp3qkuafk24pyvr7zehfbkcfon62qwuft7y
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeigboulbbqlvkexqobdkfpdgztia3nzftms3rhg4zav27gmgl5lcbq
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeianjotxyycnukby4xfeo7ia6mhmk2tgljx3kz2thpbqnj5zj2bl3u
 customs:
-- wakamex/market_maker:0.1.0:bafybeia6toouhtmabt545pyg33szwu7ayrwmwraoaq6oppn6mmt2zzpimm
+- wakamex/market_maker:0.1.0:bafybeihv3hv6l2rqpbub6dujb7zztq6elehxe23lvzpwwlq62tsrdsai2u
 default_ledger: ethereum
 required_ledgers:
 - ethereum

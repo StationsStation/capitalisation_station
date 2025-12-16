@@ -13,7 +13,7 @@ author: eightballer
 version: 0.1.0
 description: A protocol for passing position data between agent components.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 protocol_specification_id: eightballer/positions:0.1.0
 speech_acts:
   get_all_positions:

@@ -11,7 +11,7 @@ author: eightballer
 version: 0.1.0
 description: A protocol to enable agents to subscribe to order books and receive updates in real-time. This protocol facilitates monitoring changes in bid and ask prices along with their volumes for given trading pairs on specified exchanges.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 protocol_specification_id: eightballer/order_book:0.1.0
 speech_acts:
   subscribe:

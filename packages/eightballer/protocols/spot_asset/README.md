@@ -11,7 +11,7 @@ author: eightballer
 version: 0.1.0
 description: A protocol for representing spot_assets.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 protocol_specification_id: eightballer/spot_asset:0.1.0
 speech_acts:
   get_spot_asset:

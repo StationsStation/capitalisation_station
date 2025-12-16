@@ -11,7 +11,7 @@ author: zarathustra
 version: 0.1.0
 description: A minimal, atomic request-response protocol for cross-chain asset bridging.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 protocol_specification_id: zarathustra/asset_bridging:0.1.0
 speech_acts:
   request_bridge:

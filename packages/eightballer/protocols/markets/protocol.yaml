@@ -5,9 +5,9 @@ protocol_specification_id: eightballer/markets:0.1.0
 type: protocol
 description: A protocol for passing ohlcv data between compoents.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=1.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeifknqpsknwfwwgwsaymmebdc6yhfzda6ewqdan67uedpogrpypivm
+  README.md: bafybeiebbytsecknwn5m46fd442x7sue4upti5c22x233oiespjmsae5iy
   __init__.py: bafybeiebsp7ev33vclpyjzi7gqnofv24dqnhucp3i6hhnn5zf7uaii3xrq
   custom_types.py: bafybeidfqowkwvpd4zgtx7ulkmagzakw2npirlcfgw52ugootufz6sdc2u
   dialogues.py: bafybeibfl663h7pfdrci4fyxaznjzntsl422kfn5afl4pblxuzvskmxmhm
