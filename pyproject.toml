@@ -28,7 +28,7 @@ open-aea-test-autonomy = "==0.19.11"
 open-autonomy = "==0.19.11"
 autonomy-dev = {version = "==0.2.157", extras = ["all"]}
 ccxt = ">=3.1.43"
-numpy = ">=1.26.0,<2"
+numpy = ">2,<3"
 derive-client = {path = "third_party/upstream/derive_client"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
