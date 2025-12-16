@@ -8,17 +8,18 @@ from typing import Any
 from decimal import Decimal
 from pathlib import Path
 
+from derive_client import AsyncHTTPClient as DeriveAsyncClient
 from derive_client.data_types import (
-    OrderSide as DeriveOrderSide,
+    Currency,
     OrderType as DeriveOrderType,
-    Environment,
-    OrderStatus as DeriveOrderStatus,
-    TimeInForce as DeriveTimeInForce,
     InstrumentType,
-    UnderlyingCurrency,
 )
 from derive_client.exceptions import ApiException
-from derive_client.clients.async_client import AsyncClient as DeriveAsyncClient
+from derive_client.data_types.generated_models import (
+    Status as DeriveOrderStatus,
+    Direction as DeriveOrderSide,
+    TimeInForce as DeriveTimeInForce,
+)
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
@@ -243,15 +244,15 @@ def to_position(api_result):
 
 
 DERIVE_ORDER_STATUS_MAP = {
-    DeriveOrderStatus.OPEN: OrderStatus.OPEN.name,
-    DeriveOrderStatus.FILLED: OrderStatus.FILLED.name,
-    DeriveOrderStatus.CANCELLED: OrderStatus.CANCELLED.name,
-    DeriveOrderStatus.REJECTED: OrderStatus.FAILED.name,
-    DeriveOrderStatus.EXPIRED: OrderStatus.EXPIRED.name,
+    DeriveOrderStatus.open: OrderStatus.OPEN.name,
+    DeriveOrderStatus.filled: OrderStatus.FILLED.name,
+    DeriveOrderStatus.cancelled: OrderStatus.CANCELLED.name,
+    # DeriveOrderStatus.REJECTED: OrderStatus.FAILED.name,
+    DeriveOrderStatus.expired: OrderStatus.EXPIRED.name,
 }
 DERIVE_ORDER_TYPE_MAP = {
-    DeriveOrderType.LIMIT: OrderType.LIMIT.name,
-    DeriveOrderType.MARKET: OrderType.MARKET.name,
+    DeriveOrderType.limit: OrderType.LIMIT.name,
+    DeriveOrderType.market: OrderType.MARKET.name,
 }
 
 
@@ -391,20 +392,20 @@ class DeriveClient:
         private_key = keyfile.read_text().strip()
 
         self.client: DeriveAsyncClient = DeriveAsyncClient(
-            private_key=private_key,
-            subaccount_id=kwargs.get("subaccount_id"),
+            session_key=private_key,
+            subaccount_id=kwargs["subaccount_id"],
             wallet=kwargs["wallet"],
-            env=Environment(kwargs.get("environment")),
-            logger=kwargs.get("logger"),
+            env=kwargs["environment"],
+            logger=kwargs["logger"],
         )
-        self.logger = kwargs.get("logger")
+        self.logger = kwargs["logger"]
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
-            params["currency"] = UnderlyingCurrency(params["currency"].lower())
+            params["currency"] = Currency(params["currency"].upper())
         if "type" in params:
             params["type"] = InstrumentType(params["type"].lower())
         result = await self.client.fetch_instruments(**params)
@@ -418,7 +419,7 @@ class DeriveClient:
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
-            params["currency"] = UnderlyingCurrency(params["currency"].lower())
+            params["currency"] = Currency(params["currency"].upper())
         if "type" in params:
             params["type"] = InstrumentType(params["type"].lower())
 
@@ -470,7 +471,7 @@ class DeriveClient:
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
-            params["currency"] = UnderlyingCurrency(params["currency"].lower())
+            params["currency"] = Currency(params["currency"].upper())
         try:
             result = await self.client.get_positions(**params)
             data = result
@@ -525,7 +526,7 @@ class DeriveClient:
             raise ValueError(msg)
 
         def get_underlying_currency(currency):
-            return UnderlyingCurrency(currency.lower())
+            return Currency(currency.upper())
 
         asset_a, _asset_b = kwargs["symbol"].split("-")
 
