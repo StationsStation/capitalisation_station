@@ -24,7 +24,7 @@ fingerprint:
   dcxt/data/token_list.json: bafybeiex6u545y7hswqo5qlp5q3cwd36suhb6uwridrpajak74vo6ezq34
   dcxt/data/tokens.py: bafybeia23d3bmwxndq4mukdxtckt2npnsflc4iturlpoqzc7r5blvvjkee
   dcxt/defi_exchange.py: bafybeigz2wpqplwuup2hejfhdtlm6oeni7cvxrhhjfmf42semrklh36i4i
-  dcxt/derive.py: bafybeid3fsr3ry2oiilkawddvusfjey5frle3ecfzgculsdst6dekpfwpy
+  dcxt/derive.py: bafybeieggsqq2lc73cfjetdq6reixbg5bzrnh3l2nnt5ygesjilzwbab3q
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
   dcxt/nabla.py: bafybeidfto63bu5csieqdnjnzgcos7ntf6u5u6bvpiultipyx6ububsvxq
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
@@ -50,14 +50,14 @@ fingerprint:
   tests/balancer/test_balancer.py: bafybeia2btocoexcjx4eqsk7ayliuoadzuu3ak7xpy4vfgeowcootn6jrq
   tests/data/key: bafybeidq4s5ytnyclxsb6nodvo7w3daysiuuul5cs7vlx35onllspt7fpm
   tests/protocols/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
-  tests/protocols/test_asset_bridging.py: bafybeibdx7crb4aj7fzzqu7t6o27itqc47pnk6qu4mhqcwfac7q3odjbwq
-  tests/protocols/test_balances.py: bafybeih65nwvvkvrja3kan6enopuo4izh7y7uekutpoopfjxgmpcipkbly
-  tests/protocols/test_market.py: bafybeighhih4ugz7pemwlrarm4d7gkeczynvnbnqzbgzgfi5tisyuf7a4q
-  tests/protocols/test_ohlcv_interface.py: bafybeiftj6udakfxa27mwutrupguspuznxd63jmroauyw6f7myk3n33tf4
-  tests/protocols/test_order_interface.py: bafybeidie2iltdrmidvymzefvrj7y2h635mmqdqwrs7jilenjvglumcore
-  tests/protocols/test_positions_interface.py: bafybeibhnzkv4gd2qn7oth2wkj2h4cltweoakui5yq5354kksmud2kybiu
-  tests/protocols/test_spot_asset_interface.py: bafybeig7z7ilnyqdqglt726khveiy3giaf5r7he3mhmbcwg6do6bpszcue
-  tests/protocols/test_tickers.py: bafybeigu3sk2lyigdlyk53ta7g4aj6lyhpcexo2xtofpxmlqlonchuoame
+  tests/protocols/test_asset_bridging.py: bafybeia47rbxeyq2bsgfgrk5fg6hsdv5bupve37ig5563jq5ecodxuemqe
+  tests/protocols/test_balances.py: bafybeif5tmqofsuunqyolv7o47vtloxovgw3uysaeyj7oy6rtstgwwwv7q
+  tests/protocols/test_market.py: bafybeie7u6l2eta4ab5kwnsv6ufc53qevrcgueg7dwd6zyzkcezvquaquu
+  tests/protocols/test_ohlcv_interface.py: bafybeibskm4ynvhlu7f3obfwmdbso2hel3hrc57cfina2juhtnthewhpr4
+  tests/protocols/test_order_interface.py: bafybeiabqaehsm425llijcnlwrxznxg7y3q6s7mjf6ox475gaap4nujv6e
+  tests/protocols/test_positions_interface.py: bafybeifmwipyra6724jpe2ika5kobktk5qb64kmj6zyikz2zu6ozr6xknu
+  tests/protocols/test_spot_asset_interface.py: bafybeidwg2snkriq3flwljmbi6bljcmzv2pazgpccmuaboyqapy2hz43mu
+  tests/protocols/test_tickers.py: bafybeibmwayyjdzkmeaaaythzsnvrx2dvjqychwu5nhspzmw3q4rko2wim
   tests/test_dcxt_connection.py: bafybeiep2ya6sb5nercfan3jhbn2at2hsiklw4psdegsuthv7ogjqmdjye
   utils.py: bafybeic7n4jpmcxeotiovy3mxvqq4upwqm3lmxxtcvofk3e322ruvb4e7a
 fingerprint_ignore_patterns: []
@@ -152,10 +152,12 @@ dependencies:
   dateparser:
     version: '>=1.1.1'
   derive_client:
-    version: '>=0.3.1'
+    version: ==0.3.2
   web3:
-    version: '>=5.0.0'
+    version: '>=7.0.0'
   open-aea-ledger-ethereum: {}
-  open-balpy: {}
-  open-multicaller: {}
+  open-balpy:
+    version: '>=0.1.6'
+  open-multicaller:
+    version: '>=0.3.3'
 is_abstract: false

@@ -4,7 +4,7 @@ import asyncio
 
 import pytest
 from aea.mail.base import Envelope
-from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 from packages.eightballer.protocols.spot_asset.message import SpotAssetMessage
 from packages.eightballer.protocols.spot_asset.dialogues import SpotAssetDialogue, SpotAssetDialogues

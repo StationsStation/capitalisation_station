@@ -20,7 +20,7 @@ from derive_client.data_types import (
     PreparedBridgeTx,
     TypedSignedTransaction,
 )
-from dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
     PrivateDepositResultSchema,

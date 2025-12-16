@@ -81,7 +81,7 @@ def to_market(api_result):
     )
 
 
-def to_ticker(api_result):
+def to_ticker(symbol, api_result):
     """Parse from the API result to a Ticker object.
     {
     'instrument_type': 'perp',
@@ -130,8 +130,9 @@ def to_ticker(api_result):
     'min_price': '3413.85',
     'max_price': '3763.6'.
     """
+
     return Ticker(
-        symbol=api_result["instrument_name"],
+        symbol=symbol,
         timestamp=api_result["timestamp"],
         datetime=datetime.datetime.fromtimestamp(api_result["timestamp"] / 1000, tz=TZ).isoformat(),
         high=float(api_result["stats"]["high"]),
@@ -424,7 +425,7 @@ class DeriveClient:
             params["type"] = InstrumentType(params["type"].lower())
 
         try:
-            result = await self.client.fetch_tickers(**params)
+            result = await self.client.markets.get_tickers(**params)
             data = result.values()
         except Exception as error:  # noqa
             traceback.print_exc()
@@ -444,8 +445,9 @@ class DeriveClient:
 
         instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
-            result = await self.client.fetch_ticker(instrument_name=instrument_name)
-            return to_ticker(result)
+            result = await self.client.markets.get_tickers(instrument_type=InstrumentType.erc20, 
+                                                           currency=Currency("ETH"))
+            return to_ticker(result[instrument_name])
         except Exception as error:
             self.logger.exception(traceback.print_exc())
             msg = f"Failed to fetch ticker: {error}"

@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from aea.mail.base import Envelope
-from dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.markets.message import MarketsMessage
