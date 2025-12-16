@@ -24,8 +24,7 @@ from cowdao_cowpy.cow.swap import (
     CompletedOrder,
     ChecksumAddress,
     PreSignSignature,
-    post_order,
-    sign_order,
+    _sign_order,
 )
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
@@ -202,7 +201,7 @@ async def swap_tokens(
             data=safe_address,
         )
         if safe_address is not None
-        else sign_order(chain, account, order)
+        else _sign_order(chain, account, order)
     )
     order_uid = await post_order(account, safe_address, order, signature, order_book_api)
     order_link = f"{base_url}/orders/{order_uid.root!s}".lower()
