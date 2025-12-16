@@ -25,7 +25,7 @@ contracts:
 - eightballer/erc_20:0.1.0:bafybeiewlvc62xn6flmzn2dodqw3w6p3w5jqwkx36w5caznf6zjph7t2se
 - eightballer/spl_token:0.1.0:bafybeieozewfydqtdlygehzkhofque6klpcr6pkkcx5bd3eug7uuwcl7nm
 - valory/service_registry:0.1.0:bafybeigcr4y6ylathz5owdyq6nhvrdpv5unyeb3ol3h3xbncq24useqlpa
-- vybe/jupitar_swap:0.1.0:bafybeifobp2gb5uwn4m74inxzre2hsrgmtplmcmw5xh6jegltq4pnxmadq
+- vybe/jupitar_swap:0.1.0:bafybeiaaw2eblwy4z43xizkyhy4noc2q4hydu7vw7ejr7npkifhg6yx6yq
 - zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 protocols:
 - eightballer/approvals:0.1.0:bafybeid72h5vqtg4aqwluzdfwr5plj5mnkrd7yi6dpzzs3qptzugngxgyu

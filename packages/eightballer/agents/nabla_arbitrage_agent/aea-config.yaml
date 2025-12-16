@@ -26,7 +26,7 @@ contracts:
 - dakavon/multicall3:0.1.0:bafybeifdtmiuagqr6ithhoysyvquqgvqhtlmy6o3c7lze4eq45ipm3clny
 - eightballer/spl_token:0.1.0:bafybeieozewfydqtdlygehzkhofque6klpcr6pkkcx5bd3eug7uuwcl7nm
 - valory/service_registry:0.1.0:bafybeigcr4y6ylathz5owdyq6nhvrdpv5unyeb3ol3h3xbncq24useqlpa
-- vybe/jupitar_swap:0.1.0:bafybeifobp2gb5uwn4m74inxzre2hsrgmtplmcmw5xh6jegltq4pnxmadq
+- vybe/jupitar_swap:0.1.0:bafybeiaaw2eblwy4z43xizkyhy4noc2q4hydu7vw7ejr7npkifhg6yx6yq
 - zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 - zarathustra/direct_price_oracle:0.1.0:bafybeihnib2qjvgiidpg726nnfhav4fqqhrqrkxip4cndyhptrgqxql7tq
 protocols:

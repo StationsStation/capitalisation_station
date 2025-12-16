@@ -196,6 +196,7 @@ class TestContractCommon:
         rate = amount / output_token.to_human(int(quote["outAmount"]))
         assert rate > 0
 
+
 def test_simple_dummy() -> None:
     """A simple dummy test to make sure the test suite runs."""
     assert True
