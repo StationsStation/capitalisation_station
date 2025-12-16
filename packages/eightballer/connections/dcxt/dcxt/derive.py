@@ -445,8 +445,9 @@ class DeriveClient:
 
         instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
-            result = await self.client.markets.get_tickers(instrument_type=InstrumentType.erc20, 
-                                                           currency=Currency("ETH"))
+            result = await self.client.markets.get_tickers(
+                instrument_type=InstrumentType.erc20, currency=Currency("ETH")
+            )
             return to_ticker(result[instrument_name])
         except Exception as error:
             self.logger.exception(traceback.print_exc())

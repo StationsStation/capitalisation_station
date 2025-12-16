@@ -20,7 +20,6 @@ from derive_client.data_types import (
     PreparedBridgeTx,
     TypedSignedTransaction,
 )
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import BaseDcxtConnectionTest, get_dialogues
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
     PrivateDepositResultSchema,
@@ -33,7 +32,11 @@ from derive_client._clients.rest.async_http.collateral import CollateralOperatio
 from packages.zarathustra.protocols.asset_bridging.message import AssetBridgingMessage
 from packages.zarathustra.protocols.asset_bridging.dialogues import AssetBridgingDialogue, BaseAssetBridgingDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeResult, BridgeRequest
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIMEOUT
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import (
+    TIMEOUT,
+    BaseDcxtConnectionTest,
+    get_dialogues,
+)
 
 
 if TYPE_CHECKING:

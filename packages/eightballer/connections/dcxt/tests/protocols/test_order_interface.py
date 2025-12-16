@@ -5,12 +5,17 @@ from unittest.mock import MagicMock
 
 import pytest
 from aea.mail.base import Envelope
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TEST_EXCHANGES, BaseDcxtConnectionTest, with_timeout, get_dialogues
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.orders.message import OrdersMessage
 from packages.eightballer.protocols.orders.dialogues import OrdersDialogue, BaseOrdersDialogues
 from packages.eightballer.protocols.orders.custom_types import Orders
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import (
+    TEST_EXCHANGES,
+    BaseDcxtConnectionTest,
+    with_timeout,
+    get_dialogues,
+)
 
 
 TEST_SETTLEMENTS = [

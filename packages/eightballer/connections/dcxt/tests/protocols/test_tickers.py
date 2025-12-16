@@ -5,11 +5,16 @@ from unittest.mock import MagicMock
 
 import pytest
 from aea.mail.base import Envelope
-from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import TIMEOUT, TEST_EXCHANGES, BaseDcxtConnectionTest, get_dialogues
 
 from packages.eightballer.connections.dcxt import dcxt
 from packages.eightballer.protocols.tickers.message import TickersMessage
 from packages.eightballer.protocols.tickers.dialogues import TickersDialogue, BaseTickersDialogues
+from packages.eightballer.connections.dcxt.tests.test_dcxt_connection import (
+    TIMEOUT,
+    TEST_EXCHANGES,
+    BaseDcxtConnectionTest,
+    get_dialogues,
+)
 
 
 TEST_MARKET = "WETH/USDC"
