@@ -20,13 +20,14 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 cython = "<3.0.0"
-open-aea-ledger-solana = "==1.65.0"
-open-aea-ledger-cosmos = "==1.65.0"
-open-aea-cli-ipfs = "==1.65.0"
-open-aea= {path = "third_party/forks/open-aea"}
-open-aea-test-autonomy = "==0.19.11"
-open-autonomy = "==0.19.11"
-autonomy-dev = {version = "==0.2.157", extras = ["all"]}
+open-aea = { version = "==2.0.6", extras = ["all"] }
+open-aea-ledger-ethereum = "==2.0.6"
+open-aea-ledger-solana= "==2.0.6"
+open-aea-ledger-cosmos= "==2.0.6"
+open-aea-cli-ipfs = "==2.0.6"
+open-aea-test-autonomy = "==0.21.5"
+open-autonomy = "==0.21.5"
+# autonomy-dev = {version = "==0.2.157", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=2,<3"
 derive-client = {path = "third_party/upstream/derive_client"}
@@ -37,10 +38,9 @@ cytoolz = "==1.0.0"
 async-timeout = "^4.0.3"
 openapi-core = "0.14.5"
 open-balpy = {path = "third_party/forks/balpy"}
-open-multicaller = "^0.2.0"
+open-multicaller = {path = "third_party/forks/multicaller"}
 tomli = "^2.2.1"
 apprise = ">=1.7.5,<2.0.0"
-open-aea-ledger-ethereum = {path = "third_party/forks/open-aea/plugins/aea-ledger-ethereum"}
 eth-account = "^0.13.5"
 web3 = ">=5.0.0"
 cowdao-cowpy = {path = "third_party/forks/cow-py"}
@@ -67,9 +67,9 @@ pytest = ">=7.2.1"
 pytz = "2022.2.1"
 typing-extensions = ">=3.10.0.2"
 derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
-pymultihash = "0.8.1"
-eth-typing = "4.0.0"
+pymultihash = "0.8.2"
 returns = "^0.26.0"
+autonomy-dev = {version = "0.2.160", extras = ["all"]}
 
 [tool.poetry.group.dev.dependencies]
 tbump = "^6.11.0"

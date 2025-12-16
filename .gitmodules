@@ -1,6 +1,6 @@
-[submodule "third_party/forks/open_aea"]
-	path = third_party/forks/open-aea
-	url = https://github.com/8ball030/open-aea.git
+# [submodule "third_party/forks/open_aea"]
+# 	path = third_party/forks/open-aea
+# 	url = https://github.com/8ball030/open-aea.git
 [submodule "third_party/upstream/v2-action-signing-python"]
 	path = third_party/upstream/v2-action-signing-python
 	url = https://github.com/8ball030/v2-action-signing-python.git
