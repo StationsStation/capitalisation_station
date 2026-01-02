@@ -402,6 +402,7 @@ class DeriveClient:
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_markets")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -416,6 +417,7 @@ class DeriveClient:
 
     async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_tickers")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -456,6 +458,7 @@ class DeriveClient:
 
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_balance")
         del args, kwargs
         try:
             result = await self.client.get_collaterals()
@@ -471,6 +474,7 @@ class DeriveClient:
 
     async def fetch_positions(self, *args, **kwargs):
         """Fetch all positions."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_positions")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -500,6 +504,7 @@ class DeriveClient:
 
     async def watch_order_book(self, *args, **kwargs):
         """Watch the order book."""
+        raise NotImplementedError(f"{self.__class__.__name__}.watch_order_book")
         params = kwargs.get("params", {})
         try:
             result = await self.client.watch_order_book(instrument_name=args[0], **params)
