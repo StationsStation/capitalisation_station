@@ -523,33 +523,17 @@ class DeriveClient:
     async def create_order(self, *args, retries=0, **kwargs):
         """Create an order."""
 
-        # we make sure to re-login the client.
-        await self.client.connect_ws()
-        await self.client.login_client()
-
-        def get_instrument_type(instrument_name):
-            if "-" in instrument_name:
-                return InstrumentType.ERC20
-            msg = f"Unknown instrument type: {instrument_name}"
-            raise ValueError(msg)
-
-        def get_underlying_currency(currency):
-            return Currency(currency.upper())
-
-        asset_a, _asset_b = kwargs["symbol"].split("-")
-
         params = {
-            "instrument_name": kwargs["symbol"],
             "amount": kwargs["amount"],
-            "price": kwargs.get("price"),
+            "direction": DeriveOrderSide(kwargs["side"]),
+            "instrument_name": kwargs["symbol"],
+            "limit_price": kwargs["price"],
             "order_type": DeriveOrderType(kwargs["type"]),
-            "side": DeriveOrderSide(kwargs["side"]),
-            "instrument_type": get_instrument_type(kwargs["symbol"]),
-            "underlying_currency": get_underlying_currency(asset_a),
-            "time_in_force": DeriveTimeInForce.IOC if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.GTC,
+            "time_in_force": DeriveTimeInForce.ioc if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.gtc,
+
         }
         try:
-            return await self.client.create_order(**params)
+            return await self.client.orders.create(**params)
         except ApiException as error:
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
