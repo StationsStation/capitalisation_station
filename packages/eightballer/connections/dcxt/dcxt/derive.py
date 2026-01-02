@@ -19,6 +19,7 @@ from derive_client.data_types.generated_models import (
     Status as DeriveOrderStatus,
     Direction as DeriveOrderSide,
     TimeInForce as DeriveTimeInForce,
+    TickerSlimSchema,
 )
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -81,7 +82,7 @@ def to_market(api_result):
     )
 
 
-def to_ticker(symbol, api_result):
+def to_ticker(symbol: str, api_result: TickerSlimSchema) -> Ticker:
     """Parse from the API result to a Ticker object.
     {
     'instrument_type': 'perp',
@@ -133,22 +134,20 @@ def to_ticker(symbol, api_result):
 
     return Ticker(
         symbol=symbol,
-        timestamp=api_result["timestamp"],
-        datetime=datetime.datetime.fromtimestamp(api_result["timestamp"] / 1000, tz=TZ).isoformat(),
-        high=float(api_result["stats"]["high"]),
-        low=float(api_result["stats"]["low"]),
-        bid=float(api_result["best_bid_price"]),
-        bidVolume=float(api_result["best_bid_amount"]),
-        ask=float(api_result["best_ask_price"]),
-        askVolume=float(api_result["best_ask_amount"]),
-        close=float(api_result["mark_price"]),
-        last=float(api_result["mark_price"]),
-        change=float(api_result["stats"]["usd_change"]),
-        percentage=float(api_result["stats"]["percent_change"]),
-        baseVolume=float(api_result["stats"]["contract_volume"]),
-        info=json.dumps(
-            {"index_price": float(api_result["index_price"]), "mark_price": float(api_result["mark_price"])}
-        ),
+        timestamp=api_result.t,
+        datetime=datetime.datetime.fromtimestamp(api_result.t / 1000, tz=TZ).isoformat(),
+        high=float(api_result.stats.h),
+        low=float(api_result.stats.l),
+        bid=float(api_result.b),
+        bidVolume=float(api_result.B),
+        ask=float(api_result.a),
+        askVolume=float(api_result.A),
+        close=float(api_result.M),
+        last=float(api_result.M),
+        change=float(api_result.stats.c),
+        percentage=float(api_result.stats.p),
+        baseVolume=float(api_result.stats.v),
+        info=json.dumps({"index_price": float(api_result.I), "mark_price": float(api_result.M)}),
     )
 
 
@@ -446,9 +445,10 @@ class DeriveClient:
         instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
             result = await self.client.markets.get_tickers(
-                instrument_type=InstrumentType.erc20, currency=Currency("ETH")
+                instrument_type=InstrumentType.erc20,
+                currency="ETH",
             )
-            return to_ticker(result[instrument_name])
+            return to_ticker(symbol, result[instrument_name])
         except Exception as error:
             self.logger.exception(traceback.print_exc())
             msg = f"Failed to fetch ticker: {error}"
