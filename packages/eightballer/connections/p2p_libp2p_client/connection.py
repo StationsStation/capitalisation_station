@@ -21,11 +21,11 @@
 # pylint: disable-all
 import ssl
 import random
+import struct
 import asyncio
 import hashlib
 import logging
 import contextlib
-import struct
 from typing import Any, Optional
 from asyncio import CancelledError
 from pathlib import Path
@@ -72,9 +72,8 @@ ACN_CURRENT_VERSION = "0.1.0"
 class TCPSocketProtocol(BaseTCPSocketProtocol):
     """TCP socket protocol with slighly cleaner debug messages."""
 
-    async def read(self) -> Optional[bytes]:
-        """
-        Read from socket.
+    async def read(self) -> bytes | None:
+        """Read from socket.
 
         :return: read bytes
         """
@@ -88,19 +87,15 @@ class TCPSocketProtocol(BaseTCPSocketProtocol):
             if not data:  # pragma: no cover
                 return None
             if len(data) != size:  # pragma: no cover
-                raise ValueError(
-                    f"Incomplete Read Error! Expected size={size}, got: {len(data)}"
-                )
+                msg = f"Incomplete Read Error! Expected size={size}, got: {len(data)}"
+                raise ValueError(msg)
             return data
         except asyncio.IncompleteReadError as e:  # pragma: no cover
-            self.logger.debug(
-                "Connection disconnected while reading from pipe ({}/{})".format(
-                    len(e.partial), e.expected
-                )
-            )
+            self.logger.debug(f"Connection disconnected while reading from pipe ({len(e.partial)}/{e.expected})")
             return None
         except asyncio.CancelledError:  # pragma: no cover
             return None
+
 
 class NodeClient:
     """Client to communicate with node using ipc channel(pipe)."""
@@ -192,7 +187,7 @@ class NodeClient:
             address=self.agent_record.address,
             public_key=self.agent_record.public_key,
             peer_public_key=self.agent_record.representative_public_key,
-            signature="0x" + self.agent_record.signature,
+            signature=self.agent_record.signature,
             service_id=POR_DEFAULT_SERVICE_ID,
             ledger_id=self.agent_record.ledger_id,
         )

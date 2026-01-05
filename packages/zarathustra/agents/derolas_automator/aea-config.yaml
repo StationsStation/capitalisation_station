@@ -8,22 +8,22 @@ fingerprint:
   tests/test_derolas_automator.py: bafybeiepsmd6l33qxsk2ao6wnug7gkid3hqkkgtejv25npm3tkkpyrj6he
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/http_client:0.1.0:bafybeigqr2eudiwksmr2cavk6as63li2oqf3x2edwzvs5vepntuqhemnge
-- eightballer/http_server:0.1.0:bafybeieispawqnpoeqidgkt7u7vsynualtcmbs3vsgggpb6hzkdsyd3fve
-- eightballer/prometheus:0.1.1:bafybeicgvmn5eo57jotbcwasjqlmzog3ss5dvvembw7jaytfz33z4kbaoa
-- valory/ledger:0.19.0:bafybeiflmep26twrfk25olhyxuagceaa2cfvg5qtgsisaxh6z4pdapg6dy
+- eightballer/http_client:0.1.0:bafybeic3cvg5pyze5w2mdcnukosep7egyglnidcycliyatdnddtvufgvta
+- eightballer/http_server:0.1.0:bafybeieoixhtwm6f6ednwjli3sutbgklsqhnjkgxyxeflepa4qagx5gfr4
+- eightballer/prometheus:0.1.1:bafybeig7p3tzs7x4awcxjr7ctxljr6h7mrc2c36thnab6zoteualgivj6e
+- valory/ledger:0.19.0:bafybeifjtwsl47skzlo3s6kfevy5dplzmb7ptcnehasszwmuta7lyqq5ci
 contracts:
 - zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 - eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
-- open_aea/signing:1.0.0:bafybeigalbjxbpl6pezijj6it2zspjcjy3znm66t5ygbe4kz5kxcnbu65y
-- valory/contract_api:1.0.0:bafybeigzv2yxgkednegkiepkm5uxv2ekdn3y5czvh6ycba6t7n3k2otu24
-- valory/ledger_api:1.0.0:bafybeicwup3faznzvuciqkljejo2c6gbv3dliaglscf5bibu6633tylkfq
+- open_aea/signing:1.0.0:bafybeihq7fttfqxf34hjjpa35l4i5yryraxl52cuifgg225tinkanwtnd4
+- valory/contract_api:1.0.0:bafybeiegdpxw24ozrfu3ocmio7fsv2phhfcxgbe546t5ux5ejfscwnpdyq
+- valory/ledger_api:1.0.0:bafybeie45kvlznnafdcnqicxfczfeqfpgxo7wskboheoexadjgml3pkahq
 skills:
-- eightballer/prometheus:0.1.0:bafybeidfz7ms5n7f27fywsm4gbxy6ykztdctln44cvuemmyuww2igonwby
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeie66kgmojdwlcgx7g2vovdju3pu6boix3z5ypy6lttrg6fma6fq3u
+- eightballer/prometheus:0.1.0:bafybeifnee635625vabb45qotvzopgkets5dlwk3mwae3lrhr4bqfpuxyy
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiaeliqq6w3ty3e5lq5me7re5dgmqncdgdwe7whlapdo36s6qh7svi
 customs: []
 default_ledger: ethereum
 required_ledgers:

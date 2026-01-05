@@ -17,14 +17,14 @@ fingerprint:
   tests/test_metrics_dialogues.py: bafybeig3i56m65turr7jnkjvxg3fi3splufkc2h3gcz7x3jaaq3peo34pm
 fingerprint_ignore_patterns: []
 connections:
-- valory/ledger:0.19.0:bafybeiflmep26twrfk25olhyxuagceaa2cfvg5qtgsisaxh6z4pdapg6dy
+- valory/ledger:0.19.0:bafybeifjtwsl47skzlo3s6kfevy5dplzmb7ptcnehasszwmuta7lyqq5ci
 contracts:
 - zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
-- valory/contract_api:1.0.0:bafybeigzv2yxgkednegkiepkm5uxv2ekdn3y5czvh6ycba6t7n3k2otu24
-- valory/ledger_api:1.0.0:bafybeicwup3faznzvuciqkljejo2c6gbv3dliaglscf5bibu6633tylkfq
+- valory/contract_api:1.0.0:bafybeiegdpxw24ozrfu3ocmio7fsv2phhfcxgbe546t5ux5ejfscwnpdyq
+- valory/ledger_api:1.0.0:bafybeie45kvlznnafdcnqicxfczfeqfpgxo7wskboheoexadjgml3pkahq
 skills: []
 behaviours:
   main:
