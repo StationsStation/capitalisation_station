@@ -40,7 +40,7 @@ protocols:
 - eightballer/approvals:0.1.0:bafybeid72h5vqtg4aqwluzdfwr5plj5mnkrd7yi6dpzzs3qptzugngxgyu
 - eightballer/user_interaction:0.1.0:bafybeibotsfodi6jkoemmt4tpwecxkj7p3dphinuzuakh5z2cisckxxp6m
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeie3qkuqo6aeavyvzxuybij3tjgx2vnu2ta56y3axtnu5iq6xzbdhe
+- eightballer/abstract_round_abci:0.1.0:bafybeiavy2pdm2kweyecbexz5eipai5mpceos7fjgyhcn6z6wqu6ok673m
 behaviours:
   main:
     args: {}

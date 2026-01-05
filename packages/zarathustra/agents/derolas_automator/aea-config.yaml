@@ -18,7 +18,7 @@ protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 - eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
-- open_aea/signing:1.0.0:bafybeihq7fttfqxf34hjjpa35l4i5yryraxl52cuifgg225tinkanwtnd4
+- open_aea/signing:1.0.0:bafybeign4u6o3jtz2kuelpuhrmzosbyix2iwf7ifxythigrcuef4ybmuna
 - valory/contract_api:1.0.0:bafybeiegdpxw24ozrfu3ocmio7fsv2phhfcxgbe546t5ux5ejfscwnpdyq
 - valory/ledger_api:1.0.0:bafybeie45kvlznnafdcnqicxfczfeqfpgxo7wskboheoexadjgml3pkahq
 skills:

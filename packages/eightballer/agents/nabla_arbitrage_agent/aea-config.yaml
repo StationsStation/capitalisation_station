@@ -43,7 +43,7 @@ protocols:
 - eightballer/spot_asset:0.1.0:bafybeifjra7gn24377acdpxa2p4h4u4kbfmkxw26qh5s3k2vpkb7h54d6e
 - eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
 - eightballer/user_interaction:0.1.0:bafybeibotsfodi6jkoemmt4tpwecxkj7p3dphinuzuakh5z2cisckxxp6m
-- open_aea/signing:1.0.0:bafybeihq7fttfqxf34hjjpa35l4i5yryraxl52cuifgg225tinkanwtnd4
+- open_aea/signing:1.0.0:bafybeign4u6o3jtz2kuelpuhrmzosbyix2iwf7ifxythigrcuef4ybmuna
 - valory/abci:0.1.0:bafybeifoxrhaouglnxqedcwybz7gt7tsnqwviqy2sl4fuzwxgwxppe46my
 - valory/acn:1.1.0:bafybeid7fbmi52oz2g2saotokgpfrb37eq66acjj5uclt3qcad6pvqeuom
 - valory/contract_api:1.0.0:bafybeiegdpxw24ozrfu3ocmio7fsv2phhfcxgbe546t5ux5ejfscwnpdyq
@@ -53,9 +53,9 @@ protocols:
 - valory/tendermint:0.1.0:bafybeicpmyfpmoobve6eqjbrs4ht5apl5xvnikmsg4wdcpwljy42zhghl4
 - zarathustra/asset_bridging:0.1.0:bafybeiaisse2jqpfvb2jqhgnwsa3p2b6v7ommontm5llagtfphqgkmyzkq
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeie3qkuqo6aeavyvzxuybij3tjgx2vnu2ta56y3axtnu5iq6xzbdhe
+- eightballer/abstract_round_abci:0.1.0:bafybeiavy2pdm2kweyecbexz5eipai5mpceos7fjgyhcn6z6wqu6ok673m
 - eightballer/prometheus:0.1.0:bafybeifnee635625vabb45qotvzopgkets5dlwk3mwae3lrhr4bqfpuxyy
-- eightballer/simple_fsm:0.1.0:bafybeighbj67o4tcql3qzv32hgyppcob75dtehtyj4bcfxh6aqpecqfczi
+- eightballer/simple_fsm:0.1.0:bafybeibkurnlpwtnkbxebfopa6a32vpvwc2fhdixlv27fn67x744nyet2m
 - eightballer/trading_state:0.1.0:bafybeihvzriswvf2oijlnkp25at65uiol763h6t26v3etbgsa2erhbaana
 - valory/abstract_abci:0.1.0:bafybeieactg2rjpeomiqzuu3nbanoxtfdfk5vwil2dqg5ceh6z7kxl7snq
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeiaeliqq6w3ty3e5lq5me7re5dgmqncdgdwe7whlapdo36s6qh7svi

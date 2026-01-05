@@ -22,7 +22,7 @@ protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 - eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
-- open_aea/signing:1.0.0:bafybeihq7fttfqxf34hjjpa35l4i5yryraxl52cuifgg225tinkanwtnd4
+- open_aea/signing:1.0.0:bafybeign4u6o3jtz2kuelpuhrmzosbyix2iwf7ifxythigrcuef4ybmuna
 skills:
 - eightballer/gnosis_bridging_abci_app:0.1.0:bafybeiaj2rr3os5olcmq5kmu5gqo43mdro6vvsgkf27c7av5e63h5upnq4
 - eightballer/prometheus:0.1.0:bafybeifnee635625vabb45qotvzopgkets5dlwk3mwae3lrhr4bqfpuxyy

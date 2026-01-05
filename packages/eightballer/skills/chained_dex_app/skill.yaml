@@ -24,10 +24,10 @@ protocols:
 - eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
 - eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
 skills:
-- eightballer/dex_data_retrieval:0.1.0:bafybeidap4nt3lpexb37f24n5y3ykb5teyx3h53kmozoqwgselxlksbkma
-- eightballer/abstract_round_abci:0.1.0:bafybeie3qkuqo6aeavyvzxuybij3tjgx2vnu2ta56y3axtnu5iq6xzbdhe
-- eightballer/registration_abci:0.1.0:bafybeihguhbru57t6ktiuebxrittdcijfizbio6g7z5qlephgdmxpzione
-- eightballer/reset_pause_abci:0.1.0:bafybeib2iv4d546qywsynjp23ton4zzqachg7e7irfvol3sxgfvyhsuu2u
+- eightballer/dex_data_retrieval:0.1.0:bafybeihg3xr2ol7bcfcjgvh3sldnkzcwfswvw2tkmtahbkqyb4pcy23gji
+- eightballer/abstract_round_abci:0.1.0:bafybeiavy2pdm2kweyecbexz5eipai5mpceos7fjgyhcn6z6wqu6ok673m
+- eightballer/registration_abci:0.1.0:bafybeicfil6hbsidy2wr3ttesdbrba5ocm3cxstscmsvmzladwp4ttqjh4
+- eightballer/reset_pause_abci:0.1.0:bafybeig2h3xusvfi7w5lvd4mstm7wq5nwmrkdxfrmrvvcvr6cv4sgezm3i
 behaviours:
   main:
     args: {}
