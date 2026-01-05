@@ -19,6 +19,7 @@ from derive_client.data_types.generated_models import (
     Status as DeriveOrderStatus,
     Direction as DeriveOrderSide,
     TimeInForce as DeriveTimeInForce,
+    TickerSlimSchema,
 )
 
 from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
@@ -81,7 +82,7 @@ def to_market(api_result):
     )
 
 
-def to_ticker(symbol, api_result):
+def to_ticker(symbol: str, api_result: TickerSlimSchema) -> Ticker:
     """Parse from the API result to a Ticker object.
     {
     'instrument_type': 'perp',
@@ -133,22 +134,20 @@ def to_ticker(symbol, api_result):
 
     return Ticker(
         symbol=symbol,
-        timestamp=api_result["timestamp"],
-        datetime=datetime.datetime.fromtimestamp(api_result["timestamp"] / 1000, tz=TZ).isoformat(),
-        high=float(api_result["stats"]["high"]),
-        low=float(api_result["stats"]["low"]),
-        bid=float(api_result["best_bid_price"]),
-        bidVolume=float(api_result["best_bid_amount"]),
-        ask=float(api_result["best_ask_price"]),
-        askVolume=float(api_result["best_ask_amount"]),
-        close=float(api_result["mark_price"]),
-        last=float(api_result["mark_price"]),
-        change=float(api_result["stats"]["usd_change"]),
-        percentage=float(api_result["stats"]["percent_change"]),
-        baseVolume=float(api_result["stats"]["contract_volume"]),
-        info=json.dumps(
-            {"index_price": float(api_result["index_price"]), "mark_price": float(api_result["mark_price"])}
-        ),
+        timestamp=api_result.t,
+        datetime=datetime.datetime.fromtimestamp(api_result.t / 1000, tz=TZ).isoformat(),
+        high=float(api_result.stats.h),
+        low=float(api_result.stats.l),
+        bid=float(api_result.b),
+        bidVolume=float(api_result.B),
+        ask=float(api_result.a),
+        askVolume=float(api_result.A),
+        close=float(api_result.M),
+        last=float(api_result.M),
+        change=float(api_result.stats.c),
+        percentage=float(api_result.stats.p),
+        baseVolume=float(api_result.stats.v),
+        info=json.dumps({"index_price": float(api_result.I), "mark_price": float(api_result.M)}),
     )
 
 
@@ -403,6 +402,7 @@ class DeriveClient:
 
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_markets")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -417,6 +417,7 @@ class DeriveClient:
 
     async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_tickers")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -446,9 +447,10 @@ class DeriveClient:
         instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
             result = await self.client.markets.get_tickers(
-                instrument_type=InstrumentType.erc20, currency=Currency("ETH")
+                instrument_type=InstrumentType.erc20,
+                currency="ETH",
             )
-            return to_ticker(result[instrument_name])
+            return to_ticker(symbol, result[instrument_name])
         except Exception as error:
             self.logger.exception(traceback.print_exc())
             msg = f"Failed to fetch ticker: {error}"
@@ -456,6 +458,7 @@ class DeriveClient:
 
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_balance")
         del args, kwargs
         try:
             result = await self.client.get_collaterals()
@@ -471,6 +474,7 @@ class DeriveClient:
 
     async def fetch_positions(self, *args, **kwargs):
         """Fetch all positions."""
+        raise NotImplementedError(f"{self.__class__.__name__}.fetch_positions")
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -500,6 +504,7 @@ class DeriveClient:
 
     async def watch_order_book(self, *args, **kwargs):
         """Watch the order book."""
+        raise NotImplementedError(f"{self.__class__.__name__}.watch_order_book")
         params = kwargs.get("params", {})
         try:
             result = await self.client.watch_order_book(instrument_name=args[0], **params)
@@ -518,33 +523,17 @@ class DeriveClient:
     async def create_order(self, *args, retries=0, **kwargs):
         """Create an order."""
 
-        # we make sure to re-login the client.
-        await self.client.connect_ws()
-        await self.client.login_client()
-
-        def get_instrument_type(instrument_name):
-            if "-" in instrument_name:
-                return InstrumentType.ERC20
-            msg = f"Unknown instrument type: {instrument_name}"
-            raise ValueError(msg)
-
-        def get_underlying_currency(currency):
-            return Currency(currency.upper())
-
-        asset_a, _asset_b = kwargs["symbol"].split("-")
-
         params = {
-            "instrument_name": kwargs["symbol"],
             "amount": kwargs["amount"],
-            "price": kwargs.get("price"),
+            "direction": DeriveOrderSide(kwargs["side"]),
+            "instrument_name": kwargs["symbol"],
+            "limit_price": kwargs["price"],
             "order_type": DeriveOrderType(kwargs["type"]),
-            "side": DeriveOrderSide(kwargs["side"]),
-            "instrument_type": get_instrument_type(kwargs["symbol"]),
-            "underlying_currency": get_underlying_currency(asset_a),
-            "time_in_force": DeriveTimeInForce.IOC if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.GTC,
+            "time_in_force": DeriveTimeInForce.ioc if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.gtc,
+
         }
         try:
-            return await self.client.create_order(**params)
+            return await self.client.orders.create(**params)
         except ApiException as error:
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
