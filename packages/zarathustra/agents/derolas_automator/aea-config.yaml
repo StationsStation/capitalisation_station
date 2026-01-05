@@ -11,7 +11,7 @@ connections:
 - eightballer/http_client:0.1.0:bafybeic3cvg5pyze5w2mdcnukosep7egyglnidcycliyatdnddtvufgvta
 - eightballer/http_server:0.1.0:bafybeieoixhtwm6f6ednwjli3sutbgklsqhnjkgxyxeflepa4qagx5gfr4
 - eightballer/prometheus:0.1.1:bafybeig7p3tzs7x4awcxjr7ctxljr6h7mrc2c36thnab6zoteualgivj6e
-- valory/ledger:0.19.0:bafybeifjtwsl47skzlo3s6kfevy5dplzmb7ptcnehasszwmuta7lyqq5ci
+- valory/ledger:0.19.0:bafybeicib5velkx7ttqqxrbeguklyu5xeifanzqdecwalqpu3olmrjm5dq
 contracts:
 - zarathustra/derolas_staking:0.1.0:bafybeicyuprz3bnyblmkmbbwenvh76hnqgxf7c2jkmvxe3to5ye3lnttsi
 protocols:
@@ -19,11 +19,11 @@ protocols:
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 - eightballer/prometheus:1.0.0:bafybeiedkmjjqbxyid67hwhpkvyknst5rdtn5pazs6rtaa3mj6r2buwl7q
 - open_aea/signing:1.0.0:bafybeign4u6o3jtz2kuelpuhrmzosbyix2iwf7ifxythigrcuef4ybmuna
-- valory/contract_api:1.0.0:bafybeiegdpxw24ozrfu3ocmio7fsv2phhfcxgbe546t5ux5ejfscwnpdyq
-- valory/ledger_api:1.0.0:bafybeie45kvlznnafdcnqicxfczfeqfpgxo7wskboheoexadjgml3pkahq
+- valory/contract_api:1.0.0:bafybeidpch6cvuweq5x4h6ummnnw5xynmfsbj3sxm2m63seuqizrmvpd3e
+- valory/ledger_api:1.0.0:bafybeic5qfhodpwqjdkwxs4gzummpc3dxbpn4egg7s7f2gibfopa4nxz4i
 skills:
 - eightballer/prometheus:0.1.0:bafybeifnee635625vabb45qotvzopgkets5dlwk3mwae3lrhr4bqfpuxyy
-- zarathustra/derolas_automator_abci_app:0.1.0:bafybeiaeliqq6w3ty3e5lq5me7re5dgmqncdgdwe7whlapdo36s6qh7svi
+- zarathustra/derolas_automator_abci_app:0.1.0:bafybeibvwl2utbfarxlbi6d7a6rb75tpirbg74udk5t5vbrwlvqygt4e4a
 customs: []
 default_ledger: ethereum
 required_ledgers:
