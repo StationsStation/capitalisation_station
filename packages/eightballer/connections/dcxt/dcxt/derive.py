@@ -4,8 +4,6 @@ import json
 import asyncio
 import datetime
 import traceback
-from typing import Any
-from decimal import Decimal
 from pathlib import Path
 
 from derive_client import AsyncHTTPClient as DeriveAsyncClient
@@ -20,9 +18,11 @@ from derive_client.data_types.generated_models import (
     Direction as DeriveOrderSide,
     TimeInForce as DeriveTimeInForce,
     TickerSlimSchema,
+    OrderResponseSchema,
+    CollateralResponseSchema,
 )
 
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
@@ -83,55 +83,7 @@ def to_market(api_result):
 
 
 def to_ticker(symbol: str, api_result: TickerSlimSchema) -> Ticker:
-    """Parse from the API result to a Ticker object.
-    {
-    'instrument_type': 'perp',
-    'instrument_name': 'ETH-PERP',
-    'scheduled_activation': 1701840228,
-    'scheduled_deactivation': 9223372036854775807,
-    'is_active': True,
-    'tick_size': '0.01',
-    'minimum_amount': '0.1',
-    'maximum_amount': '10000',
-    'amount_step': '0.01',
-    'mark_price_fee_rate_cap': '0',
-    'maker_fee_rate': '0.0001',
-    'taker_fee_rate': '0.0006',
-    'base_fee': '0.5',
-    'base_currency': 'ETH',
-    'quote_currency': 'USD',
-    'option_details': None,
-    'perp_details': {
-        'index': 'ETH-USD',
-        'max_rate_per_hour': '0.004',
-        'min_rate_per_hour': '-0.004',
-        'static_interest_rate': '0.0000125',
-        'aggregate_funding': '162.946932236049674753',
-        'funding_rate': '0.0000455805326227'
-    },
-    'base_asset_address': '0xAf65752C4643E25C02F693f9D4FE19cF23a095E3',
-    'base_asset_sub_id': '0',
-    'best_ask_amount': '19.53',
-    'best_ask_price': '3584.14',
-    'best_bid_amount': '19.53',
-    'best_bid_price': '3582.35',
-    'option_pricing': None,
-    'index_price': '3582.84',
-    'mark_price': '3584.458005555555834112',
-    'stats': {
-        'contract_volume': '550.16',
-        'num_trades': '1504',
-        'open_interest': '192.724138686180397137',
-        'high': '3673.83',
-        'low': '3530.19',
-        'percent_change': '0.00942',
-        'usd_change': '33.45'
-    },
-    'timestamp': 1710755194000,
-    'min_price': '3413.85',
-    'max_price': '3763.6'.
-    """
-
+    """Convert to a ticker object."""
     return Ticker(
         symbol=symbol,
         timestamp=api_result.t,
@@ -151,81 +103,19 @@ def to_ticker(symbol: str, api_result: TickerSlimSchema) -> Ticker:
     )
 
 
-def to_balance(api_result):
-    """{
-    'asset_type': 'erc20',
-    'asset_name': 'USDC',
-    'currency': 'USDC',
-    'amount': '0.003987628553156971',
-    'mark_price': '1',
-    'mark_value': '0.0039877010299821909547479670266056928085163235664368',
-    'cumulative_interest': '0.0039877010299821908952647395145769493641777913569316',
-    'pending_interest': '7.24768252198952647395145769493641777913569316E-8',
-    'initial_margin': '0.0039877010299821909547479670266056928085163235664368',
-    'maintenance_margin': '0.0039877010299821909547479670266056928085163235664368'
-    }.
-    """
+def to_balance(api_result: CollateralResponseSchema):
+    """Convert to a balance object."""
     return Balance(
-        asset_id=api_result["currency"],
-        free=float(api_result["amount"]),
+        asset_id=api_result.currency,
+        free=float(api_result.amount),
         used=0,
-        total=float(api_result["amount"]),
+        total=float(api_result.amount),
         is_native=False,
     )
 
 
 def to_position(api_result):
-    """[
-    {
-        'instrument_type': 'option',
-        'instrument_name': 'ETH-20240322-3900-C',
-        'amount': '-6.3',
-        'average_price': '38.251279999999999895079365079365079365079365079365',
-        'realized_pnl': '0',
-        'unrealized_pnl': '126.829653299999999339',
-        'net_settlements': '0',
-        'cumulative_funding': '0',
-        'pending_funding': '0',
-        'mark_price': '18.119589',
-        'index_price': '3556.44999999999967232',
-        'delta': '0.134193',
-        'gamma': '0.000781',
-        'vega': '0.7962',
-        'theta': '-7.673138',
-        'mark_value': '-114.1534124761641209033768973313271999359130859375',
-        'maintenance_margin': '-485.58486746802691413904540240764617919921875',
-        'initial_margin': '-578.442731215992580473539419472217559814453125',
-        'open_orders_margin': '0',
-        'leverage': None,
-        'liquidation_price': '47440.491107822048240348605896518565714359283447266',
-        'creation_timestamp': 1710616517260
-    },
-    {
-        'instrument_type': 'perp',
-        'instrument_name': 'ETH-PERP',
-        'amount': '6.31',
-        'average_price': '3890.8895947970557939901743264659270998415213946117',
-        'realized_pnl': '-462.06600328057794275',
-        'unrealized_pnl': '-2100.3656899749795800907999999999999999999999999998',
-        'net_settlements': '16.882700747243587876',
-        'cumulative_funding': '-108.82798341841185392297',
-        'pending_funding': '-98.29803748694663830697',
-        'mark_price': '3558.02656944444413312',
-        'index_price': '3556.44999999999967232',
-        'delta': '1',
-        'gamma': '0',
-        'vega': '0',
-        'theta': '0',
-        'mark_value': '-2215.54642820917069911956787109375',
-        'maintenance_margin': '-7379.01194384805785375647246837615966796875',
-        'initial_margin': '-8669.878322757780551910400390625',
-        'open_orders_margin': '0',
-        'leverage': '0.82999134418353139253671107432550912457164708970823',
-        'liquidation_price': None,
-        'creation_timestamp': 1710434366705
-    }
-    ].
-    """
+    """Convert to a position object."""
     return Position(
         id=api_result["instrument_name"],
         symbol=api_result["instrument_name"],
@@ -256,87 +146,20 @@ DERIVE_ORDER_TYPE_MAP = {
 }
 
 
-def to_order(api_result):
-    """{
-        'subaccount_id': 305,
-        'order_id': 'fff6bf6d-4fc2-42d3-be76-da209e7ca1eb',
-        'instrument_name': 'ETH-20240322-3900-C',
-        'direction': 'sell',
-        'label': '',
-        'quote_id': None,
-        'creation_timestamp': 1710616517152,
-        'last_update_timestamp': 1710616517152,
-        'limit_price': '39.7',
-        'amount': '6.3',
-        'filled_amount': '6.3',
-        'average_price': '39.7',
-        'order_fee': '9.126936000000000661',
-        'order_type': 'limit',
-        'time_in_force': 'gtc',
-        'order_status': 'filled',
-        'max_fee': '53.19',
-        'signature_expiry_sec': 1711094399,
-        'nonce': 1710616516996107,
-        'signer': '0x86535B713830B2CFc976799C95Ef799428b8661B',
-        'signature':
-    '0xf0cfcae8c6c32a0b1b692b83065df24873cd17cb4670495ba200aa777a5f
-    0235680d91aeb9560520ceb4b91f2019cd4a14a16d82e9604b73d859b04a0afc10fa1c',
-        'cancel_reason': '',
-        'mmp': False,
-        'is_transfer': False,
-        'replaced_order_id': None,
-        'trigger_type': None,
-        'trigger_price_type': None,
-        'trigger_price': None,
-        'trigger_reject_message': None
-        }.
-
-        converts to;'
-        @dataclass
-        class Order:
-            # This class represents an instance of Orders
-
-            id: Optional[str] = None
-            exchange_id: Optional[str] = None
-            client_order_id: Optional[str] = None
-            timestamp: Optional[float] = None
-            datetime: Optional[str] = None
-            last_trade_timestamp: Optional[float] = None
-            status: Optional[OrderStatus] = None
-            symbol: Optional[str] = None
-            type: Optional[OrderType] = None
-            time_in_force: Optional[str] = None
-            post_only: Optional[bool] = None
-            side: Optional[OrderSide] = None
-            price: Optional[float] = None
-            stop_price: Optional[float] = None
-            trigger_price: Optional[float] = None
-            cost: Optional[float] = None
-            amount: Optional[float] = None
-            filled: Optional[float] = None
-            remaining: Optional[float] = None
-            fee: Optional[float] = None
-            average: Optional[float] = None
-            trades: Optional[str] = None
-            fees: Optional[str] = None
-            last_update_timestamp: Optional[float] = None
-            reduce_only: Optional[bool] = None
-            take_profit_price: Optional[float] = None
-            stop_loss_price: Optional[float] = None
-    """
-
+def to_order(api_result: OrderResponseSchema) -> Order:
+    """Convert to an order object."""
     return Order(
-        id=api_result["order_id"],
+        id=api_result.order_id,
         exchange_id="derive",
-        client_order_id=api_result["order_id"],
-        timestamp=api_result["creation_timestamp"],
-        datetime=datetime.datetime.fromtimestamp(api_result["creation_timestamp"] / 1000, tz=TZ).isoformat(),
-        last_trade_timestamp=api_result["creation_timestamp"],
-        status=map_status_to_enum(api_result["order_status"]),
-        symbol=api_result["instrument_name"],
-        type=map_order_type_to_enum(api_result["order_type"]),
-        time_in_force=api_result["time_in_force"],
-        side=OrderSide.BUY if api_result["direction"] == "buy" else OrderSide.SELL,
+        client_order_id=api_result.order_id,
+        timestamp=api_result.creation_timestamp,
+        datetime=datetime.datetime.fromtimestamp(api_result.creation_timestamp / 1000, tz=TZ).isoformat(),
+        last_trade_timestamp=api_result.creation_timestamp,
+        status=map_status_to_enum(api_result.order_status),
+        symbol=api_result.instrument_name,
+        type=map_order_type_to_enum(api_result.order_type),
+        time_in_force=api_result.time_in_force,
+        side=api_result.direction,
     )
 
 
@@ -400,9 +223,15 @@ class DeriveClient:
         )
         self.logger = kwargs["logger"]
 
+    async def ensure_connected(self):
+        """Ensure the client is connected."""
+        if not self.client._subaccounts:  # noqa: SLF001
+            await self.client.connect(True)
+
     async def fetch_markets(self, *args, **kwargs):
         """Fetch all markets."""
-        raise NotImplementedError(f"{self.__class__.__name__}.fetch_markets")
+        msg = f"{self.__class__.__name__}.fetch_markets"
+        raise NotImplementedError(msg)
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -417,7 +246,8 @@ class DeriveClient:
 
     async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
-        raise NotImplementedError(f"{self.__class__.__name__}.fetch_tickers")
+        msg = f"{self.__class__.__name__}.fetch_tickers"
+        raise NotImplementedError(msg)
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -439,18 +269,19 @@ class DeriveClient:
 
     async def fetch_ticker(self, *args, symbol, asset_a, asset_b, **kwargs):
         """Fetch all tickers."""
+        await self.ensure_connected()
         del args, kwargs  # should parse from name to instrument type?
         if (not asset_a and not asset_b) and (not symbol):
             msg = "Either asset_a, asset_b or symbol must be provided."
             raise ValueError(msg)
 
-        instrument_name = f"{asset_a}-{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
+        instrument_name = f"{asset_a}/{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
             result = await self.client.markets.get_tickers(
                 instrument_type=InstrumentType.erc20,
-                currency="ETH",
+                currency=asset_a,
             )
-            return to_ticker(symbol, result[instrument_name])
+            return to_ticker(instrument_name, result[instrument_name.replace("/", "-")])
         except Exception as error:
             self.logger.exception(traceback.print_exc())
             msg = f"Failed to fetch ticker: {error}"
@@ -458,11 +289,11 @@ class DeriveClient:
 
     async def fetch_balance(self, *args, **kwargs):
         """Fetch all balances."""
-        raise NotImplementedError(f"{self.__class__.__name__}.fetch_balance")
+        await self.ensure_connected()
         del args, kwargs
         try:
-            result = await self.client.get_collaterals()
-            balances = [to_balance(balance) for balance in result]
+            result = await self.client.collateral.get()
+            balances = [to_balance(balance) for balance in result.collaterals]
         except Exception as error:
             traceback.print_exc()
             self.logger.exception(f"Failed to fetch balances: {error}")
@@ -474,7 +305,8 @@ class DeriveClient:
 
     async def fetch_positions(self, *args, **kwargs):
         """Fetch all positions."""
-        raise NotImplementedError(f"{self.__class__.__name__}.fetch_positions")
+        msg = f"{self.__class__.__name__}.fetch_positions"
+        raise NotImplementedError(msg)
         del args
         params = kwargs.get("params", {})
         if "currency" in params:
@@ -489,10 +321,10 @@ class DeriveClient:
 
     async def fetch_open_orders(self, *args, **kwargs):
         """Fetch all open orders."""
-        del args
-        params = kwargs.get("params", {})
+        await self.ensure_connected()
+        del args, kwargs
         try:
-            result = await self.client.get_open_orders(status=DeriveOrderStatus.OPEN.value, **params)
+            result = await self.client.orders.list_open()
         except Exception as error:  # noqa
             traceback.print_exc()
             result = []
@@ -504,7 +336,8 @@ class DeriveClient:
 
     async def watch_order_book(self, *args, **kwargs):
         """Watch the order book."""
-        raise NotImplementedError(f"{self.__class__.__name__}.watch_order_book")
+        msg = f"{self.__class__.__name__}.watch_order_book"
+        raise NotImplementedError(msg)
         params = kwargs.get("params", {})
         try:
             result = await self.client.watch_order_book(instrument_name=args[0], **params)
@@ -530,10 +363,9 @@ class DeriveClient:
             "limit_price": kwargs["price"],
             "order_type": DeriveOrderType(kwargs["type"]),
             "time_in_force": DeriveTimeInForce.ioc if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.gtc,
-
         }
         try:
-            return await self.client.orders.create(**params)
+            return await to_order(self.client.orders.create(**params))
         except ApiException as error:
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
@@ -569,36 +401,6 @@ class DeriveClient:
             "average_price": 0,
             "creation_timestamp": datetime.datetime.now(tz=datetime.UTC).timestamp(),
         }
-
-    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
-        """Create an order from an api call."""
-        kwargs = {from_camelize(key): value for key, value in api_call.items()}
-        if all(
-            [
-                kwargs["order_status"] == "filled",
-                Decimal(kwargs["filled_amount"])
-                >= Decimal(
-                    kwargs["amount"],
-                ),
-            ]
-        ):
-            kwargs["status"] = "filled"
-
-        order_key = "order_status" if "order_status" in kwargs else "status"
-        return Order(
-            id=api_call.get("order_id"),
-            symbol=kwargs["instrument_name"],
-            status=map_status_to_enum(kwargs[order_key]),
-            type=map_order_type_to_enum(kwargs["order_type"]),
-            side=OrderSide.BUY if kwargs["direction"] == "buy" else OrderSide.SELL,
-            price=float(kwargs["limit_price"]),
-            amount=float(kwargs["amount"]),
-            filled=float(kwargs["filled_amount"]),
-            average=float(kwargs["average_price"]),
-            timestamp=kwargs["creation_timestamp"],
-            exchange_id=exchange_id,
-            ledger_id=exchange_id,
-        )
 
     def set_approval(self, *args, **kwargs):
         """Set approval for an asset."""

@@ -1674,15 +1674,15 @@ url = "third_party/upstream/v2-action-signing-python"
 
 [[package]]
 name = "derive-client"
-version = "0.3.2"
+version = "0.3.5"
 description = ""
 optional = false
-python-versions = "<=3.13,>=3.10"
+python-versions = "<3.14,>=3.10"
 groups = ["main"]
 markers = "python_version <= \"3.11\""
 files = [
-    {file = "derive_client-0.3.2-py3-none-any.whl", hash = "sha256:2ec81ea0d0cf3465065d9302f662f6424e168a8dee05a1aa2f46b8129f878536"},
-    {file = "derive_client-0.3.2.tar.gz", hash = "sha256:9b0bfe499e0ce96c3f25bce5e5190f008ac1c329c801c1b8416ae5aa08274290"},
+    {file = "derive_client-0.3.5-py3-none-any.whl", hash = "sha256:81bf9160d976eb96ac70307c29e8721c40047bfb8612d7d3440c3a55cbae1f2c"},
+    {file = "derive_client-0.3.5.tar.gz", hash = "sha256:fe9c485a65636c09593e25d676f6cf411090de79072c5f1d5c356b83f8649351"},
 ]
 
 [package.dependencies]
