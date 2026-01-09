@@ -5,6 +5,7 @@ import asyncio
 import datetime
 import traceback
 from pathlib import Path
+from typing import Any
 
 from derive_client import AsyncHTTPClient as DeriveAsyncClient
 from derive_client.data_types import (
@@ -246,23 +247,19 @@ class DeriveClient:
 
     async def fetch_tickers(self, *args, **kwargs):
         """Fetch all tickers."""
-        msg = f"{self.__class__.__name__}.fetch_tickers"
-        raise NotImplementedError(msg)
-        del args
-        params = kwargs.get("params", {})
-        if "currency" in params:
-            params["currency"] = Currency(params["currency"].upper())
-        if "type" in params:
-            params["type"] = InstrumentType(params["type"].lower())
+        await self.ensure_connected()
+        del args, kwargs  # should parse from name to instrument type?
 
         try:
-            result = await self.client.markets.get_tickers(**params)
-            data = result.values()
-        except Exception as error:  # noqa
-            traceback.print_exc()
-            data = []
+            data = await self.client.markets.get_tickers(
+                instrument_type=InstrumentType.erc20,
+            )
+        except Exception as error:
+            self.logger.exception(traceback.print_exc())
+            msg = f"Failed to fetch ticker: {error}"
+            raise ExchangeError(msg) from error
 
-        tickers = [to_ticker(ticker) for ticker in data]
+        tickers = [to_ticker(k, ticker) for k, ticker in data.items()]
         return Tickers(
             tickers=tickers,
         )
@@ -359,13 +356,14 @@ class DeriveClient:
         params = {
             "amount": kwargs["amount"],
             "direction": DeriveOrderSide(kwargs["side"]),
-            "instrument_name": kwargs["symbol"],
+            "instrument_name": kwargs["symbol"].replace("/", "-"),
             "limit_price": kwargs["price"],
             "order_type": DeriveOrderType(kwargs["type"]),
             "time_in_force": DeriveTimeInForce.ioc if kwargs.get("immediate_or_cancel") else DeriveTimeInForce.gtc,
         }
         try:
-            return await to_order(self.client.orders.create(**params))
+            order_response = await self.client.orders.create(**params)
+            return to_order(order_response)
         except ApiException as error:
             if "Zero liquidity for market or IOC/FOK order" in str(error):
                 self.logger.exception(f"Failed to create order initially! retries: {retries}")
@@ -386,6 +384,11 @@ class DeriveClient:
             self.logger.exception(f"Failed to create order: {error} Retries: {retries}")
             msg = f"Failed to create order: {error} with unknown error"
             raise NotImplementedError(msg) from error
+
+
+    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
+        """Create an order from an api call."""
+        return to_order(api_call)
 
     def get_failed_order_json(self, error, kwargs):
         """Get a failed order json."""
