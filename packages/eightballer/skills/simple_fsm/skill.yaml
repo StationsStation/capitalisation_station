@@ -26,9 +26,9 @@ fingerprint:
   tests/test_handler.py: bafybeifsvcne4cm7ipmsmqexhtjp772dsn7nusv74lasmarll3fsba6rwq
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/apprise_wrapper:0.1.0:bafybeib46mwxydjapluicictavkcsmt2jpppkkru4lqhv3fwx5pbmngi2u
+- eightballer/apprise_wrapper:0.1.0:bafybeiafvyh2l3imqusjn374wnnet6gzhyvc4o5wrczdlt3mz535og7elm
 - eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
-- eightballer/dcxt:0.1.0:bafybeiciybmksirpc7evytvokxhs7pkveepoyk3zqu5ubroh33dca6i2hy
+- eightballer/dcxt:0.1.0:bafybeid4ek6nb43ktregxgzdcjiayijkvidyt6d3pycspzdpeung75k7ye
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
@@ -38,9 +38,9 @@ protocols:
 - zarathustra/asset_bridging:0.1.0:bafybeiaisse2jqpfvb2jqhgnwsa3p2b6v7ommontm5llagtfphqgkmyzkq
 - eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
 - eightballer/approvals:0.1.0:bafybeid72h5vqtg4aqwluzdfwr5plj5mnkrd7yi6dpzzs3qptzugngxgyu
-- eightballer/user_interaction:0.1.0:bafybeibotsfodi6jkoemmt4tpwecxkj7p3dphinuzuakh5z2cisckxxp6m
+- eightballer/user_interaction:0.1.0:bafybeidhs7hwsfinvgkkyodgq5qoolg5i4rf5vr2c2xcuvkbyoodefcvoq
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeifazgkeuphhaiml5v26weiio6qpaa2ax57hnnbwijs5gpxs6gxhna
+- eightballer/abstract_round_abci:0.1.0:bafybeie5eapbfulhih7tvi4egacsya6xkouyn5jjaqjesw3sctgqjhwy2u
 behaviours:
   main:
     args: {}

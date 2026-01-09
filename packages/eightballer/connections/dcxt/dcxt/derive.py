@@ -4,8 +4,9 @@ import json
 import asyncio
 import datetime
 import traceback
-from pathlib import Path
 from typing import Any
+from pathlib import Path
+from itertools import starmap
 
 from derive_client import AsyncHTTPClient as DeriveAsyncClient
 from derive_client.data_types import (
@@ -259,7 +260,7 @@ class DeriveClient:
             msg = f"Failed to fetch ticker: {error}"
             raise ExchangeError(msg) from error
 
-        tickers = [to_ticker(k, ticker) for k, ticker in data.items()]
+        tickers = list(starmap(to_ticker, data.items()))
         return Tickers(
             tickers=tickers,
         )
@@ -385,8 +386,7 @@ class DeriveClient:
             msg = f"Failed to create order: {error} with unknown error"
             raise NotImplementedError(msg) from error
 
-
-    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:
+    def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:  # noqa: ARG002
         """Create an order from an api call."""
         return to_order(api_call)
 

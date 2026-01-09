@@ -16,7 +16,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- eightballer/user_interaction:0.1.0:bafybeibotsfodi6jkoemmt4tpwecxkj7p3dphinuzuakh5z2cisckxxp6m
+- eightballer/user_interaction:0.1.0:bafybeidhs7hwsfinvgkkyodgq5qoolg5i4rf5vr2c2xcuvkbyoodefcvoq
 class_name: AppriseConnection
 config:
   endpoints:

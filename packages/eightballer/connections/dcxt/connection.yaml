@@ -24,7 +24,7 @@ fingerprint:
   dcxt/data/token_list.json: bafybeiex6u545y7hswqo5qlp5q3cwd36suhb6uwridrpajak74vo6ezq34
   dcxt/data/tokens.py: bafybeia23d3bmwxndq4mukdxtckt2npnsflc4iturlpoqzc7r5blvvjkee
   dcxt/defi_exchange.py: bafybeigz2wpqplwuup2hejfhdtlm6oeni7cvxrhhjfmf42semrklh36i4i
-  dcxt/derive.py: bafybeih5vket3vcem6ltonj3eajpqwr3zjt4d2l3uvyladarmrwad7plry
+  dcxt/derive.py: bafybeibycw5zwizc72w5ijkbpdmqlpnpo3hoccllm6qoxpni3zofhnqpyq
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
   dcxt/nabla.py: bafybeidfto63bu5csieqdnjnzgcos7ntf6u5u6bvpiultipyx6ububsvxq
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
@@ -58,7 +58,7 @@ fingerprint:
   tests/protocols/test_positions_interface.py: bafybeidrjxrtoe42mdb4boyjud7u4wbu3g6ejbv5lf4nkceqr3qustaemm
   tests/protocols/test_spot_asset_interface.py: bafybeihnxqqxtjwaxcimsq4sam5p27bdfsy6y65x5scnvl34yfzuwr4l5a
   tests/protocols/test_tickers.py: bafybeif7ydtl3uwncynlkxq2hhy3rjvzakonv4j2nsk4qv3g272lfsxggy
-  tests/test_dcxt_connection.py: bafybeiep2ya6sb5nercfan3jhbn2at2hsiklw4psdegsuthv7ogjqmdjye
+  tests/test_dcxt_connection.py: bafybeihztn4gkkbc4trrqp2asi5ikjc63nqizd354mqzaigyxe6aud6xzm
   utils.py: bafybeic7n4jpmcxeotiovy3mxvqq4upwqm3lmxxtcvofk3e322ruvb4e7a
 fingerprint_ignore_patterns: []
 connections: []
