@@ -1,0 +1,97 @@
+"""Database module for portfolio value tracking."""
+
+import datetime
+from pathlib import Path
+from typing import Optional
+
+from sqlalchemy import create_engine, Column, DateTime, Float
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
+
+Base = declarative_base()
+
+
+class PortfolioValue(Base):
+    """Portfolio value snapshot table."""
+    
+    __tablename__ = 'value_table'
+    
+    datetime = Column(DateTime, primary_key=True)
+    total_usd_val = Column(Float, nullable=False)
+    total_eth_val = Column(Float, nullable=False)
+    total_olas_val = Column(Float, nullable=False)
+
+
+class PortfolioDatabase:
+    """Minimal database handler for portfolio values."""
+    
+    def __init__(self, db_config: str = "sqlite:///../data/agent_data.db"):
+        """Initialize database connection.
+        
+        Args:
+            db_config: Database connection string (SQLite or PostgreSQL)
+        """
+
+        if db_config.startswith("sqlite:///"):
+            db_path = db_config.replace("sqlite:///", "")
+            Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+        
+        self.engine = create_engine(db_config)
+        Base.metadata.create_all(self.engine)
+        self.SessionLocal = sessionmaker(bind=self.engine)
+    
+    def get_session(self) -> Session:
+        """Get a new database session."""
+        return self.SessionLocal()
+    
+    def save_snapshot(
+        self,
+        total_usd: float,
+        total_eth: float,
+        total_olas: float,
+        timestamp: Optional[datetime.datetime] = None
+    ) -> None:
+        """Save a portfolio value snapshot.
+        
+        Args:
+            total_usd: Total value in USD
+            total_eth: Total value in ETH
+            total_olas: Total value in OLAS
+            timestamp: Snapshot timestamp (defaults to now)
+        """
+        if timestamp is None:
+            timestamp = datetime.datetime.now(tz=datetime.timezone.utc)
+        
+        session = self.get_session()
+        try:
+            snapshot = PortfolioValue(
+                datetime=timestamp,
+                total_usd_val=total_usd,
+                total_eth_val=total_eth,
+                total_olas_val=total_olas
+            )
+            session.add(snapshot)
+            session.commit()
+        finally:
+            session.close()
+    
+    def get_timeseries(self, column: str, limit: int = 300) -> list[tuple]:
+        """Get timeseries data for a specific column.
+        
+        Args:
+            column: Column name (total_usd_val, total_eth_val, or total_olas_val)
+            limit: Maximum number of records to return
+            
+        Returns:
+            List of (datetime, value) tuples
+        """
+        session = self.get_session()
+        try:
+            query = session.query(
+                PortfolioValue.datetime,
+                getattr(PortfolioValue, column)
+            ).order_by(PortfolioValue.datetime.desc()).limit(limit)
+            
+            return [(row[0], row[1]) for row in query.all()]
+        finally:
+            session.close()
