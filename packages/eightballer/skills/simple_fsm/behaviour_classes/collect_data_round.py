@@ -189,6 +189,66 @@ class CollectDataRound(BaseConnectionRound):
                 b.dict() for b in bal.last_message.balances.balances
             ]
 
+        # Store in database
+        try:
+            total_usd = 0.0
+            total_eth = 0.0
+            total_olas = 0.0
+
+            # Get prices (need ETH and OLAS prices in USD)
+            eth_price_usd = 0.0
+            olas_price_usd = 0.0
+
+            # Extract ETH and OLAS prices from collected data
+            for ledger_id, exchanges in self.strategy.state.prices.items():
+                for exchange_id, tickers in exchanges.items():
+                    for ticker in tickers:
+                        symbol = ticker.get('symbol', '')
+                        if symbol == 'ETH/USDT' or symbol == 'ETH/USD':
+                            eth_price_usd = ticker.get('last', 0.0)
+                        elif symbol == 'OLAS/USDT' or symbol == 'OLAS/USD':
+                            olas_price_usd = ticker.get('last', 0.0)
+
+            # Calculate total portfolio value
+            for ledger_id, exchanges in self.strategy.state.portfolio.items():
+                for exchange_id, balances in exchanges.items():
+                    for balance in balances:
+                        asset_id = balance.get('asset_id', '')
+                        total = balance.get('total', 0.0)
+
+                        # Get price for this asset
+                        asset_price = 0.0
+                        for price_ledger, price_exchanges in self.strategy.state.prices.items():
+                            for price_exchange, tickers in price_exchanges.items():
+                                for ticker in tickers:
+                                    ticker_symbol = ticker.get('symbol', '')
+                                    # Match asset to price (e.g., OLAS -> OLAS/USDT)
+                                    if ticker_symbol.startswith(f"{asset_id}/"):
+                                        asset_price = ticker.get('last', 0.0)
+                                        break
+
+                        # Calculate USD value
+                        balance_usd = asset_price * total
+                        total_usd += balance_usd
+
+                        # Calculate ETH and OLAS values
+                        if eth_price_usd > 0:
+                            total_eth += balance_usd / eth_price_usd
+                        if olas_price_usd > 0:
+                            total_olas += balance_usd / olas_price_usd
+
+            # Save to database
+            self.strategy.portfolio_db.save_snapshot(
+                total_usd=total_usd,
+                total_eth=total_eth,
+                total_olas=total_olas
+            )
+            self.context.logger.info(
+                f"Saved portfolio snapshot: USD={total_usd:.2f}, ETH={total_eth:.4f}, OLAS={total_olas:.2f}"
+            )
+        except Exception as e:
+            self.context.logger.error(f"Error saving portfolio snapshot: {e}", exc_info=True)
+
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
