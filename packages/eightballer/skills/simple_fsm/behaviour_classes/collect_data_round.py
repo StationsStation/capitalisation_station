@@ -202,9 +202,10 @@ class CollectDataRound(BaseConnectionRound):
 
         # NOTE: ideally, we would use the ledger_id and exchange from a config
         # instead of assuming we have only two such pairs (i.e. ("derive", "derive") and ("base", "cowswap"))
-        asset_holdings = {}
 
-        # 1. Get all token holdings across venues
+        # 1. Get base and quote asset holdings by venue
+        base_asset_holdings = {}
+        quote_asset_holdings = {}
         for ledger_id, exchanges in self.strategy.state.portfolio.items():
             for exchange_id, balances in exchanges.items():
                 venue = (ledger_id, exchange_id)
@@ -212,17 +213,12 @@ class CollectDataRound(BaseConnectionRound):
                     balance = BalancesMessage.Balance(**balance_kwargs)
                     asset_id = balance.asset_id
                     amount = balance.total
-                    asset_holdings[(venue, asset_id)] = amount
-        self.context.logger.debug(f"Asset holdings: {asset_holdings}")
 
-        # 2. Separate base asset and quote asset holdings by venue
-        base_asset_holdings = {}
-        quote_asset_holdings = {}
-        for (venue, asset_id), amount in asset_holdings.items():
-            if asset_id == strategy_base_asset:
-                base_asset_holdings[venue] = amount
-            if asset_id == strategy_quote_asset:
-                quote_asset_holdings[venue] = amount
+                    if asset_id == strategy_base_asset:
+                        base_asset_holdings[venue] = amount
+                    if asset_id == strategy_quote_asset:
+                        quote_asset_holdings[venue] = amount
+
         self.context.logger.debug(f"Base asset holdings: {base_asset_holdings}")
         self.context.logger.debug(f"Quote asset holdings: {quote_asset_holdings}")
 
@@ -238,7 +234,7 @@ class CollectDataRound(BaseConnectionRound):
                         base_asset_tickers[venue] = ticker
                         break
                 else:
-                    self.context.logger.warning(f"No ticker for {strategy_base_asset}/{strategy_quote_asset} on {venue}")
+                    self.context.logger.info(f"No ticker for {strategy_base_asset}/{strategy_quote_asset} on {venue}")
         self.context.logger.debug(f"Base asset tickers: {base_asset_tickers}")
 
         # 4. Calculate base_asset value in quote_asset (USDC) terms
