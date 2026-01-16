@@ -17,6 +17,13 @@ DATA_COLLECTION_TIMEOUT_SECONDS = 10
 DEFAULT_ENCODING = "utf-8"
 
 
+def get_base_and_quote(symbol: str) -> tuple[str, str] | None:
+    if len(assets := symbol.split("/")) == 2:
+        base_asset, quote_asset = assets
+        return base_asset, quote_asset
+    return None
+
+
 class CollectDataRound(BaseConnectionRound):
     """This class implements the CollectDataRound state."""
 
@@ -189,65 +196,104 @@ class CollectDataRound(BaseConnectionRound):
                 b.dict() for b in bal.last_message.balances.balances
             ]
 
-        # Store in database
-        try:
-            total_usd = 0.0
-            total_eth = 0.0
-            total_olas = 0.0
+        # Retrieve the strategy parameters as provided per the aea-config.yaml
+        strategy_base_asset = self.strategy.strategy_init_kwargs["base_asset"]
+        strategy_quote_asset = self.strategy.strategy_init_kwargs["quote_asset"]  # always USDC
 
-            # Get prices (need ETH and OLAS prices in USD)
-            eth_price_usd = 0.0
-            olas_price_usd = 0.0
+        # NOTE: ideally, we would use the ledger_id and exchange from a config
+        # instead of assuming we have only two such pairs (i.e. ("derive", "derive") and ("base", "cowswap"))
+        asset_holdings = {}
 
-            # Extract ETH and OLAS prices from collected data
-            for ledger_id, exchanges in self.strategy.state.prices.items():
-                for exchange_id, tickers in exchanges.items():
-                    for ticker in tickers:
-                        symbol = ticker.get('symbol', '')
-                        if symbol == 'ETH/USDT' or symbol == 'ETH/USD':
-                            eth_price_usd = ticker.get('last', 0.0)
-                        elif symbol == 'OLAS/USDT' or symbol == 'OLAS/USD':
-                            olas_price_usd = ticker.get('last', 0.0)
+        # 1. get the all token holdings
+        for ledger_id, exchanges in self.strategy.state.portfolio.items():
+            for exchange_id, balances in exchanges.items():
+                venue = (ledger_id, exchange_id)
+                for balance_kwargs in balances:
+                    balance = BalancesMessage.Balance(**balance_kwargs)
+                    asset_id = balance.asset_id  # field always exists
+                    amount = balance.total  # field always exists
+                    asset_holdings[(venue, asset_id)] = amount
+        self.context.logger.debug(f"Asset holdings: {asset_holdings}")
 
-            # Calculate total portfolio value
-            for ledger_id, exchanges in self.strategy.state.portfolio.items():
-                for exchange_id, balances in exchanges.items():
-                    for balance in balances:
-                        asset_id = balance.get('asset_id', '')
-                        total = balance.get('total', 0.0)
+        # 2. get base and quote asset holdings
+        base_asset_holdings = {}
+        quote_asset_holdings = {}
+        for (venue, asset_id), amount in asset_holdings.items():
+            if asset_id == strategy_base_asset:
+                base_asset_holdings[venue] = amount
+            if asset_id == strategy_quote_asset:
+                quote_asset_holdings[venue] = amount
+        self.context.logger.debug(f"Base asset holdings: {base_asset_holdings}")
+        self.context.logger.debug(f"Quote asset holdings: {quote_asset_holdings}")
+        # We assume we only operate and track portfolio balance accross two venues
+        base_asset_balances_available = len(base_asset_holdings) == 2
+        quote_asset_balances_available = len(quote_asset_holdings) == 2
 
-                        # Get price for this asset
-                        asset_price = 0.0
-                        for price_ledger, price_exchanges in self.strategy.state.prices.items():
-                            for price_exchange, tickers in price_exchanges.items():
-                                for ticker in tickers:
-                                    ticker_symbol = ticker.get('symbol', '')
-                                    # Match asset to price (e.g., OLAS -> OLAS/USDT)
-                                    if ticker_symbol.startswith(f"{asset_id}/"):
-                                        asset_price = ticker.get('last', 0.0)
-                                        break
+        # if not base_asset_balances_available:
+        #     self.context.logger.warning(f"Expected {base_asset} balances on 2 venues, found: {base_asset_holdings}")
+        # if not quote_asset_balances_available:
+        #     self.context.logger.warning(f"Expected {quote_asset} balances on 2 venues, found: {quote_asset_holdings}")
 
-                        # Calculate USD value
-                        balance_usd = asset_price * total
-                        total_usd += balance_usd
+        # 3. Get the base_asset ticker at both venues
+        base_asset_tickers: dict[tuple[str, str], TickersMessage.Ticker] = {}
+        for ledger_id, exchanges in self.strategy.state.prices.items():
+            for exchange_id, tickers in exchanges.items():
+                venue = (ledger_id, exchange_id)
+                for ticker_kwargs in tickers:
+                    ticker = TickersMessage.Ticker(**ticker_kwargs)
+                    base_asset, quote_asset = get_base_and_quote(symbol=ticker.symbol)
+                    if base_asset == strategy_base_asset and quote_asset == strategy_quote_asset:  # TODO: case incensitive matching
+                        base_asset_tickers[venue] = ticker
+                        break
+                else:
+                    self.context.logger.warning(f"No ticker for {strategy_base_asset}/{strategy_quote_asset} on {venue}")
+        self.context.logger.info(f"Base asset tickers: {base_asset_tickers}")
 
-                        # Calculate ETH and OLAS values
-                        if eth_price_usd > 0:
-                            total_eth += balance_usd / eth_price_usd
-                        if olas_price_usd > 0:
-                            total_olas += balance_usd / olas_price_usd
+        base_asset_tickers_available = len(base_asset_tickers) == 2
 
-            # Save to database
-            self.strategy.portfolio_db.save_snapshot(
-                total_usd=total_usd,
-                total_eth=total_eth,
-                total_olas=total_olas
-            )
+        # 4. get the value of base_asset token holdings in quote_asset denomination
+        # If there is no bid, the value is zero and we end up with a downward spike in our signal
+        quote_asset_denominated_value = {}
+        for venue, base_asset_ticker in base_asset_tickers.items():
+            base_asset_quote_denominated_price = base_asset_ticker.bid or 0.0
+            if base_asset_quote_denominated_price == 0.0:
+                self.context.logger.warning(f"Cannot determine value of token (no bid price): {base_asset_ticker}")
+
+            base_asset_amount = base_asset_holdings.get(venue) # should exist, but we may not (yet) have received the message
+            if base_asset_amount is None:
+                self.context.logger.warning(f"Did not find holdings of {base_asset} on {venue} for ticker {base_asset_ticker}")
+                continue
+
+            base_asset_value = base_asset_amount * base_asset_quote_denominated_price
+            quote_asset_denominated_value[venue] = base_asset_value
+            # if venue not in quote_asset_holdings:  # should exist, but we may not (yet) have received the message
+                # self.context.logger.warning(f"Did not find {strategy_quote_asset} holdings on {venue}")
+
+        # 4. compute the sum total accross all (both) venues and store
+        # we only store if we have:
+        #   - token tickers (even if bid is zero)
+        #   - USDC balances on both venues (even if amount is zero)
+        #   - token balances on both venues (even if amount is zero)
+
+        # In case there is no ticker bid, no base asset holding, or no quote asset holding on one of the two venues
+        # i.e. due to missed message or any other reason, we will get a downward spike in our signal
+
+        # This can be simplified. We could exit early, however, we do need to set the flags at the end of this method body!
+        quote_asset_denominated_value_available = len(quote_asset_denominated_value) == 2
+        if base_asset_balances_available and quote_asset_balances_available and base_asset_tickers_available and quote_asset_denominated_value_available:
+            total_usd = sum(quote_asset_holdings.values()) + sum(quote_asset_denominated_value.values())
+            try:
+                self.strategy.portfolio_db.save_snapshot(total_usd=total_usd)
+            except Exception:
+                self.context.logger.exception("Error saving portfolio snapshot", exc_info=True)
+        else:
             self.context.logger.info(
-                f"Saved portfolio snapshot: USD={total_usd:.2f}, ETH={total_eth:.4f}, OLAS={total_olas:.2f}"
+                f"Not all asset data available (yet):\n"
+                f"Base asset ({strategy_base_asset}) balances: {base_asset_holdings}\n"
+                f"Quote asset ({strategy_quote_asset}) balances: {quote_asset_holdings}\n"
+                f"Base asset tickers: {base_asset_tickers}\n"
+                f"Total {strategy_quote_asset} denominated value: {quote_asset_denominated_value}"
             )
-        except Exception as e:
-            self.context.logger.error(f"Error saving portfolio snapshot: {e}", exc_info=True)
 
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE

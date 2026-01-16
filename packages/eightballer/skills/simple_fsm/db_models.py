@@ -18,8 +18,6 @@ class PortfolioValue(Base):
     
     datetime = Column(DateTime, primary_key=True)
     total_usd_val = Column(Float, nullable=False)
-    total_eth_val = Column(Float, nullable=False)
-    total_olas_val = Column(Float, nullable=False)
 
 
 class PortfolioDatabase:
@@ -47,16 +45,12 @@ class PortfolioDatabase:
     def save_snapshot(
         self,
         total_usd: float,
-        total_eth: float,
-        total_olas: float,
         timestamp: Optional[datetime.datetime] = None
     ) -> None:
         """Save a portfolio value snapshot.
         
         Args:
             total_usd: Total value in USD
-            total_eth: Total value in ETH
-            total_olas: Total value in OLAS
             timestamp: Snapshot timestamp (defaults to now)
         """
         if timestamp is None:
@@ -67,8 +61,6 @@ class PortfolioDatabase:
             snapshot = PortfolioValue(
                 datetime=timestamp,
                 total_usd_val=total_usd,
-                total_eth_val=total_eth,
-                total_olas_val=total_olas
             )
             session.add(snapshot)
             session.commit()
