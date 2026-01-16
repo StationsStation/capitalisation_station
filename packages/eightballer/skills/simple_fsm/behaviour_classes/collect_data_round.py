@@ -17,8 +17,8 @@ DATA_COLLECTION_TIMEOUT_SECONDS = 10
 DEFAULT_ENCODING = "utf-8"
 
 
-def get_base_and_quote(symbol: str) -> tuple[str, str] | None:
-    if len(assets := symbol.split("/")) == 2:
+def try_symbol_to_base_and_quote(symbol: str) -> tuple[str, str] | None:
+    if len(assets := symbol.upper().split("/")) == 2:
         base_asset, quote_asset = assets
         return base_asset, quote_asset
     return None
@@ -229,7 +229,11 @@ class CollectDataRound(BaseConnectionRound):
                 venue = (ledger_id, exchange_id)
                 for ticker_kwargs in tickers:
                     ticker = TickersMessage.Ticker(**ticker_kwargs)
-                    base_asset, quote_asset = get_base_and_quote(symbol=ticker.symbol)
+                    base_and_quote = try_symbol_to_base_and_quote(symbol=ticker.symbol)
+                    if base_and_quote is None:
+                        self.context.logger.error(f"Failed to parse ticker symbol: {ticker}")
+                        continue
+                    base_asset, quote_asset = base_and_quote
                     if base_asset == strategy_base_asset and quote_asset == strategy_quote_asset:
                         base_asset_tickers[venue] = ticker
                         break
