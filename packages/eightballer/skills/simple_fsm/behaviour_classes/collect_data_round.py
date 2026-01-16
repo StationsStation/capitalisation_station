@@ -204,18 +204,18 @@ class CollectDataRound(BaseConnectionRound):
         # instead of assuming we have only two such pairs (i.e. ("derive", "derive") and ("base", "cowswap"))
         asset_holdings = {}
 
-        # 1. get the all token holdings
+        # 1. Get all token holdings across venues
         for ledger_id, exchanges in self.strategy.state.portfolio.items():
             for exchange_id, balances in exchanges.items():
                 venue = (ledger_id, exchange_id)
                 for balance_kwargs in balances:
                     balance = BalancesMessage.Balance(**balance_kwargs)
-                    asset_id = balance.asset_id  # field always exists
-                    amount = balance.total  # field always exists
+                    asset_id = balance.asset_id
+                    amount = balance.total
                     asset_holdings[(venue, asset_id)] = amount
         self.context.logger.debug(f"Asset holdings: {asset_holdings}")
 
-        # 2. get base and quote asset holdings
+        # 2. Separate base asset and quote asset holdings by venue
         base_asset_holdings = {}
         quote_asset_holdings = {}
         for (venue, asset_id), amount in asset_holdings.items():
@@ -225,14 +225,6 @@ class CollectDataRound(BaseConnectionRound):
                 quote_asset_holdings[venue] = amount
         self.context.logger.debug(f"Base asset holdings: {base_asset_holdings}")
         self.context.logger.debug(f"Quote asset holdings: {quote_asset_holdings}")
-        # We assume we only operate and track portfolio balance accross two venues
-        base_asset_balances_available = len(base_asset_holdings) == 2
-        quote_asset_balances_available = len(quote_asset_holdings) == 2
-
-        # if not base_asset_balances_available:
-        #     self.context.logger.warning(f"Expected {base_asset} balances on 2 venues, found: {base_asset_holdings}")
-        # if not quote_asset_balances_available:
-        #     self.context.logger.warning(f"Expected {quote_asset} balances on 2 venues, found: {quote_asset_holdings}")
 
         # 3. Get the base_asset ticker at both venues
         base_asset_tickers: dict[tuple[str, str], TickersMessage.Ticker] = {}
@@ -242,57 +234,50 @@ class CollectDataRound(BaseConnectionRound):
                 for ticker_kwargs in tickers:
                     ticker = TickersMessage.Ticker(**ticker_kwargs)
                     base_asset, quote_asset = get_base_and_quote(symbol=ticker.symbol)
-                    if base_asset == strategy_base_asset and quote_asset == strategy_quote_asset:  # TODO: case incensitive matching
+                    if base_asset == strategy_base_asset and quote_asset == strategy_quote_asset:
                         base_asset_tickers[venue] = ticker
                         break
                 else:
                     self.context.logger.warning(f"No ticker for {strategy_base_asset}/{strategy_quote_asset} on {venue}")
-        self.context.logger.info(f"Base asset tickers: {base_asset_tickers}")
+        self.context.logger.debug(f"Base asset tickers: {base_asset_tickers}")
 
-        base_asset_tickers_available = len(base_asset_tickers) == 2
+        # 4. Calculate base_asset value in quote_asset (USDC) terms
+        base_asset_value_in_usdc = {}
+        for venue, ticker in base_asset_tickers.items():
+            price = ticker.bid or 0.0
+            if price == 0.0:
+                self.context.logger.warning(f"Cannot determine value of token (no bid price): {ticker}")
 
-        # 4. get the value of base_asset token holdings in quote_asset denomination
-        # If there is no bid, the value is zero and we end up with a downward spike in our signal
-        quote_asset_denominated_value = {}
-        for venue, base_asset_ticker in base_asset_tickers.items():
-            base_asset_quote_denominated_price = base_asset_ticker.bid or 0.0
-            if base_asset_quote_denominated_price == 0.0:
-                self.context.logger.warning(f"Cannot determine value of token (no bid price): {base_asset_ticker}")
-
-            base_asset_amount = base_asset_holdings.get(venue) # should exist, but we may not (yet) have received the message
-            if base_asset_amount is None:
-                self.context.logger.warning(f"Did not find holdings of {base_asset} on {venue} for ticker {base_asset_ticker}")
+            base_amount = base_asset_holdings.get(venue)
+            if base_amount is None:
+                self.context.logger.warning(f"Did not find holdings of {strategy_base_asset} on {venue} for ticker {ticker}")
                 continue
 
-            base_asset_value = base_asset_amount * base_asset_quote_denominated_price
-            quote_asset_denominated_value[venue] = base_asset_value
-            # if venue not in quote_asset_holdings:  # should exist, but we may not (yet) have received the message
-                # self.context.logger.warning(f"Did not find {strategy_quote_asset} holdings on {venue}")
+            base_asset_value_in_usdc[venue] = base_amount * price
 
-        # 4. compute the sum total accross all (both) venues and store
-        # we only store if we have:
-        #   - token tickers (even if bid is zero)
-        #   - USDC balances on both venues (even if amount is zero)
-        #   - token balances on both venues (even if amount is zero)
+        # 5. Calculate total portfolio value and save to database
+        # Only save if we have complete data from both venues to avoid misleading downward spikes
+        has_complete_data = (
+            len(base_asset_holdings) == 2 and
+            len(quote_asset_holdings) == 2 and
+            len(base_asset_tickers) == 2 and
+            len(base_asset_value_in_usdc) == 2
+        )
 
-        # In case there is no ticker bid, no base asset holding, or no quote asset holding on one of the two venues
-        # i.e. due to missed message or any other reason, we will get a downward spike in our signal
-
-        # This can be simplified. We could exit early, however, we do need to set the flags at the end of this method body!
-        quote_asset_denominated_value_available = len(quote_asset_denominated_value) == 2
-        if base_asset_balances_available and quote_asset_balances_available and base_asset_tickers_available and quote_asset_denominated_value_available:
-            total_usd = sum(quote_asset_holdings.values()) + sum(quote_asset_denominated_value.values())
+        if has_complete_data:
+            total_usd = sum(quote_asset_holdings.values()) + sum(base_asset_value_in_usdc.values())
             try:
                 self.strategy.portfolio_db.save_snapshot(total_usd=total_usd)
+                self.context.logger.info(f"Saved portfolio snapshot: USD={total_usd:.2f}")
             except Exception:
-                self.context.logger.exception("Error saving portfolio snapshot", exc_info=True)
+                self.context.logger.exception("Error saving portfolio snapshot")
         else:
             self.context.logger.info(
                 f"Not all asset data available (yet):\n"
-                f"Base asset ({strategy_base_asset}) balances: {base_asset_holdings}\n"
-                f"Quote asset ({strategy_quote_asset}) balances: {quote_asset_holdings}\n"
-                f"Base asset tickers: {base_asset_tickers}\n"
-                f"Total {strategy_quote_asset} denominated value: {quote_asset_denominated_value}"
+                f"  Base asset ({strategy_base_asset}) balances: {base_asset_holdings}\n"
+                f"  Quote asset ({strategy_quote_asset}) balances: {quote_asset_holdings}\n"
+                f"  Base asset tickers: {base_asset_tickers}\n"
+                f"  Base asset value in {strategy_quote_asset}: {base_asset_value_in_usdc}"
             )
 
         self._is_done = True
