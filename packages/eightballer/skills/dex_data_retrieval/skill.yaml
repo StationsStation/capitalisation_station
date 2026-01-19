@@ -25,7 +25,7 @@ fingerprint:
   tests/test_rounds.py: bafybeia56ve3tio7nqqzfwsduy342aeio5r7j24tjxf6tfn2zkspwx4tnm
 fingerprint_ignore_patterns: []
 connections:
-- eightballer/dcxt:0.1.0:bafybeid4ek6nb43ktregxgzdcjiayijkvidyt6d3pycspzdpeung75k7ye
+- eightballer/dcxt:0.1.0:bafybeihngi6fnkggmmejlcc4ijbfxpzwdooac6qtqpbq73ciy7qxvm5mju
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
@@ -34,7 +34,7 @@ protocols:
 - eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
 - eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
 skills:
-- eightballer/abstract_round_abci:0.1.0:bafybeie5eapbfulhih7tvi4egacsya6xkouyn5jjaqjesw3sctgqjhwy2u
+- eightballer/abstract_round_abci:0.1.0:bafybeifazgkeuphhaiml5v26weiio6qpaa2ax57hnnbwijs5gpxs6gxhna
 behaviours:
   main:
     args: {}

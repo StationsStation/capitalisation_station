@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "capitalisation_station"
-version = "0.1.40"
+version = "0.1.43"
 description = ""
 authors = ["StationsStation"]
 readme = "README.md"
@@ -22,7 +22,6 @@ python = ">=3.10,<3.12"
 cython = "<3.0.0"
 open-aea = { version = "==2.0.6", extras = ["all"] }
 open-aea-ledger-ethereum = "==2.0.6"
-open-aea-ledger-solana= "==2.0.6"
 open-aea-ledger-cosmos= "==2.0.6"
 open-aea-cli-ipfs = "==2.0.6"
 open-aea-test-autonomy = "==0.21.5"
@@ -30,7 +29,7 @@ open-autonomy = "==0.21.5"
 # autonomy-dev = {version = "==0.2.157", extras = ["all"]}
 ccxt = ">=3.1.43"
 numpy = ">=2,<3"
-derive-client = ">=0.3.2"
+derive-client = {path = "third_party/upstream/derive_client"}
 pandas = "2.2.3"
 psycopg2-binary = "==2.9.6"
 sqlalchemy = "==1.4.45"
@@ -68,8 +67,9 @@ typing-extensions = ">=3.10.0.2"
 derive-action-signing = {path = "third_party/upstream/v2-action-signing-python"}
 pymultihash = "0.8.2"
 returns = "^0.26.0"
-autonomy-dev = {version = "0.2.160", extras = ["all"]}
+autonomy-dev = {version = "0.2.161", extras = ["all"]}
 open-multicaller = "0.3.7"
+websockets = "15.0.1"
 
 [tool.poetry.group.dev.dependencies]
 tbump = "^6.11.0"
