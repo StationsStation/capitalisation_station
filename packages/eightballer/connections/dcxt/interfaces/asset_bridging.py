@@ -1,5 +1,6 @@
 """Interface for asset_bridging protocol."""
 
+import asyncio
 from typing import TYPE_CHECKING
 from logging import Logger
 from functools import partial
@@ -170,9 +171,19 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
 
     logger.info(f"Derive tx result: {derive_tx_result}")
 
-    if derive_tx_result.status is not DeriveTxStatus.settled:
+    attempts = 5
+
+    while derive_tx_result.status is not DeriveTxStatus.settled:
         msg = f"Subaccount -> funding transfer failed: {withdraw_result}"
-        raise DeriveTransferFailed(msg)
+        derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(
+            client=client, result=withdraw_result
+        )
+        logger.error(msg)
+        attempts -= 1
+        if attempts <= 0:
+            raise DeriveTransferFailed(msg)
+        await asyncio.sleep(2)
+    logger.info("Subaccount -> funding transfer settled.")
 
     kwargs = {
         "amount": amount,

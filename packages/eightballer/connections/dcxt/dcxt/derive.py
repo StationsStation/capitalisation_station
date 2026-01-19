@@ -221,7 +221,6 @@ class DeriveClient:
             subaccount_id=kwargs["subaccount_id"],
             wallet=kwargs["wallet"],
             env=kwargs["environment"],
-            logger=kwargs["logger"],
         )
         self.logger = kwargs["logger"]
 
