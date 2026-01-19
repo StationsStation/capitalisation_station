@@ -21,7 +21,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
 - eightballer/dcxt:0.1.0:bafybeid4ek6nb43ktregxgzdcjiayijkvidyt6d3pycspzdpeung75k7ye
-- valory/http_client:0.23.0:bafybeifcxgtlp3rcuptxtu7fkipauuxl3mcbawuofe6nnejhnq3mjw2rjq
+- valory/http_client:0.23.0:bafybeiglmlwp73njl6ijmruak5ivpfx7hv6gamap72ygsvd7jmonrdtbkm
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
@@ -29,7 +29,7 @@ protocols:
 - eightballer/orders:0.1.0:bafybeifsi7b6pw5eifxelco7ibxjcegmhxqcyl2t2ckclmwyjdyn7wef5e
 - eightballer/positions:0.1.0:bafybeicqzks7yh2zkwder2wrmt525wovl3yey2q3gcrjmi3xtthanaqhqa
 - eightballer/tickers:0.1.0:bafybeigx2wpxkygmcc5c4stn44wbmjgxfojkutghaptcr2cjh5z4ojlwf4
-- valory/http:1.0.0:bafybeiczj4q3lkuiwhb6vzn7ptxifqgjtnvl7722t7c4eystbuel5cd34i
+- valory/http:1.0.0:bafybeic2kgzaesbi6tio5wohr6sj6lq7zaxa3mxhwza52qmdlm6ai3lmrm
 skills: []
 behaviours:
   eod_reporting:
