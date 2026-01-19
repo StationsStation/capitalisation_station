@@ -55,6 +55,12 @@ jobs:
         run: |
             make lint
 
+      -name: Check Differences
+       run: |
+          set -e
+          git diff --exit-code
+        continue-on-error: false
+
       - name: Tests
         run: |
           set -e
