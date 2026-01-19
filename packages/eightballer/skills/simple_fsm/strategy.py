@@ -41,7 +41,7 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeReq
 from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
-
+from packages.eightballer.skills.simple_fsm.db_models import PortfolioDatabase
 
 TZ = datetime.datetime.now().astimezone().tzinfo
 
@@ -187,8 +187,15 @@ class ArbitrageStrategy(Model):
         self.alert_user = kwargs.pop("alert_user", True)
         self.bridging_enabled = kwargs.pop("bridging_enabled", False)
         self.bridge_status_check_interval = kwargs.pop("bridge_status_check_interval", 30)
+
+        # Initialize database
+        db_config = kwargs.pop("db_config", "sqlite:///../data/agent_data.db")
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
+        # Do this after, because fucking _context doesn't exist yet prior! shenanigans!
+        self.portfolio_db = PortfolioDatabase(db_config)
+        self.context.logger.info("Portfolio database initialized with config: %s", db_config)
+
         self.context.shared_state["state"] = self.state
         self.context.logger.info(
             "ArbitrageStrategy initialized. with cooldown period: %s",
