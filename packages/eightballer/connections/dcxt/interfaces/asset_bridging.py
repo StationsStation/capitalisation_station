@@ -162,10 +162,13 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
         asset_name=request.source_token,
     )
 
+    logger.info(f"Withdraw result: {withdraw_result}")
     # Wait for settlement
     derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(
         client=client, result=withdraw_result
     )
+
+    logger.info(f"Derive tx result: {derive_tx_result}")
 
     if derive_tx_result.status is not DeriveTxStatus.settled:
         msg = f"Subaccount -> funding transfer failed: {withdraw_result}"
