@@ -57,5 +57,20 @@ jobs:
 
       - name: Tests
         run: |
-            make test
+          set -e
+          make test
+        continue-on-error: false
+      
+      - name: Debug on failure
+        if: failure()
+        run: |
+          make hashes 
+          echo "=== git status ==="
+          git status
+      
+          echo "=== git diff ==="
+          git diff
+      
+          echo "=== file hashes ==="
+          git ls-files -z | xargs -0 sha256sum
 
