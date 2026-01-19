@@ -29,6 +29,7 @@ from dataclasses import field, asdict, dataclass
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
+from packages.eightballer.skills.simple_fsm.db_models import PortfolioDatabase
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 from packages.eightballer.protocols.user_interaction.message import (
@@ -41,7 +42,7 @@ from packages.zarathustra.protocols.asset_bridging.custom_types import BridgeReq
 from packages.eightballer.connections.apprise_wrapper.connection import (
     CONNECTION_ID as APPRISE_PUBLIC_ID,
 )
-from packages.eightballer.skills.simple_fsm.db_models import PortfolioDatabase
+
 
 TZ = datetime.datetime.now().astimezone().tzinfo
 
