@@ -17,7 +17,7 @@ fingerprint:
   behaviour_classes/post_trade_round.py: bafybeieakfnqkgp4ih63stvhsdurovrjour2l5n27xj3a4j5l3imp6xhdm
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
   behaviours.py: bafybeiefajf7cyvkhzosanuzvhexbfgonwxuvhsetnypekherlyyduafrm
-  db_models.py: bafybeiad57e622d5j5nuelrtnrtrsnm7r2kzxjexpdzg2u2ivrqinqqtee
+  db_models.py: bafybeicgzyoywqhhmhdcpewncovtrrpf5vmlemo7pja5nh7xd233d63qeu
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
   handlers.py: bafybeigi3r44b4tnesh7vmqc2pnxbvon47rckxvgie2woqh4b2qguzlx4u
