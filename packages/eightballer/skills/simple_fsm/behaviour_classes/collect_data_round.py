@@ -17,6 +17,14 @@ DATA_COLLECTION_TIMEOUT_SECONDS = 10
 DEFAULT_ENCODING = "utf-8"
 
 
+def try_symbol_to_base_and_quote(symbol: str) -> tuple[str, str] | None:
+    """Try to convert a symbol to base and quote assets."""
+    if len(assets := symbol.upper().split("/")) == 2:
+        base_asset, quote_asset = assets
+        return base_asset, quote_asset
+    return None
+
+
 class CollectDataRound(BaseConnectionRound):
     """This class implements the CollectDataRound state."""
 
@@ -189,10 +197,120 @@ class CollectDataRound(BaseConnectionRound):
                 b.dict() for b in bal.last_message.balances.balances
             ]
 
+        self.store_data()
+
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.attempts = 0
         self.context.logger.debug("Data collection complete.")
+
+    def get_base_asset_ticker(
+        self, strategy_base_asset: str, strategy_quote_asset: str
+    ) -> dict[tuple[str, str], TickersMessage.Ticker]:
+        """Get the base asset ticker for both venues."""
+        base_asset_tickers: dict[tuple[str, str], TickersMessage.Ticker] = {}
+        for ledger_id, exchanges in self.strategy.state.prices.items():
+            for exchange_id, tickers in exchanges.items():
+                venue = (ledger_id, exchange_id)
+                for ticker_kwargs in tickers:
+                    ticker = TickersMessage.Ticker(**ticker_kwargs)
+                    base_and_quote = try_symbol_to_base_and_quote(symbol=ticker.symbol)
+                    if base_and_quote is None:
+                        self.context.logger.error(f"Failed to parse ticker symbol: {ticker}")
+                        continue
+                    base_asset, quote_asset = base_and_quote
+                    if base_asset == strategy_base_asset and quote_asset == strategy_quote_asset:
+                        base_asset_tickers[venue] = ticker
+                        break
+                else:
+                    self.context.logger.info(f"No ticker for {strategy_base_asset}/{strategy_quote_asset} on {venue}")
+        return base_asset_tickers
+
+    def get_quote_and_base_holdings(
+        self, strategy_base_asset: str, strategy_quote_asset: str
+    ) -> tuple[dict[tuple[str, str], float], dict[tuple[str, str], float]]:
+        """Get the quote and base asset holdings for both venues."""
+        base_asset_holdings = {}
+        quote_asset_holdings = {}
+        for ledger_id, exchanges in self.strategy.state.portfolio.items():
+            for exchange_id, balances in exchanges.items():
+                venue = (ledger_id, exchange_id)
+                for balance_kwargs in balances:
+                    balance = BalancesMessage.Balance(**balance_kwargs)
+                    asset_id = balance.asset_id
+                    amount = balance.total
+
+                    if asset_id == strategy_base_asset:
+                        base_asset_holdings[venue] = amount
+                    if asset_id == strategy_quote_asset:
+                        quote_asset_holdings[venue] = amount
+        return base_asset_holdings, quote_asset_holdings
+
+    def store_data(self) -> None:
+        """Store the collected data into the database."""
+        strategy_base_asset = self.strategy.strategy_init_kwargs["base_asset"]
+        strategy_quote_asset = self.strategy.strategy_init_kwargs["quote_asset"]  # always USDC
+
+        # NOTE: ideally, we would use the ledger_id and exchange from a config
+        # instead of assuming we have only two such pairs (i.e. ("derive", "derive") and ("base", "cowswap"))
+
+        # 1. Get base and quote asset holdings by venue
+
+        base_asset_holdings, quote_asset_holdings = self.get_quote_and_base_holdings(
+            strategy_base_asset=strategy_base_asset,
+            strategy_quote_asset=strategy_quote_asset,
+        )
+        self.context.logger.debug(f"Base asset holdings: {base_asset_holdings}")
+        self.context.logger.debug(f"Quote asset holdings: {quote_asset_holdings}")
+
+        # 3. Get the base_asset ticker at both venues
+
+        base_asset_tickers = self.get_base_asset_ticker(
+            strategy_base_asset=strategy_base_asset,
+            strategy_quote_asset=strategy_quote_asset,
+        )
+        self.context.logger.debug(f"Base asset tickers: {base_asset_tickers}")
+
+        # 4. Calculate base_asset value in quote_asset (USDC) terms
+        base_asset_value_in_usdc = {}
+        for venue, ticker in base_asset_tickers.items():
+            price = ticker.bid or 0.0
+            if price == 0.0:
+                self.context.logger.warning(f"Cannot determine value of token (no bid price): {ticker}")
+
+            base_amount = base_asset_holdings.get(venue)
+            if base_amount is None:
+                self.context.logger.warning(
+                    f"Did not find holdings of {strategy_base_asset} on {venue} for ticker {ticker}"
+                )
+                continue
+
+            base_asset_value_in_usdc[venue] = base_amount * price
+
+        # 5. Calculate total portfolio value and save to database
+        # Only save if we have complete data from both venues to avoid misleading downward spikes
+        has_complete_data = (
+            len(base_asset_holdings) == 2
+            and len(quote_asset_holdings) == 2
+            and len(base_asset_tickers) == 2
+            and len(base_asset_value_in_usdc) == 2
+        )
+
+        if has_complete_data:
+            total_usd = sum(quote_asset_holdings.values()) + sum(base_asset_value_in_usdc.values())
+            try:
+                self.strategy.portfolio_db.save_snapshot(total_usd=total_usd)
+                self.context.logger.info(f"Saved portfolio snapshot: USD={total_usd:.2f}")
+            except Exception:
+                self.context.logger.exception("Error saving portfolio snapshot")
+        else:
+            self.context.logger.info(
+                f"Not all asset data available (yet):\n"
+                f"  Base asset ({strategy_base_asset}) balances: {base_asset_holdings}\n"
+                f"  Quote asset ({strategy_quote_asset}) balances: {quote_asset_holdings}\n"
+                f"  Base asset tickers: {base_asset_tickers}\n"
+                f"  Base asset value in {strategy_quote_asset}: {base_asset_value_in_usdc}"
+            )
 
     def _validate_orders_msg(self, orders: OrdersMessage) -> bool:
         """Validate the orders message."""

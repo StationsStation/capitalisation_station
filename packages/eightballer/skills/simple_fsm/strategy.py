@@ -29,6 +29,7 @@ from dataclasses import field, asdict, dataclass
 from aea.skills.base import Model
 from aea.configurations.base import PublicId
 
+from packages.eightballer.skills.simple_fsm.db_models import PortfolioDatabase
 from packages.eightballer.protocols.orders.custom_types import Order
 from packages.eightballer.skills.abstract_round_abci.models import FrozenMixin
 from packages.eightballer.protocols.user_interaction.message import (
@@ -187,8 +188,15 @@ class ArbitrageStrategy(Model):
         self.alert_user = kwargs.pop("alert_user", True)
         self.bridging_enabled = kwargs.pop("bridging_enabled", False)
         self.bridge_status_check_interval = kwargs.pop("bridge_status_check_interval", 30)
+
+        # Initialize database
+        db_config = kwargs.pop("db_config", "sqlite:///../data/agent_data.db")
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
+        # Do this after, because fucking _context doesn't exist yet prior! shenanigans!
+        self.portfolio_db = PortfolioDatabase(db_config)
+        self.context.logger.info("Portfolio database initialized with config: %s", db_config)
+
         self.context.shared_state["state"] = self.state
         self.context.logger.info(
             "ArbitrageStrategy initialized. with cooldown period: %s",
