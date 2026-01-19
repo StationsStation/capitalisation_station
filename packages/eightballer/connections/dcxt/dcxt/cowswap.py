@@ -15,19 +15,10 @@ import rich_click as click
 from rich import print
 from aea_ledger_ethereum import Address, EthereumApi, EthereumCrypto
 from cowdao_cowpy.cow.swap import (
-    swap_tokens,
-    CHAIN_TO_EXPLORER,
-    Wei,
     Envs,
     Order as CowOrder,
-    LocalAccount,
-    SigningScheme,
-    CompletedOrder,
-    ChecksumAddress,
-    PreSignSignature,
-    _sign_order,  # noqa: PLC2701
+    swap_tokens,
 )
-from cowdao_cowpy.order_book.api import OrderBookApi
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
@@ -149,7 +140,6 @@ async def get_quote(
             )
         msg = "CoW Swap API is not available"
         raise ExchangeNotAvailable(msg) from err
-
 
 
 class CowSwapClient(BaseErc20Exchange):

@@ -16,15 +16,15 @@ from derive_client.data_types import (
 )
 from derive_client.exceptions import ApiException
 from derive_client.data_types.generated_models import (
-    OrderStatus as DeriveOrderStatus,
     Direction as DeriveOrderSide,
+    OrderStatus as DeriveOrderStatus,
     TimeInForce as DeriveTimeInForce,
     TickerSlimSchema,
     OrderResponseSchema,
     CollateralResponseSchema,
 )
 
-from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, Orders, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderSide, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
@@ -171,14 +171,13 @@ def to_order(api_result: OrderResponseSchema) -> Order:
         filled=float(api_result.filled_amount),
         amount=float(api_result.amount),
         remaining=float(api_result.amount) - float(api_result.filled_amount),
-        price=float(api_result.limit_price)
+        price=float(api_result.limit_price),
     )
 
 
 def from_camelize(name: str) -> str:
     """Convert a camel case name to a snake case name."""
     return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
-
 
 
 class DeriveClient:
