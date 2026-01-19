@@ -15,6 +15,7 @@ import rich_click as click
 from rich import print
 from aea_ledger_ethereum import Address, EthereumApi, EthereumCrypto
 from cowdao_cowpy.cow.swap import (
+    swap_tokens,
     CHAIN_TO_EXPLORER,
     Wei,
     Envs,
@@ -26,6 +27,7 @@ from cowdao_cowpy.cow.swap import (
     PreSignSignature,
     _sign_order,  # noqa: PLC2701
 )
+from cowdao_cowpy.order_book.api import OrderBookApi
 from aea.configurations.base import PublicId
 from cowdao_cowpy.common.chains import Chain as CowChains
 from cowdao_cowpy.common.config import SupportedChainId
@@ -148,65 +150,6 @@ async def get_quote(
         msg = "CoW Swap API is not available"
         raise ExchangeNotAvailable(msg) from err
 
-
-async def swap_tokens(
-    amount: Wei,
-    account: LocalAccount,
-    chain: CowChains,
-    order_book_api: OrderBookApi,
-    sell_token: ChecksumAddress,
-    buy_token: ChecksumAddress,
-    safe_address: ChecksumAddress | None = None,
-    app_data: str = APP_DATA,
-    slippage_tolerance: float = 0.000,
-) -> CompletedOrder:
-    """Swap tokens using the CoW Protocol.
-    `CowContractAddress.VAULT_RELAYER` needs to be approved to spend the sell token before calling this function.
-    """
-    chain_id = SupportedChainId(chain.value[0])
-
-    order_quote_request = OrderQuoteRequest(
-        sellToken=sell_token,
-        buyToken=buy_token,
-        from_=safe_address if safe_address is not None else account._address,  # noqa
-        appData=app_data,
-    )
-    order_side = OrderQuoteSide1(
-        kind=OrderQuoteSideKindSell.sell,
-        sellAmountBeforeFee=TokenAmount(str(amount)),
-    )
-
-    order_quote: OrderQuoteResponse = await order_book_api.post_quote(order_quote_request, order_side)
-    valid_to = order_quote.quote.validTo
-    # we set the expiration to be 1 years from now
-    valid_to += 7 * 24 * 60 * 60
-    order = CowOrder(
-        sell_token=sell_token,
-        buy_token=buy_token,
-        receiver=safe_address if safe_address is not None else account.address,
-        valid_to=valid_to,
-        app_data=app_data,
-        sell_amount=str(amount),  # Since it is a sell order, the sellAmountBeforeFee is the same as the sellAmount.
-        buy_amount=str(int(int(order_quote.quote.buyAmount.root) * (1.0 - slippage_tolerance))),
-        fee_amount="0",  # CoW Swap does not charge fees.
-        kind=OrderQuoteSideKindSell.sell.value,
-        sell_token_balance=CowAsset.ERC20.value,
-        buy_token_balance=CowAsset.ERC20.value,
-    )
-
-    base_url = CHAIN_TO_EXPLORER.get(chain_id, "https://explorer.cow.fi")
-    signature = (
-        PreSignSignature(
-            scheme=SigningScheme.PRESIGN,
-            data=safe_address,
-        )
-        if safe_address is not None
-        else _sign_order(chain, account, order)
-    )
-    order_uid = await post_order(account, safe_address, order, signature, order_book_api)  # noqa
-    order_link = f"{base_url}/orders/{order_uid.root!s}".lower()
-    order_link = order_book_api.get_order_link(order_uid)
-    return CompletedOrder(uid=order_uid, url=order_link)
 
 
 class CowSwapClient(BaseErc20Exchange):
@@ -364,13 +307,13 @@ class CowSwapClient(BaseErc20Exchange):
 
         try:
             raw_order = await swap_tokens(
-                order_book_api=self.order_book_api,
+                amount=amount_int,
+                account=self.account.entity,
+                chain=self.chain,
                 buy_token=buy_token.address,
                 sell_token=sell_token.address,
-                amount=amount_int,
-                chain=self.chain,
-                account=self.account.entity,
                 slippage_tolerance=SLIPPAGE_TOLERANCE,  # we need it to be exact!
+                app_data=APP_DATA,
             )
         except Exception as error:
             await asyncio.sleep(cooldown * attempts)

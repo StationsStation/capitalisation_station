@@ -16,7 +16,7 @@ from derive_client.data_types import (
 )
 from derive_client.exceptions import ApiException
 from derive_client.data_types.generated_models import (
-    Status as DeriveOrderStatus,
+    OrderStatus as DeriveOrderStatus,
     Direction as DeriveOrderSide,
     TimeInForce as DeriveTimeInForce,
     TickerSlimSchema,
@@ -24,7 +24,7 @@ from derive_client.data_types.generated_models import (
     CollateralResponseSchema,
 )
 
-from packages.eightballer.protocols.orders.custom_types import Order, Orders, OrderType, OrderStatus
+from packages.eightballer.protocols.orders.custom_types import Order, OrderSide, Orders, OrderType, OrderStatus
 from packages.eightballer.protocols.markets.custom_types import Market, Markets
 from packages.eightballer.protocols.tickers.custom_types import Ticker, Tickers
 from packages.eightballer.protocols.balances.custom_types import Balance, Balances
@@ -136,20 +136,26 @@ def to_position(api_result):
 
 
 DERIVE_ORDER_STATUS_MAP = {
-    DeriveOrderStatus.open: OrderStatus.OPEN.name,
-    DeriveOrderStatus.filled: OrderStatus.FILLED.name,
-    DeriveOrderStatus.cancelled: OrderStatus.CANCELLED.name,
+    DeriveOrderStatus.open: OrderStatus.OPEN.value,
+    DeriveOrderStatus.filled: OrderStatus.FILLED.value,
+    DeriveOrderStatus.cancelled: OrderStatus.CANCELLED.value,
     # DeriveOrderStatus.REJECTED: OrderStatus.FAILED.name,
-    DeriveOrderStatus.expired: OrderStatus.EXPIRED.name,
+    DeriveOrderStatus.expired: OrderStatus.EXPIRED.value,
 }
 DERIVE_ORDER_TYPE_MAP = {
-    DeriveOrderType.limit: OrderType.LIMIT.name,
-    DeriveOrderType.market: OrderType.MARKET.name,
+    DeriveOrderType.limit: OrderType.LIMIT.value,
+    DeriveOrderType.market: OrderType.MARKET.value,
+}
+
+DERIVE_DIRECTIO_To_SIDE_MAP = {
+    DeriveOrderSide.buy: OrderSide.BUY,
+    DeriveOrderSide.sell: OrderSide.SELL,
 }
 
 
 def to_order(api_result: OrderResponseSchema) -> Order:
     """Convert to an order object."""
+    order_status = DERIVE_ORDER_STATUS_MAP[api_result.order_status]
     return Order(
         id=api_result.order_id,
         exchange_id="derive",
@@ -157,11 +163,15 @@ def to_order(api_result: OrderResponseSchema) -> Order:
         timestamp=api_result.creation_timestamp,
         datetime=datetime.datetime.fromtimestamp(api_result.creation_timestamp / 1000, tz=TZ).isoformat(),
         last_trade_timestamp=api_result.creation_timestamp,
-        status=map_status_to_enum(api_result.order_status),
+        status=order_status,
         symbol=api_result.instrument_name,
-        type=map_order_type_to_enum(api_result.order_type),
+        type=DERIVE_ORDER_TYPE_MAP[api_result.order_type],
         time_in_force=api_result.time_in_force,
-        side=api_result.direction,
+        side=DERIVE_DIRECTIO_To_SIDE_MAP[api_result.direction],
+        filled=float(api_result.filled_amount),
+        amount=float(api_result.amount),
+        remaining=float(api_result.amount) - float(api_result.filled_amount),
+        price=float(api_result.limit_price)
     )
 
 
@@ -169,36 +179,6 @@ def from_camelize(name: str) -> str:
     """Convert a camel case name to a snake case name."""
     return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
 
-
-def map_status_to_enum(status):
-    """Map the status to order protocol status."""
-    mapping = {
-        "open": OrderStatus.OPEN,
-        "new": OrderStatus.OPEN,
-        "Order queued for cancellation": OrderStatus.CANCELLED,
-        "closed": OrderStatus.CLOSED,
-        "cancelled": OrderStatus.CANCELLED,
-        "filled": OrderStatus.FILLED,
-        "partially_filled": OrderStatus.PARTIALLY_FILLED,
-        "failed": OrderStatus.FAILED,
-        "expired": OrderStatus.EXPIRED,
-    }
-    if status not in mapping:
-        msg = f"Unknown status: {status}"
-        raise ValueError(msg)
-    return mapping[status]
-
-
-def map_order_type_to_enum(order_type: str) -> OrderType:
-    """Map the order type to order protocol type."""
-    mapping = {
-        "limit": OrderType.LIMIT,
-        "market": OrderType.MARKET,
-    }
-    if order_type not in mapping:
-        msg = f"Unknown order type: {order_type}"
-        raise ValueError(msg)
-    return mapping[order_type]
 
 
 class DeriveClient:
@@ -387,7 +367,7 @@ class DeriveClient:
 
     def parse_order(self, api_call: dict[str, Any], exchange_id) -> Order:  # noqa: ARG002
         """Create an order from an api call."""
-        return to_order(api_call)
+        return api_call
 
     def get_failed_order_json(self, error, kwargs):
         """Get a failed order json."""
