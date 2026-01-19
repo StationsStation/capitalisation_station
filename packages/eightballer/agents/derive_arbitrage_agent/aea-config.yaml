@@ -51,7 +51,7 @@ protocols:
 skills:
 - eightballer/abstract_round_abci:0.1.0:bafybeifazgkeuphhaiml5v26weiio6qpaa2ax57hnnbwijs5gpxs6gxhna
 - eightballer/prometheus:0.1.0:bafybeifnee635625vabb45qotvzopgkets5dlwk3mwae3lrhr4bqfpuxyy
-- eightballer/simple_fsm:0.1.0:bafybeib3gap63q4hyzjydjzfmnz6xtocj2vxkgekin5tc4k4mtdthxcfeu
+- eightballer/simple_fsm:0.1.0:bafybeic5zgf5tdyo33z3b5gfqzleqctppyjt2yqo5xmmsfitzkdazupaim
 - eightballer/trading_state:0.1.0:bafybeihvzriswvf2oijlnkp25at65uiol763h6t26v3etbgsa2erhbaana
 - valory/abstract_abci:0.1.0:bafybeieactg2rjpeomiqzuu3nbanoxtfdfk5vwil2dqg5ceh6z7kxl7snq
 - zarathustra/derolas_automator_abci_app:0.1.0:bafybeibvwl2utbfarxlbi6d7a6rb75tpirbg74udk5t5vbrwlvqygt4e4a

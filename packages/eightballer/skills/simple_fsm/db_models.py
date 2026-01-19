@@ -34,7 +34,9 @@ class PortfolioDatabase:
             db_path = db_config.replace("sqlite:///", "")
             Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         
-        self.engine = create_engine(db_config)
+        self.engine = create_engine(db_config,
+            connect_args={"check_same_thread": False},
+        )
         Base.metadata.create_all(self.engine)
         self.SessionLocal = sessionmaker(bind=self.engine)
     
