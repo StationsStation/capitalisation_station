@@ -11,8 +11,8 @@ from itertools import starmap
 from derive_client import AsyncHTTPClient as DeriveAsyncClient
 from derive_client.data_types import (
     Currency,
+    AssetType,
     OrderType as DeriveOrderType,
-    InstrumentType,
 )
 from derive_client.exceptions import ApiException
 from derive_client.data_types.generated_models import (
@@ -76,8 +76,8 @@ def to_market(api_result):
         quoteId=api_result["quote_currency"],
         settleId=api_result["quote_currency"],
         type=api_result["instrument_type"],
-        future=api_result["instrument_type"] == InstrumentType.PERP,
-        option=api_result["instrument_type"] == InstrumentType.OPTION,
+        future=api_result["instrument_type"] == AssetType.PERP,
+        option=api_result["instrument_type"] == AssetType.OPTION,
         active=api_result["is_active"],
         taker=api_result["taker_fee_rate"],
         maker=api_result["maker_fee_rate"],
@@ -238,7 +238,7 @@ class DeriveClient:
         if "currency" in params:
             params["currency"] = Currency(params["currency"].upper())
         if "type" in params:
-            params["type"] = InstrumentType(params["type"].lower())
+            params["type"] = AssetType(params["type"].lower())
         result = await self.client.fetch_instruments(**params)
         markets = [to_market(market) for market in result]
         return Markets(
@@ -252,7 +252,7 @@ class DeriveClient:
 
         try:
             data = await self.client.markets.get_tickers(
-                instrument_type=InstrumentType.erc20,
+                instrument_type=AssetType.erc20,
             )
         except Exception as error:
             self.logger.exception(traceback.print_exc())
@@ -275,7 +275,7 @@ class DeriveClient:
         instrument_name = f"{asset_a}/{asset_b}".upper() if not symbol else symbol.upper().replace("/", "-")
         try:
             result = await self.client.markets.get_tickers(
-                instrument_type=InstrumentType.erc20,
+                instrument_type=AssetType.erc20,
                 currency=asset_a,
             )
             return to_ticker(instrument_name, result[instrument_name.replace("/", "-")])

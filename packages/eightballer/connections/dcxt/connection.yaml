@@ -24,7 +24,7 @@ fingerprint:
   dcxt/data/token_list.json: bafybeiex6u545y7hswqo5qlp5q3cwd36suhb6uwridrpajak74vo6ezq34
   dcxt/data/tokens.py: bafybeia23d3bmwxndq4mukdxtckt2npnsflc4iturlpoqzc7r5blvvjkee
   dcxt/defi_exchange.py: bafybeigz2wpqplwuup2hejfhdtlm6oeni7cvxrhhjfmf42semrklh36i4i
-  dcxt/derive.py: bafybeicydy5sh45s2xjgnscznwqplvwzcy3zk3x54kuxqf2q5lep4fz724
+  dcxt/derive.py: bafybeicekpc7gs5yhdrnlmuuxvqymfazhwla77p3razh2uwrsfbligvjym
   dcxt/exceptions.py: bafybeihymrq5zu5z5ybcfavbp73ixrqyfk2bwjr33uexvejl3jb5z7hz7q
   dcxt/nabla.py: bafybeidfto63bu5csieqdnjnzgcos7ntf6u5u6bvpiultipyx6ububsvxq
   dcxt/one_inch.py: bafybeia5m74cehzra6wxy466wmt2tjr3eyea4uhi7b2gcbdkb345kvvssq
