@@ -70,13 +70,17 @@ class PortfolioDatabase:
         finally:
             session.close()
 
-    def get_timeseries(self, column: str, limit: int = 300) -> list[tuple]:
+    def get_timeseries(
+        self,
+        column: str = "total_usd_val",
+        days: int = 7,
+    ) -> list[tuple[datetime.datetime, float]]:
         """Get timeseries data for a specific column.
 
         Args:
         ----
-            column: Column name (total_usd_val, total_eth_val, or total_olas_val)
-            limit: Maximum number of records to return
+            column: Column name (default: total_usd_val)
+            days: Number of days to look back (default: 7)
 
         Returns:
         -------
@@ -85,10 +89,12 @@ class PortfolioDatabase:
         """
         session = self.get_session()
         try:
+            cutoff_date = datetime.datetime.now(tz=datetime.UTC) - datetime.timedelta(days=days)
+
             query = (
                 session.query(PortfolioValue.datetime, getattr(PortfolioValue, column))
-                .order_by(PortfolioValue.datetime.desc())
-                .limit(limit)
+                .filter(PortfolioValue.datetime >= cutoff_date)
+                .order_by(PortfolioValue.datetime.asc())
             )
 
             return [(row[0], row[1]) for row in query.all()]
