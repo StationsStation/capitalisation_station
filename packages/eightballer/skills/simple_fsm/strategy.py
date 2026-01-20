@@ -102,6 +102,7 @@ class AgentState:
     pending_donations: deque[float] = field(default_factory=deque)
     bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
     bridge_requests_in_progress: dict[str, BridgeRequest] = field(default_factory=dict)
+    arbitrage_strategy = None  # Will be set by ArbitrageStrategy
 
     def write_to_file(self):
         """Write the state to files."""
@@ -111,6 +112,13 @@ class AgentState:
 
     def to_json(self) -> dict:
         """Convert the state to JSON."""
+
+        if self.arbitrage_strategy:
+            portfolio_db = self.arbitrage_strategy.portfolio_db
+            datetime_timeseries = portfolio_db.get_timeseries(column="total_usd_val", days=7)
+            portfolio_usd_value_timeseries = [(dt.isoformat(), val) for dt, val in datetime_timeseries]
+        else:
+            portfolio_usd_value_timeseries = []
 
         return json.dumps(
             {
@@ -126,6 +134,7 @@ class AgentState:
                 "current_state": self.current_round,
                 "current_period": self.current_period,
                 "is_healthy": self.is_healthy,
+                "portfolio_usd_value_timeseries": portfolio_usd_value_timeseries,
             }
         )
 
@@ -196,6 +205,7 @@ class ArbitrageStrategy(Model):
         # Do this after, because fucking _context doesn't exist yet prior! shenanigans!
         self.portfolio_db = PortfolioDatabase(db_config)
         self.context.logger.info("Portfolio database initialized with config: %s", db_config)
+        self.state.arbitrage_strategy = self  # back-reference
 
         self.context.shared_state["state"] = self.state
         self.context.logger.info(
