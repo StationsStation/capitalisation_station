@@ -28,12 +28,12 @@ from aea.protocols.base import Message
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategyParams
 from packages.eightballer.skills.trading_state.dialogues import (
     HttpDialogue,
     HttpDialogues,
     DefaultDialogues,
 )
-from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategyParams, TZ
 
 
 class HttpHandler(Handler):
@@ -136,7 +136,7 @@ class HttpHandler(Handler):
                 continue
             try:
                 typed_value = expected_type(value)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 msg = f"Failed to cast arbitrage strategy parameter {key} value {value} to {expected_type}: ignoring"
                 self.context.logger.warning(msg)
                 continue

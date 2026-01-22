@@ -23,8 +23,8 @@ import sys
 import pathlib
 import importlib
 from typing import TYPE_CHECKING, Any
-from dataclasses import replace, fields
 from datetime import datetime, timedelta
+from dataclasses import replace
 
 from aea.skills.behaviours import FSMBehaviour
 from aea.configurations.base import ComponentType
@@ -203,7 +203,8 @@ class CoolDownRound(BaseBehaviour):
             self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
 
-        # Claim ownership: copy the pending request and clear the shared slot so the handler cannot mutate it while we process it.
+        # Claim ownership: copy the pending request and clear the shared slot,
+        # so the handler cannot mutate it while we process it.
         agent_state = self.context.shared_state.get("state")
         if (typed_params := agent_state.arbitrage_strategy_params_update_request) is not None:
             agent_state.arbitrage_strategy_params_update_request = None
@@ -215,6 +216,7 @@ class CoolDownRound(BaseBehaviour):
         self.started = False
 
     def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
+        """Update ArbitrageStrategy parameters."""
         # arbitrage_strategy == packages.eightballer.skills.simple_fsm.strategy.ArbitrageStrategy instance
         # trading_strategy == packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy instance
 

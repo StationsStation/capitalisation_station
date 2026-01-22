@@ -44,6 +44,8 @@ from packages.eightballer.connections.apprise_wrapper.connection import (
 )
 
 
+# ruff: noqa: E501 - Line too long
+
 TZ = datetime.datetime.now().astimezone().tzinfo
 
 
@@ -65,7 +67,10 @@ PRICES_FILE = "prices.json"
 
 UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
 
+
 class ArbitrageStrategyParams(TypedDict):
+    """ArbitrageStrategyParams."""
+
     # As provided by the aea-config strategy_init_kwargs.
     # This largely mirrors packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy, which cannot be imported
 
@@ -203,7 +208,7 @@ class ArbitrageStrategy(Model):
     error_count = 0
 
     # Field is set in IdentifyOpportunityRound.setup to be an instance of packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy
-    # Then, it is updated through an atomic swap in CoolDownRound.update_arbitrage_strategy_params in case 
+    # Then, it is updated through an atomic swap in CoolDownRound.update_arbitrage_strategy_params in case
     # AgentState.arbitrage_strategy_params_update_request has been set to an instance of ArbitrageStrategyParams
     trading_strategy = None
 
