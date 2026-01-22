@@ -223,6 +223,7 @@ class CoolDownRound(BaseBehaviour):
         updated_params = replace(current_params, **typed_params)
         agent_state.arbitrage_strategy.trading_strategy = updated_params
         self.context.logger.info(f"Updated arbitrage strategy parameters from {current_params} to {updated_params}")
+        self.context.logger.info(f"ArbitrageStrategy instance identity: {id(updated_params)}")
 
 
 class SetupRound(BaseConnectionRound):

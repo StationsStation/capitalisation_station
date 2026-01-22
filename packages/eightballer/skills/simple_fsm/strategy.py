@@ -127,11 +127,12 @@ class AgentState:
         """Convert the state to JSON."""
 
         if self.arbitrage_strategy:
-            # stipping off any paramters not in ArbitrageStrategyParams, such as unaffordable: list[ArbitrageOpportunity]
+            # stipping off any parameters not in ArbitrageStrategyParams, such as unaffordable: list[ArbitrageOpportunity]
             # which should not exist on this datastructure anyway, as it is not a parameter, but a variable that is part of the state!
-            # I highly recommend learning about systems and control theory for an better understanding of this matter
+            # I recommend learning about systems and control theory for an better understanding of this distinction
             type_hints = get_type_hints(ArbitrageStrategyParams)
             trading_strategy = self.arbitrage_strategy.trading_strategy
+            self.arbitrage_strategy.context.logger.info(f"ArbitrageStrategy instance identity: {id(trading_strategy)}")
             strategy_params = {k: v for k, v in asdict(trading_strategy).items() if k in type_hints}
             portfolio_db = self.arbitrage_strategy.portfolio_db
             datetime_timeseries = portfolio_db.get_timeseries(column="total_usd_val", days=7)
