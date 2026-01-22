@@ -22,7 +22,7 @@ import json
 import pathlib
 import datetime
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 from collections import deque
 from dataclasses import field, asdict, dataclass
 
@@ -65,6 +65,16 @@ PRICES_FILE = "prices.json"
 
 UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
 
+class ArbitrageStrategyParams(TypedDict):
+    # As provided by the aea-config strategy_init_kwargs.
+    # This largely mirrors packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy, which cannot be imported
+
+    base_asset: str
+    quote_asset: str
+    order_size: float
+    min_profit: float
+    max_open_orders: int
+
 
 @dataclass
 class ArbitrageOpportunity:
@@ -103,6 +113,9 @@ class AgentState:
     bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
     bridge_requests_in_progress: dict[str, BridgeRequest] = field(default_factory=dict)
     arbitrage_strategy = None  # Will be set by ArbitrageStrategy
+    # If such exists, we will update the state in the CoolDownRound, as to not conflict with any ongoing trade execution
+    # Ideally this structure would be locked, however, python does not have an enforced ownership model
+    latest_arbitrage_strategy_params_update_request: ArbitrageStrategyParams | None = None
 
     def write_to_file(self):
         """Write the state to files."""
@@ -193,7 +206,7 @@ class ArbitrageStrategy(Model):
         self.cexs = kwargs.pop("cexs", [])
         self.dexs = kwargs.pop("dexs", [])
         self.ledgers = kwargs.pop("ledgers", [])
-        self.strategy_init_kwargs = kwargs.pop("strategy_init_kwargs", {})
+        self.strategy_init_kwargs = ArbitrageStrategyParams(**kwargs.pop("strategy_init_kwargs", {}))
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)

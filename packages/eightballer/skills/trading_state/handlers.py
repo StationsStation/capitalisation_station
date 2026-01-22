@@ -19,6 +19,8 @@
 
 """This module contains the handler for the 'metrics' skill."""
 
+import json
+import datetime
 from typing import cast
 
 from aea.skills.base import Handler
@@ -31,6 +33,7 @@ from packages.eightballer.skills.trading_state.dialogues import (
     HttpDialogues,
     DefaultDialogues,
 )
+from packages.eightballer.skills.simple_fsm.strategy import ArbitrageStrategyParams, TZ
 
 
 class HttpHandler(Handler):
@@ -78,6 +81,11 @@ class HttpHandler(Handler):
         )
         if http_msg.method == "get" and http_msg.url.find("/metrics"):
             self._handle_get(http_msg, http_dialogue)
+        # While we ideally should hit a differently named endpoint here,
+        # or, alternatively, use a more structured conversational protocol beyond the generic HTTP
+        # For now we use this metrics endpoint to update the agent trading strategy state
+        elif http_msg.method == "post" and http_msg.url.find("/metrics"):
+            self._handle_post(http_msg, http_dialogue)
         else:
             self._handle_invalid(http_msg, http_dialogue)
 
@@ -113,6 +121,27 @@ class HttpHandler(Handler):
 
     def _handle_post(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """Handle a Http request of verb POST."""
+
+        # We dump the incoming POST request to update the trading strategy parameters in the shared state,
+        # which we will subsquently pick up in the CoolDownRound to update the trading strategy state,
+        # as to not  cause a conflict by updating this state mid-flight during trade execution.
+
+        received_params = json.loads(http_msg.body)
+        agent_state = self.context.shared_state.get("state")
+        current_params = agent_state.arbitrage_strategy.strategy_init_kwargs
+        updated_params = {**current_params, **received_params}
+        params_update_request = ArbitrageStrategyParams(**updated_params)
+        agent_state.latest_arbitrage_strategy_params_update_request = params_update_request
+
+        response_payload = {
+            "status": "accepted",
+            "message": "Parameters recorded and scheduled for application during CoolDownRound.",
+            "applied": False,
+            "received_at": datetime.datetime.now(tz=TZ).isoformat(),
+            "params": received_params,
+        }
+        body = json.dumps(response_payload).encode("utf-8")
+
         http_response = http_dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
             target_message=http_msg,
@@ -120,8 +149,9 @@ class HttpHandler(Handler):
             status_code=200,
             status_text="Success",
             headers=http_msg.headers,
-            body=http_msg.body,
+            body=body,
         )
+
         self.context.logger.info(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
 
