@@ -196,6 +196,9 @@ class ArbitrageStrategy(Model):
     state: AgentState = None
     error_count = 0
 
+    # Field is set in IdentifyOpportunityRound.setup to be an instance of packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy
+    trading_strategy: "ArbitrageStrategy" | None = None
+
     entry_order: Order = None
     exit_order: Order = None
     donate: bool = True
