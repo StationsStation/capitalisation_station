@@ -114,11 +114,13 @@ class AgentState:
         """Convert the state to JSON."""
 
         if self.arbitrage_strategy:
+            strategy_params = self.arbitrage_strategy.strategy_init_kwargs
             portfolio_db = self.arbitrage_strategy.portfolio_db
             datetime_timeseries = portfolio_db.get_timeseries(column="total_usd_val", days=7)
             portfolio_usd_value_timeseries = [(dt.isoformat(), val) for dt, val in datetime_timeseries]
         else:
             portfolio_usd_value_timeseries = []
+            strategy_params = {}
 
         return json.dumps(
             {
@@ -135,6 +137,7 @@ class AgentState:
                 "current_period": self.current_period,
                 "is_healthy": self.is_healthy,
                 "portfolio_usd_value_timeseries": portfolio_usd_value_timeseries,
+                "strategy_params": strategy_params,
             }
         )
 
