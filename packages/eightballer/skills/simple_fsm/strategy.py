@@ -115,7 +115,7 @@ class AgentState:
     arbitrage_strategy = None  # Will be set by ArbitrageStrategy
     # If such exists, we will update the state in the CoolDownRound, as to not conflict with any ongoing trade execution
     # Ideally this structure would be locked, however, python does not have an enforced ownership model
-    latest_arbitrage_strategy_params_update_request: ArbitrageStrategyParams | None = None
+    arbitrage_strategy_params_update_request: ArbitrageStrategyParams | None = None
 
     def write_to_file(self):
         """Write the state to files."""

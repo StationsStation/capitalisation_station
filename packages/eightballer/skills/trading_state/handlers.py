@@ -21,7 +21,7 @@
 
 import json
 import datetime
-from typing import cast
+from typing import cast, get_type_hints
 
 from aea.skills.base import Handler
 from aea.protocols.base import Message
@@ -128,17 +128,28 @@ class HttpHandler(Handler):
 
         received_params = json.loads(http_msg.body)
         agent_state = self.context.shared_state.get("state")
-        current_params = agent_state.arbitrage_strategy.strategy_init_kwargs
-        updated_params = {**current_params, **received_params}
-        params_update_request = ArbitrageStrategyParams(**updated_params)
-        agent_state.latest_arbitrage_strategy_params_update_request = params_update_request
+        type_hints = get_type_hints(ArbitrageStrategyParams)
+        typed_params = {}
+        for key, value in received_params.items():
+            if (expected_type := type_hints.get(key)) is None:
+                self.context.logger.warning(f"Unexpected arbitrage strategy parameter: {key}: ignoring")
+                continue
+            try:
+                typed_value = expected_type(value)
+            except Exception:
+                msg = f"Failed to cast arbitrage strategy parameter {key} value {value} to {expected_type}: ignoring"
+                self.context.logger.warning(msg)
+                continue
+            typed_params[key] = typed_value
+
+        agent_state.arbitrage_strategy_params_update_request = typed_params
 
         response_payload = {
             "status": "accepted",
             "message": "Parameters recorded and scheduled for application during CoolDownRound.",
             "applied": False,
             "received_at": datetime.datetime.now(tz=TZ).isoformat(),
-            "params": received_params,
+            "params": typed_params,
         }
         body = json.dumps(response_payload).encode("utf-8")
 
