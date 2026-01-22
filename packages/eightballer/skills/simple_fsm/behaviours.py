@@ -24,13 +24,14 @@ import pathlib
 import importlib
 from typing import TYPE_CHECKING, Any
 from datetime import datetime, timedelta
+from dataclasses import replace
 
 from aea.skills.behaviours import FSMBehaviour
 from aea.configurations.base import ComponentType
 from aea.configurations.loader import load_component_configuration
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
-from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategy
+from packages.eightballer.skills.simple_fsm.strategy import TZ, AgentState, ArbitrageStrategy, ArbitrageStrategyParams
 from packages.eightballer.skills.simple_fsm.behaviour_classes.base import BaseBehaviour, BaseConnectionRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.set_approvals import SetApprovalsRound
 from packages.eightballer.skills.simple_fsm.behaviour_classes.post_trade_round import PostTradeRound
@@ -152,12 +153,16 @@ class IdentifyOpportunityRound(BaseBehaviour):
                 raise ValueError(msg)
 
         validate()
-        strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
-        strategy_path = str(component_dir / "strategy").replace("/", ".")
-        module = importlib.import_module(strategy_path)
-        strategy_class = getattr(module, strategy_class_name)
-        self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
-        self.context.logger.debug("Strategy Kwargs:", extra=self.strategy.strategy_init_kwargs)
+
+        # Only execute on the first round,
+        # otherwise we overwrite parameters updates performed in the CoolDownRound
+        if self.strategy.trading_strategy is None:
+            strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
+            strategy_path = str(component_dir / "strategy").replace("/", ".")
+            module = importlib.import_module(strategy_path)
+            strategy_class = getattr(module, strategy_class_name)
+            self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
+            self.context.logger.debug("Strategy Init Kwargs:", extra=self.strategy.strategy_init_kwargs)
 
     @property
     def strategy(self) -> ArbitrageStrategy:
@@ -201,10 +206,29 @@ class CoolDownRound(BaseBehaviour):
             remaining = (self.sleep_until - now).total_seconds()
             self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
+
+        # Claim ownership: copy the pending request and clear the shared slot,
+        # so the handler cannot mutate it while we process it.
+        agent_state = self.context.shared_state.get("state")
+        if (typed_params := agent_state.arbitrage_strategy_params_update_request) is not None:
+            agent_state.arbitrage_strategy_params_update_request = None
+            self.update_arbitrage_strategy_params(agent_state, typed_params)
+
         self.context.logger.info(f"Cool down finished. at {now}")
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
+
+    def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
+        """Update ArbitrageStrategy parameters."""
+        # arbitrage_strategy == packages.eightballer.skills.simple_fsm.strategy.ArbitrageStrategy instance
+        # trading_strategy == packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy instance
+
+        # Atomic swap, no partial state during failure, immutability-like safety
+        current_params = agent_state.arbitrage_strategy.trading_strategy
+        updated_params = replace(current_params, **typed_params)
+        agent_state.arbitrage_strategy.trading_strategy = updated_params
+        self.context.logger.info(f"Updated arbitrage strategy parameters from {current_params} to {updated_params}")
 
 
 class SetupRound(BaseConnectionRound):

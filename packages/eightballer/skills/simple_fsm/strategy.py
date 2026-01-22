@@ -22,7 +22,7 @@ import json
 import pathlib
 import datetime
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, TypedDict, cast, get_type_hints
 from collections import deque
 from dataclasses import field, asdict, dataclass
 
@@ -44,6 +44,8 @@ from packages.eightballer.connections.apprise_wrapper.connection import (
 )
 
 
+# ruff: noqa: E501 - Line too long
+
 TZ = datetime.datetime.now().astimezone().tzinfo
 
 
@@ -64,6 +66,19 @@ ORDERS_FILE = "orders.json"
 PRICES_FILE = "prices.json"
 
 UNHEALTHY_TRANSITION_THRESHOLD = 600  # 10 minutes
+
+
+class ArbitrageStrategyParams(TypedDict):
+    """ArbitrageStrategyParams."""
+
+    # As provided by the aea-config strategy_init_kwargs.
+    # This largely mirrors packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy, which cannot be imported
+
+    base_asset: str
+    quote_asset: str
+    order_size: float
+    min_profit: float
+    max_open_orders: int
 
 
 @dataclass
@@ -103,6 +118,9 @@ class AgentState:
     bridge_requests: deque[BridgeRequest] = field(default_factory=deque)
     bridge_requests_in_progress: dict[str, BridgeRequest] = field(default_factory=dict)
     arbitrage_strategy = None  # Will be set by ArbitrageStrategy
+    # If such exists, we will update the state in the CoolDownRound, as to not conflict with any ongoing trade execution
+    # Ideally this structure would be locked, however, python does not have an enforced ownership model
+    arbitrage_strategy_params_update_request: ArbitrageStrategyParams | None = None
 
     def write_to_file(self):
         """Write the state to files."""
@@ -114,11 +132,18 @@ class AgentState:
         """Convert the state to JSON."""
 
         if self.arbitrage_strategy:
+            # stipping off any parameters not in ArbitrageStrategyParams, such as unaffordable: list[ArbitrageOpportunity]
+            # which should not exist on this datastructure anyway, as it is not a parameter, but a variable that is part of the state!
+            # I recommend learning about systems and control theory for an better understanding of this distinction
+            type_hints = get_type_hints(ArbitrageStrategyParams)
+            trading_strategy = self.arbitrage_strategy.trading_strategy
+            strategy_params = {k: v for k, v in asdict(trading_strategy).items() if k in type_hints}
             portfolio_db = self.arbitrage_strategy.portfolio_db
             datetime_timeseries = portfolio_db.get_timeseries(column="total_usd_val", days=7)
             portfolio_usd_value_timeseries = [(dt.isoformat(), val) for dt, val in datetime_timeseries]
         else:
             portfolio_usd_value_timeseries = []
+            strategy_params = {}
 
         return json.dumps(
             {
@@ -135,6 +160,7 @@ class AgentState:
                 "current_period": self.current_period,
                 "is_healthy": self.is_healthy,
                 "portfolio_usd_value_timeseries": portfolio_usd_value_timeseries,
+                "strategy_params": strategy_params,
             }
         )
 
@@ -180,6 +206,11 @@ class ArbitrageStrategy(Model):
     state: AgentState = None
     error_count = 0
 
+    # Field is set in IdentifyOpportunityRound.setup to be an instance of packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy
+    # Then, it is updated through an atomic swap in CoolDownRound.update_arbitrage_strategy_params in case
+    # AgentState.arbitrage_strategy_params_update_request has been set to an instance of ArbitrageStrategyParams
+    trading_strategy = None
+
     entry_order: Order = None
     exit_order: Order = None
     donate: bool = True
@@ -190,7 +221,7 @@ class ArbitrageStrategy(Model):
         self.cexs = kwargs.pop("cexs", [])
         self.dexs = kwargs.pop("dexs", [])
         self.ledgers = kwargs.pop("ledgers", [])
-        self.strategy_init_kwargs = kwargs.pop("strategy_init_kwargs", {})
+        self.strategy_init_kwargs = ArbitrageStrategyParams(**kwargs.pop("strategy_init_kwargs", {}))
         self.strategy_public_id = PublicId.from_str(kwargs.pop("strategy_public_id"))
         self.fetch_all_tickers = kwargs.pop("fetch_all_tickers", False)
         self.cooldown_period = kwargs.pop("cooldown_period", DEFAULT_COOL_DOWN_PERIOD)
