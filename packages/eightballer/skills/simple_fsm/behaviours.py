@@ -153,12 +153,16 @@ class IdentifyOpportunityRound(BaseBehaviour):
                 raise ValueError(msg)
 
         validate()
-        strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
-        strategy_path = str(component_dir / "strategy").replace("/", ".")
-        module = importlib.import_module(strategy_path)
-        strategy_class = getattr(module, strategy_class_name)
-        self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
-        self.context.logger.debug("Strategy Kwargs:", extra=self.strategy.strategy_init_kwargs)
+
+        # Only execute on the first round,
+        # otherwise we overwrite parameters updates performed in the CoolDownRound
+        if self.strategy.trading_strategy is None:
+            strategy_class_name: str = self.custom_config.kwargs["strategy_class"]
+            strategy_path = str(component_dir / "strategy").replace("/", ".")
+            module = importlib.import_module(strategy_path)
+            strategy_class = getattr(module, strategy_class_name)
+            self.strategy.trading_strategy = strategy_class(**self.strategy.strategy_init_kwargs)
+            self.context.logger.debug("Strategy Init Kwargs:", extra=self.strategy.strategy_init_kwargs)
 
     @property
     def strategy(self) -> ArbitrageStrategy:
@@ -225,7 +229,6 @@ class CoolDownRound(BaseBehaviour):
         updated_params = replace(current_params, **typed_params)
         agent_state.arbitrage_strategy.trading_strategy = updated_params
         self.context.logger.info(f"Updated arbitrage strategy parameters from {current_params} to {updated_params}")
-        self.context.logger.info(f"ArbitrageStrategy instance identity: {id(updated_params)}")
 
 
 class SetupRound(BaseConnectionRound):
