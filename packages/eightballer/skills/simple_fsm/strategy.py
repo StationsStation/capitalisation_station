@@ -22,7 +22,7 @@ import json
 import pathlib
 import datetime
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, Any, TypedDict, cast, get_type_hints
 from collections import deque
 from dataclasses import field, asdict, dataclass
 
@@ -127,7 +127,12 @@ class AgentState:
         """Convert the state to JSON."""
 
         if self.arbitrage_strategy:
-            strategy_params = self.arbitrage_strategy.strategy_init_kwargs
+            # stipping off any paramters not in ArbitrageStrategyParams, such as unaffordable: list[ArbitrageOpportunity]
+            # which should not exist on this datastructure anyway, as it is not a parameter, but a variable that is part of the state!
+            # I highly recommend learning about systems and control theory for an better understanding of this matter
+            type_hints = get_type_hints(ArbitrageStrategyParams)
+            trading_strategy = self.arbitrage_strategy.trading_strategy
+            strategy_params = {k: v for k, v in asdict(trading_strategy).items() if k in type_hints}
             portfolio_db = self.arbitrage_strategy.portfolio_db
             datetime_timeseries = portfolio_db.get_timeseries(column="total_usd_val", days=7)
             portfolio_usd_value_timeseries = [(dt.isoformat(), val) for dt, val in datetime_timeseries]
@@ -197,7 +202,9 @@ class ArbitrageStrategy(Model):
     error_count = 0
 
     # Field is set in IdentifyOpportunityRound.setup to be an instance of packages.eightballer.customs.lbtc_arbitrage.strategy.ArbitrageStrategy
-    trading_strategy: "ArbitrageStrategy" | None = None
+    # Then, it is updated through an atomic swap in CoolDownRound.update_arbitrage_strategy_params in case 
+    # AgentState.arbitrage_strategy_params_update_request has been set to an instance of ArbitrageStrategyParams
+    trading_strategy = None
 
     entry_order: Order = None
     exit_order: Order = None
