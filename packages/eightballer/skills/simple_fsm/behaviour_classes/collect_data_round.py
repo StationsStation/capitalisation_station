@@ -216,7 +216,7 @@ class CollectDataRound(BaseConnectionRound):
                 venue = (ledger_id, exchange_id)
                 for ticker_kwargs in tickers:
                     ticker = TickersMessage.Ticker(**ticker_kwargs)
-                    symbol = ticker.symbol.upper() # for case-incensitive matching (i.e. weETH vs WEETH)
+                    symbol = ticker.symbol.upper()  # for case-incensitive matching (i.e. weETH vs WEETH)
                     base_and_quote = try_symbol_to_base_and_quote(symbol=symbol)
                     if base_and_quote is None:
                         self.context.logger.error(f"Failed to parse ticker symbol: {ticker}")
