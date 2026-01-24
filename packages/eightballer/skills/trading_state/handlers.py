@@ -79,12 +79,12 @@ class HttpHandler(Handler):
         self.context.logger.debug(
             f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body}"
         )
-        if http_msg.method == "get" and http_msg.url.find("/metrics"):
+        if http_msg.method == "get" and http_msg.url.endswith("/metrics"):
             self._handle_get(http_msg, http_dialogue)
         # While we ideally should hit a differently named endpoint here,
         # or, alternatively, use a more structured conversational protocol beyond the generic HTTP
         # For now we use this metrics endpoint to update the agent trading strategy state
-        elif http_msg.method == "post" and http_msg.url.find("/metrics"):
+        elif http_msg.method == "post" and http_msg.url.endswith("/metrics"):
             self._handle_post(http_msg, http_dialogue)
         else:
             self._handle_invalid(http_msg, http_dialogue)
