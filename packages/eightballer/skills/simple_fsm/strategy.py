@@ -233,7 +233,7 @@ class ArbitrageStrategy(Model):
         db_config = kwargs.pop("db_config", "sqlite:///../data/agent_data.db")
         self.state = self.build_initial_state()
         super().__init__(**kwargs)
-        # Do this after, because fucking _context doesn't exist yet prior! shenanigans!
+        # Do this after, because _context doesn't exist yet prior! shenanigans!
         self.portfolio_db = PortfolioDatabase(db_config)
         self.context.logger.info("Portfolio database initialized with config: %s", db_config)
         self.state.arbitrage_strategy = self  # back-reference
