@@ -205,7 +205,9 @@ class CollectDataRound(BaseConnectionRound):
         self.context.logger.debug("Data collection complete.")
 
     def get_base_asset_ticker(
-        self, strategy_base_asset: str, strategy_quote_asset: str
+        self,
+        strategy_base_asset: str,
+        strategy_quote_asset: str,
     ) -> dict[tuple[str, str], TickersMessage.Ticker]:
         """Get the base asset ticker for both venues."""
         base_asset_tickers: dict[tuple[str, str], TickersMessage.Ticker] = {}
@@ -214,7 +216,8 @@ class CollectDataRound(BaseConnectionRound):
                 venue = (ledger_id, exchange_id)
                 for ticker_kwargs in tickers:
                     ticker = TickersMessage.Ticker(**ticker_kwargs)
-                    base_and_quote = try_symbol_to_base_and_quote(symbol=ticker.symbol)
+                    symbol = ticker.symbol.upper() # for case-incensitive matching (i.e. weETH vs WEETH)
+                    base_and_quote = try_symbol_to_base_and_quote(symbol=symbol)
                     if base_and_quote is None:
                         self.context.logger.error(f"Failed to parse ticker symbol: {ticker}")
                         continue
