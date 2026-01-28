@@ -110,6 +110,12 @@ class AgentState:
     new_orders: list[Order]
     failed_orders: list[Order]
     submitted_orders: list[Order]
+
+    # Fallback trigger auction contract configuration
+    min_runtime_seconds: float
+    donation_interval_hours: int
+
+    # Configuration with default arguments
     current_round: str = None
     current_period: int = 0
     last_transition_time: datetime.datetime = None
@@ -124,9 +130,6 @@ class AgentState:
 
     agent_started_at: datetime.datetime | None = None  # set on first iteration in SetupRound.act
     last_donation_request_sent_at: datetime.datetime | None = None
-
-    min_runtime_seconds: float
-    donation_interval_hours: int
 
     def write_to_file(self):
         """Write the state to files."""
