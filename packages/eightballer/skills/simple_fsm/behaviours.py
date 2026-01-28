@@ -23,7 +23,7 @@ import sys
 import pathlib
 import importlib
 from typing import TYPE_CHECKING, Any
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from dataclasses import replace
 
 from aea.skills.behaviours import FSMBehaviour
@@ -245,6 +245,9 @@ class SetupRound(BaseConnectionRound):
             self.context.logger.info("SetupRound: First run")
             self._event = ArbitrageabciappEvents.SET_APPROVALS
             self.is_first_run = False
+
+            agent_state = self.context.shared_state.get("state")
+            agent_state.agent_started_at = datetime.now(tz=UTC)
 
         self.context.behaviours.main.setup()
         self._is_done = True
