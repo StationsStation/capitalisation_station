@@ -23,7 +23,7 @@ import sys
 import pathlib
 import importlib
 from typing import TYPE_CHECKING, Any
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from dataclasses import replace
 
 from aea.skills.behaviours import FSMBehaviour
@@ -207,9 +207,18 @@ class CoolDownRound(BaseBehaviour):
             self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
 
+        agent_state = self.context.shared_state.get("state")
+
+        # This message/signal is picked up in the Derolas automator ABCI app skill
+        if self.should_trigger_fallback_donation(agent_state):
+            value_captured = 0.0  # only presence in the queue is checked, value itself is irrelevant
+            agent_state.pending_donations.append(value_captured)
+            self.context.logger.info("Scheduled fallback donation to the auction contract for daily activity checking.")
+            # Set timestamp before queue processing to prevent duplicate fallback donations across concurrent skills
+            agent_state.last_donation_request_sent_at = datetime.now(tz=UTC)
+
         # Claim ownership: copy the pending request and clear the shared slot,
         # so the handler cannot mutate it while we process it.
-        agent_state = self.context.shared_state.get("state")
         if (typed_params := agent_state.arbitrage_strategy_params_update_request) is not None:
             agent_state.arbitrage_strategy_params_update_request = None
             self.update_arbitrage_strategy_params(agent_state, typed_params)
@@ -218,6 +227,23 @@ class CoolDownRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
+
+    def should_trigger_fallback_donation(self, agent_state: AgentState) -> bool:
+        """Trigger to determine if a donation to the auction contract is required for daily activity checking."""
+
+        now = datetime.now(tz=UTC)
+
+        # Never donated this session
+        if agent_state.last_donation_request_sent_at is None:
+            min_runtime = timedelta(agent_state.min_runtime_seconds)
+            return (now - agent_state.agent_started_at) >= min_runtime
+
+        # Last donation request was >DONATION_INTERVAL_HOURS ago
+        time_since_last_request = now - agent_state.last_donation_request_sent_at
+        # Convert hours to timedelta (handles fractional hours cleanly)
+        # That is: timedelta(hours=23.5) == timedelta(hours=23, minutes=30)
+        donation_interval = timedelta(hours=agent_state.donation_interval_hours)
+        return time_since_last_request >= donation_interval
 
     def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
         """Update ArbitrageStrategy parameters."""
@@ -245,6 +271,9 @@ class SetupRound(BaseConnectionRound):
             self.context.logger.info("SetupRound: First run")
             self._event = ArbitrageabciappEvents.SET_APPROVALS
             self.is_first_run = False
+
+            agent_state = self.context.shared_state.get("state")
+            agent_state.agent_started_at = datetime.now(tz=UTC)
 
         self.context.behaviours.main.setup()
         self._is_done = True
