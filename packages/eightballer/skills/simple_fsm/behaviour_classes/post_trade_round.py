@@ -1,6 +1,6 @@
 """Post trade round behaviour."""
 
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
