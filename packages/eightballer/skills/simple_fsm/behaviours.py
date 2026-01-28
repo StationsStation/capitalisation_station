@@ -214,6 +214,8 @@ class CoolDownRound(BaseBehaviour):
             value_captured = 0.0  # only presence in the queue is checked, value itself is irrelevant
             agent_state.pending_donations.append(value_captured)
             self.context.logger.info("Scheduled fallback donation to the auction contract for daily activity checking.")
+            # Set timestamp before queue processing to prevent duplicate fallback donations across concurrent skills
+            agent_state.last_donation_request_sent_at = datetime.now(tz=UTC)
 
         # Claim ownership: copy the pending request and clear the shared slot,
         # so the handler cannot mutate it while we process it.
