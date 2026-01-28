@@ -79,6 +79,8 @@ models:
       bridging_enabled: false
       alert_user: true
       db_config: 'sqlite+pysqlite:///:memory:'
+      min_runtime_seconds: 300
+      donation_interval_hours: 23.5
     class_name: ArbitrageStrategy
   balances_dialogues:
     args: {}
