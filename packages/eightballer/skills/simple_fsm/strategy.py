@@ -272,7 +272,7 @@ class ArbitrageStrategy(Model):
         *,  # enforce explicitness, zen 🙏
         min_runtime_seconds: int,
         donation_interval_hours: float,
-    ) -> dict:
+    ) -> AgentState:
         """Build the portfolio."""
         data = {CEX_LEDGER_ID: {cex: {} for cex in self.cexs}}
         for exchange_id, ledgers in self.dexs.items():
