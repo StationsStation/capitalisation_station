@@ -125,6 +125,9 @@ class AgentState:
     agent_started_at: datetime.datetime | None = None  # set on first iteration in SetupRound.act
     last_donation_request_sent_at: datetime.datetime | None = None
 
+    min_runtime_seconds: float
+    donation_interval_hours: int
+
     def write_to_file(self):
         """Write the state to files."""
         pathlib.Path(PORTFOLIO_FILE).write_text(json.dumps(self.portfolio, indent=4), encoding="utf-8")
@@ -234,7 +237,16 @@ class ArbitrageStrategy(Model):
 
         # Initialize database
         db_config = kwargs.pop("db_config", "sqlite:///../data/agent_data.db")
-        self.state = self.build_initial_state()
+
+        # Pop donation config before super().__init__
+        # We provide no defaults here, would be redundant with the skill.yaml
+        # effectively enforcing their existence there, separating data from code!
+        min_runtime_seconds = kwargs.pop("min_runtime_seconds")
+        donation_interval_hours = kwargs.pop("donation_interval_hours")
+        self.state = self.build_initial_state(
+            min_runtime_seconds=min_runtime_seconds,
+            donation_interval_hours=donation_interval_hours,
+        )
         super().__init__(**kwargs)
         # Do this after, because _context doesn't exist yet prior! shenanigans!
         self.portfolio_db = PortfolioDatabase(db_config)
@@ -255,7 +267,12 @@ class ArbitrageStrategy(Model):
             self.strategy_init_kwargs,
         )
 
-    def build_initial_state(self) -> dict:
+    def build_initial_state(
+        self,
+        *,  # enforce explicitness, zen 🙏
+        min_runtime_seconds: int,
+        donation_interval_hours: float,
+    ) -> dict:
         """Build the portfolio."""
         data = {CEX_LEDGER_ID: {cex: {} for cex in self.cexs}}
         for exchange_id, ledgers in self.dexs.items():
@@ -273,6 +290,8 @@ class ArbitrageStrategy(Model):
             failed_orders=[],
             submitted_orders=[],
             unaffordable_opportunity=[],
+            min_runtime_seconds=min_runtime_seconds,
+            donation_interval_hours=donation_interval_hours,
         )
 
     def send_notification_to_user(self, title: str, msg: str, attach: str | None = None) -> None:
