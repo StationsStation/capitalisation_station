@@ -207,9 +207,12 @@ class CoolDownRound(BaseBehaviour):
             self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
 
+        agent_state = self.context.shared_state.get("state")
+        if self.should_trigger_fallback_donation(agent_state):
+            ...
+
         # Claim ownership: copy the pending request and clear the shared slot,
         # so the handler cannot mutate it while we process it.
-        agent_state = self.context.shared_state.get("state")
         if (typed_params := agent_state.arbitrage_strategy_params_update_request) is not None:
             agent_state.arbitrage_strategy_params_update_request = None
             self.update_arbitrage_strategy_params(agent_state, typed_params)
@@ -218,6 +221,19 @@ class CoolDownRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
+
+    def should_trigger_fallback_donation(self, agent_state: AgentState) -> bool:
+        """Trigger to determine if a donation to the auction contract is required for daily activity checking."""
+
+        now = datetime.now(tz=UTC)
+
+        # Never donated this session
+        if agent_state.last_donation_request_sent_at is None:
+            return (now - agent_state.agent_started_at) >= timedelta(minutes=5)
+
+        # Last donation request was >23.5h ago
+        time_since_last_request = now - agent_state.last_donation_request_sent_at
+        return time_since_last_request >= timedelta(hours=23, minutes=30)
 
     def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
         """Update ArbitrageStrategy parameters."""
