@@ -235,11 +235,15 @@ class CoolDownRound(BaseBehaviour):
 
         # Never donated this session
         if agent_state.last_donation_request_sent_at is None:
-            return (now - agent_state.agent_started_at) >= timedelta(minutes=5)
+            min_runtime = timedelta(agent_state.min_runtime_seconds)
+            return (now - agent_state.agent_started_at) >= min_runtime
 
-        # Last donation request was >23.5h ago
+        # Last donation request was >DONATION_INTERVAL_HOURS ago
         time_since_last_request = now - agent_state.last_donation_request_sent_at
-        return time_since_last_request >= timedelta(hours=23, minutes=30)
+        # Convert hours to timedelta (handles fractional hours cleanly)
+        # That is: timedelta(hours=23.5) == timedelta(hours=23, minutes=30)
+        donation_interval = timedelta(hours=agent_state.donation_interval_hours)
+        return time_since_last_request >= donation_interval
 
     def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
         """Update ArbitrageStrategy parameters."""
