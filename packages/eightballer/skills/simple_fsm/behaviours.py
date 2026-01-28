@@ -208,8 +208,12 @@ class CoolDownRound(BaseBehaviour):
             return
 
         agent_state = self.context.shared_state.get("state")
+
+        # This message/signal is picked up in the Derolas automator ABCI app skill
         if self.should_trigger_fallback_donation(agent_state):
-            ...
+            value_captured = 0.0  # only presence in the queue is checked, value itself is irrelevant
+            agent_state.pending_donations.append(value_captured)
+            self.context.logger.info("Scheduled fallback donation to the auction contract for daily activity checking.")
 
         # Claim ownership: copy the pending request and clear the shared slot,
         # so the handler cannot mutate it while we process it.
