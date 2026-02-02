@@ -84,7 +84,7 @@ LEDGER_TO_COW_CHAIN = {
 LEDGER_TO_RPC = {
     SupportedLedgers.ETHEREUM: "https://eth.llamarpc.com",
     SupportedLedgers.GNOSIS: "https://gnosis.drpc.org",
-    SupportedLedgers.BASE: "https://base.llamarpc.com",
+    SupportedLedgers.BASE: "https://base.drpc.org",
     SupportedLedgers.ARBITRUM: "https://arbitrum.drpc.org",
     SupportedLedgers.POLYGON: "https://polygon.llamarpc.com",
 }

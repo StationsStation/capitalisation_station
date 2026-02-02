@@ -131,7 +131,7 @@ config:
   - name: balancer
     key_path: ethereum_private_key.txt
     ledger_id: base
-    rpc_url: https://base.llamarpc.com
+    rpc_url: https://base.drpc.org
     etherscan_api_key: YOUR_ETHERSCAN_API_KEY
 ---
 public_id: eightballer/chained_dex_app:0.1.0
