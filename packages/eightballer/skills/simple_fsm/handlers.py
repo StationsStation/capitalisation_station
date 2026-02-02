@@ -185,7 +185,9 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
                         msg=f"Bridging requests failed: {result}",
                     )
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
+            return None
 
+        self.context.logger.error(f"Unhandled bridge message, delegating to super(): {message}")
         return super().handle(message)
 
     @property
