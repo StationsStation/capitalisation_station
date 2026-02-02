@@ -1,5 +1,6 @@
 """Interface for asset_bridging protocol."""
 
+import time
 import asyncio
 from typing import TYPE_CHECKING
 from logging import Logger
@@ -78,9 +79,49 @@ class ExtraInfo(BaseModel):
 async def wait_for_settlement(
     client: AsyncHTTPClient,
     result: PrivateDepositResultSchema | PrivateWithdrawResultSchema,
+    timeout_sec: int = 60,
+    poll_interval_sec: float = 1.0,
 ) -> PublicGetTransactionResultSchema:
-    """Wait for transaction settlement on Derive chain."""
-    return await client.transactions.get(transaction_id=result.transaction_id)
+    """Wait for transaction settlement on Derive chain.
+
+    Args:
+    ----
+        client: Derive async HTTP client
+        result: Initial deposit/withdraw result with transaction_id
+        timeout_sec: Maximum time to wait for settlement
+        poll_interval_sec: Time between status checks
+
+    Returns:
+    -------
+        Final transaction result
+
+    Raises:
+    ------
+        TimeoutError: If transaction doesn't reach final state within timeout
+        RuntimeError: If transaction reaches error state (reverted/ignored/timed_out)
+
+    """
+
+    start_time = time.monotonic()
+
+    while True:
+        tx_result = await client.transactions.get(transaction_id=result.transaction_id)
+
+        # Success case
+        if tx_result.status == DeriveTxStatus.settled:
+            return tx_result
+
+        # Error cases
+        if tx_result.status in {DeriveTxStatus.reverted, DeriveTxStatus.ignored, DeriveTxStatus.timed_out}:
+            msg = f"Transaction failed with status {tx_result.status}: {tx_result.error_log}"
+            raise RuntimeError(msg)
+
+        # Still processing (requested/pending) - check timeout
+        if time.monotonic() - start_time > timeout_sec:
+            msg = f"Transaction {result.transaction_id} did not settle within {timeout_sec}s"
+            raise TimeoutError(msg)
+
+        await asyncio.sleep(poll_interval_sec)
 
 
 async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, logger):
