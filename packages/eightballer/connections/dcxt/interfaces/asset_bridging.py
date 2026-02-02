@@ -48,6 +48,8 @@ if TYPE_CHECKING:
 # ruff: noqa: SLF001   # Private member accessed
 
 
+DERIVE_TX_SETTLEMENT_TIMEOUT_SEC = 60
+
 BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
 BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
 
@@ -79,7 +81,7 @@ class ExtraInfo(BaseModel):
 async def wait_for_settlement(
     client: AsyncHTTPClient,
     result: PrivateDepositResultSchema | PrivateWithdrawResultSchema,
-    timeout_sec: int = 60,
+    timeout_sec: int = DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
     poll_interval_sec: float = 1.0,
 ) -> PublicGetTransactionResultSchema:
     """Wait for transaction settlement on Derive chain.
@@ -168,6 +170,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     deposit_result: PrivateDepositResultSchema = await client.collateral.deposit_to_subaccount(
         amount=amount,
         asset_name=request.source_token,
+        signature_expiry_sec=DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
     )
 
     # Wait for settlement
@@ -202,6 +205,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
     withdraw_result: PrivateWithdrawResultSchema = await client.collateral.withdraw_from_subaccount(
         amount=amount,
         asset_name=request.source_token,
+        signature_expiry_sec=DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
     )
 
     logger.info(f"Withdraw result: {withdraw_result}")
