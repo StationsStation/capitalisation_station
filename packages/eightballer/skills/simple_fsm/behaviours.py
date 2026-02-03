@@ -79,16 +79,14 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
-        if (
-            not self.strategy.state.bridge_requests
-            and not self.strategy.state.bridge_requests_in_progress
-            and self.strategy.bridging_enabled
-        ):
+        if not self.strategy.state.bridge_requests_in_progress and self.strategy.bridging_enabled:
             bridging_requests: list[BridgeRequest] = self.strategy.trading_strategy.get_bridge_requests(
                 portfolio=self.strategy.state.portfolio,
                 prices=self.strategy.state.prices,
                 **self.custom_config.kwargs["strategy_run_kwargs"],
             )
+            # Clear old queue and replace with fresh calculation
+            self.strategy.state.bridge_requests.clear()
             self.strategy.state.bridge_requests.extend(bridging_requests)
             if bridging_requests:
                 self.context.logger.info(f"Bridging requests found: {bridging_requests}")
