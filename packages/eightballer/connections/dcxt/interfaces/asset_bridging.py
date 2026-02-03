@@ -47,8 +47,8 @@ if TYPE_CHECKING:
 # ruff: noqa: PLR0911  # Too many return statements
 # ruff: noqa: SLF001   # Private member accessed
 
-
-DERIVE_TX_SETTLEMENT_TIMEOUT_SEC = 60
+# Minimum 300 for signature expiry, a little extra for buffer
+DERIVE_TX_SETTLEMENT_TIMEOUT_SEC = 310
 
 BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
 BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
@@ -167,10 +167,11 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     }
     logger.info(TRANSFER_TO_SUBACC, kwargs)
 
+    signature_expiry_sec = int(time.time()) + DERIVE_TX_SETTLEMENT_TIMEOUT_SEC
     deposit_result: PrivateDepositResultSchema = await client.collateral.deposit_to_subaccount(
         amount=amount,
         asset_name=request.source_token,
-        signature_expiry_sec=DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
+        signature_expiry_sec=signature_expiry_sec,
     )
 
     # Wait for settlement
@@ -178,6 +179,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
 
     if derive_tx_result.status is not DeriveTxStatus.settled:
         msg = f"Funding -> subaccount transfer failed: {deposit_result}"
+        logger.error(msg)
         raise DeriveTransferFailed(msg)
 
     return create_bridge_result(
@@ -202,10 +204,11 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
     logger.info(TRANSFER_TO_FUNDING, kwargs)
 
     # 1. Transfer from subaccount to funding account
+    signature_expiry_sec = int(time.time()) + DERIVE_TX_SETTLEMENT_TIMEOUT_SEC
     withdraw_result: PrivateWithdrawResultSchema = await client.collateral.withdraw_from_subaccount(
         amount=amount,
         asset_name=request.source_token,
-        signature_expiry_sec=DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
+        signature_expiry_sec=signature_expiry_sec,
     )
 
     logger.info(f"Withdraw result: {withdraw_result}")
@@ -214,20 +217,11 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
         client=client, result=withdraw_result
     )
 
-    logger.info(f"Derive tx result: {derive_tx_result}")
-
-    attempts = 5
-
-    while derive_tx_result.status is not DeriveTxStatus.settled:
-        msg = f"Subaccount -> funding transfer failed: {withdraw_result}"
-        derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(
-            client=client, result=withdraw_result
-        )
+    if derive_tx_result.status is not DeriveTxStatus.settled:
+        msg = f"Subaccount -> funding transfer failed: {derive_tx_result}"
         logger.error(msg)
-        attempts -= 1
-        if attempts <= 0:
-            raise DeriveTransferFailed(msg)
-        await asyncio.sleep(2)
+        raise DeriveTransferFailed(msg)
+
     logger.info("Subaccount -> funding transfer settled.")
 
     kwargs = {
