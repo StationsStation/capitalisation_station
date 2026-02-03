@@ -177,8 +177,7 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
                     self.context.logger.info(f"Bridge request completed: {result}")
                 case _:
-                    self.strategy.bridging_enabled = False
-                    msg = f"Bridging requests failed, status: {result.status}. Disabled bridging."
+                    msg = f"Bridging requests failed, status: {result.status}."
                     self.context.logger.warning(msg, extra={"result": result})
                     self.strategy.send_notification_to_user(
                         title=msg,
@@ -187,7 +186,27 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
             return None
 
-        self.context.logger.error(f"Unhandled bridge message, delegating to super(): {message}")
+        if message.performative == AssetBridgingMessage.Performative.ERROR:
+            msg = f"ERROR Performative in bridge message: {message}"
+            self.context.logger.error(msg)
+            n_requests_in_progress = len(self.strategy.state.bridge_requests_in_progress)
+            if n_requests_in_progress > 1:
+                msg = f"SHOULD NEVER OCCUR: more than 1 bridge request in progress {message}"
+                self.context.logger.error(msg)
+            self.strategy.send_notification_to_user(
+                title="Bridging requests failed.",
+                msg=msg,
+            )
+            self.strategy.state.bridge_requests_in_progress.clear()
+
+        else:
+            msg = f"SHOULD NEVER OCCUR: unexpected response performative: {message}"
+            self.context.logger.error(msg)
+            self.strategy.state.bridge_requests_in_progress.clear()
+            self.strategy.send_notification_to_user(
+                title="Bridging requests failed.",
+                msg=msg,
+            )
         return super().handle(message)
 
     @property
