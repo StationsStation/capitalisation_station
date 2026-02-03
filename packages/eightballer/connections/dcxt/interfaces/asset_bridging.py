@@ -50,6 +50,7 @@ if TYPE_CHECKING:
 
 # Minimum 300 for signature expiry, a little extra for buffer
 DERIVE_TX_SETTLEMENT_TIMEOUT_SEC = 310
+DERIVE_TX_POLL_INTERVAL = 10
 
 BRIDGE_DEPOSIT = "Depositing %(amount)s %(token)s from %(eoa)s on %(chain)s to funding wallet %(wallet)s on DERIVE."
 BRIDGE_WITHDRAWAL = "Withdrawing %(amount)s %(token)s from %(wallet)s on DERIVE to funding wallet %(eoa)s on %(chain)s."
@@ -83,7 +84,7 @@ async def wait_for_settlement(
     client: AsyncHTTPClient,
     result: PrivateDepositResultSchema | PrivateWithdrawResultSchema,
     timeout_sec: int = DERIVE_TX_SETTLEMENT_TIMEOUT_SEC,
-    poll_interval_sec: float = 1.0,
+    poll_interval_sec: float = DERIVE_TX_POLL_INTERVAL,
 ) -> PublicGetTransactionResultSchema:
     """Wait for transaction settlement on Derive chain.
 
@@ -189,6 +190,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
         w3=w3,
         tx_hash=derive_tx_result.transaction_hash,
         logger=logger,
+        poll_interval=DERIVE_TX_POLL_INTERVAL,
     )
     if tx_receipt.status != TxStatus.SUCCESS:
         msg = f"Derive deposit_to_subaccount failed waiting for finality: {tx_receipt}"
@@ -243,6 +245,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
         w3=derive_w3,
         tx_hash=derive_tx_result.transaction_hash,
         logger=logger,
+        poll_interval=DERIVE_TX_POLL_INTERVAL,
     )
     if tx_receipt.status != TxStatus.SUCCESS:
         msg = f"Derive withdraw_from_subaccount failed waiting for finality: {tx_receipt}"
