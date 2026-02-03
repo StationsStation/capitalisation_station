@@ -8,6 +8,7 @@ from functools import partial
 
 from pydantic import BaseModel, ConfigDict
 from derive_client import AsyncHTTPClient
+from derive_client._bridge.w3 import wait_for_tx_finality  # noqa: PLC2701
 from derive_client.data_types import (
     D,
     ChainID,
@@ -182,6 +183,17 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
         logger.error(msg)
         raise DeriveTransferFailed(msg)
 
+    # Wait for finality
+    w3 = client.bridge._derive_bridge.w3s[source_chain]
+    tx_receipt = await wait_for_tx_finality(
+        w3=w3,
+        tx_hash=derive_tx_result.transaction_hash,
+        logger=logger,
+    )
+    if tx_receipt.status != TxStatus.SUCCESS:
+        msg = f"Derive deposit_to_subaccount failed waiting for finality: {tx_receipt}"
+        raise DeriveTransferFailed(msg)
+
     return create_bridge_result(
         request=request,
         bridge_tx_result=bridge_tx_result,
@@ -212,6 +224,7 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
     )
 
     logger.info(f"Withdraw result: {withdraw_result}")
+
     # Wait for settlement
     derive_tx_result: PublicGetTransactionResultSchema = await wait_for_settlement(
         client=client, result=withdraw_result
@@ -223,6 +236,17 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
         raise DeriveTransferFailed(msg)
 
     logger.info("Subaccount -> funding transfer settled.")
+
+    # Wait for finality
+    derive_w3 = client.bridge._derive_bridge.derive_w3
+    tx_receipt = await wait_for_tx_finality(
+        w3=derive_w3,
+        tx_hash=derive_tx_result.transaction_hash,
+        logger=logger,
+    )
+    if tx_receipt.status != TxStatus.SUCCESS:
+        msg = f"Derive withdraw_from_subaccount failed waiting for finality: {tx_receipt}"
+        raise DeriveTransferFailed(msg)
 
     kwargs = {
         "amount": amount,
