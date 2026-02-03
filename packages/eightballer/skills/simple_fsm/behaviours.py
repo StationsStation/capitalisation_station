@@ -427,6 +427,8 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.current_behaviour = current_state
             self.strategy.state.current_round = str(self.current)
 
+        self.current_behaviour.act()
+
         if current_state.is_done():
             self.context.logger.debug(f"State {self.current} is done.")
             if current_state in self._final_states:
@@ -439,7 +441,6 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.context.logger.info(f"Transitioning: {self.current} --[{event.name}]--> {next_state}")
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
-        self.current_behaviour.act()
 
     def terminate(self) -> None:
         """Implement the termination."""
