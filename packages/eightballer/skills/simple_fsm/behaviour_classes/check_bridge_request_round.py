@@ -33,14 +33,14 @@ class CheckBridgeRequestRound(BaseConnectionRound):
     def act(self) -> None:
         """Perform the action of the state."""
 
-        while self.strategy.state.bridge_requests:
+        if self.strategy.state.bridge_requests:
             request = self.strategy.state.bridge_requests.popleft()
             self.submit_msg(
                 protocol_performative=AssetBridgingMessage.Performative.REQUEST_BRIDGE,
                 connection_id=DCXT_PUBLIC_ID,
                 request=request,
             )
-            self.context.logger.info("Submitted bridge request.", extra={"request": request})
+            self.context.logger.info(f"Submitted bridge request: {request}", extra={"request": request})
             self.strategy.state.bridge_requests_in_progress[request.request_id] = request
 
         self._is_done = True

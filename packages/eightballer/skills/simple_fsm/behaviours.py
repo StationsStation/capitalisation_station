@@ -23,7 +23,7 @@ import sys
 import pathlib
 import importlib
 from typing import TYPE_CHECKING, Any
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from dataclasses import replace
 
 from aea.skills.behaviours import FSMBehaviour
@@ -79,16 +79,14 @@ class IdentifyOpportunityRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
 
-        if (
-            not self.strategy.state.bridge_requests
-            and not self.strategy.state.bridge_requests_in_progress
-            and self.strategy.bridging_enabled
-        ):
+        if not self.strategy.state.bridge_requests_in_progress and self.strategy.bridging_enabled:
             bridging_requests: list[BridgeRequest] = self.strategy.trading_strategy.get_bridge_requests(
                 portfolio=self.strategy.state.portfolio,
                 prices=self.strategy.state.prices,
                 **self.custom_config.kwargs["strategy_run_kwargs"],
             )
+            # Clear old queue and replace with fresh calculation
+            self.strategy.state.bridge_requests.clear()
             self.strategy.state.bridge_requests.extend(bridging_requests)
             if bridging_requests:
                 self.context.logger.info(f"Bridging requests found: {bridging_requests}")
@@ -207,9 +205,18 @@ class CoolDownRound(BaseBehaviour):
             self.context.logger.debug(f"Cooling down remaining: {remaining}s")
             return
 
+        agent_state = self.context.shared_state.get("state")
+
+        # This message/signal is picked up in the Derolas automator ABCI app skill
+        if self.should_trigger_fallback_donation(agent_state):
+            value_captured = 0.0  # only presence in the queue is checked, value itself is irrelevant
+            agent_state.pending_donations.append(value_captured)
+            self.context.logger.info("Scheduled fallback donation to the auction contract for daily activity checking.")
+            # Set timestamp before queue processing to prevent duplicate fallback donations across concurrent skills
+            agent_state.last_donation_request_sent_at = datetime.now(tz=UTC)
+
         # Claim ownership: copy the pending request and clear the shared slot,
         # so the handler cannot mutate it while we process it.
-        agent_state = self.context.shared_state.get("state")
         if (typed_params := agent_state.arbitrage_strategy_params_update_request) is not None:
             agent_state.arbitrage_strategy_params_update_request = None
             self.update_arbitrage_strategy_params(agent_state, typed_params)
@@ -218,6 +225,23 @@ class CoolDownRound(BaseBehaviour):
         self._is_done = True
         self._event = ArbitrageabciappEvents.DONE
         self.started = False
+
+    def should_trigger_fallback_donation(self, agent_state: AgentState) -> bool:
+        """Trigger to determine if a donation to the auction contract is required for daily activity checking."""
+
+        now = datetime.now(tz=UTC)
+
+        # Never donated this session
+        if agent_state.last_donation_request_sent_at is None:
+            min_runtime = timedelta(agent_state.min_runtime_seconds)
+            return (now - agent_state.agent_started_at) >= min_runtime
+
+        # Last donation request was >DONATION_INTERVAL_HOURS ago
+        time_since_last_request = now - agent_state.last_donation_request_sent_at
+        # Convert hours to timedelta (handles fractional hours cleanly)
+        # That is: timedelta(hours=23.5) == timedelta(hours=23, minutes=30)
+        donation_interval = timedelta(hours=agent_state.donation_interval_hours)
+        return time_since_last_request >= donation_interval
 
     def update_arbitrage_strategy_params(self, agent_state: AgentState, typed_params: ArbitrageStrategyParams):
         """Update ArbitrageStrategy parameters."""
@@ -245,6 +269,9 @@ class SetupRound(BaseConnectionRound):
             self.context.logger.info("SetupRound: First run")
             self._event = ArbitrageabciappEvents.SET_APPROVALS
             self.is_first_run = False
+
+            agent_state = self.context.shared_state.get("state")
+            agent_state.agent_started_at = datetime.now(tz=UTC)
 
         self.context.behaviours.main.setup()
         self._is_done = True
@@ -400,6 +427,8 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.current_behaviour = current_state
             self.strategy.state.current_round = str(self.current)
 
+        self.current_behaviour.act()
+
         if current_state.is_done():
             self.context.logger.debug(f"State {self.current} is done.")
             if current_state in self._final_states:
@@ -412,7 +441,6 @@ class ArbitrageabciappFsmBehaviour(FSMBehaviour):
             self.context.logger.info(f"Transitioning: {self.current} --[{event.name}]--> {next_state}")
             self.current = next_state
             self.strategy.state.last_transition_time = datetime.now(tz=TZ)
-        self.current_behaviour.act()
 
     def terminate(self) -> None:
         """Implement the termination."""
