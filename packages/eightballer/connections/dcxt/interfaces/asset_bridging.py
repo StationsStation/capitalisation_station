@@ -17,6 +17,7 @@ from derive_client.data_types import (
     BridgeTxResult,
     PreparedBridgeTx,
 )
+from derive_client.config.networks import DeriveTokenAddress
 from derive_client.utils.prod_addresses import get_prod_derive_addresses
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
@@ -93,11 +94,16 @@ async def get_lightaccount_currency_balance(client, currency: Currency) -> Decim
 
     source_chain = ChainID.DERIVE
     derive_w3 = client.bridge._derive_bridge.derive_w3
-    token_address = DERIVE_PROD_ADDRESSES.chains[source_chain][currency].MintableToken
+    if currency == Currency.DRV:
+        token_address = DeriveTokenAddress.DERIVE.value
+    else:
+        token_address = DERIVE_PROD_ADDRESSES.chains[source_chain][currency].MintableToken
+
     contract = get_erc20_contract(w3=derive_w3, token_address=token_address)
-    balance = await contract.functions.balanceOf(account=client._auth.wallet).call()
+    balance = await contract.functions.balanceOf(client._auth.wallet).call()
     decimals = await contract.functions.decimals().call()
     amount = balance / (10**decimals)
+
     return D(amount)
 
 
