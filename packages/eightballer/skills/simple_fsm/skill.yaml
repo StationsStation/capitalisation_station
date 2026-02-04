@@ -20,7 +20,7 @@ fingerprint:
   db_models.py: bafybeignpwwzoqin44f7sbiebf447x7qmoqvbhb3j6tuqxhuksw3vxliva
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
-  handlers.py: bafybeicoexltufukc24ysq47bqro7u2mp7d5cbciqlitktbeyigccufu6e
+  handlers.py: bafybeiei7g3rsljpr5irdlf4pirbt23eta7w2elcdtho2x3iwjxaiiwxpa
   strategy.py: bafybeibn2zfu7f2cd6ryfg6krgl56f5ptqilrsglfnsh2egruru2woujkm
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
@@ -29,7 +29,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeib46mwxydjapluicictavkcsmt2jpppkkru4lqhv3fwx5pbmngi2u
 - eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
-- eightballer/dcxt:0.1.0:bafybeidginwhwx4gl7edzoalwoibjzrwzktbvjaszsokenmzyi6knfmehm
+- eightballer/dcxt:0.1.0:bafybeiatkbuvqeqevh4dr3hlcj242vuv4uzip37w2qg2k332g4f5qntjfq
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
