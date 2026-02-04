@@ -21,7 +21,7 @@ protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
 skills:
-- eightballer/simple_fsm:0.1.0:bafybeibyvbpawlhvw4dasqqimkoolppy7ti3qzxycatfisdsfmxxih2why
+- eightballer/simple_fsm:0.1.0:bafybeiatts7rds344wdvbd5lhg57x6yjzeoa66smt4rcefbsdjzrm7e4n4
 behaviours: {}
 handlers:
   metrics_handler:

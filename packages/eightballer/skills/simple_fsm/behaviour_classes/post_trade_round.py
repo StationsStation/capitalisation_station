@@ -1,6 +1,6 @@
 """Post trade round behaviour."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from textwrap import dedent
 
 from packages.eightballer.skills.simple_fsm.enums import ArbitrageabciappEvents
@@ -86,3 +86,4 @@ class PostTradeRound(BaseBehaviour):
         )
         if self.strategy.donate:
             self.strategy.state.pending_donations.append(value_captured_gross)
+            self.strategy.state.last_donation_request_sent_at = datetime.now(tz=UTC)

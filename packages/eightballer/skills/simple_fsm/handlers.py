@@ -46,6 +46,7 @@ from packages.eightballer.skills.abstract_round_abci.handlers import (
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     BridgeResult,
+    BridgeRequest,
 )
 
 
@@ -177,15 +178,47 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
                     self.context.logger.info(f"Bridge request completed: {result}")
                 case _:
-                    self.strategy.bridging_enabled = False
-                    msg = f"Bridging requests failed, status: {result.status}. Disabled bridging."
+                    msg = f"Bridging requests failed, status: {result.status}."
                     self.context.logger.warning(msg, extra={"result": result})
                     self.strategy.send_notification_to_user(
                         title=msg,
                         msg=f"Bridging requests failed: {result}",
                     )
                     self.strategy.state.bridge_requests_in_progress.pop(request_id)
+            return None
 
+        if message.performative == AssetBridgingMessage.Performative.ERROR:
+            # Sanity check to detect and help debug potential unexpected sitution deemed impossible
+            if (n := len(self.strategy.state.bridge_requests_in_progress)) != 1:
+                requests = self.strategy.state.bridge_requests_in_progress
+                title = "PANIC: Design flaw, notify devs!"
+                msg = f"SHOULD NEVER OCCUR: more than 1 bridge request in progress, found {n}"
+                self.context.logger.error(msg, extra={"bridge_requests_in_progress": requests})
+                self.strategy.send_notification_to_user(title=title, msg=msg)
+                return None
+
+            request: BridgeRequest = self.strategy.state.bridge_requests_in_progress.popitem()[1]
+            chain = request.source_ledger_id
+            token = request.source_token
+            title = "Bridging requests failed."
+            if "InsufficientNativeBalance" in message.message:
+                msg = f"Low gas on [{chain}], cannot transfer {token}. Please deposit ETH to your EOA."
+            elif "InsufficientTokenBalance" in message.message:
+                msg = f"Low token balance on [{chain}], please deposit {token} to your EOA."
+            else:
+                msg = f"ERROR Performative in bridge message: {message.message}"
+            self.context.logger.error(msg)
+            self.strategy.send_notification_to_user(title=title, msg=msg)
+            self.strategy.state.bridge_requests_in_progress.clear()
+
+        else:
+            msg = f"SHOULD NEVER OCCUR: unexpected response performative: {message}"
+            self.context.logger.error(msg)
+            self.strategy.state.bridge_requests_in_progress.clear()
+            self.strategy.send_notification_to_user(
+                title="Bridging requests failed.",
+                msg=msg,
+            )
         return super().handle(message)
 
     @property
