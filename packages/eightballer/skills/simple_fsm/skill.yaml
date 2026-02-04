@@ -16,11 +16,11 @@ fingerprint:
   behaviour_classes/order_execution_round.py: bafybeibvcb2wn4fw7aeaenwive5m4izfhljzm4hvnau3iuc3w6vvh4gucm
   behaviour_classes/post_trade_round.py: bafybeic4dbro456drzvfboqmdv2vsjwmn3k7t5nswrkjtscnvufo7ownyy
   behaviour_classes/set_approvals.py: bafybeic3gdbujbu6d2wfjckil5u3mdcluniiyclcenrydozd5t26jnowqu
-  behaviours.py: bafybeigdntyqhlc4rcvbpdtx4dtg2b5f5kp6y7x2obdd36xyjihgw5whwy
+  behaviours.py: bafybeia5sa4ohddly3m33mytkwauqpuxufl7h3o3rmxcla5iwpnu55nn5i
   db_models.py: bafybeignpwwzoqin44f7sbiebf447x7qmoqvbhb3j6tuqxhuksw3vxliva
   dialogues.py: bafybeihwmnodek2pfirntxouqauo2wkaj6ixqsvryvgbat6isrtuufqsxi
   enums.py: bafybeidhif5ucoedd2h7davjxosmpxulxi46cu5nucp74hxvt55dka767q
-  handlers.py: bafybeia56hdoax32e6zmdth3psnkloat2pnfn6hxy4pvxn2ovlt2b2hdqu
+  handlers.py: bafybeicoexltufukc24ysq47bqro7u2mp7d5cbciqlitktbeyigccufu6e
   strategy.py: bafybeibn2zfu7f2cd6ryfg6krgl56f5ptqilrsglfnsh2egruru2woujkm
   tests/__init__.py: bafybeiga7txbr7ce4oun6rcf7nft7iwtf5k53jxursuiu6gugzq7fhayze
   tests/test_behaviour.py: bafybeib5mci6yg6otrtya36sdrxioh2eej6pky5ivywqlvm4k2ngqadgom
@@ -29,7 +29,7 @@ fingerprint_ignore_patterns: []
 connections:
 - eightballer/apprise_wrapper:0.1.0:bafybeib46mwxydjapluicictavkcsmt2jpppkkru4lqhv3fwx5pbmngi2u
 - eightballer/ccxt_wrapper:0.1.0:bafybeidth26t3wye3pk6gud23ngpg47z5yybp44nuxznf5zc4i2addvcgi
-- eightballer/dcxt:0.1.0:bafybeic2vzsis22vzgqvfqpx4cuikax7mhcihhxwdxhbfgzmmeg56zqsyq
+- eightballer/dcxt:0.1.0:bafybeidginwhwx4gl7edzoalwoibjzrwzktbvjaszsokenmzyi6knfmehm
 contracts: []
 protocols:
 - eightballer/balances:0.1.0:bafybeieunsu3sfhqsh5selbbrhijedgrngjfsrzqhoevxwpv6shmlh6gni
