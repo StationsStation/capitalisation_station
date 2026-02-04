@@ -46,6 +46,7 @@ from packages.eightballer.skills.abstract_round_abci.handlers import (
 from packages.eightballer.protocols.user_interaction.dialogues import UserInteractionDialogues
 from packages.zarathustra.protocols.asset_bridging.custom_types import (
     BridgeResult,
+    BridgeRequest,
 )
 
 
@@ -187,16 +188,27 @@ class DexAssetBridgingHandler(AbstractResponseHandler):
             return None
 
         if message.performative == AssetBridgingMessage.Performative.ERROR:
-            msg = f"ERROR Performative in bridge message: {message}"
+            # Sanity check to detect and help debug potential unexpected sitution deemed impossible
+            if (n := len(self.strategy.state.bridge_requests_in_progress)) != 1:
+                requests = self.strategy.state.bridge_requests_in_progress
+                title = "PANIC: Design flaw, notify devs!"
+                msg = f"SHOULD NEVER OCCUR: more than 1 bridge request in progress, found {n}"
+                self.context.logger.error(msg, extra={"bridge_requests_in_progress": requests})
+                self.strategy.send_notification_to_user(title=title, msg=msg)
+                return None
+
+            request: BridgeRequest = self.strategy.state.bridge_requests_in_progress.popitem()[1]
+            chain = request.source_ledger_id
+            token = request.source_token
+            title = "Bridging requests failed."
+            if "InsufficientNativeBalance" in message.message:
+                msg = f"Low gas on [{chain}], cannot transfer {token}. Please deposit ETH to your EOA."
+            elif "InsufficientTokenBalance" in message.message:
+                msg = f"Low token balance on [{chain}], please deposit {token} to your EOA."
+            else:
+                msg = f"ERROR Performative in bridge message: {message.message}"
             self.context.logger.error(msg)
-            n_requests_in_progress = len(self.strategy.state.bridge_requests_in_progress)
-            if n_requests_in_progress > 1:
-                msg = f"SHOULD NEVER OCCUR: more than 1 bridge request in progress {message}"
-                self.context.logger.error(msg)
-            self.strategy.send_notification_to_user(
-                title="Bridging requests failed.",
-                msg=msg,
-            )
+            self.strategy.send_notification_to_user(title=title, msg=msg)
             self.strategy.state.bridge_requests_in_progress.clear()
 
         else:

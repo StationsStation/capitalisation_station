@@ -1,14 +1,20 @@
 """Interface for asset_bridging protocol."""
 
+from __future__ import annotations
+
+import json
 import time
 import asyncio
 from typing import TYPE_CHECKING
-from logging import Logger
 from functools import partial
 
 from pydantic import BaseModel, ConfigDict
-from derive_client import AsyncHTTPClient
-from derive_client._bridge.w3 import wait_for_tx_finality  # noqa: PLC2701
+from derive_client.config import (
+    LYRA_OFT_WITHDRAW_WRAPPER,
+    LYRA_OFT_WITHDRAW_WRAPPER_ABI_PATH,
+    LayerZeroChainIDv2,
+)
+from derive_client._bridge.w3 import get_contract, get_erc20_contract, wait_for_tx_finality  # noqa: PLC2701
 from derive_client.data_types import (
     D,
     ChainID,
@@ -17,6 +23,8 @@ from derive_client.data_types import (
     BridgeTxResult,
     PreparedBridgeTx,
 )
+from derive_client.config.networks import DeriveTokenAddress
+from derive_client.utils.prod_addresses import get_prod_derive_addresses
 from derive_client.data_types.generated_models import (
     TxStatus as DeriveTxStatus,
     PrivateDepositResultSchema,
@@ -41,6 +49,11 @@ from packages.eightballer.connections.dcxt.interfaces.interface_base import (
 
 
 if TYPE_CHECKING:
+    from decimal import Decimal
+    from logging import Logger
+
+    from derive_client import AsyncHTTPClient
+
     from packages.eightballer.connections.dcxt.dcxt.derive import DeriveClient
 
 
@@ -61,6 +74,8 @@ TRANSFER_TO_SUBACC = "Transferring %(amount)s %(token)s from funding wallet %(wa
 
 ErrorCode = AssetBridgingMessage.ErrorInfo.Code
 
+DERIVE_PROD_ADDRESSES = get_prod_derive_addresses()
+
 
 class BridgeFailed(Exception):
     """Raised when a bridge transaction fails or does not reach SUCCESS."""
@@ -78,6 +93,64 @@ class ExtraInfo(BaseModel):
     transaction_id: str = ""
     derive_tx_hash: str = ""
     bridge_type: str = ""
+
+
+async def get_lightaccount_currency_balance(
+    client,
+    currency: Currency,
+    target_chain: ChainID | None = None,
+) -> Decimal:
+    """Get LightAccount Currency Balance."""
+
+    source_chain = ChainID.DERIVE
+    derive_w3 = client.bridge._derive_bridge.derive_w3
+    if currency == Currency.DRV:
+        token_address = DeriveTokenAddress.DERIVE.value
+    else:
+        token_address = DERIVE_PROD_ADDRESSES.chains[source_chain][currency].MintableToken
+
+    contract = get_erc20_contract(w3=derive_w3, token_address=token_address)
+    balance = await contract.functions.balanceOf(client._auth.wallet).call()
+
+    if currency == Currency.DRV:
+        # pay in LZ tokens (DRV).
+        # Actual final amount will be less than balance, due to fee deduction
+        token_fee = await get_drv_fee_in_token(
+            client,
+            amount=balance,
+            token_address=token_address,
+            target_chain=target_chain,
+        )
+    else:
+        # pay in native token (ETH) for gas
+        token_fee = 0
+
+    balance -= token_fee
+
+    decimals = await contract.functions.decimals().call()
+    amount = balance / (10**decimals)
+
+    return D(amount)
+
+
+async def get_drv_fee_in_token(
+    client,
+    amount: int,
+    token_address: str,
+    target_chain: ChainID,
+) -> int:
+    """Get LayerZero fee in token. Used bridging DRV from Derive to external."""
+
+    derive_w3 = client.bridge._derive_bridge.derive_w3
+    abi = json.loads(LYRA_OFT_WITHDRAW_WRAPPER_ABI_PATH.read_text())
+    withdraw_wrapper = get_contract(w3=derive_w3, address=LYRA_OFT_WITHDRAW_WRAPPER, abi=abi)
+    destEID = LayerZeroChainIDv2[target_chain.name]  # noqa: N806
+
+    return await withdraw_wrapper.functions.getFeeInToken(
+        token=token_address,
+        amount=amount,
+        destEID=destEID,
+    ).call()
 
 
 async def wait_for_settlement(
@@ -132,6 +205,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     amount = D(request.amount)
     currency = Currency[request.source_token]
     source_chain = ChainID[request.source_ledger_id.upper()]
+    ChainID[request.target_ledger_id.upper()]
 
     kwargs = {
         "amount": amount,
@@ -161,6 +235,8 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
         raise BridgeFailed(msg)
 
     # 4. Transfer from funding account to subaccount
+    # We always try to move the entire available amount for the currency
+    amount = await get_lightaccount_currency_balance(client=client, currency=currency)
     kwargs = {
         "amount": amount,
         "token": currency.name,
@@ -170,6 +246,7 @@ async def _deposit_to_derive(request: BridgeRequest, client: AsyncHTTPClient, lo
     logger.info(TRANSFER_TO_SUBACC, kwargs)
 
     signature_expiry_sec = int(time.time()) + DERIVE_TX_SETTLEMENT_TIMEOUT_SEC
+
     deposit_result: PrivateDepositResultSchema = await client.collateral.deposit_to_subaccount(
         amount=amount,
         asset_name=request.source_token,
@@ -261,6 +338,10 @@ async def _withdraw_from_derive(request: BridgeRequest, client: AsyncHTTPClient,
     logger.info(BRIDGE_WITHDRAWAL, kwargs)
 
     # 2. Prepare bridge transaction
+    # We always try to move the entire available amount for the currency
+    # NOTE: we subtract LZ token fee in case of DRV
+    amount = await get_lightaccount_currency_balance(client=client, currency=currency, target_chain=target_chain)
+
     prepared_tx: PreparedBridgeTx = await client.bridge.prepare_withdrawal_tx(
         amount=amount,
         currency=currency,
