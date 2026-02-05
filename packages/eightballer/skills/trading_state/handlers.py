@@ -19,13 +19,16 @@
 
 """This module contains the handler for the 'metrics' skill."""
 
-from typing import cast
+import json
+import datetime
+from typing import cast, get_type_hints
 
 from aea.skills.base import Handler
 from aea.protocols.base import Message
 
 from packages.eightballer.protocols.default import DefaultMessage
 from packages.eightballer.protocols.http.message import HttpMessage
+from packages.eightballer.skills.simple_fsm.strategy import TZ, ArbitrageStrategyParams
 from packages.eightballer.skills.trading_state.dialogues import (
     HttpDialogue,
     HttpDialogues,
@@ -76,8 +79,13 @@ class HttpHandler(Handler):
         self.context.logger.debug(
             f"received http request with method={http_msg.method}, url={http_msg.url} and body={http_msg.body}"
         )
-        if http_msg.method == "get" and http_msg.url.find("/metrics"):
+        if http_msg.method == "get" and http_msg.url.endswith("/metrics"):
             self._handle_get(http_msg, http_dialogue)
+        # While we ideally should hit a differently named endpoint here,
+        # or, alternatively, use a more structured conversational protocol beyond the generic HTTP
+        # For now we use this metrics endpoint to update the agent trading strategy state
+        elif http_msg.method == "post" and http_msg.url.endswith("/metrics"):
+            self._handle_post(http_msg, http_dialogue)
         else:
             self._handle_invalid(http_msg, http_dialogue)
 
@@ -113,6 +121,38 @@ class HttpHandler(Handler):
 
     def _handle_post(self, http_msg: HttpMessage, http_dialogue: HttpDialogue) -> None:
         """Handle a Http request of verb POST."""
+
+        # We dump the incoming POST request to update the trading strategy parameters in the shared state,
+        # which we will subsquently pick up in the CoolDownRound to update the trading strategy state,
+        # as to not  cause a conflict by updating this state mid-flight during trade execution.
+
+        received_params = json.loads(http_msg.body)
+        agent_state = self.context.shared_state.get("state")
+        type_hints = get_type_hints(ArbitrageStrategyParams)
+        typed_params = {}
+        for key, value in received_params.items():
+            if (expected_type := type_hints.get(key)) is None:
+                self.context.logger.warning(f"Unexpected arbitrage strategy parameter: {key}: ignoring")
+                continue
+            try:
+                typed_value = expected_type(value)
+            except Exception:  # noqa: BLE001
+                msg = f"Failed to cast arbitrage strategy parameter {key} value {value} to {expected_type}: ignoring"
+                self.context.logger.warning(msg)
+                continue
+            typed_params[key] = typed_value
+
+        agent_state.arbitrage_strategy_params_update_request = typed_params
+
+        response_payload = {
+            "status": "accepted",
+            "message": "Parameters recorded and scheduled for application during CoolDownRound.",
+            "applied": False,
+            "received_at": datetime.datetime.now(tz=TZ).isoformat(),
+            "params": typed_params,
+        }
+        body = json.dumps(response_payload).encode("utf-8")
+
         http_response = http_dialogue.reply(
             performative=HttpMessage.Performative.RESPONSE,
             target_message=http_msg,
@@ -120,8 +160,9 @@ class HttpHandler(Handler):
             status_code=200,
             status_text="Success",
             headers=http_msg.headers,
-            body=http_msg.body,
+            body=body,
         )
+
         self.context.logger.info(f"responding with: {http_response}")
         self.context.outbox.put_message(message=http_response)
 

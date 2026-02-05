@@ -9,6 +9,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from aea.mail.base import Envelope
 from derive_client.data_types import (
+    D,
     ChainID,
     Currency,
     TxResult,
@@ -203,12 +204,14 @@ class TestAssetBridging(BaseDcxtConnectionTest):
             transaction_id="dummy-withdraw-tx-id",
         )
 
+        fake_lightaccount_balance = D(1.0)
         fake_derive_tx = PublicGetTransactionResultSchema(
             transaction_hash=DUMMY_TX_HASH,
             data={},
             status=DeriveTxStatus.settled,
             error_log={},
         )
+        fake_tx_receipt = fake_result.tx_receipt
 
         exchanges = self.connection.protocol_interface.exchanges
         exchange: DeriveClient = exchanges[request.bridge][request.bridge]
@@ -259,11 +262,26 @@ class TestAssetBridging(BaseDcxtConnectionTest):
                 )
             )
 
+            # Patch helper methods
+            stack.enter_context(
+                patch(
+                    "packages.eightballer.connections.dcxt.interfaces.asset_bridging.get_lightaccount_currency_balance",
+                    new_callable=AsyncMock,
+                    return_value=fake_lightaccount_balance,
+                )
+            )
             stack.enter_context(
                 patch(
                     "packages.eightballer.connections.dcxt.interfaces.asset_bridging.wait_for_settlement",
                     new_callable=AsyncMock,
                     return_value=fake_derive_tx,
+                )
+            )
+            stack.enter_context(
+                patch(
+                    "packages.eightballer.connections.dcxt.interfaces.asset_bridging.wait_for_tx_finality",
+                    new_callable=AsyncMock,
+                    return_value=fake_tx_receipt,
                 )
             )
 

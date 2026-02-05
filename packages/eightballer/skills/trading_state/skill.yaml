@@ -10,7 +10,7 @@ fingerprint:
   README.md: bafybeiesl5jlvvu4enydib32bpyfqphlkdulxy3oqid3t32cjxya5qykci
   __init__.py: bafybeifjqnh2dvtbyzro524aqd6vxiwp6jfkm3477gmtccnnokcfkahasm
   dialogues.py: bafybeiggsfafkurldxnvjhqw3l424acxmpgr4x6qs36ociozuobikpqejy
-  handlers.py: bafybeigpti3s2yv6zoanzbe6veykqftb7u5c3cn7utwsunw6ufzjq6ghpm
+  handlers.py: bafybeiex6dcnkcs3ih3hau72ipphe4ebcyqypjwyirrjxzt3exsa2ou7xe
   tests/__init__.py: bafybeigb2ji4vkcap3hokcedggjwsrah7te2nxjhkorwf3ibwgyaa2glma
   tests/test_metrics.py: bafybeicdjelcc73c4g2wnycx3f2l6xwwqwie4tqkbdcncy23qc4vh3fyrm
   tests/test_metrics_dialogues.py: bafybeihqylysl3qhcsjhc5bo2pyraxcbx2zuutwe5nawzryochm4ikukwi
@@ -20,7 +20,8 @@ contracts: []
 protocols:
 - eightballer/default:0.1.0:bafybeidxdrzt2lqcig5cfdaju4kx2jjlbmmrvep34blhhgvm6cyr6qtlge
 - eightballer/http:0.1.0:bafybeigvajfairsqyira3idfhacj7l4vq25mjgyti76et5ryhspbk5uvbi
-skills: []
+skills:
+- eightballer/simple_fsm:0.1.0:bafybeidq3kk6c6osmli3s4hrmlqumeafs5camxq5z7aynbfwjqovxj4gse
 behaviours: {}
 handlers:
   metrics_handler:
