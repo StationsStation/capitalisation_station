@@ -9,9 +9,9 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from aea.mail.base import Envelope
 from derive_client.data_types import (
+    D,
     ChainID,
     Currency,
-    D,
     TxResult,
     BridgeType,
     Environment,
@@ -261,7 +261,6 @@ class TestAssetBridging(BaseDcxtConnectionTest):
                     return_value=mock_withdraw_result,
                 )
             )
-
 
             # Patch helper methods
             stack.enter_context(

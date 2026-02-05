@@ -50,7 +50,7 @@ fingerprint:
   tests/balancer/test_balancer.py: bafybeia2btocoexcjx4eqsk7ayliuoadzuu3ak7xpy4vfgeowcootn6jrq
   tests/data/key: bafybeidq4s5ytnyclxsb6nodvo7w3daysiuuul5cs7vlx35onllspt7fpm
   tests/protocols/__init__.py: bafybeicug4hqjwqouaw5lzpuslmictaew5vgkby54p5i5jbi2iyww6y3vm
-  tests/protocols/test_asset_bridging.py: bafybeibcjko56j66qwddistlzh4aa2uebkocpeaqmaw6vlorwnecuaiioi
+  tests/protocols/test_asset_bridging.py: bafybeigbx5eqxvgut4v3xzw4xslha5fdcunsaw5yj6mri4b7c2spwow6ee
   tests/protocols/test_balances.py: bafybeicplvnyv74r2akz22x3kqgs6lv2tdtn2cyyypai737n554jw3ivhe
   tests/protocols/test_market.py: bafybeiewwx4lptjd7em5yry72obaqzcna7auc3mrq4z7hki7c3rfqr2j74
   tests/protocols/test_ohlcv_interface.py: bafybeihbrtizo5qhhyoblla6j3qpo2jo7iq6ieidyeywojfhbsbfc5icme
