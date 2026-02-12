@@ -31,8 +31,12 @@ from packages.eightballer.connections.dcxt.dcxt.data.tokens import (
 
 LEDGER_TO_CHAIN_ID = {
     SupportedLedgers.ETHEREUM: 1,
+    SupportedLedgers.OPTIMISM: 10,
     SupportedLedgers.GNOSIS: 100,
+    SupportedLedgers.POLYGON_POS: 137,
+    SupportedLedgers.DERIVE: 957,
     SupportedLedgers.BASE: 8453,
+    SupportedLedgers.MODE: 34443,
     SupportedLedgers.ARBITRUM: 42161,
     SupportedLedgers.POLYGON: 137,
     SupportedLedgers.OPTIMISM: 10,

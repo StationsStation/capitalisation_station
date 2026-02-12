@@ -311,7 +311,7 @@ def fetch_trades(
     print()
 
     trades = {}
-
+    dfs = []
     for _ledger in ledgers:
         if _ledger not in trades:
             trades[_ledger] = {}
@@ -329,6 +329,13 @@ def fetch_trades(
             )
             response = asyncio.run(send_and_await_response(cli_tool, envelope))
             trades[_ledger][exchange_id] = response.orders.orders
+            df = pd.DataFrame([m.model_dump() for m in response.orders.orders])
+            df.insert(0, "ledger", _ledger)
+            df.insert(1, "exchange", exchange_id)
+            dfs.append(df)
+
+    trades_df = pd.concat(dfs, ignore_index=True)
+    rich_display_dataframe(trades_df, title="Trades")
 
 
 @click.group()
